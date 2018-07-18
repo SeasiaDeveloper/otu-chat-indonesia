@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/logo_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="190dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/about_logo_margin_top"
+        android:src="@mipmap/logo_otu" />
+
+    <TextView
+        android:id="@+id/lbl_otu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OTU"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="18dp"
+        android:textColor="@color/colorTextOtu"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/app_version_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lbl_otu"
+        android:layout_centerInParent="true"
+        android:textColor="@color/about_version_text"
+        android:textSize="@dimen/about_version_text_size"
+        tools:text="Version 1.1.1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:layout_centerInParent="true"
+        android:text="Semua jadi dekat"
+        android:textColor="@color/colorTextOtu"
+        android:textSize="20sp"
+        android:layout_below="@+id/app_version_textview"/>
+
+
+    <ImageView
+        android:id="@+id/logo_vendor_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/about_logo_vendor_margin_bottom"
+        android:src="@drawable/about_logo_qb"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/about_vendor_text_margin_bottom"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/TextViewLinkStyle.Green"
+            android:id="@+id/license_button"
+            android:text="@string/about_user_agreement"
+            android:textSize="@dimen/text_size"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/vendor_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_vendor"
+            android:textColor="@color/text_light_dark"
+            android:textSize="@dimen/text_size_very_small"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

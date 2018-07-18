@@ -1,0 +1,837 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/shadow_view" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp">
+
+                <LinearLayout
+                    android:id="@+id/div1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/density_2"
+                    android:layout_below="@+id/laySaldo"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/colorTextOtu"
+                    android:orientation="vertical" />
+
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:id="@+id/laySaldo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/labelSaldo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:text="Saldo :"
+                        android:textColor="@color/colorTextOtu"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/tvSaldo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_toLeftOf="@+id/btDeposit"
+                            android:layout_toStartOf="@+id/btDeposit"
+                            android:gravity="end|center_vertical"
+                            android:text="IDR 0.00"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <ImageButton
+                            android:id="@+id/btDeposit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginStart="5dp"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/ic_add" />
+                    </RelativeLayout>
+                </android.support.v7.widget.LinearLayoutCompat>
+
+                <TextView
+                    android:id="@+id/txt1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/div1"
+                    android:text="Pilih tombol sesuai dengan kebutuhan Anda :"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/layout_topup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt1"
+                    android:layout_marginTop="@dimen/density_8"
+                    android:background="@drawable/custom_spinner"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/density_8">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TOPUP"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:id="@+id/rel1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1">
+
+                            <ImageButton
+                                android:id="@+id/btnPulsa"
+                                android:layout_width="60dp"
+                                android:src="@drawable/ic_ic_pay_pulsa"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <ImageView
+                                android:id="@+id/ivPulsa"
+                                android:layout_width="35dp"
+                                android:visibility="gone"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_ic_pay_pulsa" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnPulsa"
+                                android:layout_centerHorizontal="true"
+                                android:text="Pulsa"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:id="@+id/btnPaket"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_ic_pay_paket_data"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivPaket"
+                                android:layout_width="40dp"
+                                android:visibility="gone"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_ic_pay_paket_data" />
+
+                            <TextView
+                                android:id="@+id/textView18"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnPaket"
+                                android:layout_centerHorizontal="true"
+                                android:text="Paket data"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:id="@+id/btnVoucher"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_ic_pay_voucher_game"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivVoucher"
+                                android:layout_width="40dp"
+                                android:visibility="gone"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_ic_pay_voucher_game" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnVoucher"
+                                android:layout_centerHorizontal="true"
+                                android:text="Voucher Game"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:id="@+id/btn_wifi_id"
+                                android:layout_width="60dp"
+                                android:src="@drawable/ic_wifi"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/iv_wifi_id"
+                                android:visibility="gone"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_wifi" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btn_wifi_id"
+                                android:layout_centerHorizontal="true"
+                                android:text="Wifi ID"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:id="@+id/btn_etool"
+                                android:layout_width="60dp"
+                                android:src="@drawable/ic_etool"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/iv_etool"
+                                android:visibility="gone"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_etool" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btn_etool"
+                                android:layout_centerHorizontal="true"
+                                android:text="E-Tool"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:id="@+id/btn_sms"
+                                android:layout_width="60dp"
+                                android:src="@drawable/ic_email"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/iv_sms"
+                                android:layout_width="40dp"
+                                android:visibility="gone"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_email" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btn_sms"
+                                android:layout_centerHorizontal="true"
+                                android:text="SMS"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_ppob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layout_topup"
+                    android:layout_marginTop="@dimen/density_8"
+                    android:background="@drawable/custom_spinner"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/density_8">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PPOB"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:src="@drawable/ic_ic_pay_pln"
+                                android:id="@+id/btnPln"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivPln"
+                                android:layout_width="40dp"
+                                android:visibility="gone"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_ic_pay_pln" />
+
+                            <TextView
+                                android:id="@+id/textView19"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnPln"
+                                android:layout_centerHorizontal="true"
+                                android:text="PLN"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:id="@+id/btnTv"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_ic_pay_tv_kabel"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivTv"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                android:visibility="gone"
+                                app:srcCompat="@drawable/ic_ic_pay_tv_kabel" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnTv"
+                                android:layout_centerHorizontal="true"
+                                android:text="TV kabel"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btnTelkom"
+                                android:layout_width="60dp"
+                           android:src="@drawable/ic_ic_pay_telkom"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivTelkom"
+                                android:visibility="gone"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_ic_pay_telkom" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnTelkom"
+                                android:layout_centerHorizontal="true"
+                                android:text="Telkom"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:id="@+id/btnPdam"
+                                android:layout_width="60dp"
+                                android:src="@drawable/ic_ic_pay_pdam"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivPdam"
+                                android:visibility="gone"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_ic_pay_pdam" />
+
+                            <TextView
+                                android:id="@+id/textView17"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnPdam"
+                                android:layout_centerHorizontal="true"
+                                android:text="PDAM"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btnPascabayar"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_ic_pay_pascabayar"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivPascabayar"
+                                android:layout_width="40dp"
+                                android:visibility="gone"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_ic_pay_pascabayar" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnPascabayar"
+                                android:layout_centerHorizontal="true"
+                                android:text="Pascabayar"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btnAsuransi"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_ic_pay_asuransi"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivAsuransi"
+                                android:layout_width="40dp"
+                                android:visibility="gone"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_ic_pay_asuransi" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnAsuransi"
+                                android:layout_centerHorizontal="true"
+                                android:text="Asuransi"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:id="@+id/btnBpjs"
+                                android:layout_width="60dp"
+                                android:src="@drawable/ic_ic_pay_bpjs"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivBpjs"
+                                android:visibility="gone"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_ic_pay_bpjs" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnBpjs"
+                                android:layout_centerHorizontal="true"
+                                android:text="BPJS kesehatan"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btnMultiFinance"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_ic_pay_multifinance"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivMultiFinance"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                android:visibility="gone"
+                                app:srcCompat="@drawable/ic_ic_pay_multifinance" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnMultiFinance"
+                                android:layout_centerHorizontal="true"
+                                android:text="Multi Finance"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btnPGN"
+                                android:layout_width="60dp"
+                                android:src="@drawable/ic_ic_pay_pgn"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivPGN"
+                                android:visibility="gone"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_ic_pay_pgn" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnPGN"
+                                android:layout_centerHorizontal="true"
+                                android:text="PGN"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btnKartuKredit"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/ic_ic_pay_kartukredit"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivKartuKredit"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:visibility="gone"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                app:srcCompat="@drawable/ic_ic_pay_kartukredit" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnKartuKredit"
+                                android:layout_centerHorizontal="true"
+                                android:text="Kartu Kredit"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/btnPajak"
+                                android:layout_width="60dp"
+                                android:src="@drawable/ic_pajak"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/icon_button_shadow" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivPajak"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginTop="10dp"
+                                android:elevation="2dp"
+                                android:visibility="gone"
+                                app:srcCompat="@drawable/ic_pajak" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnPajak"
+                                android:layout_centerHorizontal="true"
+                                android:text="Pajak Daerah"
+                                android:textAlignment="center" />
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <ImageButton
+                android:id="@+id/btCallMe"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/icon_button_shadow"
+                android:text="Semua Bisa Gratis ! ..."
+                android:textColor="@color/colorRedDark" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

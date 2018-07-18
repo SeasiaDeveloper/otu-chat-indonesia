@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="8dp"
+    android:paddingStart="8dp"
+    android:paddingRight="8dp"
+    android:paddingEnd="8dp"
+    tools:context="com.eklanku.otuChat.ui.activities.payment.topup.TopupDetail">
+
+    <TextView
+        android:id="@+id/lblTopupDetailContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/green_50"
+        android:padding="10dp"/>
+    <RelativeLayout
+        android:id="@+id/layTopupDetailNominal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="50dp"
+        android:paddingLeft="50dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@color/green_200"
+        android:layout_below="@+id/lblTopupDetailContent">
+        <TextView
+            android:id="@+id/txtTopupDetailRp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rp"
+            android:layout_alignParentLeft="true"
+            android:padding="5dp"
+            android:textColor="@color/colorPrimary"
+            android:background="@color/white"
+            android:textSize="18sp"
+            android:visibility="visible" />
+        <TextView
+            android:id="@+id/txtTopupDetailDeposit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            android:textAlignment="textEnd"
+            android:gravity="end"
+            android:paddingLeft="15dp"
+            android:paddingStart="15dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="2dp"
+            android:paddingEnd="2dp"
+            android:textColor="@color/colorTextOtu"
+            android:background="@color/white"
+            android:textSize="18sp"
+            android:layout_toEndOf="@+id/txtTopupDetailRp"
+            android:layout_toRightOf="@+id/txtTopupDetailRp"
+            android:layout_toStartOf="@+id/txtTopupDetailUniq"
+            android:layout_toLeftOf="@+id/txtTopupDetailUniq"
+            android:visibility="visible" />
+        <TextView
+            android:id="@+id/txtTopupDetailUniq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="000"
+            android:paddingLeft="1dp"
+            android:paddingStart="1dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="15dp"
+            android:paddingEnd="15dp"
+            android:textAlignment="textStart"
+            android:gravity="start"
+            android:textSize="18sp"
+            android:layout_alignParentRight="true"
+            android:background="@color/amber_50"
+            android:textColor="@color/colorRedDark"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/layConfirmTopupBank"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/layTopupDetailNominal"
+        android:layout_above="@+id/textKetKonfirmasiTopupBill"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:background="@color/green_50">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="8dp"
+            android:text="berikut rekening pembayaran kami a.n. PT. Eklanku Sehati Cemerlang:" />
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="5dp"
+                app:srcCompat="@drawable/mandiri" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bank MANDIRI\nRek. 145-00777-19777"
+                android:layout_marginTop="6dp" />
+        </android.support.v7.widget.LinearLayoutCompat>
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="5dp"
+                app:srcCompat="@drawable/bni" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BNI\nRek. 6261-97-020"
+                android:layout_marginTop="6dp" />
+        </android.support.v7.widget.LinearLayoutCompat>
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="5dp"
+                app:srcCompat="@drawable/bri" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BRI\nRek. 0368-01-002477-30-0"
+                android:layout_marginTop="6dp" />
+        </android.support.v7.widget.LinearLayoutCompat>
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="5dp"
+                app:srcCompat="@drawable/bca" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BCA\nRek. 611-049-1717"
+                android:layout_marginTop="6dp" />
+        </android.support.v7.widget.LinearLayoutCompat>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+    <!--
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listBillingAccountKonfirmasi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_above="@+id/textKetKonfirmasiTopupBill"
+            android:layout_below="@+id/lblTopupDetailContent"
+            tools:listitem="@layout/row_billing_account" />
+    -->
+    <TextView
+        android:id="@+id/textResponKonfirmasiTopupBill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="@color/orange_100"
+        android:textColor="@color/red_900"
+        android:layout_above="@+id/LayKonfirmasiTopup"
+        android:textSize="10dp"
+        android:visibility="gone"
+        android:text="info"/>
+
+    <TextView
+        android:id="@+id/textKetKonfirmasiTopupBill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="@color/yellow_100"
+        android:textColor="@color/brown_800"
+        android:layout_above="@+id/textResponKonfirmasiTopupBill"
+        android:textSize="11sp"
+        android:text="Langkah menuju sukses melakukan deposit:\n1. transfer sesuai nominal sampai 3 digit angka terakhir.\n2. Pastikan no. rek. sesuai dgn a.n. PT. Eklanku Sehati Cemerlang.\n3. Silahkan klik tombol Konfirmasi, setelah transfer dilakukan."/>
+
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/LayKonfirmasiTopup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="bottom|center"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btnTopupDetailBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/ic_action_back" />
+
+        <Button
+            android:id="@+id/btnKonfirmasiTopup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_rectangle"
+            android:text="Konfirmasi Pembayaran"
+            android:textColor="@color/white" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+</RelativeLayout>

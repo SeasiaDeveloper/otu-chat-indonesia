@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ID Member"
+                android:textColor="@color/colorTextOtu"
+                android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edt_idmember"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_spinner"
+                    android:enabled="false"
+                    android:hint="ID Member"
+                    android:textSize="@dimen/text_14"
+                    android:padding="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textColor="@color/colorTextOtu"
+                android:textStyle="bold" />
+
+
+
+                <EditText
+                    android:id="@+id/edt_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_spinner"
+                    android:enabled="false"
+                    android:hint="Name"
+                    android:textSize="@dimen/text_14"
+                    android:padding="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upline"
+                android:textColor="@color/colorTextOtu"
+                android:textStyle="bold" />
+
+
+                <EditText
+                    android:id="@+id/edt_upline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_spinner"
+                    android:enabled="false"
+                    android:hint="Upline"
+                    android:textSize="@dimen/text_14"
+                    android:padding="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Carrier"
+                android:textColor="@color/colorTextOtu"
+                android:textStyle="bold" />
+
+
+
+                <EditText
+                    android:id="@+id/edt_carreer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_spinner"
+                    android:enabled="false"
+                    android:hint="Carrier"
+                    android:textSize="@dimen/text_14"
+                    android:padding="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textColor="@color/colorTextOtu"
+                android:textStyle="bold" />
+
+
+
+                <EditText
+                    android:id="@+id/edt_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_spinner"
+                    android:hint="Masukkan Email"
+                    android:textSize="@dimen/text_14"
+                    android:padding="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Identitas KTP"
+                android:textColor="@color/colorTextOtu"
+                android:textStyle="bold" />
+
+
+
+                <EditText
+                    android:id="@+id/edt_ktp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_spinner"
+                    android:hint="Masukkan identitas KTP"
+                    android:textSize="@dimen/text_14"
+                    android:padding="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textColor="@color/colorTextOtu"
+                android:textStyle="bold" />
+
+
+
+                <EditText
+                    android:id="@+id/edt_addres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_spinner"
+                    android:hint="Masukkan Alamat"
+                    android:textSize="@dimen/text_14"
+                    android:padding="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="City"
+                android:textColor="@color/colorTextOtu"
+                android:textStyle="bold"/>
+
+
+
+                <EditText
+                    android:id="@+id/edt_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_spinner"
+                    android:hint="Masukkan Kota"
+                    android:textSize="@dimen/text_14"
+                    android:padding="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sponsor Name"
+                android:textColor="@color/colorTextOtu"
+                android:textStyle="bold" />
+
+
+
+                <EditText
+                    android:id="@+id/edt_sponsor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_spinner"
+                    android:enabled="false"
+                    android:hint="Sponsor Name"
+                    android:inputType="phone"
+                    android:textSize="@dimen/text_14"
+                    android:padding="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sponsor HP"
+                android:textColor="@color/colorTextOtu"
+                android:textStyle="bold" />
+
+
+                <EditText
+                    android:id="@+id/edt_sponsor_hp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_spinner"
+                    android:enabled="false"
+                    android:hint="Sponsor HP"
+                    android:textSize="@dimen/text_14"
+                    android:padding="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bonus"
+                android:textColor="@color/colorTextOtu"
+                android:textStyle="bold" />
+
+
+                <EditText
+                    android:id="@+id/edt_bonus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_spinner"
+                    android:enabled="false"
+                    android:hint="Bonus"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/txtLayoutLoginPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtLayoutLoginEmail"
+                app:passwordToggleContentDescription="Password"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/txt_pin_update"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_bg_text"
+                    android:drawableLeft="@drawable/ic_key"
+                    android:drawableStart="@drawable/ic_key"
+                    android:hint="Masukkan PIN"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <Button
+                    android:id="@+id/btnupdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="@dimen/density_16"
+                    android:background="@drawable/custom_round_green_dark"
+                    android:drawableEnd="@drawable/ic_next_white"
+                    android:drawableRight="@drawable/ic_next_white"
+                    android:text="Simpan"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

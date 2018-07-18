@@ -1,0 +1,275 @@
+{
+  "project_info": {
+    "project_number": "339466547399",
+    "firebase_url": "https://otu-chat-indonesia-17010.firebaseio.com",
+    "project_id": "otu-chat-indonesia-17010",
+    "storage_bucket": "otu-chat-indonesia-17010.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339466547399:android:815a1d460ceea329",
+        "android_client_info": {
+          "package_name": "com.eklanku.otuChat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339466547399-hb89dmgo3p2uoeq2m7p44tjts6ccia9a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklanku.otuChat",
+            "certificate_hash": "8a91e33b47f2e6bbb61f6d2bde482a724d4f3957"
+          }
+        },
+        {
+          "client_id": "339466547399-9ufr3h8c9mg66c7sv9ij9snd5vr2rtfd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklanku.otuChat",
+            "certificate_hash": "ba284f435b70433ade727a0110c1d22a67c50edc"
+          }
+        },
+        {
+          "client_id": "339466547399-t8uo826jmf9l3a8hc2qare10k44fu9o1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklanku.otuChat",
+            "certificate_hash": "9289cbbb7b88998393bfae4fc115ed4f4f07bb60"
+          }
+        },
+        {
+          "client_id": "339466547399-i0phi0qk24erjgj8hae6vbt67mu58nsh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklanku.otuChat",
+            "certificate_hash": "38edf762871668153a7d87f7604fb9966c48f214"
+          }
+        },
+        {
+          "client_id": "339466547399-cb27rdro11kn6ea3m82qmno4d32m5f3u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklanku.otuChat",
+            "certificate_hash": "3a5202f7d5861e6f7290fa5b6828d64543dabfb2"
+          }
+        },
+        {
+          "client_id": "339466547399-u9bk6tf9g0hk09bm3ap1jl93v4k2ji0r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklanku.otuChat",
+            "certificate_hash": "17281aa856eca7b7b2d40100b75c90577ed7cc52"
+          }
+        },
+        {
+          "client_id": "339466547399-cmbag796qr3ac1ch1sb57uh1l09nm363.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw1I_UROeuj6JPlNdOW65zxaKkSkAVenY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339466547399-cmbag796qr3ac1ch1sb57uh1l09nm363.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339466547399:android:3c4ce89f3982b597",
+        "android_client_info": {
+          "package_name": "com.eklanku.otuchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339466547399-9qqdvr7tol9n4kgmqihssq9q6k7cak0d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklanku.otuchat",
+            "certificate_hash": "9289cbbb7b88998393bfae4fc115ed4f4f07bb60"
+          }
+        },
+        {
+          "client_id": "339466547399-hjodpn5d5cgvg17o25e03p67lgsmavtl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklanku.otuchat",
+            "certificate_hash": "8a91e33b47f2e6bbb61f6d2bde482a724d4f3957"
+          }
+        },
+        {
+          "client_id": "339466547399-49ves8d8tdp2bqsk7643o6betccig594.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklanku.otuchat",
+            "certificate_hash": "ba284f435b70433ade727a0110c1d22a67c50edc"
+          }
+        },
+        {
+          "client_id": "339466547399-ea0h041lk17hf3mhv17q1s74e4qbbofd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklanku.otuchat",
+            "certificate_hash": "3dc230fc81a0600cca33abcebe7e545f34b2aa97"
+          }
+        },
+        {
+          "client_id": "339466547399-rvbcr5qv7b52iidtmr62nf22fb562gep.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklanku.otuchat",
+            "certificate_hash": "3a5202f7d5861e6f7290fa5b6828d64543dabfb2"
+          }
+        },
+        {
+          "client_id": "339466547399-cmbag796qr3ac1ch1sb57uh1l09nm363.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw1I_UROeuj6JPlNdOW65zxaKkSkAVenY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339466547399-cmbag796qr3ac1ch1sb57uh1l09nm363.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339466547399:android:267a04927fde9d54",
+        "android_client_info": {
+          "package_name": "com.eklankumax.otuchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339466547399-uo2g06s9kj3rn74llnsteupe8j5bja21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eklankumax.otuchat",
+            "certificate_hash": "9289cbbb7b88998393bfae4fc115ed4f4f07bb60"
+          }
+        },
+        {
+          "client_id": "339466547399-cmbag796qr3ac1ch1sb57uh1l09nm363.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw1I_UROeuj6JPlNdOW65zxaKkSkAVenY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339466547399-cmbag796qr3ac1ch1sb57uh1l09nm363.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339466547399:android:6d064b5bcaa0dba1",
+        "android_client_info": {
+          "package_name": "com.quickblox.q_municate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339466547399-4ocd0fv313pofb53orj49vvts7chu66q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quickblox.q_municate",
+            "certificate_hash": "9289cbbb7b88998393bfae4fc115ed4f4f07bb60"
+          }
+        },
+        {
+          "client_id": "339466547399-s2cg0djd2ngag3bbu2ep8t43rgtbht1o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quickblox.q_municate",
+            "certificate_hash": "ba284f435b70433ade727a0110c1d22a67c50edc"
+          }
+        },
+        {
+          "client_id": "339466547399-it27tg9ffh59jm9mrknp24j1uqckfa1u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quickblox.q_municate",
+            "certificate_hash": "8a91e33b47f2e6bbb61f6d2bde482a724d4f3957"
+          }
+        },
+        {
+          "client_id": "339466547399-cmbag796qr3ac1ch1sb57uh1l09nm363.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw1I_UROeuj6JPlNdOW65zxaKkSkAVenY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339466547399-cmbag796qr3ac1ch1sb57uh1l09nm363.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

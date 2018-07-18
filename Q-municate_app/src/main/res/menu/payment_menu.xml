@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:icon="@drawable/ic_document"
+        android:title="History"
+        app:showAsAction="ifRoom">
+        <menu>
+
+            <item
+                android:id="@+id/mnhistory"
+                android:orderInCategory="100"
+                android:title="@string/mnhistory"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/mntrx"
+                android:orderInCategory="100"
+                android:title="@string/mntrx"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/mndeposit"
+                android:orderInCategory="100"
+                android:title="@string/mndeposit"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/mnpenarikan"
+                android:orderInCategory="100"
+                android:title="@string/mnpenarikan"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/mnbonus"
+                android:orderInCategory="100"
+                android:title="@string/mnbonus"
+                app:showAsAction="never" />
+
+        </menu>
+    </item>
+
+
+    <item
+        android:id="@+id/mntopup"
+        android:orderInCategory="100"
+        android:title="@string/mntopup"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mntransfer"
+        android:orderInCategory="100"
+        android:title="@string/mntransfer"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mnResetpass"
+        android:orderInCategory="100"
+        android:title="@string/mnResetpass"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mnResetpin"
+        android:orderInCategory="100"
+        android:title="@string/mnResetpin"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/mnProfilPay"
+        android:orderInCategory="100"
+        android:title="@string/mnprofil"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="100"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/contactUs"
+        android:orderInCategory="100"
+        android:title="@string/contactus"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/logout"
+        android:orderInCategory="100"
+        android:title="@string/dlg_logout"
+        app:showAsAction="never" />
+</menu>

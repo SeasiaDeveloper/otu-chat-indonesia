@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="@color/unselected_background_color"
+    android:focusableInTouchMode="true">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/laySaldo"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@id/activity_container"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.LinearLayoutCompat>
+    <FrameLayout
+        android:id="@+id/activity_container"
+        android:layout_width="match_parent"
+        android:background="@color/colorGrayLighter"
+        android:layout_above="@id/btnHistoryBack"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/txtHistoryInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Loading....."
+        android:layout_alignParentTop="true"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textColor="@color/amber_800"
+        android:background="@color/cardview_light_background"
+        android:textSize="14sp" />
+    <Button
+        android:id="@+id/btnHistoryBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/ic_action_back" />
+
+</RelativeLayout>

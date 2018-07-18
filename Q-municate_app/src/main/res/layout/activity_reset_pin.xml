@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.quickblox.otuchat.ui.activities.payment.transaksi.PaymentLogin">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingEnd="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingStart="16dp">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_logo_otu" />
+
+            <TextView
+                android:id="@+id/textResponPaymentLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageView2"
+                android:background="@color/orange_100"
+                android:padding="8dp"
+                android:text="info"
+                android:textColor="@color/red_900"
+                android:textSize="@dimen/call_horizontal_avatar_end_margin"
+                android:visibility="gone" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/txtLayoutLoginEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textResponPaymentLogin"
+                android:layout_marginBottom="8dp">
+                <!--
+                                <EditText
+                                    android:id="@+id/txtLoginEmail"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Email"
+                                    android:inputType="textEmailAddress" />
+                -->
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/txtLayoutLoginPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtLayoutLoginEmail"
+                app:passwordToggleContentDescription="Password"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/txtResetPIN"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_bg_text"
+                    android:drawableLeft="@drawable/ic_key"
+                    android:drawableStart="@drawable/ic_key"
+                    android:ems="10"
+                    android:hint="New PIN"
+                    android:paddingBottom="@dimen/density_16"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/lbketerangan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtLayoutLoginPassword"
+                android:layout_margin="8dp"
+                android:layout_toLeftOf="@+id/lblLoginRegister"
+                android:text="*A new PIN must be at least 6 characters maximum 10 characters"
+                android:textColor="@color/red_900" />
+
+            <RelativeLayout
+                android:id="@+id/layKeySMS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lbketerangan"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/txtLayoutKeySMS"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:layout_marginEnd="@dimen/density_4"
+                        android:layout_marginRight="@dimen/density_4"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtLayoutLoginEmail">
+
+                        <EditText
+                            android:id="@+id/txtResetKeySMS"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/custom_bg_text"
+                            android:drawableLeft="@drawable/ic_key"
+                            android:drawableStart="@drawable/ic_key"
+                            android:ems="10"
+                            android:hint="key SMS"
+                            android:inputType="text"
+                            android:paddingBottom="@dimen/density_16"
+                            android:paddingLeft="@dimen/density_8"
+                            android:paddingStart="@dimen/density_8"
+                            android:paddingTop="@dimen/density_16" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/btnGetKey"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="@dimen/density_4"
+                        android:layout_marginStart="@dimen/density_4"
+                        android:layout_marginTop="@dimen/density_4"
+                        android:paddingBottom="@dimen/density_16"
+                        android:paddingTop="@dimen/density_16"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_round_green_dark"
+                        android:text="Get key"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnReset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layKeySMS"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="@dimen/density_16"
+                android:background="@drawable/custom_round_green_dark"
+                android:drawableEnd="@drawable/ic_next_white"
+                android:drawableLeft="@drawable/ic_pin"
+                android:drawableRight="@drawable/ic_next_white"
+                android:drawableStart="@drawable/ic_pin"
+                android:text="Reset PIN"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/btnLogin"-->
+            <!--android:layout_margin="10dp"-->
+            <!--android:layout_toLeftOf="@+id/lblLoginRegister"-->
+            <!--android:text="Lupa login Akun?"-->
+            <!--android:textColor="@color/colorTextOtu" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/lblLoginRegister"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_below="@+id/btnLogin"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:padding="5dp"-->
+            <!--android:text="Reset Pass"-->
+            <!--android:textColor="@color/red_900" />-->
+
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.constraint.ConstraintLayout>

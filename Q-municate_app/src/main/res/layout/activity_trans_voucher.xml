@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransVoucherGame">
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Jenis Voucher"
+        android:textColor="@color/colorTextOtu"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_spinner"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spnTransVoucherJenis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:id="@+id/img1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_drop" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/density_16"
+        android:text="Nominal"
+        android:textColor="@color/colorTextOtu"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_spinner"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spnTransVoucherNominal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_drop" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/txtLayoutTransPulsaNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/density_16">
+
+        <EditText
+            android:id="@+id/txtTransVoucherNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_bg_text"
+            android:ems="10"
+            android:hint="Masukkan No Telepon"
+            android:inputType="number"
+            android:paddingBottom="@dimen/density_16"
+            android:paddingLeft="@dimen/density_8"
+            android:paddingStart="@dimen/density_8"
+            android:paddingTop="@dimen/density_16" />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_trans_ke"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtLayoutTransPulsaNo"
+        android:layout_marginTop="@dimen/density_16"
+        android:text="Transaksi Ke-"
+        android:textColor="@color/colorTextOtu"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txt_transaksi_ke"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_trans_ke"
+        android:background="@drawable/custom_spinner"
+        android:hint="Masukkan Transaksi ke-"
+        android:inputType="number"
+        android:padding="@dimen/density_8" />
+
+    <!--<android.support.design.widget.TextInputLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_marginTop="@dimen/density_16"-->
+    <!--android:layout_height="wrap_content">-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/txt_no_hp"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_bg_text"-->
+    <!--android:drawableLeft="@drawable/ic_phone"-->
+    <!--android:drawableStart="@drawable/ic_phone"-->
+    <!--android:ems="10"-->
+    <!--android:hint="No HP"-->
+    <!--android:inputType="textPassword"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingEnd="@dimen/density_8"-->
+    <!--android:paddingRight="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16" />-->
+
+    <!--</android.support.design.widget.TextInputLayout>-->
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:text="No HP ini digunakan untuk menerima sms konfirmasi"-->
+    <!--android:layout_height="wrap_content" />-->
+
+
+    <Button
+        android:id="@+id/btnTransVoucherBayar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/density_16"
+        android:background="@drawable/custom_round_green_dark"
+        android:drawableEnd="@drawable/ic_next_white"
+        android:drawableLeft="@drawable/ic_balance"
+        android:drawableRight="@drawable/ic_next_white"
+        android:drawableStart="@drawable/ic_balance"
+        android:text="Beli Voucher"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+</LinearLayout>

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainSettings"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.activities.settings.SettingsActivityOtu"
+    tools:showIn="@layout/activity_settings_profil">
+
+    <!--tools:context=".activities.settings.SettingsActivity"-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+        <include layout="@layout/shadow_view" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="top|center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorGrayLighter"
+                android:clickable="true"
+                android:orientation="horizontal">
+
+                <com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView
+                    style="@style/AvatarImageViewStyle.Common"
+                    android:id="@+id/avatar_imageview"
+                    android:layout_alignParentLeft="true"
+                    app:border_color="@color/dark_gray"
+                    app:border_width="@dimen/avatar_border_width"
+                    app:oval="true"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="16dp"/>
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/userAvatar"-->
+                    <!--android:layout_width="80dp"-->
+                    <!--android:layout_height="80dp"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_margin="16dp"-->
+                    <!--android:adjustViewBounds="true"-->
+                    <!--android:contentDescription="@string/app_name"-->
+                    <!--android:scaleType="fitCenter" />-->
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorGrayLighter"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/full_name_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="left"
+                        android:padding="5dp"
+                        android:textColor="@color/colorTextOtuDark"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="FullName" />
+
+                    <TextView
+                        android:id="@+id/nomorhp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="left"
+                        android:padding="5dp"
+                        android:textColor="@color/colorTextOtuDark"
+                        android:textSize="18sp" />
+
+
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/userPhone"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:gravity="left"-->
+                        <!--android:padding="5dp"-->
+                        <!--android:textColor="@color/colorTextOtu"-->
+                        <!--android:textSize="16sp" />-->
+
+                    <!--<hani.momanii.supernova_emoji_library.Helper.EmojiconTextView-->
+                        <!--android:id="@+id/user_status"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="left"-->
+                        <!--android:padding="5dp"-->
+                        <!--android:textSize="15sp" />-->
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/inputs_background"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/settingsHead"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_item_rect_ripple"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="16dp"
+                        app:srcCompat="@drawable/ic_person" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="Profile"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/inputs_background"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/account_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_item_rect_ripple"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="16dp"
+                        app:srcCompat="@drawable/ic_account" />
+
+
+                    <TextView
+                        android:id="@+id/account_settings_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="@string/account"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/inputs_background"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/chats_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_item_rect_ripple"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="16dp"
+                        app:srcCompat="@drawable/ic_chat_setting" />
+
+                    <TextView
+                        android:id="@+id/chats_settings_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="@string/chats"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/inputs_background"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/notifications_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_item_rect_ripple"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="16dp"
+                        app:srcCompat="@drawable/ic_notification_otu" />
+
+
+                    <TextView
+                        android:id="@+id/notifications_settings_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="@string/notifications"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/inputs_background"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/about_help_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_item_rect_ripple"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="16dp"
+                        app:srcCompat="@drawable/ic_contact_settings" />
+
+
+                    <TextView
+                        android:id="@+id/about_help_settings_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="@string/about_and_help"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

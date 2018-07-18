@@ -1,0 +1,739 @@
+package com.eklanku.otuChat.ui.activities.chats;
+
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.util.Log;
+import android.view.ActionMode;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
+import com.eklanku.otuChat.ui.activities.call.CallActivity;
+import com.eklanku.otuChat.ui.activities.location.MapsActivity;
+import com.eklanku.otuChat.ui.activities.others.PreviewImageActivity;
+import com.eklanku.otuChat.ui.activities.profile.UserProfileActivity;
+import com.eklanku.otuChat.ui.adapters.chats.PrivateChatMessageAdapter;
+import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
+import com.eklanku.otuChat.utils.DateUtils;
+import com.eklanku.otuChat.utils.ToastUtils;
+import com.eklanku.otuChat.utils.listeners.FriendOperationListener;
+import com.google.gson.Gson;
+import com.quickblox.chat.QBRestChatService;
+import com.quickblox.chat.model.QBAttachment;
+import com.quickblox.chat.model.QBChatDialog;
+import com.quickblox.chat.model.QBDialogType;
+import com.quickblox.content.model.QBFile;
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.exception.QBResponseException;
+import com.quickblox.core.server.Performer;
+import com.quickblox.q_municate_core.core.command.Command;
+import com.quickblox.q_municate_core.models.CombinationMessage;
+import com.quickblox.q_municate_core.qb.commands.friend.QBAcceptFriendCommand;
+import com.quickblox.q_municate_core.qb.commands.friend.QBAddFriendCommand;
+import com.quickblox.q_municate_core.qb.commands.friend.QBRejectFriendCommand;
+import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
+import com.quickblox.q_municate_core.qb.helpers.QBFriendListHelper;
+import com.quickblox.q_municate_core.service.QBService;
+import com.quickblox.q_municate_core.service.QBServiceConsts;
+import com.quickblox.q_municate_core.utils.DbUtils;
+import com.quickblox.q_municate_core.utils.OnlineStatusUtils;
+import com.quickblox.q_municate_core.utils.UserFriendUtils;
+import com.quickblox.q_municate_db.managers.DataManager;
+import com.quickblox.q_municate_db.managers.FriendDataManager;
+import com.quickblox.q_municate_db.models.Attachment;
+import com.quickblox.q_municate_db.models.Friend;
+import com.quickblox.q_municate_user_service.QMUserService;
+import com.quickblox.q_municate_user_service.model.QMUser;
+import com.eklanku.otuChat.R;
+import com.quickblox.ui.kit.chatmessage.adapter.media.video.ui.VideoPlayerActivity;
+import com.quickblox.ui.kit.chatmessage.adapter.media.view.QBPlaybackControlView;
+import com.quickblox.users.model.QBUser;
+import com.quickblox.videochat.webrtc.QBRTCTypes;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
+
+import butterknife.OnClick;
+
+public class PrivateDialogActivity extends BaseDialogActivity {
+
+    private FriendOperationAction friendOperationAction;
+    private QMUser opponentUser;
+    private FriendObserver friendObserver;
+    private BroadcastReceiver typingMessageBroadcastReceiver;
+    private int operationItemPosition;
+    private boolean isMultipleMessageSelect = false;
+    private final String TAG = PrivateDialogActivity.class.getSimpleName();
+    private ArrayList<CombinationMessage> selectedMessagesList;
+    private ActionMode mActionMode;
+    private int longPressPosition = -1;
+    private boolean isReply = false;
+
+    public static void start(Context context, QMUser opponent, QBChatDialog chatDialog) {
+        Intent intent = getIntentWithExtra(context, opponent, chatDialog);
+        intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+        context.startActivity(intent);
+    }
+
+    public static void startWithClearTop(Context context, QMUser opponent, QBChatDialog chatDialog) {
+        Intent intent = getIntentWithExtra(context, opponent, chatDialog);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+    }
+
+    public static void startForResult(Fragment fragment, QMUser opponent, QBChatDialog chatDialog,
+                                      int requestCode) {
+        Intent intent = getIntentWithExtra(fragment.getContext(), opponent, chatDialog);
+        fragment.startActivityForResult(intent, requestCode);
+    }
+
+    private static Intent getIntentWithExtra(Context context, QMUser opponent, QBChatDialog chatDialog) {
+        Intent intent = new Intent(context, PrivateDialogActivity.class);
+        intent.putExtra(QBServiceConsts.EXTRA_OPPONENT, opponent);
+        intent.putExtra(QBServiceConsts.EXTRA_DIALOG, chatDialog);
+        return intent;
+    }
+
+    @Override
+    protected void addActions() {
+        super.addActions();
+
+        addAction(QBServiceConsts.ACCEPT_FRIEND_SUCCESS_ACTION, new AcceptFriendSuccessAction());
+        addAction(QBServiceConsts.ACCEPT_FRIEND_FAIL_ACTION, failAction);
+
+        addAction(QBServiceConsts.REJECT_FRIEND_SUCCESS_ACTION, new RejectFriendSuccessAction());
+        addAction(QBServiceConsts.REJECT_FRIEND_FAIL_ACTION, failAction);
+
+        updateBroadcastActionList();
+    }
+
+    @Override
+    protected void updateActionBar() {
+        setOnlineStatus(opponentUser);
+
+        checkActionBarLogo(opponentUser.getAvatar(), R.drawable.placeholder_user);
+    }
+
+    @Override
+    protected void onConnectServiceLocally(QBService service) {
+        onConnectServiceLocally();
+        setOnlineStatus(opponentUser);
+    }
+
+    @Override
+    protected Bundle generateBundleToInitDialog() {
+        Bundle bundle = new Bundle();
+        bundle.putInt(QBServiceConsts.EXTRA_OPPONENT_ID, opponentUser.getId());
+        return bundle;
+    }
+
+    @Override
+    protected void initChatAdapter() {
+        messagesAdapter = new PrivateChatMessageAdapter(this, opponentUser, combinationMessagesList, friendOperationAction, currentChatDialog, new ItemClickListener() {
+
+            @Override
+            public void onItemClick(int position) {
+                Log.d("RINA", "initChatAdapter: "+position);
+                if (isMultipleMessageSelect)
+                    select(position);
+
+                else if (combinationMessagesList.get(position).getAttachments() != null) {
+                    String fileId = "";
+                    String fileType = "";
+                    QBAttachment qbAttachment = null;
+                    Log.d("RINA", "initChatAdapter: "+position);
+                    for (QBAttachment attachment : combinationMessagesList.get(position).getAttachments()) {
+                        fileId = attachment.getId();
+                        fileType = attachment.getType();
+                        qbAttachment = attachment;
+                        break;
+                    }
+                    Log.v("Attachment", QBFile.getPrivateUrlForUID(fileId));
+                    //fileType = fileType.toUpperCase();
+                    Log.v("FileType", "FileType: " + fileType);
+                    if (fileType.equals("image"))
+                        PreviewImageActivity.start(PrivateDialogActivity.this, QBFile.getPrivateUrlForUID(fileId));
+                    else if (fileType.equals("video")) {
+                        canPerformLogout.set(false);
+                        VideoPlayerActivity.start(PrivateDialogActivity.this, Uri.parse(QBFile.getPrivateUrlForUID(fileId)));
+                    } else if (fileType.equals("location")) {
+                        canPerformLogout.set(false);
+                        MapsActivity.startMapForResult(PrivateDialogActivity.this, qbAttachment.getData());
+                    }
+                }
+            }
+
+            @Override
+            public void onAudioItemClick(QBPlaybackControlView playbackView, int position) {
+                if (isMultipleMessageSelect)
+                    select(position);
+                else
+                    playbackView.clickIconPlayPauseView();
+            }
+
+
+            @Override
+            public void onItemLongClick(int position) {
+                if (!isMultipleMessageSelect) {
+                    longPressPosition = position;
+                    selectedMessagesList = new ArrayList<CombinationMessage>();
+                    isMultipleMessageSelect = true;
+
+                    if (mActionMode == null) {
+                        mActionMode = startActionMode(mMenuActionModeCallback);
+                    }
+                }
+                select(position);
+            }
+        });
+    }
+
+    @Override
+    protected void initMessagesRecyclerView() {
+        super.initMessagesRecyclerView();
+        messagesRecyclerView.addItemDecoration(
+                new StickyRecyclerHeadersDecoration(messagesAdapter));
+        findLastFriendsRequest(true);
+
+        messagesRecyclerView.setAdapter(messagesAdapter);
+        scrollMessagesToBottom(0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void updateMessagesList() {
+        findLastFriendsRequest(false);
+    }
+
+    @Override
+    public void notifyChangedUserStatus(int userId, boolean online) {
+        super.notifyChangedUserStatus(userId, online);
+
+        if (opponentUser != null && opponentUser.getId() == userId) {
+            if (online) {
+                //gets opponentUser from DB with updated field 'last_request_at'
+                actualizeOpponentUserFromDb();
+            }
+
+            setOnlineStatus(opponentUser);
+        }
+    }
+
+    private void actualizeOpponentUserFromDb() {
+        QMUser opponentUserFromDb = QMUserService.getInstance().getUserCache().get((long) opponentUser.getId());
+
+        if (opponentUserFromDb != null) {
+            opponentUser = opponentUserFromDb;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.private_dialog_menu, menu);
+        return true;
+    }
+
+    private ActionMode.Callback mMenuActionModeCallback = new ActionMode.Callback() {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.message_delete_menu, menu);
+            Drawable drawable = menu.findItem(R.id.action_delete).getIcon();
+
+            drawable = DrawableCompat.wrap(drawable);
+            DrawableCompat.setTint(drawable, ContextCompat.getColor(PrivateDialogActivity.this, R.color.black));
+            menu.findItem(R.id.action_delete).setIcon(drawable);
+
+            Drawable drawable_copy = menu.findItem(R.id.action_copy).getIcon();
+            drawable_copy = DrawableCompat.wrap(drawable_copy);
+            DrawableCompat.setTint(drawable_copy, ContextCompat.getColor(PrivateDialogActivity.this, R.color.black));
+            menu.findItem(R.id.action_copy).setIcon(drawable_copy);
+
+            Drawable drawable_share = menu.findItem(R.id.action_share).getIcon();
+            drawable_share = DrawableCompat.wrap(drawable_share);
+            DrawableCompat.setTint(drawable_share, ContextCompat.getColor(PrivateDialogActivity.this, R.color.black));
+            menu.findItem(R.id.action_share).setIcon(drawable_share);
+
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false; // Return false if nothing is done
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_delete:
+                    deleteMessages();
+                    break;
+                case R.id.action_copy:
+                    if (selectedMessagesList.size() == 1 && selectedMessagesList.get(0).getAttachments() == null) {
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("Message", selectedMessagesList.get(0).getBody());
+                        clipboard.setPrimaryClip(clip);
+                    } else
+                        Toast.makeText(PrivateDialogActivity.this, getString(R.string.share_copy_err), Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.action_reply:
+                    if (longPressPosition != -1) {
+                        //if(QBMessagesAdapter.TextMessageHolder)
+                        if (selectedMessagesList.size() == 1) {
+
+                            LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            View v = vi.inflate(R.layout.layout_reply_message, null);
+
+                            ImageView mIvImage = (ImageView) v.findViewById(R.id.ivImage);
+                            if (selectedMessagesList.get(0).getAttachment() != null) {
+                                Attachment.Type fileType = selectedMessagesList.get(0).getAttachment().getType();
+                                if (fileType.name().equals("IMAGE") || fileType.name().equals("VIDEO") || fileType.name().equals("LOCATION")) {
+                                    mIvImage.setVisibility(View.VISIBLE);
+                                    messagesRecyclerView.getLayoutManager().findViewByPosition(longPressPosition);
+                                    //Glide.with(PrivateDialogActivity.this).load(combinationMessagesList.get(longPressPosition).getAttachment().getRemoteUrl()).fitCenter().into(mIvImage);
+                                }
+                            }
+
+
+                            TextView tvMessage = (TextView) v.findViewById(R.id.tvName);
+                            if (opponentUser != null && opponentUser.getId().equals(selectedMessagesList.get(0).getDialogOccupant().getUser().getId())) {
+                                tvMessage.setText(selectedMessagesList.get(0).getDialogOccupant().getUser().getFullName());
+                            } else {
+                                tvMessage.setText("You");
+                            }
+
+                            TextView tvType = (TextView) v.findViewById(R.id.tvTypeMessage);
+                            tvType.setText(selectedMessagesList.get(0).getBody());
+
+                            ImageView mIvClear = (ImageView) v.findViewById(R.id.ivClear);
+                            mIvClear.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (mActionMode != null) {
+                                        mActionMode.finish();
+                                    }
+                                    finishAction();
+                                }
+                            });
+                            Log.v("ReplyMessage MAIN", selectedMessagesList.get(0).toString());
+                            setCustomParameter(selectedMessagesList.get(0).getReplyMessageString(), true);
+                            //finishActionForReply();
+                            isReply = true;
+                            setLayoutForReply(v);
+                        }
+                    }
+                    break;
+                case R.id.action_share:
+                    if (selectedMessagesList.size() == 1 && selectedMessagesList.get(0).getAttachments() == null) {
+                        String shareBody = selectedMessagesList.get(0).getBody();
+                        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                        startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_via)));
+                    } else
+                        Toast.makeText(PrivateDialogActivity.this, getString(R.string.share_copy_err), Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            finishAction();
+        }
+    };
+
+
+    private void finishAction() {
+        selectedMessagesList.clear();
+        messagesAdapter.notifyDataSetChanged();
+        mActionMode = null;
+        isMultipleMessageSelect = false;
+        longPressPosition = -1;
+        isReply = false;
+    }
+
+    private void finishActionForReply() {
+        mActionMode.finish();
+        selectedMessagesList.clear();
+        messagesAdapter.notifyDataSetChanged();
+        mActionMode = null;
+        isMultipleMessageSelect = false;
+        longPressPosition = -1;
+    }
+
+
+    private void deleteMessages() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.alert_delete_dialog));
+
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing but close the dialog
+                if (selectedMessagesList != null) {
+                    Set<String> messagesIds = new HashSet<>();
+
+                    for (int i = 0; i < selectedMessagesList.size(); i++) {
+                        messagesIds.add(selectedMessagesList.get(i).getMessageId());
+                    }
+                    QBRestChatService.deleteMessages(messagesIds, false).performAsync(new QBEntityCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid, Bundle bundle) {
+                            if (combinationMessagesList.size() > 0) {
+                                for (int i = 0; i < selectedMessagesList.size(); i++) {
+                                    DataManager.getInstance().getMessageDataManager().deleteMessageById(selectedMessagesList.get(i).getMessageId());
+                                    combinationMessagesList.remove(selectedMessagesList.get(i));
+                                }
+                            }
+                            mActionMode.finish();
+                            /*mActionMode = null;
+                            isMultipleMessageSelect = false;
+                            selectedMessagesList.clear();
+                            messagesAdapter.notifyDataSetChanged();*/
+                            finishAction();
+                        }
+
+                        @Override
+                        public void onError(QBResponseException e) {
+                            e.printStackTrace();
+
+                        }
+                    });
+                }
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void select(int position) {
+        if (mActionMode != null) {
+            if (selectedMessagesList.contains(combinationMessagesList.get(position)))
+                selectedMessagesList.remove(combinationMessagesList.get(position));
+            else
+                selectedMessagesList.add(combinationMessagesList.get(position));
+
+            ((PrivateChatMessageAdapter) messagesAdapter).setSelectedMessagesList(selectedMessagesList);
+
+            if (selectedMessagesList.size() > 0)
+                mActionMode.setTitle("" + selectedMessagesList.size());
+            else {
+                mActionMode.setTitle("");
+                mActionMode.finish();
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean isFriend = DataManager.getInstance().getFriendDataManager().getByUserId(
+                opponentUser.getId()) != null;
+        Log.d("OPPO-1", "onOptionsItemSelected = isFriend: "+isFriend);
+        if (!isFriend && item.getItemId() != android.R.id.home) {
+            DataManager.getInstance().getFriendDataManager().createOrUpdate(new Friend(opponentUser));
+            QBAddFriendCommand.start(PrivateDialogActivity.this, opponentUser.getId());
+            /*QBFriendListHelper qbHelper = new QBFriendListHelper(PrivateDialogActivity.this);
+            try {
+                qbHelper.addFriend(opponentUser.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }*/
+            //ToastUtils.shortToast(R.string.dialog_friend_sent);
+            //return true;
+        }
+        switch (item.getItemId()) {
+            case R.id.action_audio_call:
+                Log.d("AYIK", "privatedialog:process voice call");
+                callToUser(opponentUser, QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_AUDIO);
+                break;
+            case R.id.switch_camera_toggle:
+                Log.d("AYIK", "privatedialog:process video call");
+                callToUser(opponentUser, QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_VIDEO);
+                break;
+            default:
+                super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    @Override
+    protected void checkMessageSendingPossibility() {
+        boolean enable = dataManager.getFriendDataManager().existsByUserId(opponentUser.getId()) && isNetworkAvailable();
+        //checkMessageSendingPossibility(enable);
+    }
+
+    @OnClick(R.id.toolbar)
+    void openProfile(View view) {
+        UserProfileActivity.start(this, opponentUser.getId());
+    }
+
+    @Override
+    protected void initFields() {
+        super.initFields();
+        friendOperationAction = new FriendOperationAction();
+        friendObserver = new FriendObserver();
+        typingMessageBroadcastReceiver = new TypingStatusBroadcastReceiver();
+        opponentUser = (QMUser) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_OPPONENT);
+        title = opponentUser.getFullName();
+    }
+
+    @Override
+    protected void registerBroadcastReceivers() {
+        super.registerBroadcastReceivers();
+        localBroadcastManager.registerReceiver(typingMessageBroadcastReceiver,
+                new IntentFilter(QBServiceConsts.TYPING_MESSAGE));
+    }
+
+    @Override
+    protected void unregisterBroadcastReceivers() {
+        super.unregisterBroadcastReceivers();
+        localBroadcastManager.unregisterReceiver(typingMessageBroadcastReceiver);
+    }
+
+    @Override
+    protected void addObservers() {
+        super.addObservers();
+        dataManager.getFriendDataManager().addObserver(friendObserver);
+    }
+
+    @Override
+    protected void deleteObservers() {
+        super.deleteObservers();
+        dataManager.getFriendDataManager().deleteObserver(friendObserver);
+    }
+
+    private void findLastFriendsRequest(boolean needNotifyAdapter) {
+        ((PrivateChatMessageAdapter) messagesAdapter).findLastFriendsRequestMessagesPosition();
+        if (needNotifyAdapter) {
+            messagesAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void setOnlineStatus(QMUser user) {
+        if (user != null) {
+            if (friendListHelper != null) {
+                String offlineStatus = getString(R.string.last_seen, DateUtils.toTodayYesterdayShortDateWithoutYear2(user.getLastRequestAt().getTime()),
+                        DateUtils.formatDateSimpleTime(user.getLastRequestAt().getTime()));
+                setActionBarSubtitle(
+                        OnlineStatusUtils.getOnlineStatus(this, friendListHelper.isUserOnline(user.getId()), offlineStatus));
+            }
+        }
+    }
+
+    public void sendMessage(View view) {
+        if (isReply == false) {
+            sendMessage(false);
+        } else {
+            isReply = false;
+            clearLayout();
+            sendMessage(true);
+            finishActionForReply();
+        }
+    }
+
+    private void callToUser(QMUser user, QBRTCTypes.QBConferenceType qbConferenceType) {
+        Log.d("AYIK", "status calltouser "+isChatInitializedAndUserLoggedIn());
+        if (!isChatInitializedAndUserLoggedIn()) {
+            ToastUtils.longToast(R.string.call_chat_service_is_initializing);
+            return;
+        }
+        List<QBUser> qbUserList = new ArrayList<>(1);
+        qbUserList.add(UserFriendUtils.createQbUser(user));
+        CallActivity.start(PrivateDialogActivity.this, qbUserList, qbConferenceType, null);
+    }
+
+    private void acceptUser(final int userId) {
+        if (isNetworkAvailable()) {
+            if (!isChatInitializedAndUserLoggedIn()) {
+                ToastUtils.longToast(R.string.call_chat_service_is_initializing);
+                return;
+            }
+
+            showProgress();
+            QBAcceptFriendCommand.start(this, userId);
+        } else {
+            ToastUtils.longToast(R.string.dlg_fail_connection);
+            return;
+        }
+    }
+
+    private void rejectUser(final int userId) {
+        if (isNetworkAvailable()) {
+            if (!isChatInitializedAndUserLoggedIn()) {
+                ToastUtils.longToast(R.string.call_chat_service_is_initializing);
+                return;
+            }
+
+            showRejectUserDialog(userId);
+        } else {
+            ToastUtils.longToast(R.string.dlg_fail_connection);
+            return;
+        }
+    }
+
+    private void showRejectUserDialog(final int userId) {
+        QMUser user = QMUserService.getInstance().getUserCache().get((long) userId);
+        if (user == null) {
+            return;
+        }
+
+        TwoButtonsDialogFragment.show(getSupportFragmentManager(),
+                getString(R.string.dialog_message_reject_friend, user.getFullName()),
+                new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        showProgress();
+                        QBRejectFriendCommand.start(PrivateDialogActivity.this, userId);
+                    }
+                });
+    }
+
+    private void updateCurrentChatFromDB() {
+        QBChatDialog updatedDialog = null;
+        if (currentChatDialog != null) {
+            updatedDialog = dataManager.getQBChatDialogDataManager().getByDialogId(currentChatDialog.getDialogId());
+        } else {
+            finish();
+        }
+
+        if (updatedDialog == null) {
+            finish();
+        } else {
+            currentChatDialog = updatedDialog;
+            initCurrentDialog();
+        }
+    }
+
+    private void showTypingStatus() {
+        setActionBarSubtitle(R.string.dialog_now_typing);
+    }
+
+    private void hideTypingStatus() {
+        setOnlineStatus(opponentUser);
+    }
+
+    private class FriendOperationAction implements FriendOperationListener {
+
+        @Override
+        public void onAcceptUserClicked(int position, int userId) {
+            operationItemPosition = position;
+            acceptUser(userId);
+        }
+
+        @Override
+        public void onRejectUserClicked(int position, int userId) {
+            operationItemPosition = position;
+            rejectUser(userId);
+        }
+    }
+
+    private class AcceptFriendSuccessAction implements Command {
+
+        @Override
+        public void execute(Bundle bundle) {
+            ((PrivateChatMessageAdapter) messagesAdapter).clearLastRequestMessagePosition();
+            messagesAdapter.notifyItemChanged(operationItemPosition);
+            startLoadDialogMessages(false);
+            hideProgress();
+        }
+    }
+
+    private class RejectFriendSuccessAction implements Command {
+
+        @Override
+        public void execute(Bundle bundle) {
+            ((PrivateChatMessageAdapter) messagesAdapter).clearLastRequestMessagePosition();
+            messagesAdapter.notifyItemChanged(operationItemPosition);
+            startLoadDialogMessages(false);
+            hideProgress();
+        }
+    }
+
+    private class FriendObserver implements Observer {
+
+        @Override
+        public void update(Observable observable, Object data) {
+            if (data != null) {
+                String observerKey = ((Bundle) data).getString(FriendDataManager.EXTRA_OBSERVE_KEY);
+                if (observerKey.equals(dataManager.getFriendDataManager().getObserverKey())) {
+                    updateCurrentChatFromDB();
+                    checkMessageSendingPossibility();
+                }
+            }
+        }
+    }
+
+    private class TypingStatusBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle extras = intent.getExtras();
+            int userId = extras.getInt(QBServiceConsts.EXTRA_USER_ID);
+            // TODO: now it is possible only for Private chats
+            if (currentChatDialog != null && opponentUser != null && userId == opponentUser.getId()) {
+                if (QBDialogType.PRIVATE.equals(currentChatDialog.getType())) {
+                    boolean isTyping = extras.getBoolean(QBServiceConsts.EXTRA_IS_TYPING);
+                    if (isTyping) {
+                        showTypingStatus();
+                    } else {
+                        hideTypingStatus();
+                    }
+                }
+            }
+        }
+    }
+
+    public interface ItemClickListener {
+        public void onItemClick(int position);
+
+        public void onAudioItemClick(QBPlaybackControlView playbackView, int position);
+
+        public void onItemLongClick(int position);
+    }
+}

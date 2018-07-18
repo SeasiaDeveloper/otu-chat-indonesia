@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="10dp"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="@color/black"
+        android:text="Multipayment"
+        android:id="@+id/list_multipayment"
+        android:paddingLeft="16dp"
+        android:paddingBottom="3dp"
+        android:height="35dp"
+        android:gravity="center"
+        />
+
+        <View
+            android:background="@color/colorTextOtu"
+            android:layout_height="1dp"
+            android:paddingTop="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="match_parent" />
+</LinearLayout>

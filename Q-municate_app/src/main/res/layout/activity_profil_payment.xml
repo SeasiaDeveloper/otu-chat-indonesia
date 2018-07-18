@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="@dimen/density_16">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_logo_otu" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="ID Member"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:layout_marginStart="@dimen/density_4"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/txt_profile_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Name"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:layout_marginStart="@dimen/density_4"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/txt_profile_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Upline"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:layout_marginStart="@dimen/density_4"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/txt_profile_upline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Carrier"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:layout_marginStart="@dimen/density_4"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/txt_profile_carrier"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Email"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:layout_marginStart="@dimen/density_4"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/txt_profile_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="KTP"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:layout_marginStart="@dimen/density_4"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/txt_profile_ktp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Address"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:layout_marginStart="@dimen/density_4"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/txt_profile_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="City"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:layout_marginStart="@dimen/density_4"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/txt_profile_city"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Sponsor Name"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:layout_marginStart="@dimen/density_4"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/txt_profile_sponsor_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Sponsor HP"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:layout_marginStart="@dimen/density_4"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/txt_profile_sponsor_hp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Bonus"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:layout_marginStart="@dimen/density_4"
+            android:text=":" />
+
+        <TextView
+            android:id="@+id/txt_profile_bonus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5" />
+
+
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnupdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/density_16"
+        android:drawableLeft="@drawable/ic_account_circle"
+        android:drawableStart="@drawable/ic_account_circle"
+        android:background="@drawable/custom_round_green_dark"
+        android:drawableEnd="@drawable/ic_next_white"
+        android:drawableRight="@drawable/ic_next_white"
+        android:text="Update"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"/>
+
+
+</LinearLayout>

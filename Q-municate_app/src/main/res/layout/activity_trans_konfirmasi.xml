@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransKonfirmasi">
+
+    <ImageView
+        android:id="@+id/imgKonfirmasiSave"
+        android:layout_width="@dimen/density_100"
+        android:layout_height="@dimen/density_100"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_logo_otu" />
+
+    <TextView
+        android:id="@+id/txt_jenis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgKonfirmasiSave"
+        android:gravity="center"
+        android:text="JENIS"
+        android:textSize="@dimen/text_14"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_above="@+id/lblKonfirmasiContent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_jenis">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/density_8"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/layreffID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Reff ID" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_billing_reff_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/idcustomer"
+                    android:layout_width="0dp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="ID Customer" />
+
+                <TextView
+                    android:id="@+id/titik2idcust"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_customer_id"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layNama"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lbNama"
+                    android:layout_width="0dp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Name" />
+
+                <TextView
+                    android:id="@+id/titik2nama"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginTop="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_customer_name"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Phone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_customer_msisdn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Date" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_tanggal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Payment" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_payment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Admin Bank" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_admin_bank"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Billing" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_billing"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Status" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_status"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/lblKonfirmasiContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnKonfirmasiSave"
+        android:gravity="center"
+        android:text="CONTENT" />
+
+    <Button
+        android:id="@+id/btnKonfirmasiSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/density_16"
+        android:background="@drawable/custom_round_green_dark"
+        android:drawableEnd="@drawable/ic_next_white"
+        android:drawableLeft="@drawable/ic_balance"
+        android:drawableRight="@drawable/ic_next_white"
+        android:drawableStart="@drawable/ic_balance"
+        android:text="Proses"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>

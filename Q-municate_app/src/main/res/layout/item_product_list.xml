@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_list_item"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/denom"
+        android:paddingStart="@dimen/density_8"
+        android:paddingLeft="@dimen/density_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="denom"
+        android:textColor="@color/black"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/nominal"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/denom"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:paddingBottom="4dp"
+        android:paddingRight="8dp"
+        android:paddingEnd="@dimen/density_8"
+        android:text="nominal"
+        android:textColor="@color/colorTextOtu"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/denom"
+        android:paddingLeft="8dp"
+        android:paddingTop="6dp"
+        android:text="point"
+        android:textColor="@color/material_green_500"
+        android:textSize="12dp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

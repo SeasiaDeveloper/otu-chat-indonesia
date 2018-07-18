@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/density_16"
+    tools:context="com.eklanku.otuChat.ui.activities.payment.transfer.TransResponse">
+
+    <ImageView
+        android:id="@+id/imageView17"
+        android:layout_width="@dimen/density_100"
+        android:layout_height="@dimen/density_100"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        app:srcCompat="@drawable/ic_logo_otu" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_above="@+id/btn_ok"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView17"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/density_8"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Reff ID" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/density_4"
+                android:layout_marginLeft="@dimen/density_4"
+                android:layout_marginRight="@dimen/density_4"
+                android:layout_marginStart="@dimen/density_4"
+                android:text=":" />
+
+            <TextView
+                android:id="@+id/txt_reff_id"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/density_8"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ID Tujuan" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/density_4"
+                android:layout_marginLeft="@dimen/density_4"
+                android:layout_marginRight="@dimen/density_4"
+                android:layout_marginStart="@dimen/density_4"
+                android:text=":" />
+
+            <TextView
+                android:id="@+id/txt_id_tujuan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/density_8"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nama Tujuan" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/density_4"
+                android:layout_marginLeft="@dimen/density_4"
+                android:layout_marginRight="@dimen/density_4"
+                android:layout_marginStart="@dimen/density_4"
+                android:text=":" />
+
+            <TextView
+                android:id="@+id/txt_nama_tujuan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/density_8"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nominal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/density_4"
+                android:layout_marginLeft="@dimen/density_4"
+                android:layout_marginRight="@dimen/density_4"
+                android:layout_marginStart="@dimen/density_4"
+                android:text=":" />
+
+            <TextView
+                android:id="@+id/txt_nominal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/density_8"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Keterangan" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/density_4"
+                android:layout_marginLeft="@dimen/density_4"
+                android:layout_marginRight="@dimen/density_4"
+                android:layout_marginStart="@dimen/density_4"
+                android:text=":" />
+
+            <TextView
+                android:id="@+id/txt_keterangan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/density_16"
+        android:background="@drawable/custom_round_green_dark"
+        android:drawableEnd="@drawable/ic_next_white"
+        android:drawableLeft="@drawable/ic_check"
+        android:drawableRight="@drawable/ic_next_white"
+        android:drawableStart="@drawable/ic_check"
+        android:text="OK"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+    <!-- // SET GONE BY AYIK-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <TextView
+            android:id="@+id/lblTransferResponseDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView17"
+            android:layout_marginTop="8dp"
+            android:background="@color/yellow_100"
+            android:padding="8dp"
+            android:textColor="@color/brown_800"
+            android:textSize="11sp" />
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:id="@+id/layTransferResponse"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/lblTransferResponseDetail"
+            android:background="@color/green_50"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="5dp"
+                android:text="Berikut detail transaksi transfer Anda:" />
+
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="6dp"
+                    android:text="No. Tujuan"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/TextTransferResponseTujuan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text=":"
+                    android:textSize="18dp" />
+            </android.support.v7.widget.LinearLayoutCompat>
+
+            <android.support.v7.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="6dp"
+                    android:text="Nominal"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/TextTransferResponseNominal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text=":"
+                    android:textSize="18dp" />
+            </android.support.v7.widget.LinearLayoutCompat>
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <TextView
+            android:id="@+id/textResponKonfirmasiTransfer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/LayTransferResponseButton"
+            android:background="@color/orange_100"
+            android:padding="5dp"
+            android:text="info"
+            android:textColor="@color/red_900"
+            android:textSize="10dp"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:id="@+id/LayTransferResponseButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="bottom|center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnTransferResponseBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/ic_action_back" />
+
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
+    </LinearLayout>
+</RelativeLayout>

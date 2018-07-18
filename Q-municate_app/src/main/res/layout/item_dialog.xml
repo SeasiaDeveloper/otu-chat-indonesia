@@ -1,0 +1,91 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/selector_list_item"
+    android:orientation="horizontal"
+    android:padding="6dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp">
+
+        <com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView
+            android:id="@+id/avatar_imageview"
+            style="@style/AvatarImageViewStyle.Common"
+            android:layout_width="@dimen/image_view_small_avatar_layout_width"
+            android:layout_height="@dimen/image_view_small_avatar_layout_height"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            app:border_color="@color/dark_gray"
+            app:border_width="@dimen/avatar_border_width"
+            app:oval="true" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/avatar_imageview"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill"
+                android:maxLines="2"
+                android:textSize="@dimen/text_size"
+                tools:text="Nabe dsjkd sdldjscljkd dsclk" />
+
+            <com.rockerhieu.emojicon.EmojiconTextView
+                android:id="@+id/last_message_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/name_textview"
+                android:layout_gravity="center_vertical"
+                android:singleLine="true"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/text_size_small"
+                tools:text="1111111 sclk" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="1dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="1dp">
+
+            <TextView
+                android:id="@+id/last_message_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:gravity="end"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/text_size_small" />
+
+            <TextView
+                android:id="@+id/unread_messages_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/badge_unread_messages_counter"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size"
+                tools:text="@string/dialog_count_unread" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

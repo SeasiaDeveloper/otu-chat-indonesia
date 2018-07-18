@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/editProfile"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.quickblox.otuchat.ui.activities.profile.EditProfilActivity"
+    tools:showIn="@layout/activity_edit_profile">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhiteBg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <include layout="@layout/shadow_view" />
+
+        <FrameLayout
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_margin="10dp">
+
+            <ImageView
+                android:id="@+id/userAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="6dp"
+                android:scaleType="fitCenter"/>
+
+            <ProgressBar
+                android:id="@+id/progress_bar_edit_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="@dimen/density_10"
+                android:visibility="gone" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/addAvatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:clickable="true"
+                android:focusable="true"
+                app:elevation="2dp"
+                app:fabSize="normal"
+                app:rippleColor="@color/colorWhiteLight"
+                app:srcCompat="@drawable/ic_camera" />
+        </FrameLayout>
+
+        <!-- custom -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/editUsernameBtn"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:id="@+id/username_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="@dimen/density_16"
+                    android:text="Display name" />
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/username_label"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="@dimen/density_16"
+                    android:textColor="@color/colorTextOtu"
+                    android:textSize="18sp" />
+
+                <!--android:layout_toRightOf="@+id/ivPerson"-->
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/div1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/rel1"
+                android:background="@drawable/inputs_background"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/statusLayout"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:id="@+id/status_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:text="Status message" />
+
+                <!--<hani.momanii.supernova_emoji_library.Helper.EmojiconTextView-->
+                    <!--android:id="@+id/status"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@+id/status_label"-->
+                    <!--android:layout_marginLeft="16dp"-->
+                    <!--android:layout_toRightOf="@+id/ivPerson"-->
+                    <!--android:textColor="@color/colorPrimary"-->
+                    <!--android:textSize="16sp"-->
+                    <!--emojicon:emojiconSize="28sp" />-->
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/div2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/inputs_background"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/rel3"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:id="@+id/id_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_16"
+                    android:layout_marginLeft="16dp"
+                    android:text="ID" />
+
+                <TextView
+                    android:id="@+id/IDmember"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/id_label"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="@dimen/density_16"
+                    android:text="-"
+                    android:textColor="@color/colorTextOtu"
+                    android:textSize="18sp" />
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/div3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/inputs_background"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/rel4"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:id="@+id/password_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="@dimen/density_16"
+                    android:text="Password" />
+
+                <TextView
+                    android:id="@+id/userPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/password_label"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="@dimen/density_16"
+                    android:text="xxxxxxxxx"
+                    android:textColor="@color/colorTextOtu"
+                    android:textSize="18sp" />
+                <!--android:layout_toRightOf="@+id/ivPerson"-->
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/div4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/inputs_background"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/rel5"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:id="@+id/pin_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_16"
+                    android:layout_marginLeft="16dp"
+                    android:text="Pin" />
+
+                <TextView
+                    android:id="@+id/userPin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/pin_label"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="@dimen/density_16"
+                    android:text="xxxxxxxx"
+                    android:textColor="@color/colorTextOtu"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/div5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/inputs_background"
+                android:orientation="vertical" />
+
+            <RelativeLayout
+                android:id="@+id/rel6"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp">
+
+                <TextView
+                    android:id="@+id/phone_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:text="Phone Number" />
+
+                <TextView
+                    android:id="@+id/numberPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/phone_label"
+                    android:layout_marginLeft="16dp"
+                    android:textColor="@color/colorTextOtu"
+                    android:textSize="18sp" />
+
+                <!--android:layout_toRightOf="@+id/ivPerson"-->
+
+            </RelativeLayout>
+        </LinearLayout>
+        <!-- end custom -->
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

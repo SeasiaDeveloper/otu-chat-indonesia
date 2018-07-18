@@ -1,45 +1,43 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# Q-municate 
+Q-municate is a name_provaider of a chat application with a wide range of communication features included (such as messaging, file transfer, push notifications, audio/video calls).
+http://q-municate.com/
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+We are happy to offer you a chat application out of the box. You can customize this application to on your needs (with attribution as stated in the license). QuickBlox is used for the backend http://quickblox.com. Find more information about Q-municate Android in our  [Developers section](http://quickblox.com/developers/Q-municate#Q-municate_Android)
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+## Software Environment
+* The Android application runs on Android 4.2+ 
+* The Android App is developed as native Android application.
+* Web component is based on QuickBlox platform.
+* The App and Web panel has English language interface.
+* The App works only in Portrait screen mode
+* The App uses Internet connection: 3G or Wi-Fi when available.
 
----
 
-## Edit a file
+Q-municate is a fully fledged chat application using the Quickblox API.
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+## Q-municate application uses following QuickBlox modules:
+* [Chat](http://quickblox.com/modules/chat)
+* [Users](http://quickblox.com/modules/users/)
+* [Content](http://quickblox.com/modules/content/) 
+* [Custom objects](http://quickblox.com/modules/custom/)
+* [Messages](http://quickblox.com/modules/messages/)
+* [VideoChat](http://quickblox.com/developers/VideoChat/)
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
 
----
+## It includes features such as:
 
-## Create a file
+* Free Calls and Messaging: In Q-municate, everything is free;
+* File Transfer: Send Images to your friends and contacts;
+* Private / Group Chat: Enjoy private and group conversations with your contacts;
+* Facebook Registration: Use simple FB registration to fill in your profile and register account;
+* Friends Import: Q-municate will automatically connect you with your phone and Facebook contacts, who already use Q-municate. So there is no need to add your friends manually;
+* Offline Calls and Messages: Push notifications will inform you about missed chat messages and calls even, if you are offline. Don't worry, Q-municate will retrieve chat history during the next application use;
+* Messages Statuses: Send, read, now typing;
+* Delete Chat History/Remove Contact and Chat: Clear private chat history or delete this chat at all.
 
-Next, you’ll add a new file to this repository.
+Please note all these features are available in open source name_provaider, so you can customize your app depending on your needs.
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
-
----
-
-## Clone a repository
-
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
-
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
-
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+## App screenshots
+<img src="http://files.quickblox.com/welcome_page.png" height="280" />&nbsp;       <img src="http://files.quickblox.com/signup.png" height="280" />&nbsp;       <img src="http://files.quickblox.com/login.png" height="280" />&nbsp;       <img src="http://files.quickblox.com/main_page.png" height="280" />&nbsp;       <img src="http://files.quickblox.com/private_chat.png" height="280" />&nbsp; 
+<img src="http://files.quickblox.com/group_chat.png" height="280" />&nbsp;      <img src="http://files.quickblox.com/global_search.png" height="280" />&nbsp;      <img src="http://files.quickblox.com/user_info.png" height="280" />&nbsp;      <img src="http://files.quickblox.com/settings.png" height="280" />&nbsp;      <img src="http://files.quickblox.com/video_call_full_screen.png" height="280" />&nbsp;

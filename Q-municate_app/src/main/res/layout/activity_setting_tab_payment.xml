@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/density_16"
+    tools:context=".ui.activities.settings.SettingTabPaymentActivity">
+
+    <Button
+        android:id="@+id/btn_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="@dimen/density_16"
+        android:background="@drawable/custom_round_green_dark"
+        android:drawableEnd="@drawable/ic_next_white"
+        android:drawableLeft="@drawable/ic_account_circle"
+        android:drawableRight="@drawable/ic_next_white"
+        android:drawableStart="@drawable/ic_account_circle"
+        android:text="Profile"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btn_reset_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="@dimen/density_16"
+        android:background="@drawable/custom_round_green_dark"
+        android:drawableEnd="@drawable/ic_next_white"
+        android:drawableLeft="@drawable/ic_pin"
+        android:drawableRight="@drawable/ic_next_white"
+        android:drawableStart="@drawable/ic_pin"
+        android:text="Reset PIN"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btn_reset_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="@dimen/density_16"
+        android:background="@drawable/custom_round_green_dark"
+        android:drawableEnd="@drawable/ic_next_white"
+        android:drawableLeft="@drawable/ic_key_light"
+        android:drawableRight="@drawable/ic_next_white"
+        android:drawableStart="@drawable/ic_key_light"
+        android:text="Reset Password"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btn_non_aktif_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="@dimen/density_16"
+        android:background="@drawable/custom_round_green_dark"
+        android:drawableEnd="@drawable/ic_next_white"
+        android:drawableLeft="@drawable/ic_key_light"
+        android:drawableRight="@drawable/ic_next_white"
+        android:drawableStart="@drawable/ic_key_light"
+        android:text="NON AKTIF ACCOUNT"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+</LinearLayout>
