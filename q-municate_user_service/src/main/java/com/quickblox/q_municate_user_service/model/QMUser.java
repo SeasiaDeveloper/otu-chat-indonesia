@@ -19,6 +19,8 @@ public class QMUser extends QBUser {
 
     private String avatar;
 
+    private String username;
+
     private String status;
 
     public String getAvatar() {
@@ -70,5 +72,13 @@ public class QMUser extends QBUser {
             result.add(QMUser.convert(qbUser));
         }
         return result;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

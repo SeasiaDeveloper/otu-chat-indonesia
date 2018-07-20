@@ -4,17 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.eklanku.otuChat.ui.fragments.search.ContactsModel;
-import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
-import com.eklanku.otuChat.ui.fragments.search.ContactsModel;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.core.exception.QBResponseException;
 import com.quickblox.q_municate_core.models.AppSession;
@@ -28,19 +33,23 @@ import com.quickblox.q_municate_db.utils.DialogTransformUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.quickblox.users.model.QBUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyViewHolder> {
+public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyViewHolder> implements Filterable {
 
-    private final List<ContactsModel> contactsModels;
+    private List<ContactsModel> contactsModels;
+    private List<ContactsModel> mainList;
     private final Context context;
     private DataManager dataManager = DataManager.getInstance();
     private QBUser qbUser = AppSession.getSession().getUser();
+    private boolean isToGroup = false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView mTvUsername, mTvMessage, mTvPhonenumber;
         public ImageView mIvChat;
         public RelativeLayout mRlContacts;
+        public CheckBox mChkSelect;
 
         public MyViewHolder(View view) {
             super(view);
@@ -49,6 +58,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             mIvChat = (ImageView) view.findViewById(R.id.ivChat);
             mTvMessage = (TextView) view.findViewById(R.id.tvMessage);
             mRlContacts = (RelativeLayout) view.findViewById(R.id.rlContacts);
+            mChkSelect = (CheckBox) view.findViewById(R.id.chkSelect);
 
         }
     }
@@ -56,7 +66,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
     public ContactsAdapter(List<ContactsModel> contactsModels, Context context) {
         this.contactsModels = contactsModels;
+        this.mainList = contactsModels;
         this.context = context;
+        isToGroup = ((ContactsActivity) context).isToGroup;
     }
 
     @Override
@@ -72,14 +84,34 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         final ContactsModel contact = contactsModels.get(position);
 
         holder.mTvUsername.setText(contact.getFullName());
-        //holder.mTvPhonenumber.setText(contact.getLogin());
+        Log.v("Contacts New Meesage","number: "+contact.getLogin());
 
-        if (contact.getIsReg_type().equals("1")) {
+        //holder.mTvPhonenumber.setText(contact.getLogin());
+        if(isToGroup){
             holder.mIvChat.setVisibility(View.GONE);
-            //holder.mTvMessage.setText("Using this App");
+            holder.mChkSelect.setVisibility(View.VISIBLE);
+            holder.mChkSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Integer userId = Integer.valueOf(contact.getId_user());
+                    if(isChecked) {
+                        if(!((ContactsActivity) context).friendIdsList.contains(userId))
+                            ((ContactsActivity) context).friendIdsList.add(userId);
+                    } else {
+                        ((ContactsActivity) context).friendIdsList.remove(userId);
+                    }
+                }
+            });
         } else {
             holder.mIvChat.setVisibility(View.VISIBLE);
-            //holder.mTvMessage.setText("Invite");
+            holder.mChkSelect.setVisibility(View.GONE);
+            if (contact.getIsReg_type().equals("1")) {
+                holder.mIvChat.setVisibility(View.GONE);
+                //holder.mTvMessage.setText("Using this App");
+            } else {
+                holder.mIvChat.setVisibility(View.VISIBLE);
+                //holder.mTvMessage.setText("Invite");
+            }
         }
 
         holder.mRlContacts.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +136,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                             }
                         }
                     }).start();
-                    //NewMessageActivity.startForResult(ContactsFragment.newInstance(), CREATE_DIALOG);
+                    //NewMessageActivity.startForResult(ContactsActivity.newInstance(), CREATE_DIALOG);
                 } else {
                     String number = contact.getLogin();
                     Uri uri = Uri.parse("smsto:" + number);
@@ -115,6 +147,37 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 }
             }
         });
+    }
+
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    contactsModels = mainList;
+                } else {
+                    List<ContactsModel> filteredList = new ArrayList<>();
+                    for (ContactsModel model : mainList) {
+                        if (model.getFullName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(model);
+                        }
+                    }
+                    contactsModels = filteredList;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = contactsModels;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                contactsModels = (ArrayList<ContactsModel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     @Override

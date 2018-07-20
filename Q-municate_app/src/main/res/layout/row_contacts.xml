@@ -45,7 +45,6 @@
 
 
     </LinearLayout>
-
     <ImageView
         android:id="@+id/ivChat"
         android:layout_width="wrap_content"
@@ -54,5 +53,12 @@
         android:layout_centerVertical="true"
         android:src="@drawable/ic_add_user"
         android:visibility="visible" />
-
+    <CheckBox
+        android:id="@+id/chkSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_add_user"
+        android:visibility="gone" />
 </RelativeLayout>

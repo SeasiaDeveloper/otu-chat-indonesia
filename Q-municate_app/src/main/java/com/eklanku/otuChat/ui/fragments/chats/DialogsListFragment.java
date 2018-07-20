@@ -18,18 +18,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.base.BaseLoaderFragment;
-import com.eklanku.otuChat.ui.fragments.search.ContactsFragment;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBDialogType;
 import com.quickblox.core.helper.CollectionsUtil;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.loaders.DialogsListLoader;
 import com.eklanku.otuChat.ui.activities.about.AboutActivity;
 import com.eklanku.otuChat.ui.activities.chats.GroupDialogActivity;
 import com.eklanku.otuChat.ui.activities.chats.NewMessageActivity;
@@ -62,13 +60,9 @@ import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.quickblox.users.model.QBUser;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
@@ -78,9 +72,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>> {
@@ -174,7 +165,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-                launchContactsFragment();
+                launchContactsActivity();
                 break;
             case R.id.action_start_invite_friends:
                 InviteFriendsActivity.start(getActivity());
@@ -373,7 +364,11 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     @OnClick(R.id.fab_dialogs_new_chat)
     public void onAddChatClick(View view) {
         //baseActivity.setCurrentFragment(ContactsFragment.newInstance(true), true);
-        addChat();
+
+        Intent intent = new Intent(getActivity(), ContactsActivity.class);
+        intent.putExtra("isNewMessage", true);
+        startActivity(intent);
+        //addChat();
     }
 
     private boolean isFirstOpeningDialog(String dialogId) {
@@ -618,10 +613,11 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         }
     }
 
-    private void launchContactsFragment() {
-        //baseActivity.setCurrentFragment(SearchFragment.newInstance(), true);
-        baseActivity.setCurrentFragment(ContactsFragment.newInstance(), true);
+    private void launchContactsActivity() {
+        Intent intent = new Intent(getActivity(), ContactsActivity.class);
+        startActivity(intent);
     }
+
 
     private void updateDialogIds(String dialogId) {
         if (dialogsIdsToUpdate == null) {

@@ -22,20 +22,18 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.GroupDialogOccupantsAdapter;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
+import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quickblox.chat.QBChatService;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.core.exception.QBResponseException;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.profile.MyProfileActivity;
 import com.eklanku.otuChat.ui.activities.profile.UserProfileActivity;
-import com.eklanku.otuChat.ui.adapters.chats.GroupDialogOccupantsAdapter;
-import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
-import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
 import com.eklanku.otuChat.utils.ToastUtils;
 import com.eklanku.otuChat.utils.helpers.MediaPickHelper;
 import com.eklanku.otuChat.utils.image.ImageLoaderUtils;
@@ -109,6 +107,8 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     private int countOnlineFriends;
     private DataManager dataManager;
     private String dialogId;
+    private boolean isRefressOccupants = false;
+    private DbHelper mDbHelper;
 
     public static void start(Activity context, String dialogId) {
         Intent intent = new Intent(context, GroupDialogDetailsActivity.class);
@@ -193,7 +193,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
         if (requestCode == Crop.REQUEST_CROP) {
             handleCrop(resultCode, data);
             canPerformLogout.set(true);
-        } else if (requestCode == AddFriendsToGroupActivity.RESULT_ADDED_FRIENDS) {
+        } else if (requestCode == AddFriendsToGroupActivity.RESULT_ADDED_FRIENDS || requestCode == ContactsActivity.RESULT_CODE) {
             if (data != null) {
                 handleAddedFriends(data);
             }
@@ -263,6 +263,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
         currentNotificationTypeList = new ArrayList<>();
         updatingDialogDetailsBroadcastReceiver = new UpdatingDialogDetailsBroadcastReceiver();
         occupantsList = new ArrayList<>();
+        mDbHelper = new DbHelper(this);
     }
 
     private void fillUIWithData() {
@@ -283,7 +284,9 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     }
 
     private void updateDialog() {
-        if (qbDialog == null){
+
+        if (qbDialog == null || isRefressOccupants) {
+            isRefressOccupants = false;
             qbDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
         }
 
@@ -291,6 +294,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
         occupantsList = getUsersForGroupChat(qbDialog.getDialogId(), qbDialog.getOccupants());
         qbDialog.setOccupantsIds(ChatUtils.createOccupantsIdsFromUsersList(occupantsList));
         groupDialogOccupantsAdapter.setNewData(occupantsList);
+
     }
 
     private void registerBroadcastManagers() {
@@ -333,7 +337,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     }
 
     private void registerListeners() {
-        groupNameEditText.addTextChangedListener(new SimpleTextWatcher(){
+        groupNameEditText.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 groupNameCurrent = s.toString();
@@ -389,9 +393,10 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     private void handleAddedFriends(Intent data) {
         newFriendIdsList = (ArrayList<Integer>) data.getSerializableExtra(QBServiceConsts.EXTRA_FRIENDS);
         if (newFriendIdsList != null) {
-
+            isRefressOccupants = true;
             updateCurrentData();
             updateOccupantsList();
+            updateCountOnlineFriends();
 
             try {
                 chatHelper.sendSystemMessageAboutCreatingGroupChat(qbDialog, newFriendIdsList);
@@ -404,7 +409,12 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     }
 
     private void startAddFriendsActivity() {
-        AddFriendsToGroupActivity.start(this, qbDialog);
+        //AddFriendsToGroupActivity.start(this, qbDialog);
+        Intent intent = new Intent(this, ContactsActivity.class);
+        intent.putExtra("isToGroup", true);
+        intent.putExtra(QBServiceConsts.EXTRA_DIALOG, qbDialog);
+        startActivityForResult(intent, ContactsActivity.RESULT_CODE);
+        //startActivity(intent);
     }
 
     private void handleCrop(int resultCode, Intent result) {
@@ -434,6 +444,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
 
     private void updateCurrentData() {
         QBChatDialog qbChatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(qbDialog.getDialogId());
+        qbChatDialog.initForChat(QBChatService.getInstance());
         occupantsList = QMUserService.getInstance().getUserCache().getUsersByIDs(qbChatDialog.getOccupants());
         groupNameCurrent = groupNameEditText.getText().toString();
     }
@@ -563,6 +574,11 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
 
         for (QMUser qmUser : qmUsers) {
             if (dialogOccupantIdsSet.contains(qmUser.getId())) {
+                String regexStr = "^[0-9]*$";
+                if(qmUser.getFullName().toString().trim().matches(regexStr)) {
+                    String username = mDbHelper.getNamebyNumber(qmUser.getPhone());
+                    qmUser.setUsername(username);
+                }
                 usersList.add(qmUser);
             }
         }

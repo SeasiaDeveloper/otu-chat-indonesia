@@ -103,7 +103,7 @@
 
 
     <!-- Add Friends To Group Dialog -->
-    <string name="add_friends_to_group_title">Add Friends</string>
+    <string name="add_friends_to_group_title">Add to Group</string>
     <string name="add_friends_to_group_no_friends_for_adding">No Friends for adding</string>
 
 

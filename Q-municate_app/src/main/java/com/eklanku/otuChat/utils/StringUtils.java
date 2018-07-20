@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
 import com.eklanku.otuChat.App;
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.quickblox.core.helper.MimeUtils;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.R;;
@@ -107,5 +108,13 @@ public class StringUtils {
                     fileExtension.toLowerCase());
         }
         return mimeType;
+    }
+
+    public static boolean isNumeric(String strObject){
+        String regexStr = "^[0-9]*$";
+        if(strObject.trim().matches(regexStr)) {
+            return true;
+        }
+        return false;
     }
 }

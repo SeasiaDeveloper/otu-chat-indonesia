@@ -5,9 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.adapters.base.BaseListAdapter;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
 import com.eklanku.otuChat.utils.DateUtils;
+import com.eklanku.otuChat.utils.StringUtils;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBDialogType;
 import com.eklanku.otuChat.R;;
@@ -59,11 +61,20 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
         if (QBDialogType.PRIVATE.equals(currentDialog.getType())) {
             QMUser opponentUser = dialogWrapper.getOpponentUser();
             if (opponentUser.getFullName() != null) {
+                String username = "";
                 if(opponentUser.getFullName().equals(String.valueOf(opponentUser.getId()))) {
-                    viewHolder.nameTextView.setText(currentDialog.getName());
+                    username = currentDialog.getName();
                 } else {
-                    viewHolder.nameTextView.setText(opponentUser.getFullName());
+                    username = opponentUser.getFullName();
                 }
+
+                if(StringUtils.isNumeric(opponentUser.getFullName()) && context instanceof MainActivity) {
+                   String name = ((MainActivity) context).mDbHelper.getNamebyNumber(opponentUser.getFullName()) ;
+                   if (!name.isEmpty())
+                       username = name;
+
+                }
+                viewHolder.nameTextView.setText(username);
                 displayAvatarImage(opponentUser.getAvatar(), viewHolder.avatarImageView);
             } else {
                 viewHolder.nameTextView.setText(resources.getString(R.string.deleted_user));

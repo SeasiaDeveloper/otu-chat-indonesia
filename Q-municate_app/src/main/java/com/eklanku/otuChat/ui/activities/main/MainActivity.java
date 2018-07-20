@@ -1,13 +1,19 @@
 package com.eklanku.otuChat.ui.activities.main;
 
+import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.BaseColumns;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
@@ -21,10 +27,12 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
+import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -51,6 +59,9 @@ import com.eklanku.otuChat.utils.helpers.ImportFriendsHelper;
 import com.eklanku.otuChat.utils.image.ImageLoaderUtils;
 import com.eklanku.otuChat.utils.MediaUtils;
 
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.exception.QBResponseException;
+import com.quickblox.core.request.QBPagedRequestBuilder;
 import com.quickblox.q_municate_core.core.command.Command;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.DialogWrapper;
@@ -61,6 +72,8 @@ import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
+import com.quickblox.users.QBUsers;
+import com.quickblox.users.model.QBUser;
 import com.yyydjk.library.BannerLayout;
 
 import butterknife.Bind;
@@ -169,6 +182,8 @@ public class MainActivity extends BaseLoggableActivity {
 
         initFields();
         setUpActionBarWithUpButton();
+        //mDbHelper.removeAsll(); // TO REMOVE
+        synchContacts();
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -252,7 +267,7 @@ public class MainActivity extends BaseLoggableActivity {
 //                        break;
                     case 2:
                         Log.d("OPPO-1", "isMember: " + PreferenceUtil.isMemberStatus(MainActivity.this));
-                      //  PreferenceUtil.setMemberStatus(MainActivity.this, false);
+                        //  PreferenceUtil.setMemberStatus(MainActivity.this, false);
                         if (!PreferenceUtil.isMemberStatus(MainActivity.this)) {
                             Log.d("OPPO-1", "isMember2: " + PreferenceUtil.isMemberStatus(MainActivity.this));
                             //jalankan register activity
@@ -280,7 +295,6 @@ public class MainActivity extends BaseLoggableActivity {
 
         //populate();
         mainActivity = this;
-
     }
 
 
@@ -306,6 +320,7 @@ public class MainActivity extends BaseLoggableActivity {
 
     private void initFields() {
         Log.d(TAG, "initFields()");
+        mDbHelper = new DbHelper(this);
         title = " " + AppSession.getSession().getUser().getFullName();
         importFriendsSuccessAction = new ImportFriendsSuccessAction();
         importFriendsFailAction = new ImportFriendsFailAction();
@@ -613,7 +628,7 @@ public class MainActivity extends BaseLoggableActivity {
                     grantResults[9] == PackageManager.PERMISSION_GRANTED /*&&
                     grantResults[10] == PackageManager.PERMISSION_GRANTED*/
                     ) {
-
+                synchContacts();
             } else {
                 finish();
 
@@ -638,7 +653,7 @@ public class MainActivity extends BaseLoggableActivity {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
                     String errNumber = response.body().getErrNumber();
-                    Log.d("OPPO-1", "cekMember:process success "+errNumber);
+                    Log.d("OPPO-1", "cekMember:process success " + errNumber);
                     if (errNumber.equalsIgnoreCase("0")) {
                         PreferenceUtil.setMemberStatus(MainActivity.this, true);
                     } else if (errNumber.equalsIgnoreCase("5")) {
@@ -657,6 +672,109 @@ public class MainActivity extends BaseLoggableActivity {
             public void onFailure(Call<DataProfile> call, Throwable t) {
                 Log.d("OPPO-1", "cekMember:process failure");
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public DbHelper mDbHelper;
+    public ArrayList<String> arrayPhone = new ArrayList<>();
+    public ArrayList<String> arrayName = new ArrayList<>();
+    private int intCurrentPage = 0;
+    private int startPosition = 0;
+    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    private static final int PER_PAGE = 200; //5; //200;
+    private static final int COUNTRY_CODE = 62; // 91; 62;
+
+    private void synchContacts() {
+        if (!mDbHelper.isContactsExists()) {
+            readContacts();
+        }
+    }
+
+    public void readContacts() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+        } else {
+            intCurrentPage++;
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        arrayPhone.clear();
+                        ContentResolver cr = getContentResolver();
+                        Cursor cur;
+
+                        String limit = String.valueOf(startPosition) + ", " + PER_PAGE;
+
+                        cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, "UPPER(" + ContactsContract.Contacts.DISPLAY_NAME + ") ASC LIMIT " + limit);
+                        if (cur.getCount() > 0) {
+                            arrayName.clear();
+                            while (cur.moveToNext()) {
+                                String id = cur.getString(cur.getColumnIndex(BaseColumns._ID));
+                                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                            new String[]{id}, null);
+                                    while (pCur.moveToNext()) {
+                                        String phonenumber = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                        String contactname = pCur.getString(pCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                                        phonenumber = phonenumber.replaceAll("[+()-]", "");
+                                        phonenumber = phonenumber.replaceAll(" ", "");
+                                        if (phonenumber.startsWith("0")) {
+                                            phonenumber = phonenumber.replaceFirst("0", String.valueOf(COUNTRY_CODE));
+                                        } else if (!phonenumber.startsWith(String.valueOf(COUNTRY_CODE))) {
+                                            phonenumber = COUNTRY_CODE + phonenumber;
+                                        }
+                                        if (!arrayPhone.contains(phonenumber.trim())) {
+                                            if (!phonenumber.isEmpty()) {
+                                                arrayPhone.add(phonenumber);
+                                                arrayName.add(contactname);
+                                            }
+                                        }
+                                    }
+                                    pCur.close();
+                                }
+                            }
+                            sendContact();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }).start();
+        }
+    }
+
+    private void sendContact() {
+        QBPagedRequestBuilder pagedRequestBuilder = new QBPagedRequestBuilder();
+        pagedRequestBuilder.setPage(1);
+        pagedRequestBuilder.setPerPage(arrayPhone.size());
+
+        for (int i = 0; i < arrayPhone.size(); i++) {
+            if (!mDbHelper.isPhoneNumberExists(arrayPhone.get(i))) {
+                mDbHelper.insertContact(new ContactsModel(arrayPhone.get(i), arrayName.get(i), "0"));
+            }
+        }
+
+        QBUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new QBEntityCallback<ArrayList<QBUser>>() {
+            @Override
+            public void onSuccess(ArrayList<QBUser> users, Bundle params) {
+                if (users.size() > 0) {
+                    for (int j = 0; j < users.size(); j++) {
+                        if (!mDbHelper.isQbUser(users.get(j).getPhone())) {
+                            mDbHelper.updateContact(users.get(j).getPhone(), users.get(j).getId());
+                        }
+                    }
+                }
+                startPosition = intCurrentPage * PER_PAGE;
+                readContacts();
+            }
+
+            @Override
+            public void onError(QBResponseException errors) {
+                Log.e("Error", errors.getErrors().toString());
             }
         });
     }

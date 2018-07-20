@@ -30,12 +30,15 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.eklanku.otuChat.ui.activities.call.CallActivity;
 import com.eklanku.otuChat.ui.activities.location.MapsActivity;
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.others.PreviewImageActivity;
 import com.eklanku.otuChat.ui.activities.profile.UserProfileActivity;
 import com.eklanku.otuChat.ui.adapters.chats.PrivateChatMessageAdapter;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.utils.DateUtils;
+import com.eklanku.otuChat.utils.StringUtils;
 import com.eklanku.otuChat.utils.ToastUtils;
+import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.eklanku.otuChat.utils.listeners.FriendOperationListener;
 import com.google.gson.Gson;
 import com.quickblox.chat.QBRestChatService;
@@ -81,6 +84,8 @@ import java.util.Set;
 import butterknife.OnClick;
 
 public class PrivateDialogActivity extends BaseDialogActivity {
+
+    public DbHelper mDbHelper;
 
     private FriendOperationAction friendOperationAction;
     private QMUser opponentUser;
@@ -476,7 +481,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         Log.d("OPPO-1", "onOptionsItemSelected = isFriend: "+isFriend);
         if (!isFriend && item.getItemId() != android.R.id.home) {
             DataManager.getInstance().getFriendDataManager().createOrUpdate(new Friend(opponentUser));
-            QBAddFriendCommand.start(PrivateDialogActivity.this, opponentUser.getId());
+            //QBAddFriendCommand.start(PrivateDialogActivity.this, opponentUser.getId());
             /*QBFriendListHelper qbHelper = new QBFriendListHelper(PrivateDialogActivity.this);
             try {
                 qbHelper.addFriend(opponentUser.getId());
@@ -519,7 +524,13 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         friendObserver = new FriendObserver();
         typingMessageBroadcastReceiver = new TypingStatusBroadcastReceiver();
         opponentUser = (QMUser) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_OPPONENT);
-        title = opponentUser.getFullName();
+        title = opponentUser.getFullName(); //6285804895038
+        mDbHelper = new DbHelper(this);
+        if(StringUtils.isNumeric(opponentUser.getFullName())) {
+            String name = mDbHelper.getNamebyNumber(opponentUser.getFullName()) ;
+            if (!name.isEmpty())
+                title = name;
+        }
     }
 
     @Override
