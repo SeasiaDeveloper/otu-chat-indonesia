@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
 import com.eklanku.otuChat.App;
-import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.quickblox.core.helper.MimeUtils;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.R;;
@@ -14,6 +13,7 @@ import com.quickblox.q_municate_db.models.Attachment;
 
 import java.io.File;
 import java.util.ArrayList;
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 
 public class StringUtils {
 

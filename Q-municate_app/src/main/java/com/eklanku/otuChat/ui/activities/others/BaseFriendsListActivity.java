@@ -2,6 +2,7 @@ package com.eklanku.otuChat.ui.activities.others;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -81,11 +82,14 @@ public abstract class BaseFriendsListActivity extends BaseLoggableActivity {
     }
 
     protected List<QMUser> getFriendsList() {
-        List<Friend> friendsList = dataManager.getFriendDataManager().getAllSorted();
+        List<Friend> friendsList = dataManager.getFriendDataManager().getAllSorted();//get data from server qblock
+        Log.d("OPPO-1", "getFriendsList: "+friendsList);
         return UserFriendUtils.getUsersFromFriends(friendsList);
     }
 
     protected abstract FriendsAdapter getFriendsAdapter();
 
     protected abstract void performDone();
+
+
 }

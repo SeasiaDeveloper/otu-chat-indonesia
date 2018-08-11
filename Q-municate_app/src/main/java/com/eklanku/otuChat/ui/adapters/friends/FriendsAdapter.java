@@ -1,7 +1,6 @@
 package com.eklanku.otuChat.ui.adapters.friends;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -23,7 +22,7 @@ import com.quickblox.q_municate_core.qb.helpers.QBFriendListHelper;
 import com.quickblox.q_municate_core.utils.OnlineStatusUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.quickblox.users.model.QBUser;
-
+import android.util.Log;
 import java.util.List;
 
 import butterknife.Bind;
@@ -58,8 +57,6 @@ public class FriendsAdapter extends BaseFilterAdapter<QMUser, BaseClickListenerV
         } else {
             viewHolder.firstLatterTextView.setVisibility(View.GONE);
         }
-
-        //Log.v("Contacts New Meesage","number: "+user.getPhone());
 
         viewHolder.nameTextView.setText(user.getFullName());
 

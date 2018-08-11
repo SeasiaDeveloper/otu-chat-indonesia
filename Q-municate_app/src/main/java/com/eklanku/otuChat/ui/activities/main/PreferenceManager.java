@@ -16,8 +16,13 @@ public class PreferenceManager {
     private static final String IS_LOGIN = "IsLoggedIn";
 
     public static final String KEY_USERID = "userid";
-    public static final String KEY_ACCESS_TOKEN= "access_token";
+    public static final String KEY_ACCESS_TOKEN = "access_token";
     public static final String KEY_IS_MEMBER = "is_member";
+
+    public final String KEY_REFF_LAUNCH = "firstLaunch";
+    public final String KEY_REFF_DATE = "referrerDate";
+    public final String KEY_REFF_RAW = "referrerDataRaw";
+    public final String KEY_REFF_DECODE = "referrerDataDecoded";
 
     public PreferenceManager(Context context) {
         this._context = context;
@@ -37,7 +42,15 @@ public class PreferenceManager {
         editor.commit();
     }
 
-    public void createTokenforResetPass(String accessToken){
+    public void createReff(String launch, String date, String raw, String decode) {
+        editor.putString(KEY_REFF_LAUNCH, launch);
+        editor.putString(KEY_REFF_DATE, date);
+        editor.putString(KEY_REFF_RAW, raw);
+        editor.putString(KEY_REFF_DECODE, decode);
+        editor.commit();
+    }
+
+    public void createTokenforResetPass(String accessToken) {
         editor.putString(KEY_ACCESS_TOKEN, accessToken);
         editor.commit();
     }
@@ -52,6 +65,11 @@ public class PreferenceManager {
         HashMap<String, String> user = new HashMap<String, String>();
         user.put(KEY_USERID, pref.getString(KEY_USERID, null));
         user.put(KEY_ACCESS_TOKEN, pref.getString(KEY_ACCESS_TOKEN, null));
+
+        user.put(KEY_REFF_LAUNCH, pref.getString(KEY_REFF_LAUNCH, null));
+        user.put(KEY_REFF_DATE, pref.getString(KEY_REFF_DATE, null));
+        user.put(KEY_REFF_RAW, pref.getString(KEY_REFF_RAW, null));
+        user.put(KEY_REFF_DECODE, pref.getString(KEY_REFF_DECODE, null));
         return user;
     }
 

@@ -46,6 +46,7 @@ import com.quickblox.q_municate_core.qb.commands.friend.QBRemoveFriendCommand;
 import com.quickblox.q_municate_core.qb.commands.chat.QBUpdateGroupDialogCommand;
 import com.quickblox.q_municate_core.qb.commands.chat.QBUpdateStatusMessageCommand;
 import com.quickblox.q_municate_core.qb.commands.push.QBSendPushCommand;
+import com.quickblox.q_municate_core.qb.commands.rest.QBSignUpCommand;
 import com.quickblox.q_municate_core.qb.helpers.BaseHelper;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
 import com.quickblox.q_municate_core.qb.helpers.QBChatRestHelper;
@@ -113,6 +114,8 @@ public class QBService extends Service {
     private void initCommands() {
         // first call init
         registerInitCallChatCommand();
+
+        registerSignUpCommand();
 
         // chat commands
         registerCreatePrivateChatCommand();
@@ -542,6 +545,13 @@ public class QBService extends Service {
     private void forceReLogin() {
         Intent intent = new Intent(QBServiceConsts.FORCE_RELOGIN);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void registerSignUpCommand() {
+        QBSignUpCommand signUpCommand = new QBSignUpCommand(this,
+                QBServiceConsts.SIGNUP_SUCCESS_ACTION,
+                QBServiceConsts.SIGNUP_FAIL_ACTION);
+        serviceCommandMap.put(QBServiceConsts.SIGNUP_ACTION, signUpCommand);
     }
 
     @Override

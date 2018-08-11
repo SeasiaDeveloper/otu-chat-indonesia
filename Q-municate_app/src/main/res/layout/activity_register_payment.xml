@@ -44,6 +44,11 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:text="@string/ekl_default"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/btn_next"
         android:layout_width="match_parent"

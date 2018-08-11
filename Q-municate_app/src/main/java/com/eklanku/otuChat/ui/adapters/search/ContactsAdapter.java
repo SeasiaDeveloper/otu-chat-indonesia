@@ -16,10 +16,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.eklanku.otuChat.R;
-import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
+import com.eklanku.otuChat.ui.activities.chats.NewMessageActivity;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
+import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsModelGroup;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.core.exception.QBResponseException;
 import com.quickblox.q_municate_core.models.AppSession;
@@ -36,10 +38,20 @@ import com.quickblox.users.model.QBUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
+
+
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyViewHolder> implements Filterable {
 
     private List<ContactsModel> contactsModels;
     private List<ContactsModel> mainList;
+
+
     private final Context context;
     private DataManager dataManager = DataManager.getInstance();
     private QBUser qbUser = AppSession.getSession().getUser();
@@ -71,6 +83,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         isToGroup = ((ContactsActivity) context).isToGroup;
     }
 
+
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -81,7 +95,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final ContactsModel contact = contactsModels.get(position);
+        final com.eklanku.otuChat.ui.activities.contacts.ContactsModel contact = contactsModels.get(position);
 
         holder.mTvUsername.setText(contact.getFullName());
         Log.v("Contacts New Meesage","number: "+contact.getLogin());
@@ -138,10 +152,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                     }).start();
                     //NewMessageActivity.startForResult(ContactsActivity.newInstance(), CREATE_DIALOG);
                 } else {
+                    //get ID EKL
+
                     String number = contact.getLogin();
                     Uri uri = Uri.parse("smsto:" + number);
                     Intent it = new Intent(Intent.ACTION_SENDTO, uri);
-                    it.putExtra("sms_body", "The SMS text");
+                    it.putExtra("sms_body", "https://play.google.com/store/apps/details?id=com.eklanku.otuChat");
                     context.startActivity(it);
                     //context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
                 }
@@ -159,8 +175,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 if (charString.isEmpty()) {
                     contactsModels = mainList;
                 } else {
-                    List<ContactsModel> filteredList = new ArrayList<>();
-                    for (ContactsModel model : mainList) {
+                    List<com.eklanku.otuChat.ui.activities.contacts.ContactsModel> filteredList = new ArrayList<>();
+                    for (com.eklanku.otuChat.ui.activities.contacts.ContactsModel model : mainList) {
                         if (model.getFullName().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(model);
                         }
@@ -174,7 +190,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                contactsModels = (ArrayList<ContactsModel>) filterResults.values;
+                contactsModels = (ArrayList<com.eklanku.otuChat.ui.activities.contacts.ContactsModel>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
@@ -199,4 +215,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     private void startPrivateChat(QBChatDialog dialog, QMUser selectedUser) {
         PrivateDialogActivity.start(context, selectedUser, dialog);
     }
+
+
 }

@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,6 +34,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.eklanku.otuChat.ui.activities.about.ContactUsActivity;
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBalanceActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBonusActivity;
@@ -83,7 +85,8 @@ public class PaymentFragment extends Fragment {
             lblSaldo;
     ImageButton btnDeposit, btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
-            btnTv, btnPaket, btnCallme, btnSMS, btnEtool, btnWi;
+            btnTv, btnPaket, btnSMS, btnEtool, btnWi;
+    Button btnCallme;
     /* Button btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
              btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
              btnTv, btnPaket, btnCallme, btnSMS, btnEtool, btnWi;*/
@@ -405,12 +408,47 @@ public class PaymentFragment extends Fragment {
                 PreferenceUtil.setLoginStatus(getActivity(), false);
                 //logout(strUserID, strAccessToken);*/
                 break;
+
+            case R.id.referal:
+                //dialog();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
 
     }
 
+  /*  private void dialog() {
+
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setCancelable(false);
+
+        final TextView tvStatus = (TextView) dialog.findViewById(R.id.status);
+        final TextView tvFirst = (TextView) dialog.findViewById(R.id.firstlaunch);
+        final TextView tvDate = (TextView) dialog.findViewById(R.id.date);
+        final TextView tvRaw = (TextView) dialog.findViewById(R.id.raw);
+        final TextView tvDecode = (TextView) dialog.findViewById(R.id.decode);
+
+        tvStatus.setText("" + MainActivity.mainActivity.isReferrerDetected);
+        tvFirst.setText(MainActivity.mainActivity.firstLaunch);
+        tvDate.setText(MainActivity.mainActivity.referrerDate);
+        tvRaw.setText(MainActivity.mainActivity.referrerDataRaw);
+        tvDecode.setText(MainActivity.mainActivity.referrerDataDecoded);
+
+        Button dialogButtonX = (Button) dialog.findViewById(R.id.btn_ok);
+        dialogButtonX.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+*/
     public static String getCurrentTime() {
         try {
 

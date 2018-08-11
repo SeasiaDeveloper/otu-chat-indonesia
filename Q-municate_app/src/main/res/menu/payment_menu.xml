@@ -90,4 +90,10 @@
         android:orderInCategory="100"
         android:title="@string/dlg_logout"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/referal"
+        android:orderInCategory="100"
+        android:title="Referral"
+        app:showAsAction="never" />
 </menu>

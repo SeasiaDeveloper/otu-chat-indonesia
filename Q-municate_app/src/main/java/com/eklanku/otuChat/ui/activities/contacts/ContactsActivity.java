@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -26,8 +25,7 @@ import android.view.MenuItem;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
-import com.eklanku.otuChat.ui.activities.chats.AddFriendsToGroupActivity;
-import com.eklanku.otuChat.ui.adapters.friends.SelectableFriendsAdapter;
+import com.eklanku.otuChat.ui.activities.chats.NewGroupDialogActivity;
 import com.eklanku.otuChat.ui.adapters.search.ContactsAdapter;
 import com.eklanku.otuChat.utils.ToastUtils;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
@@ -40,11 +38,6 @@ import com.quickblox.q_municate_core.core.command.Command;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.qb.commands.chat.QBAddFriendsToGroupCommand;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
-import com.quickblox.q_municate_core.utils.ChatUtils;
-import com.quickblox.q_municate_core.utils.UserFriendUtils;
-import com.quickblox.q_municate_db.managers.DataManager;
-import com.quickblox.q_municate_db.models.Friend;
-import com.quickblox.q_municate_user_service.model.QMUser;
 import com.quickblox.users.QBUsers;
 import com.quickblox.users.model.QBUser;
 
@@ -232,6 +225,9 @@ public class ContactsActivity extends BaseLoggableActivity implements SearchView
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_create_group:
+                NewGroupDialogActivity.start(this);
+                break;
             case android.R.id.home:
                 finish();
                 return true;

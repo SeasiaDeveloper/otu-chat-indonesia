@@ -49,7 +49,7 @@
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         android:text="Saldo :"
-                        android:textColor="@color/colorTextOtu"
+                        android:textColor="@color/colorTextOtuDark"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -82,7 +82,8 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginStart="5dp"
                             android:background="@android:color/transparent"
-                            android:src="@drawable/ic_add" />
+                            android:src="@drawable/ic_add"
+                            />
                     </RelativeLayout>
                 </android.support.v7.widget.LinearLayoutCompat>
 
@@ -107,11 +108,23 @@
                     android:orientation="vertical"
                     android:padding="@dimen/density_8">
 
+                    <!--<Button-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="TOPUP"-->
+                        <!--android:layout_margin="@dimen/density_8"-->
+                        <!--android:background="@drawable/icon_button_shadow"-->
+                        <!--android:textStyle="bold" />-->
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="TOPUP"
+                        android:textColor="@color/colorTextOtuDark"
                         android:textStyle="bold" />
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="#c0c0c0"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -127,11 +140,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnPulsa"
-                                android:layout_width="60dp"
-                                android:src="@drawable/ic_ic_pay_pulsa"
-                                android:layout_height="60dp"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:src="@drawable/ic_pulsa"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true" />
 
                             <ImageView
                                 android:id="@+id/ivPulsa"
@@ -143,7 +155,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_ic_pay_pulsa" />
+                                app:srcCompat="@drawable/ic_pulsa" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -151,7 +163,8 @@
                                 android:layout_below="@id/btnPulsa"
                                 android:layout_centerHorizontal="true"
                                 android:text="Pulsa"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -163,11 +176,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnPaket"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:src="@drawable/ic_ic_pay_paket_data"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
+                                android:src="@drawable/ic_paket_data"
+                                android:layout_centerHorizontal="true"/>
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/ivPaket"
@@ -179,7 +191,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_ic_pay_paket_data" />
+                                app:srcCompat="@drawable/ic_paket_data" />
 
                             <TextView
                                 android:id="@+id/textView18"
@@ -188,7 +200,8 @@
                                 android:layout_below="@id/btnPaket"
                                 android:layout_centerHorizontal="true"
                                 android:text="Paket data"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -200,11 +213,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnVoucher"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:src="@drawable/ic_ic_pay_voucher_game"
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
                                 android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:src="@drawable/ic_voucher_game" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/ivVoucher"
@@ -216,7 +228,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_ic_pay_voucher_game" />
+                                app:srcCompat="@drawable/ic_voucher_game" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -224,7 +236,8 @@
                                 android:layout_below="@id/btnVoucher"
                                 android:layout_centerHorizontal="true"
                                 android:text="Voucher Game"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -236,11 +249,10 @@
 
                             <ImageButton
                                 android:id="@+id/btn_wifi_id"
-                                android:layout_width="60dp"
-                                android:src="@drawable/ic_wifi"
-                                android:layout_height="60dp"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:src="@drawable/ic_wifiid"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/iv_wifi_id"
@@ -252,7 +264,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_wifi" />
+                                app:srcCompat="@drawable/ic_wifiid" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -260,7 +272,8 @@
                                 android:layout_below="@id/btn_wifi_id"
                                 android:layout_centerHorizontal="true"
                                 android:text="Wifi ID"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                     </LinearLayout>
@@ -279,11 +292,10 @@
 
                             <ImageButton
                                 android:id="@+id/btn_etool"
-                                android:layout_width="60dp"
-                                android:src="@drawable/ic_etool"
-                                android:layout_height="60dp"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:src="@drawable/ic_etoll"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/iv_etool"
@@ -295,7 +307,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_etool" />
+                                app:srcCompat="@drawable/ic_etoll" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -303,7 +315,8 @@
                                 android:layout_below="@id/btn_etool"
                                 android:layout_centerHorizontal="true"
                                 android:text="E-Tool"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="10dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -315,11 +328,10 @@
 
                             <ImageButton
                                 android:id="@+id/btn_sms"
-                                android:layout_width="60dp"
-                                android:src="@drawable/ic_email"
-                                android:layout_height="60dp"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:src="@drawable/ic_sms"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/iv_sms"
@@ -331,7 +343,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_email" />
+                                app:srcCompat="@drawable/ic_sms" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -339,7 +351,8 @@
                                 android:layout_below="@id/btn_sms"
                                 android:layout_centerHorizontal="true"
                                 android:text="SMS"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="10dp"/>
                         </RelativeLayout>
 
 
@@ -373,11 +386,24 @@
                     android:orientation="vertical"
                     android:padding="@dimen/density_8">
 
+                    <!--<Button-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="PPOB"-->
+                        <!--android:layout_margin="@dimen/density_8"-->
+                        <!--android:background="@drawable/icon_button_shadow"-->
+                        <!--android:textStyle="bold" />-->
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="PPOB"
-                        android:textStyle="bold" />
+                        android:textColor="@color/colorTextOtuDark"
+                        android:textStyle="bold"
+                        />
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dp"
+                        android:background="#c0c0c0"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -392,12 +418,11 @@
                             android:gravity="center">
 
                             <ImageButton
-                                android:src="@drawable/ic_ic_pay_pln"
+                                android:src="@drawable/ic_pln"
                                 android:id="@+id/btnPln"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/ivPln"
@@ -409,7 +434,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_ic_pay_pln" />
+                                app:srcCompat="@drawable/ic_pln" />
 
                             <TextView
                                 android:id="@+id/textView19"
@@ -418,7 +443,8 @@
                                 android:layout_below="@id/btnPln"
                                 android:layout_centerHorizontal="true"
                                 android:text="PLN"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -430,11 +456,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnTv"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:src="@drawable/ic_ic_pay_tv_kabel"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
+                                android:src="@drawable/ic_tv"
+                                android:layout_centerHorizontal="true" />
 
 
                             <android.support.v7.widget.AppCompatImageView
@@ -447,7 +472,7 @@
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
                                 android:visibility="gone"
-                                app:srcCompat="@drawable/ic_ic_pay_tv_kabel" />
+                                app:srcCompat="@drawable/ic_tv" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -455,7 +480,8 @@
                                 android:layout_below="@id/btnTv"
                                 android:layout_centerHorizontal="true"
                                 android:text="TV kabel"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -468,11 +494,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnTelkom"
-                                android:layout_width="60dp"
-                           android:src="@drawable/ic_ic_pay_telkom"
-                                android:layout_height="60dp"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:src="@drawable/ic_telkom"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/ivTelkom"
@@ -484,7 +509,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_ic_pay_telkom" />
+                                app:srcCompat="@drawable/ic_telkom" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -492,7 +517,8 @@
                                 android:layout_below="@id/btnTelkom"
                                 android:layout_centerHorizontal="true"
                                 android:text="Telkom"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -504,11 +530,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnPdam"
-                                android:layout_width="60dp"
-                                android:src="@drawable/ic_ic_pay_pdam"
-                                android:layout_height="60dp"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:src="@drawable/ic_pdam"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/ivPdam"
@@ -520,7 +545,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_ic_pay_pdam" />
+                                app:srcCompat="@drawable/ic_pdam" />
 
                             <TextView
                                 android:id="@+id/textView17"
@@ -529,7 +554,8 @@
                                 android:layout_below="@id/btnPdam"
                                 android:layout_centerHorizontal="true"
                                 android:text="PDAM"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                     </LinearLayout>
@@ -549,11 +575,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnPascabayar"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:src="@drawable/ic_ic_pay_pascabayar"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
+                                android:src="@drawable/ic_pascabayar"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/ivPascabayar"
@@ -565,7 +590,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_ic_pay_pascabayar" />
+                                app:srcCompat="@drawable/ic_pascabayar" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -573,7 +598,8 @@
                                 android:layout_below="@id/btnPascabayar"
                                 android:layout_centerHorizontal="true"
                                 android:text="Pascabayar"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -586,11 +612,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnAsuransi"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:src="@drawable/ic_ic_pay_asuransi"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
+                                android:src="@drawable/ic_asuransi"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/ivAsuransi"
@@ -602,7 +627,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_ic_pay_asuransi" />
+                                app:srcCompat="@drawable/ic_asuransi" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -610,7 +635,8 @@
                                 android:layout_below="@id/btnAsuransi"
                                 android:layout_centerHorizontal="true"
                                 android:text="Asuransi"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -622,11 +648,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnBpjs"
-                                android:layout_width="60dp"
-                                android:src="@drawable/ic_ic_pay_bpjs"
-                                android:layout_height="60dp"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:src="@drawable/ic_bpjs"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true" />
 
 
                             <android.support.v7.widget.AppCompatImageView
@@ -639,15 +664,16 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_ic_pay_bpjs" />
+                                app:srcCompat="@drawable/ic_bpjs" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/btnBpjs"
                                 android:layout_centerHorizontal="true"
-                                android:text="BPJS kesehatan"
-                                android:textAlignment="center" />
+                                android:text="BPJS"
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -660,11 +686,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnMultiFinance"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:src="@drawable/ic_ic_pay_multifinance"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
+                                android:src="@drawable/ic_finance"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/ivMultiFinance"
@@ -676,7 +701,7 @@
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
                                 android:visibility="gone"
-                                app:srcCompat="@drawable/ic_ic_pay_multifinance" />
+                                app:srcCompat="@drawable/ic_finance" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -684,7 +709,8 @@
                                 android:layout_below="@id/btnMultiFinance"
                                 android:layout_centerHorizontal="true"
                                 android:text="Multi Finance"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                     </LinearLayout>
@@ -704,11 +730,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnPGN"
-                                android:layout_width="60dp"
-                                android:src="@drawable/ic_ic_pay_pgn"
-                                android:layout_height="60dp"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:src="@drawable/ic_pgn"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/ivPGN"
@@ -720,7 +745,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_ic_pay_pgn" />
+                                app:srcCompat="@drawable/ic_pgn" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -728,7 +753,8 @@
                                 android:layout_below="@id/btnPGN"
                                 android:layout_centerHorizontal="true"
                                 android:text="PGN"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -741,11 +767,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnKartuKredit"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:src="@drawable/ic_ic_pay_kartukredit"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
+                                android:src="@drawable/ic_kartu_kredit"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/ivKartuKredit"
@@ -757,7 +782,7 @@
                                 android:layout_marginBottom="10dp"
                                 android:layout_marginTop="10dp"
                                 android:elevation="2dp"
-                                app:srcCompat="@drawable/ic_ic_pay_kartukredit" />
+                                app:srcCompat="@drawable/ic_kartu_kredit" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -765,7 +790,8 @@
                                 android:layout_below="@id/btnKartuKredit"
                                 android:layout_centerHorizontal="true"
                                 android:text="Kartu Kredit"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -778,11 +804,10 @@
 
                             <ImageButton
                                 android:id="@+id/btnPajak"
-                                android:layout_width="60dp"
+                                android:layout_width="62dp"
                                 android:src="@drawable/ic_pajak"
-                                android:layout_height="60dp"
-                                android:layout_centerHorizontal="true"
-                                android:background="@drawable/icon_button_shadow" />
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true" />
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/ivPajak"
@@ -801,8 +826,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/btnPajak"
                                 android:layout_centerHorizontal="true"
-                                android:text="Pajak Daerah"
-                                android:textAlignment="center" />
+                                android:text="Pajak"
+                                android:textAlignment="center"
+                                android:textSize="11dp"/>
                         </RelativeLayout>
 
 
@@ -819,18 +845,17 @@
 
             </RelativeLayout>
 
-            <ImageButton
+            <Button
                 android:id="@+id/btCallMe"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="6dp"
                 android:background="@drawable/icon_button_shadow"
-                android:text="Semua Bisa Gratis ! ..."
-                android:textColor="@color/colorRedDark" />
+                android:shadowColor="@color/colorTextOtuDark"
+                android:text="Semua Bisa Gratis ! ..." />
         </LinearLayout>
     </ScrollView>
 

@@ -54,22 +54,23 @@ public class GroupDialogOccupantsAdapter extends BaseListAdapter<QMUser> {
         }
 
         String fullName;
+       // if (isFriendValid(user)) {
+        //    fullName = user.getFullName();
         if(user.getUsername().isEmpty()) {
             if (isFriendValid(user)) {
                 fullName = user.getFullName();
-            } else {
-                fullName = String.valueOf(user.getId());
+            }else {
+                //fullName = String.valueOf(user.getId());
+                fullName = user.getUsername();
             }
         } else {
-            fullName = user.getUsername();
+            fullName = String.valueOf(user.getId());
         }
-
         viewHolder.nameTextView.setText(fullName);
 
         setStatus(viewHolder, user);
-        //viewHolder.addFriendImageView.setVisibility(isFriend(user) ? View.GONE : View.VISIBLE);
+       // viewHolder.addFriendImageView.setVisibility(isFriend(user) ? View.GONE : View.VISIBLE);
         viewHolder.addFriendImageView.setVisibility(View.GONE);
-
         initListeners(viewHolder, user.getId());
 
         displayAvatarImage(user.getAvatar(), viewHolder.avatarImageView);

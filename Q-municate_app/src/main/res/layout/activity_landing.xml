@@ -16,14 +16,14 @@
 
     <TextView
         android:id="@+id/labels_imageview"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:text="@string/account_exist"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_large"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
 
     <Button
@@ -38,7 +38,8 @@
         android:drawableRight="@drawable/ic_next"
         android:drawableStart="@drawable/ic_login"
         android:text="@string/auth_login_title"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
 
     <!--<LinearLayout-->
@@ -53,10 +54,10 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/or"
-        android:visibility="gone"
         android:textColor="@color/cardview_light_background"
         android:textSize="@dimen/text_16"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <!--</LinearLayout>-->
 
@@ -64,7 +65,6 @@
         android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_marginTop="@dimen/density_16"
         android:background="@drawable/custom_round"
         android:drawableEnd="@drawable/ic_next"
@@ -72,7 +72,8 @@
         android:drawableRight="@drawable/ic_next"
         android:drawableStart="@drawable/ic_signup"
         android:text="@string/auth_sign_up_title"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/app_version_textview"
@@ -81,5 +82,29 @@
         android:layout_marginBottom="@dimen/density_8"
         android:textColor="@color/gray"
         android:textSize="@dimen/text_12" />
+
+    <Button
+        android:id="@+id/login"
+        android:layout_marginTop="@dimen/density_16"
+        android:layout_width="200sp"
+        android:layout_height="wrap_content"
+        android:background="#0099ff"
+        android:drawableStart="@drawable/ic_account_circle"
+        android:drawableLeft="@drawable/ic_account_circle"
+        android:onClick="phoneLogin"
+        android:text="Phone Login"
+        android:textAllCaps="false"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="#ff9900"
+        android:onClick="logout"
+        android:text="Logout"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        android:visibility="gone" />
 
 </LinearLayout>

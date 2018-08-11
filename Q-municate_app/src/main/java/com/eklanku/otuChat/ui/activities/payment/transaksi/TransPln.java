@@ -102,6 +102,7 @@ public class TransPln extends AppCompatActivity {
     LinearLayout layoutNominal;
     private RadioGroup radioGroup;
     String rbPln;
+    LinearLayout layoutTransaksiKe, layoutNoKonfirmasi;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -157,11 +158,15 @@ public class TransPln extends AppCompatActivity {
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
 
-        LinearLayout layoutTransaksiKe = findViewById(R.id.layout_transaksi_ke);
-        LinearLayout layoutNoKonfirmasi = findViewById(R.id.layout_no_konfirmasi);
+        layoutTransaksiKe = findViewById(R.id.layout_transaksi_ke);
+        layoutNoKonfirmasi = findViewById(R.id.layout_no_konfirmasi);
 
         radioGroup = (RadioGroup) findViewById(R.id.radio_group_pln);
         radioGroup.clearCheck();
+
+        RadioButton rbToken = findViewById(R.id.radio_pln_token);
+        rbToken.setChecked(true);
+
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -197,11 +202,12 @@ public class TransPln extends AppCompatActivity {
                 if (rbPln.equalsIgnoreCase("PLN TOKEN")) {
                     AlertDialog dialog = new AlertDialog.Builder(TransPln.this)
                             .setTitle("Transaksi")
-                            .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: "+txtNo.getText().toString()+"\nVoucher: "+code)
+                            .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: " + txtNo.getText().toString() + "\nVoucher: " + code)
                             .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     cek_transaksi_token();
+                                    finish();
                                 }
                             })
                             .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -215,10 +221,23 @@ public class TransPln extends AppCompatActivity {
                     return;
                 } else {
                     cek_transaksi();
+
                 }
 
             }
         });
+
+        load();
+    }
+
+    private void load(){
+        loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+        layoutNominal.setVisibility(View.VISIBLE);
+        rbPln = "PLN TOKEN";
+        btnBayar.setText("BELI");
+        txtno_hp.setVisibility(View.GONE);
+        layoutTransaksiKe.setVisibility(View.VISIBLE);
+        layoutNoKonfirmasi.setVisibility(View.GONE);
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
@@ -538,7 +557,7 @@ public class TransPln extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, "PLN", txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
+        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, "plnpost", txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
 
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override

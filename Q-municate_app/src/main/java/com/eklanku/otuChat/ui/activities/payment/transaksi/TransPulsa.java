@@ -374,14 +374,8 @@ public class TransPulsa extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", "");
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("profit", "");
-
-//                        inKonfirmasi.putExtra("transaksi", trans.get(0).getTransaksi());
-//                        inKonfirmasi.putExtra("harga", trans.get(0).getHarga());
-//                        inKonfirmasi.putExtra("id_pel", trans.get(0).getIdPel());
-//                        inKonfirmasi.putExtra("jenis", trans.get(0).getJenis());
-//                        inKonfirmasi.putExtra("pin", trans.get(0).getPin());
-//                        inKonfirmasi.putExtra("cmd_save", trans.get(0).getCmdSave());
                         startActivity(inKonfirmasi);
+                        finish();
                     } else {
                         Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }

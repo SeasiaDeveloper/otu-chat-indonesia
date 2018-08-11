@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_bg_text"
                 android:ems="10"
-                android:hint="Masukkan No Telepon"
+                android:hint="Masukkan ID Pelanggan"
                 android:inputType="number"
                 android:paddingBottom="@dimen/density_16"
                 android:paddingLeft="@dimen/density_8"

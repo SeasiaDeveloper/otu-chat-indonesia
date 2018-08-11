@@ -324,6 +324,7 @@ public class TransMultiFinance extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus().toString();
                     String error  = response.body().getRespMessage();
+                    Log.d("OPPO-1", "onResponse: "+error+" / "+status);
 
                     if ( status.equals("SUCCESS") ) {
                         Intent inKonfirmasi       = new Intent(getBaseContext(), TransKonfirmasi.class);

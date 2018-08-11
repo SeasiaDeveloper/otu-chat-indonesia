@@ -30,15 +30,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.eklanku.otuChat.ui.activities.call.CallActivity;
 import com.eklanku.otuChat.ui.activities.location.MapsActivity;
-import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.others.PreviewImageActivity;
 import com.eklanku.otuChat.ui.activities.profile.UserProfileActivity;
 import com.eklanku.otuChat.ui.adapters.chats.PrivateChatMessageAdapter;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.utils.DateUtils;
-import com.eklanku.otuChat.utils.StringUtils;
 import com.eklanku.otuChat.utils.ToastUtils;
-import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.eklanku.otuChat.utils.listeners.FriendOperationListener;
 import com.google.gson.Gson;
 import com.quickblox.chat.QBRestChatService;
@@ -74,6 +71,10 @@ import com.quickblox.users.model.QBUser;
 import com.quickblox.videochat.webrtc.QBRTCTypes;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
+import com.eklanku.otuChat.utils.StringUtils;
+import com.eklanku.otuChat.utils.helpers.DbHelper;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -84,8 +85,6 @@ import java.util.Set;
 import butterknife.OnClick;
 
 public class PrivateDialogActivity extends BaseDialogActivity {
-
-    public DbHelper mDbHelper;
 
     private FriendOperationAction friendOperationAction;
     private QMUser opponentUser;
@@ -98,6 +97,8 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     private ActionMode mActionMode;
     private int longPressPosition = -1;
     private boolean isReply = false;
+
+    public DbHelper mDbHelper;
 
     public static void start(Context context, QMUser opponent, QBChatDialog chatDialog) {
         Intent intent = getIntentWithExtra(context, opponent, chatDialog);
@@ -478,7 +479,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean isFriend = DataManager.getInstance().getFriendDataManager().getByUserId(
                 opponentUser.getId()) != null;
-        Log.d("OPPO-1", "onOptionsItemSelected = isFriend: "+isFriend);
+        Log.d("OPPO-1", "onOptionsItemSelected = isFriend: "+opponentUser);
         if (!isFriend && item.getItemId() != android.R.id.home) {
             DataManager.getInstance().getFriendDataManager().createOrUpdate(new Friend(opponentUser));
             //QBAddFriendCommand.start(PrivateDialogActivity.this, opponentUser.getId());
@@ -524,7 +525,8 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         friendObserver = new FriendObserver();
         typingMessageBroadcastReceiver = new TypingStatusBroadcastReceiver();
         opponentUser = (QMUser) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_OPPONENT);
-        title = opponentUser.getFullName(); //6285804895038
+        title = opponentUser.getFullName();
+
         mDbHelper = new DbHelper(this);
         if(StringUtils.isNumeric(opponentUser.getFullName())) {
             String name = mDbHelper.getNamebyNumber(opponentUser.getFullName()) ;

@@ -61,4 +61,5 @@
         android:layout_centerVertical="true"
         android:src="@drawable/ic_add_user"
         android:visibility="gone" />
+
 </RelativeLayout>

@@ -1,13 +1,19 @@
 package com.eklanku.otuChat.ui.activities.authorization;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.App;
+import com.eklanku.otuChat.Application;
+import com.eklanku.otuChat.ReferrerReceiver;
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
+import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
@@ -35,6 +41,16 @@ public class SplashActivity extends BaseAuthActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
     private static final int DELAY_FOR_OPENING_LANDING_ACTIVITY = 3000;
     ApiInterfacePayment mApiInterfacePayment;
+    private PreferenceManager preferenceManager;
+    public boolean isReferrerDetected;
+    public String firstLaunch, referrerDate, referrerDataRaw, referrerDataDecoded;
+
+    private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateData();
+        }
+    };
 
     public static void start(Context context) {
         Intent intent = new Intent(context, SplashActivity.class);
@@ -64,6 +80,7 @@ public class SplashActivity extends BaseAuthActivity {
 
         appInitialized = true;
         AppSession.load();
+        preferenceManager = new PreferenceManager(this);
 
         processPushIntent();
 
@@ -164,5 +181,53 @@ public class SplashActivity extends BaseAuthActivity {
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateData() {
+        isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
+        firstLaunch = Application.getFirstLaunch(getApplicationContext());
+        referrerDate = Application.getReferrerDate(getApplicationContext());
+        referrerDataRaw = Application.getReferrerDataRaw(getApplicationContext());
+        referrerDataDecoded = Application.getReferrerDataDecoded(getApplicationContext());
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("<b>First launch:</b>")
+                .append("<br/>")
+                .append(firstLaunch)
+                .append("<br/><br/>")
+                .append("<b>Referrer detection:</b>")
+                .append("<br/>")
+                .append(referrerDate);
+        if (isReferrerDetected) {
+            sb.append("<br/><br/>")
+                    .append("<b>Raw referrer:</b>")
+                    .append("<br/>")
+                    .append(referrerDataRaw);
+
+            if (referrerDataDecoded != null) {
+                sb.append("<br/><br/>")
+                        .append("<b>Decoded referrer:</b>")
+                        .append("<br/>")
+                        .append(referrerDataDecoded);
+            }
+        }
+
+       /* content.setText(Html.fromHtml(sb.toString()));
+        content.setMovementMethod(new LinkMovementMethod());*/
+
+        preferenceManager.createReff(firstLaunch, referrerDate, referrerDataRaw, referrerDataDecoded);
+
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateReceiver);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
+        super.onResume();
     }
 }

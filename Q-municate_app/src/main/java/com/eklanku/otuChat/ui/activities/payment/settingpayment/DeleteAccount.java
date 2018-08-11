@@ -52,8 +52,10 @@ public class DeleteAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_delete_account);
-        //get userid and token from preference
+
         preferenceManager = new PreferenceManager(DeleteAccount.this);
+
+        //get userid and token from preference
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
@@ -137,6 +139,7 @@ public class DeleteAccount extends AppCompatActivity {
                         PreferenceUtil.setLoginStatus(DeleteAccount.this, false);
 
                         Intent register = new Intent(getBaseContext(), Register.class);
+
                         register.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         register.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(register);

@@ -85,4 +85,6 @@
     <color name="colorWhiteLight">#21ffffff</color>
 
     <color name="reply_transparent_overlay">#dd6b6b6b</color>
+
+    <color name="colorPrimaryLightRipple_">#40dd4b39</color>
 </resources>

@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/chat_header_date_background"
     android:orientation="vertical"
     android:alpha="0.9">
 
@@ -13,13 +12,14 @@
         android:gravity="center"
         android:padding="5dp"
         android:textColor="@color/dark_gray"
-        android:textSize="@dimen/text_size"
-        android:textStyle="bold" />
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:text="@string/today"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/header_date_textview"
-        android:background="@color/chat_background" />
+    <!--<View-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_below="@+id/header_date_textview"-->
+        <!--android:background="@color/colorTextOtu" />-->
 
 </LinearLayout>

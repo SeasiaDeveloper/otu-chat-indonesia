@@ -181,11 +181,13 @@ dependencies {
     //table
     implementation 'com.evrencoskun.library:tableview:0.8.5.1'
 
+    //facebook
+    implementation 'com.facebook.android:account-kit-sdk:4.20.0'
 }
 
 def changeApkFileName(variant) {
     variant.outputs.each { output ->
-        def newName = 'QMUN_Android_v.' + rootProject.versionName + '_c.' + rootProject.versionCode + '-' + variant.buildType.name + '.apk'
+        def newName = 'OTU_Chat_v.' + rootProject.versionName + '_c.' + rootProject.versionCode + '-' + variant.buildType.name + '.apk'
         output.outputFileName = newName
     }
 }

@@ -31,14 +31,18 @@ import com.eklanku.otuChat.utils.helpers.FlurryAnalyticsHelper;
 import com.eklanku.otuChat.utils.helpers.GoogleAnalyticsHelper;
 import com.eklanku.otuChat.utils.helpers.FacebookHelper;
 import com.eklanku.otuChat.utils.helpers.FirebaseAuthHelper;
+import com.quickblox.auth.session.QBSessionManager;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.LoginType;
 import com.eklanku.otuChat.utils.helpers.ServiceManager;
+import com.quickblox.q_municate_core.service.QBServiceConsts;
+import com.quickblox.q_municate_user_service.model.QMUser;
 import com.quickblox.users.model.QBUser;
 
 import butterknife.Bind;
 import butterknife.OnTextChanged;
 import rx.Observer;
+import rx.Subscriber;
 
 public abstract class BaseAuthActivity extends BaseActivity {
 
@@ -156,7 +160,7 @@ public abstract class BaseAuthActivity extends BaseActivity {
     }
 
     protected void startSocialLogin() {
-        if (!appSharedHelper.isShownUserAgreement()) {
+        /*if (!appSharedHelper.isShownUserAgreement()) {
             UserAgreementDialogFragment
                     .show(getSupportFragmentManager(), new MaterialDialog.ButtonCallback() {
                         @Override
@@ -166,9 +170,9 @@ public abstract class BaseAuthActivity extends BaseActivity {
                             loginWithSocial();
                         }
                     });
-        } else {
+        } else {*/
             loginWithSocial();
-        }
+//        }
     }
 
     private void loginWithSocial() {
@@ -225,13 +229,34 @@ public abstract class BaseAuthActivity extends BaseActivity {
     }
 
     private void performLoginSuccessAction(QBUser user) {
-        startMainActivity(user);
+        user.setPassword(user.getLogin());
+        user.setOldPassword(QBSessionManager.getInstance().getToken());
+        ServiceManager.getInstance().updateUserPassword(user).subscribe(new Subscriber<QMUser>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onNext(QMUser qmUser) {
+                startMainActivity(qmUser);
+
+                // send analytics data
+                GoogleAnalyticsHelper.pushAnalyticsData(BaseAuthActivity.this, user, "User Sign In");
+                FlurryAnalyticsHelper.pushAnalyticsData(BaseAuthActivity.this);
+            }
+        });
+        //startMainActivity(user);
 
         // send analytics data
-        GoogleAnalyticsHelper.pushAnalyticsData(this, user, "User Sign In");
-        FlurryAnalyticsHelper.pushAnalyticsData(this);
+        //GoogleAnalyticsHelper.pushAnalyticsData(this, user, "User Sign In");
+        //FlurryAnalyticsHelper.pushAnalyticsData(this);
     }
-
 
     private Observer<QBUser> socialLoginObserver = new Observer<QBUser>() {
         @Override

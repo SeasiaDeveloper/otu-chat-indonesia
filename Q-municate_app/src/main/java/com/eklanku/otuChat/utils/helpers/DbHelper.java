@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
 import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsModelGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,6 +129,29 @@ public class DbHelper extends SQLiteOpenHelper {
         return mArray;
     }
 
+    public ArrayList<ContactsModelGroup> getContactsGroup() {
+        ArrayList<ContactsModelGroup> mArray = new ArrayList<ContactsModelGroup>();
+        String selectQuery = "SELECT  * FROM " + TABLE_ACCOUNT + " ORDER BY "+KEY_FULL_NAME+" ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try {
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                mArray.clear();
+                do {
+                    mArray.add(new ContactsModelGroup(cursor.getString(cursor.getColumnIndex(KEY_LOGIN)),
+                            cursor.getString(cursor.getColumnIndex(KEY_FULL_NAME)),
+                            cursor.getString(cursor.getColumnIndex(KEY_REG_TYPE)),
+                            Integer.valueOf(cursor.getString(cursor.getColumnIndex(KEY_USER_ID)))));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mArray;
+    }
+
     public ArrayList<ContactsModel> getContactsExcept(List<Integer> arrIds) {
         ArrayList<ContactsModel> mArray = new ArrayList<ContactsModel>();
         String strCon = "";
@@ -155,6 +179,33 @@ public class DbHelper extends SQLiteOpenHelper {
         return mArray;
     }
 
+    public ArrayList<ContactsModelGroup> getContactsExceptGroup(List<Integer> arrIds) {
+        ArrayList<ContactsModelGroup> mArray = new ArrayList<ContactsModelGroup>();
+        String strCon = "";
+        if(arrIds.size() > 0) {
+            strCon += " AND "+KEY_USER_ID+" NOT IN ("+TextUtils.join(", ", arrIds)+")";
+        }
+        String selectQuery = "SELECT  * FROM " + TABLE_ACCOUNT+" WHERE "+ KEY_REG_TYPE + " = '1'"+ strCon + " ORDER BY "+KEY_FULL_NAME+" ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try {
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                mArray.clear();
+                do {
+                    mArray.add(new ContactsModelGroup(cursor.getString(cursor.getColumnIndex(KEY_LOGIN)),
+                            cursor.getString(cursor.getColumnIndex(KEY_FULL_NAME)),
+                            cursor.getString(cursor.getColumnIndex(KEY_REG_TYPE)),
+                            Integer.valueOf(cursor.getString(cursor.getColumnIndex(KEY_USER_ID)))));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mArray;
+    }
+
     public ArrayList<ContactsModel> getContactsSelected() {
         ArrayList<ContactsModel> mArray = new ArrayList<ContactsModel>();
         String selectQuery = "SELECT  * FROM " + TABLE_ACCOUNT + " where " + KEY_REG_TYPE + " = '1'" + " ORDER BY "+KEY_FULL_NAME+" ASC";
@@ -166,6 +217,29 @@ public class DbHelper extends SQLiteOpenHelper {
                 mArray.clear();
                 do {
                     mArray.add(new ContactsModel(cursor.getString(cursor.getColumnIndex(KEY_LOGIN)),
+                            cursor.getString(cursor.getColumnIndex(KEY_FULL_NAME)),
+                            cursor.getString(cursor.getColumnIndex(KEY_REG_TYPE)),
+                            Integer.valueOf(cursor.getString(cursor.getColumnIndex(KEY_USER_ID)))));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mArray;
+    }
+
+    public ArrayList<ContactsModelGroup> getContactsSelectedGroup() {
+        ArrayList<ContactsModelGroup> mArray = new ArrayList<ContactsModelGroup>();
+        String selectQuery = "SELECT  * FROM " + TABLE_ACCOUNT + " where " + KEY_REG_TYPE + " = '1'" + " ORDER BY "+KEY_FULL_NAME+" ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try {
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                mArray.clear();
+                do {
+                    mArray.add(new ContactsModelGroup(cursor.getString(cursor.getColumnIndex(KEY_LOGIN)),
                             cursor.getString(cursor.getColumnIndex(KEY_FULL_NAME)),
                             cursor.getString(cursor.getColumnIndex(KEY_REG_TYPE)),
                             Integer.valueOf(cursor.getString(cursor.getColumnIndex(KEY_USER_ID)))));

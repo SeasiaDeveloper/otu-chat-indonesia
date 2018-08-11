@@ -103,6 +103,7 @@
 
 
     <!-- Add Friends To Group Dialog -->
+    <!--<string name="add_friends_to_group_title">Add Friends</string>-->
     <string name="add_friends_to_group_title">Add to Group</string>
     <string name="add_friends_to_group_no_friends_for_adding">No Friends for adding</string>
 
@@ -379,6 +380,7 @@
     <string name="mnResetpass">Reset Password</string>
     <string name="mnResetpin">Reset PIN</string>
     <string name="mnprofil">Profil</string>
+    <string name="ekl_default">Silahkan memasukkan Kode Referral EKL0000000, jika anda tidak memiliki kode referal sebelumnya</string>
     <string name="under">Sedang dalam pengembangan</string>
     <string name="error_fungsi">Maaf masih belum berfungsi. Kami akan mengupdate segera...</string>
     <string name="NoCalls">There\'s no calls yet, you may start one now</string>
@@ -471,4 +473,11 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <!--facebook account kit-->
+    <string name="FACEBOOK_APP_ID">456959221440042</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">8e8b917c96b178f85546045f2abc5017</string>
+    <string name="ak_login_protocol_scheme">ak456959221440042</string>
+
+    <string name="dlg_auth_error_message">Something went wrong. Please try again.</string>
 </resources>

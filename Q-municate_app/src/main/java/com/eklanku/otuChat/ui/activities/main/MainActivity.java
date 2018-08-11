@@ -1,22 +1,19 @@
 package com.eklanku.otuChat.ui.activities.main;
 
-import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.BaseColumns;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -25,14 +22,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eklanku.otuChat.Application;
+import com.eklanku.otuChat.ReferrerReceiver;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
-import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
-import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -59,12 +56,10 @@ import com.eklanku.otuChat.utils.helpers.ImportFriendsHelper;
 import com.eklanku.otuChat.utils.image.ImageLoaderUtils;
 import com.eklanku.otuChat.utils.MediaUtils;
 
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.request.QBPagedRequestBuilder;
 import com.quickblox.q_municate_core.core.command.Command;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.DialogWrapper;
+import com.quickblox.q_municate_core.models.LoginType;
 import com.quickblox.q_municate_core.models.UserCustomData;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_core.utils.Utils;
@@ -72,8 +67,6 @@ import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.QBUsers;
-import com.quickblox.users.model.QBUser;
 import com.yyydjk.library.BannerLayout;
 
 import butterknife.Bind;
@@ -103,6 +96,20 @@ import static android.Manifest.permission.RECEIVE_SMS;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.VIBRATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.provider.BaseColumns;
+import android.provider.ContactsContract;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
+import com.eklanku.otuChat.utils.helpers.DbHelper;
+import com.quickblox.core.QBEntityCallback;
+import com.quickblox.core.exception.QBResponseException;
+import com.quickblox.core.request.QBPagedRequestBuilder;
+import com.quickblox.users.QBUsers;
+import com.quickblox.users.model.QBUser;
 
 public class MainActivity extends BaseLoggableActivity {
 
@@ -141,8 +148,24 @@ public class MainActivity extends BaseLoggableActivity {
     String strAccessToken;
     String strApIUse = "OTU";
 
+   /* boolean isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
+    String firstLaunch = Application.getFirstLaunch(getApplicationContext());
+    String referrerDate = Application.getReferrerDate(getApplicationContext());
+    String referrerDataRaw = Application.getReferrerDataRaw(getApplicationContext());
+    String referrerDataDecoded = Application.getReferrerDataDecoded(getApplicationContext());*/
+
+   public boolean isReferrerDetected;
+   public String firstLaunch, referrerDate, referrerDataRaw, referrerDataDecoded;
+
     private static final int REQUEST_READ_PHONE_STATE = 0;
     boolean doubleBackToExitPressedOnce = false;
+
+    private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+           updateData();
+        }
+    };
 
     public static void start(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -182,13 +205,18 @@ public class MainActivity extends BaseLoggableActivity {
 
         initFields();
         setUpActionBarWithUpButton();
-        //mDbHelper.removeAsll(); // TO REMOVE
         synchContacts();
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
         preferenceManager = new PreferenceManager(this);
+
+        /*HashMap<String, String> userReferal = preferenceManager.getUserDetailsPayment();
+        firstLaunch = userReferal.get(preferenceManager.KEY_REFF_LAUNCH);
+        referrerDate = userReferal.get(preferenceManager.KEY_REFF_DATE);
+        referrerDataRaw = userReferal.get(preferenceManager.KEY_REFF_RAW);
+        referrerDataDecoded = userReferal.get(preferenceManager.KEY_REFF_DECODE);*/
 
         //get userid and token from preference
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
@@ -267,7 +295,7 @@ public class MainActivity extends BaseLoggableActivity {
 //                        break;
                     case 2:
                         Log.d("OPPO-1", "isMember: " + PreferenceUtil.isMemberStatus(MainActivity.this));
-                        //  PreferenceUtil.setMemberStatus(MainActivity.this, false);
+                      //  PreferenceUtil.setMemberStatus(MainActivity.this, false);
                         if (!PreferenceUtil.isMemberStatus(MainActivity.this)) {
                             Log.d("OPPO-1", "isMember2: " + PreferenceUtil.isMemberStatus(MainActivity.this));
                             //jalankan register activity
@@ -295,6 +323,8 @@ public class MainActivity extends BaseLoggableActivity {
 
         //populate();
         mainActivity = this;
+
+        //serviceUpdatePass();
     }
 
 
@@ -352,6 +382,7 @@ public class MainActivity extends BaseLoggableActivity {
     @Override
     protected void onResume() {
         actualizeCurrentTitle();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
         super.onResume();
         addActions();
 
@@ -411,6 +442,7 @@ public class MainActivity extends BaseLoggableActivity {
 
     @Override
     protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateReceiver);
         super.onPause();
         removeActions();
     }
@@ -628,6 +660,7 @@ public class MainActivity extends BaseLoggableActivity {
                     grantResults[9] == PackageManager.PERMISSION_GRANTED /*&&
                     grantResults[10] == PackageManager.PERMISSION_GRANTED*/
                     ) {
+
                 synchContacts();
             } else {
                 finish();
@@ -642,10 +675,10 @@ public class MainActivity extends BaseLoggableActivity {
         finish();
     }
 
-
     private void cekMember() {
-        Log.d("OPPO-1", "cekMember:process");
-        Call<DataProfile> isMember = mApiInterfacePayment.isMember(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), "OTU");
+        //Call<DataProfile> isMember = mApiInterfacePayment.isMember( FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), "OTU");
+        Call<DataProfile> isMember = mApiInterfacePayment.isMember( AppSession.getSession().getUser().getLogin(), "OTU");
+
         isMember.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
@@ -653,7 +686,6 @@ public class MainActivity extends BaseLoggableActivity {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
                     String errNumber = response.body().getErrNumber();
-                    Log.d("OPPO-1", "cekMember:process success " + errNumber);
                     if (errNumber.equalsIgnoreCase("0")) {
                         PreferenceUtil.setMemberStatus(MainActivity.this, true);
                     } else if (errNumber.equalsIgnoreCase("5")) {
@@ -706,25 +738,25 @@ public class MainActivity extends BaseLoggableActivity {
                         ContentResolver cr = getContentResolver();
                         Cursor cur;
 
-                        String limit = String.valueOf(startPosition) + ", " + PER_PAGE;
+                        String limit = String.valueOf(startPosition)  +", "  +PER_PAGE;
 
-                        cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, "UPPER(" + ContactsContract.Contacts.DISPLAY_NAME + ") ASC LIMIT " + limit);
+                        cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, "UPPER("+  ContactsContract.Contacts.DISPLAY_NAME+  ") ASC LIMIT "+  limit);
                         if (cur.getCount() > 0) {
                             arrayName.clear();
                             while (cur.moveToNext()) {
                                 String id = cur.getString(cur.getColumnIndex(BaseColumns._ID));
                                 if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID+  " = ?",
                                             new String[]{id}, null);
                                     while (pCur.moveToNext()) {
                                         String phonenumber = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                                         String contactname = pCur.getString(pCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                                        phonenumber = phonenumber.replaceAll("[+()-]", "");
+                                        phonenumber = phonenumber.replaceAll("[()-]", "");
                                         phonenumber = phonenumber.replaceAll(" ", "");
                                         if (phonenumber.startsWith("0")) {
                                             phonenumber = phonenumber.replaceFirst("0", String.valueOf(COUNTRY_CODE));
                                         } else if (!phonenumber.startsWith(String.valueOf(COUNTRY_CODE))) {
-                                            phonenumber = COUNTRY_CODE + phonenumber;
+                                            phonenumber = COUNTRY_CODE+  phonenumber;
                                         }
                                         if (!arrayPhone.contains(phonenumber.trim())) {
                                             if (!phonenumber.isEmpty()) {
@@ -752,7 +784,7 @@ public class MainActivity extends BaseLoggableActivity {
         pagedRequestBuilder.setPage(1);
         pagedRequestBuilder.setPerPage(arrayPhone.size());
 
-        for (int i = 0; i < arrayPhone.size(); i++) {
+        for (int i = 0; i < arrayPhone.size(); ++i) {
             if (!mDbHelper.isPhoneNumberExists(arrayPhone.get(i))) {
                 mDbHelper.insertContact(new ContactsModel(arrayPhone.get(i), arrayName.get(i), "0"));
             }
@@ -762,7 +794,7 @@ public class MainActivity extends BaseLoggableActivity {
             @Override
             public void onSuccess(ArrayList<QBUser> users, Bundle params) {
                 if (users.size() > 0) {
-                    for (int j = 0; j < users.size(); j++) {
+                    for (int j = 0; j < users.size(); ++j) {
                         if (!mDbHelper.isQbUser(users.get(j).getPhone())) {
                             mDbHelper.updateContact(users.get(j).getPhone(), users.get(j).getId());
                         }
@@ -858,4 +890,88 @@ public class MainActivity extends BaseLoggableActivity {
         });
     }
     /*=====================================end ayik=============================================*/
+
+    private void updateData() {
+        isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
+        firstLaunch = Application.getFirstLaunch(getApplicationContext());
+        referrerDate = Application.getReferrerDate(getApplicationContext());
+        referrerDataRaw = Application.getReferrerDataRaw(getApplicationContext());
+        referrerDataDecoded = Application.getReferrerDataDecoded(getApplicationContext());
+
+       /* StringBuilder sb = new StringBuilder();
+        sb.append("<b>First launch:</b>")
+                .append("<br/>")
+                .append(firstLaunch)
+                .append("<br/><br/>")
+                .append("<b>Referrer detection:</b>")
+                .append("<br/>")
+                .append(referrerDate);
+        if (isReferrerDetected) {
+            sb.append("<br/><br/>")
+                    .append("<b>Raw referrer:</b>")
+                    .append("<br/>")
+                    .append(referrerDataRaw);
+
+            if (referrerDataDecoded != null) {
+                sb.append("<br/><br/>")
+                        .append("<b>Decoded referrer:</b>")
+                        .append("<br/>")
+                        .append(referrerDataDecoded);
+            }
+        }*/
+
+       /* content.setText(Html.fromHtml(sb.toString()));
+        content.setMovementMethod(new LinkMovementMethod());*/
+    }
+
+  /*  @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateReceiver);
+        super.onPause();
+    }*/
+
+   /* @Override
+    protected void onResume() {
+        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
+        super.onResume();
+    }*/
+
+   private void serviceUpdatePass () {
+       showProgress();
+
+       ArrayList<String> arrayPhone = new ArrayList<>();
+       arrayPhone.add("919898989898");
+       QBPagedRequestBuilder pagedRequestBuilder = new QBPagedRequestBuilder();
+       pagedRequestBuilder.setPage(1);
+       pagedRequestBuilder.setPerPage(1);
+
+       QBUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new QBEntityCallback<ArrayList<QBUser>>() {
+           @Override
+           public void onSuccess(ArrayList<QBUser> users, Bundle params) {
+
+               if (users.size() > 0) {
+                   for (QBUser qbUser: users) {
+                       //qbUser.setPassword(user);
+                       qbUser.setFullName("ABC EFG");
+                       QBUsers.updateUser(qbUser).performAsync(new QBEntityCallback<QBUser>() {
+                           @Override
+                           public void onSuccess(QBUser qbUser, Bundle bundle) {
+                               Log.v("Update Response","Success");
+                           }
+
+                           @Override
+                           public void onError(QBResponseException e) {
+                               Log.v("Update Response","Failed: "+e.toString());
+                           }
+                       });
+                   }
+               }
+           }
+
+           @Override
+           public void onError(QBResponseException errors) {
+               Log.e("Error", errors.getErrors().toString());
+           }
+       });
+   }
 }

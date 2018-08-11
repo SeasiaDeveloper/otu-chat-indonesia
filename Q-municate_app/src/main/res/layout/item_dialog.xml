@@ -58,8 +58,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:gravity="center_horizontal"
+
+            android:gravity="center"
             android:orientation="vertical"
             android:paddingBottom="1dp"
             android:paddingLeft="10dp"
@@ -83,7 +83,8 @@
                 android:paddingRight="5dp"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/text_size"
-                tools:text="@string/dialog_count_unread" />
+                tools:text="@string/dialog_count_unread"
+                android:layout_gravity ="center"/>
         </LinearLayout>
 
     </RelativeLayout>

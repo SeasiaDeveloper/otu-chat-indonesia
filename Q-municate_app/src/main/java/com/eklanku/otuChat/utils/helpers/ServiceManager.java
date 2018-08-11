@@ -126,7 +126,8 @@ public class ServiceManager {
                             throw Exceptions.propagate(e);
                         }
 
-                        qbUser.setPassword(QBSessionManager.getInstance().getToken());
+                        //qbUser.setPassword(QBSessionManager.getInstance().getToken());
+                        qbUser.setPassword(qbUser.getLogin());
 
                         saveOwnerUser(qbUser);
 
@@ -222,6 +223,25 @@ public class ServiceManager {
                         } else {
                             qmUser.setPassword(QBSessionManager.getInstance().getToken());
                         }
+                        return qmUser;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread());
+
+        return result;
+    }
+
+    public Observable<QMUser> updateUserPassword(QBUser inputUser) {
+        Observable<QMUser> result = null;
+        UserCustomData userCustomDataNew = getUserCustomData(inputUser);
+        inputUser.setCustomData(Utils.customDataToString(userCustomDataNew));
+
+        QMUser qmUser = QMUser.convert(inputUser);
+        result = QMUserService.getInstance().updateUser(qmUser)
+                .subscribeOn(Schedulers.io())
+                .map(new Func1<QMUser, QMUser>() {
+                    @Override
+                    public QMUser call(QMUser qmUser) {
                         return qmUser;
                     }
                 })

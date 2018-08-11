@@ -2,10 +2,13 @@ package com.eklanku.otuChat.ui.activities.payment.settingpayment;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +42,7 @@ import retrofit2.Response;
 public class Register extends AppCompatActivity {
 
     Dialog loadingDialog;
+    ProgressDialog progressDialog;
     ApiInterfacePayment mApiInterfacePayment;
 
     String strApIUse = "OTU", strUserID, strAccessToken;
@@ -48,12 +52,18 @@ public class Register extends AppCompatActivity {
     TextView txtNama, txtReferal;
     Button btnNext;
 
+    String referal;
+    public String firstLaunch, referrerDate, referrerDataRaw, referrerDataDecoded;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Log.d("AYIK", "register:onCreate");
         setContentView(R.layout.activity_register_payment);//layout belum
+
+        progressDialog = new ProgressDialog(this);
 
         txtNama = findViewById(R.id.txt_nama);
         txtReferal = findViewById(R.id.txt_referal);
@@ -65,25 +75,75 @@ public class Register extends AppCompatActivity {
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
+        HashMap<String, String> userReferal = preferenceManager.getUserDetailsPayment();
+        firstLaunch = userReferal.get(preferenceManager.KEY_REFF_LAUNCH);
+        referrerDate = userReferal.get(preferenceManager.KEY_REFF_DATE);
+        referrerDataRaw = userReferal.get(preferenceManager.KEY_REFF_RAW);
+        referrerDataDecoded = userReferal.get(preferenceManager.KEY_REFF_DECODE);
+
+        if(referrerDataRaw!=null){
+            txtReferal.setText(referrerDataRaw);
+        }else{
+            txtReferal.setText("EKL0000000");
+        }
+
+
+
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Resgister();
+                String txt = txtReferal.getText().toString().trim();
+                if (txt.equals("") || TextUtils.isEmpty(txt)) {
+                    dialogReferalEmpty("Notice", "Your have not fill Referal ID, want continue");
+                } else {
+                    Resgister();
+                }
             }
         });
     }
 
+    public void dialogReferalEmpty(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNegativeButton("Tidak",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+
+                    }
+                });
+        builder.setPositiveButton("Iya",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                        Resgister();
+
+                    }
+                });
+        builder.show();
+    }
+
 
     public void Resgister() {
-        loadingDialog = ProgressDialog.show(Register.this, "Harap Tunggu", "Proses Register...");
-        loadingDialog.setCanceledOnTouchOutside(true);
+        /*loadingDialog = ProgressDialog.show(Register.this, "Harap Tunggu", "Proses Register...");
+        loadingDialog.setCanceledOnTouchOutside(true);*/
+        progressDialog.setMessage("Proses Register...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        //btnNext.setEnabled(false);
+
         Log.d("OPPO-1", "Resgister: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         Log.d("OPPO-1", "Resgister: " + strApIUse);
         Call<DataProfile> callProfil = mApiInterfacePayment.getTokenRegister(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), strApIUse);
         callProfil.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
-                loadingDialog.dismiss();
+                //loadingDialog.dismiss();
+                //progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
@@ -95,9 +155,13 @@ public class Register extends AppCompatActivity {
                         exRegister(tokenRegister);
 
                     } else {
+//                        loadingDialog.dismiss();
+                        progressDialog.dismiss();
                         Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    progressDialog.dismiss();
+//                    loadingDialog.dismiss();
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
 
@@ -105,7 +169,8 @@ public class Register extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
-                loadingDialog.dismiss();
+                //loadingDialog.dismiss();
+                progressDialog.dismiss();
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
@@ -117,13 +182,15 @@ public class Register extends AppCompatActivity {
         callProfil.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
-                loadingDialog.dismiss();
+                //loadingDialog.dismiss();
+                progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
                     Log.d("OPPO-1", "onResponse: " + status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         //run main activity
+                        Toast.makeText(Register.this, "Register berhasil", Toast.LENGTH_SHORT).show();
                         PreferenceUtil.setMemberStatus(Register.this, true);
                         //MainActivity.start(Register.this);
                         startActivity(new Intent(Register.this, MainActivity.class));
@@ -138,7 +205,8 @@ public class Register extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
-                loadingDialog.dismiss();
+//                loadingDialog.dismiss();
+                progressDialog.dismiss();
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }

@@ -128,6 +128,7 @@ public class TransSMS extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 cek_transaksi();
+                                finish();
                             }
                         })
                         .setNegativeButton("Batal", new DialogInterface.OnClickListener() {

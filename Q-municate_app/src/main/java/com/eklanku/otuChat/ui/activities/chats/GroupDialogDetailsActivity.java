@@ -26,14 +26,17 @@ import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.GroupDialogOccupantsAdapter;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
-import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quickblox.chat.QBChatService;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.core.exception.QBResponseException;
 import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.profile.MyProfileActivity;
 import com.eklanku.otuChat.ui.activities.profile.UserProfileActivity;
+import com.eklanku.otuChat.ui.adapters.chats.GroupDialogOccupantsAdapter;
+import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
+import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
 import com.eklanku.otuChat.utils.ToastUtils;
 import com.eklanku.otuChat.utils.helpers.MediaPickHelper;
 import com.eklanku.otuChat.utils.image.ImageLoaderUtils;
@@ -60,6 +63,7 @@ import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.quickblox.users.model.QBUser;
 import com.soundcloud.android.crop.Crop;
+import com.eklanku.otuChat.utils.helpers.DbHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -107,6 +111,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     private int countOnlineFriends;
     private DataManager dataManager;
     private String dialogId;
+
     private boolean isRefressOccupants = false;
     private DbHelper mDbHelper;
 
@@ -284,7 +289,6 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     }
 
     private void updateDialog() {
-
         if (qbDialog == null || isRefressOccupants) {
             isRefressOccupants = false;
             qbDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
@@ -294,7 +298,6 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
         occupantsList = getUsersForGroupChat(qbDialog.getDialogId(), qbDialog.getOccupants());
         qbDialog.setOccupantsIds(ChatUtils.createOccupantsIdsFromUsersList(occupantsList));
         groupDialogOccupantsAdapter.setNewData(occupantsList);
-
     }
 
     private void registerBroadcastManagers() {
@@ -393,6 +396,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     private void handleAddedFriends(Intent data) {
         newFriendIdsList = (ArrayList<Integer>) data.getSerializableExtra(QBServiceConsts.EXTRA_FRIENDS);
         if (newFriendIdsList != null) {
+
             isRefressOccupants = true;
             updateCurrentData();
             updateOccupantsList();
@@ -409,12 +413,10 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     }
 
     private void startAddFriendsActivity() {
-        //AddFriendsToGroupActivity.start(this, qbDialog);
         Intent intent = new Intent(this, ContactsActivity.class);
         intent.putExtra("isToGroup", true);
         intent.putExtra(QBServiceConsts.EXTRA_DIALOG, qbDialog);
         startActivityForResult(intent, ContactsActivity.RESULT_CODE);
-        //startActivity(intent);
     }
 
     private void handleCrop(int resultCode, Intent result) {

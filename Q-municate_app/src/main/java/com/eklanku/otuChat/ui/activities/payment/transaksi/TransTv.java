@@ -105,6 +105,7 @@ public class TransTv extends AppCompatActivity {
     String[] nama_wilayah;
 
     String StrTV;
+    LinearLayout layoutNoKonfirmasi, layoutTransaksiKe;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -153,10 +154,12 @@ public class TransTv extends AppCompatActivity {
 
             }
         });*/
-        LinearLayout layoutNoKonfirmasi = findViewById(R.id.layout_no_konfirmasi);
-        LinearLayout layoutTransaksiKe = findViewById(R.id.layout_transaksi_ke);
+        layoutNoKonfirmasi = findViewById(R.id.layout_no_konfirmasi);
+        layoutTransaksiKe = findViewById(R.id.layout_transaksi_ke);
         radioGroup = (RadioGroup) findViewById(R.id.radio_group_tv);
         radioGroup.clearCheck();
+        RadioButton rbToken = findViewById(R.id.radio_tv_voucher);
+        rbToken.setChecked(true);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -198,6 +201,7 @@ public class TransTv extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     cek_transaksi_tv_voucher();
+                                    finish();
                                 }
                             })
                             .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -216,6 +220,18 @@ public class TransTv extends AppCompatActivity {
 
             }
         });
+
+        load();
+    }
+
+    private void load(){
+        loadProvider(strUserID, strAccessToken, strAplUse, "VOUCHER TV");
+        layoutNominal.setVisibility(View.VISIBLE);
+        StrTV = "VOUCHER TV";
+        btnBayar.setText("BELI");
+        txtno_hp.setVisibility(View.GONE);
+        layoutTransaksiKe.setVisibility(View.VISIBLE);
+        layoutNoKonfirmasi.setVisibility(View.GONE);
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
@@ -461,20 +477,34 @@ public class TransTv extends AppCompatActivity {
                     String status = response.body().getStatus();
                     String error = response.body().getRespMessage();
 
+
                     if (status.equals("SUCCESS")) {
                         Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasi.class);
                         inKonfirmasi.putExtra("userID", response.body().getUserID());
                         inKonfirmasi.putExtra("accessToken", strAccessToken);
+                        inKonfirmasi.putExtra("status", status);
+                        inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
+                        inKonfirmasi.putExtra("respTime", response.body().getRespTime());
                         inKonfirmasi.putExtra("productCode", response.body().getProductCode());
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());
                         inKonfirmasi.putExtra("customerName", response.body().getCustomerName());
                         inKonfirmasi.putExtra("period", response.body().getPeriod());
+                        inKonfirmasi.putExtra("policeNumber", response.body().getPoliceNumber());
+                        inKonfirmasi.putExtra("lastPaidPeriod", response.body().getLastPaidPeriod());
+                        inKonfirmasi.putExtra("tenor", response.body().getTenor());
+                        inKonfirmasi.putExtra("lastPaidDueDate", response.body().getLastPaidDueDate());
+                        inKonfirmasi.putExtra("usageUnit", response.body().getUsageUnit());
+                        inKonfirmasi.putExtra("penalty", response.body().getPenalty());
                         inKonfirmasi.putExtra("payment", response.body().getPayment());
+                        inKonfirmasi.putExtra("minPayment", response.body().getMinPayment());
+                        inKonfirmasi.putExtra("minPayment", response.body().getMaxPayment());
+                        inKonfirmasi.putExtra("additionalMessage", response.body().getAdditionalMessage());
                         inKonfirmasi.putExtra("billing", response.body().getBilling());
                         inKonfirmasi.putExtra("sellPrice", response.body().getSellPrice());
                         inKonfirmasi.putExtra("adminBank", response.body().getAdminBank());
+                        inKonfirmasi.putExtra("profit", response.body().getProfit());
 
                         inKonfirmasi.putExtra("transaksi", "-");
                         inKonfirmasi.putExtra("harga", "-");
