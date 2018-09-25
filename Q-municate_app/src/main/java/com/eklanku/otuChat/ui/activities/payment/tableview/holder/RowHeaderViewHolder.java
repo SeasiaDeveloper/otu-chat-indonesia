@@ -31,7 +31,7 @@ public class RowHeaderViewHolder extends AbstractViewHolder {
             nForegroundColorId = R.color.white;
 
         } else if (p_nSelectionState == SelectionState.UNSELECTED) {
-            nBackgroundColorId = R.color.unselected_header_background_color;
+            nBackgroundColorId = R.color.row_header_background_unselected;
             nForegroundColorId = R.color.unselected_text_color;
 
         } else { // SelectionState.SHADOWED

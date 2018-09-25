@@ -14,7 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -41,6 +47,7 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPaymentAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
+import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -81,7 +88,7 @@ public class TransTv extends AppCompatActivity {
 
     SharedPreferences prefs;
     Spinner spnJenis, spnLayanan;
-    EditText txtNo, txtno_hp;
+    EditText txtNo, txtno_hp, txtTransaksi_ke;
     TextInputLayout layoutNo;
     Button btnBayar;
     String //id_member,
@@ -107,28 +114,50 @@ public class TransTv extends AppCompatActivity {
     String StrTV;
     LinearLayout layoutNoKonfirmasi, layoutTransaksiKe;
 
+    /*AlertDialog.Builder dialog;
+    LayoutInflater inflater;
+    View dialogView;*/
+    TextView txtnomor, txtvoucher;
+    Button btnYes, btnNo;
+
+    Utils utilsAlert;
+    String titleAlert = "Vouchet TV";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans_tv);
-
         ButterKnife.bind(this);
+
+        utilsAlert = new Utils(TransTv.this);
 
         layoutNominal = (LinearLayout) findViewById(R.id.layout_nominal);
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnJenis = (Spinner) findViewById(R.id.spnTransTvJenis);
         spnLayanan = (Spinner) findViewById(R.id.spnTransTvLayanan);
         txtNo = (EditText) findViewById(R.id.txtTransTvNo);
-        layoutNo      = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
+        layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransTvBayar);
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
 
         //id_member     = prefs.getString("auth_id", "");
 
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
+
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
-        txtno_hp.setText(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        if (PreferenceUtil.getNumberPhone(this).startsWith("+62")) {
+            String no = PreferenceUtil.getNumberPhone(this).replace("+62", "0");
+            txtno_hp.setText(no);
+        } else {
+            txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
+        }
+
+        txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
+        txtTransaksi_ke.setText("1");
 
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -170,9 +199,9 @@ public class TransTv extends AppCompatActivity {
                     layoutNominal.setVisibility(View.VISIBLE);
                     StrTV = "VOUCHER TV";
                     btnBayar.setText("BELI");
-                    txtno_hp.setVisibility(View.GONE);
+                    txtno_hp.setVisibility(View.VISIBLE);
                     layoutTransaksiKe.setVisibility(View.VISIBLE);
-                    layoutNoKonfirmasi.setVisibility(View.GONE);
+                    layoutNoKonfirmasi.setVisibility(View.VISIBLE);
                 } else {
                     loadProviderPPOB(strUserID, strAccessToken, "OTU", "TV KABEL");
                     layoutNominal.setVisibility(View.GONE);
@@ -194,14 +223,45 @@ public class TransTv extends AppCompatActivity {
 
                 Log.d("OPPO-1", "onClick: " + StrTV);
                 if (StrTV.equalsIgnoreCase("VOUCHER TV")) {
-                    AlertDialog dialog = new AlertDialog.Builder(TransTv.this)
+                    final Dialog dialog = new Dialog(TransTv.this);
+
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.activity_alert_dialog);
+                    dialog.setCancelable(false);
+                    dialog.setTitle("Peringatan Transaksi!!!");
+
+                    btnYes = (Button) dialog.findViewById(R.id.btn_yes);
+                    btnNo = (Button) dialog.findViewById(R.id.btn_no);
+                    txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
+                    txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+                    txtnomor.setText(txtNo.getText().toString());
+                    txtvoucher.setText(selected_nominal);
+
+                    btnYes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            cek_transaksi_tv_voucher();
+                            dialog.dismiss();
+                        }
+                    });
+
+                    btnNo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                    return;
+
+                /*AlertDialog dialog = new AlertDialog.Builder(TransTv.this)
                             .setTitle("Transaksi")
                             .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: "+txtNo.getText().toString()+"\nVoucher: "+selected_nominal)
                             .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     cek_transaksi_tv_voucher();
-                                    finish();
                                 }
                             })
                             .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -212,7 +272,31 @@ public class TransTv extends AppCompatActivity {
                             })
                             .create();
                     dialog.show();
-                    return;
+                    return;*/
+
+                    /*dialog = new AlertDialog.Builder(TransTv.this);
+                    inflater = getLayoutInflater();
+                    dialogView = inflater.inflate(R.layout.activity_alert_dialog, null);
+                    dialog.setView(dialogView);
+                    dialog.setCancelable(true);
+                    dialog.setIcon(R.mipmap.ic_launcher);
+                    dialog.setTitle("Peringatan Transaksi!!!");*/
+
+                    /*dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            cek_transaksi();
+                        }
+                    });
+
+                    dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });*/
+
+                    // ((Button)dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.button_border);
 
                 } else {
                     cek_transaksi();
@@ -224,14 +308,14 @@ public class TransTv extends AppCompatActivity {
         load();
     }
 
-    private void load(){
+    private void load() {
         loadProvider(strUserID, strAccessToken, strAplUse, "VOUCHER TV");
         layoutNominal.setVisibility(View.VISIBLE);
         StrTV = "VOUCHER TV";
         btnBayar.setText("BELI");
-        txtno_hp.setVisibility(View.GONE);
+        txtno_hp.setVisibility(View.VISIBLE);
         layoutTransaksiKe.setVisibility(View.VISIBLE);
-        layoutNoKonfirmasi.setVisibility(View.GONE);
+        layoutNoKonfirmasi.setVisibility(View.VISIBLE);
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
@@ -276,16 +360,19 @@ public class TransTv extends AppCompatActivity {
                         });
 
                     } else {
-                        Toast.makeText(TransTv.this, "" + respMessage, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransTv.this, titleAlert, respMessage);
+                        //Toast.makeText(TransTv.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
                 loadingDialog.dismiss();
+                utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
             }
         });
     }
@@ -342,16 +429,19 @@ public class TransTv extends AppCompatActivity {
                         });
 
                     } else {
-                        Toast.makeText(TransTv.this, "" + respMessage, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransTv.this, titleAlert, respMessage);
+                        //Toast.makeText(TransTv.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponseProduct> call, Throwable t) {
                 loadingDialog.dismiss();
+                utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
             }
         });
     }
@@ -395,17 +485,20 @@ public class TransTv extends AppCompatActivity {
                             }
                         });
                     } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransTv.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -463,7 +556,7 @@ public class TransTv extends AppCompatActivity {
 
 
     private void cek_transaksi() {
-        Log.d("OPPO-1", "cek_transaksi: " + load_id + " / " + strUserID + " / " + strAccessToken + " / " + txtNo.getText().toString() + " / " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() + " / " + strAplUse);
+        Log.d("OPPO-1", "cek_transaksi: " + load_id + " / " + strUserID + " / " + strAccessToken + " / " + txtNo.getText().toString() + " / " + PreferenceUtil.getNumberPhone(this) + " / " + strAplUse);
         loadingDialog = ProgressDialog.show(TransTv.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
@@ -514,17 +607,20 @@ public class TransTv extends AppCompatActivity {
                         inKonfirmasi.putExtra("cmd_save", "-");
                         startActivity(inKonfirmasi);
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransTv.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -535,7 +631,7 @@ public class TransTv extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransTv.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), "1", txtNo.getText().toString(), "", selected_nominal);
+        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtTransaksi_ke.getText().toString(), txtNo.getText().toString(), "", selected_nominal);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -580,17 +676,20 @@ public class TransTv extends AppCompatActivity {
                         inKonfirmasi.putExtra("cmd_save", "-");
                         startActivity(inKonfirmasi);
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransTv.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
+               // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -602,8 +701,8 @@ public class TransTv extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransTv.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Log.d("OPPO-1", "cek_transaksi - transtv: "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), load_id, selected_nominal, txtNo.getText().toString(), "tvbyr");
+        Log.d("OPPO-1", "cek_transaksi - transtv: "+PreferenceUtil.getNumberPhone(this)));
+        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), load_id, selected_nominal, txtNo.getText().toString(), "tvbyr");
 //        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", load_id, selected_nominal, txtNo.getText().toString(), "tvbyr");
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
@@ -644,8 +743,8 @@ public class TransTv extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransTv.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Log.d("OPPO-1", "cek_transaksi - transtv: "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Log.d("OPPO-1", "cek_transaksi - transtv: "+PreferenceUtil.getNumberPhone(this)));
+        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, PreferenceUtil.getNumberPhone(this)));
 //        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, "085334059170");
 
 
@@ -715,4 +814,28 @@ public class TransTv extends AppCompatActivity {
         });
     }
     /*==========================================end payment lama=============================================*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

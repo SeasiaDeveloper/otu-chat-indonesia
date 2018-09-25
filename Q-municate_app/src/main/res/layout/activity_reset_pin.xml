@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.quickblox.otuchat.ui.activities.payment.transaksi.PaymentLogin">
+    android:background="@color/white"
+    tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -19,6 +20,15 @@
             android:paddingRight="16dp"
             android:paddingStart="16dp">
 
+            <com.eklanku.otuChat.ui.views.ARTextView android:id="@+id/lbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Masukan PIN baru."
+                android:textColor="@color/grey_600"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/textResponPaymentLogin" />
+
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
@@ -28,6 +38,7 @@
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="16dp"
                 android:scaleType="fitCenter"
+                android:visibility="gone"
                 app:srcCompat="@drawable/ic_logo_otu" />
 
             <TextView
@@ -46,7 +57,7 @@
                 android:id="@+id/txtLayoutLoginEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textResponPaymentLogin"
+                android:layout_below="@id/lbl"
                 android:layout_marginBottom="8dp">
                 <!--
                                 <EditText
@@ -61,25 +72,26 @@
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/txtLayoutLoginPassword"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txtLayoutLoginEmail"
                 app:passwordToggleContentDescription="Password"
+                android:minWidth="150dp"
+                android:layout_centerHorizontal="true"
                 app:passwordToggleEnabled="true">
 
                 <EditText
                     android:id="@+id/txtResetPIN"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_bg_text"
-                    android:drawableLeft="@drawable/ic_key"
-                    android:drawableStart="@drawable/ic_key"
+                    android:background="@drawable/custom_bottom_border_green"
                     android:ems="10"
                     android:hint="New PIN"
-                    android:paddingBottom="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_8"
                     android:paddingLeft="@dimen/density_8"
+                    android:gravity="center"
                     android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16" />
+                    android:paddingTop="@dimen/density_8" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -88,63 +100,87 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtLayoutLoginPassword"
+                android:layout_alignEnd="@+id/txtLayoutLoginPassword"
+                android:layout_alignRight="@+id/txtLayoutLoginPassword"
+                android:layout_alignLeft="@+id/txtLayoutLoginPassword"
+                android:layout_alignStart="@+id/txtLayoutLoginPassword"
                 android:layout_margin="8dp"
+                android:gravity="center"
+                android:textSize="@dimen/density_10"
                 android:layout_toLeftOf="@+id/lblLoginRegister"
                 android:text="*A new PIN must be at least 6 characters maximum 10 characters"
-                android:textColor="@color/red_900" />
+                android:textColor="@color/red_400" />
+
+
+            <com.eklanku.otuChat.ui.views.ARTextView android:id="@+id/lblKeySms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="key SMS"
+                android:textColor="@color/grey_600"
+                android:gravity="center"
+                android:layout_below="@+id/lbketerangan"
+                android:layout_alignLeft="@+id/txtLayoutLoginPassword"
+                android:layout_alignStart="@+id/txtLayoutLoginPassword"
+                android:layout_alignEnd="@+id/txtLayoutLoginPassword"
+                android:layout_alignRight="@+id/txtLayoutLoginPassword"
+                android:layout_marginTop="10dp" />
 
             <RelativeLayout
                 android:id="@+id/layKeySMS"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lbketerangan"
+                android:layout_alignLeft="@+id/txtLayoutLoginPassword"
+                android:layout_alignStart="@+id/txtLayoutLoginPassword"
+                android:layout_below="@+id/lblKeySms"
                 android:orientation="horizontal">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:gravity="center_vertical"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/txtLayoutKeySMS"
-                        android:layout_width="0dp"
-                        android:layout_weight="5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtLayoutLoginEmail"
                         android:layout_marginEnd="@dimen/density_4"
                         android:layout_marginRight="@dimen/density_4"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/txtLayoutLoginEmail">
+                        android:layout_weight="1"
+                        app:hintEnabled="false"
+                        android:minWidth="180dp">
 
                         <EditText
                             android:id="@+id/txtResetKeySMS"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/custom_bg_text"
-                            android:drawableLeft="@drawable/ic_key"
-                            android:drawableStart="@drawable/ic_key"
+                            android:background="@drawable/custom_bottom_border_green"
                             android:ems="10"
-                            android:hint="key SMS"
+                            android:gravity="center"
+                            android:hint=""
                             android:inputType="text"
-                            android:paddingBottom="@dimen/density_16"
+                            android:paddingBottom="@dimen/density_8"
                             android:paddingLeft="@dimen/density_8"
                             android:paddingStart="@dimen/density_8"
-                            android:paddingTop="@dimen/density_16" />
+                            android:paddingTop="@dimen/density_8" />
 
                     </android.support.design.widget.TextInputLayout>
 
                     <Button
                         android:id="@+id/btnGetKey"
-                        android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
                         android:layout_marginLeft="@dimen/density_4"
                         android:layout_marginStart="@dimen/density_4"
                         android:layout_marginTop="@dimen/density_4"
-                        android:paddingBottom="@dimen/density_16"
-                        android:paddingTop="@dimen/density_16"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/custom_round_green_dark"
-                        android:text="Get key"
+                        android:background="@color/default_text_icon_otu_color"
+                        android:text="Depatkan key"
+                        android:textAllCaps="false"
+                        android:layout_gravity="top"
                         android:textColor="@color/white"
+                        android:textSize="@dimen/density_10"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -152,17 +188,18 @@
 
             <Button
                 android:id="@+id/btnReset"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/layKeySMS"
                 android:layout_marginBottom="8dp"
-                android:layout_marginTop="@dimen/density_16"
-                android:background="@drawable/custom_round_green_dark"
-                android:drawableEnd="@drawable/ic_next_white"
-                android:drawableLeft="@drawable/ic_pin"
-                android:drawableRight="@drawable/ic_next_white"
-                android:drawableStart="@drawable/ic_pin"
+                android:layout_marginTop="@dimen/density_24"
+                android:layout_alignEnd="@+id/txtLayoutLoginPassword"
+                android:layout_alignRight="@+id/txtLayoutLoginPassword"
+                android:layout_alignLeft="@+id/txtLayoutLoginPassword"
+                android:layout_alignStart="@+id/txtLayoutLoginPassword"
+                android:background="@drawable/background_round_corner_green"
                 android:text="Reset PIN"
+                android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold" />
 

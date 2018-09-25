@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:icon="@drawable/ic_document"
+        android:icon="@drawable/ic_document_payment"
         android:title="History"
         app:showAsAction="ifRoom">
         <menu>
@@ -95,5 +95,6 @@
         android:id="@+id/referal"
         android:orderInCategory="100"
         android:title="Referral"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false"/>
 </menu>

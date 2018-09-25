@@ -2,6 +2,7 @@ package com.eklanku.otuChat.ui.activities.main;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -13,8 +14,10 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,9 +27,12 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.Application;
 import com.eklanku.otuChat.ReferrerReceiver;
+import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
+import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
@@ -59,7 +65,6 @@ import com.eklanku.otuChat.utils.MediaUtils;
 import com.quickblox.q_municate_core.core.command.Command;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.DialogWrapper;
-import com.quickblox.q_municate_core.models.LoginType;
 import com.quickblox.q_municate_core.models.UserCustomData;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_core.utils.Utils;
@@ -103,6 +108,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
+
 import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.quickblox.core.QBEntityCallback;
@@ -148,14 +154,16 @@ public class MainActivity extends BaseLoggableActivity {
     String strAccessToken;
     String strApIUse = "OTU";
 
+    private static String[] banner_promo;
+
    /* boolean isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
     String firstLaunch = Application.getFirstLaunch(getApplicationContext());
     String referrerDate = Application.getReferrerDate(getApplicationContext());
     String referrerDataRaw = Application.getReferrerDataRaw(getApplicationContext());
     String referrerDataDecoded = Application.getReferrerDataDecoded(getApplicationContext());*/
 
-   public boolean isReferrerDetected;
-   public String firstLaunch, referrerDate, referrerDataRaw, referrerDataDecoded;
+    public boolean isReferrerDetected;
+    public String firstLaunch, referrerDate, referrerDataRaw, referrerDataDecoded;
 
     private static final int REQUEST_READ_PHONE_STATE = 0;
     boolean doubleBackToExitPressedOnce = false;
@@ -163,7 +171,7 @@ public class MainActivity extends BaseLoggableActivity {
     private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-           updateData();
+            updateData();
         }
     };
 
@@ -196,50 +204,32 @@ public class MainActivity extends BaseLoggableActivity {
         }, 2000);
     }
 
-    //tools.context
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        populate();
 
-        initFields();
-        setUpActionBarWithUpButton();
-        synchContacts();
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
         preferenceManager = new PreferenceManager(this);
 
-        /*HashMap<String, String> userReferal = preferenceManager.getUserDetailsPayment();
-        firstLaunch = userReferal.get(preferenceManager.KEY_REFF_LAUNCH);
-        referrerDate = userReferal.get(preferenceManager.KEY_REFF_DATE);
-        referrerDataRaw = userReferal.get(preferenceManager.KEY_REFF_RAW);
-        referrerDataDecoded = userReferal.get(preferenceManager.KEY_REFF_DECODE);*/
-
-        //get userid and token from preference
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
+        populate();
+        initFields();
+        setUpActionBarWithUpButton();
+        synchContacts();
 
         if (!isChatInitializedAndUserLoggedIn()) {
-            Log.d(TAG, "onCreate. !isChatInitializedAndUserLoggedIn()");
             loginChat();
         }
 
-        //banner
-        bannerSlider.setImageLoader(new GlideImageLoader());
-        List<String> urls = new ArrayList<>();
-        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-        bannerSlider.setViewUrls(urls);
+        loadBanner();
 
         addDialogsAction();
-        //launchDialogsListFragment();
         openPushDialogIfPossible();
 
         //ayik
@@ -249,25 +239,6 @@ public class MainActivity extends BaseLoggableActivity {
         pageAdapter = new PageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pageAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-       /* tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Toast.makeText(MainActivity.this, "tabSelected:  " + tab.getText(), Toast.LENGTH_SHORT).show();
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                Toast.makeText(MainActivity.this, "tabReSelected:  " + tab.getText(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
             public void onPageScrollStateChanged(int state) {
@@ -294,11 +265,9 @@ public class MainActivity extends BaseLoggableActivity {
 //                        }
 //                        break;
                     case 2:
-                        Log.d("OPPO-1", "isMember: " + PreferenceUtil.isMemberStatus(MainActivity.this));
-                      //  PreferenceUtil.setMemberStatus(MainActivity.this, false);
+
                         if (!PreferenceUtil.isMemberStatus(MainActivity.this)) {
-                            Log.d("OPPO-1", "isMember2: " + PreferenceUtil.isMemberStatus(MainActivity.this));
-                            //jalankan register activity
+
                             cekMember();
                         }
                         // DO NOTHING
@@ -317,14 +286,13 @@ public class MainActivity extends BaseLoggableActivity {
         tabLayout.getTabAt(1).setCustomView(R.layout.custom_tabs_calls);
         tabLayout.getTabAt(0).setCustomView(R.layout.custom_tab_chats);
 
-//        load();
-
         preferenceManager = new PreferenceManager(this);
 
-        //populate();
-        mainActivity = this;
+        if(!PreferenceUtil.isFirstLaunch(this)){
+            restartApp();
+        }
 
-        //serviceUpdatePass();
+        mainActivity = this;
     }
 
 
@@ -394,7 +362,7 @@ public class MainActivity extends BaseLoggableActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Makassar"));
             String currentDateTime = dateFormat.format(new Date()); // Find todays date
-
+            Log.d("OPPO-1", "getCurrentTime: " + currentDateTime);
             return currentDateTime;
         } catch (Exception e) {
             e.printStackTrace();
@@ -618,9 +586,9 @@ public class MainActivity extends BaseLoggableActivity {
                         checkSelfPermission(MODIFY_AUDIO_SETTINGS) == PackageManager.PERMISSION_GRANTED &&
                         checkSelfPermission(RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED /*&&
                         checkSelfPermission(VIBRATE) == PackageManager.PERMISSION_GRANTED*/
+                )
+        {
 
-
-                ) {
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_PHONE_STATE)) {
@@ -659,7 +627,12 @@ public class MainActivity extends BaseLoggableActivity {
                     grantResults[8] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[9] == PackageManager.PERMISSION_GRANTED /*&&
                     grantResults[10] == PackageManager.PERMISSION_GRANTED*/
-                    ) {
+                    )
+
+
+
+            {
+
 
                 synchContacts();
             } else {
@@ -675,9 +648,11 @@ public class MainActivity extends BaseLoggableActivity {
         finish();
     }
 
+
     private void cekMember() {
-        //Call<DataProfile> isMember = mApiInterfacePayment.isMember( FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), "OTU");
-        Call<DataProfile> isMember = mApiInterfacePayment.isMember( AppSession.getSession().getUser().getLogin(), "OTU");
+//        Log.d("OPPO-1", "cekMember:process"+AppSession.getSession().getUser().getPhone());
+        // Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this)), "OTU");
+        Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this), "OTU");
 
         isMember.enqueue(new Callback<DataProfile>() {
             @Override
@@ -691,18 +666,15 @@ public class MainActivity extends BaseLoggableActivity {
                     } else if (errNumber.equalsIgnoreCase("5")) {
                         lauchRegister();
                     } else {
-                        Log.d("OPPO-1", "cekMember:process failed token");
                         Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.d("OPPO-1", "cekMember:process error api");
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
-                Log.d("OPPO-1", "cekMember:process failure");
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
@@ -738,15 +710,15 @@ public class MainActivity extends BaseLoggableActivity {
                         ContentResolver cr = getContentResolver();
                         Cursor cur;
 
-                        String limit = String.valueOf(startPosition)  +", "  +PER_PAGE;
+                        String limit = String.valueOf(startPosition) + ", " + PER_PAGE;
 
-                        cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, "UPPER("+  ContactsContract.Contacts.DISPLAY_NAME+  ") ASC LIMIT "+  limit);
+                        cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, "UPPER(" + ContactsContract.Contacts.DISPLAY_NAME + ") ASC LIMIT " + limit);
                         if (cur.getCount() > 0) {
                             arrayName.clear();
                             while (cur.moveToNext()) {
                                 String id = cur.getString(cur.getColumnIndex(BaseColumns._ID));
                                 if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID+  " = ?",
+                                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
                                             new String[]{id}, null);
                                     while (pCur.moveToNext()) {
                                         String phonenumber = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -756,7 +728,7 @@ public class MainActivity extends BaseLoggableActivity {
                                         if (phonenumber.startsWith("0")) {
                                             phonenumber = phonenumber.replaceFirst("0", String.valueOf(COUNTRY_CODE));
                                         } else if (!phonenumber.startsWith(String.valueOf(COUNTRY_CODE))) {
-                                            phonenumber = COUNTRY_CODE+  phonenumber;
+                                            phonenumber = COUNTRY_CODE + phonenumber;
                                         }
                                         if (!arrayPhone.contains(phonenumber.trim())) {
                                             if (!phonenumber.isEmpty()) {
@@ -811,11 +783,63 @@ public class MainActivity extends BaseLoggableActivity {
         });
     }
 
+    public void loadBanner() {
+        bannerSlider.setImageLoader(new GlideImageLoader());
+        List<String> urls = new ArrayList<>();
+        Call<LoadBanner> callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(MainActivity.this), strApIUse);
+        callLoadBanner.enqueue(new Callback<LoadBanner>() {
+            @Override
+            public void onResponse(Call<LoadBanner> call, Response<LoadBanner> response) {
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    if (status.equals("SUCCESS")) {
+                        final List<DataBanner> result = response.body().getRespMessage();
+                        banner_promo = new String[result.size()];
+                        if (result.size() > 0) {
+                            try {
+                                for (int i = 0; i < result.size(); i++) {
+                                    banner_promo[i] = result.get(i).getBaner_promo();
+                                    urls.add(banner_promo[i]);
+                                }
+                            } catch (Exception e) {
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+                            }
+                        } else {
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+                        }
+                    } else {
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+                    }
+                    bannerSlider.setViewUrls(urls);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoadBanner> call, Throwable t) {
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+
+                bannerSlider.setViewUrls(urls);
+            }
+        });
+    }
+
     /*================================================end load deposit======================================================*/
 
     /*=====================================load deposit lama=====================================================*/
     /*public void load() {
-        Call<DataDeposit> userCall = mApiInterfacePayment.getUserDeposit(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Call<DataDeposit> userCall = mApiInterfacePayment.getUserDeposit(PreferenceUtil.getNumberPhone(this)));
         userCall.enqueue(new Callback<DataDeposit>() {
             @Override
             public void onResponse(Call<DataDeposit> call, Response<DataDeposit> response) {
@@ -862,7 +886,7 @@ public class MainActivity extends BaseLoggableActivity {
     /*=============================AYIK===========================================*/
     /*
     private void loadDetail() {
-        String phone = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+        String phone = PreferenceUtil.getNumberPhone(this));
         Call<RegisterResponse> userCall = apiInterfaceProfile.postDetail(phone);
         userCall.enqueue(new Callback<RegisterResponse>() {
             @Override
@@ -924,6 +948,23 @@ public class MainActivity extends BaseLoggableActivity {
         content.setMovementMethod(new LinkMovementMethod());*/
     }
 
+    public void restartApp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("Silahkan restart aplikasi OTU Chat");
+        builder.setNeutralButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                        PreferenceUtil.setFirstLaunch(MainActivity.this, true);
+                        SplashActivity.start(MainActivity.this);
+                        finish();
+                    }
+                });
+        builder.show();
+    }
+
   /*  @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateReceiver);
@@ -935,43 +976,4 @@ public class MainActivity extends BaseLoggableActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
         super.onResume();
     }*/
-
-   private void serviceUpdatePass () {
-       showProgress();
-
-       ArrayList<String> arrayPhone = new ArrayList<>();
-       arrayPhone.add("919898989898");
-       QBPagedRequestBuilder pagedRequestBuilder = new QBPagedRequestBuilder();
-       pagedRequestBuilder.setPage(1);
-       pagedRequestBuilder.setPerPage(1);
-
-       QBUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new QBEntityCallback<ArrayList<QBUser>>() {
-           @Override
-           public void onSuccess(ArrayList<QBUser> users, Bundle params) {
-
-               if (users.size() > 0) {
-                   for (QBUser qbUser: users) {
-                       //qbUser.setPassword(user);
-                       qbUser.setFullName("ABC EFG");
-                       QBUsers.updateUser(qbUser).performAsync(new QBEntityCallback<QBUser>() {
-                           @Override
-                           public void onSuccess(QBUser qbUser, Bundle bundle) {
-                               Log.v("Update Response","Success");
-                           }
-
-                           @Override
-                           public void onError(QBResponseException e) {
-                               Log.v("Update Response","Failed: "+e.toString());
-                           }
-                       });
-                   }
-               }
-           }
-
-           @Override
-           public void onError(QBResponseException errors) {
-               Log.e("Error", errors.getErrors().toString());
-           }
-       });
-   }
 }

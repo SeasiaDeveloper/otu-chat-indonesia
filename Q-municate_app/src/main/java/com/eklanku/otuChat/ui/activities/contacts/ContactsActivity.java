@@ -118,12 +118,14 @@ public class ContactsActivity extends BaseLoggableActivity implements SearchView
 
         } else {
             contactsModels = mDbHelper.getContacts();
+            Log.d("OPPO-1", "onCreate - contactsModels: "+contactsModels);
             if (contactsModels.size() > 0)
                 isFirst = false;
         }
         readContacts();
 
         contactsAdapter = new ContactsAdapter(contactsModels, this);
+        Log.d("OPPO-1", "onCreate: "+contactsAdapter);
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRvContacts.setLayoutManager(linearLayoutManager);
         mRvContacts.setItemAnimator(new DefaultItemAnimator());
@@ -226,7 +228,11 @@ public class ContactsActivity extends BaseLoggableActivity implements SearchView
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_group:
-                NewGroupDialogActivity.start(this);
+//                NewGroupDialogActivity.start(this);
+                Intent intent = new Intent(this, NewGroupDialogActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                intent.putExtra("isToGroup", true);
+                intent.putExtra(QBServiceConsts.EXTRA_DIALOG, qbDialog);
                 break;
             case android.R.id.home:
                 finish();
@@ -340,7 +346,7 @@ public class ContactsActivity extends BaseLoggableActivity implements SearchView
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (isToGroup) {
-            getMenuInflater().inflate(R.menu.done_menu, menu);
+            getMenuInflater().inflate(R.menu.done_green_menu, menu);
         } else {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.search_menu_new, menu);

@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -325,8 +328,8 @@ public class TransPaket extends AppCompatActivity {
     private void load_data() {
         loadingDialog = ProgressDialog.show(TransPaket.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Log.d("OPPO-1", "cek_transaksi - transpaket: "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Log.d("OPPO-1", "cek_transaksi - transpaket: "+PreferenceUtil.getNumberPhone(this));
+        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, PreferenceUtil.getNumberPhone(this));
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
@@ -391,8 +394,8 @@ public class TransPaket extends AppCompatActivity {
     public void load_data2() {
         loadingDialog = ProgressDialog.show(TransPaket.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Log.d("OPPO-1", "cek_transaksi - transpaket: "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Log.d("OPPO-1", "cek_transaksi - transpaket: "+PreferenceUtil.getNumberPhone(this));
+        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, PreferenceUtil.getNumberPhone(this));
 //        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, "085334059170");
         dataCall.enqueue(new Callback<LoadDataResponse>() {
 
@@ -508,8 +511,8 @@ public class TransPaket extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransPaket.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Log.d("OPPO-1", "cek_transaksi - transpaket: "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), load_id, selected_nominal, txtNo.getText().toString(), "paket");
+        Log.d("OPPO-1", "cek_transaksi - transpaket: "+PreferenceUtil.getNumberPhone(this)));
+        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), load_id, selected_nominal, txtNo.getText().toString(), "paket");
 //        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", load_id, selected_nominal, txtNo.getText().toString(), "paket");
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
@@ -546,4 +549,25 @@ public class TransPaket extends AppCompatActivity {
         });
     }*/
 /*===========================================================end payment lama==================================================*/
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.payment_transaction_menu, menu);
+    return true;
+}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

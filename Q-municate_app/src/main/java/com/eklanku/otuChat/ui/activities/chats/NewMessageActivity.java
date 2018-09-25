@@ -191,7 +191,12 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_group:
-                NewGroupDialogActivity.start(this);
+               NewGroupDialogActivity.start(this);
+                /*Intent intent = new Intent(this, NewGroupDialogActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                intent.putExtra("isToGroup", true);
+                intent.putExtra(QBServiceConsts.EXTRA_DIALOG, qbDialog);
+                startActivity(intent);*/
                 break;
             default:
                 super.onOptionsItemSelected(item);

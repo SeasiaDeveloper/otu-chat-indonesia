@@ -1,6 +1,7 @@
 package com.eklanku.otuChat.ui.activities.payment.tableview.holder;
 
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -24,6 +25,8 @@ public class CellViewHolder extends AbstractViewHolder {
         super(itemView);
         cell_textview = itemView.findViewById(R.id.cell_data);
         cell_container = itemView.findViewById(R.id.cell_container);
+
+
     }
 
     public void setCellModel(CellModel p_jModel, int pColumnPosition) {
@@ -53,4 +56,7 @@ public class CellViewHolder extends AbstractViewHolder {
                     .unselected_text_color));
         }
     }
+
+
+
 }

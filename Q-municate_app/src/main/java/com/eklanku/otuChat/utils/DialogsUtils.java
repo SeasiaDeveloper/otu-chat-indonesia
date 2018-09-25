@@ -82,4 +82,5 @@ public class DialogsUtils {
         Log.v(DialogsUtils.class.getSimpleName(), "broadcast action " + resultAction + " sent " + intent.getExtras());
         LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
     }
+
 }

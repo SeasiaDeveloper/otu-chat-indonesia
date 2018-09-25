@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
 
-    <!--rina-->
+    <!-- rina -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission
@@ -29,16 +29,12 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <!--rina-->
-    <!--<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>-->
-
+    <!-- rina -->
+    <!-- <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/> -->
 
     <uses-permission android:name="android.permission.READ_SMS" />
-
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-
-
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
@@ -46,15 +42,12 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
-
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
-
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
@@ -66,25 +59,26 @@
         android:resizeable="false"
         android:smallScreens="true" />
 
-    <!--<uses-feature-->
-    <!--android:name="android.hardware.camera"-->
-    <!--android:required="false" />-->
-    <!--<uses-feature-->
-    <!--android:name="android.hardware.camera.autofocus"-->
-    <!--android:required="false" />-->
-
-    <!-- <supports-screens
+    <!-- <uses-feature -->
+    <!-- android:name="android.hardware.camera" -->
+    <!-- android:required="false" /> -->
+    <!-- <uses-feature -->
+    <!-- android:name="android.hardware.camera.autofocus" -->
+    <!-- android:required="false" /> -->
+    <!--
+ <supports-screens
          android:largeScreens="true"
-         android:xlargeScreens="true" />-->
-
-    <!-- <supports-screens
+         android:xlargeScreens="true" />
+    -->
+    <!--
+ <supports-screens
          android:anyDensity="true"
          android:largeScreens="true"
          android:normalScreens="true"
          android:resizeable="false"
          android:smallScreens="true"
          android:xlargeScreens="true" />
- -->
+    -->
     <application
         android:name=".Application"
         android:allowBackup="false"
@@ -127,8 +121,8 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".ui.activities.main.MainActivity"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeMain" />
         <activity
             android:name=".ui.activities.settings.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -172,14 +166,13 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.chats.GroupDialogActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.chats.GroupDialogDetailsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -316,7 +309,6 @@
             android:label="@string/title_activity_edit_profile"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-
         <activity
             android:name=".ui.activities.contacts.ContactsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -328,17 +320,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.settingpayment.ResetPassword">
+        <activity android:name=".ui.activities.payment.settingpayment.ResetPassword"
+            android:label="Profil"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.settingpayment.Profile">
+        <activity android:name=".ui.activities.payment.settingpayment.Profile"
+            android:label="Reset Password"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.settingpayment.ResetPIN">
+        <activity android:name=".ui.activities.payment.settingpayment.ResetPIN"
+            android:label="Profil"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
@@ -358,93 +356,143 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-
         <activity android:name=".ui.activities.payment.transaksi.TransKonfirmasi">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransPulsa">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransPulsa"
+            android:label="Pulsa"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransPaketData">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransPaketData"
+            android:label="Paket Data"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransPln">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransPln"
+            android:label="Listrik PLN"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransVoucherGame">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransVoucherGame"
+            android:label="Voucher Game"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransEtool">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransEtool"
+            android:label="E-TOOL"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransWi">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransWi"
+            android:label="Wifi ID"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransSMS">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransSMS"
+            android:label="SMS"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransPajak">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransPajak"
+            android:label="Pajak Daerah"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransBpjs">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransBpjs"
+            android:label="BPJS Kesehatan"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransTv">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransTv"
+            android:label="TV Kabel"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransPdam">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransPdam"
+            android:label="PDAM"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransTagihan">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransTagihan"
+            android:label="Pascabayar"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransTelkom">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransTelkom"
+            android:label="Telkom"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransMultiFinance">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransMultiFinance"
+            android:label="Finance"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransKartuKredit">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransKartuKredit"
+            android:label="Kartu Kredit"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransAsuransi">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransAsuransi"
+            android:label="ASURANSI"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransPGN">
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransPGN"
+            android:label="PGN"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
@@ -484,7 +532,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transfer.TransDeposit">
+        <activity android:name=".ui.activities.payment.transfer.TransDeposit"
+            android:label="Transfer Saldo"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
@@ -499,17 +549,31 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.topup.TopupOrder" />
+        <activity
+            android:name=".ui.activities.payment.topup.TopupOrder"
+            android:label="Topup"
+            android:theme="@style/AppThemePaymentItems">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
+        </activity>
         <activity android:name=".ui.activities.payment.topup.TopupBilling" />
         <activity android:name=".ui.activities.payment.topup.TopupDetail" />
-        <!--<activity android:name=".ui.activities.payment.settingpayment.Register" />-->
-        <activity android:name=".ui.activities.settings.SettingTabPaymentActivity" />
-        <activity android:name=".ui.activities.about.ContactUsActivity" />
+        <!-- <activity android:name=".ui.activities.payment.settingpayment.Register" /> -->
+        <activity android:name=".ui.activities.settings.SettingTabPaymentActivity"
+            android:label="Pengaturan"
+            android:theme="@style/AppThemePaymentItems" />
+        <activity android:name=".ui.activities.about.ContactUsActivity"
+            android:label="Kontak Kami"
+            android:theme="@style/AppThemePaymentItems"/>
         <activity android:name=".ui.activities.payment.transaksi.TransThankyou" />
-        <!--new config-->
-        <!-- <meta-data android:name="com.connectycube.pushnotifications.TYPE" android:value="FCM" />
+        <activity android:name=".ui.activities.payment.topup.AlertSyarat" />
+        <!-- new config -->
+        <!--
+         <meta-data android:name=".com.connectycube.pushnotifications.TYPE" android:value="FCM" />
          <meta-data android:name="com.connectycube.pushnotifications.SENDER_ID" android:value="@string/sender_id" />
-         <meta-data android:name="com.connectycube.pushnotifications.ENVIRONMENT" android:value="PRODUCTION" />-->
+         <meta-data android:name="com.connectycube.pushnotifications.ENVIRONMENT" android:value="PRODUCTION" />
+        -->
 
         <receiver
             android:name=".ReferrerReceiver"
@@ -520,12 +584,11 @@
             </intent-filter>
         </receiver>
 
-        <!--facebook account kit-->
+        <!-- facebook account kit -->
         <activity
             android:name="com.facebook.accountkit.ui.AccountKitActivity"
             android:theme="@style/AppLoginTheme"
             tools:replace="android:theme" />
-
         <activity android:name="com.facebook.accountkit.ui.AccountKitEmailRedirectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -551,6 +614,10 @@
             android:name="com.facebook.accountkit.ClientToken"
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
 
+        <activity android:name=".ui.activities.payment.TestActivity" />
+        <activity android:name=".ui.activities.payment.RiwayatActivity"
+            android:label="Riwayat"
+            android:theme="@style/AppThemePaymentItems"></activity>
     </application>
 
 </manifest>

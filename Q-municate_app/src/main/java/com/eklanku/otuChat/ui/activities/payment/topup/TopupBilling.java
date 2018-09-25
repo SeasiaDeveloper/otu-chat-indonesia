@@ -168,7 +168,7 @@ public class TopupBilling extends AppCompatActivity {
         public void onClick(View v) {
             loadingDialog = ProgressDialog.show(TopupBilling.this, "Harap Tunggu", "Memproses Pengisian Topup");
             loadingDialog.setCanceledOnTouchOutside(true);
-            Call<TopupPayResponse> dataCall = mApiInterface.postTopupPay("transfer", id_paket, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+            Call<TopupPayResponse> dataCall = mApiInterface.postTopupPay("transfer", id_paket, PreferenceUtil.getNumberPhone(this)));
 //            Call<TopupPayResponse> dataCall = mApiInterface.postTopupPay("transfer", id_paket, "085334059170");
             dataCall.enqueue(new Callback<TopupPayResponse>() {
                 @Override

@@ -14,7 +14,6 @@ import com.eklanku.otuChat.ui.activities.feedback.FeedbackActivity;
 import com.eklanku.otuChat.ui.activities.profile.MyProfileActivity;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
-import com.facebook.accountkit.AccountKit;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quickblox.auth.session.QBSettings;
 import com.eklanku.otuChat.R;;
@@ -138,7 +137,6 @@ public class SettingsActivity extends BaseLoggableActivity {
 
                                     facebookHelper.logout();
                                     firebaseAuthHelper.logout();
-                                    AccountKit.logOut();
 
                                     ServiceManager.getInstance().logout(new Subscriber<Void>() {
                                         @Override
@@ -180,9 +178,8 @@ public class SettingsActivity extends BaseLoggableActivity {
 
     private void fillUI() {
         pushNotificationSwitch.setChecked(QBSettings.getInstance().isEnablePushNotification());
-        //changePasswordView.setVisibility(
-        //        LoginType.EMAIL.equals(AppSession.getSession().getLoginType()) ? View.VISIBLE : View.GONE);
-        changePasswordView.setVisibility(View.GONE);
+        changePasswordView.setVisibility(
+                LoginType.EMAIL.equals(AppSession.getSession().getLoginType()) ? View.VISIBLE : View.GONE);
         fullNameTextView.setText(user.getFullName());
 
         showUserAvatar();

@@ -180,9 +180,12 @@ dependencies {
 
     //table
     implementation 'com.evrencoskun.library:tableview:0.8.5.1'
-
+    implementation 'com.google.firebase:firebase-config:11.4.2'
     //facebook
     implementation 'com.facebook.android:account-kit-sdk:4.20.0'
+    //textview improve
+    implementation 'com.codesgood:justifiedtextview:1.0.2'
+    implementation 'com.ms-square:expandableTextView:0.1.4'
 }
 
 def changeApkFileName(variant) {

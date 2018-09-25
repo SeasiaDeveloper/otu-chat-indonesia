@@ -5,9 +5,11 @@
 
     <color name="primary">#fff</color>
     <color name="primary_dark">@color/dark_gray</color>
+    <color name="primary_dark_">#269728</color>
     <color name="accent">@color/green</color>
     <color name="action_mode_background">@color/light_gray</color>
     <color name="toolbar_shadow">#c0c0c0</color>
+    <color name="toolbar_light_shadow">#e9e9e9</color>
 
     <color name="white">#fff</color>
     <color name="black">#000000</color>
@@ -16,7 +18,7 @@
     <color name="dark_gray">#6c6c6c</color>
     <color name="red">#ff0000</color>
     <color name="pink">#ed1e6e</color>
-    <color name="green">#1cba48</color>
+    <color name="green">#3ab54a</color>
     <color name="white_green">#A9FF80</color>
     <color name="blue">#0d70b3</color>
     <color name="white_blue">#00BFFF</color>
@@ -30,7 +32,9 @@
 
     <color name="link_text_color">#0d70b3</color>
 
-    <color name="badge_unread_messages_counter">#d20000</color>
+    <color name="dailog_list_time_text_color">@color/gray_color_message</color>
+    <color name="default_text_icon_otu_color">#199934</color>
+    <color name="badge_unread_messages_counter">@color/default_text_icon_otu_color</color>
     <color name="badge_online">#1cba48</color>
 
     <color name="button_general_pressed">#dddddd</color>
@@ -67,16 +71,19 @@
     <color name="material_green_700">#388E3C</color>
     <color name="material_green_a200">#69F0AE</color>
 
-    <color name="colorTextOtu">#40d681</color>
-    <color name="colorTextOtuDark">#0e8b1b</color>
+    <color name="colorTextOtu">#3ab54a</color>
+    <color name="color_no_msg">#585858</color>
+    <color name="colorTextOtuDark">#FF3AA148</color>
     <color name="colorGray">#E6E6E6</color>
     <color name="colorGrayDarker">#607D8B</color>
     <color name="colorGrayLighter">#EAEAEA</color>
     <color name="colorRedDark">#E00034</color>
     <color name="unselected_background_color">#f4fff4</color>
-    <color name="unselected_text_color">#537095</color>
-    <color name="unselected_header_background_color">#d5e7ca</color>
-    <color name="separator_color">@android:color/holo_green_dark</color>
+    <color name="unselected_text_color">#3D3D3F</color><!--#537095-->
+    <color name="unselected_header_background_color">#199934</color><!--#d5e7ca-->
+    <color name="unselected_header_aleternate_background_color">#EEEEEE</color><!--#d5e7ca-->
+    <color name="separator_color">@android:color/holo_green_dark</color><!--#199934-->
+    <color name="row_header_background_unselected">#FFFFFF</color><!--#199934-->
 
     <color name="selected_background_color">#15a4fa</color>
     <color name="shadow_background_color">#9abe84</color>
@@ -86,5 +93,19 @@
 
     <color name="reply_transparent_overlay">#dd6b6b6b</color>
 
-    <color name="colorPrimaryLightRipple_">#40dd4b39</color>
+    <!-- Recent chat -->
+    <color name="gray_color_name">#565656</color>
+    <color name="gray_color_message">#989898</color>
+
+    <!-- Chat Conversation -->
+    <color name="right_bubble_tint_color">#B1F0B2</color>
+
+    <!-- Otu payment screen -->
+    <color name="color_payment_contact_us_gray">#676767</color>
+    <color name="color_payment_list_icon_text">#4D4D4D</color>
+    <color name="color_payment_list_icon_border">#CCCCCC</color>
+    <color name="color_bg_payment_screen_bonus_amount">#20b337</color>
+    <color name="color_yellow_payment_amount">#FEEE23</color>
+    <color name="gray_color_light_dark">#6e6e6e</color>
+
 </resources>

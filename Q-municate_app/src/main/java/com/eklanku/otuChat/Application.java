@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.eklanku.otuChat.utils.TypefaceUtil;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.DateFormat;
@@ -20,6 +22,7 @@ public class Application extends App{
     public void onCreate() {
         super.onCreate();
         setFirstLaunch(this);
+        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/CenturyGothic.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
     }
 
     private static void setFirstLaunch(Context context) {

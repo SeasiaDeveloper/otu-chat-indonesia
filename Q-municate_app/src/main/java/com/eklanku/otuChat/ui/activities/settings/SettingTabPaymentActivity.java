@@ -3,6 +3,7 @@ package com.eklanku.otuChat.ui.activities.settings;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -23,6 +24,9 @@ public class SettingTabPaymentActivity extends AppCompatActivity {
         Button btnResetPIN = findViewById(R.id.btn_reset_pin);
         Button btnPass = findViewById(R.id.btn_reset_pass);
         Button btnNonaktifAccount = findViewById(R.id.btn_non_aktif_account);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,4 +59,18 @@ public class SettingTabPaymentActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

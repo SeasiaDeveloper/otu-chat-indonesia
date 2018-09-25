@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -413,6 +414,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     }
 
     private void startAddFriendsActivity() {
+        Log.d("OPPO-1", "startAddFriendsActivity: ---");
         Intent intent = new Intent(this, ContactsActivity.class);
         intent.putExtra("isToGroup", true);
         intent.putExtra(QBServiceConsts.EXTRA_DIALOG, qbDialog);
@@ -631,7 +633,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
 
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-            actionMode.getMenuInflater().inflate(R.menu.done_menu, menu);
+            actionMode.getMenuInflater().inflate(R.menu.done_green_menu, menu);
             return true;
         }
 

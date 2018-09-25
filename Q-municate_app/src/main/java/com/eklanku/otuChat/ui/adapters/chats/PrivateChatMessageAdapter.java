@@ -70,6 +70,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
     @Override
     protected void onBindViewCustomHolder(QBMessageViewHolder holder, CombinationMessage chatMessage, final int position) {
         Log.d(TAG, "onBindViewCustomHolder combinationMessage getBody= " + chatMessage.getBody());
+        Log.d("OPPO-1", "onBindViewCustomHolder: "+chatMessage.getBody());
         FriendsViewHolder friendsViewHolder = (FriendsViewHolder) holder;
 
         boolean friendsRequestMessage = DialogNotification.Type.FRIENDS_REQUEST.equals(
@@ -488,9 +489,9 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         int iconResourceId = 0;
 
         if (isRead) {
-            iconResourceId = R.drawable.ic_status_mes_sent_received;
+            iconResourceId = R.drawable.ic_status_msg_sent_receive_blue;
         } else if (isDelivered) {
-            iconResourceId = R.drawable.ic_status_mes_sent;
+            iconResourceId = R.drawable.ic_status_msg_sent_gray;
         }
 
         return iconResourceId;

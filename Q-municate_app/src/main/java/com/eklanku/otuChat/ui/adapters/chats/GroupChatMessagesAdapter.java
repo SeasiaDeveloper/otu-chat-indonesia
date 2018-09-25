@@ -53,6 +53,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
         RequestsViewHolder viewHolder = (RequestsViewHolder) holder;
         boolean notificationMessage = chatMessage.getNotificationType() != null;
 
+
         if (notificationMessage) {
             viewHolder.messageTextView.setText(chatMessage.getBody());
             viewHolder.timeTextMessageTextView.setText(getDate(chatMessage.getCreatedDate()));
@@ -192,9 +193,9 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
         int iconResourceId = 0;
 
         if (isRead) {
-            iconResourceId = R.drawable.ic_status_mes_sent_received;
+            iconResourceId = R.drawable.ic_status_msg_sent_receive_blue;
         } else if (isDelivered) {
-            iconResourceId = R.drawable.ic_status_mes_sent;
+            iconResourceId = R.drawable.ic_status_msg_sent_gray;
         }
 
         return iconResourceId;

@@ -157,7 +157,7 @@ public class MyProfileActivity extends BaseLoggableActivity implements OnMediaPi
 
     private void initData() {
         currentFullName = qbUser.getFullName();
-//        Log.d("myprofile", "myprofiledataok2:" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+//        Log.d("myprofile", "myprofiledataok2:" + PreferenceUtil.getNumberPhone(this)));
         initCustomData();
         loadAvatar();
         fullNameEditText.setText(currentFullName);

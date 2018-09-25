@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layout_alert"
+    android:padding="16dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="6dp">
+
+        <ImageView
+            android:id="@+id/ic_launcer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            />
+
+        <TextView
+            android:id="@+id/tx_judul_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/ic_launcer"
+            android:gravity="center_horizontal"
+            android:text="Judul"
+            android:textColor="@color/colorTextOtuDark"
+            android:textSize="12dp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tx_pesan_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="pesan"
+        android:layout_marginBottom="6dp"/>
+
+    <Button
+        android:id="@+id/btn_ok_error"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:text="Ok"
+        android:layout_gravity="right"
+        android:background="@drawable/custom_round_green_dark"
+        />
+
+</LinearLayout>

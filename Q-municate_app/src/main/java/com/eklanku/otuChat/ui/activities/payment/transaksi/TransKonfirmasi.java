@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -199,7 +202,7 @@ public class TransKonfirmasi extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransKonfirmasi.this, "Harap Tunggu", "Konfirmasi Pembayaran...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transKonfirmCall = mApiInterface.postTransConfirm(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), jenis, id_pel, pin, cmd_save);
+        Call<TransBeliResponse> transKonfirmCall = mApiInterface.postTransConfirm(PreferenceUtil.getNumberPhone(this)), jenis, id_pel, pin, cmd_save);
         transKonfirmCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -229,4 +232,25 @@ public class TransKonfirmasi extends AppCompatActivity {
         });
     }
     /*=======================================================*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

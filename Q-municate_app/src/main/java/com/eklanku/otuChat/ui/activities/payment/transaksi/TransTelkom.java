@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -30,6 +33,8 @@ import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
+import com.eklanku.otuChat.utils.PreferenceUtil;
+import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -76,12 +81,16 @@ public class TransTelkom extends AppCompatActivity {
 
     String strUserID, strAccessToken, strAplUse = "OTU", strOpsel, strProductGroup = "TELKOM";
 
+    Utils utilsAlert;
+    String titleAlert = "Telkom";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans_telkom);
-
         ButterKnife.bind(this);
+
+        utilsAlert = new Utils(TransTelkom.this);
 
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnJenis = (Spinner) findViewById(R.id.spnTransTelkomJenis);
@@ -93,7 +102,15 @@ public class TransTelkom extends AppCompatActivity {
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
-        txtno_hp.setText(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){
+            String no = PreferenceUtil.getNumberPhone(this).replace("+62","0");
+            txtno_hp.setText(no);
+        }else{
+            txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
+        }
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -171,17 +188,20 @@ public class TransTelkom extends AppCompatActivity {
                             }
                         });
                     } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransTelkom.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransTelkom.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransTelkom.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -286,10 +306,12 @@ public class TransTelkom extends AppCompatActivity {
                         inKonfirmasi.putExtra("cmd_save", "-");
                         startActivity(inKonfirmasi);
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransTelkom.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransTelkom.this, titleAlert, getResources().getString(R.string.error_api));
+                   // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -308,9 +330,9 @@ public class TransTelkom extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransTelkom.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Log.d("OPPO-1", "cek_transaksi - transtelkom: "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Log.d("OPPO-1", "cek_transaksi - transtelkom: "+PreferenceUtil.getNumberPhone(this)));
 
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), load_id, "", txtNo.getText().toString(), "telkombyr");
+        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), load_id, "", txtNo.getText().toString(), "telkombyr");
 //        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", load_id, "", txtNo.getText().toString(), "telkombyr");
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
@@ -347,4 +369,28 @@ public class TransTelkom extends AppCompatActivity {
         });
     }
     /*====================================================end payment lama=====================================*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

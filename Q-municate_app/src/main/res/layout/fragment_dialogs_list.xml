@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
@@ -12,6 +13,8 @@
         android:background="@color/bg_main"
         android:orientation="vertical">
 
+        <include layout="@layout/shadow_view" />
+
         <ListView
             android:id="@+id/chats_listview"
             android:layout_width="match_parent"
@@ -19,21 +22,34 @@
             android:background="@color/white"
             tools:listitem="@layout/item_dialog" />
 
-        <TextView
-            android:id="@+id/empty_list_textview"
+        <FrameLayout android:id="@+id/frameEmptyList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:padding="10dp"
-            android:text="@string/dialog_no_chats"
-            android:textColor="@color/colorTextOtu"
-            android:textSize="@dimen/text_size"
-            android:visibility="gone" />
+            android:visibility="gone">
+
+            <com.eklanku.otuChat.ui.views.ARTextView
+                android:id="@+id/empty_list_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/ic_big_chat_otu"
+                android:text="@string/dialog_no_chats"
+                android:layout_gravity="center"
+                android:textColor="@color/color_no_msg"
+                android:visibility="gone"
+                android:textSize="@dimen/text_size" />
+
+        </FrameLayout>
 
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_dialogs_new_chat"
-        style="@style/FabStyle"
-        android:src="@drawable/ic_message" />
+        style="@style/FabStyleNewChat"
+        android:theme="@style/FabStyleNewChat"
+        android:backgroundTint="@color/white"
+        app:borderWidth="2dp"
+        android:src="@drawable/ic_tabs_chat_otu" />
 </android.support.design.widget.CoordinatorLayout>

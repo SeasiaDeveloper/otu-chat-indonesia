@@ -24,6 +24,8 @@ public class PreferenceManager {
     public final String KEY_REFF_RAW = "referrerDataRaw";
     public final String KEY_REFF_DECODE = "referrerDataDecoded";
 
+
+
     public PreferenceManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
@@ -60,6 +62,8 @@ public class PreferenceManager {
         user.put(KEY_USERID, pref.getString(KEY_USERID, null));
         return user;
     }
+
+
 
     public HashMap<String, String> getUserDetailsPayment() {
         HashMap<String, String> user = new HashMap<String, String>();

@@ -2,10 +2,14 @@ package com.eklanku.otuChat.ui.activities.authorization;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,11 +21,17 @@ import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.utils.PreferenceUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.quickblox.auth.model.QBProvider;
 import com.quickblox.auth.session.QBSessionManager;
 import com.eklanku.otuChat.App;
-import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.BuildConfig;
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.quickblox.q_municate_core.models.AppSession;
@@ -44,6 +54,11 @@ public class SplashActivity extends BaseAuthActivity {
     private PreferenceManager preferenceManager;
     public boolean isReferrerDetected;
     public String firstLaunch, referrerDate, referrerDataRaw, referrerDataDecoded;
+    private static final String LOADING_PHRASE_CONFIG_KEY = "loading_phrase";
+    private static final String WELCOME_MESSAGE_KEY = "welcome_message";
+    private static final String WELCOME_MESSAGE_CAPS_KEY = "welcome_message_caps";
+
+    private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
     private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -84,12 +99,13 @@ public class SplashActivity extends BaseAuthActivity {
 
         processPushIntent();
 
-        if (QBSessionManager.getInstance().getSessionParameters() != null && appSharedHelper.isSavedRememberMe()) {
+        /*if (QBSessionManager.getInstance().getSessionParameters() != null && appSharedHelper.isSavedRememberMe()) {
             startLastOpenActivityOrMain();
             //cekMember();
         } else {
             startLandingActivity();
-        }
+        }*/
+        fBaseConf();
     }
 
     private void processPushIntent() {
@@ -98,7 +114,6 @@ public class SplashActivity extends BaseAuthActivity {
     }
 
     private void startLandingActivity() {
-        Log.v(TAG, "startLandingActivity();");
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -123,7 +138,7 @@ public class SplashActivity extends BaseAuthActivity {
             needCleanTask = true;
             lastActivityClass = MainActivity.class;
         }
-        Log.v(TAG, "start " + lastActivityClass.getSimpleName());
+
         startActivityByName(lastActivityClass, needCleanTask);
     }
 
@@ -154,7 +169,9 @@ public class SplashActivity extends BaseAuthActivity {
 
     private void cekMember() {
         Log.d("AYIK", "cekMember:process");
-        Call<DataProfile> isMember = mApiInterfacePayment.isMember(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), "OTU");
+        Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this), "OTU");
+
+        //Call<DataProfile> isMember = mApiInterfacePayment.isMember(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), "OTU");
         isMember.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
@@ -229,5 +246,81 @@ public class SplashActivity extends BaseAuthActivity {
     protected void onResume() {
         LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
         super.onResume();
+    }
+
+    private void fBaseConf() {
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettings(configSettings);
+        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_default);
+        fetchWelcome();
+
+    }
+
+    private void fetchWelcome() {
+        long cacheExpiration = 3600; // 1 hour in seconds.
+        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0;
+        }
+
+        mFirebaseRemoteConfig.fetch(cacheExpiration)
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            mFirebaseRemoteConfig.activateFetched();
+
+                        } else {
+                            //Log.d(TAG, "3 " + "Fetch Failed");
+                        }
+                        displayWelcomeMessage();
+                    }
+                });
+    }
+
+    private void displayWelcomeMessage() {
+        long versionServer = mFirebaseRemoteConfig.getLong("versi");
+        long versionApp = BuildConfig.VERSION_CODE;
+
+        if (versionApp < versionServer) {
+            updateApp();
+        } else {
+            if (QBSessionManager.getInstance().getSessionParameters() != null && appSharedHelper.isSavedRememberMe()) {
+                startLastOpenActivityOrMain();
+            } else {
+                startLandingActivity();
+            }
+        }
+    }
+
+    public void updateApp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("Aplikasi anda versi lama. Silahkan update ke versi terbaru");
+        builder.setNegativeButton("Tutup",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+        builder.setPositiveButton("Update",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                        final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        }
+                        finish();
+                    }
+                });
+        builder.show();
     }
 }

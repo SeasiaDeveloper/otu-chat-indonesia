@@ -16,14 +16,14 @@
 
     <TextView
         android:id="@+id/labels_imageview"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:text="@string/account_exist"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_large"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        android:textStyle="bold" />
 
 
     <Button
@@ -39,7 +39,7 @@
         android:drawableStart="@drawable/ic_login"
         android:text="@string/auth_login_title"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 
     <!--<LinearLayout-->
@@ -54,10 +54,10 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/or"
+        android:visibility="gone"
         android:textColor="@color/cardview_light_background"
         android:textSize="@dimen/text_16"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        android:textStyle="bold" />
 
     <!--</LinearLayout>-->
 
@@ -65,15 +65,15 @@
         android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_marginTop="@dimen/density_16"
         android:background="@drawable/custom_round"
         android:drawableEnd="@drawable/ic_next"
         android:drawableLeft="@drawable/ic_signup"
         android:drawableRight="@drawable/ic_next"
         android:drawableStart="@drawable/ic_signup"
-        android:text="@string/auth_sign_up_title"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        android:text="@string/auth_login_title"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/app_version_textview"
@@ -86,15 +86,17 @@
     <Button
         android:id="@+id/login"
         android:layout_marginTop="@dimen/density_16"
-        android:layout_width="200sp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#0099ff"
-        android:drawableStart="@drawable/ic_account_circle"
-        android:drawableLeft="@drawable/ic_account_circle"
+        android:background="@drawable/custom_round"
+        android:drawableEnd="@drawable/ic_next"
+        android:drawableLeft="@drawable/ic_login"
+        android:drawableRight="@drawable/ic_next"
+        android:drawableStart="@drawable/ic_login"
         android:onClick="phoneLogin"
-        android:text="Phone Login"
-        android:textAllCaps="false"
-        android:textColor="#fff" />
+        android:text="@string/auth_login_title"
+        android:textAllCaps="true"
+        android:textStyle="bold"  />
 
     <Button
         android:id="@+id/logout"

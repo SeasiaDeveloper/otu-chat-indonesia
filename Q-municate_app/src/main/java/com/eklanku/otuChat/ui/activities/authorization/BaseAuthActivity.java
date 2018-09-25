@@ -116,23 +116,23 @@ public abstract class BaseAuthActivity extends BaseActivity {
     }
 
     private void onReceiveFirebaseAuthResult(int resultCode, Intent data) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
+        IdpResponse response = IdpResponse.fromResultIntent(data);
 
-            // Successfully signed in
-            if (resultCode == RESULT_OK) {
-                firebaseAuthHelper.refreshInternalFirebaseToken(firebaseAuthCallback);
-            } else {
-                 //Sign in failed
-                if (response == null) {
-                    // User pressed back button
-                    Log.i(TAG, "BACK button pressed");
-                    return;
-                }
-
-                if (response.getErrorCode() == ErrorCodes.NO_NETWORK || response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-                    showSnackbar(R.string.dlg_internet_connection_error, Snackbar.LENGTH_INDEFINITE);
-                }
+        // Successfully signed in
+        if (resultCode == RESULT_OK) {
+            firebaseAuthHelper.refreshInternalFirebaseToken(firebaseAuthCallback);
+        } else {
+            //Sign in failed
+            if (response == null) {
+                // User pressed back button
+                Log.i(TAG, "BACK button pressed");
+                return;
             }
+
+            if (response.getErrorCode() == ErrorCodes.NO_NETWORK || response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+                showSnackbar(R.string.dlg_internet_connection_error, Snackbar.LENGTH_INDEFINITE);
+            }
+        }
     }
 
     @Nullable
@@ -171,7 +171,7 @@ public abstract class BaseAuthActivity extends BaseActivity {
                         }
                     });
         } else {*/
-            loginWithSocial();
+        loginWithSocial();
 //        }
     }
 
@@ -284,7 +284,7 @@ public abstract class BaseAuthActivity extends BaseActivity {
             Log.d(TAG, "+++ FacebookCallback call onSuccess from BaseAuthActivity +++");
             showProgress();
             serviceManager.login(QBProvider.FACEBOOK, loginResult.getAccessToken().getToken(), null)
-                          .subscribe(socialLoginObserver);
+                    .subscribe(socialLoginObserver);
         }
 
         @Override

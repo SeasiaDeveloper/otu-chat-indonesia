@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eklanku.otuChat.R;;
@@ -45,6 +46,7 @@ public class SpinnerBankAdapter extends BaseAdapter {
         TextView text_denom = (TextView) convertView.findViewById(R.id.denom);
         TextView text_nominal = (TextView) convertView.findViewById(R.id.nominal);
         TextView text_point = (TextView) convertView.findViewById(R.id.point);
+        ImageView imgBank = (ImageView) convertView.findViewById(R.id.img_bank);
 
         final TopupDetailM item = datas.get(position);
 
@@ -57,6 +59,17 @@ public class SpinnerBankAdapter extends BaseAdapter {
         text_denom.setText("Bank " + item.getBank());
         text_nominal.setText("No. Rekening " + item.getNorec());
         text_point.setText(""+ item.getAnbank());
+
+        if(item.getBank().equals("BNI")){
+            imgBank.setImageResource(R.drawable.ic_bni);
+        }else if(item.getBank().equals("BCA")){
+            imgBank.setImageResource(R.drawable.ic_bca);
+        }else if(item.getBank().equals("MANDIRI")){
+            imgBank.setImageResource(R.drawable.ic_mandiri);
+        }else if(item.getBank().equals("BRI")){
+            imgBank.setImageResource(R.drawable.ic_bri);
+        }
+
         return convertView;
     }
 }

@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -31,6 +34,7 @@ import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
+import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -78,12 +82,16 @@ public class TransPGN extends AppCompatActivity {
 
     String strUserID,strAccessToken,strAplUse = "OTU";
 
+    Utils utilsAlert;
+    String titleAlert = "PGN";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans_pgn);
-
         ButterKnife.bind(this);
+
+        utilsAlert = new Utils(TransPGN.this);
 
         prefs       = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnOperator = (Spinner) findViewById(R.id.spnTransPgnOperator);
@@ -95,7 +103,15 @@ public class TransPGN extends AppCompatActivity {
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
-        txtno_hp.setText(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){
+            String no = PreferenceUtil.getNumberPhone(this).replace("+62","0");
+            txtno_hp.setText(no);
+        }else{
+            txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
+        }
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -126,7 +142,7 @@ public class TransPGN extends AppCompatActivity {
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( !validateIdpel() ) {
+                if (!validateIdpel()) {
                     return;
                 }
                 cek_transaksi();
@@ -203,17 +219,20 @@ public class TransPGN extends AppCompatActivity {
                             }
                         });
                     } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransPGN.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransPGN.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransPGN.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -288,27 +307,30 @@ public class TransPGN extends AppCompatActivity {
                         inKonfirmasi.putExtra("cmd_save", "-");
                         startActivity(inKonfirmasi);
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransPGN.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransPGN.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransPGN.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
     }
 
-    private void load_data() {
+    /*private void load_data() {
         loadingDialog = ProgressDialog.show(TransPGN.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Log.d("OPPO-1", "cek_transaksi - transpgn: "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id,FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Log.d("OPPO-1", "cek_transaksi - transpgn: "+PreferenceUtil.getNumberPhone(this));
+        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id,PreferenceUtil.getNumberPhone(this));
 //        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id,"085334059170");
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
@@ -335,7 +357,7 @@ public class TransPGN extends AppCompatActivity {
                         dfs.setCurrencySymbol("");
                         dfs.setMonetaryDecimalSeparator(',');
                         dfs.setGroupingSeparator('.');
-                        decimal.setDecimalFormatSymbols(dfs);*/
+                        decimal.setDecimalFormatSymbols(dfs);
 
                         for ( int i=0; i<result.size(); i++ ) {
                             nama_operator[i] = result.get(i).getProductName();//+" | "+ format.format(result.get(i).getHargaJual())+" ("+ decimal.format(result.get(i).getEpoint())+")";
@@ -371,7 +393,7 @@ public class TransPGN extends AppCompatActivity {
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }
         });
-    }
+    }*/
 
     /*==============================================payment lama====================================================*/
 
@@ -381,8 +403,8 @@ public class TransPGN extends AppCompatActivity {
         loadingDialog.setCanceledOnTouchOutside(true);
         String nominal="";
 
-        Log.d("OPPO-1", "cek_transaksi - transpgn: "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), selected_operator, nominal, txtNo.getText().toString(), "pgnbyr");
+        Log.d("OPPO-1", "cek_transaksi - transpgn: "+PreferenceUtil.getNumberPhone(this)));
+        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), selected_operator, nominal, txtNo.getText().toString(), "pgnbyr");
 //        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", selected_operator, nominal, txtNo.getText().toString(), "pgnbyr");
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
@@ -420,4 +442,28 @@ public class TransPGN extends AppCompatActivity {
     }*/
 
     /*==================================================end payment lama=================================================*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -181,8 +184,8 @@ public class TransVoucher extends AppCompatActivity {
     public void load_data() {
         loadingDialog = ProgressDialog.show(TransVoucher.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Log.d("OPPO-1", "cek_transaksi - transvoucher: "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Log.d("OPPO-1", "cek_transaksi - transvoucher: "+PreferenceUtil.getNumberPhone(this));
+        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, PreferenceUtil.getNumberPhone(this));
 //        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, "085334059170");
         dataCall.enqueue(new Callback<LoadDataResponse>() {
 
@@ -267,7 +270,7 @@ public class TransVoucher extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransVoucher.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, selected_nominal, txtNo.getText().toString(), FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), strAplUse);
+        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, selected_nominal, txtNo.getText().toString(), PreferenceUtil.getNumberPhone(this), strAplUse);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -335,8 +338,8 @@ public class TransVoucher extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransVoucher.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Log.d("OPPO-1", "cek_transaksi - transvucher: "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), load_id, selected_nominal, txtNo.getText().toString(), "game");
+        Log.d("OPPO-1", "cek_transaksi - transvucher: "+PreferenceUtil.getNumberPhone(this)));
+        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), load_id, selected_nominal, txtNo.getText().toString(), "game");
 //        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", load_id, selected_nominal, txtNo.getText().toString(), "game");
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
@@ -374,4 +377,25 @@ public class TransVoucher extends AppCompatActivity {
     }
 
     /*================================end payment lama==========================================*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

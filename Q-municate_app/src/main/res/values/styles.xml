@@ -1,26 +1,31 @@
 <resources>
 
     <style name="ToolbarStyle">
+        <item name="android:typeface">serif</item>
         <item name="android:minHeight">?actionBarSize</item>
         <item name="android:background">?colorPrimary</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="popupTheme">@style/Theme.AppCompat.Light.DarkActionBar</item>
         <item name="theme">@style/ToolbarTheme</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_arrow_back</item>
     </style>
 
     <style name="ToolbarStyleCall">
+        <item name="android:typeface">serif</item>
         <item name="android:minHeight">?actionBarSize</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+        <item name="popupTheme">@style/Theme.AppCompat.Light.DarkActionBar</item>
         <item name="theme">@style/ToolbarThemeCall</item>
     </style>
 
     <style name="ButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:typeface">serif</item>
         <item name="android:background">@drawable/selector_button_general</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textColor">@color/text_dark</item>
     </style>
 
     <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:typeface">serif</item>
         <item name="android:textColor">@color/text_dark</item>
         <item name="android:textColorHint">@color/text_light_dark</item>
     </style>
@@ -30,10 +35,12 @@
         <item name="android:layout_height">@dimen/image_view_big_avatar_layout_height</item>
         <item name="android:layout_gravity">center|top</item>
         <item name="android:scaleType">centerCrop</item>
+        <item name="android:typeface">serif</item>
     </style>
 
     <style name="SearchRadioButtonStyle">
         <item name="android:layout_width">match_parent</item>
+        <item name="android:typeface">serif</item>
         <item name="android:layout_height">@dimen/contact_item_header_height</item>
         <item name="android:textColor">@drawable/selector_contacts_tab_text</item>
         <item name="android:textSize">@dimen/text_size</item>
@@ -50,15 +57,18 @@
         <item name="android:gravity">center</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
+        <item name="android:typeface">serif</item>
         <item name="android:textSize">@dimen/text_size</item>
         <item name="android:background">@drawable/selector_button_general</item>
     </style>
 
     <style name="TextViewDrawableStyle.White">
+        <item name="android:typeface">serif</item>
         <item name="android:textColor">@color/text_white</item>
     </style>
 
     <style name="TextViewDrawableStyle.Dark">
+        <item name="android:typeface">serif</item>
         <item name="android:textColor">@color/text_dark</item>
     </style>
 
@@ -68,29 +78,52 @@
         <item name="android:background">@drawable/selector_button_general</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">10dp</item>
+        <item name="android:typeface">serif</item>
         <item name="android:textSize">@dimen/text_size</item>
     </style>
 
     <style name="TextViewLinkStyle.Dark">
+        <item name="android:typeface">serif</item>
         <item name="android:textColor">@color/text_light_dark</item>
     </style>
 
     <style name="TextViewLinkStyle.Red">
+        <item name="android:typeface">serif</item>
         <item name="android:textColor">@color/text_red</item>
     </style>
 
     <style name="TextViewLinkStyle.Green">
+        <item name="android:typeface">serif</item>
         <item name="android:textColor">@color/green</item>
     </style>
 
     <style name="ChatActionButtonStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">@dimen/chat_input_message_height</item>
+        <item name="android:layout_width">@dimen/chat_input_attach_button_height</item>
+        <item name="android:layout_height">@dimen/chat_input_attach_button_height</item>
         <item name="android:background">@drawable/selector_button_general</item>
         <item name="android:gravity">center</item>
-        <item name="android:padding">5dp</item>
-        <item name="android:paddingBottom">10dp</item>
+        <item name="android:typeface">serif</item>
         <item name="android:textSize">@dimen/text_size</item>
+    </style>
+
+
+    <style name="ChatActionSmileButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/chat_input_message_smile_button_height</item>
+        <item name="android:background">@drawable/selector_button_general</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!--<style name="BubbleTextFrame.Left">
+        <item name="android:background">@drawable/left_bubble</item>
+    </style>-->
+
+    <style name="ChatRoundActionButtonStyle">
+        <item name="android:layout_width">@dimen/chat_input_message_round_button_height</item>
+        <item name="android:layout_height">@dimen/chat_input_message_round_button_height</item>
+        <item name="android:background">@drawable/selector_button_general</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">7dp</item>
     </style>
 
     <style name="SettingsButtonStyle">
@@ -98,6 +131,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/selector_button_general</item>
         <item name="android:gravity">left</item>
+        <item name="android:typeface">serif</item>
         <item name="android:padding">@dimen/padding_large</item>
         <item name="android:textSize">@dimen/text_size</item>
         <item name="android:textAllCaps">false</item>
@@ -105,6 +139,7 @@
 
     <style name="LocalVideoViewStyle">
         <item name="android:layout_width">120dp</item>
+        <item name="android:typeface">serif</item>
         <item name="android:layout_height">180dp</item>
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_alignParentRight">true</item>
@@ -114,20 +149,24 @@
 
     <style name="WrapContent">
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:typeface">serif</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="MatchParent">
         <item name="android:layout_width">match_parent</item>
+        <item name="android:typeface">serif</item>
         <item name="android:layout_height">match_parent</item>
     </style>
 
     <style name="MatchWidth">
         <item name="android:layout_width">match_parent</item>
+        <item name="android:typeface">serif</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="FabStyle" parent="WrapContent">
+        <item name="android:typeface">serif</item>
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_marginBottom">@dimen/fab_margin_bottom</item>
@@ -138,21 +177,47 @@
     </style>
 
     <style name="AvatarImageViewStyle.Right">
+        <item name="android:typeface">serif</item>
         <item name="android:visibility">gone</item>
     </style>
 
     <style name="TextViewTextMsg.Left">
-        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:typeface">serif</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:paddingLeft">@dimen/chat_text_more_margin_left_right</item>
+        <item name="android:paddingRight">@dimen/chat_text_less_margin_left_right</item>
         <item name="android:autoLink">web|phone|email</item>
     </style>
 
+    <style name="TextViewTimeMsg.Left">
+        <item name="android:typeface">serif</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:paddingLeft">@dimen/chat_text_more_margin_left_right</item>
+        <item name="android:paddingRight">@dimen/chat_text_less_margin_left_right</item>
+        <item name="android:textSize">@dimen/text_size_very_small</item>
+    </style>
+
+    <style name="TextViewTimeMsg.Right">
+        <item name="android:typeface">serif</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:paddingRight">@dimen/chat_text_more_margin_left_right</item>
+        <item name="android:paddingLeft">@dimen/chat_text_less_margin_left_right</item>
+        <item name="android:textSize">@dimen/text_size_very_small</item>
+    </style>
+
     <style name="TextViewTextMsg.Right">
-        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:typeface">serif</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:paddingRight">@dimen/chat_text_more_margin_left_right</item>
+        <item name="android:paddingLeft">@dimen/chat_text_less_margin_left_right</item>
         <item name="android:autoLink">web|phone|email</item>
     </style>
 
     <style name="BorderlessImageButtonStyle" parent="WrapContent">
         <item name="android:background">@null</item>
+        <item name="android:typeface">serif</item>
         <item name="android:padding">@dimen/padding_common</item>
         <item name="android:scaleType">centerInside</item>
     </style>
@@ -161,7 +226,7 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
-
+        <item name="android:typeface">serif</item>
         <item name="colorControlNormal">@color/material_green_500</item>
         <item name="colorControlActivated">@color/material_green_500</item>
     </style>
@@ -169,13 +234,23 @@
     <!-- Dialog Activity with no Title -->
     <style name="ThemeOverlay.MyDialogActivity" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowActionBar">false</item>
+        <item name="android:typeface">serif</item>
         <item name="windowNoTitle">true</item>
     </style>
 
     <!-- Blue Buttons -->
     <style name="ThemeOverlay.MyBlueButton" parent="ThemeOverlay.AppCompat.Dark">
         <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="android:typeface">serif</item>
     </style>
+
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColorSecondary">@color/colorTextOtu</item>
+    </style>
+
 
     <style name="AppLoginTheme" parent="Theme.AccountKit">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -184,5 +259,107 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="AppThemePayment" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
 
+        <item name="colorPrimary">@color/accent</item>
+        <item name="colorPrimaryDark">@color/primary_dark_</item>
+        <item name="colorAccent">@color/primary</item>
+        <item name="elevation">0dp</item>
+        <item name="android:typeface">serif</item>
+        <item name="colorControlNormal">@color/material_green_500</item>
+        <item name="colorControlActivated">@color/material_green_500</item>
+    </style>
+
+
+    <style name="AppThemePaymentItems" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/grey_300</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:homeAsUpIndicator">@drawable/baseline_arrow_back</item>
+        <item name="elevation">0dp</item>
+        <item name="android:typeface">serif</item>
+        <item name="titleTextColor">@color/material_green_500</item>
+        <item name="subtitleTextColor">@color/material_green_500</item>
+        <item name="colorControlNormal">@color/material_green_500</item>
+        <item name="colorControlActivated">@color/material_green_500</item>
+        <item name="android:actionOverflowButtonStyle">@style/OverFlowPayment</item>
+    </style>
+
+    <style name="OverFlowPayment" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_chat_overflow</item>
+    </style>
+    <style name="BubbleTextFrame.Left">
+        <item name="android:background">@drawable/left_chat_bubble</item>
+    </style>
+
+    <style name="BubbleTextFrame.Right">
+        <item name="android:background">@drawable/bg_chat_right_bubble</item>
+    </style>
+
+    <style name="ImageViewAttach.Right">
+        <item name="android:paddingRight">@dimen/chat_imageview_margin_right</item>
+    </style>
+
+    <style name="ImageViewAttach.Left">
+        <item name="android:paddingLeft">@dimen/chat_imageview_margin_right</item>
+    </style>
+
+    <style name="BubbleAttachFrame.Left">
+        <item name="android:background">@drawable/left_chat_bubble</item>
+        <item name="android:paddingLeft">@dimen/chat_imageview_margin_right</item>
+    </style>
+
+    <style name="BubbleAttachFrame.Right">
+        <item name="android:background">@drawable/bg_chat_right_bubble</item>
+        <item name="android:layout_marginRight">@dimen/chat_imageview_margin_right</item>
+    </style>
+
+    <style name="BubbleAttachAudioFrame.Right">
+        <item name="android:background">@drawable/bg_chat_right_bubble</item>
+    </style>
+
+    <style name="BubbleAttachAudioFrame.Left">
+        <item name="android:background">@drawable/left_chat_bubble</item>
+    </style>
+
+    <style name="AppThemeToolbarWhite" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/material_green_500</item>
+        <item name="elevation">0dp</item>
+        <item name="android:typeface">serif</item>
+        <item name="colorControlNormal">@color/default_text_icon_otu_color</item>
+        <item name="colorControlActivated">@color/material_green_500</item>
+        <item name="android:tint">@color/material_green_500</item>
+    </style>
+
+    <style name="ToolbarColoredBackArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">@color/material_green_a200</item>
+    </style>
+
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="FabStyleNewChat" parent="WrapContent">
+        <item name="android:typeface">serif</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginBottom">@dimen/fab_margin_bottom</item>
+        <item name="android:layout_marginRight">@dimen/fab_margin_right</item>
+        <item name="android:layout_gravity">right|bottom</item>
+        <item name="borderWidth">2dp</item>
+        <item name="colorAccent">@color/default_text_icon_otu_color</item>
+        <item name="fabSize">normal</item>
+    </style>
+    <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 </resources>

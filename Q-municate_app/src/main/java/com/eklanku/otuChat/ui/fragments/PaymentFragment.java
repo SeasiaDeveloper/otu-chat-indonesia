@@ -36,6 +36,7 @@ import retrofit2.Response;
 import com.eklanku.otuChat.ui.activities.about.ContactUsActivity;
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.RiwayatActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBalanceActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBonusActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryDespositActivity;
@@ -46,6 +47,7 @@ import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
+import com.eklanku.otuChat.ui.activities.payment.topup.AlertSyarat;
 import com.eklanku.otuChat.ui.activities.payment.topup.TopupOrder;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransEtool;
@@ -86,6 +88,7 @@ public class PaymentFragment extends Fragment {
     ImageButton btnDeposit, btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
             btnTv, btnPaket, btnSMS, btnEtool, btnWi;
+    ImageButton btnRiwayat,btnTransfer,btnPengaturan;
     Button btnCallme;
     /* Button btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
              btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
@@ -115,18 +118,27 @@ public class PaymentFragment extends Fragment {
         user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
         context = getActivity();
         View mView = inflater.inflate(R.layout.fragment_payment_new, container, false);
         initializeResources(mView);
         ButterKnife.bind(this, mView);
 
-        Log.d("AYIK", "OnCreate userID " + strUserID + " accessToken " + strAccessToken);
+        TextView txt1 = mView.findViewById(R.id.txt1);
+        txt1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), AlertSyarat.class));
+            }
+        });
 
         return mView;
     }
@@ -165,6 +177,9 @@ public class PaymentFragment extends Fragment {
         btnTelkom = view.findViewById(R.id.btnTelkom);
         btnPaket = view.findViewById(R.id.btnPaket);
         btnCallme = view.findViewById(R.id.btCallMe);
+        btnRiwayat = view.findViewById(R.id.btnRiwayat);
+        btnTransfer = view.findViewById(R.id.btnTransfer);
+        btnPengaturan = view.findViewById(R.id.btnPengaturan);
 
         btnWi = view.findViewById(R.id.btn_wifi_id);
         btnSMS = view.findViewById(R.id.btn_sms);
@@ -185,6 +200,9 @@ public class PaymentFragment extends Fragment {
         btnTv.setOnClickListener(new buttonListener());
         btnTelkom.setOnClickListener(new buttonListener());
         btnPaket.setOnClickListener(new buttonListener());
+        btnRiwayat.setOnClickListener(new buttonListener());
+        btnPengaturan.setOnClickListener(new buttonListener());
+        btnTransfer.setOnClickListener(new buttonListener());
         btnCallme.setOnClickListener(new buttonListener());
 
         btnEtool.setOnClickListener(new buttonListener());
@@ -286,6 +304,21 @@ public class PaymentFragment extends Fragment {
                     break;
                 case R.id.btnPajak:
                     startActivity(new Intent(context, TransPajak.class));
+                    break;
+                case R.id.btnRiwayat:
+                    if (menuDialog()) {
+                        startActivity(new Intent(context, RiwayatActivity.class));
+                    }
+                    break;
+                case R.id.btnTransfer:
+                    if (menuDialog()) {
+                        startActivity(new Intent(context, TransDeposit.class));
+                    }
+                    break;
+                case R.id.btnPengaturan:
+                    if (menuDialog()) {
+                        startActivity(new Intent(context, SettingTabPaymentActivity.class));
+                    }
                     break;
                 default:
                     Toast.makeText(context, getResources().getString(R.string.error_fungsi), Toast.LENGTH_SHORT).show();
@@ -418,37 +451,37 @@ public class PaymentFragment extends Fragment {
 
     }
 
-  /*  private void dialog() {
+    /*  private void dialog() {
 
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog);
-        dialog.setCancelable(false);
+          final Dialog dialog = new Dialog(getActivity());
+          dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+          dialog.setContentView(R.layout.custom_dialog);
+          dialog.setCancelable(false);
 
-        final TextView tvStatus = (TextView) dialog.findViewById(R.id.status);
-        final TextView tvFirst = (TextView) dialog.findViewById(R.id.firstlaunch);
-        final TextView tvDate = (TextView) dialog.findViewById(R.id.date);
-        final TextView tvRaw = (TextView) dialog.findViewById(R.id.raw);
-        final TextView tvDecode = (TextView) dialog.findViewById(R.id.decode);
+          final TextView tvStatus = (TextView) dialog.findViewById(R.id.status);
+          final TextView tvFirst = (TextView) dialog.findViewById(R.id.firstlaunch);
+          final TextView tvDate = (TextView) dialog.findViewById(R.id.date);
+          final TextView tvRaw = (TextView) dialog.findViewById(R.id.raw);
+          final TextView tvDecode = (TextView) dialog.findViewById(R.id.decode);
 
-        tvStatus.setText("" + MainActivity.mainActivity.isReferrerDetected);
-        tvFirst.setText(MainActivity.mainActivity.firstLaunch);
-        tvDate.setText(MainActivity.mainActivity.referrerDate);
-        tvRaw.setText(MainActivity.mainActivity.referrerDataRaw);
-        tvDecode.setText(MainActivity.mainActivity.referrerDataDecoded);
+          tvStatus.setText("" + MainActivity.mainActivity.isReferrerDetected);
+          tvFirst.setText(MainActivity.mainActivity.firstLaunch);
+          tvDate.setText(MainActivity.mainActivity.referrerDate);
+          tvRaw.setText(MainActivity.mainActivity.referrerDataRaw);
+          tvDecode.setText(MainActivity.mainActivity.referrerDataDecoded);
 
-        Button dialogButtonX = (Button) dialog.findViewById(R.id.btn_ok);
-        dialogButtonX.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+          Button dialogButtonX = (Button) dialog.findViewById(R.id.btn_ok);
+          dialogButtonX.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  dialog.dismiss();
+              }
+          });
 
-        dialog.show();
+          dialog.show();
 
-    }
-*/
+      }
+  */
     public static String getCurrentTime() {
         try {
 

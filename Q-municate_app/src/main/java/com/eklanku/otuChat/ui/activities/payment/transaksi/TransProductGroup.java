@@ -19,7 +19,7 @@ public class TransProductGroup {
     public String checkProductGroup(){
         mApiInterfacePayment = apiClientPayment.getClient().create(ApiInterfacePayment.class);
         try{
-          //  Call<DataProductGroup> transBeliCall = mApiInterfacePayment.postTransBeli(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), selected_operator, nominal, txtNo.getText().toString(), "asuransibyr");
+          //  Call<DataProductGroup> transBeliCall = mApiInterfacePayment.postTransBeli(PreferenceUtil.getNumberPhone(this)), selected_operator, nominal, txtNo.getText().toString(), "asuransibyr");
 
         }catch (Exception e){
             Log.e("ERROR GET PRODUCT GROUP", "checkProductGroup: "+e.getMessage());

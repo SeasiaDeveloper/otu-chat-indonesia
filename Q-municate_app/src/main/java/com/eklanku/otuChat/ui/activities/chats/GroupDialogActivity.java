@@ -247,17 +247,17 @@ public class GroupDialogActivity extends BaseDialogActivity {
             Drawable drawable = menu.findItem(R.id.action_delete).getIcon();
 
             drawable = DrawableCompat.wrap(drawable);
-            DrawableCompat.setTint(drawable, ContextCompat.getColor(GroupDialogActivity.this, R.color.black));
+            DrawableCompat.setTint(drawable, ContextCompat.getColor(GroupDialogActivity.this, R.color.green));
             menu.findItem(R.id.action_delete).setIcon(drawable);
 
             Drawable drawable_copy = menu.findItem(R.id.action_copy).getIcon();
             drawable_copy = DrawableCompat.wrap(drawable_copy);
-            DrawableCompat.setTint(drawable_copy, ContextCompat.getColor(GroupDialogActivity.this, R.color.black));
+            DrawableCompat.setTint(drawable_copy, ContextCompat.getColor(GroupDialogActivity.this, R.color.green));
             menu.findItem(R.id.action_copy).setIcon(drawable_copy);
 
             Drawable drawable_share = menu.findItem(R.id.action_share).getIcon();
             drawable_share = DrawableCompat.wrap(drawable_share);
-            DrawableCompat.setTint(drawable_share, ContextCompat.getColor(GroupDialogActivity.this, R.color.black));
+            DrawableCompat.setTint(drawable_share, ContextCompat.getColor(GroupDialogActivity.this, R.color.green));
             menu.findItem(R.id.action_share).setIcon(drawable_share);
 
             return true;

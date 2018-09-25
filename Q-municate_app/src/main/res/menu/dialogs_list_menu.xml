@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_green_vector"
+        android:icon="@drawable/ic_search_chat"
         android:title="@string/action_bar_search"
         app:showAsAction="ifRoom" />
 
@@ -15,7 +15,8 @@
     <item
         android:id="@+id/action_start_invite_friends"
         android:title="@string/action_bar_invite_friends"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false"/>
 
     <item
         android:id="@+id/action_start_feedback"

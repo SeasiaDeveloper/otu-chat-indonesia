@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.ResetPINResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -41,15 +43,22 @@ public class ResetPIN extends AppCompatActivity {
     String strApIUse = "OTU";
     Dialog loadingDialog;
 
+    Utils utilsAlert;
+    String titleAlert = "Reset PIN";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_pin);
 
+        utilsAlert = new Utils(ResetPIN.this);
+
         txtNewPin = (EditText) findViewById(R.id.txtResetPIN);
         txtkeySMS = (EditText) findViewById(R.id.txtResetKeySMS);
         btnReset = (Button) findViewById(R.id.btnReset);
         btnGetKey = (Button) findViewById(R.id.btnGetKey);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         preferenceManager = new PreferenceManager(this);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -92,6 +101,8 @@ public class ResetPIN extends AppCompatActivity {
                     Log.d("OPPO-1", "getKey: "+status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         //jalankan approve
+                    }else{
+                        utilsAlert.globalDialog(ResetPIN.this, titleAlert, msg);
                     }
                 }
             }
@@ -99,7 +110,8 @@ public class ResetPIN extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResetPINResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(ResetPIN.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -120,10 +132,12 @@ public class ResetPIN extends AppCompatActivity {
                     String msg = response.body().getRespMessage();
                     Log.d("OPPO-1", "apprResetPIN: "+status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                        Toast.makeText(getBaseContext(), status+":"+msg, Toast.LENGTH_SHORT).show();
-                         finish();
+                        utilsAlert.globalDialog(ResetPIN.this, titleAlert, msg);
+                        //Toast.makeText(getBaseContext(), status+":"+msg, Toast.LENGTH_SHORT).show();
+                        finish();
                     }else{
-                        Toast.makeText(getBaseContext(), status+":"+msg, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(ResetPIN.this, titleAlert, msg);
+                        //Toast.makeText(getBaseContext(), status+":"+msg, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -131,9 +145,23 @@ public class ResetPIN extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResetPINResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(ResetPIN.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

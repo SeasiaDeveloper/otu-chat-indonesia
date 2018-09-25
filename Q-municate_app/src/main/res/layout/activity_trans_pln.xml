@@ -5,210 +5,250 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:background="@color/white"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransPln">
 
-    <RadioGroup
-        android:id="@+id/radio_group_pln"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
-        <RadioButton
-            android:id="@+id/radio_pln_token"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="PLN TOKEN" />
-
-        <RadioButton
-            android:id="@+id/radio_pln"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="PLN" />
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_4"
-        android:text="Pilih Pembayaran"
-        android:textColor="@color/colorTextOtu"
-        android:textSize="12sp"
-        android:textStyle="bold" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_spinner"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/spnTransPln"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:spinnerMode="dropdown" />
+            android:orientation="vertical" >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_drop" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_spinner_nominal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:text="Pilih Nominal"
-            android:textColor="@color/colorTextOtu"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_spinner"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/spnTransPlnNominal"
+            <RadioGroup
+                android:id="@+id/radio_group_pln"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:gravity="center"
-                android:spinnerMode="dropdown" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="16dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_drop" />
+                <RadioButton
+                    android:id="@+id/radio_pln_token"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="PLN TOKEN"
+                    android:textColor="@color/default_text_icon_otu_color" />
 
-        </RelativeLayout>
-    </LinearLayout>
+                <RadioButton
+                    android:id="@+id/radio_pln"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="PLN"
+                    android:textColor="@color/default_text_icon_otu_color" />
+            </RadioGroup>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/txtLayoutTransPulsaNo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16">
-
-        <EditText
-            android:id="@+id/txtTransPlnNo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_bg_text"
-            android:ems="10"
-            android:hint="Masukkan No Pelanggan"
-            android:inputType="number"
-            android:paddingBottom="@dimen/density_16"
-            android:paddingLeft="@dimen/density_8"
-            android:paddingStart="@dimen/density_8"
-            android:paddingTop="@dimen/density_16" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_transaksi_ke"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_trans_ke"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/txtTransPulsaNo"
-            android:text="Transaksi Ke-"
-            android:textColor="@color/colorTextOtu"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/txt_transaksi_ke"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_trans_ke"
-            android:background="@drawable/custom_spinner"
-            android:hint="Masukkan Transaksi ke-"
-            android:inputType="number"
-            android:padding="@dimen/density_8" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_no_konfirmasi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/density_16">
-
-            <EditText
-                android:id="@+id/txt_no_hp"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/custom_bg_text"
-                android:drawableLeft="@drawable/ic_phone"
-                android:drawableStart="@drawable/ic_phone"
-                android:ems="10"
-                android:hint="No HP"
-                android:paddingBottom="@dimen/density_16"
-                android:paddingEnd="@dimen/density_8"
-                android:paddingLeft="@dimen/density_8"
-                android:paddingRight="@dimen/density_8"
-                android:paddingStart="@dimen/density_8"
-                android:paddingTop="@dimen/density_16"
-                android:inputType="number"/>
+                android:layout_height="4dp"
+                android:layout_marginBottom="@dimen/density_4"
+                android:background="@drawable/below_shadow_rect" />
 
-        </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="No HP ini digunakan untuk menerima sms konfirmasi" />
+                <com.eklanku.otuChat.ui.views.ARTextView
+                    android:id="@+id/textView14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/density_4"
+                    android:text="Pilih Pembayaran"
+                    android:textColor="@color/grey_600"
+                    android:textSize="16sp" />
 
-    </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_bottom_border_grey"
+                    android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btnTransPlnBayar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
-        android:background="@drawable/custom_round_green_dark"
-        android:drawableEnd="@drawable/ic_next_white"
-        android:drawableLeft="@drawable/ic_balance"
-        android:drawableRight="@drawable/ic_next_white"
-        android:drawableStart="@drawable/ic_balance"
-        android:text="Beli Token Listrik"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+                    <Spinner
+                        android:id="@+id/spnTransPln"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:spinnerMode="dropdown" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_drop"
+                        android:tint="@color/default_text_icon_otu_color" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_spinner_nominal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/density_16"
+                    android:orientation="vertical">
+
+                    <com.eklanku.otuChat.ui.views.ARTextView
+                        android:id="@+id/textView15"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:text="Pilih Nominal"
+                        android:textColor="@color/grey_600"
+                        android:textSize="16sp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_bottom_border_grey"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/spnTransPlnNominal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:gravity="center"
+                            android:spinnerMode="dropdown" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_drop"
+                            android:tint="@color/default_text_icon_otu_color" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <com.eklanku.otuChat.ui.views.ARTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/density_16"
+                    android:text="Masukkan No Pelanggan"
+                    android:textColor="@color/grey_600"
+                    android:textSize="16sp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/txtLayoutTransPulsaNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/density_8"
+                    app:hintEnabled="false">
+
+                    <EditText
+                        android:id="@+id/txtTransPlnNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_bottom_border_grey"
+                        android:ems="10"
+                        android:textColor="@color/grey_600"
+                        android:inputType="number"
+                        android:paddingBottom="@dimen/density_8" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_transaksi_ke"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/density_16"
+                    android:orientation="vertical">
+
+                    <com.eklanku.otuChat.ui.views.ARTextView
+                        android:id="@+id/tv_trans_ke"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txtTransPulsaNo"
+                        android:inputType="number"
+                        android:text="Transaksi Ke-"
+                        android:textColor="@color/grey_600"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/txt_transaksi_ke"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_trans_ke"
+                        android:background="@drawable/custom_bottom_border_grey"
+                        android:hint="Masukkan Transaksi ke-"
+                        android:textColor="@color/grey_600"
+                        android:inputType="number"
+                        android:paddingBottom="@dimen/density_8"
+                        android:paddingTop="@dimen/density_8" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_no_konfirmasi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.eklanku.otuChat.ui.views.ARTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/density_16"
+                        android:text="No HP"
+                        android:textColor="@color/grey_600"
+                        android:textSize="16sp"
+                        app:hintEnabled="false" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:hintEnabled="false" >
+
+                        <EditText
+                            android:id="@+id/txt_no_hp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/custom_bottom_border_grey"
+                            android:drawableLeft="@drawable/ic_phone"
+                            android:drawableStart="@drawable/ic_phone"
+                            android:ems="10"
+                            android:textColor="@color/grey_600"
+                            android:inputType="number"
+                            android:paddingBottom="@dimen/density_8" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="No HP ini digunakan untuk menerima sms konfirmasi" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnTransPlnBayar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/density_16"
+                    android:background="@drawable/rectangle_rounded_green"
+                    android:text="Beli Token Listrik"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

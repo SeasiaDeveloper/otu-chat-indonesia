@@ -19,6 +19,7 @@ import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.OneButtonDialogFragment;
 import com.eklanku.otuChat.utils.AuthUtils;
+import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.StringObfuscator;
 /*import com.facebook.accountkit.AccessToken;
 import com.facebook.accountkit.Account;
@@ -43,6 +44,8 @@ import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.SkinManager;
 import com.facebook.accountkit.ui.UIManager;
+
+
 import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.QBErrors;
 import com.quickblox.core.exception.QBResponseException;
@@ -166,9 +169,10 @@ public class LandingActivity extends BaseAuthActivity {
                         // Get phone number
                         PhoneNumber phoneNumber = account.getPhoneNumber();
                         String phoneNumberString = phoneNumber.toString();
-                        logout.setVisibility(View.VISIBLE);
+                        //logout.setVisibility(View.VISIBLE);
                         login.setVisibility(View.GONE);
                         Log.e(TAG, phoneNumberString);
+                        PreferenceUtil.setNumberPhone(LandingActivity.this, phoneNumberString);
                         authenticateWithNumber(phoneNumber.getRawPhoneNumber());
                         //authenticateWithNumber("919898989898");
                     }
@@ -206,7 +210,7 @@ public class LandingActivity extends BaseAuthActivity {
 
     @Override
     public void onActivityResult(final int requestCode, final int resultCode,
-                                    final Intent data) {
+                                 final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == APP_REQUEST_CODE) { // confirm that this response matches your request
             AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
@@ -263,6 +267,7 @@ public class LandingActivity extends BaseAuthActivity {
     protected void authenticateWithNumber(String strPhoneNumber){
         showProgress();
 
+        Log.d(TAG, "authenticateWithNumber: "+strPhoneNumber);
         loginType = LoginType.FIREBASE_PHONE;
         ArrayList<String> arrayPhone = new ArrayList<>();
         arrayPhone.add(strPhoneNumber);
@@ -274,6 +279,7 @@ public class LandingActivity extends BaseAuthActivity {
             @Override
             public void onSuccess(ArrayList<QBUser> users, Bundle params) {
 
+                Log.d(TAG, "onSuccess: users "+users);
                 if (users.size() > 0) {
                     login(strPhoneNumber);
                 } else {

@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/toolbar_view"
-        layout="@layout/toolbar" />
+        layout="@layout/toolbar_main" />
 
     <!--<LinearLayout-->
         <!--android:id="@+id/toolbar_view"-->
@@ -43,6 +43,7 @@
         android:id="@+id/bannerLayout"
         android:layout_width="match_parent"
         android:layout_height="125dp"
+        android:background="@color/accent"
         app:autoPlayDuration="4000"
         app:scrollDuration="1000" />
 
@@ -71,7 +72,7 @@
                     android:focusable="auto"
                     android:visibility="visible"
                     app:tabGravity="fill"
-                    app:tabIndicatorColor="@color/colorTextOtu"
+                    app:tabIndicatorColor="@color/default_text_icon_otu_color"
                     app:tabIndicatorHeight="4dp"
                     app:tabMaxWidth="0dp"
                     app:tabMode="fixed"

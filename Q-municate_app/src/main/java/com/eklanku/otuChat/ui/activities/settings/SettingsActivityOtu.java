@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.profile.EditProfilActivity;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
+import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.quickblox.auth.session.QBSettings;
@@ -72,7 +73,8 @@ public class SettingsActivityOtu extends BaseLoggableActivity {
 //        changePasswordView.setVisibility(
 //                LoginType.EMAIL.equals(AppSession.getSession().getLoginType()) ? View.VISIBLE : View.GONE);
         fullNameTextView.setText(user.getFullName());
-        nomorhp.setText(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+
+        nomorhp.setText(PreferenceUtil.getNumberPhone(this));
 
         showUserAvatar();
     }

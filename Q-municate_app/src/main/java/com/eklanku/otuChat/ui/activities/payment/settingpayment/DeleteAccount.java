@@ -47,15 +47,19 @@ public class DeleteAccount extends AppCompatActivity {
     EditText txtPinDelete;
     Button btnDelete;
 
+    com.eklanku.otuChat.utils.Utils utilsAlert;
+    String titleAlert = "Hapus Akun";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_delete_account);
 
-        preferenceManager = new PreferenceManager(DeleteAccount.this);
+        utilsAlert = new com.eklanku.otuChat.utils.Utils(DeleteAccount.this);
 
         //get userid and token from preference
+        preferenceManager = new PreferenceManager(DeleteAccount.this);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
@@ -91,7 +95,8 @@ public class DeleteAccount extends AppCompatActivity {
                     String msg = response.body().getRespMessage();
 
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                        Toast.makeText(DeleteAccount.this, msg, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(DeleteAccount.this, titleAlert, msg);
+                        //Toast.makeText(DeleteAccount.this, msg, Toast.LENGTH_SHORT).show();
                         /*PreferenceUtil.setMemberStatus(DeleteAccount.this, false);
                         Intent register = new Intent(getBaseContext(), Register.class);
                         register.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -101,17 +106,20 @@ public class DeleteAccount extends AppCompatActivity {
                         PreferenceUtil.setMemberStatus(DeleteAccount.this, false);
                         logOutPayment();
                     } else {
-                        Toast.makeText(DeleteAccount.this, msg, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(DeleteAccount.this, titleAlert, msg);
+                        //Toast.makeText(DeleteAccount.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(DeleteAccount.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(DeleteAccount.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }
         });
@@ -136,27 +144,31 @@ public class DeleteAccount extends AppCompatActivity {
 
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         Toast.makeText(DeleteAccount.this, "SUCCESS LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
+                        //utilsAlert.globalDialog(DeleteAccount.this, titleAlert, msg);
+
                         PreferenceUtil.setLoginStatus(DeleteAccount.this, false);
 
                         Intent register = new Intent(getBaseContext(), Register.class);
-
                         register.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         register.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(register);
                         finish();
                         MainActivity.mainActivity.finish();
                     } else {
-                        Toast.makeText(DeleteAccount.this, "FAILED LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(DeleteAccount.this, titleAlert, msg);
+                        //Toast.makeText(DeleteAccount.this, "FAILED LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
-                    Toast.makeText(DeleteAccount.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(DeleteAccount.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(DeleteAccount.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResetPassResponse> call, Throwable t) {
-                Toast.makeText(DeleteAccount.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(DeleteAccount.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(DeleteAccount.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 //Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });

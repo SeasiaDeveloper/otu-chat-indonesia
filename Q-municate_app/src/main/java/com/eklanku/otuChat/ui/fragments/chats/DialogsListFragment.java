@@ -1,12 +1,17 @@
 package com.eklanku.otuChat.ui.fragments.chats;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.Loader;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -16,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,6 +105,9 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     @Bind(R.id.empty_list_textview)
     TextView emptyListTextView;
 
+    @Bind(R.id.frameEmptyList)
+    FrameLayout mFrameEmptyList;
+
     private DialogsListAdapter dialogsListAdapter;
     private DataManager dataManager;
     private QBUser qbUser;
@@ -127,7 +136,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
+
         initFields();
         initChatsDialogs();
         initActions();
@@ -140,7 +149,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         View view = inflater.inflate(R.layout.fragment_dialogs_list, container, false);
         activateButterKnife(view);
         registerForContextMenu(dialogsListView);
-
+        setEmptyMessage();
         dialogsListView.setAdapter(dialogsListAdapter);
         return view;
     }
@@ -149,7 +158,6 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     public void initActionBar() {
         super.initActionBar();
         actionBarBridge.setActionBarUpButtonEnabled(false);
-
         loadingBridge.hideActionBarProgress();
     }
 
@@ -159,10 +167,25 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         qbUser = AppSession.getSession().getUser();
     }
 
+    private void setEmptyMessage() {
+        String textBeforeImage = getString(R.string.dialog_no_chats_before_image_string);
+        String textAfterImage = getString(R.string.dialog_no_chats_after_image_string);
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(textBeforeImage+" ").append(" ");
+        builder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.default_text_icon_otu_color)), 14, 22, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        Drawable chat = getResources().getDrawable(R.drawable.ic_small_chat);
+        chat.setBounds(0, 0, 40,30);
+        builder.setSpan(new ImageSpan(chat, ImageSpan.ALIGN_BASELINE),
+                builder.length() - 1, builder.length(), 0);
+        builder.append(" "+textAfterImage);
+
+        emptyListTextView.setText(builder);
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated");
         baseActivity.showSnackbar(R.string.dialog_loading_dialogs, Snackbar.LENGTH_INDEFINITE);
     }
 
@@ -226,7 +249,6 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated");
         addActions();
         if (dialogsListAdapter.getCount() == 0) {
             initDataLoader(LOADER_ID);
@@ -236,7 +258,6 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
         if (dialogsListAdapter != null) {
             checkVisibilityEmptyLabel();
         }
@@ -270,34 +291,28 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause()");
         setStopStateUpdateDialogsProcess();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop()");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d(TAG, "onDestroyView()");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        Log.d(TAG, "onDestroy() removeActions and deleteObservers");
         removeActions();
         deleteObservers();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(TAG, "onActivityResult " + requestCode + ", data= " + data);
         if (PICK_DIALOG == requestCode && data != null) {
             String dialogId = data.getStringExtra(QBServiceConsts.EXTRA_DIALOG_ID);
             checkDialogsIds(dialogId);
@@ -337,7 +352,6 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     private void updateOrAddDialog(String dialogId, boolean updatePosition) {
         QBChatDialog qbChatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
         DialogWrapper dialogWrapper = new DialogWrapper(getContext(), dataManager, qbChatDialog);
-        Log.i(TAG, "updateOrAddDialog dialogWrapper= " + dialogWrapper.getTotalCount());
         if (updateDialogsProcess == State.finished || dialogsListAdapter.getCount() != 0) {
             dialogsListAdapter.updateItem(dialogWrapper);
         }
@@ -450,7 +464,12 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         intent.putExtra("isNewMessage", true);
         startActivity(intent);
 
+       /* Intent intent = new Intent(getActivity(), ContactsActivity.class);
+        intent.putExtra("isNewMessage", true);
+        startActivity(intent);*/
+
         /*boolean hasFriends = !dataManager.getFriendDataManager().getAll().isEmpty();
+        Log.d("OPPO-1", "addChat - hasFriends: "+hasFriends);
         if (isFriendsLoading()) {
             ToastUtils.longToast(R.string.chat_service_is_initializing);
         } else if (!hasFriends) {
@@ -470,6 +489,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
     private void checkVisibilityEmptyLabel() {
         emptyListTextView.setVisibility(dialogsListAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+        mFrameEmptyList.setVisibility(dialogsListAdapter.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     private void addObservers() {
@@ -629,8 +649,10 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     private void checkEmptyList(int listSize) {
         if (listSize > 0) {
             emptyListTextView.setVisibility(View.GONE);
+            mFrameEmptyList.setVisibility(View.GONE);
         } else {
             emptyListTextView.setVisibility(View.VISIBLE);
+            mFrameEmptyList.setVisibility(View.VISIBLE);
         }
     }
 

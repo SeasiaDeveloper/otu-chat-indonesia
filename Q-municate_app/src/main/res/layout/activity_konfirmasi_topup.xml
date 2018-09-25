@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Unggah Bukti Pembayaran"
+        android:textColor="@color/colorTextOtu"
+        android:layout_marginBottom="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_round"
+        android:orientation="vertical"
+        android:layout_marginBottom="14dp">
+
+        <TextView
+            android:id="@+id/tx_status_trx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status Transaksi"
+            android:textStyle="italic"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Menunggu Bukti Pembayaran"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_round"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_upload"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload bukti transfer anda untuk mempercepat proseskonfirmasi. Jika anda belum menyelesaikan pembayaran, anda dapat mengulang proses deposit"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="14dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Unggah dalam format JPG, JPEG, PNG. Maksimal ukuran 3MB"
+            android:textSize="10dp"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/btn_unggah"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:text="Unggah Bukti Transaksi"
+            android:background="@drawable/custom_round_green_dark"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

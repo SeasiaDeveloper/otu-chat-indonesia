@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -52,13 +54,20 @@ public class ResetPassword extends AppCompatActivity {
 
     String getToken = "";
 
+    com.eklanku.otuChat.utils.Utils utilsAlert;
+    String titleAlert = "Reset Password";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_reset_password);
+        utilsAlert = new com.eklanku.otuChat.utils.Utils(ResetPassword.this);
+
         txtNewPass = (EditText) findViewById(R.id.txtResetPassword);
         btnReset = (Button) findViewById(R.id.btnReset);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         preferenceManager = new PreferenceManager(this);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -82,7 +91,7 @@ public class ResetPassword extends AppCompatActivity {
 
     public void sendresetPass(String token) {
         String pass = txtNewPass.getText().toString().trim();
-        Call<ResetPassResponse> callResetPass = mApiInterfacePayment.postResetpass(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), strApIUse, getToken, pass);
+        Call<ResetPassResponse> callResetPass = mApiInterfacePayment.postResetpass(PreferenceUtil.getNumberPhone(this), strApIUse, getToken, pass);
         callResetPass.enqueue(new Callback<ResetPassResponse>() {
             @Override
             public void onResponse(Call<ResetPassResponse> call, Response<ResetPassResponse> response) {
@@ -92,7 +101,8 @@ public class ResetPassword extends AppCompatActivity {
                     String msg = response.body().getRespMessage();
                     Log.d("OPPO-1", "resetPass: " + status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                        Toast.makeText(getBaseContext(), "SUCCESS RESET PASS [" + msg + "]", Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(ResetPassword.this, titleAlert, msg);
+                        //Toast.makeText(getBaseContext(), "SUCCESS RESET PASS [" + msg + "]", Toast.LENGTH_SHORT).show();
                         logOutPayment();
                     }
                     /*else {
@@ -100,13 +110,15 @@ public class ResetPassword extends AppCompatActivity {
                     }*/
 
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(ResetPassword.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResetPassResponse> call, Throwable t) {
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(ResetPassword.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -129,7 +141,7 @@ public class ResetPassword extends AppCompatActivity {
     public void resetPass() {
         loadingDialog = ProgressDialog.show(ResetPassword.this, "Harap Tunggu", "Load Reset Password...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Call<ResetPassResponse> callResetPass = mApiInterfacePayment.getTokenResetpass(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), strApIUse);
+        Call<ResetPassResponse> callResetPass = mApiInterfacePayment.getTokenResetpass(PreferenceUtil.getNumberPhone(this), strApIUse);
         callResetPass.enqueue(new Callback<ResetPassResponse>() {
             @Override
             public void onResponse(Call<ResetPassResponse> call, Response<ResetPassResponse> response) {
@@ -151,14 +163,16 @@ public class ResetPassword extends AppCompatActivity {
                     }*/
 
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(ResetPassword.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResetPassResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(ResetPassword.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -184,16 +198,31 @@ public class ResetPassword extends AppCompatActivity {
                     }*/
 
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(ResetPassword.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResetPassResponse> call, Throwable t) {
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(ResetPassword.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
 }

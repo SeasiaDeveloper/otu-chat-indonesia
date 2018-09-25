@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     android:padding="16dp">
 
 
-    <TextView
+    <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Pilih Operator"
-        android:textColor="@color/colorTextOtu"
-        android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textColor="@color/grey_600"
+        android:textSize="16sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_spinner"
+        android:background="@drawable/custom_bottom_border_grey"
         android:orientation="horizontal">
 
         <Spinner
@@ -38,24 +39,24 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
+            android:tint="@color/default_text_icon_otu_color"
             android:src="@drawable/ic_drop" />
 
     </RelativeLayout>
 
-    <TextView
+    <com.eklanku.otuChat.ui.views.ARTextView
         android:id="@+id/textView24"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/density_16"
         android:text="Pilih Nominal"
-        android:textColor="@color/colorTextOtu"
-        android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textColor="@color/grey_600"
+        android:textSize="16sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_spinner"
+        android:background="@drawable/custom_bottom_border_grey"
         android:orientation="horizontal">
 
         <Spinner
@@ -74,36 +75,46 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
+            android:tint="@color/default_text_icon_otu_color"
             android:src="@drawable/ic_drop" />
 
     </RelativeLayout>
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtLayoutTransPulsaNo"
+            android:layout_marginTop="@dimen/density_16"
+            android:text="Masukkan No Telepon"
+            android:inputType="number"
+            android:textColor="@color/grey_600"
+            android:textSize="16sp" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/txtLayoutTransPulsaNo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/density_16">
+            app:hintEnabled="false" >
 
             <EditText
                 android:id="@+id/txtTransWifiidNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_bg_text"
+                android:background="@drawable/custom_bottom_border_grey"
                 android:ems="10"
-                android:hint="Masukkan No Telepon"
+                android:textColor="@color/grey_600"
                 android:inputType="number"
-                android:paddingBottom="@dimen/density_16"
-                android:paddingLeft="@dimen/density_8"
-                android:paddingStart="@dimen/density_8"
-                android:paddingTop="@dimen/density_16" />
+                android:paddingBottom="@dimen/density_8"
+                android:paddingTop="@dimen/density_8" />
         </android.support.design.widget.TextInputLayout>
 
-        <TextView
+        <com.eklanku.otuChat.ui.views.ARTextView
             android:id="@+id/tv_trans_ke"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,21 +122,22 @@
             android:layout_marginTop="@dimen/density_16"
             android:text="Transaksi ke-"
             android:inputType="number"
-            android:textColor="@color/colorTextOtu"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textColor="@color/grey_600"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/txt_transaksi_ke"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_trans_ke"
-            android:background="@drawable/custom_spinner"
+            android:background="@drawable/custom_bottom_border_grey"
             android:hint="Masukkan transaksi ke-"
+            android:textColor="@color/grey_600"
             android:inputType="number"
-            android:padding="@dimen/density_8" />
+            android:paddingTop="@dimen/density_8"
+            android:paddingBottom="@dimen/density_8" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <!--<android.support.design.widget.TextInputLayout-->
     <!--android:layout_width="match_parent"-->
@@ -161,11 +173,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/density_16"
-        android:background="@drawable/custom_round_green_dark"
-        android:drawableEnd="@drawable/ic_next_white"
-        android:drawableLeft="@drawable/ic_balance"
-        android:drawableRight="@drawable/ic_next_white"
-        android:drawableStart="@drawable/ic_balance"
+        android:background="@drawable/background_round_corner_green"
         android:text="Beli"
         android:textColor="#FFFFFF"
         android:textStyle="bold" />

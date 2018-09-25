@@ -31,6 +31,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
@@ -140,6 +141,9 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     @Bind(R.id.attach_button)
     ImageButton attachButton;
+
+    @Bind(R.id.attach_camera)
+    ImageButton attachCamera;
 
     @Bind(R.id.chat_record_audio_button)
     QBRecordAudioButton recordAudioButton;
@@ -280,6 +284,11 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         mediaPickHelper.pickAnMedia(this, MediaUtils.IMAGE_VIDEO_LOCATION_REQUEST_CODE);
     }
 
+    @OnClick(R.id.attach_camera)
+    void attachCamera(View view) {
+        Toast.makeText(this, "Comming soon", Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void onBackPressed() {
         if (isSmilesLayoutShowing()) {
@@ -311,6 +320,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     private void checkLoginToChatOrShowError() {
+        Log.d("OPPO-1", "authenticated: 7");
         if (!QBChatService.getInstance().isLoggedIn()){
             showSnackbar(R.string.error_disconnected, Snackbar.LENGTH_INDEFINITE);
         }
@@ -662,7 +672,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     private void hideSmileLayout() {
         emojiconsFragment.setVisibility(View.GONE);
-        setSmilePanelIcon(R.drawable.ic_smile_dark);
+        setSmilePanelIcon(R.drawable.ic_smile_green);
     }
 
     private void showSmileLayout() {
@@ -747,11 +757,13 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     private void setActionButtonVisibility(CharSequence charSequence) {
         if (TextUtils.isEmpty(charSequence) || TextUtils.isEmpty(charSequence.toString().trim())) {
             sendButton.setVisibility(View.GONE);
-            attachButton.setVisibility(View.VISIBLE);
+            //attachButton.setVisibility(View.VISIBLE);
+            //attachCamera.setVisibility(View.VISIBLE);
             recordAudioButton.setVisibility(View.VISIBLE);
         } else {
             sendButton.setVisibility(View.VISIBLE);
-            attachButton.setVisibility(View.GONE);
+            //attachButton.setVisibility(View.GONE);
+            //attachCamera.setVisibility(View.GONE);
             recordAudioButton.setVisibility(View.GONE);
         }
     }
@@ -975,6 +987,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         messageEditText.setEnabled(enable);
         smilePanelImageButton.setEnabled(enable);
         attachButton.setEnabled(enable);
+        attachCamera.setEnabled(enable);
         recordAudioButton.setEnabled(enable);
     }
 
@@ -1065,6 +1078,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         messageEditText.setFocusable(enable);
         smilePanelImageButton.setEnabled(enable);
         attachButton.setEnabled(enable);
+        attachCamera.setEnabled(enable);
     }
 
     private void audioViewPostDelayVisibility(final int visibility) {

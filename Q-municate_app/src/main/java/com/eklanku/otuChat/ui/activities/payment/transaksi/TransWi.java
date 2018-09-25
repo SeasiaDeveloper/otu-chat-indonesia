@@ -14,7 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -50,6 +55,7 @@ import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
+import com.eklanku.otuChat.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,6 +86,15 @@ public class TransWi extends AppCompatActivity {
     String strOpsel;
     String code;
 
+    /*AlertDialog.Builder dialog;
+    LayoutInflater inflater;
+    View dialogView;*/
+    TextView txtnomor, txtvoucher;
+    Button btnYes, btnNo;
+
+    Utils utilsAlert;
+    String titleAlert = "Wifi ID";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +102,7 @@ public class TransWi extends AppCompatActivity {
         setContentView(R.layout.activity_trans_wi);
         ButterKnife.bind(this);
 
+        utilsAlert = new Utils(TransWi.this);
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnKartu = (Spinner) findViewById(R.id.spnTransWifiid);
         spnNominal = (Spinner) findViewById(R.id.spnTransWifiidNominal);
@@ -94,6 +110,9 @@ public class TransWi extends AppCompatActivity {
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
         btnBayar = (Button) findViewById(R.id.btnTransWifiBayar);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("BELI");
@@ -120,14 +139,47 @@ public class TransWi extends AppCompatActivity {
                 if (!validateIdpel()) {
                     return;
                 }
-                AlertDialog dialog = new AlertDialog.Builder(TransWi.this)
+
+                final Dialog dialog = new Dialog(TransWi.this);
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.activity_alert_dialog);
+                dialog.setCancelable(false);
+                dialog.setTitle("Peringatan Transaksi!!!");
+
+                btnYes = (Button) dialog.findViewById(R.id.btn_yes);
+                btnNo = (Button) dialog.findViewById(R.id.btn_no);
+                txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
+                txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+                txtnomor.setText(txtNo.getText().toString());
+                txtvoucher.setText(code);
+
+
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cek_transaksi();
+                        dialog.dismiss();
+                    }
+                });
+
+                btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                return;
+
+                /*AlertDialog dialog = new AlertDialog.Builder(TransWi.this)
                         .setTitle("Transaksi")
                         .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: "+txtNo.getText().toString()+"\nVoucher: "+code)
                         .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 cek_transaksi();
-                                finish();
                             }
                         })
                         .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -138,7 +190,31 @@ public class TransWi extends AppCompatActivity {
                         })
                         .create();
                 dialog.show();
-                return;
+                return;*/
+
+                /*dialog = new AlertDialog.Builder(TransWi.this);
+                inflater = getLayoutInflater();
+                dialogView = inflater.inflate(R.layout.activity_alert_dialog, null);
+                dialog.setView(dialogView);
+                dialog.setCancelable(true);
+                dialog.setIcon(R.mipmap.ic_launcher);
+                dialog.setTitle("Peringatan Transaksi!!!");
+
+                dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cek_transaksi();
+                    }
+                });
+
+                dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });*/
+
+                // ((Button)dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.button_border);
             }
         });
     }
@@ -233,16 +309,19 @@ public class TransWi extends AppCompatActivity {
                         });
 
                     } else {
-                        Toast.makeText(TransWi.this, "" + respMessage, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransWi.this, titleAlert, respMessage);
+                        //Toast.makeText(TransWi.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
                 loadingDialog.dismiss();
+                utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
             }
         });
     }
@@ -297,16 +376,19 @@ public class TransWi extends AppCompatActivity {
                         });
 
                     } else {
-                        Toast.makeText(TransWi.this, "" + respMessage, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransWi.this, titleAlert, respMessage);
+                        //Toast.makeText(TransWi.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponseProduct> call, Throwable t) {
                 loadingDialog.dismiss();
+                utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
             }
         });
     }
@@ -353,29 +435,51 @@ public class TransWi extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", "");
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("profit", "");
-
-//                        inKonfirmasi.putExtra("transaksi", trans.get(0).getTransaksi());
-//                        inKonfirmasi.putExtra("harga", trans.get(0).getHarga());
-//                        inKonfirmasi.putExtra("id_pel", trans.get(0).getIdPel());
-//                        inKonfirmasi.putExtra("jenis", trans.get(0).getJenis());
-//                        inKonfirmasi.putExtra("pin", trans.get(0).getPin());
-//                        inKonfirmasi.putExtra("cmd_save", trans.get(0).getCmdSave());
                         startActivity(inKonfirmasi);
+                        finish();
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransWi.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

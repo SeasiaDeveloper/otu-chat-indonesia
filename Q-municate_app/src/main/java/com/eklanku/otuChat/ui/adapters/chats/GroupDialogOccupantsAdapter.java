@@ -1,5 +1,6 @@
 package com.eklanku.otuChat.ui.adapters.chats;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -56,7 +57,8 @@ public class GroupDialogOccupantsAdapter extends BaseListAdapter<QMUser> {
         String fullName;
        // if (isFriendValid(user)) {
         //    fullName = user.getFullName();
-        if(user.getUsername().isEmpty()) {
+        Log.d("OPPO-1", "getView: "+user.getUsername());
+        /*if(user.getUsername().isEmpty()) {
             if (isFriendValid(user)) {
                 fullName = user.getFullName();
             }else {
@@ -65,7 +67,13 @@ public class GroupDialogOccupantsAdapter extends BaseListAdapter<QMUser> {
             }
         } else {
             fullName = String.valueOf(user.getId());
+        }*/
+        if(user.getUsername() != null && !user.getUsername().isEmpty()) {
+            fullName = user.getUsername();
+        } else {
+            fullName = user.getFullName();
         }
+
         viewHolder.nameTextView.setText(fullName);
 
         setStatus(viewHolder, user);
@@ -106,7 +114,7 @@ public class GroupDialogOccupantsAdapter extends BaseListAdapter<QMUser> {
             viewHolder.onlineStatusTextView.setText(context.getString(R.string.last_seen,
                     DateUtils.toTodayYesterdayShortDateWithoutYear2(user.getLastRequestAt().getTime()),
                     DateUtils.formatDateSimpleTime(user.getLastRequestAt().getTime())));
-            viewHolder.onlineStatusTextView.setTextColor(context.getResources().getColor(R.color.dark_gray));
+            viewHolder.onlineStatusTextView.setTextColor(context.getResources().getColor(R.color.white));
         }
     }
 

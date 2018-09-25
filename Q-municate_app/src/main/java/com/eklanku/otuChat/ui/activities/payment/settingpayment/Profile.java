@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +17,8 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.utils.PreferenceUtil;
+import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile;
@@ -41,11 +44,16 @@ public class Profile extends AppCompatActivity {
     String mbr_id, name_member, upline, mbr_carier, email, no_ktp, alamat, kota, sponsor_name, hp_sponsor, jml_bonus;
     TextView txtId, txtName,txtUpline, txtCarrier, txtEmail, txtKtp, txtAddress, txtCity, txtSponsorName, txtSponsorHp, txtBonus;
     Button btnUpdate;
+
+    Utils utilsAlert;
+    String titleAlert = "Profil";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_profil_payment);//layout belum
+
+        utilsAlert = new Utils(Profile.this);
 
         txtId= findViewById(R.id.txt_profile_id);
         txtName= findViewById(R.id.txt_profile_name);
@@ -59,6 +67,9 @@ public class Profile extends AppCompatActivity {
         txtSponsorHp= findViewById(R.id.txt_profile_sponsor_hp);
         txtBonus= findViewById(R.id.txt_profile_bonus);
         btnUpdate = findViewById(R.id.btnupdate);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         getProfile();
@@ -83,7 +94,7 @@ public class Profile extends AppCompatActivity {
         Log.d("OPPO-1", "getProfile: running get profil");
         loadingDialog = ProgressDialog.show(Profile.this, "Harap Tunggu", "Load data profil...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Call<DataProfile> callProfil = mApiInterfacePayment.getTokenProfile(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), strApIUse);
+        Call<DataProfile> callProfil = mApiInterfacePayment.getTokenProfile(PreferenceUtil.getNumberPhone(this), strApIUse);
         callProfil.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
@@ -97,10 +108,12 @@ public class Profile extends AppCompatActivity {
                         //send token to get data profile
                         exProfile(tokenProfile);
                     } else {
-                        Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(Profile.this, titleAlert, msg);
+                        //Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(Profile.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -108,14 +121,15 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(Profile.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
     }
 
     public void getProfileonResume() {
-        Call<DataProfile> callProfil = mApiInterfacePayment.getTokenProfile(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), strApIUse);
+        Call<DataProfile> callProfil = mApiInterfacePayment.getTokenProfile(PreferenceUtil.getNumberPhone(this), strApIUse);
         callProfil.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
@@ -128,17 +142,20 @@ public class Profile extends AppCompatActivity {
                         //send token to get data profile
                         exProfile(tokenProfile);
                     } else {
-                        Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(Profile.this, titleAlert, msg);
+                        //Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(Profile.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
 
             }
 
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(Profile.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -146,7 +163,7 @@ public class Profile extends AppCompatActivity {
 
     public void exProfile(String tokenProfile) {
         Log.d("OPPO-1", "getProfile: running exProfil");
-        Call<DataDetailProfile> callProfil = mApiInterfacePayment.getProfile(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), strApIUse, tokenProfile);
+        Call<DataDetailProfile> callProfil = mApiInterfacePayment.getProfile(PreferenceUtil.getNumberPhone(this), strApIUse, tokenProfile);
         callProfil.enqueue(new Callback<DataDetailProfile>() {
             @Override
             public void onResponse(Call<DataDetailProfile> call, Response<DataDetailProfile> response) {
@@ -192,13 +209,13 @@ public class Profile extends AppCompatActivity {
                         txtSponsorHp.setText(hp_sponsor);
                         txtBonus.setText(jml_bonus);
 
-
-
                     } else {
-                        Toast.makeText(getBaseContext(), "FAILED GET TOKEN ["+result+"]", Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(Profile.this, titleAlert, response.body().getErrNumber());
+                        //Toast.makeText(getBaseContext(), "FAILED GET TOKEN ["+result+"]", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(Profile.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -206,11 +223,24 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onFailure(Call<DataDetailProfile> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(Profile.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void EXupdateProfil(){

@@ -12,7 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -39,6 +45,8 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPaymentAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
+import com.eklanku.otuChat.utils.PreferenceUtil;
+import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -81,7 +89,7 @@ public class TransPln extends AppCompatActivity {
     //SharedPreferences prefs;
     Spinner spinnerProvider, spnNominal;
     //LinearLayout laySpnNominal;
-    EditText txtNo, txtno_hp;
+    EditText txtNo, txtno_hp, txtTransaksi_ke;
     TextInputLayout layoutNo;
     Button btnBayar;
     String load_id = "PLN", selected_nominal;
@@ -104,25 +112,47 @@ public class TransPln extends AppCompatActivity {
     String rbPln;
     LinearLayout layoutTransaksiKe, layoutNoKonfirmasi;
 
+    /*AlertDialog.Builder dialog;
+    LayoutInflater inflater;
+    View dialogView;*/
+    TextView txtnomor, txtvoucher;
+    Button btnYes, btnNo;
+
+    Utils utilsAlert;
+    String titleAlert = "PLN";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans_pln);
-
         ButterKnife.bind(this);
+
+        utilsAlert = new Utils(TransPln.this);
 
         layoutNominal = (LinearLayout) findViewById(R.id.layout_spinner_nominal);
         spinnerProvider = (Spinner) findViewById(R.id.spnTransPln);
         spnNominal = (Spinner) findViewById(R.id.spnTransPlnNominal);
         txtNo = (EditText) findViewById(R.id.txtTransPlnNo);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
-//        laySpnNominal = (LinearLayout) findViewById(R.id.spnLayoutTransPlnNominal);
         btnBayar = (Button) findViewById(R.id.btnTransPlnBayar);
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
-        txtno_hp.setText(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+
+        if (PreferenceUtil.getNumberPhone(this).startsWith("+62")) {
+            String no = PreferenceUtil.getNumberPhone(this).replace("+62", "0");
+            txtno_hp.setText(no);
+        } else {
+            txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
+        }
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
+        txtTransaksi_ke.setText("1");
+
 
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
 
@@ -177,9 +207,9 @@ public class TransPln extends AppCompatActivity {
                     layoutNominal.setVisibility(View.VISIBLE);
                     rbPln = "PLN TOKEN";
                     btnBayar.setText("BELI");
-                    txtno_hp.setVisibility(View.GONE);
+                    txtno_hp.setVisibility(View.VISIBLE);
                     layoutTransaksiKe.setVisibility(View.VISIBLE);
-                    layoutNoKonfirmasi.setVisibility(View.GONE);
+                    layoutNoKonfirmasi.setVisibility(View.VISIBLE);
                 } else {
                     loadProviderPPOB(strUserID, strAccessToken, "OTU", "PLN");
                     rbPln = "PLN PASCA";
@@ -200,14 +230,53 @@ public class TransPln extends AppCompatActivity {
                 }
 
                 if (rbPln.equalsIgnoreCase("PLN TOKEN")) {
-                    AlertDialog dialog = new AlertDialog.Builder(TransPln.this)
+                    final Dialog dialog = new Dialog(TransPln.this);
+
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.activity_alert_dialog);
+                    dialog.setCancelable(false);
+                    dialog.setTitle("Peringatan Transaksi!!!");
+
+                    btnYes = (Button) dialog.findViewById(R.id.btn_yes);
+                    btnNo = (Button) dialog.findViewById(R.id.btn_no);
+                    txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
+                    txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+                    txtnomor.setText(txtNo.getText().toString());
+                    txtvoucher.setText(code);
+
+                    btnYes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            cek_transaksi_token();
+                            dialog.dismiss();
+                        }
+                    });
+
+                    btnNo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                    return;
+
+                    /*dialog = new AlertDialog.Builder(TransPln.this);
+                    inflater = getLayoutInflater();
+                    dialogView = inflater.inflate(R.layout.activity_alert_dialog, null);
+                    dialog.setView(dialogView);
+                    dialog.setCancelable(true);
+                    dialog.setIcon(R.mipmap.ic_launcher);
+                    dialog.setTitle("Peringatan Transaksi!!!");*/
+
+                    /*AlertDialog dialog = new AlertDialog.Builder(TransPln.this)
                             .setTitle("Transaksi")
                             .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: " + txtNo.getText().toString() + "\nVoucher: " + code)
                             .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     cek_transaksi_token();
-                                    finish();
                                 }
                             })
                             .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -218,10 +287,24 @@ public class TransPln extends AppCompatActivity {
                             })
                             .create();
                     dialog.show();
-                    return;
+                    return;*/
+
+                   /* dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            cek_transaksi_token();
+                        }
+                    });
+
+                    dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });*/
+
                 } else {
                     cek_transaksi();
-
                 }
 
             }
@@ -230,14 +313,14 @@ public class TransPln extends AppCompatActivity {
         load();
     }
 
-    private void load(){
+    private void load() {
         loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
         layoutNominal.setVisibility(View.VISIBLE);
         rbPln = "PLN TOKEN";
         btnBayar.setText("BELI");
-        txtno_hp.setVisibility(View.GONE);
+        txtno_hp.setVisibility(View.VISIBLE);
         layoutTransaksiKe.setVisibility(View.VISIBLE);
-        layoutNoKonfirmasi.setVisibility(View.GONE);
+        layoutNoKonfirmasi.setVisibility(View.VISIBLE);
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
@@ -282,16 +365,19 @@ public class TransPln extends AppCompatActivity {
                         });
 
                     } else {
-                        Toast.makeText(TransPln.this, "" + respMessage, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransPln.this, titleAlert, respMessage);
+                       // Toast.makeText(TransPln.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
                 loadingDialog.dismiss();
+                utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
             }
         });
     }
@@ -347,16 +433,19 @@ public class TransPln extends AppCompatActivity {
                         });
 
                     } else {
-                        Toast.makeText(TransPln.this, "" + respMessage, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransPln.this, titleAlert, respMessage);
+                        //Toast.makeText(TransPln.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponseProduct> call, Throwable t) {
                 loadingDialog.dismiss();
+                utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
             }
         });
     }
@@ -400,17 +489,20 @@ public class TransPln extends AppCompatActivity {
                             }
                         });
                     } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransPln.this, titleAlert, error);
+                       // Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -554,6 +646,7 @@ public class TransPln extends AppCompatActivity {
 
 
     private void cek_transaksi() {
+        Log.d("OPPO-1", "cek_transaksi: ");
         loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
@@ -604,28 +697,31 @@ public class TransPln extends AppCompatActivity {
                         inKonfirmasi.putExtra("cmd_save", "-");
                         startActivity(inKonfirmasi);
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransPln.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
+                   // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
+               // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
     }
 
     private void cek_transaksi_token() {
-        Log.d("OPPO-1", "cek_transaksi_pasca: ");
+        Log.d("OPPO-1", "cek_transaksi_pasca: " + txtno_hp.getText().toString());
         loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), "1", txtno_hp.getText().toString(), "", code);
+        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtTransaksi_ke.getText().toString(), txtno_hp.getText().toString(), "", code);
 
 
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
@@ -672,17 +768,20 @@ public class TransPln extends AppCompatActivity {
                         inKonfirmasi.putExtra("cmd_save", "-");
                         startActivity(inKonfirmasi);
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransPln.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -695,7 +794,7 @@ public class TransPln extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), load_id, selected_nominal, txtNo.getText().toString(), "token");
+        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), load_id, selected_nominal, txtNo.getText().toString(), "token");
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -731,4 +830,28 @@ public class TransPln extends AppCompatActivity {
         });
     }
     /*====================================end paymnet lama==================================================================*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

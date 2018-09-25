@@ -5,7 +5,7 @@
     android:background="@color/bg_main"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/toolbar_white" />
 
     <LinearLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -35,6 +35,9 @@
                 android:descendantFocusability="beforeDescendants"
                 android:focusableInTouchMode="true"
                 android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center_vertical"
                 android:paddingLeft="10dp">
 
                 <EditText
@@ -42,21 +45,54 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="5dp"
                     android:background="@null"
                     android:ellipsize="end"
                     android:maxLines="2"
+                    android:textColor="@color/gray"
                     android:textSize="@dimen/text_size" />
 
-                <TextView
-                    android:id="@+id/occupants_textview"
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@color/dark_gray"
-                    android:textSize="@dimen/text_size_small" />
+                    android:layout_height="1px"
+                    android:background="@color/default_text_icon_otu_color" />
+
 
             </LinearLayout>
+        </LinearLayout>
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/gray"
+            android:text="@string/dialog_details_enter_group_name_and_image"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="@dimen/text_size_very_small" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:orientation="horizontal">
+
+            <com.eklanku.otuChat.ui.views.ARTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/dark_gray"
+                android:text="@string/dialog_details_member"
+                android:layout_marginRight="5dp"
+                android:textSize="@dimen/text_size_small" />
+
+            <com.eklanku.otuChat.ui.views.ARTextView
+                android:id="@+id/occupants_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/text_size_small" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -64,6 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="15dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <ImageView
@@ -85,6 +122,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/divider_height"
+            android:visibility="gone"
             android:background="@color/dark_gray" />
 
         <ListView

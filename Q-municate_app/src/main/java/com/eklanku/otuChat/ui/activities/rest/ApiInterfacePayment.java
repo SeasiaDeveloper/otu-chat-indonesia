@@ -8,6 +8,7 @@ import com.eklanku.otuChat.ui.activities.payment.models.DetailTransferResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.JsonResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.LaporanSaldoResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.LaporanTrxResponse;
+import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
@@ -453,5 +454,13 @@ public interface ApiInterfacePayment {
             @Field("city") String city,
             @Field("address") String address,
             @Field("identitas") String identitas
+    );
+
+    //banner
+    @FormUrlEncoded
+    @POST("banner")
+    Call<LoadBanner> getBanner(
+            @Field("userID") String userID,
+            @Field("aplUse") String accessToken
     );
 }

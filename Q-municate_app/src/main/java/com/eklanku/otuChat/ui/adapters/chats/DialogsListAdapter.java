@@ -91,8 +91,10 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
         if (totalCount > ConstsCore.ZERO_INT_VALUE) {
             viewHolder.unreadMessagesTextView.setText(totalCount >= 100 ? resources.getString(R.string.dialog_count_unread) : Long.toString(totalCount));
             viewHolder.unreadMessagesTextView.setVisibility(View.VISIBLE);
+            viewHolder.lastMessageTime.setTextColor(context.getResources().getColor(R.color.badge_unread_messages_counter));
         } else {
             viewHolder.unreadMessagesTextView.setVisibility(View.GONE);
+            viewHolder.lastMessageTime.setTextColor(context.getResources().getColor(R.color.gray_color_message));
         }
 
         viewHolder.lastMessageTextView.setText(dialogWrapper.getLastMessage());

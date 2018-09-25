@@ -30,6 +30,13 @@ public class PreferenceUtil {
     private static final String PAYMENTNAME_KEY_PREF = "pref_paymentname_key";
     private static final String PAYMENTEMAIL_KEY_PREF = "pref_paymentemail_key";
 
+    private static final String KEY_PHONE_NUMBER = "phonenumber";
+    private static final String FIRST_LAUNCH_PREF = "pref_firstlaunch_key";
+
+    private static final String IS_FIRST_LAUNCH = "isfirstlaunch";
+
+
+
     public static @Nullable void setAuthName(Context context, String name) {
         setStringPreference(context, AUTH_NAME, name);
     }
@@ -114,21 +121,37 @@ public class PreferenceUtil {
     public static void setPaymentId(Context context, String id) {
         setStringPreference(context, PAYMENTID_KEY_PREF, id);
     }
-/*
-    public static String getLoginStatus(Context context) {
-        return getStringPreference(context, PAYMENTSTATUS_LOGIN_PREF, null);
+
+    public static String getNumberPhone(Context context) {
+        return getStringPreference(context, KEY_PHONE_NUMBER, null);
     }
 
-    public static void setLoginStatus(Context context, String id) {
-        setStringPreference(context, PAYMENTSTATUS_LOGIN_PREF, id);
+    public static void setNumberPhone(Context context, String phone) {
+        setStringPreference(context, KEY_PHONE_NUMBER, phone);
     }
-*/
+
+    public static boolean getIsFirstLaunch(Context context) {
+        return getBooleanPreference(context, IS_FIRST_LAUNCH, false);
+    }
+
+    public static void setIsFirstLaunch(Context context, boolean isfirstlogin) {
+        setBooleanPreference(context, IS_FIRST_LAUNCH, isfirstlogin);
+    }
+
     public static boolean isLoginStatus(Context context) {
         return getBooleanPreference(context, PAYMENTSTATUS_LOGIN_PREF, false);
     }
 
     public static void setLoginStatus(Context context, boolean haslogin) {
         setBooleanPreference(context, PAYMENTSTATUS_LOGIN_PREF, haslogin);
+    }
+
+    public static boolean isFirstLaunch(Context context) {
+        return getBooleanPreference(context, FIRST_LAUNCH_PREF, false);
+    }
+
+    public static void setFirstLaunch(Context context, boolean haslogin) {
+        setBooleanPreference(context, FIRST_LAUNCH_PREF, haslogin);
     }
 
     public static boolean isMemberStatus(Context context) {

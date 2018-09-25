@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.main.Utils;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupKonfirmResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClient;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -70,12 +69,17 @@ public class TransConfirm extends AppCompatActivity {
 
     String strSecurityCode;
 
+    com.eklanku.otuChat.utils.Utils utilsAlert;
+    String titleAlert = "Transfer";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transfer_confirm);
 
         initializeResources();
+
+        utilsAlert = new com.eklanku.otuChat.utils.Utils(TransConfirm.this);
 
         tujuan = getIntent().getExtras().getString("tujuan", "");
         nominal = getIntent().getExtras().getString("nominal", "");
@@ -232,17 +236,20 @@ public class TransConfirm extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransConfirm.this, titleAlert, error);
+                       // Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransConfirm.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TopupKonfirmResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransConfirm.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -286,17 +293,20 @@ public class TransConfirm extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransConfirm.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransConfirm.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TopupKonfirmResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransConfirm.this, titleAlert, getResources().getString(R.string.error_api));
+                //.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -312,7 +322,7 @@ public class TransConfirm extends AppCompatActivity {
             loadingDialog.setCanceledOnTouchOutside(true);
 
 <<<<<<< .mine
-            Log.d("OPPO-1", "onClick: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() + "/" + tujuan + "/" + nominal + "/" + txtPIN.getText().toString());
+            Log.d("OPPO-1", "onClick: " + PreferenceUtil.getNumberPhone(this)) + "/" + tujuan + "/" + nominal + "/" + txtPIN.getText().toString());
             Call<TopupKonfirmResponse> transDepositCall = mApiInterfacePayment.postRequestTransfer(strUserID, strAccessToken, strApIUse, tujuan,nominal);
             transDepositCall.enqueue(new Callback<TopupKonfirmResponse>() {
                 @Override
@@ -323,7 +333,7 @@ public class TransConfirm extends AppCompatActivity {
                         String error  = response.body().getError();
 
 <<<<<<< .mine
-            Call<TopupKonfirmResponse> transDepositCall = mApiInterface.getTransDeposit(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), tujuan, nominal, txtPIN.getText().toString());
+            Call<TopupKonfirmResponse> transDepositCall = mApiInterface.getTransDeposit(PreferenceUtil.getNumberPhone(this)), tujuan, nominal, txtPIN.getText().toString());
                         if ( status.equals("SUCCESS") ) {
                             Intent intent = new Intent(getBaseContext(), TransResponse.class);
 

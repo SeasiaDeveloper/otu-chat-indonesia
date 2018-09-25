@@ -5,6 +5,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -41,7 +43,7 @@ public class HistoryBonusActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+        initActionBar();
         ButterKnife.bind(this);
 
         preferenceManager = new PreferenceManager(this);
@@ -110,4 +112,23 @@ public class HistoryBonusActivity extends AppCompatActivity {
                     View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
+
+
+
+    private void initActionBar() {
+        Toolbar mToolBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolBar);
+        getSupportActionBar().setTitle(getString(R.string.title_riwayat_bonus));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

@@ -1,21 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rlContacts"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:layout_marginBottom="1dp"
-    android:padding="12dp">
+    android:orientation="vertical"
+    android:gravity="center_vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/btn_invite_people"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:srcCompat="@drawable/ic_group_vector"-->
+        <!--android:background="@color/white"-->
+        <!--android:layout_marginBottom="16dp"/>-->
+
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/btn_create_group"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:srcCompat="@drawable/ic_group_vector"-->
+        <!--android:background="@color/white"-->
+        <!--android:layout_marginBottom="32dp"-->
+        <!--android:layout_below="@+id/btn_invite_people"/>-->
+
+    <ImageView android:id="@+id/ivIcon"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/drawable_circle_background" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/ivChat"
+        android:layout_toRightOf="@id/ivIcon"
+        android:layout_weight="1"
         android:orientation="vertical">
 
-        <TextView
+        <com.eklanku.otuChat.ui.views.ARTextView
             android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,8 +84,8 @@
             android:textSize="15sp"
             android:visibility="gone" />
 
-
     </LinearLayout>
+
     <ImageView
         android:id="@+id/ivChat"
         android:layout_width="wrap_content"
@@ -52,7 +93,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_add_user"
-        android:visibility="visible" />
+        android:visibility="visible"
+        />
     <CheckBox
         android:id="@+id/chkSelect"
         android:layout_width="wrap_content"
@@ -60,6 +102,18 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_add_user"
-        android:visibility="gone" />
+        android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/divider_horizontal">
+
+    </FrameLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -137,9 +137,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
         initFields();
         activateButterKnife();
-
-
-
     }
 
     @Override
@@ -302,6 +299,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
     protected void onPause() {
         super.onPause();
         Log.d("BaseActivity", "onPause");
+        Log.d("OPPO-1", "authenticated: 4");
         unregisterBroadcastReceivers();
         unregisterConnectionListener();
         removeActions();
@@ -320,7 +318,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
         registerConnectionListener();
         addActions();
         NotificationManagerHelper.clearNotificationEvent(this);
-
         checkShowingConnectionError();
     }
 
@@ -535,8 +532,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
     }
 
     public void setCurrentFragment(Fragment fragment, boolean needAddToBackStack) {
-        Log.d("OPPO - 1", "setCurrentFragment: "+fragment);
-        Log.d("OPPO - 1", "needAddToBackStack: "+needAddToBackStack);
+
         setCurrentFragment(fragment, null, needAddToBackStack);
     }
 
@@ -672,7 +668,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
         if (QBSessionManager.getInstance().getSessionParameters() != null
                 && QBProvider.FIREBASE_PHONE.equals(QBSessionManager.getInstance().getSessionParameters().getSocialProvider())
                 && !QBSessionManager.getInstance().isValidActiveSession()) {
-            Log.d(TAG, "start refresh Firebase token");
+
             new FirebaseAuthHelper(BaseActivity.this).refreshInternalFirebaseToken(new FirebaseAuthHelper.RequestFirebaseIdTokenCallback() {
                 @Override
                 public void onSuccess(String accessToken) {
@@ -714,12 +710,14 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
     protected void performLoginChatSuccessAction(Bundle bundle) {
         blockUI(false);
+        Log.d("OPPO-1", "authenticated: 6");
         hideSnackBar(R.string.error_disconnected);
         QBInitCallChatCommand.start(this, CallActivity.class, null);
         hideProgress();
     }
 
     protected void performLoginChatFailAction(Bundle bundle) {
+        Log.d("OPPO-1", "authenticated: 5");
         blockUI(true);
         hideSnackBar(R.string.dialog_loading_dialogs);
         showSnackbar(R.string.error_disconnected, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
@@ -741,6 +739,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
             @Override
             public void authenticated(XMPPConnection xmppConnection, boolean b) {
                 Log.d(TAG, "chatConnectionListener authenticated");
+                Log.d("OPPO-1", "authenticated: 1");
                 hideSnackBar(R.string.error_disconnected);
                 blockUI(false);
                 checkShowingConnectionError();
@@ -755,6 +754,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
             public void connectionClosedOnError(Exception e) {
                 onChatDisconnected(e);
                 blockUI(true);
+                Log.d("OPPO-1", "authenticated: 2");
                 showSnackbar(R.string.error_disconnected, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
             }
 
@@ -762,6 +762,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
             public void reconnectionSuccessful() {
                 onChatReconnected();
                 Log.d(TAG, "chatConnectionListener reconnectionSuccessful");
+                Log.d("OPPO-1", "authenticated: 3");
                 hideSnackBar(R.string.error_disconnected);
                 blockUI(false);
                 checkShowingConnectionError();

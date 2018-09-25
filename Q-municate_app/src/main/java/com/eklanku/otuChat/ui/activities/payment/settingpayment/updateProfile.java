@@ -41,12 +41,17 @@ public class updateProfile extends AppCompatActivity {
 
     Button btnUpdate;
 
+    com.eklanku.otuChat.utils.Utils utilsAlert;
+    String titleAlert = "Profile";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_edit_profile_payment);
+
+        utilsAlert = new com.eklanku.otuChat.utils.Utils(updateProfile.this);
 
         ed_idmember = findViewById(R.id.edt_idmember);
         ed_name = findViewById(R.id.edt_name);
@@ -124,12 +129,15 @@ public class updateProfile extends AppCompatActivity {
                     Log.d("OPPO-1", "onResponse: " + status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         finish();
-                        Toast.makeText(getBaseContext(), "SUCCESS UPDATE PROFIL [" + msg + "]", Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(updateProfile.this, titleAlert, msg);
+                        //Toast.makeText(getBaseContext(), "SUCCESS UPDATE PROFIL [" + msg + "]", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(updateProfile.this, titleAlert, msg);
+                        //Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(updateProfile.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -137,7 +145,8 @@ public class updateProfile extends AppCompatActivity {
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(updateProfile.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });

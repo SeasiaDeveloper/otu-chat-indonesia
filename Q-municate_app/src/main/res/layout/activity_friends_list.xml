@@ -4,7 +4,7 @@
     android:background="@color/bg_main"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/toolbar_white" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/friends_recyclerview"

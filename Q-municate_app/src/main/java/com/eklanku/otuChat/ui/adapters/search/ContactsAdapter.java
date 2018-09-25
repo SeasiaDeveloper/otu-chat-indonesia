@@ -22,6 +22,9 @@ import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsModelGroup;
+import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.core.exception.QBResponseException;
 import com.quickblox.q_municate_core.models.AppSession;
@@ -36,6 +39,7 @@ import com.quickblox.q_municate_user_service.model.QMUser;
 import com.quickblox.users.model.QBUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.util.Log;
@@ -57,11 +61,16 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     private QBUser qbUser = AppSession.getSession().getUser();
     private boolean isToGroup = false;
 
+    //Rina
+    PreferenceManager preferenceManager;
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView mTvUsername, mTvMessage, mTvPhonenumber;
         public ImageView mIvChat;
         public RelativeLayout mRlContacts;
         public CheckBox mChkSelect;
+//        public ImageView mCreateGroup;
+//        public ImageView mInvitePeople;
 
         public MyViewHolder(View view) {
             super(view);
@@ -71,6 +80,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             mTvMessage = (TextView) view.findViewById(R.id.tvMessage);
             mRlContacts = (RelativeLayout) view.findViewById(R.id.rlContacts);
             mChkSelect = (CheckBox) view.findViewById(R.id.chkSelect);
+//            mCreateGroup = (ImageView) view.findViewById(R.id.btn_create_group);
+//            mInvitePeople = (ImageView) view.findViewById(R.id.btn_invite_people);
 
         }
     }
@@ -89,7 +100,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_contacts, parent, false);
-
+        preferenceManager = new PreferenceManager(context);
         return new MyViewHolder(itemView);
     }
 
@@ -102,6 +113,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
         //holder.mTvPhonenumber.setText(contact.getLogin());
         if(isToGroup){
+//            holder.mCreateGroup.setVisibility(View.GONE);
+//            holder.mInvitePeople.setVisibility(View.GONE);
             holder.mIvChat.setVisibility(View.GONE);
             holder.mChkSelect.setVisibility(View.VISIBLE);
             holder.mChkSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -117,6 +130,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 }
             });
         } else {
+
+
             holder.mIvChat.setVisibility(View.VISIBLE);
             holder.mChkSelect.setVisibility(View.GONE);
             if (contact.getIsReg_type().equals("1")) {
@@ -152,12 +167,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                     }).start();
                     //NewMessageActivity.startForResult(ContactsActivity.newInstance(), CREATE_DIALOG);
                 } else {
-                    //get ID EKL
+
+                    HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
+                    String strUserID = user.get(preferenceManager.KEY_USERID);
 
                     String number = contact.getLogin();
                     Uri uri = Uri.parse("smsto:" + number);
                     Intent it = new Intent(Intent.ACTION_SENDTO, uri);
-                    it.putExtra("sms_body", "https://play.google.com/store/apps/details?id=com.eklanku.otuChat");
+                    it.putExtra("sms_body", "https://play.google.com/store/apps/details?id=com.eklanku.otuChat&referrer=" + strUserID);
                     context.startActivity(it);
                     //context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
                 }
@@ -215,6 +232,4 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     private void startPrivateChat(QBChatDialog dialog, QMUser selectedUser) {
         PrivateDialogActivity.start(context, selectedUser, dialog);
     }
-
-
 }

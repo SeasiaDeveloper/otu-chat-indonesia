@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +35,14 @@ public class TableFragment extends Fragment {
 
     private ProgressDialog mProgressDialog;
     private WebServiceHandler mWebServiceHandler;
+    private TextView mTxtEmptyMessage;
 
     // For TableView
     private List<List<CellModel>> mCellList;
     private List<ColumnHeaderModel> mColumnHeaderList;
     private List<RowHeaderModel> mRowHeaderList;
+
+    private LinearLayout mLinEmptyMessage;
 
     private String TableName;
 
@@ -69,6 +74,8 @@ public class TableFragment extends Fragment {
         View view = inflater.inflate(R.layout.tableview_fragment, container, false);
 
         mTableView = (TableView) view.findViewById(R.id.my_TableView);
+        mLinEmptyMessage = (LinearLayout) view.findViewById(R.id.linEmptyMessage);
+        mTxtEmptyMessage = (TextView) view.findViewById(R.id.txtEmptyMessage);
 
         // Create TableView Adapter
         mTableAdapter = new MyTableAdapter(getContext());
@@ -90,6 +97,29 @@ public class TableFragment extends Fragment {
         mCellList = userInfoList;
         mRowHeaderList = createRowHeaderList();
 
+        if(mCellList == null || mCellList.size() == 0) {
+            if (getTableName().contains("balance")) {
+                mLinEmptyMessage.setVisibility(View.VISIBLE);
+                mTableView.setVisibility(View.GONE);
+                mTxtEmptyMessage.setText(getString(R.string.otu_payment_balance_history_empty_message));
+            } else if (getTableName().contains("trx")) {
+                mLinEmptyMessage.setVisibility(View.VISIBLE);
+                mTableView.setVisibility(View.GONE);
+                mTxtEmptyMessage.setText(getString(R.string.otu_payment_transaction_history_empty_message));
+            } else if (getTableName().contains("deposit")) {
+                mLinEmptyMessage.setVisibility(View.VISIBLE);
+                mTableView.setVisibility(View.GONE);
+                mTxtEmptyMessage.setText(getString(R.string.otu_payment_deposit_history_empty_message));
+            } else if (getTableName().contains("penarikan")) {
+                mLinEmptyMessage.setVisibility(View.VISIBLE);
+                mTableView.setVisibility(View.GONE);
+                mTxtEmptyMessage.setText(getString(R.string.otu_payment_penarikan_history_empty_message));
+            } else if (getTableName().contains("bonus")) {
+                mLinEmptyMessage.setVisibility(View.VISIBLE);
+                mTableView.setVisibility(View.GONE);
+                mTxtEmptyMessage.setText(getString(R.string.otu_payment_bonus_history_empty_message));
+            }
+        }
 
         // Set all items to the TableView
         mTableAdapter.setAllItems(mColumnHeaderList, mRowHeaderList, mCellList);

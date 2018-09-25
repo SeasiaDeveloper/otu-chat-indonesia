@@ -7,10 +7,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.AlertDialog;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.fragments.payment.TableFragment;
+import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -146,6 +148,7 @@ public class WebServiceHandler {
 
                     } else {
                         Toast.makeText(mainFragment.getContext(), "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
+
                     }
                 } else {
                     Toast.makeText(mainFragment.getContext(), mainFragment.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();

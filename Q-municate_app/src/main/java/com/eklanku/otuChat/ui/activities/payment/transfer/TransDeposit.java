@@ -1,17 +1,22 @@
 package com.eklanku.otuChat.ui.activities.payment.transfer;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -21,6 +26,7 @@ import retrofit2.Response;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.DetailTransferResponse;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.R;;
@@ -29,6 +35,7 @@ import com.eklanku.otuChat.ui.activities.payment.models.DetailTransferResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupKonfirmResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.utils.Utils;
 
 import java.util.HashMap;
 
@@ -48,12 +55,23 @@ public class TransDeposit extends AppCompatActivity {
     String reffID;
     String strApIUse = "OTU";
 
+    AlertDialog.Builder dialog;
+    LayoutInflater inflater;
+    View dialogView;
+    TextView txtnomor, txtvoucher;
+    Button btnYes, btnNo;
+
+    Utils utilsAlert;
+    String titleAlert = "Deposit";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_trans_deposit);
         ButterKnife.bind(this);
+
+        utilsAlert = new Utils(TransDeposit.this);
 
         txtNo = (EditText) findViewById(R.id.txtTransDepositTujuan);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransDepositTujuan);
@@ -68,6 +86,10 @@ public class TransDeposit extends AppCompatActivity {
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //cek antrian
         cekAntrianTransfer();
 
@@ -78,7 +100,42 @@ public class TransDeposit extends AppCompatActivity {
                 if (!validateIdpel()) {
                     return;
                 }
-                cek_transaksi();
+
+                dialog = new AlertDialog.Builder(TransDeposit.this);
+                inflater = getLayoutInflater();
+                dialogView = inflater.inflate(R.layout.activity_alert_topup, null);
+                dialog.setView(dialogView);
+                dialog.setCancelable(true);
+                dialog.setIcon(R.mipmap.ic_launcher);
+                dialog.setTitle("Peringatan Transfer!!!");
+
+
+                btnYes = (Button) dialogView.findViewById(R.id.btn_yes);
+                btnNo = (Button) dialogView.findViewById(R.id.btn_no);
+                txtnomor = (TextView) dialogView.findViewById(R.id.txt_nomor);
+                txtvoucher = (TextView) dialogView.findViewById(R.id.txt_voucher);
+                txtnomor.setText(txtNo.getText().toString());
+                txtvoucher.setText(txtJml.getText().toString());
+
+                dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cek_transaksi();
+                    }
+                });
+
+                dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                // ((Button)dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.button_border);
+
+                dialog.show();
+                return;
+
             }
         });
 
@@ -169,17 +226,20 @@ public class TransDeposit extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransDeposit.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransDeposit.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<DetailTransferResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransDeposit.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -219,18 +279,32 @@ public class TransDeposit extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-
+                        utilsAlert.globalDialog(TransDeposit.this, titleAlert, error);
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransDeposit.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<DetailTransferResponse> call, Throwable t) {
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransDeposit.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

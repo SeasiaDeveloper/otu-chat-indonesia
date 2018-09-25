@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_topup_confirmation"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_balance_topup"
+        android:title="@string/payment_confirmation" />
+    <item
+        android:id="@+id/action_topup_evidence"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_assignment_topup"
+        android:title="@string/payment_send_evindence" />
+</menu>

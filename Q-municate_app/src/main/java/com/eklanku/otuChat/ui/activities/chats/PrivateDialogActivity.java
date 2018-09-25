@@ -8,12 +8,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -269,6 +272,8 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         return true;
     }
 
+
+
     private ActionMode.Callback mMenuActionModeCallback = new ActionMode.Callback() {
 
         @Override
@@ -279,17 +284,17 @@ public class PrivateDialogActivity extends BaseDialogActivity {
             Drawable drawable = menu.findItem(R.id.action_delete).getIcon();
 
             drawable = DrawableCompat.wrap(drawable);
-            DrawableCompat.setTint(drawable, ContextCompat.getColor(PrivateDialogActivity.this, R.color.black));
+            DrawableCompat.setTint(drawable, ContextCompat.getColor(PrivateDialogActivity.this, R.color.green));
             menu.findItem(R.id.action_delete).setIcon(drawable);
 
             Drawable drawable_copy = menu.findItem(R.id.action_copy).getIcon();
             drawable_copy = DrawableCompat.wrap(drawable_copy);
-            DrawableCompat.setTint(drawable_copy, ContextCompat.getColor(PrivateDialogActivity.this, R.color.black));
+            DrawableCompat.setTint(drawable_copy, ContextCompat.getColor(PrivateDialogActivity.this, R.color.green));
             menu.findItem(R.id.action_copy).setIcon(drawable_copy);
 
             Drawable drawable_share = menu.findItem(R.id.action_share).getIcon();
             drawable_share = DrawableCompat.wrap(drawable_share);
-            DrawableCompat.setTint(drawable_share, ContextCompat.getColor(PrivateDialogActivity.this, R.color.black));
+            DrawableCompat.setTint(drawable_share, ContextCompat.getColor(PrivateDialogActivity.this, R.color.green));
             menu.findItem(R.id.action_share).setIcon(drawable_share);
 
             return true;

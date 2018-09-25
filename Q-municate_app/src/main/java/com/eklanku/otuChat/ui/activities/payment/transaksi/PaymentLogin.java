@@ -110,12 +110,12 @@ public class PaymentLogin extends AppCompatActivity {
 
             strSecurityCode = Utils.md5(strToken + Utils.md5(pass));
             //VOLLEY==========================
-            //login(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), strToken, strSecurityCode, pass);
+            //login(PreferenceUtil.getNumberPhone(this)), strToken, strSecurityCode, pass);
             //================================
 
-            Log.d("AYIK", "userid:" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() + ", token:" + strSecurityCode + ", " + strToken);
+            Log.d("OPPO-1", "userid:" + PreferenceUtil.getNumberPhone(PaymentLogin.this) + ", token:" + strSecurityCode + ", " + strToken);
             // RETROFIT=============================================
-            Call<LoginResponse> userCall = apiInterfacePayment.postLogin(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), strToken, strSecurityCode, pass);
+            Call<LoginResponse> userCall = apiInterfacePayment.postLogin(PreferenceUtil.getNumberPhone(PaymentLogin.this), strToken, strSecurityCode, pass);
             userCall.enqueue(new Callback<LoginResponse>() {
                 @Override
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
@@ -134,7 +134,7 @@ public class PaymentLogin extends AppCompatActivity {
                             preferenceManager.createUserPayment(userID, accessToken, true);
                             PreferenceUtil.setLoginStatus(getApplicationContext(), true);
                             finish();
-                            Log.d("AYIK", "userid:" + userID + ", token:" + accessToken);
+                            //Log.d("AYIK", "userid:" + userID + ", token:" + accessToken);
                         } else {
                             lblInfo.setText("Error:\n" + respMessage);
                             lblInfo.setVisibility(View.VISIBLE);
@@ -251,14 +251,14 @@ public class PaymentLogin extends AppCompatActivity {
         VolleyController.getInstance().addToRequestQueue(request);
     }*/
 
-   /*=================================================RESET PASS LAMA============================*/
+    /*=================================================RESET PASS LAMA============================*/
    /*private class RegisterLabelListener implements View.OnClickListener {
        @Override
        public void onClick(View v) {
            loadingDialog = ProgressDialog.show(PaymentLogin.this, "Harap Tunggu", "Cek Transaksi...");
            loadingDialog.setCanceledOnTouchOutside(true);
 
-           Call<RegisterResponse> transDepositCall = mApiInterface.postResetPass(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+           Call<RegisterResponse> transDepositCall = mApiInterface.postResetPass(PreferenceUtil.getNumberPhone(this)));
            transDepositCall.enqueue(new Callback<RegisterResponse>() {
                @Override
                public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {

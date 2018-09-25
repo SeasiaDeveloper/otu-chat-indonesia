@@ -7,10 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -28,6 +32,8 @@ import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
+import com.eklanku.otuChat.utils.PreferenceUtil;
+import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -120,7 +126,7 @@ public class TransPajak extends AppCompatActivity {
     SharedPreferences prefs;
     Spinner spnWilayah;
     EditText txtNo, txtno_hp;
-    //TextInputLayout layoutNo;
+    TextInputLayout layoutNo;
     Button btnBayar;
     String //id_member,
             load_id = "PDAM_AETRA";
@@ -135,21 +141,29 @@ public class TransPajak extends AppCompatActivity {
 
     String strUserID,strAccessToken,strAplUse = "OTU";
 
+    Utils utilsAlert;
+    String titleAlert = "Pajak";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pajak_daerah);
-
         ButterKnife.bind(this);
+
+        utilsAlert = new Utils(TransPajak.this);
+
         prefs      = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnWilayah = (Spinner) findViewById(R.id.spnTransPajak);
         txtNo      = (EditText) findViewById(R.id.txtTransPajakNo);
-        //layoutNo   = (TextInputLayout) findViewById(R.id.txtLayoutTransPdamNo);
+        layoutNo    = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar   = (Button) findViewById(R.id.btnTransPajakBayar);
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //get userid and token from preference
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
@@ -159,7 +173,12 @@ public class TransPajak extends AppCompatActivity {
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
-        txtno_hp.setText(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){
+            String no = PreferenceUtil.getNumberPhone(this).replace("+62","0");
+            txtno_hp.setText(no);
+        }else{
+            txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
+        }
 
        /* spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(), nama_wilayah);
         spnWilayah.setAdapter(spinnerPpobAdapter);
@@ -193,8 +212,8 @@ public class TransPajak extends AppCompatActivity {
         String id_pel = txtNo.getText().toString().trim();
 
         if (id_pel.isEmpty()) {
-            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            //layoutNo.setError("Kolom nomor tidak boleh kosong");
+            //Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            layoutNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
@@ -249,17 +268,20 @@ public class TransPajak extends AppCompatActivity {
                             }
                         });
                     } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransPajak.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransPajak.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransPajak.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -347,17 +369,20 @@ public class TransPajak extends AppCompatActivity {
                         inKonfirmasi.putExtra("cmd_save", "-");
                         startActivity(inKonfirmasi);
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransPajak.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransPajak.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransPajak.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -370,8 +395,8 @@ public class TransPajak extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransPdam.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Log.d("OPPO-1", "cek_transaksi - transpdam: "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), load_id, "", txtNo.getText().toString(), "pdambyr");
+        Log.d("OPPO-1", "cek_transaksi - transpdam: "+PreferenceUtil.getNumberPhone(this)));
+        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), load_id, "", txtNo.getText().toString(), "pdambyr");
 //        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", load_id, "", txtNo.getText().toString(), "pdambyr");
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
@@ -408,4 +433,28 @@ public class TransPajak extends AppCompatActivity {
         });
     }*/
     /*===========================================end payment lama======================================================*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

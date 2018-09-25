@@ -1,8 +1,10 @@
 package com.eklanku.otuChat.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -12,13 +14,16 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.ui.activities.payment.TestActivity;
 import com.eklanku.otuChat.utils.listeners.LoadingData;
 
 import butterknife.Bind;
 
-public class CallFragment extends Fragment implements LoadingData{
+public class CallFragment extends Fragment implements LoadingData {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -74,9 +79,28 @@ public class CallFragment extends Fragment implements LoadingData{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_call, container, false);
         // Inflate the layout for this fragment
         //setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_call, container, false);
+        TextView tvCall = view.findViewById(R.id.tv_call_fragment);
+        tvCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), TestActivity.class));
+            }
+        });
+
+        FloatingActionButton call= view.findViewById(R.id.fab_dialogs_new_call);
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), TestActivity.class));
+                Toast.makeText(getActivity(), "TEST", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return view;
     }
 
     @Override

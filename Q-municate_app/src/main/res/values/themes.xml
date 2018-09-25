@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    // About Properties
-    // https://gist.github.com/seanKenkeremath/c945c39cdf92af138395
-
     <style name="Base.AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-
+        <item name="android:typeface">serif</item>
         <item name="windowActionModeOverlay">true</item>
-
         <item name="android:windowBackground">@color/bg_main</item>
 
         <item name="colorPrimary">@color/primary</item>
@@ -33,26 +29,45 @@
 
     </style>
 
-    <style name="AppTheme" parent="Base.AppTheme" />
-
-    <style name="ToolbarTheme">
-        <item name="colorControlNormal">@color/dark_gray</item>
+    <style name="AppTheme" parent="Base.AppTheme">
+        <item name="android:typeface">serif</item>
     </style>
 
-    <style name="ToolbarThemeCall" parent="Theme.AppCompat">
-        <item name="colorControlNormal">@color/light_gray</item>
+
+    <style name="AppThemeMain" parent="Base.AppTheme">
+        <item name="android:typeface">serif</item>
+        <item name="actionOverflowButtonStyle">@style/OverFlow</item>
+    </style>
+
+    <style name="OverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_chat_overflow</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:typeface">serif</item>
+        <item name="android:background">@color/accent</item>
+        <item name="colorControlNormal">@color/primary</item>
+    </style>
+
+    <style name="ToolbarThemeCall" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:typeface">serif</item>
+        <item name="android:background">@color/accent</item>
+        <item name="colorControlNormal">@color/primary</item>
     </style>
 
     <style name="Theme.MyTheme" parent="Theme.AppCompat">
+        <item name="android:typeface">serif</item>
 
     </style>
 
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="android:typeface">serif</item>
         <item name="searchHintIcon">@null</item>
     </style>
 
     <style name="VideoPlayerTheme" parent="android:Theme.Holo">
         <item name="android:windowNoTitle">true</item>
+        <item name="android:typeface">serif</item>
         <item name="android:windowBackground">@android:color/black</item>
     </style>
 

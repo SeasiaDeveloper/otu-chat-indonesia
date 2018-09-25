@@ -7,13 +7,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -25,23 +32,13 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.ListViewAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerBankAdapter;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.PaketTopup;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupDetailM;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupOrderResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment.ListViewAdapter;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerBankAdapter;
-
-import java.text.NumberFormat;
+import com.eklanku.otuChat.utils.Utils;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,6 +66,11 @@ public class TopupOrder extends AppCompatActivity {
     Button btnTopup;
 
     String nama, norek, an, error, strMsg;
+    CheckBox ck_Setuju;
+    LinearLayout tx_syarat;
+
+    Utils utilsAlert;
+    String titleAlert = "Topup";
 
 
     @Override
@@ -76,7 +78,7 @@ public class TopupOrder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topup_order);
 
-        // initializeResources();
+        utilsAlert = new Utils(TopupOrder.this);
 
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         preferenceManager = new PreferenceManager(this);
@@ -85,6 +87,8 @@ public class TopupOrder extends AppCompatActivity {
         spnDataBank = findViewById(R.id.spinner_data_bank);
         edNominal = findViewById(R.id.edittext_nominal);
         btnTopup = findViewById(R.id.btn_topup);
+        ck_Setuju = findViewById(R.id.cksetuju);
+
 
         //get userid and token from preference
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
@@ -94,6 +98,32 @@ public class TopupOrder extends AppCompatActivity {
         //loadData();
         loadDataBank();
         //initializeResources();
+
+        ck_Setuju.setChecked(false);
+        btnTopup.setEnabled(false);
+        btnTopup.setBackgroundResource(R.drawable.custom_round);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Expandable textview
+        ExpandableTextView expTv1 = findViewById(R.id.expand_text_view);
+        expTv1.setText(getString(R.string.syarat_ketentuan_detail));
+
+
+        ck_Setuju.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ck_Setuju.isChecked()){
+                    btnTopup.setBackgroundResource(R.drawable.custom_round_green_dark);
+                    btnTopup.setEnabled(true);
+                }else{
+                    btnTopup.setBackgroundResource(R.drawable.custom_round);
+                    btnTopup.setEnabled(false);
+                }
+            }
+        });
+
         btnTopup.setOnClickListener(new BayarButtonListener());
 
     }
@@ -139,8 +169,12 @@ public class TopupOrder extends AppCompatActivity {
                                     norek = result.get(position).getNorec();
                                     nama = result.get(position).getBank();
                                     an = result.get(position).getAnbank();
+
+
                                 }else{
-                                    Toast.makeText(TopupOrder.this, "No Rekening tidak aktif", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(TopupOrder.this, "No Rekening tidak aktif", Toast.LENGTH_SHORT).show();
+                                    utilsAlert.globalDialog(TopupOrder.this, titleAlert, "No Rekening tidak aktif");
+
                                 }
                             }
                             @Override
@@ -150,17 +184,20 @@ public class TopupOrder extends AppCompatActivity {
                         });
 
                     } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TopupOrder.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TopupOrder.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TopupOrderResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TopupOrder.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }
         });
@@ -169,6 +206,10 @@ public class TopupOrder extends AppCompatActivity {
     private class BayarButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            /*Intent intent = new Intent(TopupOrder.this, AlertSyarat.class);
+            intent.putExtra("nominal", edNominal.getText().toString());
+            intent.putExtra("nama", nama);
+            startActivity(intent);*/
             depositOrder();
 
         }
@@ -196,17 +237,20 @@ public class TopupOrder extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TopupOrder.this, titleAlert, error);
+                        //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TopupOrder.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TopupPayResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TopupOrder.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }
         });
@@ -264,4 +308,30 @@ public class TopupOrder extends AppCompatActivity {
         });
     }
     /*===========================================end payment lama=====================================================*/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_topup_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_topup_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_topup_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

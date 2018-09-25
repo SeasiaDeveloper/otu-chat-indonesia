@@ -38,6 +38,7 @@
                     android:src="@drawable/ic_empty"/>
 
                 <TextView
+                    android:id="@+id/tv_call_fragment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

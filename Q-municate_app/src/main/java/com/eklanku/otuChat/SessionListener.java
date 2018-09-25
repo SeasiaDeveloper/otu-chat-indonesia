@@ -18,6 +18,8 @@ import com.quickblox.users.model.QBUser;
 
 public class SessionListener {
 
+    //Last seen
+
     private static final String TAG = SessionListener.class.getSimpleName();
 
     private final QBSessionListener listener;

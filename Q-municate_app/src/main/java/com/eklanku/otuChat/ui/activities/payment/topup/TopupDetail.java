@@ -16,6 +16,7 @@ import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.rest.ApiClient;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -52,11 +53,16 @@ public class TopupDetail extends AppCompatActivity {
     String strAccessToken;
     String strApIUse = "OTU";
 
+    Utils utilsAlert;
+    String titleAlert = "Topup";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topup_detail);
         initializeResources();
+
+        utilsAlert = new Utils(TopupDetail.this);
 
         id = getIntent().getExtras().getString("id", "");
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -68,6 +74,8 @@ public class TopupDetail extends AppCompatActivity {
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
+
+        Log.d("OPPO-1", "onCreate: "+PreferenceUtil.getNumberPhone(TopupDetail.this));
        // loadData();
     }
 
@@ -114,17 +122,20 @@ public class TopupDetail extends AppCompatActivity {
                         lbUniq.setText(rupiah.substring(rupiah.length() - 3));
 
                     } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TopupDetail.this, titleAlert, error);
+                       // Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TopupDetail.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TopupDetailResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TopupDetail.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }
         });
@@ -155,9 +166,10 @@ public class TopupDetail extends AppCompatActivity {
     private class KonfirmButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            Log.d("OPPO-1", "View.OnClickListener: "+PreferenceUtil.getNumberPhone(TopupDetail.this));
             loadingDialog = ProgressDialog.show(TopupDetail.this, "Harap Tunggu", "Memproses Pengisian Topup");
             loadingDialog.setCanceledOnTouchOutside(true);
-            Call<TopupKonfirmResponse> dataCall = mApiInterface.postTopupKonfirm(id, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+            Call<TopupKonfirmResponse> dataCall = mApiInterface.postTopupKonfirm(id, PreferenceUtil.getNumberPhone(TopupDetail.this));
             dataCall.enqueue(new Callback<TopupKonfirmResponse>() {
                 @Override
                 public void onResponse(Call<TopupKonfirmResponse> call, Response<TopupKonfirmResponse> response) {
@@ -172,22 +184,26 @@ public class TopupDetail extends AppCompatActivity {
                             //Intent intent = new Intent(getBaseContext(), TopupDetail.class);
                             //intent.putExtra("id", message);
                             //startActivity(intent);
-                            Toast.makeText(getBaseContext(), "Sukses:" + message+"\n Tunggu beberapa saat untuk kami verifikasi... terima kasih.", Toast.LENGTH_LONG).show();
+                            utilsAlert.globalDialog(TopupDetail.this, titleAlert, message);
+                            //Toast.makeText(getBaseContext(), "Sukses:" + message+"\n Tunggu beberapa saat untuk kami verifikasi... terima kasih.", Toast.LENGTH_LONG).show();
                             finish();
                         } else {
                             lblInfo.setText("Error:\n"+error);
                             lblInfo.setVisibility(View.VISIBLE);
-                            Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
+                            utilsAlert.globalDialog(TopupDetail.this, titleAlert, error);
+                            //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TopupDetail.this, titleAlert, getResources().getString(R.string.error_api));
+                        //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<TopupKonfirmResponse> call, Throwable t) {
                     loadingDialog.dismiss();
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TopupDetail.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                     Log.d("API_LOADDATA", t.getMessage().toString());
                 }
             });

@@ -39,7 +39,5 @@ public class EditProfilActivity extends BaseLoggableActivity {
     public static void start(Context context) {
         Intent intent = new Intent(context, EditProfilActivity.class);
         context.startActivity(intent);
-
     }
-
 }

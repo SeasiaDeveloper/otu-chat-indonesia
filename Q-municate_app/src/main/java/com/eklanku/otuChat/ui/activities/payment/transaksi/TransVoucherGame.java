@@ -14,13 +14,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -35,8 +41,10 @@ import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
+import com.eklanku.otuChat.ui.adapters.payment.SpinnerGameAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPaymentAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
+import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -101,12 +109,24 @@ public class TransVoucherGame extends AppCompatActivity {
 
     String code;
 
+    /*AlertDialog.Builder dialog;
+    LayoutInflater inflater;
+    View dialogView;*/
+    TextView txtnomor, txtvoucher;
+    Button btnYes, btnNo;
+    SpinnerGameAdapter spinnerGameAdapter;
+
+    Utils utilsAlert;
+    String titleAlert = "Voucher Game";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans_voucher);
 
         ButterKnife.bind(this);
+
+        utilsAlert = new Utils(TransVoucherGame.this);
 
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnVoucher = (Spinner) findViewById(R.id.spnTransVoucherJenis);
@@ -123,6 +143,9 @@ public class TransVoucherGame extends AppCompatActivity {
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
@@ -161,14 +184,47 @@ public class TransVoucherGame extends AppCompatActivity {
                 if (!validateIdpel()) {
                     return;
                 }
-                AlertDialog dialog = new AlertDialog.Builder(TransVoucherGame.this)
+
+                final Dialog dialog = new Dialog(TransVoucherGame.this);
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.activity_alert_dialog);
+                dialog.setCancelable(false);
+                dialog.setTitle("Peringatan Transaksi!!!");
+
+                btnYes = (Button) dialog.findViewById(R.id.btn_yes);
+                btnNo = (Button) dialog.findViewById(R.id.btn_no);
+                txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
+                txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+                txtnomor.setText(txtNo.getText().toString());
+                txtvoucher.setText(code);
+
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cek_transaksi();
+                        dialog.dismiss();
+                    }
+                });
+
+                btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                return;
+
+
+                /*AlertDialog dialog = new AlertDialog.Builder(TransVoucherGame.this)
                         .setTitle("Transaksi")
                         .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: " + txtNo.getText().toString() + "\nVoucher: " + code)
                         .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 cek_transaksi();
-                                finish();
                             }
                         })
                         .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -179,7 +235,33 @@ public class TransVoucherGame extends AppCompatActivity {
                         })
                         .create();
                 dialog.show();
-                return;
+                return;*/
+
+                /*dialog = new AlertDialog.Builder(TransVoucherGame.this);
+                inflater = getLayoutInflater();
+                dialogView = inflater.inflate(R.layout.activity_alert_dialog, null);
+                dialog.setView(dialogView);
+                dialog.setCancelable(true);
+                dialog.setIcon(R.mipmap.ic_launcher);
+                dialog.setTitle("Peringatan Transaksi!!!");
+
+
+                /*dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cek_transaksi();
+                    }
+                });
+
+                dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });*/
+
+                // ((Button)dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.button_border);
+
             }
         });
     }
@@ -187,7 +269,6 @@ public class TransVoucherGame extends AppCompatActivity {
     private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
         loadingDialog = ProgressDialog.show(TransVoucherGame.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        // Toast.makeText(this, "load provider", Toast.LENGTH_SHORT).show();
         Call<LoadDataResponseProvider> userCall = apiInterfacePayment.getLoadProvider(userID, accessToken, aplUse, productType);
         userCall.enqueue(new Callback<LoadDataResponseProvider>() {
             @Override
@@ -211,12 +292,14 @@ public class TransVoucherGame extends AppCompatActivity {
                             list.add(x);
                         }
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, list);
-                        spnVoucher.setAdapter(adapter);
+                       // ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, list);
+                        SpinnerGameAdapter spinnerGameAdapter = new SpinnerGameAdapter(getApplicationContext(), products, "GAME");
+                        spnVoucher.setAdapter(spinnerGameAdapter);
                         spnVoucher.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                strOpsel = parent.getItemAtPosition(position).toString();
+                                //strOpsel = parent.getItemAtPosition(position).toString();
+                                strOpsel = products.get(position).getName_provaider();
                                 loadProduct(strUserID, strAccessToken, strAplUse, strOpsel);
                             }
 
@@ -227,16 +310,19 @@ public class TransVoucherGame extends AppCompatActivity {
                         });
 
                     } else {
-                        Toast.makeText(TransVoucherGame.this, "" + respMessage, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransVoucherGame.this, titleAlert, respMessage);
+                       // Toast.makeText(TransVoucherGame.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransVoucherGame.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
                 loadingDialog.dismiss();
+                utilsAlert.globalDialog(TransVoucherGame.this, titleAlert, getResources().getString(R.string.error_api));
             }
         });
     }
@@ -283,7 +369,6 @@ public class TransVoucherGame extends AppCompatActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 code = products.get(position).getCode();
-                                //Toast.makeText(TransVoucherGame.this, "" + code, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -293,16 +378,19 @@ public class TransVoucherGame extends AppCompatActivity {
                         });
 
                     } else {
-                        Toast.makeText(TransVoucherGame.this, "" + respMessage, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransVoucherGame.this, titleAlert, respMessage);
+                       // Toast.makeText(TransVoucherGame.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransVoucherGame.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponseProduct> call, Throwable t) {
                 loadingDialog.dismiss();
+                utilsAlert.globalDialog(TransVoucherGame.this, titleAlert, getResources().getString(R.string.error_api));
             }
         });
     }
@@ -374,18 +462,22 @@ public class TransVoucherGame extends AppCompatActivity {
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("profit", "");
                         startActivity(inKonfirmasi);
+                        finish();
                     } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(TransVoucherGame.this, titleAlert, error);
+                       // Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    utilsAlert.globalDialog(TransVoucherGame.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                utilsAlert.globalDialog(TransVoucherGame.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -425,8 +517,8 @@ public class TransVoucherGame extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransVoucherGame.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Log.d("OPPO-1", "cek_transaksi - transvucher: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), load_id, selected_nominal, txtNo.getText().toString(), "game");
+        Log.d("OPPO-1", "cek_transaksi - transvucher: " + PreferenceUtil.getNumberPhone(this)));
+        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), load_id, selected_nominal, txtNo.getText().toString(), "game");
 //        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", load_id, selected_nominal, txtNo.getText().toString(), "game");
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
@@ -467,8 +559,8 @@ public class TransVoucherGame extends AppCompatActivity {
     public void load_data() {
         loadingDialog = ProgressDialog.show(TransVoucherGame.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Log.d("OPPO-1", "cek_transaksi - transvoucher: " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Log.d("OPPO-1", "cek_transaksi - transvoucher: " + PreferenceUtil.getNumberPhone(this)));
+        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, PreferenceUtil.getNumberPhone(this)));
 //        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, "085334059170");
         dataCall.enqueue(new Callback<LoadDataResponse>() {
 
@@ -549,4 +641,28 @@ public class TransVoucherGame extends AppCompatActivity {
         });
     }
     /*=======================================end payment lama=========================================*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
