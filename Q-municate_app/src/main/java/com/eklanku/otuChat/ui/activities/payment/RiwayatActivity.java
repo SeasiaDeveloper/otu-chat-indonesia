@@ -97,5 +97,5 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
         } else return true;
     }
 
-    
+
 }
