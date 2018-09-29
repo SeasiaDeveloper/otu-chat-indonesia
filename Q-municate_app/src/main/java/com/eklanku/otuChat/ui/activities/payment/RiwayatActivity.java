@@ -38,16 +38,19 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
         mLinRiwayatPenarikan = (LinearLayout) findViewById(R.id.linRiwayatPenrikan);
         mLinRiwayatBonus = (LinearLayout) findViewById(R.id.linRiwayatBonus);
 
-        Log.d("OPPO-1", "okee: ");
+        mLinRiwayatSaldo.setOnClickListener(this);
+        mLinRiwayatTransaksi.setOnClickListener(this);
+        mLinRiwayatDeposit.setOnClickListener(this);
+        mLinRiwayatPenarikan.setOnClickListener(this);
+        mLinRiwayatBonus.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
-        Log.d("OPPO-1", "okee2: ");
         switch (v.getId()) {
             case R.id.linRiwayatSaldo:
                 if (menuDialog()) {
-                    Log.d("OPPO-1", "okee: 3");
                     startActivity(new Intent(RiwayatActivity.this, HistoryBalanceActivity.class));
                 }
                 break;
@@ -74,7 +77,6 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
     private boolean menuDialog() {
-        Log.d("OPPO-1", "isLoginStatus: "+PreferenceUtil.isLoginStatus(RiwayatActivity.this));
         if (!PreferenceUtil.isLoginStatus(RiwayatActivity.this)) {
             android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(RiwayatActivity.this)
                     .setTitle("PERINGATAN!!!")
