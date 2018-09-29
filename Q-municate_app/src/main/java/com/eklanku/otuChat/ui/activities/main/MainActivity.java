@@ -1,5 +1,6 @@
 package com.eklanku.otuChat.ui.activities.main;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -227,7 +228,12 @@ public class MainActivity extends BaseLoggableActivity {
             loginChat();
         }
 
-        loadBanner();
+        Activity activity = this;
+
+        if (!activity.isFinishing()) {
+            loadBanner();
+        }
+
 
         addDialogsAction();
         openPushDialogIfPossible();
@@ -288,7 +294,7 @@ public class MainActivity extends BaseLoggableActivity {
 
         preferenceManager = new PreferenceManager(this);
 
-        if(!PreferenceUtil.isFirstLaunch(this)){
+        if (!PreferenceUtil.isFirstLaunch(this)) {
             restartApp();
         }
 
@@ -586,8 +592,7 @@ public class MainActivity extends BaseLoggableActivity {
                         checkSelfPermission(MODIFY_AUDIO_SETTINGS) == PackageManager.PERMISSION_GRANTED &&
                         checkSelfPermission(RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED /*&&
                         checkSelfPermission(VIBRATE) == PackageManager.PERMISSION_GRANTED*/
-                )
-        {
+                ) {
 
             return true;
         }
@@ -628,7 +633,6 @@ public class MainActivity extends BaseLoggableActivity {
                     grantResults[9] == PackageManager.PERMISSION_GRANTED /*&&
                     grantResults[10] == PackageManager.PERMISSION_GRANTED*/
                     )
-
 
 
             {
@@ -784,7 +788,7 @@ public class MainActivity extends BaseLoggableActivity {
     }
 
     public void loadBanner() {
-        bannerSlider.setImageLoader(new GlideImageLoader());
+        bannerSlider.setImageLoader(new GlideImageLoader(getApplicationContext()));
         List<String> urls = new ArrayList<>();
         Call<LoadBanner> callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(MainActivity.this), strApIUse);
         callLoadBanner.enqueue(new Callback<LoadBanner>() {

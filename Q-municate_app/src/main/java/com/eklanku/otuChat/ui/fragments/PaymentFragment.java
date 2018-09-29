@@ -1,5 +1,6 @@
 package com.eklanku.otuChat.ui.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -88,7 +89,7 @@ public class PaymentFragment extends Fragment {
     ImageButton btnDeposit, btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
             btnTv, btnPaket, btnSMS, btnEtool, btnWi;
-    ImageButton btnRiwayat,btnTransfer,btnPengaturan;
+    ImageButton btnRiwayat, btnTransfer, btnPengaturan;
     Button btnCallme;
     /* Button btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
              btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
@@ -150,10 +151,13 @@ public class PaymentFragment extends Fragment {
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
-        Log.d("AYIK", "OnResume userID " + strUserID + " accessToken " + strAccessToken);
         if (PreferenceUtil.isLoginStatus(getActivity())) {
             //Toast.makeText(context, "YES DEPOSITE " + PreferenceUtil.isLoginStatus(getActivity()), Toast.LENGTH_SHORT).show();
-            loadDeposite(strUserID, strAccessToken);
+
+            Activity activity = getActivity();
+            if (activity != null && isAdded())
+                loadDeposite(strUserID, strAccessToken);
+
         } else {
             //Toast.makeText(context, "NOT DEPOSITE " + PreferenceUtil.isLoginStatus(getActivity()), Toast.LENGTH_SHORT).show();
         }
@@ -434,6 +438,10 @@ public class PaymentFragment extends Fragment {
                 break;
 
             case R.id.logout:
+
+
+                Activity activity = getActivity();
+                if (activity != null && isAdded())
                 logOutPayment();
                 /*loadingDialog = ProgressDialog.show(getActivity(), "Harap Tunggu", "Melakukan proses logout");
                 loadingDialog.setCanceledOnTouchOutside(true);
