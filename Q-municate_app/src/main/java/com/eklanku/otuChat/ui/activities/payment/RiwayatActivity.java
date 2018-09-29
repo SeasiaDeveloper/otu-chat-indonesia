@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -36,13 +37,17 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
         mLinRiwayatDeposit = (LinearLayout) findViewById(R.id.linRiwayatDeposit);
         mLinRiwayatPenarikan = (LinearLayout) findViewById(R.id.linRiwayatPenrikan);
         mLinRiwayatBonus = (LinearLayout) findViewById(R.id.linRiwayatBonus);
+
+        Log.d("OPPO-1", "okee: ");
     }
 
     @Override
     public void onClick(View v) {
+        Log.d("OPPO-1", "okee2: ");
         switch (v.getId()) {
             case R.id.linRiwayatSaldo:
                 if (menuDialog()) {
+                    Log.d("OPPO-1", "okee: 3");
                     startActivity(new Intent(RiwayatActivity.this, HistoryBalanceActivity.class));
                 }
                 break;
@@ -69,6 +74,7 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
     private boolean menuDialog() {
+        Log.d("OPPO-1", "isLoginStatus: "+PreferenceUtil.isLoginStatus(RiwayatActivity.this));
         if (!PreferenceUtil.isLoginStatus(RiwayatActivity.this)) {
             android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(RiwayatActivity.this)
                     .setTitle("PERINGATAN!!!")
@@ -90,4 +96,6 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
             return false;
         } else return true;
     }
+
+    
 }

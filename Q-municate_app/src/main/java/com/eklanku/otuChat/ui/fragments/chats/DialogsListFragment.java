@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.Loader;
 import android.text.Spannable;
@@ -107,6 +108,9 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
     @Bind(R.id.frameEmptyList)
     FrameLayout mFrameEmptyList;
+
+    @Bind(R.id.fab_dialogs_new_chat)
+    FloatingActionButton btnNewChat;
 
     private DialogsListAdapter dialogsListAdapter;
     private DataManager dataManager;

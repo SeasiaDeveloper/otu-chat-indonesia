@@ -514,7 +514,7 @@
     <string name="riwayat_saldo">Riwayat saldo</string>
     <string name="riwayat_transaksi">Riwayat Transaksi</string>
     <string name="riwayat_deposit">Riwayat Deposit</string>
-    <string name="riwayat_penrikan">Riwayat Penrikan</string>
+    <string name="riwayat_penrikan">Riwayat Penarikan</string>
     <string name="riwayat_bonus">Riwayat Bonus</string>
 
 </resources>

@@ -115,7 +115,7 @@ public class TopupOrder extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(ck_Setuju.isChecked()){
-                    btnTopup.setBackgroundResource(R.drawable.custom_round_green_dark);
+                    btnTopup.setBackgroundResource(R.drawable.background_round_corner_green);
                     btnTopup.setEnabled(true);
                 }else{
                     btnTopup.setBackgroundResource(R.drawable.custom_round);

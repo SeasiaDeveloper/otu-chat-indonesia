@@ -8,7 +8,8 @@
     android:fitsSystemWindows="true"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="com.eklanku.otuChat.ui.activities.payment.topup.TopupOrder">
+    tools:context="com.eklanku.otuChat.ui.activities.payment.topup.TopupOrder"
+    android:padding="16dp">
 
     <LinearLayout
         android:id="@+id/linear_topup"
@@ -202,12 +203,16 @@
 
     <Button
         android:id="@+id/btn_topup"
-        android:layout_width="190dp"
-        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/density_16"
         android:background="@drawable/background_round_corner_green"
         android:text="OK"
+        android:drawableEnd="@drawable/ic_next_white"
+        android:drawableLeft="@drawable/ic_balance"
+        android:drawableRight="@drawable/ic_next_white"
+        android:drawableStart="@drawable/ic_balance"
         android:layout_centerHorizontal="true"
         android:textColor="#FFFFFF"
         android:layout_marginBottom="@dimen/density_16"

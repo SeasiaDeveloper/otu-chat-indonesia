@@ -47,9 +47,9 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_dialogs_new_chat"
-        style="@style/FabStyleNewChat"
-        android:theme="@style/FabStyleNewChat"
-        android:backgroundTint="@color/white"
+        style="@style/FabStyle"
+        android:theme="@style/FabStyle"
+        app:backgroundTint="@color/white"
         app:borderWidth="2dp"
         android:src="@drawable/ic_tabs_chat_otu" />
 </android.support.design.widget.CoordinatorLayout>
