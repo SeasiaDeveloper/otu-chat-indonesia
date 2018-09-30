@@ -96,6 +96,8 @@ public class TransPulsa extends AppCompatActivity {
 
     Context context;
 
+
+
     //AlertDialog.Builder dialog;
     //LayoutInflater inflater;
     //View dialogView;
@@ -110,6 +112,8 @@ public class TransPulsa extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans_pulsa);
         ButterKnife.bind(this);
+
+
 
         utilsAlert = new Utils(TransPulsa.this);
 

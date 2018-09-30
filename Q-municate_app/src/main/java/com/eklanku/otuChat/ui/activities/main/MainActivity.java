@@ -788,7 +788,7 @@ public class MainActivity extends BaseLoggableActivity {
     }
 
     public void loadBanner() {
-        bannerSlider.setImageLoader(new GlideImageLoader(getApplicationContext()));
+        bannerSlider.setImageLoader(new GlideImageLoader());
         List<String> urls = new ArrayList<>();
         Call<LoadBanner> callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(MainActivity.this), strApIUse);
         callLoadBanner.enqueue(new Callback<LoadBanner>() {
