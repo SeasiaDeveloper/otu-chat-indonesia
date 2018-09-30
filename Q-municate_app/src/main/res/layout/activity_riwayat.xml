@@ -8,7 +8,102 @@
     android:background="@color/white"
     tools:context="com.eklanku.otuChat.ui.activities.payment.RiwayatActivity">
 
-    <LinearLayout android:id="@+id/linRiwayatSaldo"
+    <Button
+        android:id="@+id/linRiwayatSaldo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_saldo"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_saldo"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="20dp"
+        android:text="Riwayat Saldo"
+        android:textAllCaps="false"
+        android:background="@null"
+        android:textColor="@color/grey_600" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/grey_400" />
+
+    <Button
+        android:id="@+id/linRiwayatTransaksi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_transaksi"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_transaksi"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="20dp"
+        android:text="Riwayat Transaksi"
+        android:textAllCaps="false"
+        android:background="@null"
+        android:textColor="@color/grey_600" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/grey_400" />
+
+    <Button
+        android:id="@+id/linRiwayatDeposit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_deposit"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_deposit"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="20dp"
+        android:text="Riwayat Deposit"
+        android:textAllCaps="false"
+        android:background="@null"
+        android:textColor="@color/grey_600" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/grey_400" />
+
+    <Button
+        android:id="@+id/linRiwayatPenarikan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_penarikan"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_penarikan"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="20dp"
+        android:text="Riwayat Penarikan"
+        android:textAllCaps="false"
+        android:background="@null"
+        android:textColor="@color/grey_600" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/grey_400" />
+
+    <Button
+        android:id="@+id/linRiwayatBonus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_bonus"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_bonus"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="20dp"
+        android:text="Riwayat Bonus"
+        android:textAllCaps="false"
+        android:background="@null"
+        android:textColor="@color/grey_600" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/grey_400" />
+
+    <!--<LinearLayout android:id="@+id/linRiwayatSaldox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -28,7 +123,7 @@
 
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/linRiwayatTransaksi"
+    <LinearLayout android:id="@+id/linRiwayatTransaksix"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -37,7 +132,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/riwayat_transaksi"
-            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
             android:padding="5dp"/>
 
@@ -48,7 +144,7 @@
 
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/linRiwayatDeposit"
+    <LinearLayout android:id="@+id/linRiwayatDepositx"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -88,7 +184,7 @@
 
     </LinearLayout>
 
-    <LinearLayout android:id="@+id/linRiwayatBonus"
+    <LinearLayout android:id="@+id/linRiwayatBonusx"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
@@ -106,7 +202,7 @@
             android:layout_height="0.5dp"
             android:background="@color/grey_600" />
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 
 </LinearLayout>

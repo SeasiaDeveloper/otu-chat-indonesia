@@ -5,6 +5,7 @@
     <item
         android:icon="@drawable/ic_document_payment"
         android:title="History"
+        android:visible="false"
         app:showAsAction="ifRoom">
         <menu>
 
@@ -75,6 +76,7 @@
 
     <item
         android:id="@+id/settings"
+        android:visible="false"
         android:orderInCategory="100"
         android:title="@string/settings"
         app:showAsAction="never" />

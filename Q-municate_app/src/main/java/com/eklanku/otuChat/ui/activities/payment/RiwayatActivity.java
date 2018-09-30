@@ -4,9 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.Button;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBalanceActivity;
@@ -17,26 +17,28 @@ import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryTrxActivity;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
-import butterknife.ButterKnife;
 
 public class RiwayatActivity extends AppCompatActivity implements View.OnClickListener {
 
-    LinearLayout mLinRiwayatSaldo;
-    LinearLayout mLinRiwayatTransaksi;
-    LinearLayout mLinRiwayatDeposit;
-    LinearLayout mLinRiwayatPenarikan;
-    LinearLayout mLinRiwayatBonus;
+    Button mLinRiwayatSaldo;
+    Button mLinRiwayatTransaksi;
+    Button mLinRiwayatDeposit;
+    Button mLinRiwayatPenarikan;
+    Button mLinRiwayatBonus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_riwayat);
 
-        mLinRiwayatSaldo = (LinearLayout) findViewById(R.id.linRiwayatSaldo);
-        mLinRiwayatTransaksi = (LinearLayout) findViewById(R.id.linRiwayatTransaksi);
-        mLinRiwayatDeposit = (LinearLayout) findViewById(R.id.linRiwayatDeposit);
-        mLinRiwayatPenarikan = (LinearLayout) findViewById(R.id.linRiwayatPenrikan);
-        mLinRiwayatBonus = (LinearLayout) findViewById(R.id.linRiwayatBonus);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mLinRiwayatSaldo = findViewById(R.id.linRiwayatSaldo);
+        mLinRiwayatTransaksi =  findViewById(R.id.linRiwayatTransaksi);
+        mLinRiwayatDeposit =  findViewById(R.id.linRiwayatDeposit);
+        mLinRiwayatPenarikan =  findViewById(R.id.linRiwayatPenarikan);
+        mLinRiwayatBonus =  findViewById(R.id.linRiwayatBonus);
 
         mLinRiwayatSaldo.setOnClickListener(this);
         mLinRiwayatTransaksi.setOnClickListener(this);
@@ -64,7 +66,7 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
                     startActivity(new Intent(RiwayatActivity.this, HistoryDespositActivity.class));
                 }
                 break;
-            case R.id.linRiwayatPenrikan:
+            case R.id.linRiwayatPenarikan:
                 if (menuDialog()) {
                     startActivity(new Intent(RiwayatActivity.this, HistoryPenarikanActivity.class));
                 }
@@ -99,5 +101,16 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
         } else return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }
