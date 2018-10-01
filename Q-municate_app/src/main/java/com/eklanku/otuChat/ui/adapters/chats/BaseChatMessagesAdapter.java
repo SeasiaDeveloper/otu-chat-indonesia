@@ -12,11 +12,11 @@ import android.widget.TextView;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.quickblox.chat.model.QBChatDialog;
-import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.utils.DateUtils;
 import com.eklanku.otuChat.utils.FileUtils;
+import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_core.qb.commands.chat.QBUpdateStatusMessageCommand;
@@ -30,6 +30,8 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+;
 
 
 public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessage> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
@@ -73,6 +75,36 @@ public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessag
         headerTextView.setText(DateUtils.toTodayYesterdayFullMonthDate(combinationMessage.getCreatedDate()));
     }
 
+    @Override
+    protected void onBindViewMsgRightHolder(QBMessagesAdapter.TextMessageHolder holder, CombinationMessage chatMessage, int position) {
+        int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        super.onBindViewMsgRightHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewMsgLeftHolder(QBMessagesAdapter.TextMessageHolder holder, CombinationMessage chatMessage, int position) {
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.left_chat_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        super.onBindViewMsgRightHolder(holder, chatMessage, position);
+    }
+
+    private boolean isPreviousMsgIn(int position) {
+        return position != 0 && getItemViewType(position - 1) == TYPE_TEXT_LEFT;
+    }
+
+    private boolean isPreviousMsgOut(int position) {
+        return position != 0 && getItemViewType(position - 1) == TYPE_TEXT_RIGHT;
+    }
+
+    private static void updateBubbleChatRetainedPadding(View view, int resourceID) {
+        int bottom = view.getPaddingBottom();
+        int top = view.getPaddingTop();
+        int right = view.getPaddingRight();
+        int left = view.getPaddingLeft();
+        view.setBackgroundResource(resourceID);
+        view.setPadding(left, top, right, bottom);
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -160,7 +192,7 @@ public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessag
         notifyItemRangeInserted(chatMessages.size() - collection.size(), chatMessages.size());
     }
 
-    public void setList(List <CombinationMessage> collection, boolean notifyDataChanged){
+    public void setList(List<CombinationMessage> collection, boolean notifyDataChanged) {
         chatMessages = collection;
         if (notifyDataChanged) {
             this.notifyDataSetChanged();
