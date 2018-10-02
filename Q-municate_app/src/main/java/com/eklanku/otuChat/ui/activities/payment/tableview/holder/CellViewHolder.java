@@ -55,7 +55,10 @@ public class CellViewHolder extends AbstractViewHolder {
             cell_textview.setTextColor(ContextCompat.getColor(cell_textview.getContext(), R.color
                     .unselected_text_color));
         }
+
+        Log.d("OPPO-1", "setSelected: "+cell_textview.getText());;
     }
+
 
 
 

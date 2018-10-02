@@ -73,8 +73,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:autoLink="phone"
             android:text="CS 1 : 0811 3888 286"
+            android:autoLink="all"
             android:textColor="@color/color_payment_contact_us_gray"
             android:textSize="21sp" />
         <TextView
@@ -82,11 +82,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:autoLink="phone"
-            android:text="CS 1 : 0811 3888 586"
+
+            android:text="CS 2 : 0811 3888 586"
+            android:autoLink="all"
             android:textColor="@color/color_payment_contact_us_gray"
             android:layout_marginBottom="20dp"
             android:textSize="21sp" />
+
     </LinearLayout>
 
 </LinearLayout>
