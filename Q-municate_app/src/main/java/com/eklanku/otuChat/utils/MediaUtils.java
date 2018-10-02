@@ -56,6 +56,7 @@ public class MediaUtils {
     public static final int CAMERA_VIDEO_REQUEST_CODE = 232;
     public static final int IMAGE_REQUEST_CODE = 333;
     public static final int IMAGE_VIDEO_LOCATION_REQUEST_CODE = 444;
+    public static final int LOCATION_REQUEST_CODE = 555;
 
     private static final String TAG = MediaUtils.class.getSimpleName();
     private static final String CAMERA_FILE_NAME_PREFIX = "CAMERA_";

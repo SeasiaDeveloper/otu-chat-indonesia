@@ -286,7 +286,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     @OnClick(R.id.attach_camera)
     void attachCamera(View view) {
-        Toast.makeText(this, "Comming soon", Toast.LENGTH_LONG).show();
+        mediaPickHelper.pickAnMediaFromActivity(this, MediaUtils.CAMERA_VIDEO_REQUEST_CODE);
     }
 
     @Override
