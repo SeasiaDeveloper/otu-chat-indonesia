@@ -43,7 +43,7 @@
     </LinearLayout>
 
 
-    <include layout="@layout/view_input_message_layout"/>
+    <include layout="@layout/view_input_message_layout" />
 
 
     <fragment
@@ -51,5 +51,10 @@
         class="com.rockerhieu.emojicon.EmojiconsFragment"
         android:layout_width="match_parent"
         android:layout_height="250dp" />
+
+    <include
+        android:id="@+id/view_attach_stub"
+        layout="@layout/view_attachment_layout"
+        android:visibility="gone"/>
 
 </LinearLayout>
