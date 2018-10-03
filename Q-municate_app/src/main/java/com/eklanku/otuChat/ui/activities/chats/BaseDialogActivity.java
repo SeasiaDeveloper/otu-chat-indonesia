@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -112,6 +113,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
 import butterknife.OnTouch;
 
@@ -123,6 +125,8 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     private static final int TYPING_DELAY = 1000;
     private static final int DELAY_SCROLLING_LIST = 300;
     private static final int DELAY_SHOWING_SMILE_PANEL = 200;
+    private static final int DELAY_SHOWING_ATTACH_PANEL = 200;
+    private static final int DURATION_ANIMATE_ATTACH_PANEL = 300;
     private static final int MESSAGES_PAGE_SIZE = ConstsCore.DIALOG_MESSAGES_PER_PAGE;
     private static final int KEEP_ALIVE_TIME = 1;
     private static final int POST_DELAY_VIEW = 1000;
@@ -171,6 +175,9 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     @Bind(R.id.smile_panel_imagebutton)
     ImageButton smilePanelImageButton;
+
+    @Bind(R.id.view_attach_stub)
+    View attachViewPanel;
 
     private String replyMessage = null;
 
@@ -266,6 +273,16 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         }
     }
 
+    @OnClick(R.id.message_edittext)
+    void messageEditClicked() {
+        hideAttachPanelIfNeed();
+    }
+
+    @OnFocusChange(R.id.message_edittext)
+    void messageEditFocusChanged() {
+        hideAttachPanelIfNeed();
+    }
+
     @OnTouch(R.id.message_edittext)
     boolean touchMessageEdit() {
         hideSmileLayout();
@@ -275,13 +292,15 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     @OnClick(R.id.smile_panel_imagebutton)
     void smilePanelImageButtonClicked() {
+        hideAttachPanelIfNeed();
         visibleOrHideSmilePanel();
         scrollMessagesWithDelay();
     }
 
     @OnClick(R.id.attach_button)
-    void attachFile(View view) {
-        mediaPickHelper.pickAnMedia(this, MediaUtils.IMAGE_VIDEO_LOCATION_REQUEST_CODE);
+    void attachFile() {
+        hideSmilePanelIfNeed();
+        showOrHideAttachPanel();
     }
 
     @OnClick(R.id.attach_camera)
@@ -289,10 +308,42 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         mediaPickHelper.pickAnMediaFromActivity(this, MediaUtils.CAMERA_VIDEO_REQUEST_CODE);
     }
 
+    @OnClick(R.id.btn_attach_document)
+    void attachPanelDocument(View view) {
+        Toast.makeText(this, "Comming soon", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.btn_attach_camera)
+    void attachPanelCamera(View view) {
+        mediaPickHelper.pickAnMediaFromActivity(this, MediaUtils.CAMERA_PHOTO_REQUEST_CODE);
+    }
+
+    @OnClick(R.id.btn_attach_gallery)
+    void attachPanelGallery(View view) {
+        mediaPickHelper.pickAnMediaFromActivity(this, MediaUtils.IMAGE_REQUEST_CODE);
+    }
+
+    @OnClick(R.id.btn_attach_audio)
+    void attachPanelAudio(View view) {
+        Toast.makeText(this, "Comming soon", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.btn_attach_location)
+    void attachPanelLocation(View view) {
+        mediaPickHelper.pickAnMediaFromActivity(this, MediaUtils.LOCATION_REQUEST_CODE);
+    }
+
+    @OnClick(R.id.btn_attach_contact)
+    void attachPanelContact(View view) {
+        Toast.makeText(this, "Comming soon", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onBackPressed() {
         if (isSmilesLayoutShowing()) {
             hideSmileLayout();
+        } else if (isAttachLayoutShowing()) {
+            slideDownAttachViewPanel();
         } else {
             returnResult();
             super.onBackPressed();
@@ -795,6 +846,10 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         return emojiconsFragment.getVisibility() == View.VISIBLE;
     }
 
+    private boolean isAttachLayoutShowing() {
+        return attachViewPanel.getVisibility() == View.VISIBLE;
+    }
+
     protected boolean needScrollBottom(int countAddedMessages) {
         if (lastVisiblePosition + countAddedMessages < messagesAdapter.getItemCount() - 1){
             return false;
@@ -973,6 +1028,13 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         }
     }
 
+    private void hideSmilePanelIfNeed() {
+        if (isSmilesLayoutShowing()) {
+            hideSmileLayout();
+            KeyboardUtils.hideKeyboard(BaseDialogActivity.this);
+        }
+    }
+
     private void visibleOrHideSmilePanel() {
         if (isSmilesLayoutShowing()) {
             hideSmileLayout();
@@ -981,6 +1043,59 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             KeyboardUtils.hideKeyboard(BaseDialogActivity.this);
             showSmileLayout();
         }
+    }
+
+    private void showOrHideAttachPanel() {
+        if (isAttachLayoutShowing()) {
+            slideDownAttachViewPanel();
+        } else {
+            if (KeyboardUtils.isKeyboardShown(this)) {
+                messageEditText.clearFocus();
+                KeyboardUtils.hideKeyboard(BaseDialogActivity.this);
+                slideUpAttachViewPanelDelayed();
+            } else {
+                messageEditText.clearFocus();
+                slideUpAttachViewPanel();
+            }
+        }
+    }
+
+    protected void hideAttachPanelIfNeed() {
+        if(isAttachLayoutShowing()) {
+            attachViewPanel.setVisibility(View.GONE);
+        }
+    }
+
+    protected void slideUpAttachViewPanelDelayed() {
+        attachViewPanel.postDelayed(this::slideUpAttachViewPanel, DELAY_SHOWING_ATTACH_PANEL);
+    }
+
+    protected void slideUpAttachViewPanel() {
+        attachViewPanel.setVisibility(View.VISIBLE);
+    }
+
+    protected void slideDownAttachViewPanel() {
+        TranslateAnimation animate = new TranslateAnimation(0, 0, 0, attachViewPanel.getHeight());
+        animate.setDuration(DURATION_ANIMATE_ATTACH_PANEL);
+        animate.setFillAfter(true);
+        animate.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                attachViewPanel.setVisibility(View.GONE);
+                attachViewPanel.clearAnimation();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        attachViewPanel.startAnimation(animate);
     }
 
     protected void checkMessageSendingPossibility(boolean enable) {
