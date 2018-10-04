@@ -112,9 +112,6 @@ public class TransPln extends AppCompatActivity {
     String rbPln;
     LinearLayout layoutTransaksiKe, layoutNoKonfirmasi;
 
-    /*AlertDialog.Builder dialog;
-    LayoutInflater inflater;
-    View dialogView;*/
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
 
@@ -314,7 +311,8 @@ public class TransPln extends AppCompatActivity {
     }
 
     private void load() {
-        loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+       // loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+        loadProduct(strUserID, strAccessToken, strAplUse, strProductType);
         layoutNominal.setVisibility(View.VISIBLE);
         rbPln = "PLN TOKEN";
         btnBayar.setText("BELI");
@@ -324,6 +322,7 @@ public class TransPln extends AppCompatActivity {
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
+        Log.d("OPPO-1", "loadProvider: "+userID);
         loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
         //Toast.makeText(this, "load provider", Toast.LENGTH_SHORT).show();
@@ -346,6 +345,7 @@ public class TransPln extends AppCompatActivity {
                         final List<DataProvider> products = response.body().getProviders();
                         for (int i = 0; i < products.size(); i++) {
                             String x = products.get(i).getName_provaider();
+                            Log.d("OPPO-1", "onResponse: "+x);
                             list.add(x);
                         }
 

@@ -9,77 +9,6 @@
     android:background="@color/white"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketData">
 
-
-    <com.eklanku.otuChat.ui.views.ARTextView
-        android:id="@+id/textView35"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Jenis Paket"
-        android:textColor="@color/grey_600"
-        android:textSize="16sp" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_bottom_border_grey"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/spnTransPaketJenis"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:spinnerMode="dropdown" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_drop" />
-
-    </RelativeLayout>
-
-    <com.eklanku.otuChat.ui.views.ARTextView
-        android:id="@+id/textView36"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
-        android:text="Nama Paket"
-        android:textColor="@color/grey_600"
-        android:textSize="16sp" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_bottom_border_grey"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/spnTransPaketNama"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:spinnerMode="dropdown" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_drop" />
-
-    </RelativeLayout>
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -93,24 +22,116 @@
             android:textColor="@color/grey_600"
             android:textSize="16sp" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/txtLayoutTransPulsaNo"
+        <RelativeLayout
             android:layout_width="match_parent"
-            app:hintEnabled="false"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/txtTransPaketNo"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/txtLayoutTransPulsaNo"
+                android:layout_width="260dp"
+                app:hintEnabled="false"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txtTransPaketNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_bottom_border_grey"
+                    android:ems="10"
+                    android:textColor="@color/grey_600"
+                    android:paddingTop="@dimen/density_8"
+                    android:inputType="number"
+                    android:paddingBottom="@dimen/density_8" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/imgOpr"
+                android:layout_width="65dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight = "true"/>
+
+            <TextView
+                android:id="@+id/txOpr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgOpr"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:id="@+id/textView35"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Jenis Paket"
+            android:textColor="@color/grey_600"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:id="@+id/layOprPaket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_bottom_border_grey"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Spinner
+                android:id="@+id/spnTransPaketJenis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_bottom_border_grey"
-                android:ems="10"
-                android:textColor="@color/grey_600"
-                android:paddingTop="@dimen/density_8"
-                android:inputType="number"
-                android:paddingBottom="@dimen/density_8" />
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:spinnerMode="dropdown" />
 
-        </android.support.design.widget.TextInputLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_drop" />
+        </RelativeLayout>
+
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:id="@+id/textView36"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/density_16"
+            android:text="Nama Paket"
+            android:textColor="@color/grey_600"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_bottom_border_grey"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spnTransPaketNama"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:spinnerMode="dropdown" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_drop" />
+
+        </RelativeLayout>
 
         <com.eklanku.otuChat.ui.views.ARTextView
             android:id="@+id/tv_trans_ke"

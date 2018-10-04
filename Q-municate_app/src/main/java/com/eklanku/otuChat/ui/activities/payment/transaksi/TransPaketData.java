@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +51,7 @@ import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerGameAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPaymentAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
+import com.eklanku.otuChat.ui.views.ARTextView;
 import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
@@ -73,10 +75,12 @@ import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -90,7 +94,7 @@ public class TransPaketData extends AppCompatActivity {
     private static String load_type = "paket_nominal";
 
     SharedPreferences prefs;
-    Spinner spnJenis,spnNama;
+    Spinner spnJenis, spnNama;
     EditText txtNo, txtTransaksi_ke;
     TextInputLayout layoutNo;
     Button btnBayar;
@@ -122,6 +126,20 @@ public class TransPaketData extends AppCompatActivity {
     Utils utilsAlert;
     String titleAlert = "Paket Data";
 
+    String[] prefix_indosat = {"0814", "0815", "0816", "0855", "0856", "0857", "0858"};
+    String[] prefix_telkomsel = {"0811", "0812", "0813", "0821", "0822", "0823", "0851", "0852", "0853"};
+    String[] prefix_tri = {"0896", "0897", "0898", "0899", "0895"};
+    String[] prefix_xl = {"0817", "0818", "0819", "0877", "0879", "0878", "0859", "0831", "0838"};
+    String[] prefix_bolt = {"0999", "0998"};
+    String[] prefix_smartfren = {"0881", "0882", "0883", "0884", "0885", "0885", "0887", "0888", "0889"};
+    String[] prefix_axis = {"0838", "0831", "0832", "0833"};
+
+    ImageView imgOpr;
+    TextView txOpr;
+
+    RelativeLayout layOprPaket;
+    ARTextView laytxOprPaket;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,13 +150,18 @@ public class TransPaketData extends AppCompatActivity {
         utilsAlert = new Utils(TransPaketData.this);
 
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
-        spnJenis  = (Spinner) findViewById(R.id.spnTransPaketJenis);
+        spnJenis = (Spinner) findViewById(R.id.spnTransPaketJenis);
         spnNama = (Spinner) findViewById(R.id.spnTransPaketNama);
         txtNo = (EditText) findViewById(R.id.txtTransPaketNo);
         txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransPaketBayar);
         btnBayar.setText("BELI");
+
+        imgOpr = findViewById(R.id.imgOpr);
+        txOpr = findViewById(R.id.txOpr);
+        layOprPaket = findViewById(R.id.layOprPaket);
+        laytxOprPaket = findViewById(R.id.textView35);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -150,65 +173,14 @@ public class TransPaketData extends AppCompatActivity {
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
-       /* txtNo.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                if (mJsonArray == null) {
-//                    load_datafilter();
-//                }
-//                btnBayar.setEnabled(false);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                cekPrefix(s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });*/
-
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
-//        load_datafilter();
-
-        /*
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, jenis_paket);
-        spnJenis.setAdapter(adapter);
-*/
-
-       /* spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(), jenis_paket);
-        spnJenis.setAdapter(spinnerPpobAdapter);
-        spnJenis.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                load_id = kode_paket[position];
-                load_data2();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        btnBayar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!validateIdpel()) {
-                    return;
-                }
-                cek_transaksi();
-            }
-        });*/
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
 
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
-        loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+        //loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
 
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -314,6 +286,8 @@ public class TransPaketData extends AppCompatActivity {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+            cekPrefix(s);
+
         }
 
         @Override
@@ -372,6 +346,7 @@ public class TransPaketData extends AppCompatActivity {
                         final List<DataProvider> products = response.body().getProviders();
                         for (int i = 0; i < products.size(); i++) {
                             String x = products.get(i).getName_provaider();
+                            Log.d("OPPO-1", "onResponse: " + x);
                             list.add(x);
                         }
 
@@ -466,7 +441,7 @@ public class TransPaketData extends AppCompatActivity {
                     }
                 } else {
                     utilsAlert.globalDialog(TransPaketData.this, titleAlert, getResources().getString(R.string.error_api));
-                   // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -708,7 +683,7 @@ public class TransPaketData extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransPaketData.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtTransaksi_ke.getText().toString(),"" ,"", code);
+        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtTransaksi_ke.getText().toString(), "", "", code);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -750,7 +725,7 @@ public class TransPaketData extends AppCompatActivity {
                         finish();
                     } else {
                         utilsAlert.globalDialog(TransPaketData.this, titleAlert, error);
-                       // Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransPaketData.this, titleAlert, getResources().getString(R.string.error_api));
@@ -767,6 +742,7 @@ public class TransPaketData extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -789,6 +765,87 @@ public class TransPaketData extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    String oprPaket = "";
+    String tempPaket = "";
+    boolean statPaket = false;
+
+    public void cekPrefix(CharSequence s) {
+        try {
+            if (s.length() >= 4) {
+                String nomorHp = s.toString().substring(0, 4);
+                if (Arrays.asList(prefix_xl).contains(nomorHp)) {
+                    oprPaket = "XL DATA";
+                    imgOpr.setImageResource(R.mipmap.xl);
+                    txOpr.setText("XL DATA");
+                    statPaket = true;
+                } else if (Arrays.asList(prefix_axis).contains(nomorHp)) {
+                    oprPaket = "AXIS DATA";
+                    imgOpr.setImageResource(R.mipmap.axis);
+                    txOpr.setText("AXIS DATA");
+                    statPaket = true;
+                } else if (Arrays.asList(prefix_smartfren).contains(nomorHp)) {
+                    oprPaket = "SMARTFREN DATA";
+                    imgOpr.setImageResource(R.mipmap.smart);
+                    txOpr.setText("SMARTFREN DATA");
+                    statPaket = true;
+                } else if (Arrays.asList(prefix_tri).contains(nomorHp)) {
+                    oprPaket = "TRI DATA";
+                    imgOpr.setImageResource(R.mipmap.three);
+                    txOpr.setText("TRI DATA");
+                    statPaket = true;
+                } else if (Arrays.asList(prefix_indosat).contains(nomorHp)) {
+                    oprPaket = "ISAT DATA";
+                    imgOpr.setImageResource(R.mipmap.indosat);
+                    txOpr.setText("ISAT DATA");
+                    statPaket = true;
+                } else if (Arrays.asList(prefix_bolt).contains(nomorHp)) {
+                    oprPaket = "BOLT";
+                    imgOpr.setImageResource(R.mipmap.bolt);
+                    txOpr.setText("BOLT");
+                    statPaket = true;
+                } else if (Arrays.asList(prefix_telkomsel).contains(nomorHp)) {
+                    oprPaket = "TSEL DATA";
+                    imgOpr.setImageResource(R.mipmap.telkomsel);
+                    txOpr.setText("TSEL DATA");
+                    statPaket = true;
+                } else {
+                    statPaket = false;
+                    tempPaket = "";
+                    layOprPaket.setVisibility(View.VISIBLE);
+                    laytxOprPaket.setVisibility(View.VISIBLE);
+                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+                    btnBayar.setEnabled(true);
+                }
+
+                if (!oprPaket.equalsIgnoreCase(tempPaket) && statPaket) {
+                    loadProduct(strUserID, strAccessToken, strAplUse, oprPaket);
+                    statPaket = false;
+                    tempPaket = oprPaket;
+                    layOprPaket.setVisibility(View.GONE);
+                    laytxOprPaket.setVisibility(View.GONE);
+                    btnBayar.setEnabled(true);
+                }
+                Log.d("OPPO-1", "cekPrefix: " + oprPaket);
+            } else if (s.length() < 4) {
+                spnNama.setAdapter(adapter);
+                tempPaket = "";
+                btnBayar.setEnabled(false);
+                statPaket = false;
+                imgOpr.setImageResource(0);
+                txOpr.setText("");
+                layOprPaket.setVisibility(View.GONE);
+                laytxOprPaket.setVisibility(View.GONE);
+            } else if (s.length() >= 8 && s.length() <= 13) {
+                btnBayar.setEnabled(true);
+                layOprPaket.setVisibility(View.GONE);
+                laytxOprPaket.setVisibility(View.GONE);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

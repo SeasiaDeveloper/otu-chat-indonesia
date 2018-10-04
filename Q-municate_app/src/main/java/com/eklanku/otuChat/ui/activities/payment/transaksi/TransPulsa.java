@@ -28,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerGameAdapter;
+import com.eklanku.otuChat.ui.views.ARTextView;
 import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
@@ -113,6 +115,8 @@ public class TransPulsa extends AppCompatActivity {
 
     ImageView imgOpr;
     TextView txOpr;
+    RelativeLayout layOpr;
+    ARTextView txLayOpr;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -133,6 +137,8 @@ public class TransPulsa extends AppCompatActivity {
 
         imgOpr = findViewById(R.id.imgOpr);
         txOpr = findViewById(R.id.txOpr);
+        layOpr = findViewById(R.id.layNominal);
+        txLayOpr = findViewById(R.id.txLayOpr);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -570,6 +576,13 @@ public class TransPulsa extends AppCompatActivity {
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.axis);
                     statOprPulsa = true;
+                } else {
+                    layOpr.setVisibility(View.VISIBLE);
+                    txLayOpr.setVisibility(View.VISIBLE);
+                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+                    statOprPulsa = false;
+                    tempOprPulsa = "";
+                    btnBayar.setEnabled(true);
                 }
 
                 Log.d("OPPO-1", "opr baru: " + oprPulsa + " tempOprPulsa: " + tempOprPulsa);
@@ -581,15 +594,22 @@ public class TransPulsa extends AppCompatActivity {
                     tempOprPulsa = oprPulsa;
                     statOprPulsa = false;
                     btnBayar.setEnabled(true);
+                    layOpr.setVisibility(View.GONE);
+                    txLayOpr.setVisibility(View.GONE);
                 }
+
             } else if (s.length() < 4) {
                 spnNominal.setAdapter(adapter);
                 statOprPulsa = false;
                 tempOprPulsa = "";
                 txOpr.setText("");
                 imgOpr.setImageResource(0);
+                layOpr.setVisibility(View.GONE);
+                txLayOpr.setVisibility(View.GONE);
                 btnBayar.setEnabled(false);
             } else if (s.length() >= 8 && s.length() <= 13) {
+                layOpr.setVisibility(View.GONE);
+                txLayOpr.setVisibility(View.GONE);
                 btnBayar.setEnabled(true);
             }
 
