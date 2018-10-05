@@ -100,7 +100,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/density_16"
-                    android:text="Masukkan No Pelanggan"
+                    android:text="Nomor Pelanggan"
                     android:textColor="@color/grey_600"
                     android:textSize="16sp" />
 
@@ -128,9 +128,9 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <ImageView
-                        android:layout_width="40dp"
+                        android:layout_width="50dp"
                         android:layout_height="50dp"
-                        app:srcCompat="@drawable/ic_pay_pln"
+                        app:srcCompat="@drawable/ic_otu_pln"
                         android:layout_alignParentRight="true"/>
 
                 </RelativeLayout>

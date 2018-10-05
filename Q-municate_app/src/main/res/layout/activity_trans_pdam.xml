@@ -4,10 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/white"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransPdam">
+
+    <com.eklanku.otuChat.ui.views.ARTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/density_16"
+        android:text="Nomor Pelanggan"
+        android:textColor="@color/grey_600"
+        android:textSize="16sp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/txtLayoutTransPulsaNo"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:hintEnabled="false">
+
+            <EditText
+                android:id="@+id/txtTransPdamNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:ems="10"
+                android:inputType="text"
+                android:paddingBottom="@dimen/density_8"
+                android:paddingTop="@dimen/density_8" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_otu_pdam"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
 
     <com.eklanku.otuChat.ui.views.ARTextView
         android:id="@+id/textView28"
@@ -39,36 +77,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:tint="@color/default_text_icon_otu_color"
-            android:src="@drawable/ic_drop" />
+            android:src="@drawable/ic_drop"
+            android:tint="@color/default_text_icon_otu_color" />
 
     </RelativeLayout>
-
-    <com.eklanku.otuChat.ui.views.ARTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
-        android:text="Masukkan No Pelanggan"
-        android:textColor="@color/grey_600"
-        android:textSize="16sp" />
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/txtLayoutTransPulsaNo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hintEnabled="false">
-
-        <EditText
-            android:id="@+id/txtTransPdamNo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_bottom_border_grey"
-            android:ems="10"
-            android:inputType="text"
-            android:paddingBottom="@dimen/density_8"
-            android:paddingTop="@dimen/density_8" />
-
-    </android.support.design.widget.TextInputLayout>
 
     <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
@@ -91,10 +103,10 @@
             android:drawableLeft="@drawable/ic_phone"
             android:drawableStart="@drawable/ic_phone"
             android:ems="10"
+            android:inputType="number"
             android:paddingBottom="@dimen/density_8"
-            android:textColor="@color/grey_600"
             android:paddingTop="@dimen/density_8"
-            android:inputType="number"/>
+            android:textColor="@color/grey_600" />
 
     </android.support.design.widget.TextInputLayout>
 

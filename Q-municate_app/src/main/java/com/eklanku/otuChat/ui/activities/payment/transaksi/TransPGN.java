@@ -201,6 +201,8 @@ public class TransPGN extends AppCompatActivity {
                         nama_operator = new String[result.size()];
                         selected_operator = result.get(0).getCode();
 
+                        Log.d("OPPO-1", "onResponse: "+selected_operator);
+
                         for (int i = 0; i < result.size(); i++) {
                             nama_operator[i] = result.get(i).getName();
                         }
@@ -211,6 +213,7 @@ public class TransPGN extends AppCompatActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 selected_operator = result.get(position).getCode();
+                                Log.d("OPPO-1", "onItemSelected: "+selected_operator);
                             }
 
                             @Override

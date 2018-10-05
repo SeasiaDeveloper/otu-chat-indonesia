@@ -4,9 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     android:padding="16dp">
+
+    <com.eklanku.otuChat.ui.views.ARTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtLayoutTransPulsaNo"
+        android:layout_marginTop="@dimen/density_16"
+        android:text="Nomor E-TOOL"
+        android:textColor="@color/grey_600"
+        android:textSize="16sp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/txtLayoutTransPulsaNo"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:hintEnabled="false">
+
+            <EditText
+                android:id="@+id/txtTransEtoolNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:ems="10"
+                android:inputType="number"
+                android:paddingBottom="@dimen/density_8"
+                android:paddingTop="@dimen/density_8"
+                android:textColor="@color/grey_600" />
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_otu_etool"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
 
 
     <com.eklanku.otuChat.ui.views.ARTextView
@@ -39,8 +78,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:tint="@color/default_text_icon_otu_color"
-            android:src="@drawable/ic_drop" />
+            android:src="@drawable/ic_drop"
+            android:tint="@color/default_text_icon_otu_color" />
 
     </RelativeLayout>
 
@@ -75,8 +114,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:tint="@color/default_text_icon_otu_color"
-            android:src="@drawable/ic_drop" />
+            android:src="@drawable/ic_drop"
+            android:tint="@color/default_text_icon_otu_color" />
 
     </RelativeLayout>
 
@@ -86,32 +125,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.eklanku.otuChat.ui.views.ARTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/txtLayoutTransPulsaNo"
-            android:layout_marginTop="@dimen/density_16"
-            android:text="Masukkan No Kartu"
-            android:textColor="@color/grey_600"
-            android:textSize="16sp" />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/txtLayoutTransPulsaNo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:hintEnabled="false">
-
-            <EditText
-                android:id="@+id/txtTransEtoolNo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/custom_bottom_border_grey"
-                android:ems="10"
-                android:textColor="@color/grey_600"
-                android:inputType="number"
-                android:paddingBottom="@dimen/density_8"
-                android:paddingTop="@dimen/density_8" />
-        </android.support.design.widget.TextInputLayout>
 
         <com.eklanku.otuChat.ui.views.ARTextView
             android:id="@+id/tv_trans_ke"
@@ -130,9 +143,9 @@
             android:layout_below="@+id/tv_trans_ke"
             android:background="@drawable/custom_bottom_border_grey"
             android:hint="Masukkan Transaksi ke-"
-            android:textColor="@color/grey_600"
             android:inputType="number"
-            android:padding="@dimen/density_8" />
+            android:padding="@dimen/density_8"
+            android:textColor="@color/grey_600" />
 
     </LinearLayout>
 
