@@ -169,12 +169,12 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         dialogsListView.setAdapter(dialogsListAdapter);
 
         View header = getLayoutInflater().inflate(R.layout.header_banner, null);
-        banner = header.findViewById(R.id.bannerLayout);
+        banner = view.findViewById(R.id.bannerLayout);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
         loadBanner();
 
-        dialogsListView.addHeaderView(header);
+        //dialogsListView.addHeaderView(header);
 
         return view;
     }

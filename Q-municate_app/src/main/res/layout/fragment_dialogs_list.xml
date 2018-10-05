@@ -15,6 +15,13 @@
 
         <include layout="@layout/shadow_view" />
 
+        <com.yyydjk.library.BannerLayout
+            android:id="@+id/bannerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            app:autoPlayDuration="4000"
+            app:scrollDuration="1000" />
+
         <ListView
             android:id="@+id/chats_listview"
             android:layout_width="match_parent"

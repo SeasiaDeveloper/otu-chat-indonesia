@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="10dp"
-            android:background="@drawable/custom_quote"
+            android:background="@drawable/custom_quote_x"
             android:orientation="vertical">
 
             <TextView android:id="@+id/tvName"
