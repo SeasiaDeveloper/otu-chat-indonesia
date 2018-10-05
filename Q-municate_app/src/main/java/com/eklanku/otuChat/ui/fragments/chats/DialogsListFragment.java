@@ -29,10 +29,16 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
+import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
+import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
+import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.base.BaseLoaderFragment;
 import com.eklanku.otuChat.ui.fragments.search.ContactsFragment;
+import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
+import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBDialogType;
 import com.quickblox.core.helper.CollectionsUtil;
@@ -91,6 +97,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
+import com.yyydjk.library.BannerLayout;
 
 public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>> {
 
@@ -131,6 +138,11 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     private LoadChatsFailedAction loadChatsFailedAction;
     private UpdateDialogSuccessAction updateDialogSuccessAction;
 
+    private static String[] banner_promo;
+    BannerLayout banner;
+    ApiInterfacePayment mApiInterfacePayment;
+    String strApIUse = "OTU";
+
     enum State {started, stopped, finished}
 
     public static DialogsListFragment newInstance() {
@@ -155,6 +167,15 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         registerForContextMenu(dialogsListView);
         setEmptyMessage();
         dialogsListView.setAdapter(dialogsListAdapter);
+
+        View header = getLayoutInflater().inflate(R.layout.header_banner, null);
+        banner = header.findViewById(R.id.bannerLayout);
+        mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
+
+        loadBanner();
+
+        dialogsListView.addHeaderView(header);
+
         return view;
     }
 
@@ -175,14 +196,14 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         String textBeforeImage = getString(R.string.dialog_no_chats_before_image_string);
         String textAfterImage = getString(R.string.dialog_no_chats_after_image_string);
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(textBeforeImage+" ").append(" ");
+        builder.append(textBeforeImage + " ").append(" ");
         builder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.default_text_icon_otu_color)), 14, 22, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         Drawable chat = getResources().getDrawable(R.drawable.ic_small_chat);
-        chat.setBounds(0, 0, 40,30);
+        chat.setBounds(0, 0, 40, 30);
         builder.setSpan(new ImageSpan(chat, ImageSpan.ALIGN_BASELINE),
                 builder.length() - 1, builder.length(), 0);
-        builder.append(" "+textAfterImage);
+        builder.append(" " + textAfterImage);
 
         emptyListTextView.setText(builder);
     }
@@ -798,6 +819,59 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     private void launchContactsActivity() {
         Intent intent = new Intent(getActivity(), ContactsActivity.class);
         startActivity(intent);
+    }
+
+    public void loadBanner() {
+
+        banner.setImageLoader(new GlideImageLoader());
+        List<String> urls = new ArrayList<>();
+        Call<LoadBanner> callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(getActivity()), strApIUse);
+        callLoadBanner.enqueue(new Callback<LoadBanner>() {
+            @Override
+            public void onResponse(Call<LoadBanner> call, Response<LoadBanner> response) {
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    if (status.equals("SUCCESS")) {
+                        final List<DataBanner> result = response.body().getRespMessage();
+                        banner_promo = new String[result.size()];
+                        if (result.size() > 0) {
+                            try {
+                                for (int i = 0; i < result.size(); i++) {
+                                    banner_promo[i] = result.get(i).getBaner_promo();
+                                    urls.add(banner_promo[i]);
+                                }
+                            } catch (Exception e) {
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+                            }
+                        } else {
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+                        }
+                    } else {
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+                    }
+                    banner.setViewUrls(urls);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoadBanner> call, Throwable t) {
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+
+                banner.setViewUrls(urls);
+            }
+        });
     }
 
 }

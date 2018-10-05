@@ -43,7 +43,9 @@ import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBonusActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryDespositActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryPenarikanActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryTrxActivity;
+import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
+import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
@@ -72,7 +74,9 @@ import com.eklanku.otuChat.ui.activities.payment.transfer.TransDeposit;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.settings.SettingTabPaymentActivity;
+import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
 import com.eklanku.otuChat.utils.PreferenceUtil;
+import com.yyydjk.library.BannerLayout;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -86,7 +90,8 @@ public class PaymentFragment extends Fragment {
     Context context;
     TextView //lblUsername,
             lblSaldo;
-    ImageButton btnDeposit, btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
+    Button btnDeposit;
+    ImageButton btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
             btnTv, btnPaket, btnSMS, btnEtool, btnWi;
     ImageButton btnRiwayat, btnTransfer, btnPengaturan;
@@ -99,6 +104,8 @@ public class PaymentFragment extends Fragment {
     Dialog loadingDialog;
     private String strUserID, strAccessToken, strApIUse = "OTU";
     HashMap<String, String> user;
+    private BannerLayout banner;
+    private static String[] banner_promo;
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -140,6 +147,11 @@ public class PaymentFragment extends Fragment {
                 startActivity(new Intent(getActivity(), AlertSyarat.class));
             }
         });
+
+        banner = mView.findViewById(R.id.bannerLayout);
+        apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
+
+        loadBanner();
 
         return mView;
     }
@@ -442,7 +454,7 @@ public class PaymentFragment extends Fragment {
 
                 Activity activity = getActivity();
                 if (activity != null && isAdded())
-                logOutPayment();
+                    logOutPayment();
                 /*loadingDialog = ProgressDialog.show(getActivity(), "Harap Tunggu", "Melakukan proses logout");
                 loadingDialog.setCanceledOnTouchOutside(true);
                 preferenceManager.createUserPayment("", "", false);
@@ -580,6 +592,57 @@ public class PaymentFragment extends Fragment {
             }
         });
     }
+    public void loadBanner() {
 
+        banner.setImageLoader(new GlideImageLoader());
+        List<String> urls = new ArrayList<>();
+        Call<LoadBanner> callLoadBanner = apiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(getActivity()), strApIUse);
+        callLoadBanner.enqueue(new Callback<LoadBanner>() {
+            @Override
+            public void onResponse(Call<LoadBanner> call, Response<LoadBanner> response) {
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    if (status.equals("SUCCESS")) {
+                        final List<DataBanner> result = response.body().getRespMessage();
+                        banner_promo = new String[result.size()];
+                        if (result.size() > 0) {
+                            try {
+                                for (int i = 0; i < result.size(); i++) {
+                                    banner_promo[i] = result.get(i).getBaner_promo();
+                                    urls.add(banner_promo[i]);
+                                }
+                            } catch (Exception e) {
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+                            }
+                        } else {
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+                        }
+                    } else {
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+                    }
+                    banner.setViewUrls(urls);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoadBanner> call, Throwable t) {
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
+                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+
+                banner.setViewUrls(urls);
+            }
+        });
+    }
 
 }

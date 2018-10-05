@@ -41,6 +41,7 @@
 
     <com.yyydjk.library.BannerLayout
         android:id="@+id/bannerLayout"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="125dp"
         app:autoPlayDuration="4000"

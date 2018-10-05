@@ -69,6 +69,7 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_dialogs_new_call"
         style="@style/FabStyle"
+        android:visibility="gone"
         android:src="@drawable/ic_call" />
 
 </FrameLayout>

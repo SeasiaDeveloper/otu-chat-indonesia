@@ -1,14 +1,8 @@
 package com.eklanku.otuChat.ui.activities.main;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
-
-import com.eklanku.otuChat.ui.fragments.CallFragment;
-import com.eklanku.otuChat.ui.fragments.PaymentFragment;
-import com.eklanku.otuChat.ui.fragments.chats.DialogsListFragment;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
 import com.eklanku.otuChat.ui.fragments.chats.DialogsListFragment;

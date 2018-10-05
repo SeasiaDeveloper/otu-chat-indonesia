@@ -296,8 +296,6 @@ public class TransDeposit extends AppCompatActivity {
         });
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection

@@ -230,9 +230,9 @@ public class MainActivity extends BaseLoggableActivity {
 
         Activity activity = this;
 
-        if (!activity.isFinishing()) {
+       /* if (!activity.isFinishing()) {
             loadBanner();
-        }
+        }*/
 
 
         addDialogsAction();
