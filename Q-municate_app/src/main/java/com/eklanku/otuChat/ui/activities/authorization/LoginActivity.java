@@ -7,7 +7,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.quickblox.auth.session.QBSessionManager;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.forgotpassword.ForgotPasswordActivity;
 import com.eklanku.otuChat.utils.KeyboardUtils;
@@ -102,7 +102,7 @@ public class LoginActivity extends BaseAuthActivity {
                 userEmail, userPassword)) {
 
             showProgress();
-            boolean ownerUser =   QBSessionManager.getInstance().getSessionParameters() != null && userEmail.equals(QBSessionManager.getInstance().getSessionParameters().getUserEmail());
+            boolean ownerUser =   ConnectycubeSessionManager.getInstance().getSessionParameters() != null && userEmail.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getUserEmail());
             if (!ownerUser) {
                 DataManager.getInstance().clearAllTables();
             }

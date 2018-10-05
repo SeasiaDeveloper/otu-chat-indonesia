@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.quickblox.auth.session.QBSessionManager;
-import com.quickblox.auth.session.QBSettings;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
+import com.connectycube.auth.session.ConnectycubeSettings;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.agreements.UserAgreementActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;

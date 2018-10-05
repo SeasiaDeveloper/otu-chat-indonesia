@@ -5,15 +5,15 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.eklanku.otuChat.App;
-import com.quickblox.auth.model.QBProvider;
-import com.quickblox.auth.session.QBSessionManager;
-import com.quickblox.content.QBContent;
-import com.quickblox.content.model.QBFile;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.server.Performer;
-import com.quickblox.extensions.RxJavaPerformProcessor;
-import com.quickblox.messages.services.QBPushManager;
-import com.quickblox.messages.services.SubscribeService;
+import com.connectycube.auth.model.ConnectycubeProvider;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
+import com.connectycube.storage.ConnectycubeStorage;
+import com.connectycube.storage.model.ConnectycubeFile;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.server.Performer;
+import com.connectycube.extensions.RxJavaPerformProcessor;
+import com.connectycube.pushnotifications.services.ConnectycubePushManager;
+import com.connectycube.pushnotifications.services.SubscribeService;
 import com.eklanku.otuChat.App;
 import com.quickblox.q_municate_auth_service.QMAuthService;
 import com.quickblox.q_municate_core.models.AppSession;
@@ -26,7 +26,7 @@ import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.io.File;
 
@@ -67,35 +67,35 @@ public class ServiceManager {
 
     }
 
-    public Observable<QBUser> login(QBUser user) {
+    public Observable<ConnectycubeUser> login(ConnectycubeUser user) {
         final String userPassword = user.getPassword();
 
-        Observable<QBUser> result = authService.login(user)
+        Observable<ConnectycubeUser> result = authService.login(user)
                 .subscribeOn(Schedulers.io())
-                .map(new Func1<QBUser, QBUser>() {
+                .map(new Func1<ConnectycubeUser, ConnectycubeUser>() {
                     @Override
-                    public QBUser call(QBUser qbUser) {
+                    public ConnectycubeUser call(ConnectycubeUser connectycubeUser) {
                         CoreSharedHelper.getInstance().saveUsersImportInitialized(true);
 
                         String password = userPassword;
 
-                        if (!hasUserCustomData(qbUser)) {
-                            qbUser.setOldPassword(password);
+                        if (!hasUserCustomData(connectycubeUser)) {
+                            connectycubeUser.setOldPassword(password);
                             try {
-                                updateUserSync(qbUser);
-                            } catch (QBResponseException e) {
+                                updateUserSync(connectycubeUser);
+                            } catch (ResponseException e) {
                                 Log.d(TAG, "updateUser " + e.getMessage());
                                 throw Exceptions.propagate(e);
                             }
                         }
 
-                        qbUser.setPassword(password);
+                        connectycubeUser.setPassword(password);
 
-                        saveOwnerUser(qbUser);
+                        saveOwnerUser(connectycubeUser);
 
-                        AppSession.startSession(qbUser);
+                        AppSession.startSession(connectycubeUser);
 
-                        return qbUser;
+                        return connectycubeUser;
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
@@ -103,37 +103,37 @@ public class ServiceManager {
         return result;
     }
 
-    public Observable<QBUser> login(final String socialProvider, final String accessToken, final String accessTokenSecret) {
-        Observable<QBUser> result = authService.login(socialProvider, accessToken, accessTokenSecret).subscribeOn(Schedulers.io())
-                .map(new Func1<QBUser, QBUser>() {
+    public Observable<ConnectycubeUser> login(final String socialProvider, final String accessToken, final String accessTokenSecret) {
+        Observable<ConnectycubeUser> result = authService.login(socialProvider, accessToken, accessTokenSecret).subscribeOn(Schedulers.io())
+                .map(new Func1<ConnectycubeUser, ConnectycubeUser>() {
                     @Override
-                    public QBUser call(QBUser qbUser) {
-                        Log.d(TAG, "login observer call " + qbUser);
-                        UserCustomData userCustomData = Utils.customDataToObject(qbUser.getCustomData());
-                        if (QBProvider.FACEBOOK.equals(socialProvider) && TextUtils.isEmpty(userCustomData.getAvatarUrl())) {
+                    public ConnectycubeUser call(ConnectycubeUser connectycubeUser) {
+                        Log.d(TAG, "login observer call " + connectycubeUser);
+                        UserCustomData userCustomData = Utils.customDataToObject(connectycubeUser.getCustomData());
+                        if (ConnectycubeProvider.FACEBOOK.equals(socialProvider) && TextUtils.isEmpty(userCustomData.getAvatarUrl())) {
                             //Actions for first login via Facebook
                             CoreSharedHelper.getInstance().saveUsersImportInitialized(false);
-                            getFBUserWithAvatar(qbUser);
-                        } else if (QBProvider.FIREBASE_PHONE.equals(socialProvider) && TextUtils.isEmpty(qbUser.getFullName())) {
+                            getFBUserWithAvatar(connectycubeUser);
+                        } else if (ConnectycubeProvider.FIREBASE_PHONE.equals(socialProvider) && TextUtils.isEmpty(connectycubeUser.getFullName())) {
                             //Actions for first login via Firebase phone
                             CoreSharedHelper.getInstance().saveUsersImportInitialized(false);
-                            getUserWithFullNameAsPhone(qbUser);
+                            getUserWithFullNameAsPhone(connectycubeUser);
                         }
                         try {
-                            updateUserSync(qbUser);
-                        } catch (QBResponseException e) {
+                            updateUserSync(connectycubeUser);
+                        } catch (ResponseException e) {
                             Log.d(TAG, "updateUser " + e.getMessage());
                             throw Exceptions.propagate(e);
                         }
 
-                        //qbUser.setPassword(QBSessionManager.getInstance().getToken());
-                        qbUser.setPassword(qbUser.getLogin());
+                        //connectycubeUser.setPassword(ConnectycubeSessionManager.getInstance().getToken());
+                        connectycubeUser.setPassword(connectycubeUser.getLogin());
 
-                        saveOwnerUser(qbUser);
+                        saveOwnerUser(connectycubeUser);
 
-                        AppSession.startSession(qbUser);
+                        AppSession.startSession(connectycubeUser);
 
-                        return qbUser;
+                        return connectycubeUser;
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
@@ -142,8 +142,8 @@ public class ServiceManager {
     }
 
     public void logout(final Subscriber<Void> subscriber) {
-        if (QBPushManager.getInstance().isSubscribedToPushes()) {
-            QBPushManager.getInstance().addListener(new QBPushManager.QBSubscribeListener() {
+        if (ConnectycubePushManager.getInstance().isSubscribedToPushes()) {
+            ConnectycubePushManager.getInstance().addListener(new ConnectycubePushManager.SubscribeListener() {
                 @Override
                 public void onSubscriptionCreated() {
                 }
@@ -184,15 +184,15 @@ public class ServiceManager {
     }
 
 
-    public Observable<QMUser> changePasswordUser(QBUser inputUser) {
+    public Observable<QMUser> changePasswordUser(ConnectycubeUser inputUser) {
         final String password = inputUser.getPassword();
         QMUser qmUser = QMUser.convert(inputUser);
         Observable<QMUser> result = QMUserService.getInstance().updateUser(qmUser)
                 .subscribeOn(Schedulers.io())
-                .map(new Func1<QBUser, QMUser>() {
+                .map(new Func1<ConnectycubeUser, QMUser>() {
                     @Override
-                    public QMUser call(QBUser qbUser) {
-                        QMUser user = QMUser.convert(qbUser);
+                    public QMUser call(ConnectycubeUser connectycubeUser) {
+                        QMUser user = QMUser.convert(connectycubeUser);
                         user.setPassword(password);
                         return user;
                     }
@@ -203,7 +203,7 @@ public class ServiceManager {
     }
 
 
-    public Observable<QMUser> updateUser(QBUser inputUser) {
+    public Observable<QMUser> updateUser(ConnectycubeUser inputUser) {
         Observable<QMUser> result = null;
         final String password = inputUser.getPassword();
 
@@ -221,7 +221,7 @@ public class ServiceManager {
                         if (LoginType.EMAIL.equals(AppSession.getSession().getLoginType())) {
                             qmUser.setPassword(password);
                         } else {
-                            qmUser.setPassword(QBSessionManager.getInstance().getToken());
+                            qmUser.setPassword(ConnectycubeSessionManager.getInstance().getToken());
                         }
                         return qmUser;
                     }
@@ -231,7 +231,7 @@ public class ServiceManager {
         return result;
     }
 
-    public Observable<QMUser> updateUserPassword(QBUser inputUser) {
+    public Observable<QMUser> updateUserPassword(ConnectycubeUser inputUser) {
         Observable<QMUser> result = null;
         UserCustomData userCustomDataNew = getUserCustomData(inputUser);
         inputUser.setCustomData(Utils.customDataToString(userCustomDataNew));
@@ -250,28 +250,28 @@ public class ServiceManager {
         return result;
     }
 
-    public Observable<QMUser> updateUser(final QBUser user, final File file) {
+    public Observable<QMUser> updateUser(final ConnectycubeUser user, final File file) {
 
         Observable<QMUser> result = null;
 
-        Performer<QBFile> performer = QBContent.uploadFileTask(file, true, (String) null);
-        final Observable<QBFile> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+        Performer<ConnectycubeFile> performer = ConnectycubeStorage.uploadFileTask(file, true, (String) null);
+        final Observable<ConnectycubeFile> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
 
         result = observable
                 .subscribeOn(Schedulers.io())
 
-                .flatMap(new Func1<QBFile, Observable<QMUser>>() {
+                .flatMap(new Func1<ConnectycubeFile, Observable<QMUser>>() {
                     @Override
-                    public Observable<QMUser> call(QBFile qbFile) {
-                        QBUser newUser = new QBUser();
+                    public Observable<QMUser> call(ConnectycubeFile ConnectycubeFile) {
+                        ConnectycubeUser newUser = new ConnectycubeUser();
 
                         newUser.setId(user.getId());
                         newUser.setPassword(user.getPassword());
-                        newUser.setFileId(qbFile.getId());
+                        newUser.setFileId(ConnectycubeFile.getId());
                         newUser.setFullName(user.getFullName());
 
                         UserCustomData userCustomData = getUserCustomData(user);
-                        userCustomData.setAvatarUrl(qbFile.getPublicUrl());
+                        userCustomData.setAvatarUrl(ConnectycubeFile.getPublicUrl());
                         newUser.setCustomData(Utils.customDataToString(userCustomData));
 
                         return updateUser(newUser);
@@ -282,8 +282,8 @@ public class ServiceManager {
         return result;
     }
 
-    public QBUser updateUserSync(QBUser inputUser) throws QBResponseException {
-        QBUser user;
+    public ConnectycubeUser updateUserSync(ConnectycubeUser inputUser) throws ResponseException {
+        ConnectycubeUser user;
 
         String password = inputUser.getPassword();
 
@@ -299,7 +299,7 @@ public class ServiceManager {
         if (LoginType.EMAIL.equals(AppSession.getSession().getLoginType())) {
             user.setPassword(password);
         } else {
-            user.setPassword(QBSessionManager.getInstance().getToken());
+            user.setPassword(ConnectycubeSessionManager.getInstance().getToken());
         }
 
         return user;
@@ -312,13 +312,13 @@ public class ServiceManager {
 
     }
 
-    private void saveOwnerUser(QBUser qbUser) {
-        QMUser user = UserFriendUtils.createLocalUser(qbUser);
+    private void saveOwnerUser(ConnectycubeUser connectycubeUser) {
+        QMUser user = UserFriendUtils.createLocalUser(connectycubeUser);
         QMUserService.getInstance().getUserCache().createOrUpdate(user);
     }
 
 
-    private boolean hasUserCustomData(QBUser user) {
+    private boolean hasUserCustomData(ConnectycubeUser user) {
         if (TextUtils.isEmpty(user.getCustomData())) {
             return false;
         }
@@ -327,7 +327,7 @@ public class ServiceManager {
     }
 
 
-    private UserCustomData getUserCustomData(QBUser user) {
+    private UserCustomData getUserCustomData(ConnectycubeUser user) {
         if (TextUtils.isEmpty(user.getCustomData())) {
             return new UserCustomData();
         }
@@ -341,13 +341,13 @@ public class ServiceManager {
         }
     }
 
-    private QBUser getFBUserWithAvatar(QBUser user) {
+    private ConnectycubeUser getFBUserWithAvatar(ConnectycubeUser user) {
         String avatarUrl = context.getString(com.quickblox.q_municate_core.R.string.url_to_facebook_avatar, user.getFacebookId());
         user.setCustomData(Utils.customDataToString(getUserCustomData(avatarUrl)));
         return user;
     }
 
-    private QBUser getUserWithFullNameAsPhone(QBUser user) {
+    private ConnectycubeUser getUserWithFullNameAsPhone(ConnectycubeUser user) {
         user.setFullName(user.getPhone());
         user.setCustomData(Utils.customDataToString(getUserCustomData(ConstsCore.EMPTY_STRING)));
         return user;

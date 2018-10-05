@@ -27,8 +27,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-import com.quickblox.auth.model.QBProvider;
-import com.quickblox.auth.session.QBSessionManager;
+import com.connectycube.auth.model.ConnectycubeProvider;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.BuildConfig;
@@ -86,8 +86,8 @@ public class SplashActivity extends BaseAuthActivity {
 
         //TODO VT temp code for correct migration from Twitter Digits to Firebase Phone Auth
         //should be removed in next release
-        if (QBSessionManager.getInstance().getSessionParameters() != null
-                && QBProvider.TWITTER_DIGITS.equals(QBSessionManager.getInstance().getSessionParameters().getSocialProvider())) {
+        if (ConnectycubeSessionManager.getInstance().getSessionParameters() != null
+                && ConnectycubeProvider.TWITTER_DIGITS.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider())) {
             restartAppWithFirebaseAuth();
             return;
         }
@@ -99,7 +99,7 @@ public class SplashActivity extends BaseAuthActivity {
 
         processPushIntent();
 
-        /*if (QBSessionManager.getInstance().getSessionParameters() != null && appSharedHelper.isSavedRememberMe()) {
+        /*if (ConnectycubeSessionManager.getInstance().getSessionParameters() != null && appSharedHelper.isSavedRememberMe()) {
             startLastOpenActivityOrMain();
             //cekMember();
         } else {
@@ -287,7 +287,7 @@ public class SplashActivity extends BaseAuthActivity {
         if (versionApp < versionServer) {
             updateApp();
         } else {
-            if (QBSessionManager.getInstance().getSessionParameters() != null && appSharedHelper.isSavedRememberMe()) {
+            if (ConnectycubeSessionManager.getInstance().getSessionParameters() != null && appSharedHelper.isSavedRememberMe()) {
                 startLastOpenActivityOrMain();
             } else {
                 startLandingActivity();

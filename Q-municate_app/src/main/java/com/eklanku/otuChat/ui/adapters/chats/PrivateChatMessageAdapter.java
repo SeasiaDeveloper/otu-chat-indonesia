@@ -15,18 +15,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
-import com.quickblox.chat.model.QBChatDialog;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.utils.DateUtils;
 import com.eklanku.otuChat.utils.listeners.FriendOperationListener;
-import com.quickblox.content.model.QBFile;
+import com.connectycube.storage.model.ConnectycubeFile;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.models.DialogNotification;
 import com.quickblox.q_municate_db.models.State;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.ui.kit.chatmessage.adapter.media.video.thumbnails.VideoThumbnail;
+import com.connectycube.ui.chatmessage.adapter.media.video.thumbnails.VideoThumbnail;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import org.json.JSONArray;
@@ -53,7 +53,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     protected DataManager dataManager;
 
-    public PrivateChatMessageAdapter(BaseActivity baseActivity, QMUser opponentUser, List<CombinationMessage> chatMessages, FriendOperationListener friendOperationListener, QBChatDialog chatDialog, PrivateDialogActivity.ItemClickListener itemClickListener) {
+    public PrivateChatMessageAdapter(BaseActivity baseActivity, QMUser opponentUser, List<CombinationMessage> chatMessages, FriendOperationListener friendOperationListener, ConnectycubeChatDialog chatDialog, PrivateDialogActivity.ItemClickListener itemClickListener) {
         super(baseActivity, chatDialog, chatMessages);
         this.friendOperationListener = friendOperationListener;
         dataManager = DataManager.getInstance();
@@ -68,7 +68,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
     }
 
     @Override
-    protected void onBindViewCustomHolder(QBMessageViewHolder holder, CombinationMessage chatMessage, final int position) {
+    protected void onBindViewCustomHolder(MessageViewHolder holder, CombinationMessage chatMessage, final int position) {
         Log.d(TAG, "onBindViewCustomHolder combinationMessage getBody= " + chatMessage.getBody());
         Log.d("OPPO-1", "onBindViewCustomHolder: "+chatMessage.getBody());
         FriendsViewHolder friendsViewHolder = (FriendsViewHolder) holder;
@@ -276,15 +276,15 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
                             if (objAttachment.getString("type").equals("location")) {
                                 url = objAttachment.getString("url");
                             } else if (objAttachment.getString("type").equals("image")) {
-                                url = QBFile.getPrivateUrlForUID(objAttachment.getString("ID"));
+                                url = ConnectycubeFile.getPrivateUrlForUID(objAttachment.getString("ID"));
                             } else if (objAttachment.getString("type").equals("video")) {
-                                String strVideoUrl = QBFile.getPrivateUrlForUID(objAttachment.getString("ID"));
+                                String strVideoUrl = ConnectycubeFile.getPrivateUrlForUID(objAttachment.getString("ID"));
                                 VideoThumbnail model = new VideoThumbnail(strVideoUrl);
-                                Glide.with(this.context).load(model).override(42, 42).error(com.quickblox.ui.kit.chatmessage.adapter.R.drawable.ic_error).into(imgAttach);
+                                Glide.with(this.context).load(model).override(42, 42).error(com.connectycube.ui.chatmessage.adapter.R.drawable.ic_error).into(imgAttach);
                             }
                             if (url.length() > 0) {
                                 imgAttach.setVisibility(View.VISIBLE);
-                                Glide.with(this.context).load(url).override(42, 42).error(com.quickblox.ui.kit.chatmessage.adapter.R.drawable.ic_error).into(imgAttach);
+                                Glide.with(this.context).load(url).override(42, 42).error(com.connectycube.ui.chatmessage.adapter.R.drawable.ic_error).into(imgAttach);
                             }
 
                         }
@@ -408,7 +408,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
     }
 
     @Override
-    protected QBMessageViewHolder onCreateCustomViewHolder(ViewGroup parent, int viewType) {
+    protected MessageViewHolder onCreateCustomViewHolder(ViewGroup parent, int viewType) {
         return viewType == TYPE_REQUEST_MESSAGE ? new FriendsViewHolder(inflater.inflate(R.layout.item_friends_notification_message, parent, false)) : null;
     }
 
@@ -591,7 +591,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         }
     }
 
-    protected static class FriendsViewHolder extends QBMessageViewHolder {
+    protected static class FriendsViewHolder extends MessageViewHolder {
         @Nullable
         @Bind(R.id.message_textview)
         TextView messageTextView;

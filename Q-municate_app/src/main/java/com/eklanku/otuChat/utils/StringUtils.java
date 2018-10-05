@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
 import com.eklanku.otuChat.App;
-import com.quickblox.core.helper.MimeUtils;
+import com.connectycube.core.helper.MimeUtils;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.R;;
 import com.quickblox.q_municate_db.models.Attachment;

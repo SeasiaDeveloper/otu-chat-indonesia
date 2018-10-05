@@ -9,6 +9,7 @@ import android.util.Log;
 import com.eklanku.otuChat.R;;
 
 import org.webrtc.RendererCommon;
+import org.webrtc.VideoCapturer;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoRendererGui;
 

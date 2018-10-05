@@ -40,7 +40,7 @@ import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.utils.helpers.SystemPermissionHelper;
 import com.quickblox.q_municate_core.utils.ConstsCore;
-import com.quickblox.ui.kit.chatmessage.adapter.utils.LocationUtils;
+import com.connectycube.ui.chatmessage.adapter.utils.LocationUtils;
 
 import butterknife.Bind;
 import butterknife.OnClick;

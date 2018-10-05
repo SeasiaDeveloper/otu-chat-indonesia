@@ -13,7 +13,7 @@ import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.quickblox.chat.model.QBChatDialog;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.call.CallActivity;
@@ -37,8 +37,8 @@ import com.quickblox.q_municate_db.utils.DialogTransformUtils;
 import com.quickblox.q_municate_user_cache.QMUserCacheImpl;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
-import com.quickblox.videochat.webrtc.QBRTCTypes;
+import com.connectycube.users.model.ConnectycubeUser;
+import com.connectycube.videochat.RTCTypes;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -131,7 +131,7 @@ public class UserProfileActivity extends BaseLoggableActivity {
     void sendMessage(View view) {
         DialogOccupant dialogOccupant = dataManager.getDialogOccupantDataManager().getDialogOccupantForPrivateChat(user.getId());
         if (dialogOccupant != null && dialogOccupant.getDialog() != null) {
-            QBChatDialog chatDialog = DialogTransformUtils.createQBDialogFromLocalDialog(dataManager, dialogOccupant.getDialog());
+            ConnectycubeChatDialog chatDialog = DialogTransformUtils.createQBDialogFromLocalDialog(dataManager, dialogOccupant.getDialog());
             PrivateDialogActivity.startWithClearTop(UserProfileActivity.this, user, chatDialog);
         } else {
             showProgress();
@@ -141,12 +141,12 @@ public class UserProfileActivity extends BaseLoggableActivity {
 
     @OnClick(R.id.audio_call_button)
     void audioCall(View view) {
-        callToUser(QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_AUDIO);
+        callToUser(RTCTypes.ConferenceType.CONFERENCE_TYPE_AUDIO);
     }
 
     @OnClick(R.id.video_call_button)
     void videoCall(View view) {
-        callToUser(QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_VIDEO);
+        callToUser(RTCTypes.ConferenceType.CONFERENCE_TYPE_VIDEO);
     }
 
     @OnClick(R.id.delete_chat_history_button)
@@ -288,14 +288,14 @@ public class UserProfileActivity extends BaseLoggableActivity {
         if (dialogOccupant == null){
             finish();
         } else {
-            QBChatDialog chatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogOccupant.getDialog().getDialogId());
+            ConnectycubeChatDialog chatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogOccupant.getDialog().getDialogId());
             if (chatDialog != null) {
                 QBDeleteChatCommand.start(this, chatDialog.getDialogId(), chatDialog.getType().getCode());
             }
         }
     }
 
-    private void startPrivateChat(QBChatDialog qbDialog) {
+    private void startPrivateChat(ConnectycubeChatDialog qbDialog) {
         PrivateDialogActivity.start(UserProfileActivity.this, user, qbDialog);
     }
 
@@ -309,7 +309,7 @@ public class UserProfileActivity extends BaseLoggableActivity {
         return dataManager.getDialogOccupantDataManager().getDialogOccupantForPrivateChat(user.getId()) != null;
     }
 
-    private void callToUser(QBRTCTypes.QBConferenceType qbConferenceType) {
+    private void callToUser(RTCTypes.ConferenceType conferenceType) {
         if (!isChatInitializedAndUserLoggedIn()) {
             ToastUtils.longToast(R.string.call_chat_service_is_initializing);
             return;
@@ -321,9 +321,9 @@ public class UserProfileActivity extends BaseLoggableActivity {
             return;
         }
 
-        List<QBUser> qbUserList = new ArrayList<>(1);
-        qbUserList.add(UserFriendUtils.createQbUser(user));
-        CallActivity.start(this, qbUserList, qbConferenceType, null);
+        List<ConnectycubeUser> ConnectycubeUserList = new ArrayList<>(1);
+        ConnectycubeUserList.add(UserFriendUtils.createConnectycubeUser(user));
+        CallActivity.start(this, ConnectycubeUserList, conferenceType, null);
     }
 
     private class UserObserver implements Observer {
@@ -365,7 +365,7 @@ public class UserProfileActivity extends BaseLoggableActivity {
         @Override
         public void execute(Bundle bundle) throws Exception {
             hideProgress();
-            QBChatDialog qbDialog = (QBChatDialog) bundle.getSerializable(QBServiceConsts.EXTRA_DIALOG);
+            ConnectycubeChatDialog qbDialog = (ConnectycubeChatDialog) bundle.getSerializable(QBServiceConsts.EXTRA_DIALOG);
             startPrivateChat(qbDialog);
         }
     }

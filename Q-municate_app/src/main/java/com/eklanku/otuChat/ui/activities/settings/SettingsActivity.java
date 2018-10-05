@@ -15,7 +15,7 @@ import com.eklanku.otuChat.ui.activities.profile.MyProfileActivity;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.quickblox.auth.session.QBSettings;
+import com.connectycube.auth.session.ConnectycubeSettings;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.changepassword.ChangePasswordActivity;
@@ -106,7 +106,7 @@ public class SettingsActivity extends BaseLoggableActivity {
 
     @OnCheckedChanged(R.id.push_notification_switch)
     void enablePushNotification(boolean enable) {
-        QBSettings.getInstance().setEnablePushNotification(enable);
+        ConnectycubeSettings.getInstance().setEnablePushNotification(enable);
     }
 
     @OnClick(R.id.invite_friends_button)
@@ -177,7 +177,7 @@ public class SettingsActivity extends BaseLoggableActivity {
     }
 
     private void fillUI() {
-        pushNotificationSwitch.setChecked(QBSettings.getInstance().isEnablePushNotification());
+        pushNotificationSwitch.setChecked(ConnectycubeSettings.getInstance().isEnablePushNotification());
         changePasswordView.setVisibility(
                 LoginType.EMAIL.equals(AppSession.getSession().getLoginType()) ? View.VISIBLE : View.GONE);
         fullNameTextView.setText(user.getFullName());

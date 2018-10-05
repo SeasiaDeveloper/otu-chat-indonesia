@@ -35,20 +35,19 @@ import com.quickblox.q_municate_core.qb.helpers.QBFriendListHelper;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
-import com.quickblox.videochat.webrtc.AppRTCAudioManager;
-import com.quickblox.videochat.webrtc.BaseSession;
-import com.quickblox.videochat.webrtc.QBMediaStreamManager;
-import com.quickblox.videochat.webrtc.QBRTCSession;
-import com.quickblox.videochat.webrtc.QBRTCTypes;
-import com.quickblox.videochat.webrtc.callbacks.QBRTCClientVideoTracksCallbacks;
-import com.quickblox.videochat.webrtc.callbacks.QBRTCSessionConnectionCallbacks;
-import com.quickblox.videochat.webrtc.view.QBRTCSurfaceView;
-import com.quickblox.videochat.webrtc.view.QBRTCVideoTrack;
+import com.connectycube.users.model.ConnectycubeUser;
+import com.connectycube.videochat.AppRTCAudioManager;
+import com.connectycube.videochat.BaseSession;
+import com.connectycube.videochat.RTCMediaStreamManager;
+import com.connectycube.videochat.RTCSession;
+import com.connectycube.videochat.RTCTypes;
+import com.connectycube.videochat.callbacks.RTCClientVideoTracksCallbacks;
+import com.connectycube.videochat.callbacks.RTCSessionConnectionCallbacks;
+import com.connectycube.videochat.view.RTCSurfaceView;
+import com.connectycube.videochat.view.RTCVideoTrack;
 
 import org.webrtc.CameraVideoCapturer;
 import org.webrtc.RendererCommon;
-import org.webrtc.VideoRenderer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -59,15 +58,15 @@ import java.util.Map;
 /**
  * QuickBlox team
  */
-public class ConversationCallFragment extends Fragment implements Serializable, QBRTCClientVideoTracksCallbacks<QBRTCSession>,
-        QBRTCSessionConnectionCallbacks, CallActivity.QBRTCSessionUserCallback {
+public class ConversationCallFragment extends Fragment implements Serializable, RTCClientVideoTracksCallbacks<RTCSession>,
+        RTCSessionConnectionCallbacks, CallActivity.RTCSessionUserCallback {
 
     private static final long TOGGLE_CAMERA_DELAY = 1000;
     private static final long LOCAL_TRACk_INITIALIZE_DELAY = 500;
 
     private String TAG = ConversationCallFragment.class.getSimpleName();
-    private ArrayList<QBUser> opponents;
-    private QBRTCTypes.QBConferenceType qbConferenceType;
+    private ArrayList<ConnectycubeUser> opponents;
+    private RTCTypes.ConferenceType conferenceType;
     private StartConversationReason startConversationReason;
 
     private ToggleButton cameraToggle;
@@ -75,15 +74,15 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     private ImageButton handUpVideoCall;
     private boolean isVideoCall = false;
     private boolean isAudioEnabled = true;
-    private List<QBUser> allUsers = new ArrayList<>();
+    private List<ConnectycubeUser> allUsers = new ArrayList<>();
     private String callerName;
     private boolean isMessageProcessed;
-    private QBRTCSurfaceView remoteVideoView;
-    private QBRTCSurfaceView localVideoView;
+    private RTCSurfaceView remoteVideoView;
+    private RTCSurfaceView localVideoView;
     private CameraState cameraState = CameraState.NONE;
     private boolean isPeerToPeerCall;
-    private QBRTCVideoTrack localVideoTrack;
-    private QBRTCVideoTrack remoteVideoTrack;
+    private RTCVideoTrack localVideoTrack;
+    private RTCVideoTrack remoteVideoTrack;
     private Handler mainHandler;
     private ImageView avatarImageview;
     private TextView callingToTextView;
@@ -95,14 +94,14 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     private SystemPermissionHelper systemPermissionHelper;
     private boolean isAllViewsInitialized = true;
 
-    public static ConversationCallFragment newInstance(List<QBUser> opponents, String callerName,
-                                                       QBRTCTypes.QBConferenceType qbConferenceType,
+    public static ConversationCallFragment newInstance(List<ConnectycubeUser> opponents, String callerName,
+                                                       RTCTypes.ConferenceType conferenceType,
                                                        StartConversationReason reason,
                                                        String sessionId) {
 
         ConversationCallFragment fragment = new ConversationCallFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(QBServiceConsts.EXTRA_CONFERENCE_TYPE, qbConferenceType);
+        bundle.putSerializable(QBServiceConsts.EXTRA_CONFERENCE_TYPE, conferenceType);
         bundle.putString(QBServiceConsts.EXTRA_CALLER_NAME, callerName);
         bundle.putSerializable(QBServiceConsts.EXTRA_OPPONENTS, (Serializable) opponents);
 
@@ -120,13 +119,13 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
         Log.d(TAG, "Fragment. Thread id: " + Thread.currentThread().getId());
 
         if (getArguments() != null) {
-            opponents = (ArrayList<QBUser>) getArguments().getSerializable(QBServiceConsts.EXTRA_OPPONENTS);
-            qbConferenceType = (QBRTCTypes.QBConferenceType) getArguments().getSerializable(QBServiceConsts.EXTRA_CONFERENCE_TYPE);
+            opponents = (ArrayList<ConnectycubeUser>) getArguments().getSerializable(QBServiceConsts.EXTRA_OPPONENTS);
+            conferenceType = (RTCTypes.ConferenceType) getArguments().getSerializable(QBServiceConsts.EXTRA_CONFERENCE_TYPE);
             startConversationReason = (StartConversationReason) getArguments().getSerializable(QBServiceConsts.EXTRA_START_CONVERSATION_REASON_TYPE);
             callerName = getArguments().getString(QBServiceConsts.EXTRA_CALLER_NAME);
 
             isPeerToPeerCall = opponents.size() == 1;
-            isVideoCall = QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_VIDEO.equals(qbConferenceType);
+            isVideoCall = RTCTypes.ConferenceType.CONFERENCE_TYPE_VIDEO.equals(conferenceType);
             Log.d(TAG, "CALLER_NAME: " + callerName);
             Log.d(TAG, "opponents: " + opponents.toString());
         }
@@ -165,7 +164,7 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     }
 
     private void correctButtonsVisibilityByGrantedPermissions() {
-        if (!systemPermissionHelper.isAllPermissionsGrantedForCallByType(qbConferenceType)) {
+        if (!systemPermissionHelper.isAllPermissionsGrantedForCallByType(conferenceType)) {
             if (!systemPermissionHelper.isMicrophonePermissionGranted()) {
                 micToggleVideoCall.setChecked(false);
                 micToggleVideoCall.setEnabled(false);
@@ -229,7 +228,7 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     @Override
     public void onStart() {
         super.onStart();
-        QBRTCSession session = ((CallActivity) getActivity()).getCurrentSession();
+        RTCSession session = ((CallActivity) getActivity()).getCurrentSession();
         if (!isMessageProcessed) {
             if (startConversationReason == StartConversationReason.INCOME_CALL_FOR_ACCEPTION) {
                 session.acceptCall(session.getUserInfo());
@@ -246,12 +245,12 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     private void sendPushAboutCall() {
         if (isPeerToPeerCall) {
             QBFriendListHelper qbFriendListHelper = new QBFriendListHelper(getActivity());
-            QBUser qbUser = opponents.get(0);
+            ConnectycubeUser connectycubeUser = opponents.get(0);
 
-            if (!qbFriendListHelper.isUserOnline(qbUser.getId())) {
+            if (!qbFriendListHelper.isUserOnline(connectycubeUser.getId())) {
                 String callMsg = getString(R.string.dlg_offline_call,
                         AppSession.getSession().getUser().getFullName());
-                QBSendPushCommand.start(getActivity(), callMsg, qbUser.getId(), ConstsCore.PUSH_MESSAGE_TYPE_CALL);
+                QBSendPushCommand.start(getActivity(), callMsg, connectycubeUser.getId(), ConstsCore.PUSH_MESSAGE_TYPE_CALL);
             }
         }
     }
@@ -264,9 +263,9 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     }
 
     private void initViews(View view) {
-        remoteVideoView = (QBRTCSurfaceView) view.findViewById(R.id.remote_video_view);
+        remoteVideoView = (RTCSurfaceView) view.findViewById(R.id.remote_video_view);
 
-        localVideoView = (QBRTCSurfaceView) view.findViewById(R.id.local_video_view);
+        localVideoView = (RTCSurfaceView) view.findViewById(R.id.local_video_view);
         localVideoView.setZOrderMediaOverlay(true);
 
         cameraToggle = (ToggleButton) view.findViewById(R.id.cameraToggle);
@@ -421,12 +420,12 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        QBRTCSession currentSession = ((CallActivity) getActivity()).getCurrentSession();
+        RTCSession currentSession = ((CallActivity) getActivity()).getCurrentSession();
         if (currentSession == null) {
             return super.onOptionsItemSelected(item);
         }
 
-        final QBMediaStreamManager mediaStreamManager = currentSession.getMediaStreamManager();
+        final RTCMediaStreamManager mediaStreamManager = currentSession.getMediaStreamManager();
         if (mediaStreamManager == null) {
             return super.onOptionsItemSelected(item);
         }
@@ -518,8 +517,8 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     }
 
     private boolean isVideoEnabled() {
-        QBRTCSession currentSession = ((CallActivity) getActivity()).getCurrentSession();
-        QBMediaStreamManager mediaStreamManager;
+        RTCSession currentSession = ((CallActivity) getActivity()).getCurrentSession();
+        RTCMediaStreamManager mediaStreamManager;
         if (currentSession != null) {
             mediaStreamManager = currentSession.getMediaStreamManager();
         } else {
@@ -539,7 +538,7 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     }
 
     private void toggleCamera(boolean isNeedEnableCam) {
-        QBRTCSession currentSession = ((CallActivity) getActivity()).getCurrentSession();
+        RTCSession currentSession = ((CallActivity) getActivity()).getCurrentSession();
         if (currentSession != null && currentSession.getMediaStreamManager() != null) {
             currentSession.getMediaStreamManager().setVideoEnabled(isNeedEnableCam);
             getActivity().invalidateOptionsMenu();
@@ -547,7 +546,7 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     }
 
     @Override
-    public void onLocalVideoTrackReceive(QBRTCSession qbrtcSession, final QBRTCVideoTrack videoTrack) {
+    public void onLocalVideoTrackReceive(RTCSession qbrtcSession, final RTCVideoTrack videoTrack) {
         Log.d(TAG, "onLocalVideoTrackReceive() run");
         localVideoTrack = videoTrack;
 
@@ -560,7 +559,7 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     }
 
     @Override
-    public void onRemoteVideoTrackReceive(QBRTCSession session, QBRTCVideoTrack videoTrack, Integer userID) {
+    public void onRemoteVideoTrackReceive(RTCSession session, RTCVideoTrack videoTrack, Integer userID) {
         Log.d(TAG, "onRemoteVideoTrackReceive for opponent= " + userID);
         remoteVideoTrack = videoTrack;
 
@@ -573,9 +572,9 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
         }
     }
 
-    private void fillVideoView(QBRTCSurfaceView videoView, QBRTCVideoTrack videoTrack, boolean localRenderer) {
+    private void fillVideoView(RTCSurfaceView videoView, RTCVideoTrack videoTrack, boolean localRenderer) {
         videoTrack.cleanUp();
-        videoTrack.addRenderer(new VideoRenderer(videoView));
+        videoTrack.addRenderer(videoView);
 
         if (localRenderer) {
             updateVideoView(videoView, isFrontCameraSelected);
@@ -583,11 +582,11 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
         Log.d(TAG, (localRenderer ? "local" : "remote") + " Track is rendering");
     }
 
-    protected void updateVideoView(QBRTCSurfaceView surfaceViewRenderer, boolean mirror) {
+    protected void updateVideoView(RTCSurfaceView surfaceViewRenderer, boolean mirror) {
         updateVideoView(surfaceViewRenderer, mirror, RendererCommon.ScalingType.SCALE_ASPECT_FILL);
     }
 
-    protected void updateVideoView(QBRTCSurfaceView surfaceViewRenderer, boolean mirror, RendererCommon.ScalingType scalingType) {
+    protected void updateVideoView(RTCSurfaceView surfaceViewRenderer, boolean mirror, RendererCommon.ScalingType scalingType) {
         Log.i(TAG, "updateVideoView mirror:" + mirror + ", scalintType = " + scalingType);
         surfaceViewRenderer.setScalingType(scalingType);
         surfaceViewRenderer.setMirror(mirror);
@@ -595,58 +594,58 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     }
 
     @Override
-    public void onStartConnectToUser(QBRTCSession qbrtcSession, Integer userId) {
+    public void onStartConnectToUser(RTCSession qbrtcSession, Integer userId) {
 //        setStatusForOpponent(userId, getString(R.string.checking));
     }
 
     @Override
-    public void onStateChanged(QBRTCSession qbrtcSession, BaseSession.QBRTCSessionState qbrtcSessionState) {
+    public void onStateChanged(RTCSession qbrtcSession, BaseSession.RTCSessionState qbrtcSessionState) {
 
     }
 
     @Override
-    public void onConnectedToUser(QBRTCSession qbrtcSession, final Integer userId) {
+    public void onConnectedToUser(RTCSession qbrtcSession, final Integer userId) {
         actionsByConnectedToUser();
     }
 
 
     @Override
-    public void onConnectionClosedForUser(QBRTCSession qbrtcSession, Integer integer) {
+    public void onConnectionClosedForUser(RTCSession qbrtcSession, Integer integer) {
 //        setStatusForOpponent(integer, getString(R.string.closed));
     }
 
     @Override
-    public void onDisconnectedFromUser(QBRTCSession qbrtcSession, Integer integer) {
+    public void onDisconnectedFromUser(RTCSession qbrtcSession, Integer integer) {
 //        setStatusForOpponent(integer, getString(R.string.disconnected));
     }
 
     @Override
-    public void onDisconnectedTimeoutFromUser(QBRTCSession qbrtcSession, Integer integer) {
+    public void onDisconnectedTimeoutFromUser(RTCSession qbrtcSession, Integer integer) {
 //        setStatusForOpponent(integer, getString(R.string.time_out));
     }
 
     @Override
-    public void onConnectionFailedWithUser(QBRTCSession qbrtcSession, Integer integer) {
+    public void onConnectionFailedWithUser(RTCSession qbrtcSession, Integer integer) {
 //        setStatusForOpponent(integer, getString(R.string.failed));
     }
 
     @Override
-    public void onUserNotAnswer(QBRTCSession session, Integer userId) {
+    public void onUserNotAnswer(RTCSession session, Integer userId) {
 //        setStatusForOpponent(userId, getString(R.string.call_no_answer));
     }
 
     @Override
-    public void onCallRejectByUser(QBRTCSession session, Integer userId, Map<String, String> userInfo) {
+    public void onCallRejectByUser(RTCSession session, Integer userId, Map<String, String> userInfo) {
 //        setStatusForOpponent(userId, getString(R.string.call_rejected));
     }
 
     @Override
-    public void onCallAcceptByUser(QBRTCSession session, Integer userId, Map<String, String> userInfo) {
+    public void onCallAcceptByUser(RTCSession session, Integer userId, Map<String, String> userInfo) {
 //        setStatusForOpponent(userId, getString(R.string.call_accepted));
     }
 
     @Override
-    public void onReceiveHangUpFromUser(QBRTCSession session, Integer userId) {
+    public void onReceiveHangUpFromUser(RTCSession session, Integer userId) {
 //        setStatusForOpponent(userId, getString(R.string.call_hung_up));
     }
 

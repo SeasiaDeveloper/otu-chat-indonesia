@@ -8,7 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.eklanku.otuChat.App;
-import com.quickblox.auth.model.QBProvider;
+import com.connectycube.auth.model.ConnectycubeProvider;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.utils.listeners.GlobalLoginListener;
 import com.quickblox.q_municate_core.models.AppSession;
@@ -16,7 +16,7 @@ import com.quickblox.q_municate_core.models.LoginType;
 import com.quickblox.q_municate_core.qb.commands.chat.QBLoadDialogsCommand;
 import com.quickblox.q_municate_core.qb.commands.chat.QBLoginChatCompositeCommand;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import rx.Subscriber;
 
@@ -56,8 +56,8 @@ public class LoginHelper {
 
     public void loginFB() {
         String fbToken = appSharedHelper.getFBToken();
-        ServiceManager.getInstance().login(QBProvider.FACEBOOK, fbToken, null)
-                .subscribe(new Subscriber<QBUser>() {
+        ServiceManager.getInstance().login(ConnectycubeProvider.FACEBOOK, fbToken, null)
+                .subscribe(new Subscriber<ConnectycubeUser>() {
                     @Override
                     public void onCompleted() {
 
@@ -72,8 +72,8 @@ public class LoginHelper {
                     }
 
                     @Override
-                    public void onNext(QBUser qbUser) {
-                        AppSession.getSession().updateUser(qbUser);
+                    public void onNext(ConnectycubeUser connectycubeUser) {
+                        AppSession.getSession().updateUser(connectycubeUser);
                         loginChat();
                     }
                 });
@@ -81,8 +81,8 @@ public class LoginHelper {
 
     private void loginPhoneNumber() {
         String firebaseAccessToken = appSharedHelper.getFirebaseToken();
-        ServiceManager.getInstance().login(QBProvider.FIREBASE_PHONE, firebaseAccessToken, appSharedHelper.getFirebaseProjectId())
-                .subscribe(new Subscriber<QBUser>() {
+        ServiceManager.getInstance().login(ConnectycubeProvider.FIREBASE_PHONE, firebaseAccessToken, appSharedHelper.getFirebaseProjectId())
+                .subscribe(new Subscriber<ConnectycubeUser>() {
                     @Override
                     public void onCompleted() {
 
@@ -97,8 +97,8 @@ public class LoginHelper {
                     }
 
                     @Override
-                    public void onNext(QBUser qbUser) {
-                        AppSession.getSession().updateUser(qbUser);
+                    public void onNext(ConnectycubeUser connectycubeUser) {
+                        AppSession.getSession().updateUser(connectycubeUser);
                         loginChat();
                     }
                 });
@@ -152,8 +152,8 @@ public class LoginHelper {
         public void onReceive(Context context, final Intent intent) {
             if (intent.getAction().equals(QBServiceConsts.LOGIN_SUCCESS_ACTION)
                     || intent.getAction().equals(QBServiceConsts.SOCIAL_LOGIN_SUCCESS_ACTION)) {
-                QBUser qbUser = (QBUser) intent.getExtras().getSerializable(QBServiceConsts.EXTRA_USER);
-                AppSession.getSession().updateUser(qbUser);
+                ConnectycubeUser connectycubeUser = (ConnectycubeUser) intent.getExtras().getSerializable(QBServiceConsts.EXTRA_USER);
+                AppSession.getSession().updateUser(connectycubeUser);
                 loginChat();
             } else if (intent.getAction().equals(QBServiceConsts.LOGIN_CHAT_COMPOSITE_SUCCESS_ACTION)) {
                 loadDialogs();

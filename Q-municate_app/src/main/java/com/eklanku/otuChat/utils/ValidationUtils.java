@@ -15,7 +15,7 @@ import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_core.utils.MediaUtils;
 import com.quickblox.q_municate_db.models.Attachment;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.io.File;
 import java.util.regex.Matcher;
@@ -29,11 +29,11 @@ public class ValidationUtils {
     private final static String NULL = "null";
 
     private Context context;
-    private QBUser qbUser;
+    private ConnectycubeUser connectycubeUser;
 
     public ValidationUtils(Context context) {
         this.context = context;
-        this.qbUser = AppSession.getSession().getUser();
+        this.connectycubeUser = AppSession.getSession().getUser();
     }
 
     public boolean isLoginDataValid(TextInputLayout emailTextInputLayout,
@@ -118,7 +118,7 @@ public class ValidationUtils {
         boolean isNewPasswordEntered = !TextUtils.isEmpty(newPassword.trim());
 
         if (isOldPasswordEntered && isNewPasswordEntered) {
-            if (!qbUser.getPassword().equals(oldPassword)) {
+            if (!connectycubeUser.getPassword().equals(oldPassword)) {
                 oldPasswordTextInputLayout.setError(context.getString(R.string.change_password_old_password_wrong));
             } else {
                 return true;

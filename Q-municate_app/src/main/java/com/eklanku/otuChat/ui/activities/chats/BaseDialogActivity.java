@@ -35,25 +35,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.connectycube.ui.chatmessage.adapter.listeners.LinkPreviewClickListener;
+import com.connectycube.ui.chatmessage.adapter.models.LinkPreview;
+import com.connectycube.ui.chatmessage.adapter.utils.MessageTextClickMovement;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.adapters.chats.BaseChatMessagesAdapter;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.ui.views.recyclerview.WrapContentLinearLayoutManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import com.quickblox.chat.QBChatService;
-import com.quickblox.chat.model.QBAttachment;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
-import com.quickblox.content.model.QBFile;
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.chat.ConnectycubeChatService;
+import com.connectycube.chat.model.ConnectycubeAttachment;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
+import com.connectycube.storage.model.ConnectycubeFile;
+import com.connectycube.core.exception.ResponseException;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.location.MapsActivity;
 import com.eklanku.otuChat.ui.activities.others.PreviewImageActivity;
-import com.eklanku.otuChat.ui.adapters.chats.BaseChatMessagesAdapter;
-import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
-import com.eklanku.otuChat.ui.views.recyclerview.WrapContentLinearLayoutManager;
 import com.eklanku.otuChat.utils.ClipboardUtils;
 import com.eklanku.otuChat.utils.KeyboardUtils;
 import com.eklanku.otuChat.utils.StringUtils;
@@ -84,17 +83,14 @@ import com.quickblox.q_municate_db.models.DialogNotification;
 import com.quickblox.q_municate_db.models.DialogOccupant;
 import com.quickblox.q_municate_db.models.Message;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
-import com.quickblox.ui.kit.chatmessage.adapter.listeners.QBChatAttachClickListener;
-import com.quickblox.ui.kit.chatmessage.adapter.listeners.QBChatMessageLinkClickListener;
-import com.quickblox.ui.kit.chatmessage.adapter.listeners.QBLinkPreviewClickListener;
-import com.quickblox.ui.kit.chatmessage.adapter.media.SingleMediaManager;
-import com.quickblox.ui.kit.chatmessage.adapter.media.recorder.AudioRecorder;
-import com.quickblox.ui.kit.chatmessage.adapter.media.recorder.exceptions.MediaRecorderException;
-import com.quickblox.ui.kit.chatmessage.adapter.media.recorder.listeners.QBMediaRecordListener;
-import com.quickblox.ui.kit.chatmessage.adapter.media.recorder.view.QBRecordAudioButton;
-import com.quickblox.ui.kit.chatmessage.adapter.media.video.ui.VideoPlayerActivity;
-import com.quickblox.ui.kit.chatmessage.adapter.models.QBLinkPreview;
-import com.quickblox.ui.kit.chatmessage.adapter.utils.QBMessageTextClickMovement;
+import com.connectycube.ui.chatmessage.adapter.listeners.ChatAttachClickListener;
+import com.connectycube.ui.chatmessage.adapter.listeners.ChatMessageLinkClickListener;
+import com.connectycube.ui.chatmessage.adapter.media.SingleMediaManager;
+import com.connectycube.ui.chatmessage.adapter.media.recorder.ConnectycubeAudioRecorder;
+import com.connectycube.ui.chatmessage.adapter.media.recorder.exceptions.MediaRecorderException;
+import com.connectycube.ui.chatmessage.adapter.media.recorder.listeners.MediaRecordListener;
+import com.connectycube.ui.chatmessage.adapter.media.recorder.view.RecordAudioButton;
+import com.connectycube.ui.chatmessage.adapter.media.video.ui.VideoPlayerActivity;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
 import com.rockerhieu.emojicon.emoji.Emojicon;
@@ -150,7 +146,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     ImageButton attachCamera;
 
     @Bind(R.id.chat_record_audio_button)
-    QBRecordAudioButton recordAudioButton;
+    RecordAudioButton recordAudioButton;
 
     @Bind(R.id.chat_audio_record_chronometer)
     Chronometer recordChronometer;
@@ -183,21 +179,21 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     private boolean isReplyMessage = false;
 
-    protected QBChatDialog currentChatDialog;
+    protected ConnectycubeChatDialog currentChatDialog;
     protected Resources resources;
     protected DataManager dataManager;
     protected BaseChatMessagesAdapter messagesAdapter;
     protected List<CombinationMessage> combinationMessagesList;
     protected MediaPickHelper mediaPickHelper;
     protected SingleMediaManager mediaManager;
-    protected AudioRecorder audioRecorder;
+    protected ConnectycubeAudioRecorder audioRecorder;
 
     private MessagesTextViewLinkClickListener messagesTextViewLinkClickListener;
     private LocationAttachClickListener locationAttachClickListener;
     private ImageAttachClickListener imageAttachClickListener;
     private LinkPreviewClickListener linkPreviewClickListener;
     private VideoAttachClickListener videoAttachClickListener;
-    private QBMediaRecordListenerImpl recordListener;
+    private MediaRecordListenerImpl recordListener;
     private Handler mainThreadHandler;
     private View emojiconsFragment;
     private LoadAttachFileSuccessAction loadAttachFileSuccessAction;
@@ -372,7 +368,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     private void checkLoginToChatOrShowError() {
         Log.d("OPPO-1", "authenticated: 7");
-        if (!QBChatService.getInstance().isLoggedIn()){
+        if (!ConnectycubeChatService.getInstance().isLoggedIn()){
             showSnackbar(R.string.error_disconnected, Snackbar.LENGTH_INDEFINITE);
         }
     }
@@ -522,7 +518,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     private void initAudioRecorder() {
-        audioRecorder = AudioRecorder.newBuilder()
+        audioRecorder = ConnectycubeAudioRecorder.newBuilder()
                 // Required
                 .useInBuildFilePathGenerator(this)
                 .setDuration(ConstsCore.MAX_RECORD_DURATION_IN_SEC)
@@ -624,10 +620,10 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         messagesTextViewLinkClickListener = new MessagesTextViewLinkClickListener();
         locationAttachClickListener = new LocationAttachClickListener();
         imageAttachClickListener = new ImageAttachClickListener();
-        linkPreviewClickListener = new LinkPreviewClickListener();
+        linkPreviewClickListener = new LinkPreviewClickListenerImpl();
         videoAttachClickListener = new VideoAttachClickListener();
-        recordListener = new QBMediaRecordListenerImpl();
-        currentChatDialog = (QBChatDialog) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_DIALOG);
+        recordListener = new MediaRecordListenerImpl();
+        currentChatDialog = (ConnectycubeChatDialog) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_DIALOG);
         combinationMessagesList = new ArrayList<>();
         vibro = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         messagesScrollListener = new MessagesScrollListener();
@@ -695,13 +691,13 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     protected void addObservers() {
-        dataManager.getQBChatDialogDataManager().addObserver(dialogObserver);
+        dataManager.getConnectycubeChatDialogDataManager().addObserver(dialogObserver);
         dataManager.getMessageDataManager().addObserver(messageObserver);
         dataManager.getDialogNotificationDataManager().addObserver(dialogNotificationObserver);
     }
 
     protected void deleteObservers() {
-        dataManager.getQBChatDialogDataManager().deleteObserver(dialogObserver);
+        dataManager.getConnectycubeChatDialogDataManager().deleteObserver(dialogObserver);
         dataManager.getMessageDataManager().deleteObserver(messageObserver);
         dataManager.getDialogNotificationDataManager().deleteObserver(dialogNotificationObserver);
     }
@@ -796,7 +792,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                 });
     }
 
-    protected void startLoadDialogMessages(QBChatDialog chatDialog, long lastDateLoad, boolean isLoadOldMessages) {
+    protected void startLoadDialogMessages(ConnectycubeChatDialog chatDialog, long lastDateLoad, boolean isLoadOldMessages) {
         Log.v(TAG, "startLoadDialogMessages()");
         if (isChatInitializedAndUserLoggedIn()) {
             Log.v(TAG, "startLoadDialogMessages() --- isChatInitializedAndUserLoggedIn()");
@@ -876,7 +872,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         boolean error = false;
         try {
             chatHelper.sendChatMessage(messageEditText.getText().toString());
-        } catch (QBResponseException e) {
+        } catch (ResponseException e) {
             ErrorUtils.showError(this, e);
             error = true;
         } catch (IllegalStateException e) {
@@ -900,7 +896,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             } else {
                 chatHelper.sendChatMessage(messageEditText.getText().toString());
             }
-        } catch (QBResponseException e) {
+        } catch (ResponseException e) {
             ErrorUtils.showError(this, e);
             error = true;
         } catch (IllegalStateException e) {
@@ -958,7 +954,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             if (chatHelper != null && currentChatDialog != null) {
                 try {
                     chatHelper.initCurrentChatDialog(currentChatDialog, generateBundleToInitDialog());
-                } catch (QBResponseException e) {
+                } catch (ResponseException e) {
                     ErrorUtils.showError(this, e.getMessage());
                     finish();
                 }
@@ -1238,7 +1234,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             } else {
                 chatHelper.sendMessageWithAttachment(attachmentType, attachmentObject, localPath);
             }
-        } catch (QBResponseException exc) {
+        } catch (ResponseException exc) {
             ErrorUtils.showError(this, exc);
         }
     }
@@ -1297,7 +1293,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                     } else if (action == DialogNotificationDataManager.CREATE_ACTION) {
                         Log.d(TAG, "created dialogNotification = " + dialogNotification);
                         addMessageItemToAdapter(combinationMessage);
-                        if (currentChatDialog != null && QBDialogType.PRIVATE.equals(currentChatDialog.getType())) {
+                        if (currentChatDialog != null && ConnectycubeDialogType.PRIVATE.equals(currentChatDialog.getType())) {
                             updateMessagesList();
                             messagesAdapter.notifyDataSetChanged();
                             scrollMessagesToBottom(1);
@@ -1321,9 +1317,9 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             Log.i(TAG, "==== DialogObserver  'update' ====");
             if (data != null) {
                 String observerKey = ((Bundle) data).getString(DialogDataManager.EXTRA_OBSERVE_KEY);
-                if (observerKey.equals(dataManager.getQBChatDialogDataManager().getObserverKey())) {
+                if (observerKey.equals(dataManager.getConnectycubeChatDialogDataManager().getObserverKey())) {
                     Dialog dialog = (Dialog)((Bundle)data).getSerializable(BaseManager.EXTRA_OBJECT);
-                    currentChatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(currentChatDialog.getDialogId());
+                    currentChatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(currentChatDialog.getDialogId());
                     if(currentChatDialog != null) {
                         if (dialog != null && dialog.getDialogId().equals(currentChatDialog.getDialogId())) {
                             // need init current dialog after getting from DB
@@ -1351,7 +1347,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
         @Override
         public void execute(Bundle bundle) {
-            QBFile file = (QBFile) bundle.getSerializable(QBServiceConsts.EXTRA_ATTACH_FILE);
+            ConnectycubeFile file = (ConnectycubeFile) bundle.getSerializable(QBServiceConsts.EXTRA_ATTACH_FILE);
             String dialogId = (String) bundle.getSerializable(QBServiceConsts.EXTRA_DIALOG_ID);
             String localPath = (String) bundle.getSerializable(QBServiceConsts.EXTRA_FILE_PATH);
 
@@ -1389,7 +1385,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                             @Override
                             public void run() {
                                 updateMessagesAdapter(isLoadedOldMessages, totalEntries);
-                                if (currentChatDialog != null && QBDialogType.PRIVATE.equals(currentChatDialog.getType())) {
+                                if (currentChatDialog != null && ConnectycubeDialogType.PRIVATE.equals(currentChatDialog.getType())) {
                                     updateMessagesList();
                                 }
                                 afterLoadingMessagesActions();
@@ -1451,12 +1447,12 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         }
     }
 
-    protected class MessagesTextViewLinkClickListener implements QBChatMessageLinkClickListener {
+    protected class MessagesTextViewLinkClickListener implements ChatMessageLinkClickListener {
 
         @Override
-        public void onLinkClicked(String linkText, QBMessageTextClickMovement.QBLinkType qbLinkType, int position) {
+        public void onLinkClicked(String linkText, MessageTextClickMovement.LinkType qbLinkType, int position) {
 
-            if (!QBMessageTextClickMovement.QBLinkType.NONE.equals(qbLinkType)) {
+            if (!MessageTextClickMovement.LinkType.NONE.equals(qbLinkType)) {
                 canPerformLogout.set(false);
             }
         }
@@ -1468,32 +1464,32 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     }
 
-    protected class LocationAttachClickListener implements QBChatAttachClickListener{
+    protected class LocationAttachClickListener implements ChatAttachClickListener{
 
         @Override
-        public void onLinkClicked(QBAttachment qbAttachment, int position) {
-            MapsActivity.startMapForResult(BaseDialogActivity.this, qbAttachment.getData());
+        public void onItemClicked(ConnectycubeAttachment attachment, int position) {
+            MapsActivity.startMapForResult(BaseDialogActivity.this, attachment.getData());
         }
     }
 
-    protected class ImageAttachClickListener implements QBChatAttachClickListener {
+    protected class ImageAttachClickListener implements ChatAttachClickListener {
 
         @Override
-        public void onLinkClicked(QBAttachment qbAttachment, int position) {
-            PreviewImageActivity.start(BaseDialogActivity.this, QBFile.getPrivateUrlForUID(qbAttachment.getId()));
+        public void onItemClicked(ConnectycubeAttachment attachment, int position) {
+            PreviewImageActivity.start(BaseDialogActivity.this, ConnectycubeFile.getPrivateUrlForUID(attachment.getId()));
         }
     }
 
-    protected class VideoAttachClickListener implements QBChatAttachClickListener {
+    protected class VideoAttachClickListener implements ChatAttachClickListener {
 
         @Override
-        public void onLinkClicked(QBAttachment qbAttachment, int position) {
+        public void onItemClicked(ConnectycubeAttachment attachment, int position) {
             canPerformLogout.set(false);
-            VideoPlayerActivity.start(BaseDialogActivity.this, Uri.parse(QBFile.getPrivateUrlForUID(qbAttachment.getId())));
+            VideoPlayerActivity.start(BaseDialogActivity.this, Uri.parse(ConnectycubeFile.getPrivateUrlForUID(attachment.getId())));
         }
     }
 
-    protected class RecordTouchListener implements QBRecordAudioButton.RecordTouchEventListener {
+    protected class RecordTouchListener implements RecordAudioButton.RecordTouchEventListener {
 
         @Override
         public void onStartClick(View v) {
@@ -1548,7 +1544,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         }
     }
 
-    private class QBMediaRecordListenerImpl implements QBMediaRecordListener {
+    private class MediaRecordListenerImpl implements MediaRecordListener {
 
         @Override
         public void onMediaRecorded(File file) {
@@ -1576,15 +1572,15 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         }
     }
 
-    protected class LinkPreviewClickListener implements QBLinkPreviewClickListener{
+    protected class LinkPreviewClickListenerImpl implements LinkPreviewClickListener {
 
         @Override
-        public void onLinkPreviewClicked(String link, QBLinkPreview linkPreview, int position) {
+        public void onLinkPreviewClicked(String link, LinkPreview linkPreview, int position) {
 
         }
 
         @Override
-        public void onLinkPreviewLongClicked(String link, QBLinkPreview linkPreview, int position) {
+        public void onLinkPreviewLongClicked(String link, LinkPreview linkPreview, int position) {
             ClipboardUtils.copySimpleTextToClipboard(BaseDialogActivity.this, link);
             ToastUtils.longToast(R.string.link_was_copied);
             Log.v(TAG, linkPreview.toString());

@@ -3,7 +3,7 @@ package com.quickblox.q_municate_core.core.concurrency;
 import android.app.Activity;
 import android.app.DialogFragment;
 
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.core.exception.ResponseException;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
 
 import java.lang.ref.WeakReference;
@@ -23,7 +23,7 @@ public abstract class BaseErrorAsyncTask<Params, Progress, Result> extends BaseA
 
         Activity parentActivity = activityRef.get();
 
-        if (e instanceof QBResponseException) {
+        if (e instanceof ResponseException) {
             ErrorUtils.showError(parentActivity, e);
         }
     }

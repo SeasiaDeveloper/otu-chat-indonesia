@@ -20,16 +20,16 @@ dependencies {
     implementation project(path: ':q-municate_user_service')
     implementation project(path: ':q-municate_auth_service')
 
-    //    QuickBlox libs
-    api "com.quickblox:quickblox-android-sdk-content:${rootProject.qbSdkVersion}"
-    api "com.quickblox:quickblox-android-sdk-customobjects:${rootProject.qbSdkVersion}"
-    api("com.quickblox:quickblox-android-sdk-messages:${rootProject.qbSdkVersion}") {
+    //    Connectycube libs
+    api "com.connectycube:connectycube-android-sdk-storage:${rootProject.cbSdkVersion}"
+    api "com.connectycube:connectycube-android-sdk-customobjects:${rootProject.cbSdkVersion}"
+    api("com.connectycube:connectycube-android-sdk-pushnotifications:${rootProject.cbSdkVersion}") {
         exclude group: 'com.android.support'
     }
-    api "com.quickblox:quickblox-android-sdk-videochat-webrtc:${rootProject.qbSdkVersion}"
-    api "com.quickblox:quickblox-android-sdk-core:${rootProject.qbSdkVersion}"
-    api("com.quickblox:chat-message-adapter:$rootProject.qbMessageAdapterVersion") {
-        exclude group: 'com.quickblox'
+    api "com.connectycube:connectycube-android-sdk-videochat:${rootProject.cbSdkVersion}"
+    api "com.connectycube:connectycube-android-sdk-core:${rootProject.cbSdkVersion}"
+    api("com.connectycube:connectycube-ui-chat-messages-adapter:$rootProject.cbMessageAdapterVersion") {
+        exclude group: 'com.connectycube'
         exclude group: 'com.android.support'
     }
 

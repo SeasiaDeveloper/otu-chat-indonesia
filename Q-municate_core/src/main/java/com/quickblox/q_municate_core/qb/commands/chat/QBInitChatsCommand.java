@@ -9,7 +9,7 @@ import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
 import com.quickblox.q_municate_core.service.QBService;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 public class QBInitChatsCommand extends ServiceCommand {
 
@@ -27,12 +27,12 @@ public class QBInitChatsCommand extends ServiceCommand {
 
     @Override
     public Bundle perform(Bundle extras) throws Exception {
-        QBUser user;
+        ConnectycubeUser user;
 
         if (extras == null) {
             user = AppSession.getSession().getUser();
         } else {
-            user = (QBUser) extras.getSerializable(QBServiceConsts.EXTRA_USER);
+            user = (ConnectycubeUser) extras.getSerializable(QBServiceConsts.EXTRA_USER);
         }
 
         chatHelper.init(user);

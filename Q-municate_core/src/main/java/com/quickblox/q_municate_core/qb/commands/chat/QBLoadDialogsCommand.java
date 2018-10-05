@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.request.QBRequestGetBuilder;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.request.RequestGetBuilder;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.models.ParcelableQBDialog;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
@@ -36,8 +36,8 @@ public class QBLoadDialogsCommand extends ServiceCommand {
     private final static int DIALOGS_PARTS = 10; // TODO: need to fix in the second release.
 
 
-    private List<QBChatDialog> dialogsListPrivate;
-    private List<QBChatDialog> dialogsListGroup;
+    private List<ConnectycubeChatDialog> dialogsListPrivate;
+    private List<ConnectycubeChatDialog> dialogsListGroup;
 
     public QBLoadDialogsCommand(Context context, QBChatHelper chatHelper, String successAction,
                                 String failAction) {
@@ -60,7 +60,7 @@ public class QBLoadDialogsCommand extends ServiceCommand {
         final ArrayList<ParcelableQBDialog> parcelableQBDialog = new ArrayList<>();
 
         final Bundle returnedBundle = new Bundle();
-        final QBRequestGetBuilder qbRequestGetBuilder = new QBRequestGetBuilder();
+        final RequestGetBuilder qbRequestGetBuilder = new RequestGetBuilder();
 
         qbRequestGetBuilder.setLimit(ConstsCore.CHATS_DIALOGS_PER_PAGE);
         qbRequestGetBuilder.sortDesc(QBServiceConsts.EXTRA_LAST_MESSAGE_DATE_SENT);
@@ -78,13 +78,13 @@ public class QBLoadDialogsCommand extends ServiceCommand {
         return bundle;
     }
 
-    private int loadAllDialogsByType(QBDialogType dialogsType,  Bundle returnedBundle, QBRequestGetBuilder qbRequestGetBuilder, List<QBChatDialog> allDialogsList, int pageNumber) throws QBResponseException {
+    private int loadAllDialogsByType(ConnectycubeDialogType dialogsType,  Bundle returnedBundle, RequestGetBuilder qbRequestGetBuilder, List<ConnectycubeChatDialog> allDialogsList, int pageNumber) throws ResponseException {
         boolean needToLoadMore = false;
 
         qbRequestGetBuilder.setSkip(allDialogsList.size());
         qbRequestGetBuilder.eq(FIELD_DIALOG_TYPE, dialogsType.getCode());
-        List<QBChatDialog> newDialogsList = getDialogs(qbRequestGetBuilder, returnedBundle);
-        if (dialogsType == QBDialogType.GROUP) {
+        List<ConnectycubeChatDialog> newDialogsList = getDialogs(qbRequestGetBuilder, returnedBundle);
+        if (dialogsType == ConnectycubeDialogType.GROUP) {
             dialogsListGroup = newDialogsList;
         } else{
             dialogsListPrivate = newDialogsList;
@@ -92,7 +92,7 @@ public class QBLoadDialogsCommand extends ServiceCommand {
         allDialogsList.addAll(newDialogsList);
         Log.d("QBLoadDialogsCommand", "needToLoadMore = " + needToLoadMore + "newDialogsList.size() = " + newDialogsList.size());
 
-        if (dialogsType == QBDialogType.GROUP) {
+        if (dialogsType == ConnectycubeDialogType.GROUP) {
             boolean needClean = (pageNumber == 0);
             tryJoinRoomChatsPage(newDialogsList, needClean);
         }
@@ -100,25 +100,25 @@ public class QBLoadDialogsCommand extends ServiceCommand {
         return newDialogsList.size();
     }
 
-    private List<QBChatDialog> loadAllDialogsByPages(Bundle returnedBundle, QBRequestGetBuilder qbRequestGetBuilder, boolean updateAll) throws QBResponseException {
-        List<QBChatDialog> allDialogsList = null;
-        List<QBChatDialog> allDialogsListPrivate = new ArrayList<>();
-        List<QBChatDialog> allDialogsListGroup = new ArrayList<>();
+    private List<ConnectycubeChatDialog> loadAllDialogsByPages(Bundle returnedBundle, RequestGetBuilder qbRequestGetBuilder, boolean updateAll) throws ResponseException {
+        List<ConnectycubeChatDialog> allDialogsList = null;
+        List<ConnectycubeChatDialog> allDialogsListPrivate = new ArrayList<>();
+        List<ConnectycubeChatDialog> allDialogsListGroup = new ArrayList<>();
         boolean needToLoadMorePrivate = true;
         boolean needToLoadMoreGroup = true;
         int pageNumber = 0;
 
-        final QBRequestGetBuilder qbRequestGetBuilderPrivate = new QBRequestGetBuilder();
+        final RequestGetBuilder qbRequestGetBuilderPrivate = new RequestGetBuilder();
 
         qbRequestGetBuilderPrivate.setLimit(ConstsCore.CHATS_DIALOGS_PER_PAGE);
         qbRequestGetBuilderPrivate.sortDesc(QBServiceConsts.EXTRA_LAST_MESSAGE_DATE_SENT);
-        qbRequestGetBuilderPrivate.addRule(FIELD_DIALOG_TYPE, OPERATOR_EQ, QBDialogType.PRIVATE.getCode());
+        qbRequestGetBuilderPrivate.addRule(FIELD_DIALOG_TYPE, OPERATOR_EQ, ConnectycubeDialogType.PRIVATE.getCode());
 
-        final QBRequestGetBuilder qbRequestGetBuilderGroup = new QBRequestGetBuilder();
+        final RequestGetBuilder qbRequestGetBuilderGroup = new RequestGetBuilder();
 
         qbRequestGetBuilderGroup.setLimit(ConstsCore.CHATS_DIALOGS_PER_PAGE);
         qbRequestGetBuilderGroup.sortDesc(QBServiceConsts.EXTRA_LAST_MESSAGE_DATE_SENT);
-        qbRequestGetBuilderGroup.addRule(FIELD_DIALOG_TYPE, OPERATOR_EQ, QBDialogType.GROUP.getCode());
+        qbRequestGetBuilderGroup.addRule(FIELD_DIALOG_TYPE, OPERATOR_EQ, ConnectycubeDialogType.GROUP.getCode());
 
         int skipRow = 0;
 
@@ -126,12 +126,12 @@ public class QBLoadDialogsCommand extends ServiceCommand {
             int privateDialogsSize = 0;
             int groupDialogsSize = 0;
             if(needToLoadMorePrivate) {
-                privateDialogsSize = loadAllDialogsByType(QBDialogType.PRIVATE, returnedBundle, qbRequestGetBuilderPrivate, allDialogsListPrivate, pageNumber);
+                privateDialogsSize = loadAllDialogsByType(ConnectycubeDialogType.PRIVATE, returnedBundle, qbRequestGetBuilderPrivate, allDialogsListPrivate, pageNumber);
                 needToLoadMorePrivate = privateDialogsSize == ConstsCore.CHATS_DIALOGS_PER_PAGE;
             }
 
             if(needToLoadMoreGroup) {
-                groupDialogsSize = loadAllDialogsByType(QBDialogType.GROUP, returnedBundle, qbRequestGetBuilderGroup, allDialogsListGroup, pageNumber);
+                groupDialogsSize = loadAllDialogsByType(ConnectycubeDialogType.GROUP, returnedBundle, qbRequestGetBuilderGroup, allDialogsListGroup, pageNumber);
                 needToLoadMoreGroup = groupDialogsSize == ConstsCore.CHATS_DIALOGS_PER_PAGE;
             }
 
@@ -161,11 +161,11 @@ public class QBLoadDialogsCommand extends ServiceCommand {
         return allDialogsList;
     }
 
-    private List<QBChatDialog> getDialogs(QBRequestGetBuilder qbRequestGetBuilder, Bundle returnedBundle) throws QBResponseException {
+    private List<ConnectycubeChatDialog> getDialogs(RequestGetBuilder qbRequestGetBuilder, Bundle returnedBundle) throws ResponseException {
         return chatHelper.getDialogs(qbRequestGetBuilder, returnedBundle);
     }
 
-    private void tryJoinRoomChatsPage(final List<QBChatDialog> dialogsList, final boolean needClean) {
+    private void tryJoinRoomChatsPage(final List<ConnectycubeChatDialog> dialogsList, final boolean needClean) {
         chatHelper.tryJoinRoomChatsPage(dialogsList, needClean);
     }
 

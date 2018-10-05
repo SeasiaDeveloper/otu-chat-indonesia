@@ -1,26 +1,28 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="5dp"
     android:layout_alignParentBottom="true"
     android:orientation="horizontal"
-    android:padding="5dp">
+    >
 
     <RelativeLayout
         android:id="@+id/message_relativelayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/new_chat_input_message_height"
-        android:layout_marginRight="-12dp"
         android:layout_weight="1"
+        android:layout_marginRight="-12dp"
         android:background="@drawable/background_green_send_message">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/new_chat_input_message_height"
-            android:layout_margin="6dp"
+            android:background="@drawable/rounded_shape_message"
             android:layout_toStartOf="@id/action_buttons_view"
-            android:layout_toLeftOf="@id/action_buttons_view"
-            android:background="@drawable/rounded_shape_message">
+            android:layout_margin="6dp"
+            android:layout_toLeftOf="@id/action_buttons_view">
 
             <com.rockerhieu.emojicon.EmojiconEditText
                 android:id="@+id/message_edittext"
@@ -31,13 +33,14 @@
                 android:background="@null"
                 android:clickable="true"
                 android:focusable="true"
-                android:gravity="center_vertical"
                 android:hint="@string/dialog_hint_message"
+                android:gravity="center_vertical"
                 android:maxLines="5"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray_color_message"
                 android:textSize="14sp"
-                emojicon:emojiconSize="@dimen/chat_emoji_item_preview_size" />
+                android:textColorHint="@color/gray_color_message"
+                android:textColor="@color/black"
+                emojicon:emojiconSize="@dimen/chat_emoji_item_preview_size"
+                />
 
             <ImageButton
                 android:id="@+id/smile_panel_imagebutton"
@@ -86,9 +89,8 @@
 
         </LinearLayout>
 
-        <include
-            layout="@layout/view_input_audio_container"
-            android:visibility="invisible" />
+        <include layout="@layout/view_input_audio_container"
+            android:visibility="invisible"/>
 
     </RelativeLayout>
 
@@ -104,9 +106,9 @@
         android:src="@drawable/ic_send_message"
         android:visibility="gone" />
 
-    <com.quickblox.ui.kit.chatmessage.adapter.media.recorder.view.QBRecordAudioButton
-        android:id="@+id/chat_record_audio_button"
+    <com.connectycube.ui.chatmessage.adapter.media.recorder.view.RecordAudioButton
         style="@style/ChatRoundActionButtonStyle"
+        android:id="@+id/chat_record_audio_button"
         android:layout_gravity="center_vertical"
         android:background="@drawable/background_round_icon_voice"
         android:scaleType="centerInside"

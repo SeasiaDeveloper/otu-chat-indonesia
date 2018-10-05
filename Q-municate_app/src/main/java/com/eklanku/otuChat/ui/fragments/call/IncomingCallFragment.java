@@ -14,16 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.call.CallActivity;
 import com.eklanku.otuChat.utils.image.ImageLoaderUtils;
 import com.quickblox.q_municate_core.models.StartConversationReason;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_core.utils.call.RingtonePlayer;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
-import com.quickblox.videochat.webrtc.QBRTCSessionDescription;
-import com.quickblox.videochat.webrtc.QBRTCTypes;
+import com.connectycube.users.model.ConnectycubeUser;
+import com.connectycube.videochat.RTCSessionDescription;
+import com.connectycube.videochat.RTCTypes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -42,10 +42,10 @@ public class IncomingCallFragment extends Fragment implements Serializable, View
     private ImageButton takeBtn;
 
     private ArrayList<Integer> opponents;
-    private List<QBUser> opponentsFromCall = new ArrayList<>();
-    private QBRTCSessionDescription sessionDescription;
+    private List<ConnectycubeUser> opponentsFromCall = new ArrayList<>();
+    private RTCSessionDescription sessionDescription;
     private Vibrator vibrator;
-    private QBRTCTypes.QBConferenceType qbConferenceType;
+    private RTCTypes.ConferenceType conferenceType;
     private View view;
     private long lastClickTime = 0l;
     private RingtonePlayer ringtonePlayer;
@@ -62,17 +62,17 @@ public class IncomingCallFragment extends Fragment implements Serializable, View
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (getArguments() != null) {
             opponents = getArguments().getIntegerArrayList(QBServiceConsts.EXTRA_OPPONENTS);
-            sessionDescription = (QBRTCSessionDescription) getArguments().getSerializable(QBServiceConsts.EXTRA_SESSION_DESCRIPTION);
-            qbConferenceType = (QBRTCTypes.QBConferenceType) getArguments().getSerializable(QBServiceConsts.EXTRA_CONFERENCE_TYPE);
+            sessionDescription = (RTCSessionDescription) getArguments().getSerializable(QBServiceConsts.EXTRA_SESSION_DESCRIPTION);
+            conferenceType = (RTCTypes.ConferenceType) getArguments().getSerializable(QBServiceConsts.EXTRA_CONFERENCE_TYPE);
 
-            Log.d(TAG, qbConferenceType.toString() + "From onCreateView()");
+            Log.d(TAG, conferenceType.toString() + "From onCreateView()");
         }
 
         if (savedInstanceState == null) {
             view = inflater.inflate(R.layout.fragment_income_call, container, false);
 
             initUI(view);
-            setDisplayedTypeCall(qbConferenceType);
+            setDisplayedTypeCall(conferenceType);
             initButtonsListener();
         }
 
@@ -140,10 +140,10 @@ public class IncomingCallFragment extends Fragment implements Serializable, View
         }
     }
 
-    private void setDisplayedTypeCall(QBRTCTypes.QBConferenceType conferenceType) {
-        typeIncCall.setText(getString(QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_VIDEO.equals(conferenceType) ?
+    private void setDisplayedTypeCall(RTCTypes.ConferenceType conferenceType) {
+        typeIncCall.setText(getString(RTCTypes.ConferenceType.CONFERENCE_TYPE_VIDEO.equals(conferenceType) ?
                 R.string.call_incoming_video_call : R.string.call_incoming_audio_call));
-        takeBtn.setImageResource(QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_VIDEO.equals(conferenceType) ?
+        takeBtn.setImageResource(RTCTypes.ConferenceType.CONFERENCE_TYPE_VIDEO.equals(conferenceType) ?
                 R.drawable.ic_video_white : R.drawable.ic_call);
     }
 

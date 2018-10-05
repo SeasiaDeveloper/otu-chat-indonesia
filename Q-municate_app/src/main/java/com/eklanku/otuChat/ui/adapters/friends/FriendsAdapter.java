@@ -21,7 +21,7 @@ import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.qb.helpers.QBFriendListHelper;
 import com.quickblox.q_municate_core.utils.OnlineStatusUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 import android.util.Log;
 import java.util.List;
 
@@ -121,7 +121,7 @@ public class FriendsAdapter extends BaseFilterAdapter<QMUser, BaseClickListenerV
     }
 
     private boolean isMe(QMUser inputUser) {
-        QBUser currentUser = AppSession.getSession().getUser();
+        ConnectycubeUser currentUser = AppSession.getSession().getUser();
         return currentUser.getId().intValue() == inputUser.getId().intValue();
     }
 

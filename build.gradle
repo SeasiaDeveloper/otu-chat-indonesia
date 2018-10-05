@@ -22,11 +22,11 @@ allprojects {
             if (isPrivateRepository) {
                 url = qbRepository
                 credentials {
-                    username qbUser
-                    password qbPassword
+                    username cbUser
+                    password cbPassword
                 }
             } else {
-                url "https://github.com/QuickBlox/quickblox-android-sdk-releases/raw/master/"
+                url "https://github.com/ConnectyCube/connectycube-android-sdk-releases/raw/master/"
             }
         }
         maven { url 'https://maven.fabric.io/public' }
@@ -49,8 +49,8 @@ ext {
     lintAbortOnError = false
 
 //    QuickBlox SDK version
-    qbSdkVersion = '3.5.2'
-    qbMessageAdapterVersion = '2.0'
+    cbSdkVersion = '1.2.0'
+    cbMessageAdapterVersion = '1.0'
 
     testRunnerVersion = "0.4.1"
 

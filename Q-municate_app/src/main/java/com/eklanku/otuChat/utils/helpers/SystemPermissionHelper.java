@@ -20,7 +20,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;;
-import com.quickblox.videochat.webrtc.QBRTCTypes;
+import com.connectycube.videochat.RTCTypes;
 
 import java.util.ArrayList;
 
@@ -123,8 +123,8 @@ public class SystemPermissionHelper {
         return deniedPermissionsList.toArray(new String[deniedPermissionsList.size()]);
     }
 
-    public boolean isAllPermissionsGrantedForCallByType(QBRTCTypes.QBConferenceType qbConferenceType) {
-        if (QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_AUDIO.equals(qbConferenceType)) {
+    public boolean isAllPermissionsGrantedForCallByType(RTCTypes.ConferenceType conferenceType) {
+        if (RTCTypes.ConferenceType.CONFERENCE_TYPE_AUDIO.equals(conferenceType)) {
             return isPermissionGranted(Manifest.permission.RECORD_AUDIO);
         } else {
             return isAllPermissionGranted(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA);
@@ -151,8 +151,8 @@ public class SystemPermissionHelper {
         return isAllPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO);
     }
 
-    public void requestPermissionsForCallByType(QBRTCTypes.QBConferenceType qbConferenceType) {
-        if (QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_AUDIO.equals(qbConferenceType)) {
+    public void requestPermissionsForCallByType(RTCTypes.ConferenceType conferenceType) {
+        if (RTCTypes.ConferenceType.CONFERENCE_TYPE_AUDIO.equals(conferenceType)) {
             checkAndRequestPermissions(PERMISSIONS_FOR_CALL_REQUEST, Manifest.permission.RECORD_AUDIO);
         } else {
             checkAndRequestPermissions(PERMISSIONS_FOR_CALL_REQUEST, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA);

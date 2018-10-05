@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.messages.QBPushNotifications;
-import com.quickblox.messages.model.QBEvent;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.pushnotifications.ConnectycubePushNotifications;
+import com.connectycube.pushnotifications.model.ConnectycubeEvent;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.service.QBService;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
@@ -41,10 +41,10 @@ public class QBSendPushCommand extends ServiceCommand {
                 QBServiceConsts.EXTRA_FRIENDS);
         String message = extras.getString(ConstsCore.PUSH_MESSAGE);
         String messageType = extras.getString(ConstsCore.PUSH_MESSAGE_TYPE);
-        QBEvent pushEvent = CoreNotificationHelper.createPushEvent(usersIdsList, message, messageType);
+        ConnectycubeEvent pushEvent = CoreNotificationHelper.createPushEvent(usersIdsList, message, messageType);
         try {
-            QBPushNotifications.createEvent(pushEvent).perform();
-        } catch (QBResponseException e) {
+            ConnectycubePushNotifications.createEvent(pushEvent).perform();
+        } catch (ResponseException e) {
             /* ignore message = "No one can receive the message" */
         }
 

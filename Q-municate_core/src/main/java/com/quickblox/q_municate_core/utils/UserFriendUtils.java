@@ -1,12 +1,12 @@
 package com.quickblox.q_municate_core.utils;
 
-import com.quickblox.chat.model.QBRosterEntry;
+import com.connectycube.chat.model.ConnectycubeRosterEntry;
 import com.quickblox.q_municate_core.models.UserCustomData;
 import com.quickblox.q_municate_db.models.DialogOccupant;
 import com.quickblox.q_municate_db.models.Friend;
 import com.quickblox.q_municate_db.models.UserRequest;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import org.jivesoftware.smack.roster.packet.RosterPacket;
 
@@ -36,20 +36,20 @@ public class UserFriendUtils {
         return userList;
     }
 
-    public static QMUser createLocalUser(QBUser qbUser) {
+    public static QMUser createLocalUser(ConnectycubeUser connectycubeUser) {
         QMUser user = new QMUser();
-        user.setId(qbUser.getId());
-        user.setFullName(qbUser.getFullName());
-        user.setEmail(qbUser.getEmail());
-        user.setPhone(qbUser.getPhone());
-        user.setLogin(qbUser.getLogin());
+        user.setId(connectycubeUser.getId());
+        user.setFullName(connectycubeUser.getFullName());
+        user.setEmail(connectycubeUser.getEmail());
+        user.setPhone(connectycubeUser.getPhone());
+        user.setLogin(connectycubeUser.getLogin());
 
-        if (qbUser.getLastRequestAt() != null) {
-            user.setLastRequestAt(qbUser.getLastRequestAt());
+        if (connectycubeUser.getLastRequestAt() != null) {
+            user.setLastRequestAt(connectycubeUser.getLastRequestAt());
         }
 
 
-        UserCustomData userCustomData = Utils.customDataToObject(qbUser.getCustomData());
+        UserCustomData userCustomData = Utils.customDataToObject(connectycubeUser.getCustomData());
 
         if (userCustomData != null) {
             user.setAvatar(userCustomData.getAvatarUrl());
@@ -60,30 +60,30 @@ public class UserFriendUtils {
     }
 
 
-    public static QBUser createQbUser(QMUser user) {
-        QBUser qbUser = new QBUser();
-        qbUser.setId(user.getId());
-        qbUser.setLogin(user.getLogin());
-        qbUser.setFullName(user.getFullName());
-        return qbUser;
+    public static ConnectycubeUser createConnectycubeUser(QMUser user) {
+        ConnectycubeUser connectycubeUser = new ConnectycubeUser();
+        connectycubeUser.setId(user.getId());
+        connectycubeUser.setLogin(user.getLogin());
+        connectycubeUser.setFullName(user.getFullName());
+        return connectycubeUser;
     }
 
-    public static boolean isOutgoingFriend(QBRosterEntry rosterEntry) {
+    public static boolean isOutgoingFriend(ConnectycubeRosterEntry rosterEntry) {
         return RosterPacket.ItemStatus.subscribe.equals(rosterEntry.getStatus());
     }
 
-    public static boolean isNoneFriend(QBRosterEntry rosterEntry) {
+    public static boolean isNoneFriend(ConnectycubeRosterEntry rosterEntry) {
         return RosterPacket.ItemType.none.equals(rosterEntry.getType())
                 || RosterPacket.ItemType.from.equals(rosterEntry.getType());
     }
 
-    public static boolean isEmptyFriendsStatus(QBRosterEntry rosterEntry) {
+    public static boolean isEmptyFriendsStatus(ConnectycubeRosterEntry rosterEntry) {
         return rosterEntry.getStatus() == null;
     }
 
-    public static List<QMUser> createUsersList(Collection<QBUser> usersList) {
+    public static List<QMUser> createUsersList(Collection<ConnectycubeUser> usersList) {
         List<QMUser> users = new ArrayList<QMUser>();
-        for (QBUser user : usersList) {
+        for (ConnectycubeUser user : usersList) {
             users.add(createLocalUser(user));
         }
         return users;
@@ -91,23 +91,23 @@ public class UserFriendUtils {
 
     public static List<QMUser> createUsers(Collection<QMUser> usersList) {
         List<QMUser> users = new ArrayList<QMUser>();
-        for (QBUser user : usersList) {
+        for (ConnectycubeUser user : usersList) {
             users.add(createLocalUser(user));
         }
         return users;
     }
 
-    public static Map<Integer, QMUser> createUserMap(List<QBUser> userList) {
+    public static Map<Integer, QMUser> createUserMap(List<ConnectycubeUser> userList) {
         Map<Integer, QMUser> userHashMap = new HashMap<Integer, QMUser>();
-        for (QBUser user : userList) {
+        for (ConnectycubeUser user : userList) {
             userHashMap.put(user.getId(), createLocalUser(user));
         }
         return userHashMap;
     }
 
-    public static ArrayList<Integer> getFriendIdsList(List<QBUser> friendList) {
+    public static ArrayList<Integer> getFriendIdsList(List<ConnectycubeUser> friendList) {
         ArrayList<Integer> friendIdsList = new ArrayList<Integer>();
-        for (QBUser friend : friendList) {
+        for (ConnectycubeUser friend : friendList) {
             friendIdsList.add(friend.getId());
         }
         return friendIdsList;
@@ -145,8 +145,8 @@ public class UserFriendUtils {
         return friendsList;
     }
 
-    public static String getUserNameByID(Integer userId, List<QBUser> usersList) {
-        for (QBUser user : usersList) {
+    public static String getUserNameByID(Integer userId, List<ConnectycubeUser> usersList) {
+        for (ConnectycubeUser user : usersList) {
             if (user.getId().equals(userId)) {
                 return user.getFullName();
             }
@@ -154,10 +154,10 @@ public class UserFriendUtils {
         return userId.toString();
     }
 
-    public static List<QBUser> getUsersByIDs(Integer[] ids, List<QBUser> usersList) {
-        ArrayList<QBUser> result = new ArrayList<>();
+    public static List<ConnectycubeUser> getUsersByIDs(Integer[] ids, List<ConnectycubeUser> usersList) {
+        ArrayList<ConnectycubeUser> result = new ArrayList<>();
         for (Integer userId : ids) {
-            for (QBUser user : usersList) {
+            for (ConnectycubeUser user : usersList) {
                 if (userId.equals(user.getId())){
                     result.add(user);
                 }

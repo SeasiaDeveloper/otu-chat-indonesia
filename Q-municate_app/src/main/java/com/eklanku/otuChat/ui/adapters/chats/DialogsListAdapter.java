@@ -8,8 +8,8 @@ import android.widget.TextView;
 import com.eklanku.otuChat.ui.adapters.base.BaseListAdapter;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
 import com.eklanku.otuChat.utils.DateUtils;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.adapters.base.BaseListAdapter;
@@ -39,7 +39,7 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
         ViewHolder viewHolder;
 
         DialogWrapper dialogWrapper = getItem(position);
-        QBChatDialog currentDialog = dialogWrapper.getChatDialog();
+        ConnectycubeChatDialog currentDialog = dialogWrapper.getChatDialog();
 
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.item_dialog, null);
@@ -58,7 +58,7 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (QBDialogType.PRIVATE.equals(currentDialog.getType())) {
+        if (ConnectycubeDialogType.PRIVATE.equals(currentDialog.getType())) {
             QMUser opponentUser = dialogWrapper.getOpponentUser();
             if (opponentUser.getFullName() != null) {
                 String username = "";

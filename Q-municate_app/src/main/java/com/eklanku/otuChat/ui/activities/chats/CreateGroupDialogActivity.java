@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.eklanku.otuChat.ui.adapters.friends.FriendsAdapter;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.content.model.QBFile;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.storage.model.ConnectycubeFile;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.others.BaseFriendsListActivity;
 import com.eklanku.otuChat.ui.activities.profile.UserProfileActivity;
@@ -53,7 +53,7 @@ public class CreateGroupDialogActivity extends BaseFriendsListActivity implement
     @Bind(R.id.participants_count_textview)
     TextView participantsCountTextView;
 
-    private QBFile qbFile;
+    private ConnectycubeFile connectycubeFile;
     private List<QMUser> friendsList;
     private MediaPickHelper mediaPickHelper;
     private Uri imageUri;
@@ -194,7 +194,7 @@ public class CreateGroupDialogActivity extends BaseFriendsListActivity implement
     }
 
     private void createGroupChat() {
-        String photoUrl = qbFile != null ? qbFile.getPublicUrl() : null;
+        String photoUrl = connectycubeFile != null ? connectycubeFile.getPublicUrl() : null;
         QBCreateGroupDialogCommand.start(this, groupNameEditText.getText().toString(), (ArrayList<QMUser>) friendsList, photoUrl);
     }
 
@@ -221,7 +221,7 @@ public class CreateGroupDialogActivity extends BaseFriendsListActivity implement
 
         @Override
         public void execute(Bundle bundle) {
-            qbFile = (QBFile) bundle.getSerializable(QBServiceConsts.EXTRA_ATTACH_FILE);
+            connectycubeFile = (ConnectycubeFile) bundle.getSerializable(QBServiceConsts.EXTRA_ATTACH_FILE);
             createGroupChat();
         }
     }
@@ -231,7 +231,7 @@ public class CreateGroupDialogActivity extends BaseFriendsListActivity implement
         @Override
         public void execute(Bundle bundle) {
             hideProgress();
-            QBChatDialog dialog = (QBChatDialog) bundle.getSerializable(QBServiceConsts.EXTRA_DIALOG);
+            ConnectycubeChatDialog dialog = (ConnectycubeChatDialog) bundle.getSerializable(QBServiceConsts.EXTRA_DIALOG);
 
             if (dialog != null) {
                 GroupDialogActivity.start(CreateGroupDialogActivity.this, dialog);

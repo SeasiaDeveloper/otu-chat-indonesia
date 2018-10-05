@@ -14,7 +14,7 @@ import com.quickblox.q_municate_db.managers.DialogDataManager;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.quickblox.q_municate_user_service.model.QMUserColumns;
 import com.quickblox.q_municate_user_service.cache.QMUserCache;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.sql.SQLException;
 import java.util.Collection;

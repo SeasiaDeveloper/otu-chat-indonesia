@@ -3,7 +3,7 @@ package com.eklanku.otuChat.fcm;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.quickblox.messages.services.fcm.QBFcmPushListenerService;
+import com.connectycube.pushnotifications.services.fcm.FcmPushListenerService;
 import com.eklanku.otuChat.utils.helpers.notification.ChatNotificationHelper;
 
 import java.util.Map;
@@ -11,12 +11,12 @@ import java.util.Map;
 import static com.quickblox.q_municate_core.utils.ConstsCore.*;
 
 
-public class FcmPushListenerService extends QBFcmPushListenerService {
-    private String TAG = FcmPushListenerService.class.getSimpleName();
+public class FirebasePushListenerService extends FcmPushListenerService {
+    private String TAG = FirebasePushListenerService.class.getSimpleName();
 
     private ChatNotificationHelper chatNotificationHelper;
 
-    public FcmPushListenerService() {
+    public FirebasePushListenerService() {
         this.chatNotificationHelper = new ChatNotificationHelper(this);
     }
 

@@ -13,7 +13,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
-import com.quickblox.chat.model.QBChatDialog;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
 import com.quickblox.q_municate_core.models.NotificationEvent;
@@ -32,7 +32,7 @@ public class NotificationManagerHelper {
     public static void sendChatNotificationEvent(Context context, int userId, String dialogId,
                                                  NotificationEvent notificationEvent) {
 
-        QBChatDialog chatDialog = DataManager.getInstance().getQBChatDialogDataManager()
+        ConnectycubeChatDialog chatDialog = DataManager.getInstance().getConnectycubeChatDialogDataManager()
                 .getByDialogId(dialogId);
         QMUser user = QMUserService.getInstance().getUserCache().get((long) userId);
 

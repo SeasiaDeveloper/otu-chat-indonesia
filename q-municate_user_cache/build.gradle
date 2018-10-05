@@ -32,7 +32,7 @@ dependencies {
     })
     implementation "com.android.support:appcompat-v7:${rootProject.supportVersion}"
     implementation project(path: ':q-municate_base_cache')
-    implementation "com.quickblox:quickblox-android-sdk-core:${rootProject.qbSdkVersion}"
+    implementation "com.connectycube:connectycube-android-sdk-core:${rootProject.cbSdkVersion}"
     implementation 'com.j256.ormlite:ormlite-core:5.0'
     implementation project(path: ':Q-municate_db')
     implementation project(path: ':q-municate_user_service')

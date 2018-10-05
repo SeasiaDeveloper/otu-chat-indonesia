@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.quickblox.chat.model.QBDialogType;
+import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
 import com.quickblox.q_municate_core.service.QBService;
@@ -30,7 +30,7 @@ public class QBDeleteChatCommand extends ServiceCommand {
     @Override
     protected Bundle perform(Bundle extras) throws Exception {
         String dialogId = extras.getString(QBServiceConsts.EXTRA_DIALOG_ID);
-        QBDialogType dialogType = QBDialogType.parseByCode(extras.getInt(QBServiceConsts.EXTRA_DIALOG_TYPE));
+        ConnectycubeDialogType dialogType = ConnectycubeDialogType.parseByCode(extras.getInt(QBServiceConsts.EXTRA_DIALOG_TYPE));
         chatHelper.deleteDialog(dialogId, dialogType);
         return extras;
     }

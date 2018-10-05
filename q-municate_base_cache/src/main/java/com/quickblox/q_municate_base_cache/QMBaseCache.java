@@ -1,6 +1,6 @@
 package com.quickblox.q_municate_base_cache;
 
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.Collection;
 import java.util.List;

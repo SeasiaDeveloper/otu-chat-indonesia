@@ -26,7 +26,6 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
@@ -40,11 +39,10 @@ import com.eklanku.otuChat.ui.fragments.base.BaseLoaderFragment;
 import com.eklanku.otuChat.ui.fragments.search.ContactsFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
 import com.eklanku.otuChat.utils.PreferenceUtil;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
-import com.quickblox.core.helper.CollectionsUtil;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
+import com.connectycube.core.helper.CollectionsUtil;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.loaders.DialogsListLoader;
 import com.eklanku.otuChat.ui.activities.about.AboutActivity;
 import com.eklanku.otuChat.ui.activities.chats.GroupDialogActivity;
 import com.eklanku.otuChat.ui.activities.chats.NewMessageActivity;
@@ -75,15 +73,11 @@ import com.quickblox.q_municate_db.models.Message;
 import com.quickblox.q_municate_user_cache.QMUserCacheImpl;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
@@ -122,7 +116,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
     private DialogsListAdapter dialogsListAdapter;
     private DataManager dataManager;
-    private QBUser qbUser;
+    private ConnectycubeUser connectycubeUser;
     private Observer commonObserver;
     private DialogsListLoader dialogsListLoader;
     private Queue<LoaderConsumer> loaderConsumerQueue = new ConcurrentLinkedQueue<>();
@@ -193,7 +187,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     private void initFields() {
         dataManager = DataManager.getInstance();
         commonObserver = new CommonObserver();
-        qbUser = AppSession.getSession().getUser();
+        connectycubeUser = AppSession.getSession().getUser();
     }
 
     private void setEmptyMessage() {
@@ -253,8 +247,8 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         super.onCreateContextMenu(menu, view, menuInfo);
         MenuInflater menuInflater = baseActivity.getMenuInflater();
         AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        QBChatDialog chatDialog = dialogsListAdapter.getItem(adapterContextMenuInfo.position).getChatDialog();
-        if (chatDialog.getType().equals(QBDialogType.GROUP)) {
+        ConnectycubeChatDialog chatDialog = dialogsListAdapter.getItem(adapterContextMenuInfo.position).getChatDialog();
+        if (chatDialog.getType().equals(ConnectycubeDialogType.GROUP)) {
             menuInflater.inflate(R.menu.dialogs_list_group_ctx_menu, menu);
         } else {
             menuInflater.inflate(R.menu.dialogs_list_private_ctx_menu, menu);
@@ -267,7 +261,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         switch (item.getItemId()) {
             case R.id.action_delete:
                 if (baseActivity.checkNetworkAvailableWithError() && checkDialogsLoadFinished()) {
-                    QBChatDialog chatDialog = dialogsListAdapter.getItem(adapterContextMenuInfo.position).getChatDialog();
+                    ConnectycubeChatDialog chatDialog = dialogsListAdapter.getItem(adapterContextMenuInfo.position).getChatDialog();
                     deleteDialog(chatDialog);
                 }
                 break;
@@ -379,8 +373,8 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     }
 
     private void updateOrAddDialog(String dialogId, boolean updatePosition) {
-        QBChatDialog qbChatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
-        DialogWrapper dialogWrapper = new DialogWrapper(getContext(), dataManager, qbChatDialog);
+        ConnectycubeChatDialog connectycubeChatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
+        DialogWrapper dialogWrapper = new DialogWrapper(getContext(), dataManager, connectycubeChatDialog);
         if (updateDialogsProcess == State.finished || dialogsListAdapter.getCount() != 0) {
             dialogsListAdapter.updateItem(dialogWrapper);
         }
@@ -402,13 +396,13 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
     @OnItemClick(R.id.chats_listview)
     void startChat(int position) {
-        QBChatDialog chatDialog = dialogsListAdapter.getItem(position).getChatDialog();
+        ConnectycubeChatDialog chatDialog = dialogsListAdapter.getItem(position).getChatDialog();
 
         if (!baseActivity.checkNetworkAvailableWithError() && isFirstOpeningDialog(chatDialog.getDialogId())) {
             return;
         }
 
-        if (QBDialogType.PRIVATE.equals(chatDialog.getType())) {
+        if (ConnectycubeDialogType.PRIVATE.equals(chatDialog.getType())) {
             startPrivateChatActivity(chatDialog);
         } else {
             startGroupChatActivity(chatDialog);
@@ -522,7 +516,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     }
 
     private void addObservers() {
-        dataManager.getQBChatDialogDataManager().addObserver(commonObserver);
+        dataManager.getConnectycubeChatDialogDataManager().addObserver(commonObserver);
         dataManager.getMessageDataManager().addObserver(commonObserver);
         dataManager.getDialogOccupantDataManager().addObserver(commonObserver);
         dataManager.getDialogNotificationDataManager().addObserver(commonObserver);
@@ -531,7 +525,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
     private void deleteObservers() {
         if (dataManager != null) {
-            dataManager.getQBChatDialogDataManager().deleteObserver(commonObserver);
+            dataManager.getConnectycubeChatDialogDataManager().deleteObserver(commonObserver);
             dataManager.getMessageDataManager().deleteObserver(commonObserver);
             dataManager.getDialogOccupantDataManager().deleteObserver(commonObserver);
             dataManager.getDialogNotificationDataManager().deleteObserver(commonObserver);
@@ -575,17 +569,17 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         updateDialogSuccessAction = new UpdateDialogSuccessAction();
     }
 
-    private void startPrivateChatActivity(QBChatDialog chatDialog) {
+    private void startPrivateChatActivity(ConnectycubeChatDialog chatDialog) {
         List<DialogOccupant> occupantsList = dataManager.getDialogOccupantDataManager()
                 .getDialogOccupantsListByDialogId(chatDialog.getDialogId());
-        QMUser opponent = ChatUtils.getOpponentFromPrivateDialog(UserFriendUtils.createLocalUser(qbUser), occupantsList);
+        QMUser opponent = ChatUtils.getOpponentFromPrivateDialog(UserFriendUtils.createLocalUser(connectycubeUser), occupantsList);
 
         if (!TextUtils.isEmpty(chatDialog.getDialogId())) {
             PrivateDialogActivity.startForResult(this, opponent, chatDialog, PICK_DIALOG);
         }
     }
 
-    private void startGroupChatActivity(QBChatDialog chatDialog) {
+    private void startGroupChatActivity(ConnectycubeChatDialog chatDialog) {
         GroupDialogActivity.startForResult(this, chatDialog, PICK_DIALOG);
     }
 
@@ -666,7 +660,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         }
     }
 
-    private void deleteDialog(QBChatDialog chatDialog) {
+    private void deleteDialog(ConnectycubeChatDialog chatDialog) {
         if (chatDialog == null || chatDialog.getDialogId() == null) {
             return;
         }
@@ -786,7 +780,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
                             updateOrAddDialog(message.getDialogOccupant().getDialog().getDialogId(), action == BaseManager.CREATE_ACTION);
                         }
-                    } else if (observeKey.equals(dataManager.getQBChatDialogDataManager().getObserverKey())) {
+                    } else if (observeKey.equals(dataManager.getConnectycubeChatDialogDataManager().getObserverKey())) {
                         int action = ((Bundle) data).getInt(BaseManager.EXTRA_ACTION);
                         if (action == BaseManager.DELETE_ACTION
                                 || action == BaseManager.DELETE_BY_ID_ACTION) {

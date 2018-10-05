@@ -5,14 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.quickblox.auth.session.QBSessionManager;
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
+import com.connectycube.core.exception.ResponseException;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.qb.helpers.QBChatRestHelper;
 import com.quickblox.q_municate_core.service.QBService;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
@@ -38,22 +38,22 @@ public class QBLoginChatCommand extends ServiceCommand {
 
     @Override
     public Bundle perform(Bundle extras) throws Exception {
-        final QBUser currentUser = AppSession.getSession().getUser();
+        final ConnectycubeUser currentUser = AppSession.getSession().getUser();
 
         Log.i(TAG, "login with user login:" + currentUser.getLogin()
                 + ", user id:" + currentUser.getId()
                 + ", pswd=" + currentUser.getPassword() + ", fb id:" + currentUser.getFacebookId()
                 + ", tw dg id:" + currentUser.getTwitterDigitsId());
 
-        Log.i(TAG, "session token:" + QBSessionManager.getInstance().getToken()
-                + "\n, token exp date: " + QBSessionManager.getInstance().getTokenExpirationDate()
-                + "\n, is valid token:" + QBSessionManager.getInstance().isValidActiveSession());
+        Log.i(TAG, "session token:" + ConnectycubeSessionManager.getInstance().getToken()
+                + "\n, token exp date: " + ConnectycubeSessionManager.getInstance().getTokenExpirationDate()
+                + "\n, is valid token:" + ConnectycubeSessionManager.getInstance().isValidActiveSession());
 
 
         // We don't make login if QB session was deleted by one of expiration cases :
         // for ex when social provider token is no more valid
-        if (QBSessionManager.getInstance().getSessionParameters() == null) {
-            throw new QBResponseException("invalid session");
+        if (ConnectycubeSessionManager.getInstance().getSessionParameters() == null) {
+            throw new ResponseException("invalid session");
         }
 
         login(currentUser);
@@ -61,7 +61,7 @@ public class QBLoginChatCommand extends ServiceCommand {
         return extras;
     }
 
-    private void login(QBUser currentUser) throws XMPPException, IOException, SmackException {
+    private void login(ConnectycubeUser currentUser) throws XMPPException, IOException, SmackException {
         chatRestHelper.login(currentUser);
     }
 

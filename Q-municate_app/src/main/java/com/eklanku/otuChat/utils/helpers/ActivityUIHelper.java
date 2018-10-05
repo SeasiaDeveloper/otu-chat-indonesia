@@ -8,8 +8,8 @@ import android.view.View;
 
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.chats.BaseDialogActivity;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.chats.BaseDialogActivity;
@@ -40,11 +40,11 @@ public class ActivityUIHelper {
     }
 
     private boolean isChatDialogExist(String dialogId) {
-        return DataManager.getInstance().getQBChatDialogDataManager().exists(dialogId);
+        return DataManager.getInstance().getConnectycubeChatDialogDataManager().exists(dialogId);
     }
 
-    private QBChatDialog getChatDialogForNotification(String dialogId) {
-        return DataManager.getInstance().getQBChatDialogDataManager().getByDialogId(dialogId);
+    private ConnectycubeChatDialog getChatDialogForNotification(String dialogId) {
+        return DataManager.getInstance().getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
     }
 
     public void showContactRequestNotification(Bundle extras) {
@@ -63,7 +63,7 @@ public class ActivityUIHelper {
         }
     }
 
-    private void showNewNotification(final QBChatDialog chatDialog, final QMUser senderUser, String message) {
+    private void showNewNotification(final ConnectycubeChatDialog chatDialog, final QMUser senderUser, String message) {
         baseActivity.hideSnackBar();
         baseActivity.showSnackbar(message, Snackbar.LENGTH_LONG, R.string.dialog_reply,
                 new View.OnClickListener() {
@@ -75,14 +75,14 @@ public class ActivityUIHelper {
                 });
     }
 
-    private void showDialog(QBChatDialog chatDialog, QMUser senderUser) {
+    private void showDialog(ConnectycubeChatDialog chatDialog, QMUser senderUser) {
         if (baseActivity instanceof BaseDialogActivity) {
             baseActivity.finish();
         }
 
         Log.i(ActivityUIHelper.class.getSimpleName(), "Show dialog from " + baseActivity.getClass().getSimpleName());
 
-        if (QBDialogType.PRIVATE.equals(chatDialog.getType())) {
+        if (ConnectycubeDialogType.PRIVATE.equals(chatDialog.getType())) {
             baseActivity.startPrivateChatActivity(senderUser, chatDialog);
         } else {
             baseActivity.startGroupChatActivity(chatDialog);

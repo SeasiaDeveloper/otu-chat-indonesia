@@ -3,7 +3,7 @@ package com.eklanku.otuChat.utils.helpers;
 import android.content.Context;
 
 import com.flurry.android.FlurryAgent;
-import com.quickblox.auth.session.QBSettings;
+import com.connectycube.auth.session.ConnectycubeSettings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +20,8 @@ public class FlurryAnalyticsHelper {
         Map<String, String> params = new HashMap<>();
 
         //param keys and values have to be of String type
-        params.put("app_id", QBSettings.getInstance().getApplicationId());
-        params.put("chat_endpoint", QBSettings.getInstance().getChatEndpoint());
+        params.put("app_id", ConnectycubeSettings.getInstance().getApplicationId());
+        params.put("chat_endpoint", ConnectycubeSettings.getInstance().getChatEndpoint());
 
         //up to 10 params can be logged with each event
         FlurryAgent.logEvent("connect_to_chat", params);

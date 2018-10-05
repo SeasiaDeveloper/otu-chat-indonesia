@@ -17,16 +17,16 @@ import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.chats.GroupDialogActivity;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.eklanku.otuChat.utils.ColorUtils;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.content.model.QBFile;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.storage.model.ConnectycubeFile;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_db.models.State;
 import com.eklanku.otuChat.R;
-import com.quickblox.ui.kit.chatmessage.adapter.QBMessagesAdapter;
-import com.quickblox.ui.kit.chatmessage.adapter.media.video.thumbnails.VideoThumbnail;
-import com.quickblox.ui.kit.chatmessage.adapter.media.view.QBPlaybackControlView;
-import com.quickblox.ui.kit.chatmessage.adapter.utils.LinkUtils;
+import com.connectycube.ui.chatmessage.adapter.ConnectycubeChatAdapter;
+import com.connectycube.ui.chatmessage.adapter.media.video.thumbnails.VideoThumbnail;
+import com.connectycube.ui.chatmessage.adapter.media.view.ConnectycubePlaybackControlView;
+import com.connectycube.ui.chatmessage.adapter.utils.LinkUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,7 +41,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
     GroupDialogActivity.ItemClickListener itemClickListener;
     ArrayList<CombinationMessage> selectedMessagesList;
 
-    public GroupChatMessagesAdapter(BaseActivity baseActivity, QBChatDialog chatDialog,
+    public GroupChatMessagesAdapter(BaseActivity baseActivity, ConnectycubeChatDialog chatDialog,
                                     List<CombinationMessage> chatMessages, GroupDialogActivity.ItemClickListener itemClickListener) {
         super(baseActivity, chatDialog, chatMessages);
         colorUtils = new ColorUtils();
@@ -49,7 +49,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
     }
 
     @Override
-    protected void onBindViewCustomHolder(QBMessageViewHolder holder, CombinationMessage chatMessage, int position) {
+    protected void onBindViewCustomHolder(MessageViewHolder holder, CombinationMessage chatMessage, int position) {
         RequestsViewHolder viewHolder = (RequestsViewHolder) holder;
         boolean notificationMessage = chatMessage.getNotificationType() != null;
 
@@ -69,7 +69,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
     }
 
     @Override
-    protected QBMessageViewHolder onCreateCustomViewHolder(ViewGroup parent, int viewType) {
+    protected MessageViewHolder onCreateCustomViewHolder(ViewGroup parent, int viewType) {
         return viewType == TYPE_REQUEST_MESSAGE ? new RequestsViewHolder(inflater.inflate(R.layout.item_notification_message, parent, false)) : null;
     }
 
@@ -94,7 +94,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
 
         final List<String> urlsList = LinkUtils.extractUrls(chatMessage.getBody());
         if (!urlsList.isEmpty()) {
-            layoutParams.width = (int) context.getResources().getDimension(com.quickblox.ui.kit.chatmessage.adapter.R.dimen.link_preview_width);
+            layoutParams.width = (int) context.getResources().getDimension(com.connectycube.ui.chatmessage.adapter.R.dimen.link_preview_width);
         } else {
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         }
@@ -362,7 +362,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
 
             ViewGroup insertPoint = null;
 
-            insertPoint = (ViewGroup) ((QBMessageViewHolder) holder).bubbleFrame;
+            insertPoint = (ViewGroup) ((MessageViewHolder) holder).bubbleFrame;
 
             if (holder instanceof ImageAttachHolder) {
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -415,15 +415,15 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
                             if (objAttachment.getString("type").equals("location")) {
                                 url = objAttachment.getString("url");
                             } else if (objAttachment.getString("type").equals("image")) {
-                                url = QBFile.getPrivateUrlForUID(objAttachment.getString("ID"));
+                                url = ConnectycubeFile.getPrivateUrlForUID(objAttachment.getString("ID"));
                             } else if (objAttachment.getString("type").equals("video")) {
-                                String strVideoUrl = QBFile.getPrivateUrlForUID(objAttachment.getString("ID"));
+                                String strVideoUrl = ConnectycubeFile.getPrivateUrlForUID(objAttachment.getString("ID"));
                                 VideoThumbnail model = new VideoThumbnail(strVideoUrl);
-                                Glide.with(this.context).load(model).override(42, 42).error(com.quickblox.ui.kit.chatmessage.adapter.R.drawable.ic_error).into(imgAttach);
+                                Glide.with(this.context).load(model).override(42, 42).error(com.connectycube.ui.chatmessage.adapter.R.drawable.ic_error).into(imgAttach);
                             }
                             if (url.length() > 0) {
                                 imgAttach.setVisibility(View.VISIBLE);
-                                Glide.with(this.context).load(url).override(42, 42).error(com.quickblox.ui.kit.chatmessage.adapter.R.drawable.ic_error).into(imgAttach);
+                                Glide.with(this.context).load(url).override(42, 42).error(com.connectycube.ui.chatmessage.adapter.R.drawable.ic_error).into(imgAttach);
                             }
 
                         }

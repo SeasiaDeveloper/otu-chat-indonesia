@@ -1,13 +1,13 @@
 package com.quickblox.q_municate_auth_service;
 
 
-import com.quickblox.auth.model.QBProvider;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.server.Performer;
-import com.quickblox.extensions.RxJavaPerformProcessor;
+import com.connectycube.auth.model.ConnectycubeProvider;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.server.Performer;
+import com.connectycube.extensions.RxJavaPerformProcessor;
 import com.quickblox.q_municate_base_service.QMBaseService;
-import com.quickblox.users.QBUsers;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.ConnectycubeUsers;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -34,15 +34,15 @@ public class QMAuthService extends QMBaseService {
     protected void serviceWillStart() {
     }
 
-    public Observable<QBUser> login(final QBUser user) {
-        Observable<QBUser> result = null;
-        Performer<QBUser> performer = QBUsers.signIn(user);
-        final Observable<QBUser> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
-        result = observable.flatMap(new Func1<QBUser, Observable<QBUser>>() {
+    public Observable<ConnectycubeUser> login(final ConnectycubeUser user) {
+        Observable<ConnectycubeUser> result = null;
+        Performer<ConnectycubeUser> performer = ConnectycubeUsers.signIn(user);
+        final Observable<ConnectycubeUser> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+        result = observable.flatMap(new Func1<ConnectycubeUser, Observable<ConnectycubeUser>>() {
             @Override
-            public Observable<QBUser> call(QBUser qbUser) {
+            public Observable<ConnectycubeUser> call(ConnectycubeUser connectycubeUser) {
                 authorized = true;
-                notifyLogin(qbUser);
+                notifyLogin(connectycubeUser);
                 return observable;
             }
         });
@@ -50,74 +50,74 @@ public class QMAuthService extends QMBaseService {
         return result;
     }
 
-    public QBUser loginSync(final QBUser user) throws QBResponseException {
-        QBUser result =  QBUsers.signIn(user).perform();
+    public ConnectycubeUser loginSync(final ConnectycubeUser user) throws ResponseException {
+        ConnectycubeUser result =  ConnectycubeUsers.signIn(user).perform();
         authorized = true;
         notifyLogin(result);
         return result;
     }
 
 
-    public Observable<QBUser> login(final String socialProvider, final String accessToken, final String accessTokenSecret){
-        Observable<QBUser> result = null;
-        Performer<QBUser> performer = null;
-        if (socialProvider.equals(QBProvider.TWITTER_DIGITS)){
-            performer = QBUsers.signInUsingTwitterDigits(accessToken, accessTokenSecret);
-        } else if (socialProvider.equals(QBProvider.FIREBASE_PHONE)){
-            performer = QBUsers.signInUsingFirebase(accessTokenSecret, accessToken);
+    public Observable<ConnectycubeUser> login(final String socialProvider, final String accessToken, final String accessTokenSecret){
+        Observable<ConnectycubeUser> result = null;
+        Performer<ConnectycubeUser> performer = null;
+        if (socialProvider.equals(ConnectycubeProvider.TWITTER_DIGITS)){
+            performer = ConnectycubeUsers.signInUsingTwitterDigits(accessToken, accessTokenSecret);
+        } else if (socialProvider.equals(ConnectycubeProvider.FIREBASE_PHONE)){
+            performer = ConnectycubeUsers.signInUsingFirebase(accessTokenSecret, accessToken);
         } else {
-            performer = QBUsers.signInUsingSocialProvider(socialProvider, accessToken, accessTokenSecret);
+            performer = ConnectycubeUsers.signInUsingSocialProvider(socialProvider, accessToken, accessTokenSecret);
         }
-        final Observable<QBUser> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
-        result = observable.flatMap(new Func1<QBUser, Observable<QBUser>>() {
+        final Observable<ConnectycubeUser> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+        result = observable.flatMap(new Func1<ConnectycubeUser, Observable<ConnectycubeUser>>() {
             @Override
-            public Observable<QBUser> call(QBUser qbUser) {
+            public Observable<ConnectycubeUser> call(ConnectycubeUser connectycubeUser) {
                 authorized = true;
-                notifyLogin(qbUser);
+                notifyLogin(connectycubeUser);
                 return observable;
             }
         });
         return result;
     }
 
-    public QBUser loginSync(final String socialProvider, final String accessToken, final String accessTokenSecret) throws QBResponseException {
-        Performer<QBUser> performer = null;
-        if (socialProvider.equals(QBProvider.TWITTER_DIGITS)){
-            performer = QBUsers.signInUsingTwitterDigits(accessToken, accessTokenSecret);
-        } else if (socialProvider.equals(QBProvider.FIREBASE_PHONE)){
-            performer = QBUsers.signInUsingFirebase(accessTokenSecret, accessToken);
+    public ConnectycubeUser loginSync(final String socialProvider, final String accessToken, final String accessTokenSecret) throws ResponseException {
+        Performer<ConnectycubeUser> performer = null;
+        if (socialProvider.equals(ConnectycubeProvider.TWITTER_DIGITS)){
+            performer = ConnectycubeUsers.signInUsingTwitterDigits(accessToken, accessTokenSecret);
+        } else if (socialProvider.equals(ConnectycubeProvider.FIREBASE_PHONE)){
+            performer = ConnectycubeUsers.signInUsingFirebase(accessTokenSecret, accessToken);
         } else {
-            performer = QBUsers.signInUsingSocialProvider(socialProvider, accessToken, accessTokenSecret);
+            performer = ConnectycubeUsers.signInUsingSocialProvider(socialProvider, accessToken, accessTokenSecret);
         }
-        QBUser result  = performer.perform();
+        ConnectycubeUser result  = performer.perform();
         authorized = true;
         notifyLogin(result);
         return result;
     }
 
-    public Observable<QBUser> signup(final QBUser user){
-        Performer<QBUser> performer = QBUsers.signUp(user);
-        Observable<QBUser> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+    public Observable<ConnectycubeUser> signup(final ConnectycubeUser user){
+        Performer<ConnectycubeUser> performer = ConnectycubeUsers.signUp(user);
+        Observable<ConnectycubeUser> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
         return observable;
     }
 
-    public Observable<QBUser> signUpLogin(final QBUser user){
-        Observable<QBUser> result = null;
-        Performer<QBUser> performer = QBUsers.signUpSignInTask(user);
-        final Observable<QBUser> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
-        result = observable.flatMap(new Func1<QBUser, Observable<QBUser>>() {
+    public Observable<ConnectycubeUser> signUpLogin(final ConnectycubeUser user){
+        Observable<ConnectycubeUser> result = null;
+        Performer<ConnectycubeUser> performer = ConnectycubeUsers.signUpSignInTask(user);
+        final Observable<ConnectycubeUser> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+        result = observable.flatMap(new Func1<ConnectycubeUser, Observable<ConnectycubeUser>>() {
             @Override
-            public Observable<QBUser> call(QBUser qbUser) {
+            public Observable<ConnectycubeUser> call(ConnectycubeUser connectycubeUser) {
                 authorized = true;
-                notifyLogin(qbUser);
+                notifyLogin(connectycubeUser);
                 return observable;
             }
         });
         return result;
     }
 
-    public QBUser signUpLoginSync(final QBUser user) throws QBResponseException {
-        QBUser result = QBUsers.signUpSignInTask(user).perform();
+    public ConnectycubeUser signUpLoginSync(final ConnectycubeUser user) throws ResponseException {
+        ConnectycubeUser result = ConnectycubeUsers.signUpSignInTask(user).perform();
         authorized = true;
         notifyLogin(result);
         return result;
@@ -125,7 +125,7 @@ public class QMAuthService extends QMBaseService {
 
     public Observable<Void>  logout(){
         Observable<Void> result = null;
-        Performer<Void> performer = QBUsers.signOut();
+        Performer<Void> performer = ConnectycubeUsers.signOut();
         final Observable<Void> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
         result = observable.flatMap(new Func1<Void, Observable<Void>>() {
             @Override
@@ -138,20 +138,20 @@ public class QMAuthService extends QMBaseService {
         return result;
     }
 
-    public void  logoutSync() throws QBResponseException {
-        QBUsers.signOut().perform();
+    public void  logoutSync() throws ResponseException {
+        ConnectycubeUsers.signOut().perform();
         authorized = false;
         notifyLogout(this);
     }
 
     public Observable<Void> resetPassword(String email){
-        Performer<Void> performer = QBUsers.resetPassword(email);
+        Performer<Void> performer = ConnectycubeUsers.resetPassword(email);
         final Observable<Void> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
         return observable;
     }
 
-    public void resetPasswordSync(String email) throws QBResponseException {
-        QBUsers.resetPassword(email).perform();
+    public void resetPasswordSync(String email) throws ResponseException {
+        ConnectycubeUsers.resetPassword(email).perform();
     }
 
     public boolean isAuthorized() {
@@ -170,7 +170,7 @@ public class QMAuthService extends QMBaseService {
         this.listener = listener;
     }
 
-    private void notifyLogin(QBUser user){
+    private void notifyLogin(ConnectycubeUser user){
         if(listener != null){
             listener.login(user);
         }
@@ -183,7 +183,7 @@ public class QMAuthService extends QMBaseService {
     }
 
     public interface QMAuthServiceListener{
-        void login(QBUser user);
+        void login(ConnectycubeUser user);
         void logout(QMAuthService authService);
 
     }

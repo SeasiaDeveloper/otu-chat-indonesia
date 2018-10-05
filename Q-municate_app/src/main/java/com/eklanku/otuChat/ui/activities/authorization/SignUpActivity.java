@@ -34,7 +34,7 @@ import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.models.Attachment;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
@@ -58,7 +58,7 @@ public class SignUpActivity extends BaseAuthActivity implements OnMediaPickedLis
     RoundedImageView avatarImageView;
 
     private boolean isNeedUpdateImage;
-    private QBUser qbUser;
+    private ConnectycubeUser connectycubeUser;
     private Uri imageUri;
     private MediaPickHelper mediaPickHelper;
 
@@ -148,7 +148,7 @@ public class SignUpActivity extends BaseAuthActivity implements OnMediaPickedLis
 
     private void initFields(Bundle bundle) {
         title = getString(R.string.auth_sign_up_title);
-        qbUser = new QBUser();
+        connectycubeUser = new ConnectycubeUser();
         signUpSuccessAction = new SignUpSuccessAction();
         updateUserSuccessAction = new UpdateUserSuccessAction();
         fullNameEditText.setFilters(new InputFilter[]{ fullNameFilter });
@@ -194,9 +194,9 @@ public class SignUpActivity extends BaseAuthActivity implements OnMediaPickedLis
 
         if (new ValidationUtils(this).isSignUpDataValid(fullNameInputLayout, emailTextInputLayout,
                 passwordTextInputLayout, fullNameText, emailText, passwordText)) {
-            qbUser.setFullName(fullNameText);
-            qbUser.setEmail(emailText);
-            qbUser.setPassword(passwordText);
+            connectycubeUser.setFullName(fullNameText);
+            connectycubeUser.setEmail(emailText);
+            connectycubeUser.setPassword(passwordText);
 
             showProgress();
 
@@ -211,11 +211,11 @@ public class SignUpActivity extends BaseAuthActivity implements OnMediaPickedLis
 
     private void startSignUp(File imageFile) {
         DataManager.getInstance().clearAllTables();
-        QBSignUpCommand.start(SignUpActivity.this, qbUser, imageFile);
+        QBSignUpCommand.start(SignUpActivity.this, connectycubeUser, imageFile);
     }
 
     protected void performUpdateUserSuccessAction(Bundle bundle) {
-        QBUser user = (QBUser) bundle.getSerializable(QBServiceConsts.EXTRA_USER);
+        ConnectycubeUser user = (ConnectycubeUser) bundle.getSerializable(QBServiceConsts.EXTRA_USER);
         appSharedHelper.saveFirstAuth(true);
         appSharedHelper.saveSavedRememberMe(true);
         startMainActivity(user);
@@ -226,7 +226,7 @@ public class SignUpActivity extends BaseAuthActivity implements OnMediaPickedLis
 
     private void performSignUpSuccessAction(Bundle bundle) {
         File image = (File) bundle.getSerializable(QBServiceConsts.EXTRA_FILE);
-        QBUser user = (QBUser) bundle.getSerializable(QBServiceConsts.EXTRA_USER);
+        ConnectycubeUser user = (ConnectycubeUser) bundle.getSerializable(QBServiceConsts.EXTRA_USER);
         ServiceManager.getInstance().updateUser(user, image).subscribe(new Subscriber<QMUser>() {
             @Override
             public void onCompleted() {

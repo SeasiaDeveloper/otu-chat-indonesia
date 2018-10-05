@@ -2,10 +2,10 @@ package com.quickblox.q_municate_core.utils.helpers;
 
 import android.text.TextUtils;
 
-import com.quickblox.core.helper.StringifyArrayList;
-import com.quickblox.messages.model.QBEnvironment;
-import com.quickblox.messages.model.QBEvent;
-import com.quickblox.messages.model.QBNotificationType;
+import com.connectycube.core.helper.StringifyArrayList;
+import com.connectycube.pushnotifications.model.ConnectycubeEnvironment;
+import com.connectycube.pushnotifications.model.ConnectycubeEvent;
+import com.connectycube.pushnotifications.model.ConnectycubeNotificationType;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
 
 import org.json.JSONObject;
@@ -16,18 +16,18 @@ import static com.quickblox.q_municate_core.utils.ConstsCore.*;
 
 public class CoreNotificationHelper {
 
-    public static QBEvent createPushEvent(List<Integer> userIdsList, String message, String messageType) {
+    public static ConnectycubeEvent createPushEvent(List<Integer> userIdsList, String message, String messageType) {
         StringifyArrayList<Integer> userIds = new StringifyArrayList<>();
         userIds.addAll(userIdsList);
-        QBEvent event = new QBEvent();
+        ConnectycubeEvent event = new ConnectycubeEvent();
         event.setUserIds(userIds);
-        event.setEnvironment(QBEnvironment.PRODUCTION);
-        event.setNotificationType(QBNotificationType.PUSH);
+        event.setEnvironment(ConnectycubeEnvironment.PRODUCTION);
+        event.setNotificationType(ConnectycubeNotificationType.PUSH);
         setMessage(event, message, messageType);
         return event;
     }
 
-    private static void setMessage(QBEvent event, String message, String messageType) {
+    private static void setMessage(ConnectycubeEvent event, String message, String messageType) {
         String eventMessage = message;
         if (isMessageWithParam(messageType)) {
             eventMessage = messageWithParams(message, messageType);

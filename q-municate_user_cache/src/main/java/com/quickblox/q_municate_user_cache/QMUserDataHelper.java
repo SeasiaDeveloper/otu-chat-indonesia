@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.quickblox.q_municate_base_cache.QMBaseDataHelper;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 public class QMUserDataHelper extends QMBaseDataHelper {
 

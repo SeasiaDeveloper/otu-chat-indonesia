@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.core.exception.ResponseException;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
 
@@ -26,7 +26,7 @@ public abstract class ServiceCommand implements Command {
         try {
             result = perform(bundle);
             sendResult(result, successAction);
-        } catch (QBResponseException e) {
+        } catch (ResponseException e) {
             ErrorUtils.logError(e);
             result = new Bundle();
             result.putSerializable(QBServiceConsts.EXTRA_ERROR, e);

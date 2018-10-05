@@ -83,7 +83,7 @@ public class DataManager {
         return dialogDataManager;
     }
 
-    public QBChatDialogDataManager getQBChatDialogDataManager() {
+    public QBChatDialogDataManager getConnectycubeChatDialogDataManager() {
         if (chatDialogDataManager == null) {
             chatDialogDataManager = new QBChatDialogDataManager(getDialogDataManager());
         }

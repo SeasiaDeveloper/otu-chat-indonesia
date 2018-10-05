@@ -3,8 +3,8 @@ package com.quickblox.q_municate_core.models;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.quickblox.chat.model.QBAttachment;
-import com.quickblox.chat.model.QBChatMessage;
+import com.connectycube.chat.model.ConnectycubeAttachment;
+import com.connectycube.chat.model.ConnectycubeChatMessage;
 import com.quickblox.q_municate_db.models.Attachment;
 import com.quickblox.q_municate_db.models.DialogNotification;
 import com.quickblox.q_municate_db.models.DialogOccupant;
@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 // Combination DialogNotification and Message (for chats)
-public class CombinationMessage extends QBChatMessage implements Serializable {
+public class CombinationMessage extends ConnectycubeChatMessage implements Serializable {
 
     private String messageId;
     private DialogOccupant dialogOccupant;
@@ -27,7 +27,7 @@ public class CombinationMessage extends QBChatMessage implements Serializable {
     private State state;
     private String body;
     private long createdDate;
-    private QBAttachment qbAttachment;
+    private ConnectycubeAttachment connectycubeAttachment;
     //private Map<String,String> properties;
     private String replyMessage;
     private DialogNotification.Type notificationType;
@@ -59,15 +59,15 @@ public class CombinationMessage extends QBChatMessage implements Serializable {
         this.recipentId = message.getRecipentId();
         this.dialogId = message.getDialogId();
         this.setDateSent(createdDate);
-        addQBAttachment(attachment);
+        addConnectycubeAttachment(attachment);
     }
 
-    public QBAttachment getQbAttachment() {
-        return qbAttachment;
+    public ConnectycubeAttachment getConnectycubeAttachment() {
+        return connectycubeAttachment;
     }
 
-    public void setQbAttachment(QBAttachment qbAttachment) {
-        this.qbAttachment = qbAttachment;
+    public void setConnectycubeAttachment(ConnectycubeAttachment connectycubeAttachment) {
+        this.connectycubeAttachment = connectycubeAttachment;
     }
 
     /*@Override
@@ -283,26 +283,26 @@ public class CombinationMessage extends QBChatMessage implements Serializable {
         }
     }
 
-    private void addQBAttachment(Attachment attachment) {
+    private void addConnectycubeAttachment(Attachment attachment) {
         String attachType;
         if(attachment == null ){
             return;
         }
         if(attachment.getType() == null){
-            attachType = QBAttachment.IMAGE_TYPE;
+            attachType = connectycubeAttachment.IMAGE_TYPE;
         } else {
             attachType = attachment.getType().name().toLowerCase();
         }
-        qbAttachment = new QBAttachment(attachType);
-        qbAttachment.setId(attachment.getAttachmentId());
-        qbAttachment.setUrl(attachment.getRemoteUrl());
-        qbAttachment.setName(attachment.getName());
-        qbAttachment.setSize(attachment.getSize());
-        qbAttachment.setHeight(attachment.getHeight());
-        qbAttachment.setWidth(attachment.getWidth());
-        qbAttachment.setDuration(attachment.getDuration());
-        qbAttachment.setData(attachment.getAdditionalInfo());
-        this.addAttachment(qbAttachment);
+        connectycubeAttachment = new ConnectycubeAttachment(attachType);
+        connectycubeAttachment.setId(attachment.getAttachmentId());
+        connectycubeAttachment.setUrl(attachment.getRemoteUrl());
+        connectycubeAttachment.setName(attachment.getName());
+        connectycubeAttachment.setSize(attachment.getSize());
+        connectycubeAttachment.setHeight(attachment.getHeight());
+        connectycubeAttachment.setWidth(attachment.getWidth());
+        connectycubeAttachment.setDuration(attachment.getDuration());
+        connectycubeAttachment.setData(attachment.getAdditionalInfo());
+        this.addAttachment(connectycubeAttachment);
     }
 
     public static class DateComparator implements Comparator<CombinationMessage> {

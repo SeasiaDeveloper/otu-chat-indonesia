@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.text.TextUtils;
 
-import com.quickblox.chat.model.QBChatMessage;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
-import com.quickblox.core.helper.CollectionUtils;
+import com.connectycube.chat.model.ConnectycubeChatMessage;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
+import com.connectycube.core.helper.CollectionUtils;
 import com.quickblox.q_municate_core.R;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.ChatNotificationType;
@@ -17,7 +17,7 @@ import com.quickblox.q_municate_db.models.DialogNotification;
 import com.quickblox.q_municate_db.models.DialogOccupant;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,7 +43,7 @@ public class ChatNotificationUtils {
     public static final String VALUE_MODULE_IDENTIFIER = "SystemNotifications";
     public static final String VALUE_GROUP_CHAT_TYPE = "2";
 
-    public static QBChatDialog parseDialogFromQBMessage(Context context, QBChatMessage qbChatMessage, QBDialogType qbDialogType) {
+    public static ConnectycubeChatDialog parseDialogFromQBMessage(Context context, ConnectycubeChatMessage qbChatMessage, ConnectycubeDialogType connectycubeDialogType) {
         String dialogId = qbChatMessage.getDialogId();
         String currentOccupantsIdsString = (String) qbChatMessage.getProperty(PROPERTY_ROOM_CURRENT_OCCUPANTS_IDS);
         String addedOccupantsIdsString = (String) qbChatMessage.getProperty(PROPERTY_ROOM_ADDED_OCCUPANTS_IDS);
@@ -53,10 +53,10 @@ public class ChatNotificationUtils {
         String updatedAtString = (String) qbChatMessage.getProperty(PROPERTY_ROOM_UPDATED_AT);
         String roomJid = ChatUtils.getRoomJid(dialogId);
 
-        QBChatDialog qbDialog = new QBChatDialog(dialogId);
+        ConnectycubeChatDialog qbDialog = new ConnectycubeChatDialog(dialogId);
         qbDialog.setRoomJid(roomJid);
         qbDialog.setPhoto(photoUrl);
-        qbDialog.setType(qbDialogType);
+        qbDialog.setType(connectycubeDialogType);
 
         qbDialog.setName(dialogName);
 
@@ -82,9 +82,9 @@ public class ChatNotificationUtils {
         return qbDialog;
     }
 
-    public static QBChatDialog parseDialogFromQBMessage(Context context, QBChatMessage qbChatMessage,
-            String lastMessage, QBDialogType qbDialogType) {
-        QBChatDialog qbDialog = parseDialogFromQBMessage(context, qbChatMessage, qbDialogType);
+    public static ConnectycubeChatDialog parseDialogFromQBMessage(Context context, ConnectycubeChatMessage qbChatMessage,
+            String lastMessage, ConnectycubeDialogType connectycubeDialogType) {
+        ConnectycubeChatDialog qbDialog = parseDialogFromQBMessage(context, qbChatMessage, connectycubeDialogType);
 
         if (! CollectionUtils.isEmpty(qbChatMessage.getAttachments())) {
             qbDialog.setLastMessage(context.getString(R.string.dlg_attached_last_message));
@@ -95,7 +95,7 @@ public class ChatNotificationUtils {
         return qbDialog;
     }
 
-    public static void updateDialogFromQBMessage(Context context, DataManager dataManager, QBChatMessage qbChatMessage, QBChatDialog qbDialog) {
+    public static void updateDialogFromQBMessage(Context context, DataManager dataManager, ConnectycubeChatMessage qbChatMessage, ConnectycubeChatDialog qbDialog) {
         String lastMessage = getBodyForUpdateChatNotificationMessage(context, dataManager, qbChatMessage);
         String dialogName = (String) qbChatMessage.getProperty(PROPERTY_ROOM_NAME);
         String photoUrl = (String) qbChatMessage.getProperty(PROPERTY_ROOM_PHOTO);
@@ -126,13 +126,13 @@ public class ChatNotificationUtils {
         qbDialog.setLastMessage(lastMessage);
     }
 
-    private static void setDialogPhoto(QBChatDialog qbDialog, String photoUrl) {
+    private static void setDialogPhoto(ConnectycubeChatDialog qbDialog, String photoUrl) {
         if (!TextUtils.isEmpty(photoUrl)) {
             qbDialog.setPhoto(photoUrl);
         }
     }
 
-    private static void setDialogName(QBChatDialog qbDialog, String dialogName) {
+    private static void setDialogName(ConnectycubeChatDialog qbDialog, String dialogName) {
         if (!TextUtils.isEmpty(dialogName)) {
             qbDialog.setName(dialogName);
         }
@@ -155,8 +155,8 @@ public class ChatNotificationUtils {
         DbUtils.updateDialogOccupants(dataManager, dialogId, occupantsIdsList, status);
     }
 
-    public static QBChatMessage createSystemMessageAboutCreatingGroupChat(Context context, QBChatDialog qbDialog) {
-        QBChatMessage qbChatMessage = new QBChatMessage();
+    public static ConnectycubeChatMessage createSystemMessageAboutCreatingGroupChat(Context context, ConnectycubeChatDialog qbDialog) {
+        ConnectycubeChatMessage qbChatMessage = new ConnectycubeChatMessage();
         addNecessaryPropertyForCreatingSystemMessage(context, qbChatMessage, qbDialog);
 
         if (qbDialog.getPhoto() != null) {
@@ -167,7 +167,7 @@ public class ChatNotificationUtils {
     }
 
     private static void addNecessaryPropertyForCreatingSystemMessage(Context context,
-            QBChatMessage qbChatMessage, QBChatDialog qbDialog) {
+            ConnectycubeChatMessage qbChatMessage, ConnectycubeChatDialog qbDialog) {
         qbChatMessage.setBody(context.getResources().getString(R.string.cht_notification_message));
         qbChatMessage.setProperty(PROPERTY_MODULE_IDENTIFIER, VALUE_MODULE_IDENTIFIER);
         qbChatMessage.setProperty(PROPERTY_NOTIFICATION_TYPE,
@@ -180,15 +180,15 @@ public class ChatNotificationUtils {
                 ChatUtils.getOccupantsIdsStringFromList(qbDialog.getOccupants()));
     }
 
-    public static boolean isNotificationMessage(QBChatMessage qbChatMessage) {
+    public static boolean isNotificationMessage(ConnectycubeChatMessage qbChatMessage) {
         return qbChatMessage.getProperty(PROPERTY_NOTIFICATION_TYPE) != null;
     }
 
     public static String getBodyForFriendsNotificationMessage(Context context, DataManager dataManager,
-            DialogNotification.Type notificationType, QBChatMessage qbChatMessage) {
+            DialogNotification.Type notificationType, ConnectycubeChatMessage qbChatMessage) {
         Resources resources = context.getResources();
         String resultMessage = resources.getString(R.string.cht_notification_message);
-        QBUser user = AppSession.getSession().getUser();
+        ConnectycubeUser user = AppSession.getSession().getUser();
         int senderId;
 
         if (qbChatMessage.getSenderId() == null) {
@@ -240,9 +240,9 @@ public class ChatNotificationUtils {
         return resultMessage;
     }
 
-    public static QBChatMessage createPrivateMessageAboutFriendsRequests(Context context,
+    public static ConnectycubeChatMessage createPrivateMessageAboutFriendsRequests(Context context,
             NotificationType notificationType) {
-        QBChatMessage qbChatMessage = new QBChatMessage();
+        ConnectycubeChatMessage qbChatMessage = new ConnectycubeChatMessage();
         qbChatMessage.setSenderId(AppSession.getSession().getUser().getId());
         qbChatMessage.setBody(context.getResources().getString(R.string.cht_notification_message));
         qbChatMessage.setSaveToHistory(VALUE_SAVE_TO_HISTORY);
@@ -250,8 +250,8 @@ public class ChatNotificationUtils {
         return qbChatMessage;
     }
 
-    public static QBChatMessage createGroupMessageAboutCreateGroupChat(Context context, QBChatDialog qbDialog, String photoUrl) {
-        QBChatMessage qbChatMessage = new QBChatMessage();
+    public static ConnectycubeChatMessage createGroupMessageAboutCreateGroupChat(Context context, ConnectycubeChatDialog qbDialog, String photoUrl) {
+        ConnectycubeChatMessage qbChatMessage = new ConnectycubeChatMessage();
         qbChatMessage.setSaveToHistory(VALUE_SAVE_TO_HISTORY);
         qbChatMessage.setProperty(PROPERTY_NOTIFICATION_TYPE,
                 String.valueOf(NotificationType.GROUP_CHAT_UPDATE.getValue()));
@@ -269,9 +269,9 @@ public class ChatNotificationUtils {
         return qbChatMessage;
     }
 
-    public static QBChatMessage createGroupMessageAboutUpdateChat(Context context, QBChatDialog qbDialog,
+    public static ConnectycubeChatMessage createGroupMessageAboutUpdateChat(Context context, ConnectycubeChatDialog qbDialog,
             DialogNotification.Type notificationType, Collection<Integer> occupantsIdsList, boolean leavedFromChat) {
-        QBChatMessage qbChatMessage = new QBChatMessage();
+        ConnectycubeChatMessage qbChatMessage = new ConnectycubeChatMessage();
         qbChatMessage.setSaveToHistory(VALUE_SAVE_TO_HISTORY);
         qbChatMessage.setProperty(PROPERTY_NOTIFICATION_TYPE,
                 String.valueOf(NotificationType.GROUP_CHAT_UPDATE.getValue()));
@@ -330,7 +330,7 @@ public class ChatNotificationUtils {
         return qbChatMessage;
     }
 
-    public static DialogNotification.Type getUpdateChatLocalNotificationType(QBChatMessage qbChatMessage) {
+    public static DialogNotification.Type getUpdateChatLocalNotificationType(ConnectycubeChatMessage qbChatMessage) {
         String notificationTypeString = (String) qbChatMessage.getProperty(PROPERTY_NOTIFICATION_TYPE);
         String updatedInfo = (String) qbChatMessage.getProperty(PROPERTY_ROOM_UPDATE_INFO);
 
@@ -374,7 +374,7 @@ public class ChatNotificationUtils {
     }
 
     public static String getBodyForUpdateChatNotificationMessage(Context context, DataManager dataManager,
-            QBChatMessage qbChatMessage) {
+            ConnectycubeChatMessage qbChatMessage) {
         String notificationTypeString = (String) qbChatMessage.getProperty(PROPERTY_NOTIFICATION_TYPE);
         String updatedInfo = (String) qbChatMessage.getProperty(PROPERTY_ROOM_UPDATE_INFO);
         String addedOccupantsIdsString = (String) qbChatMessage.getProperty(PROPERTY_ROOM_ADDED_OCCUPANTS_IDS);
@@ -394,15 +394,15 @@ public class ChatNotificationUtils {
 
         Resources resources = context.getResources();
         String resultMessage = resources.getString(R.string.cht_notification_message);
-        QBUser qbUser = AppSession.getSession().getUser();
-        boolean ownMessage = qbUser.getId().equals(qbChatMessage.getSenderId());
+        ConnectycubeUser connectycubeUser = AppSession.getSession().getUser();
+        boolean ownMessage = connectycubeUser.getId().equals(qbChatMessage.getSenderId());
 
         if (notificationType != null && notificationType.equals(NotificationType.GROUP_CHAT_CREATE)) {
             String fullNames;
 
             if (ownMessage) {
-                fullNames = ChatUtils.getFullNamesFromOpponentId(dataManager, qbUser.getId(), addedOccupantsIdsString);
-                resultMessage = resources.getString(R.string.cht_update_group_added_message, qbUser.getFullName(), fullNames);
+                fullNames = ChatUtils.getFullNamesFromOpponentId(dataManager, connectycubeUser.getId(), addedOccupantsIdsString);
+                resultMessage = resources.getString(R.string.cht_update_group_added_message, connectycubeUser.getFullName(), fullNames);
             } else {
                 fullNames = ChatUtils.getFullNamesFromOpponentId(dataManager, qbChatMessage.getSenderId(), addedOccupantsIdsString);
                 resultMessage = resources.getString(R.string.cht_update_group_added_message, ChatUtils.getFullNameById(dataManager,
@@ -416,12 +416,12 @@ public class ChatNotificationUtils {
             switch (chatNotificationType) {
                 case CHAT_PHOTO:
                     resultMessage = ownMessage ? resources.getString(R.string.cht_update_group_photo_message,
-                            qbUser.getFullName()) : resources.getString(R.string.cht_update_group_photo_message,
+                            connectycubeUser.getFullName()) : resources.getString(R.string.cht_update_group_photo_message,
                             ChatUtils.getFullNameById(dataManager, qbChatMessage.getSenderId()));
                     break;
                 case CHAT_NAME:
                     resultMessage = ownMessage ? resources.getString(R.string.cht_update_group_name_message,
-                            qbUser.getFullName(), dialogName) : resources.getString(
+                            connectycubeUser.getFullName(), dialogName) : resources.getString(
                             R.string.cht_update_group_name_message, ChatUtils.getFullNameById(dataManager,
                                     qbChatMessage.getSenderId()), dialogName);
                     break;
@@ -431,7 +431,7 @@ public class ChatNotificationUtils {
                     if (!TextUtils.isEmpty(addedOccupantsIdsString)) {
                         fullNames = ChatUtils.getFullNamesFromOpponentIds(dataManager, addedOccupantsIdsString);
                         resultMessage = ownMessage ?
-                                resources.getString(R.string.cht_update_group_added_message, qbUser.getFullName(), fullNames)
+                                resources.getString(R.string.cht_update_group_added_message, connectycubeUser.getFullName(), fullNames)
                                 : resources.getString(R.string.cht_update_group_added_message, ChatUtils.getFullNameById(dataManager, qbChatMessage.getSenderId()),
                                 fullNames);
                     }
@@ -439,7 +439,7 @@ public class ChatNotificationUtils {
                     if (!TextUtils.isEmpty(deletedOccupantsIdsString)) {
                         fullNames = ChatUtils.getFullNamesFromOpponentIds(dataManager, deletedOccupantsIdsString);
                         resultMessage = ownMessage ?
-                                resources.getString(R.string.cht_update_group_leave_message, qbUser.getFullName())
+                                resources.getString(R.string.cht_update_group_leave_message, connectycubeUser.getFullName())
                                 : resources.getString(R.string.cht_update_group_leave_message, fullNames);
                     }
 

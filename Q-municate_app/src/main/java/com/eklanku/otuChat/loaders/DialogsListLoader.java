@@ -3,7 +3,7 @@ package com.eklanku.otuChat.loaders;
 import android.content.Context;
 import android.util.Log;
 
-import com.quickblox.chat.model.QBChatDialog;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.utils.DialogsUtils;
 import com.quickblox.q_municate_core.core.loader.BaseLoader;
 import com.quickblox.q_municate_core.models.DialogWrapper;
@@ -60,14 +60,14 @@ public class DialogsListLoader extends BaseLoader<List<DialogWrapper>> {
     protected List<DialogWrapper> getItems() {
         Log.d(TAG, "getItems() chatDialogs startRow= " + startRow + ", perPage= " + perPage + ", loadAll= " + loadAll);
 
-        List<QBChatDialog> chatDialogs = loadAll ? dataManager.getQBChatDialogDataManager().getAllSorted() :
-                dataManager.getQBChatDialogDataManager().getSkippedSorted(startRow, perPage);
+        List<ConnectycubeChatDialog> chatDialogs = loadAll ? dataManager.getConnectycubeChatDialogDataManager().getAllSorted() :
+                dataManager.getConnectycubeChatDialogDataManager().getSkippedSorted(startRow, perPage);
 
         Log.d(TAG, "getItems() chatDialogs size= " + chatDialogs.size());
         Log.d(TAG, "getItems() chatDialogs All" + chatDialogs.toString());
 
         List<DialogWrapper> dialogWrappers = new ArrayList<>(chatDialogs.size());
-        for (QBChatDialog chatDialog : chatDialogs) {
+        for (ConnectycubeChatDialog chatDialog : chatDialogs) {
             dialogWrappers.add(new DialogWrapper(getContext(), dataManager, chatDialog));
         }
 
@@ -97,7 +97,7 @@ public class DialogsListLoader extends BaseLoader<List<DialogWrapper>> {
 
     private void retrieveAllDialogsFromCacheByPages() {
         loadCacheFinished = false;
-        long dialogsCount = DataManager.getInstance().getQBChatDialogDataManager().getAllCount();
+        long dialogsCount = DataManager.getInstance().getConnectycubeChatDialogDataManager().getAllCount();
         boolean isCacheEmpty = dialogsCount <= 0;
 
         Log.d(TAG, "isCacheEmpty = " + isCacheEmpty);

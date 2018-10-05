@@ -3,8 +3,8 @@ package com.quickblox.q_municate_core.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_core.utils.Utils;
 
@@ -20,16 +20,16 @@ public class ParcelableQBDialog implements Parcelable {
             return new ParcelableQBDialog[size];
         }
     };
-    private QBChatDialog dialog;
+    private ConnectycubeChatDialog dialog;
 
-    public ParcelableQBDialog(QBChatDialog dialog) {
+    public ParcelableQBDialog(ConnectycubeChatDialog dialog) {
         this.dialog = dialog;
     }
 
     public ParcelableQBDialog(Parcel inputParcel) {
-        dialog = new QBChatDialog(inputParcel.readString());
+        dialog = new ConnectycubeChatDialog(inputParcel.readString());
         dialog.setName(inputParcel.readString());
-        dialog.setType(QBDialogType.parseByCode(inputParcel.readInt()));
+        dialog.setType(ConnectycubeDialogType.parseByCode(inputParcel.readInt()));
         dialog.setRoomJid(inputParcel.readString());
         dialog.setLastMessage(inputParcel.readString());
         dialog.setLastMessageDateSent(inputParcel.readLong());
@@ -38,7 +38,7 @@ public class ParcelableQBDialog implements Parcelable {
         dialog.setOccupantsIds(Utils.toArrayList(occupantArray));
     }
 
-    public QBChatDialog getDialog() {
+    public ConnectycubeChatDialog getDialog() {
         return dialog;
     }
 

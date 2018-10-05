@@ -11,12 +11,12 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 import com.firebase.jobdispatcher.Trigger;
-import com.quickblox.auth.model.QBProvider;
+import com.connectycube.auth.model.ConnectycubeProvider;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.utils.helpers.FirebaseAuthHelper;
 import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.quickblox.q_municate_core.qb.commands.chat.QBLoginChatCompositeCommand;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import rx.Observer;
 
@@ -58,7 +58,7 @@ public class SessionJobService extends JobService {
 
         if (SIGN_IN_SOCIAL_ACTION.equals(jobParameters.getTag())) {
             Bundle jobExtras = jobParameters.getExtras();
-            ServiceManager.getInstance().login(QBProvider.FIREBASE_PHONE,
+            ServiceManager.getInstance().login(ConnectycubeProvider.FIREBASE_PHONE,
                     jobExtras.getString(FirebaseAuthHelper.EXTRA_FIREBASE_ACCESS_TOKEN),
                     App.getInstance().getAppSharedHelper().getFirebaseProjectId())
                     .subscribe( new JobObserver(this, jobParameters));
@@ -74,7 +74,7 @@ public class SessionJobService extends JobService {
         return false;// Answers the question: "Should this job be retried?"
     }
 
-    private class JobObserver implements Observer<QBUser> {
+    private class JobObserver implements Observer<ConnectycubeUser> {
 
         private SessionJobService jobService;
         private JobParameters parameters;
@@ -96,8 +96,8 @@ public class SessionJobService extends JobService {
         }
 
         @Override
-        public void onNext(QBUser qbUser) {
-            Log.i(TAG, "onNext " + qbUser.getLogin());
+        public void onNext(ConnectycubeUser connectycubeUser) {
+            Log.i(TAG, "onNext " + connectycubeUser.getLogin());
             QBLoginChatCompositeCommand.start(SessionJobService.this);
             jobService.jobFinished(parameters, false);
         }

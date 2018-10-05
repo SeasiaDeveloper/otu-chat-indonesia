@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,11 +14,8 @@ import android.widget.EditText;
 
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
-import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
 import com.eklanku.otuChat.utils.ToastUtils;
 import com.eklanku.otuChat.utils.ValidationUtils;
 import com.eklanku.otuChat.utils.helpers.MediaPickHelper;
@@ -33,7 +29,7 @@ import com.quickblox.q_municate_core.utils.Utils;
 import com.quickblox.q_municate_db.models.Attachment;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
@@ -57,7 +53,7 @@ public class MyProfileActivity extends BaseLoggableActivity implements OnMediaPi
     @Bind(R.id.full_name_edittext)
     EditText fullNameEditText;
 
-    private QBUser qbUser;
+    private ConnectycubeUser connectycubeUser;
     private boolean isNeedUpdateImage;
     private UserCustomData userCustomData;
     private String currentFullName;
@@ -152,11 +148,11 @@ public class MyProfileActivity extends BaseLoggableActivity implements OnMediaPi
     private void initFields() {
         title = getString(R.string.profile_title);
         mediaPickHelper = new MediaPickHelper();
-        qbUser = AppSession.getSession().getUser();
+        connectycubeUser = AppSession.getSession().getUser();
     }
 
     private void initData() {
-        currentFullName = qbUser.getFullName();
+        currentFullName = connectycubeUser.getFullName();
 //        Log.d("myprofile", "myprofiledataok2:" + PreferenceUtil.getNumberPhone(this)));
         initCustomData();
         loadAvatar();
@@ -169,7 +165,7 @@ public class MyProfileActivity extends BaseLoggableActivity implements OnMediaPi
     }
 
     private void initCustomData() {
-        userCustomData = Utils.customDataToObject(qbUser.getCustomData());
+        userCustomData = Utils.customDataToObject(connectycubeUser.getCustomData());
         if (userCustomData == null) {
             userCustomData = new UserCustomData();
         }
@@ -188,7 +184,7 @@ public class MyProfileActivity extends BaseLoggableActivity implements OnMediaPi
     }
 
     private void resetUserData() {
-        qbUser.setFullName(oldFullName);
+        connectycubeUser.setFullName(oldFullName);
         isNeedUpdateImage = false;
         initCurrentData();
     }
@@ -211,16 +207,16 @@ public class MyProfileActivity extends BaseLoggableActivity implements OnMediaPi
         Crop.of(originalUri, imageUri).asSquare().start(this);
     }
 
-    private QBUser createUserForUpdating() {
-        QBUser newUser = new QBUser();
-        newUser.setId(qbUser.getId());
-        newUser.setPassword(qbUser.getPassword());
-        newUser.setOldPassword(qbUser.getOldPassword());
-        qbUser.setFullName(currentFullName);
+    private ConnectycubeUser createUserForUpdating() {
+        ConnectycubeUser newUser = new ConnectycubeUser();
+        newUser.setId(connectycubeUser.getId());
+        newUser.setPassword(connectycubeUser.getPassword());
+        newUser.setOldPassword(connectycubeUser.getOldPassword());
+        connectycubeUser.setFullName(currentFullName);
         newUser.setFullName(currentFullName);
-        newUser.setFacebookId(qbUser.getFacebookId());
-        newUser.setTwitterId(qbUser.getTwitterId());
-        newUser.setTwitterDigitsId(qbUser.getTwitterDigitsId());
+        newUser.setFacebookId(connectycubeUser.getFacebookId());
+        newUser.setTwitterId(connectycubeUser.getTwitterId());
+        newUser.setTwitterDigitsId(connectycubeUser.getTwitterDigitsId());
         newUser.setCustomData(Utils.customDataToString(userCustomData));
         return newUser;
     }
@@ -247,7 +243,7 @@ public class MyProfileActivity extends BaseLoggableActivity implements OnMediaPi
         if (new ValidationUtils(this).isFullNameValid(fullNameTextInputLayout, currentFullName.trim())) {
             showProgress();
 
-            QBUser newUser = createUserForUpdating();
+            ConnectycubeUser newUser = createUserForUpdating();
             File file = null;
             if (isNeedUpdateImage && imageUri != null) {
                 file = MediaUtils.getCreatedFileFromUri(imageUri);

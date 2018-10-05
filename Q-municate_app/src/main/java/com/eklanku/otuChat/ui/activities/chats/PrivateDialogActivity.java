@@ -41,14 +41,14 @@ import com.eklanku.otuChat.utils.DateUtils;
 import com.eklanku.otuChat.utils.ToastUtils;
 import com.eklanku.otuChat.utils.listeners.FriendOperationListener;
 import com.google.gson.Gson;
-import com.quickblox.chat.QBRestChatService;
-import com.quickblox.chat.model.QBAttachment;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
-import com.quickblox.content.model.QBFile;
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.server.Performer;
+import com.connectycube.chat.ConnectycubeRestChatService;
+import com.connectycube.chat.model.ConnectycubeAttachment;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
+import com.connectycube.storage.model.ConnectycubeFile;
+import com.connectycube.core.EntityCallback;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.server.Performer;
 import com.quickblox.q_municate_core.core.command.Command;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_core.qb.commands.friend.QBAcceptFriendCommand;
@@ -68,10 +68,10 @@ import com.quickblox.q_municate_db.models.Friend;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.eklanku.otuChat.R;
-import com.quickblox.ui.kit.chatmessage.adapter.media.video.ui.VideoPlayerActivity;
-import com.quickblox.ui.kit.chatmessage.adapter.media.view.QBPlaybackControlView;
-import com.quickblox.users.model.QBUser;
-import com.quickblox.videochat.webrtc.QBRTCTypes;
+import com.connectycube.ui.chatmessage.adapter.media.video.ui.VideoPlayerActivity;
+import com.connectycube.ui.chatmessage.adapter.media.view.ConnectycubePlaybackControlView;
+import com.connectycube.users.model.ConnectycubeUser;
+import com.connectycube.videochat.RTCTypes;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
@@ -103,25 +103,25 @@ public class PrivateDialogActivity extends BaseDialogActivity {
 
     public DbHelper mDbHelper;
 
-    public static void start(Context context, QMUser opponent, QBChatDialog chatDialog) {
+    public static void start(Context context, QMUser opponent, ConnectycubeChatDialog chatDialog) {
         Intent intent = getIntentWithExtra(context, opponent, chatDialog);
         intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
         context.startActivity(intent);
     }
 
-    public static void startWithClearTop(Context context, QMUser opponent, QBChatDialog chatDialog) {
+    public static void startWithClearTop(Context context, QMUser opponent, ConnectycubeChatDialog chatDialog) {
         Intent intent = getIntentWithExtra(context, opponent, chatDialog);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
     }
 
-    public static void startForResult(Fragment fragment, QMUser opponent, QBChatDialog chatDialog,
+    public static void startForResult(Fragment fragment, QMUser opponent, ConnectycubeChatDialog chatDialog,
                                       int requestCode) {
         Intent intent = getIntentWithExtra(fragment.getContext(), opponent, chatDialog);
         fragment.startActivityForResult(intent, requestCode);
     }
 
-    private static Intent getIntentWithExtra(Context context, QMUser opponent, QBChatDialog chatDialog) {
+    private static Intent getIntentWithExtra(Context context, QMUser opponent, ConnectycubeChatDialog chatDialog) {
         Intent intent = new Intent(context, PrivateDialogActivity.class);
         intent.putExtra(QBServiceConsts.EXTRA_OPPONENT, opponent);
         intent.putExtra(QBServiceConsts.EXTRA_DIALOG, chatDialog);
@@ -174,31 +174,31 @@ public class PrivateDialogActivity extends BaseDialogActivity {
                 else if (combinationMessagesList.get(position).getAttachments() != null) {
                     String fileId = "";
                     String fileType = "";
-                    QBAttachment qbAttachment = null;
+                    ConnectycubeAttachment connectycubeAttachment = null;
                     Log.d("RINA", "initChatAdapter: "+position);
-                    for (QBAttachment attachment : combinationMessagesList.get(position).getAttachments()) {
+                    for (ConnectycubeAttachment attachment : combinationMessagesList.get(position).getAttachments()) {
                         fileId = attachment.getId();
                         fileType = attachment.getType();
-                        qbAttachment = attachment;
+                        connectycubeAttachment = attachment;
                         break;
                     }
-                    Log.v("Attachment", QBFile.getPrivateUrlForUID(fileId));
+                    Log.v("Attachment", ConnectycubeFile.getPrivateUrlForUID(fileId));
                     //fileType = fileType.toUpperCase();
                     Log.v("FileType", "FileType: " + fileType);
                     if (fileType.equals("image"))
-                        PreviewImageActivity.start(PrivateDialogActivity.this, QBFile.getPrivateUrlForUID(fileId));
+                        PreviewImageActivity.start(PrivateDialogActivity.this, ConnectycubeFile.getPrivateUrlForUID(fileId));
                     else if (fileType.equals("video")) {
                         canPerformLogout.set(false);
-                        VideoPlayerActivity.start(PrivateDialogActivity.this, Uri.parse(QBFile.getPrivateUrlForUID(fileId)));
+                        VideoPlayerActivity.start(PrivateDialogActivity.this, Uri.parse(ConnectycubeFile.getPrivateUrlForUID(fileId)));
                     } else if (fileType.equals("location")) {
                         canPerformLogout.set(false);
-                        MapsActivity.startMapForResult(PrivateDialogActivity.this, qbAttachment.getData());
+                        MapsActivity.startMapForResult(PrivateDialogActivity.this, connectycubeAttachment.getData());
                     }
                 }
             }
 
             @Override
-            public void onAudioItemClick(QBPlaybackControlView playbackView, int position) {
+            public void onAudioItemClick(ConnectycubePlaybackControlView playbackView, int position) {
                 if (isMultipleMessageSelect)
                     select(position);
                 else
@@ -322,7 +322,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
 
                 case R.id.action_reply:
                     if (longPressPosition != -1) {
-                        //if(QBMessagesAdapter.TextMessageHolder)
+                        //if(ConnectycubeChatAdapter.TextMessageHolder)
                         if (selectedMessagesList.size() == 1) {
 
                             LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -420,7 +420,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
                     for (int i = 0; i < selectedMessagesList.size(); i++) {
                         messagesIds.add(selectedMessagesList.get(i).getMessageId());
                     }
-                    QBRestChatService.deleteMessages(messagesIds, false).performAsync(new QBEntityCallback<Void>() {
+                    ConnectycubeRestChatService.deleteMessages(messagesIds, false).performAsync(new EntityCallback<Void>() {
                         @Override
                         public void onSuccess(Void aVoid, Bundle bundle) {
                             if (combinationMessagesList.size() > 0) {
@@ -438,7 +438,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
                         }
 
                         @Override
-                        public void onError(QBResponseException e) {
+                        public void onError(ResponseException e) {
                             e.printStackTrace();
 
                         }
@@ -500,11 +500,11 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         switch (item.getItemId()) {
             case R.id.action_audio_call:
                 Log.d("AYIK", "privatedialog:process voice call");
-                callToUser(opponentUser, QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_AUDIO);
+                callToUser(opponentUser, RTCTypes.ConferenceType.CONFERENCE_TYPE_AUDIO);
                 break;
             case R.id.switch_camera_toggle:
                 Log.d("AYIK", "privatedialog:process video call");
-                callToUser(opponentUser, QBRTCTypes.QBConferenceType.QB_CONFERENCE_TYPE_VIDEO);
+                callToUser(opponentUser, RTCTypes.ConferenceType.CONFERENCE_TYPE_VIDEO);
                 break;
             default:
                 super.onOptionsItemSelected(item);
@@ -594,15 +594,15 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         }
     }
 
-    private void callToUser(QMUser user, QBRTCTypes.QBConferenceType qbConferenceType) {
+    private void callToUser(QMUser user, RTCTypes.ConferenceType ConferenceType) {
         Log.d("AYIK", "status calltouser "+isChatInitializedAndUserLoggedIn());
         if (!isChatInitializedAndUserLoggedIn()) {
             ToastUtils.longToast(R.string.call_chat_service_is_initializing);
             return;
         }
-        List<QBUser> qbUserList = new ArrayList<>(1);
-        qbUserList.add(UserFriendUtils.createQbUser(user));
-        CallActivity.start(PrivateDialogActivity.this, qbUserList, qbConferenceType, null);
+        List<ConnectycubeUser> connectycubeUserList = new ArrayList<>(1);
+        connectycubeUserList.add(UserFriendUtils.createConnectycubeUser(user));
+        CallActivity.start(PrivateDialogActivity.this, connectycubeUserList, ConferenceType, null);
     }
 
     private void acceptUser(final int userId) {
@@ -653,9 +653,9 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     }
 
     private void updateCurrentChatFromDB() {
-        QBChatDialog updatedDialog = null;
+        ConnectycubeChatDialog updatedDialog = null;
         if (currentChatDialog != null) {
-            updatedDialog = dataManager.getQBChatDialogDataManager().getByDialogId(currentChatDialog.getDialogId());
+            updatedDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(currentChatDialog.getDialogId());
         } else {
             finish();
         }
@@ -735,7 +735,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
             int userId = extras.getInt(QBServiceConsts.EXTRA_USER_ID);
             // TODO: now it is possible only for Private chats
             if (currentChatDialog != null && opponentUser != null && userId == opponentUser.getId()) {
-                if (QBDialogType.PRIVATE.equals(currentChatDialog.getType())) {
+                if (ConnectycubeDialogType.PRIVATE.equals(currentChatDialog.getType())) {
                     boolean isTyping = extras.getBoolean(QBServiceConsts.EXTRA_IS_TYPING);
                     if (isTyping) {
                         showTypingStatus();
@@ -750,7 +750,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     public interface ItemClickListener {
         public void onItemClick(int position);
 
-        public void onAudioItemClick(QBPlaybackControlView playbackView, int position);
+        public void onAudioItemClick(ConnectycubePlaybackControlView playbackView, int position);
 
         public void onItemLongClick(int position);
     }

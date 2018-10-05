@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.eklanku.otuChat.ui.views.RTCGLVideoView;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.views.RTCGLVideoView;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class OpponentsFromCallAdapter extends RecyclerView.Adapter<OpponentsFrom
     private int paddingLeft = 0;
 
     private Context context;
-    private List<QBUser> opponents;
+    private List<ConnectycubeUser> opponents;
     private int gridWidth;
     private boolean showVideoView;
     private LayoutInflater inflater;
@@ -36,7 +36,7 @@ public class OpponentsFromCallAdapter extends RecyclerView.Adapter<OpponentsFrom
     private OnAdapterEventListener adapterListener;
 
 
-    public OpponentsFromCallAdapter(Context context, List<QBUser> users, int width, int height, int gridWidth,
+    public OpponentsFromCallAdapter(Context context, List<ConnectycubeUser> users, int width, int height, int gridWidth,
             int columns, int itemMargin, boolean showVideoView) {
         this.context = context;
         this.opponents = users;
@@ -84,7 +84,7 @@ public class OpponentsFromCallAdapter extends RecyclerView.Adapter<OpponentsFrom
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final QBUser user = opponents.get(position);
+        final ConnectycubeUser user = opponents.get(position);
 
         holder.setUserId(user.getId());
         if (position == (opponents.size() -1 )) {

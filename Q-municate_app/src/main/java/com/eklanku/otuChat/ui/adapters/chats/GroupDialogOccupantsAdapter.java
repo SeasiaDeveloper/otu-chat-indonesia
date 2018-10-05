@@ -16,7 +16,7 @@ import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.cache.QMUserCache;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 import com.eklanku.otuChat.R;;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
@@ -138,7 +138,7 @@ public class GroupDialogOccupantsAdapter extends BaseListAdapter<QMUser> {
     }
 
     private boolean isMe(QMUser inputUser) {
-        QBUser currentUser = AppSession.getSession().getUser();
+        ConnectycubeUser currentUser = AppSession.getSession().getUser();
         return currentUser.getId().intValue() == inputUser.getId().intValue();
     }
 

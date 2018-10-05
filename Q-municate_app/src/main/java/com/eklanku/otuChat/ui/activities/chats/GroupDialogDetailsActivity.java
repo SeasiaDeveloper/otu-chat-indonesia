@@ -28,9 +28,9 @@ import com.eklanku.otuChat.ui.adapters.chats.GroupDialogOccupantsAdapter;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.quickblox.chat.QBChatService;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.chat.ConnectycubeChatService;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.core.exception.ResponseException;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.profile.MyProfileActivity;
@@ -62,7 +62,7 @@ import com.quickblox.q_municate_db.models.DialogOccupant;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 import com.soundcloud.android.crop.Crop;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
 
@@ -98,7 +98,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     private Object actionMode;
     private boolean isNeedUpdateImage;
     private Uri imageUri;
-    private QBChatDialog qbDialog;
+    private ConnectycubeChatDialog qbDialog;
     private String groupNameCurrent;
     private String photoUrlOld;
     private String groupNameOld;
@@ -292,10 +292,10 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     private void updateDialog() {
         if (qbDialog == null || isRefressOccupants) {
             isRefressOccupants = false;
-            qbDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
+            qbDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
         }
 
-        qbDialog.initForChat(QBChatService.getInstance());
+        qbDialog.initForChat(ConnectycubeChatService.getInstance());
         occupantsList = getUsersForGroupChat(qbDialog.getDialogId(), qbDialog.getOccupants());
         qbDialog.setOccupantsIds(ChatUtils.createOccupantsIdsFromUsersList(occupantsList));
         groupDialogOccupantsAdapter.setNewData(occupantsList);
@@ -385,7 +385,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
                 });
     }
 
-    private void deleteDialog(QBChatDialog chatDialog) {
+    private void deleteDialog(ConnectycubeChatDialog chatDialog) {
         if (chatDialog == null || chatDialog.getDialogId() == null) {
             return;
         }
@@ -447,9 +447,9 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     }
 
     private void updateCurrentData() {
-        QBChatDialog qbChatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(qbDialog.getDialogId());
-        qbChatDialog.initForChat(QBChatService.getInstance());
-        occupantsList = QMUserService.getInstance().getUserCache().getUsersByIDs(qbChatDialog.getOccupants());
+        ConnectycubeChatDialog ConnectycubeChatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(qbDialog.getDialogId());
+        ConnectycubeChatDialog.initForChat(ConnectycubeChatService.getInstance());
+        occupantsList = QMUserService.getInstance().getUserCache().getUsersByIDs(ConnectycubeChatDialog.getOccupants());
         groupNameCurrent = groupNameEditText.getText().toString();
     }
 
@@ -489,13 +489,13 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     private void sendNotificationToGroup(boolean leavedFromDialog) {
         for (DialogNotification.Type messagesNotificationType : currentNotificationTypeList) {
             try {
-                QBChatDialog localDialog = qbDialog;
+                ConnectycubeChatDialog localDialog = qbDialog;
                 if (qbDialog != null) {
-                    localDialog = dataManager.getQBChatDialogDataManager().getByDialogId(qbDialog.getDialogId());
+                    localDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(qbDialog.getDialogId());
                 }
                 chatHelper.sendGroupMessageToFriends(localDialog, messagesNotificationType,
                         newFriendIdsList, leavedFromDialog);
-            } catch (QBResponseException e) {
+            } catch (ResponseException e) {
                 ErrorUtils.logError(e);
                 hideProgress();
             }
@@ -513,7 +513,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
     }
 
     private void startFriendProfile(QMUser selectedFriend) {
-        QBUser currentUser = AppSession.getSession().getUser();
+        ConnectycubeUser currentUser = AppSession.getSession().getUser();
         if (currentUser.getId().intValue() == selectedFriend.getId().intValue()) {
             MyProfileActivity.start(GroupDialogDetailsActivity.this);
         } else {
@@ -673,7 +673,7 @@ public class GroupDialogDetailsActivity extends BaseLoggableActivity implements 
 
         @Override
         public void execute(Bundle bundle) {
-            qbDialog = (QBChatDialog) bundle.getSerializable(QBServiceConsts.EXTRA_DIALOG);
+            qbDialog = (ConnectycubeChatDialog) bundle.getSerializable(QBServiceConsts.EXTRA_DIALOG);
 
             updateCurrentData();
             updateOldGroupData();

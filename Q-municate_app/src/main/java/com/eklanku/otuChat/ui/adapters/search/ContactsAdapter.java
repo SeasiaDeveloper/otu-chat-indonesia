@@ -16,17 +16,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.eklanku.otuChat.ui.activities.chats.NewMessageActivity;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
-import com.eklanku.otuChat.ui.activities.contacts.ContactsModelGroup;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.core.exception.ResponseException;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.qb.commands.chat.QBCreatePrivateChatCommand;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
@@ -36,18 +32,11 @@ import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.models.DialogOccupant;
 import com.quickblox.q_municate_db.utils.DialogTransformUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import android.util.Log;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.Filter;
-import android.widget.Filterable;
-import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
 
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyViewHolder> implements Filterable {
@@ -58,7 +47,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
     private final Context context;
     private DataManager dataManager = DataManager.getInstance();
-    private QBUser qbUser = AppSession.getSession().getUser();
+    private ConnectycubeUser connectycubeUser = AppSession.getSession().getUser();
     private boolean isToGroup = false;
 
     //Rina
@@ -150,17 +139,17 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            //QBChatDialog privateDialog = new QBChatDialog();
+                            //ConnectycubeChatDialog privateDialog = new ConnectycubeChatDialog();
                             QBChatHelper chatHelper = new QBChatHelper(context);
-                            QBChatDialog privateDialog = null;
+                            ConnectycubeChatDialog privateDialog = null;
                             try {
                                 privateDialog = chatHelper.createPrivateDialogIfNotExist(contact.getId_user());
                                 List<DialogOccupant> occupantsList = dataManager.getDialogOccupantDataManager()
                                         .getDialogOccupantsListByDialogId(privateDialog.getDialogId());
-                                QMUser opponent = ChatUtils.getOpponentFromPrivateDialog(UserFriendUtils.createLocalUser(qbUser), occupantsList);
+                                QMUser opponent = ChatUtils.getOpponentFromPrivateDialog(UserFriendUtils.createLocalUser(connectycubeUser), occupantsList);
                                 checkForOpenChat(opponent);
 
-                            } catch (QBResponseException e) {
+                            } catch (ResponseException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -221,7 +210,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     private void checkForOpenChat(QMUser user) {
         DialogOccupant dialogOccupant = dataManager.getDialogOccupantDataManager().getDialogOccupantForPrivateChat(user.getId());
         if (dialogOccupant != null && dialogOccupant.getDialog() != null) {
-            QBChatDialog chatDialog = DialogTransformUtils.createQBDialogFromLocalDialog(dataManager, dialogOccupant.getDialog());
+            ConnectycubeChatDialog chatDialog = DialogTransformUtils.createQBDialogFromLocalDialog(dataManager, dialogOccupant.getDialog());
             startPrivateChat(chatDialog, user);
         } else {
             QBCreatePrivateChatCommand.start(context, user);
@@ -229,7 +218,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         }
     }
 
-    private void startPrivateChat(QBChatDialog dialog, QMUser selectedUser) {
+    private void startPrivateChat(ConnectycubeChatDialog dialog, QMUser selectedUser) {
         PrivateDialogActivity.start(context, selectedUser, dialog);
     }
 }

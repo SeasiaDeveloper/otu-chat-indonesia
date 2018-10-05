@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.request.QBRequestGetBuilder;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.request.RequestGetBuilder;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.models.ParcelableQBDialog;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
@@ -61,19 +61,19 @@ public class QBLoadDialogByIdsCommand extends ServiceCommand {
         return bundle;
     }
 
-    private List<QBChatDialog> loadAllDialogsByIds(List<String> dialogsIds, Bundle returnedBundle) throws QBResponseException {
+    private List<ConnectycubeChatDialog> loadAllDialogsByIds(List<String> dialogsIds, Bundle returnedBundle) throws ResponseException {
         Object[] arrDialogsIds = dialogsIds.toArray(new String[dialogsIds.size()]);
 
-        QBRequestGetBuilder requestBuilder = new QBRequestGetBuilder();
+        RequestGetBuilder requestBuilder = new RequestGetBuilder();
         requestBuilder.sortAsc(QBServiceConsts.EXTRA_LAST_MESSAGE_DATE_SENT);
         requestBuilder.in(OPERATOR_ID, arrDialogsIds);
-        List<QBChatDialog> chatDialogs = getDialogs(requestBuilder, returnedBundle);
+        List<ConnectycubeChatDialog> chatDialogs = getDialogs(requestBuilder, returnedBundle);
 
         chatHelper.saveDialogsToCache(chatDialogs, false);
         return chatDialogs;
     }
 
-    private List<QBChatDialog> getDialogs(QBRequestGetBuilder qbRequestGetBuilder, Bundle returnedBundle) throws QBResponseException {
+    private List<ConnectycubeChatDialog> getDialogs(RequestGetBuilder qbRequestGetBuilder, Bundle returnedBundle) throws ResponseException {
         return chatHelper.getDialogs(qbRequestGetBuilder, returnedBundle);
     }
 }
