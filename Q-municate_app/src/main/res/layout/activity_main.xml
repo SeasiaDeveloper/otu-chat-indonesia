@@ -9,27 +9,29 @@
         android:id="@+id/toolbar_view"
         layout="@layout/toolbar_main" />
 
+    <include layout="@layout/content_main" />
+
     <!--<LinearLayout-->
-        <!--android:id="@+id/toolbar_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
+    <!--android:id="@+id/toolbar_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
 
-        <!--<android.support.v7.widget.Toolbar-->
-            <!--style="@style/ToolbarStyle"-->
-            <!--android:id="@+id/toolbar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:titleTextColor="@color/colorTextOtu">-->
+    <!--<android.support.v7.widget.Toolbar-->
+    <!--style="@style/ToolbarStyle"-->
+    <!--android:id="@+id/toolbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:titleTextColor="@color/colorTextOtu">-->
 
-            <!--<ProgressBar-->
-                <!--android:id="@+id/toolbar_progressbar"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="end"-->
-                <!--android:indeterminate="true"-->
-                <!--android:visibility="gone" />-->
+    <!--<ProgressBar-->
+    <!--android:id="@+id/toolbar_progressbar"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="end"-->
+    <!--android:indeterminate="true"-->
+    <!--android:visibility="gone" />-->
 
-        <!--</android.support.v7.widget.Toolbar>-->
+    <!--</android.support.v7.widget.Toolbar>-->
 
     <!--</LinearLayout>-->
 
@@ -41,9 +43,9 @@
 
     <com.yyydjk.library.BannerLayout
         android:id="@+id/bannerLayout"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="125dp"
+        android:visibility="gone"
         app:autoPlayDuration="4000"
         app:scrollDuration="1000" />
 
@@ -150,7 +152,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:background="@color/white"/>
+                    android:background="@color/white" />
             </LinearLayout>
 
         </LinearLayout>

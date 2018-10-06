@@ -21,5 +21,7 @@
         android:gravity="center"
         android:indeterminate="true"
         android:visibility="gone" />
+
+
 </android.support.v7.widget.Toolbar>
 

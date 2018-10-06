@@ -13,8 +13,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -22,6 +24,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +39,8 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
+import com.eklanku.otuChat.ui.fragments.CallFragment;
+import com.eklanku.otuChat.ui.fragments.PaymentFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -131,13 +136,13 @@ public class MainActivity extends BaseLoggableActivity {
     private ImportFriendsFailAction importFriendsFailAction;
 
     //ayik
-    Toolbar toolbar;
+    /*Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
     PageAdapter pageAdapter;
     TabItem tabChats;
     TabItem tabStatus;
-    TabItem tabCalls;
+    TabItem tabCalls;*/
 
     Intent intent;
     public static final int REQUEST_CODE_LOGOUT = 300;
@@ -205,9 +210,62 @@ public class MainActivity extends BaseLoggableActivity {
         }, 2000);
     }
 
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Fragment fragment = null;
+            switch (item.getItemId()) {
+                case R.id.navigation_chat:
+
+                    fragment = new DialogsListFragment();
+
+                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
+                        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
+                        strUserID = user.get(preferenceManager.KEY_USERID);
+                        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
+                    }
+                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
+                        logOutPayment();
+                    }
+                    break;
+                case R.id.navigation_call:
+                    fragment = new CallFragment();
+
+                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
+                        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
+                        strUserID = user.get(preferenceManager.KEY_USERID);
+                        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
+                    }
+                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
+                        logOutPayment();
+                    }
+
+                    break;
+                case R.id.navigation_payment:
+                    fragment = new PaymentFragment();
+                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
+                        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
+                        strUserID = user.get(preferenceManager.KEY_USERID);
+                        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
+                    }
+                    if (!PreferenceUtil.isMemberStatus(MainActivity.this)) {
+                        cekMember();
+                    }
+
+                    break;
+            }
+            return loadFragment(fragment);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
@@ -238,15 +296,14 @@ public class MainActivity extends BaseLoggableActivity {
         addDialogsAction();
         openPushDialogIfPossible();
 
-        //ayik
-        tabLayout = findViewById(R.id.tablayout);
+        /*tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewPager);
 
         pageAdapter = new PageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pageAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));*/
 
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
+        /*viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
             public void onPageScrollStateChanged(int state) {
             }
 
@@ -290,7 +347,7 @@ public class MainActivity extends BaseLoggableActivity {
         viewPager.setCurrentItem(0);
         tabLayout.getTabAt(2).setCustomView(R.layout.custom_tabs_payment);
         tabLayout.getTabAt(1).setCustomView(R.layout.custom_tabs_calls);
-        tabLayout.getTabAt(0).setCustomView(R.layout.custom_tab_chats);
+        tabLayout.getTabAt(0).setCustomView(R.layout.custom_tab_chats);*/
 
         preferenceManager = new PreferenceManager(this);
 
@@ -298,7 +355,19 @@ public class MainActivity extends BaseLoggableActivity {
             restartApp();
         }
 
+        loadFragment(new DialogsListFragment());
+
         mainActivity = this;
+    }
+
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
     }
 
 

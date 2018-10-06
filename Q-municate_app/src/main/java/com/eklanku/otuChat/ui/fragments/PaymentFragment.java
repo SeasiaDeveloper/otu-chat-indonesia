@@ -151,7 +151,10 @@ public class PaymentFragment extends Fragment {
         banner = mView.findViewById(R.id.bannerLayout);
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
-        loadBanner();
+        Activity activity = getActivity();
+
+        if (activity != null && isAdded())
+            loadBanner();
 
         return mView;
     }
@@ -518,7 +521,7 @@ public class PaymentFragment extends Fragment {
 
 
     public void loadDeposite(String strUserID, String strAccessToken) {
-        Log.d("AYIK", "OnLoad userID " + strUserID + " accessToken " + strAccessToken);
+        //Log.d("AYIK", "OnLoad userID " + strUserID + " accessToken " + strAccessToken);
         Call<DataDeposit> userCall = apiInterfacePayment.getSaldo(strUserID, strApIUse, strAccessToken);
         userCall.enqueue(new Callback<DataDeposit>() {
             @Override
@@ -555,7 +558,6 @@ public class PaymentFragment extends Fragment {
             @Override
             public void onFailure(Call<DataDeposit> call, Throwable t) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_REGISTER", t.getMessage().toString());
             }
         });
 
@@ -592,6 +594,7 @@ public class PaymentFragment extends Fragment {
             }
         });
     }
+
     public void loadBanner() {
 
         banner.setImageLoader(new GlideImageLoader());
