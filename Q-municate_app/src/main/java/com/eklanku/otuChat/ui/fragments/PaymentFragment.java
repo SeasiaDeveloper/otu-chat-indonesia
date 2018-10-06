@@ -69,6 +69,7 @@ import com.eklanku.otuChat.ui.activities.payment.transaksi.TransMultiFinance;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKartuKredit;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransAsuransi;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPGN;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransVouchergame_opsi;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransWi;
 import com.eklanku.otuChat.ui.activities.payment.transfer.TransDeposit;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -268,7 +269,7 @@ public class PaymentFragment extends Fragment {
                     break;
 
                 case R.id.btnVoucher:
-                    startActivity(new Intent(context, TransVoucherGame.class));
+                    startActivity(new Intent(context, TransVouchergame_opsi.class));
                     break;
 
                 case R.id.btnPdam:

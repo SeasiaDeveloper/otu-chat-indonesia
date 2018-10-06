@@ -289,6 +289,7 @@ public class TransVoucherGame extends AppCompatActivity {
                         final List<DataProvider> products = response.body().getProviders();
                         for (int i = 0; i < products.size(); i++) {
                             String x = products.get(i).getName_provaider();
+                            Log.d("OPPO-1", "onResponse: "+x);
                             list.add(x);
                         }
 
