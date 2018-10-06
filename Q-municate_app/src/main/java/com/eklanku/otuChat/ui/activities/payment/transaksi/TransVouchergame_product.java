@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -14,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -57,6 +61,9 @@ public class TransVouchergame_product extends AppCompatActivity{
     Button btnYes, btnNo;
     TextView txtnomor, txtvoucher;
 
+    ArrayList<String> id_paket;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,46 +92,7 @@ public class TransVouchergame_product extends AppCompatActivity{
 
         loadProduct(strUserID, strAccessToken, strAplUse, jnsGame);
 
-        btnBayar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                if (!validateIdpel()) {
-//                    return;
-//                }
-
-                final Dialog dialog = new Dialog(TransVouchergame_product.this);
-
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.activity_alert_dialog);
-                dialog.setCancelable(false);
-                dialog.setTitle("Peringatan Transaksi!!!");
-
-                btnYes = (Button) dialog.findViewById(R.id.btn_yes);
-                btnNo = (Button) dialog.findViewById(R.id.btn_no);
-                txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
-                txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
-                txtnomor.setText(noPel.getText().toString());
-                txtvoucher.setText(code);
-
-                btnYes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cek_transaksi();
-                        dialog.dismiss();
-                    }
-                });
-
-                btnNo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
-                return;
-            }
-        });
+        initializeResources();
 
     }
 
@@ -147,6 +115,7 @@ public class TransVouchergame_product extends AppCompatActivity{
                             List<String> listPrice = new ArrayList<String>();
                             List<String> listNama = new ArrayList<String>();
                             List<String> listEp = new ArrayList<String>();
+                            id_paket = new ArrayList<>();
                             listPrice.clear();
                             listNama.clear();
                             listEp.clear();
@@ -155,7 +124,7 @@ public class TransVouchergame_product extends AppCompatActivity{
                                 String name = products.get(i).getName();
                                 String price = products.get(i).getPrice();
                                 String ep = products.get(i).getEp();
-
+                                id_paket.add(products.get(i).getCode());
                                 listNama.add(name);
                                 listEp.add(ep);
                                 listPrice.add(price);
@@ -163,12 +132,12 @@ public class TransVouchergame_product extends AppCompatActivity{
 
                             SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
                             lvProductGame.setAdapter(adapter);
-                            lvProductGame.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            /*lvProductGame.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                     code = products.get(position).getCode();
                                 }
-                            });
+                            });*/
 
                         }
                     }
@@ -246,5 +215,72 @@ public class TransVouchergame_product extends AppCompatActivity{
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
+    }
+
+
+    private void initializeResources() {
+        Log.d("OPPO-1", "initializeResources: ");
+        lvProductGame = (ListView) findViewById(R.id.listProductGame);
+        lvProductGame.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Dialog dialog = new Dialog(TransVouchergame_product.this);
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.activity_alert_dialog);
+                dialog.setCancelable(false);
+                dialog.setTitle("Peringatan Transaksi!!!");
+
+                code = id_paket.get(position);
+                btnYes = (Button) dialog.findViewById(R.id.btn_yes);
+                btnNo = (Button) dialog.findViewById(R.id.btn_no);
+                txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
+                txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+                txtnomor.setText(noPel.getText().toString());
+                txtvoucher.setText(code);
+
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cek_transaksi();
+                        dialog.dismiss();
+                    }
+                });
+
+                btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                return;
+            }
+        });
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

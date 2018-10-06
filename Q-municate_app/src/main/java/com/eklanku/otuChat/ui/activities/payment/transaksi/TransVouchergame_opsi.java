@@ -6,8 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.google.gson.JsonNull;
@@ -61,10 +65,10 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
                 jnsGame = "GEMSCOOL";
                 break;
             case R.id.btnVGMobilelegend:
-                jnsGame = "MOBILE LEGEND";
+                jnsGame = "MOBILE LEGENDS";
                 break;
             case R.id.btnVGGoogleplay:
-                jnsGame = "GOOGLE PLAY";
+                jnsGame = "GOOGLE PLAY ID";
                 break;
             case R.id.btnVGLyto:
                 jnsGame = "LYTO";
@@ -80,5 +84,30 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         Intent product = new Intent(getApplicationContext(), TransVouchergame_product.class);
         product.putExtra("jnsGame", jnsGame);
         startActivity(product);
+    }
+
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
