@@ -1,5 +1,6 @@
 package com.eklanku.otuChat.ui.fragments.chats;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -172,6 +173,9 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         banner = view.findViewById(R.id.bannerLayout);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
+        Activity activity = getActivity();
+
+        if (activity != null && isAdded())
         loadBanner();
 
         //dialogsListView.addHeaderView(header);
