@@ -598,6 +598,7 @@ public class PaymentFragment extends Fragment {
 
     public void loadBanner() {
 
+        Log.d("AYIK", "TEST");
         banner.setImageLoader(new GlideImageLoader());
         List<String> urls = new ArrayList<>();
         Call<LoadBanner> callLoadBanner = apiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(getActivity()), strApIUse);
