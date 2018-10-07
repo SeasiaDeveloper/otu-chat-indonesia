@@ -15,7 +15,9 @@ public class GlideImageLoader implements BannerLayout.ImageLoader {
         /*Glide.with(context)
                 .load(s)
                 .into(imageView);*/
-        Glide.with(context).load(s).error(context.getResources().getDrawable(R.drawable.ic_image_broken)).centerCrop().into(imageView);
+        //Glide.with(context).load(s).error(context.getResources().getDrawable(R.drawable.ic_image_broken)).centerCrop().into(imageView);
+        Glide.with(context).load(s).error(context.getResources().getDrawable(R.drawable.otu_ad)).centerCrop().into(imageView);
+
 
     }
 }

@@ -29,7 +29,6 @@ import com.eklanku.otuChat.ui.activities.rest.ApiClient;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment.ListViewAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerBankAdapter;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupDetailM;
@@ -51,7 +50,6 @@ public class TopupOrder extends AppCompatActivity {
     Dialog loadingDialog;
 
     ApiInterface mApiInterface;
-    ListViewAdapter listViewAdapter;
     ArrayList<String> nominal;
 
     ApiInterfacePayment mApiInterfacePayment;
