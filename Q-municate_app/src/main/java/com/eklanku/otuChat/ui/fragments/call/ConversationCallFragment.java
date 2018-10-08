@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.connectycube.videochat.RTCCameraVideoCapturer;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.call.CallActivity;
@@ -432,7 +433,7 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
 
         switch (item.getItemId()) {
             case R.id.switch_camera_toggle:
-                mediaStreamManager.switchCameraInput(new CameraVideoCapturer.CameraSwitchHandler() {
+                ((RTCCameraVideoCapturer)(mediaStreamManager.getVideoCapturer())).switchCamera(new CameraVideoCapturer.CameraSwitchHandler() {
                     @Override
                     public void onCameraSwitchDone(boolean b) {
                         isFrontCameraSelected = b;
@@ -458,24 +459,21 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
 
     private void toggleAudioOutput() {
         if (!audioManager.getSelectedAudioDevice().equals(AppRTCAudioManager.AudioDevice.SPEAKER_PHONE)) {
-            audioManager.setAudioDevice(AppRTCAudioManager.AudioDevice.SPEAKER_PHONE);
+            audioManager.selectAudioDevice(AppRTCAudioManager.AudioDevice.SPEAKER_PHONE);
         } else {
             if (audioManager.getAudioDevices().contains(AppRTCAudioManager.AudioDevice.WIRED_HEADSET)) {
-                audioManager.setAudioDevice(AppRTCAudioManager.AudioDevice.WIRED_HEADSET);
+                audioManager.selectAudioDevice(AppRTCAudioManager.AudioDevice.WIRED_HEADSET);
             } else {
-                audioManager.setAudioDevice(AppRTCAudioManager.AudioDevice.EARPIECE);
+                audioManager.selectAudioDevice(AppRTCAudioManager.AudioDevice.EARPIECE);
             }
         }
     }
 
     private void initAudioManager() {
-        audioManager = AppRTCAudioManager.create(getActivity(), new AppRTCAudioManager.OnAudioManagerStateListener() {
-            @Override
-            public void onAudioChangedState(AppRTCAudioManager.AudioDevice audioDevice) {
-                ToastUtils.shortToast("Audio device switched to  " + audioDevice);
-            }
+        audioManager = AppRTCAudioManager.create(getActivity());
+        audioManager.start((selectedAudioDevice, availableAudioDevices) -> {
+            Log.d(TAG, "Audio device switched to  " + selectedAudioDevice);
         });
-        audioManager.init();
     }
 
     @Override

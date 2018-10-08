@@ -11,7 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
-import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.R;
 import com.quickblox.q_municate_core.qb.helpers.BaseThreadPoolHelper;
 
 import java.util.Collections;

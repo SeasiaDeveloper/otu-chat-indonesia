@@ -12,7 +12,7 @@
         android:background="@color/gray"
         >
 
-        <com.quickblox.otuchat.ui.views.RTCGLVideoView
+        <com.connectycube.videochat.view.RTCSurfaceView
             android:id="@+id/opponentView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

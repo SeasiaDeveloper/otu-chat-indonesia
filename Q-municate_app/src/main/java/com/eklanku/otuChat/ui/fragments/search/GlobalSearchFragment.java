@@ -15,7 +15,7 @@ import com.eklanku.otuChat.ui.fragments.base.BaseFragment;
 import com.eklanku.otuChat.ui.views.recyclerview.SimpleDividerItemDecoration;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
-import com.connectycube.core.request.QBPagedRequestBuilder;
+import com.connectycube.core.request.PagedRequestBuilder;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.utils.listeners.UserOperationListener;
 import com.eklanku.otuChat.utils.listeners.SearchListener;
@@ -261,7 +261,7 @@ public class GlobalSearchFragment extends BaseFragment implements SearchListener
     private void searchUsers() {
         if (!TextUtils.isEmpty(searchQuery) && checkSearchDataWithError(searchQuery)) {
 
-            QBPagedRequestBuilder requestBuilder = new QBPagedRequestBuilder();
+            PagedRequestBuilder requestBuilder = new PagedRequestBuilder();
             requestBuilder.setPage(page);
             requestBuilder.setPerPage(ConstsCore.FL_FRIENDS_PER_PAGE);
 

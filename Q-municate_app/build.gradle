@@ -180,7 +180,7 @@ dependencies {
 
     //table
     implementation 'com.evrencoskun.library:tableview:0.8.5.1'
-    implementation 'com.google.firebase:firebase-config:11.4.2'
+    implementation "com.google.firebase:firebase-config:$firebaseAuthVersion"
     //facebook
     implementation 'com.facebook.android:account-kit-sdk:4.20.0'
     //textview improve

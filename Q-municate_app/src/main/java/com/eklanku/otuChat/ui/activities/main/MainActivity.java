@@ -119,7 +119,7 @@ import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.connectycube.core.EntityCallback;
 import com.connectycube.core.exception.ResponseException;
-import com.connectycube.core.request.QBPagedRequestBuilder;
+import com.connectycube.core.request.PagedRequestBuilder;
 import com.connectycube.users.ConnectycubeUsers;
 import com.connectycube.users.model.ConnectycubeUser;
 
@@ -825,7 +825,7 @@ public class MainActivity extends BaseLoggableActivity {
     }
 
     private void sendContact() {
-        QBPagedRequestBuilder pagedRequestBuilder = new QBPagedRequestBuilder();
+        PagedRequestBuilder pagedRequestBuilder = new PagedRequestBuilder();
         pagedRequestBuilder.setPage(1);
         pagedRequestBuilder.setPerPage(arrayPhone.size());
 

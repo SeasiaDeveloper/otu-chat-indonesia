@@ -29,7 +29,7 @@ import com.eklanku.otuChat.R;
 import com.connectycube.core.Consts;
 import com.connectycube.core.EntityCallback;
 import com.connectycube.core.exception.ResponseException;
-import com.connectycube.core.request.QBPagedRequestBuilder;
+import com.connectycube.core.request.PagedRequestBuilder;
 import com.connectycube.users.ConnectycubeUsers;
 import com.connectycube.users.model.ConnectycubeUser;
 
@@ -232,7 +232,7 @@ public class ContactsFragment extends BaseFragment implements MenuItemCompat.OnA
 
     private void sendContact() {
         Log.v("Contacts", "Contacts: " + arrayPhone.toString());
-        QBPagedRequestBuilder pagedRequestBuilder = new QBPagedRequestBuilder();
+        PagedRequestBuilder pagedRequestBuilder = new PagedRequestBuilder();
         pagedRequestBuilder.setPage(intCurrentPage);
         pagedRequestBuilder.setPerPage(arrayPhone.size());
 
