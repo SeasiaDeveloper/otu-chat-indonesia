@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -112,11 +113,14 @@ public class TransPln extends AppCompatActivity {
     String rbPln;
     LinearLayout layoutTransaksiKe, layoutNoKonfirmasi;
 
-    TextView txtnomor, txtvoucher;
+    TextView txtnomor, txtvoucher, txtpilihpembayaran;
     Button btnYes, btnNo;
 
     Utils utilsAlert;
     String titleAlert = "PLN";
+
+    ListView listPLN;
+    ArrayList<String> id_paket;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -132,6 +136,8 @@ public class TransPln extends AppCompatActivity {
         txtNo = (EditText) findViewById(R.id.txtTransPlnNo);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransPlnBayar);
+        listPLN = (ListView) findViewById(R.id.listPLN);
+        txtpilihpembayaran = findViewById(R.id.tvPiliPembayaran);
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
@@ -199,22 +205,28 @@ public class TransPln extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton rb = (RadioButton) group.findViewById(checkedId);
                 //Toast.makeText(TransPln.this, rb.getText(), Toast.LENGTH_SHORT).show();
-                if (rb.getText().toString().equalsIgnoreCase("PLN TOKEN")) {
+                if (rb.getText().toString().equalsIgnoreCase("Token Listrik")) {
                     loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
                     layoutNominal.setVisibility(View.VISIBLE);
-                    rbPln = "PLN TOKEN";
+                    rbPln = "Token Listrik";
                     btnBayar.setText("BELI");
+                    btnBayar.setVisibility(View.GONE);
                     txtno_hp.setVisibility(View.VISIBLE);
                     layoutTransaksiKe.setVisibility(View.VISIBLE);
                     layoutNoKonfirmasi.setVisibility(View.VISIBLE);
+                    listPLN.setVisibility(View.VISIBLE);
+                    txtpilihpembayaran.setVisibility(View.VISIBLE);
                 } else {
                     loadProviderPPOB(strUserID, strAccessToken, "OTU", "PLN");
                     rbPln = "PLN PASCA";
                     layoutNominal.setVisibility(View.GONE);
                     btnBayar.setText("CEK TAGIHAN");
+                    btnBayar.setVisibility(View.VISIBLE);
                     txtno_hp.setVisibility(View.VISIBLE);
                     layoutTransaksiKe.setVisibility(View.GONE);
                     layoutNoKonfirmasi.setVisibility(View.VISIBLE);
+                    listPLN.setVisibility(View.GONE);
+                    txtpilihpembayaran.setVisibility(View.GONE);
                 }
             }
         });
@@ -225,104 +237,30 @@ public class TransPln extends AppCompatActivity {
                 if (!validateIdpel()) {
                     return;
                 }
-
-                if (rbPln.equalsIgnoreCase("PLN TOKEN")) {
-                    final Dialog dialog = new Dialog(TransPln.this);
-
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setContentView(R.layout.activity_alert_dialog);
-                    dialog.setCancelable(false);
-                    dialog.setTitle("Peringatan Transaksi!!!");
-
-                    btnYes = (Button) dialog.findViewById(R.id.btn_yes);
-                    btnNo = (Button) dialog.findViewById(R.id.btn_no);
-                    txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
-                    txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
-                    txtnomor.setText(txtNo.getText().toString());
-                    txtvoucher.setText(code);
-
-                    btnYes.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cek_transaksi_token();
-                            dialog.dismiss();
-                        }
-                    });
-
-                    btnNo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    dialog.show();
-                    return;
-
-                    /*dialog = new AlertDialog.Builder(TransPln.this);
-                    inflater = getLayoutInflater();
-                    dialogView = inflater.inflate(R.layout.activity_alert_dialog, null);
-                    dialog.setView(dialogView);
-                    dialog.setCancelable(true);
-                    dialog.setIcon(R.mipmap.ic_launcher);
-                    dialog.setTitle("Peringatan Transaksi!!!");*/
-
-                    /*AlertDialog dialog = new AlertDialog.Builder(TransPln.this)
-                            .setTitle("Transaksi")
-                            .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: " + txtNo.getText().toString() + "\nVoucher: " + code)
-                            .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    cek_transaksi_token();
-                                }
-                            })
-                            .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .create();
-                    dialog.show();
-                    return;*/
-
-                   /* dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            cek_transaksi_token();
-                        }
-                    });
-
-                    dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });*/
-
-                } else {
-                    cek_transaksi();
-                }
-
+                cek_transaksi();
             }
         });
 
         load();
+        initializeResources();
     }
 
     private void load() {
-       // loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+        // loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
         loadProduct(strUserID, strAccessToken, strAplUse, strProductType);
         layoutNominal.setVisibility(View.VISIBLE);
-        rbPln = "PLN TOKEN";
+        rbPln = "Token Listrik";
         btnBayar.setText("BELI");
+        btnBayar.setVisibility(View.GONE);
         txtno_hp.setVisibility(View.VISIBLE);
         layoutTransaksiKe.setVisibility(View.VISIBLE);
         layoutNoKonfirmasi.setVisibility(View.VISIBLE);
+        listPLN.setVisibility(View.VISIBLE);
+        txtpilihpembayaran.setVisibility(View.VISIBLE);
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
-        Log.d("OPPO-1", "loadProvider: "+userID);
+        Log.d("OPPO-1", "loadProvider: " + userID);
         loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
         //Toast.makeText(this, "load provider", Toast.LENGTH_SHORT).show();
@@ -345,7 +283,7 @@ public class TransPln extends AppCompatActivity {
                         final List<DataProvider> products = response.body().getProviders();
                         for (int i = 0; i < products.size(); i++) {
                             String x = products.get(i).getName_provaider();
-                            Log.d("OPPO-1", "onResponse: "+x);
+                            Log.d("OPPO-1", "onResponse: " + x);
                             list.add(x);
                         }
 
@@ -366,7 +304,7 @@ public class TransPln extends AppCompatActivity {
 
                     } else {
                         utilsAlert.globalDialog(TransPln.this, titleAlert, respMessage);
-                       // Toast.makeText(TransPln.this, "" + respMessage, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(TransPln.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
@@ -403,6 +341,7 @@ public class TransPln extends AppCompatActivity {
                         List<String> listPrice = new ArrayList<String>();
                         List<String> listNama = new ArrayList<String>();
                         List<String> listEp = new ArrayList<String>();
+                        id_paket = new ArrayList<>();
                         listPrice.clear();
                         listNama.clear();
                         listEp.clear();
@@ -411,7 +350,7 @@ public class TransPln extends AppCompatActivity {
                             String name = products.get(i).getName();
                             String price = products.get(i).getPrice();
                             String ep = products.get(i).getEp();
-
+                            id_paket.add(products.get(i).getCode());
                             listNama.add(name);
                             listEp.add(ep);
                             listPrice.add(price);
@@ -419,8 +358,8 @@ public class TransPln extends AppCompatActivity {
 
                         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, list);
                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
-                        spnNominal.setAdapter(adapter);
-                        spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        listPLN.setAdapter(adapter);
+                        /*spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 code = products.get(position).getCode();
@@ -430,7 +369,7 @@ public class TransPln extends AppCompatActivity {
                             public void onNothingSelected(AdapterView<?> parent) {
 
                             }
-                        });
+                        });*/
 
                     } else {
                         utilsAlert.globalDialog(TransPln.this, titleAlert, respMessage);
@@ -490,7 +429,7 @@ public class TransPln extends AppCompatActivity {
                         });
                     } else {
                         utilsAlert.globalDialog(TransPln.this, titleAlert, error);
-                       // Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
@@ -559,92 +498,6 @@ public class TransPln extends AppCompatActivity {
         }
     }
 
-    /*private void loadProvider(String userID, String accessToken, String apiUse, String productType) {
-
-        loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Call<LoadDataResponseProvider> dataCall = apiInterfacePayment.postLoadDataPLN(userID, accessToken, apiUse, productType);
-        dataCall.enqueue(new Callback<LoadDataResponseProvider>() {
-
-            @Override
-            public void onResponse(Call<LoadDataResponseProvider> call, Response<LoadDataResponseProvider> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-
-
-                    String status = response.body().getStatus();
-                    String userID = response.body().getUserID();
-                    String accessToken = response.body().getAccessToken();
-                    String respMessage = response.body().getRespMessage();
-                    String respTime = response.body().getRespTime();
-                    String productType = response.body().getProductType();
-                    String providers = response.body().getProviders();
-
-                    Log.d("AYIK", "response:status=" + status + ", " + respMessage + ", " + response.toString());
-
-                    String list = providers.replace("[", "").replace("]", "");
-
-                    if (status.equals("OK")) {
-                        arrayProvider = new String[]{list};
-                        spinnerProviderAdapter = new SpinnerPpobAdapter(getApplicationContext(), arrayProvider);
-                        spinnerProvider.setAdapter(spinnerProviderAdapter);
-                    } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + respMessage, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
-
-            }
-        });
-    }*/
-
-    /*private void loadProviderProduct(String userID, String accessToken, String apiUse, String productType) {
-        loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Call<LoadDataResponseProvider> dataCall = apiInterfacePayment.postLoadDataPLN(userID, accessToken, apiUse, productType);
-        dataCall.enqueue(new Callback<LoadDataResponseProvider>() {
-
-            @Override
-            public void onResponse(Call<LoadDataResponseProvider> call, Response<LoadDataResponseProvider> response) {
-                loadingDialog.dismiss();
-                nominal = new String[0];
-                denom = new String[0];
-                point = new String[0];
-                spinnerPaymentAdapter = new SpinnerPaymentAdapter(getApplicationContext(), denom, nominal, point);
-                spnNominal.setAdapter(spinnerPaymentAdapter);
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String userID = response.body().getUserID();
-                    String accessToken = response.body().getAccessToken();
-                    String respMessage = response.body().getRespMessage();
-                    String respTime = response.body().getRespTime();
-                    String productType = response.body().getProductType();
-                    String providers = response.body().getProviders();
-                    String list = providers.replace("[", "").replace("]", "");
-
-                    if (status.equals("OK")) {
-                        arrayProvider = new String[]{list};
-                    } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + respMessage, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
-
-            }
-        });
-    }*/
-
-
     private void cek_transaksi() {
         Log.d("OPPO-1", "cek_transaksi: ");
         loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Cek Transaksi...");
@@ -702,7 +555,7 @@ public class TransPln extends AppCompatActivity {
                     }
                 } else {
                     utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-                   // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -710,7 +563,7 @@ public class TransPln extends AppCompatActivity {
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-               // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -788,48 +641,6 @@ public class TransPln extends AppCompatActivity {
     }
 
 
-    /*======================================payment lama==================================================*/
-    /*
-    private void cek_transaksi() {
-        loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Cek Transaksi...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), load_id, selected_nominal, txtNo.getText().toString(), "token");
-        transBeliCall.enqueue(new Callback<TransBeliResponse>() {
-            @Override
-            public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String error = response.body().getError();
-
-                    if (status.equals("OK")) {
-                        List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasi.class);
-                        inKonfirmasi.putExtra("transaksi", trans.get(0).getTransaksi());
-                        inKonfirmasi.putExtra("harga", trans.get(0).getHarga());
-                        inKonfirmasi.putExtra("id_pel", trans.get(0).getIdPel());
-                        inKonfirmasi.putExtra("jenis", trans.get(0).getJenis());
-                        inKonfirmasi.putExtra("pin", trans.get(0).getPin());
-                        inKonfirmasi.putExtra("cmd_save", trans.get(0).getCmdSave());
-                        startActivity(inKonfirmasi);
-                    } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TransBeliResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_TRANSBELI", t.getMessage().toString());
-            }
-        });
-    }
-    /*====================================end paymnet lama==================================================================*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -853,5 +664,57 @@ public class TransPln extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    private void initializeResources() {
+        Log.d("OPPO-1", "initializeResources: ");
+        listPLN = (ListView) findViewById(R.id.listPLN);
+        listPLN.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!validateIdpel()) {
+                    return;
+                }
+
+                if (rbPln.equalsIgnoreCase("Token Listrik")) {
+                    final Dialog dialog = new Dialog(TransPln.this);
+
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.activity_alert_dialog);
+                    dialog.setCancelable(false);
+                    dialog.setTitle("Peringatan Transaksi!!!");
+
+                    code = id_paket.get(position);
+
+                    btnYes = (Button) dialog.findViewById(R.id.btn_yes);
+                    btnNo = (Button) dialog.findViewById(R.id.btn_no);
+                    txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
+                    txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+                    txtnomor.setText(txtNo.getText().toString());
+                    txtvoucher.setText(code);
+
+                    btnYes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            cek_transaksi_token();
+                            dialog.dismiss();
+                        }
+                    });
+
+                    btnNo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
+                    return;
+                } else {
+                    cek_transaksi();
+                }
+            }
+        });
     }
 }

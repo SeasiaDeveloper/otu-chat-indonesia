@@ -28,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -118,6 +119,10 @@ public class TransPulsa extends AppCompatActivity {
     RelativeLayout layOpr;
     ARTextView txLayOpr;
 
+    ListView listPulsa;
+    ArrayList<String> id_paket;
+    boolean availableNominal = true;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,6 +144,7 @@ public class TransPulsa extends AppCompatActivity {
         txOpr = findViewById(R.id.txOpr);
         layOpr = findViewById(R.id.layNominal);
         txLayOpr = findViewById(R.id.txLayOpr);
+        listPulsa = findViewById(R.id.listPulsa);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -166,21 +172,6 @@ public class TransPulsa extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
-
-       /* ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, opSel);
-        spnKartu.setAdapter(adapter);
-        spnKartu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                strOpsel = parent.getItemAtPosition(position).toString();
-                loadProduct(strUserID, strAccessToken, strAplUse, strOpsel);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/
 
         btnBayar.setOnClickListener(new View.OnClickListener() {
 
@@ -223,50 +214,10 @@ public class TransPulsa extends AppCompatActivity {
                 dialog.show();
                 return;
 
-                /*AlertDialog dialog = new AlertDialog.Builder(TransPulsa.this)
-                        .setTitle("Transaksi")
-                        .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: "+txtNo.getText().toString()+"\nVoucher: "+code)
-                        .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                cek_transaksi();
-                            }
-                        })
-                        .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create();
-                dialog.show();
-                return;*/
-
-                /*dialog = new AlertDialog.Builder(TransPulsa.this);
-                inflater = getLayoutInflater();
-                dialogView = inflater.inflate(R.layout.activity_alert_dialog, null);
-                dialog.setView(dialogView);
-                dialog.setCancelable(true);
-                dialog.setIcon(R.mipmap.ic_launcher);
-                dialog.setTitle("Peringatan Transaksi!!!");*/
-
-                /*dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        cek_transaksi();
-                    }
-                });
-
-                dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });*/
-
-                // ((Button)dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.button_border);
             }
         });
+
+        initializeResources();
 
     }
 
@@ -403,6 +354,7 @@ public class TransPulsa extends AppCompatActivity {
                         List<String> listPrice = new ArrayList<String>();
                         List<String> listNama = new ArrayList<String>();
                         List<String> listEp = new ArrayList<String>();
+                        id_paket = new ArrayList<>();
                         listPrice.clear();
                         listNama.clear();
                         listEp.clear();
@@ -411,7 +363,7 @@ public class TransPulsa extends AppCompatActivity {
                             String name = products.get(i).getName();
                             String price = products.get(i).getPrice();
                             String ep = products.get(i).getEp();
-
+                            id_paket.add(products.get(i).getCode());
                             listNama.add(name);
                             listEp.add(ep);
                             listPrice.add(price);
@@ -419,8 +371,9 @@ public class TransPulsa extends AppCompatActivity {
 
                         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, list);
                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
-                        spnNominal.setAdapter(adapter);
-                        spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        listPulsa.setAdapter(adapter);
+
+                        /*spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 code = products.get(position).getCode();
@@ -430,13 +383,15 @@ public class TransPulsa extends AppCompatActivity {
                             public void onNothingSelected(AdapterView<?> parent) {
 
                             }
-                        });
+                        });*/
 
                     } else {
                         utilsAlert.globalDialog(TransPulsa.this, titleAlert, respMessage);
                         // Toast.makeText(TransPulsa.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
-                } else {
+                } else
+
+                {
                     utilsAlert.globalDialog(TransPulsa.this, titleAlert, getResources().getString(R.string.error_api));
                     // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
@@ -551,6 +506,7 @@ public class TransPulsa extends AppCompatActivity {
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.indosat);
                     statOprPulsa = true;
+
                 } else if (Arrays.asList(prefix_telkomsel).contains(nomorHp)) {
                     oprPulsa = "Telkomsel";
                     txOpr.setText(oprPulsa);
@@ -599,7 +555,7 @@ public class TransPulsa extends AppCompatActivity {
                 }
 
             } else if (s.length() < 4) {
-                spnNominal.setAdapter(adapter);
+                listPulsa.setAdapter(adapter);
                 statOprPulsa = false;
                 tempOprPulsa = "";
                 txOpr.setText("");
@@ -608,9 +564,10 @@ public class TransPulsa extends AppCompatActivity {
                 txLayOpr.setVisibility(View.GONE);
                 btnBayar.setEnabled(false);
             } else if (s.length() >= 8 && s.length() <= 13) {
+                listPulsa.setAdapter(adapter);
                 layOpr.setVisibility(View.GONE);
                 txLayOpr.setVisibility(View.GONE);
-                btnBayar.setEnabled(true);
+                btnBayar.setEnabled(false);
             }
 
         } catch (Exception e) {
@@ -620,4 +577,54 @@ public class TransPulsa extends AppCompatActivity {
     }
 
 
+    private void initializeResources() {
+        listPulsa = (ListView) findViewById(R.id.listPulsa);
+
+        listPulsa.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!validateIdpel()) {
+                    return;
+                }
+                code = id_paket.get(position);
+                dialogWarning(code);
+            }
+        });
+
+    }
+
+    public void dialogWarning(String kodepaket) {
+        final Dialog dialog = new Dialog(TransPulsa.this);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_alert_dialog);
+        dialog.setCancelable(false);
+        dialog.setTitle("Peringatan Transaksi!!!");
+
+
+        btnYes = (Button) dialog.findViewById(R.id.btn_yes);
+        btnNo = (Button) dialog.findViewById(R.id.btn_no);
+        txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
+        txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+        txtnomor.setText(txtNo.getText().toString());
+        txtvoucher.setText(kodepaket);
+        btnYes.setText("YA, Lanjutkan");
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cek_transaksi();
+                dialog.dismiss();
+            }
+        });
+
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        return;
+    }
 }

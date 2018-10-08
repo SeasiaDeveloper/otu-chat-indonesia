@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,6 +96,9 @@ public class TransEtool extends AppCompatActivity {
     Utils utilsAlert;
     String titleAlert = "E Tool";
 
+    ListView listNamaPaket;
+    ArrayList<String> idNamaPaket;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,9 +115,9 @@ public class TransEtool extends AppCompatActivity {
         btnBayar = (Button) findViewById(R.id.btnTransEtoolBayar);
         txtTrasaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
-
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("BELI");
+        listNamaPaket = findViewById(R.id.listNamaPaket);
 
         txtTrasaksi_ke.setText("1");
         txtopr = (TextView) findViewById(R.id.textopr);
@@ -173,50 +177,9 @@ public class TransEtool extends AppCompatActivity {
                 dialog.show();
                 return;
 
-                /*AlertDialog dialog = new AlertDialog.Builder(TransEtool.this)
-                        .setTitle("Transaksi")
-                        .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: "+txtNo.getText().toString()+"\nVoucher: "+code)
-                        .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                cek_transaksi();
-                            }
-                        })
-                        .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create();
-                dialog.show();
-                return;*/
-
-                /*dialog = new AlertDialog.Builder(TransEtool.this);
-                inflater = getLayoutInflater();
-                dialogView = inflater.inflate(R.layout.activity_alert_dialog, null);
-                dialog.setView(dialogView);
-                dialog.setCancelable(true);
-                dialog.setIcon(R.mipmap.ic_launcher);
-                dialog.setTitle("Peringatan Transaksi!!!");*/
-
-                /*dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        cek_transaksi();
-                    }
-                });
-
-                dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });*/
-
-                // ((Button)dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.button_border);
             }
         });
+        initializeResources();
     }
 
     private class txtWatcher implements TextWatcher {
@@ -310,7 +273,7 @@ public class TransEtool extends AppCompatActivity {
 
                     } else {
                         utilsAlert.globalDialog(TransEtool.this, titleAlert, respMessage);
-                       // Toast.makeText(TransEtool.this, "" + respMessage, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(TransEtool.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransEtool.this, titleAlert, getResources().getString(R.string.error_api));
@@ -347,6 +310,7 @@ public class TransEtool extends AppCompatActivity {
                         List<String> listPrice = new ArrayList<String>();
                         List<String> listNama = new ArrayList<String>();
                         List<String> listEp = new ArrayList<String>();
+                        idNamaPaket = new ArrayList<>();
                         listPrice.clear();
                         listNama.clear();
                         listEp.clear();
@@ -355,15 +319,15 @@ public class TransEtool extends AppCompatActivity {
                             String name = products.get(i).getName();
                             String price = products.get(i).getPrice();
                             String ep = products.get(i).getEp();
-
+                            idNamaPaket.add(products.get(i).getCode());
                             listNama.add(name);
                             listEp.add(ep);
                             listPrice.add(price);
                         }
 
                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
-                        spnNominal.setAdapter(adapter);
-                        spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        listNamaPaket.setAdapter(adapter);
+                        /*spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 code = products.get(position).getCode();
@@ -373,7 +337,7 @@ public class TransEtool extends AppCompatActivity {
                             public void onNothingSelected(AdapterView<?> parent) {
 
                             }
-                        });
+                        });*/
 
                     } else {
                         utilsAlert.globalDialog(TransEtool.this, titleAlert, respMessage);
@@ -394,7 +358,7 @@ public class TransEtool extends AppCompatActivity {
     }
 
     private void cek_transaksi() {
-        Log.d("OPPO-1", "cek_transaksi: "+code);
+        Log.d("OPPO-1", "cek_transaksi: " + code);
         loadingDialog = ProgressDialog.show(TransEtool.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
         Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtTrasaksi_ke.getText().toString(), "", "", code);
@@ -482,4 +446,49 @@ public class TransEtool extends AppCompatActivity {
         }
     }
 
+    private void initializeResources() {
+        listNamaPaket = (ListView) findViewById(R.id.listNamaPaket);
+        listNamaPaket.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                code = idNamaPaket.get(position);
+                if (!validateIdpel()) {
+                    return;
+                }
+
+                final Dialog dialog = new Dialog(TransEtool.this);
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.activity_alert_dialog);
+                dialog.setCancelable(false);
+                dialog.setTitle("Peringatan Transaksi!!!");
+
+                btnYes = (Button) dialog.findViewById(R.id.btn_yes);
+                btnNo = (Button) dialog.findViewById(R.id.btn_no);
+                txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
+                txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+                txtnomor.setText(txtNo.getText().toString());
+                txtvoucher.setText(code);
+
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cek_transaksi();
+                        dialog.dismiss();
+                    }
+                });
+
+                btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                return;
+            }
+        });
+
+    }
 }

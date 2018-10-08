@@ -90,13 +90,15 @@
         android:layout_marginTop="@dimen/density_16"
         android:text="Pilih Nominal"
         android:textColor="@color/grey_600"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_bottom_border_grey"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <Spinner
             android:id="@+id/spnTransEtoolNominal"
@@ -157,6 +159,24 @@
         android:background="@drawable/background_round_corner_green"
         android:text="Beli"
         android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+    <com.eklanku.otuChat.ui.views.ARTextView
+        android:id="@+id/tvNamaPaket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/density_4"
+        android:text="Nama Paket"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:background="@drawable/rounded_shape_payment"
+        android:padding="4dp"/>
+
+    <ListView
+        android:id="@+id/listNamaPaket"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"/>
 
 </LinearLayout>

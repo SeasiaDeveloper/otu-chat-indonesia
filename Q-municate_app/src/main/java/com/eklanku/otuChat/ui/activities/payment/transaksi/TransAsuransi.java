@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -82,6 +84,9 @@ public class TransAsuransi extends AppCompatActivity {
 
     Utils utilsAlert;
     String titleAlert = "Asuransi";
+    ListView listAsuransi;
+    ArrayList<String> idAsuransi;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,20 +98,21 @@ public class TransAsuransi extends AppCompatActivity {
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnOperator = (Spinner) findViewById(R.id.spnTransAsuransiOperator);
         txtNo = (EditText) findViewById(R.id.txtTransAsuransiNo);
-        layoutNo    = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
+        layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransAsuransiBayar);
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
+        listAsuransi = findViewById(R.id.listAsuransi);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
-        if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){
-            String no = PreferenceUtil.getNumberPhone(this).replace("+62","0");
+        if (PreferenceUtil.getNumberPhone(this).startsWith("+62")) {
+            String no = PreferenceUtil.getNumberPhone(this).replace("+62", "0");
             txtno_hp.setText(no);
-        }else{
+        } else {
             txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
         }
 
@@ -132,6 +138,8 @@ public class TransAsuransi extends AppCompatActivity {
                 cek_transaksi();
             }
         });
+
+        initializeResources();
     }
 
     private class txtWatcher implements TextWatcher {
@@ -196,6 +204,7 @@ public class TransAsuransi extends AppCompatActivity {
                 loadingDialog.dismiss();
                 nama_operator = new String[0];
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
+                idAsuransi = new ArrayList<>();
                 spnOperator.setAdapter(adapter);
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
@@ -208,11 +217,12 @@ public class TransAsuransi extends AppCompatActivity {
 
                         for (int i = 0; i < result.size(); i++) {
                             nama_operator[i] = result.get(i).getName();
+                            idAsuransi.add(result.get(i).getCode());
                         }
 
                         adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
-                        spnOperator.setAdapter(adapter);
-                        spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        listAsuransi.setAdapter(adapter);
+                        /*spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 selected_operator = result.get(position).getCode();
@@ -222,7 +232,7 @@ public class TransAsuransi extends AppCompatActivity {
                             public void onNothingSelected(AdapterView<?> parent) {
 
                             }
-                        });
+                        });*/
                     } else {
                         utilsAlert.globalDialog(TransAsuransi.this, titleAlert, error);
                         //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
@@ -311,173 +321,6 @@ public class TransAsuransi extends AppCompatActivity {
         });
     }
 
-    /*private void load_data() {
-        loadingDialog = ProgressDialog.show(TransAsuransi.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-
-        Call<LoadDataResponse> dataCall = mApiInterfacePayment.postPpobProduct(strUserID, strAccessToken, "ASURANSI", "OTU");
-        dataCall.enqueue(new Callback<LoadDataResponse>() {
-            @Override
-            public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
-                nama_operator = new String[0];
-                spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(), nama_operator);
-                spnOperator.setAdapter(spinnerPpobAdapter);
-
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String error = response.body().getError();
-
-                    if (status.equals("SUCCESS")) {
-                        final List<DataListPPOB> result = response.body().getProductList();
-                        nama_operator = new String[result.size()];
-                        selected_operator = result.get(0).getCode();
-
-                        for (int i = 0; i < result.size(); i++) {
-                            nama_operator[i] = result.get(i).getName();
-                        }
-
-                        spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(), nama_operator);
-                        spnOperator.setAdapter(spinnerPpobAdapter);
-                        spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                selected_operator = result.get(position).getCode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-                    } else {
-                        utilsAlert.globalDialog(TransAsuransi.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    utilsAlert.globalDialog(TransAsuransi.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransAsuransi.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_LOADDATA", t.getMessage().toString());
-            }
-        });
-    }*/
-
-    /*=========================================================payment lama======================================*/
-    /*
-    private void cek_transaksi() {
-        loadingDialog = ProgressDialog.show(TransAsuransi.this, "Harap Tunggu", "Cek Transaksi...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        String nominal="";
-
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), selected_operator, nominal, txtNo.getText().toString(), "asuransibyr");
-        transBeliCall.enqueue(new Callback<TransBeliResponse>() {
-            @Override
-            public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus().toString();
-                    String error  = response.body().getError();
-
-                    if ( status.equals("OK") ) {
-                        List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi       = new Intent(getBaseContext(), TransKonfirmasi.class);
-                        inKonfirmasi.putExtra("transaksi", trans.get(0).getTransaksi());
-                        inKonfirmasi.putExtra("harga", trans.get(0).getHarga());
-                        inKonfirmasi.putExtra("id_pel", trans.get(0).getIdPel());
-                        inKonfirmasi.putExtra("jenis", trans.get(0).getJenis());
-                        inKonfirmasi.putExtra("pin", trans.get(0).getPin());
-                        inKonfirmasi.putExtra("cmd_save", trans.get(0).getCmdSave());
-                        startActivity(inKonfirmasi);
-                    } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TransBeliResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_TRANSBELI", t.getMessage().toString());
-            }
-        });
-    }
-
-    private void load_data() {
-        loadingDialog = ProgressDialog.show(TransAsuransi.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-
-        //get userid and token from preference
-        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
-        strUserID = user.get(preferenceManager.KEY_USERID);
-        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
-        Log.d("OPPO-1", "load_data: "+strUserID+" / "+strAccessToken);
-
-
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id,PreferenceUtil.getNumberPhone(this)));
-        dataCall.enqueue(new Callback<LoadDataResponse>() {
-            @Override
-            public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
-                nama_operator=new String[0];
-//                adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, nama_operator);
-                spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(), nama_operator);
-                spnOperator.setAdapter(spinnerPpobAdapter);
-
-                if (response.isSuccessful()) {
-                    String status   = response.body().getStatus();
-                    String error    = response.body().getError();
-
-
-                    if ( status.equals("OK") ) {
-                        final List<DataNominal> result = response.body().getResult();
-                        nama_operator                        = new String[result.size()];
-                        selected_operator                    = result.get(0).getProductKode();
-
-                        for ( int i=0; i<result.size(); i++ ) {
-                            nama_operator[i] = result.get(i).getProductName();//+" | "+ format.format(result.get(i).getHargaJual())+" ("+ decimal.format(result.get(i).getEpoint())+")";
-                        }
-
-                        spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(), nama_operator);
-                        spnOperator.setAdapter(spinnerPpobAdapter);
-                        spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                selected_operator = result.get(position).getProductKode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_LOADDATA", t.getMessage().toString());
-            }
-        });
-    }*/
-    /*=======================================================end payment lama======================================================*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -501,5 +344,21 @@ public class TransAsuransi extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void initializeResources() {
+        listAsuransi = (ListView) findViewById(R.id.listAsuransi);
+
+        listAsuransi.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!validateIdpel()) {
+                    return;
+                }
+                selected_operator = idAsuransi.get(position);
+                cek_transaksi();
+            }
+        });
+
     }
 }

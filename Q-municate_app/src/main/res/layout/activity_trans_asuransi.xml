@@ -55,13 +55,15 @@
         android:layout_height="wrap_content"
         android:text="Operator"
         android:textColor="@color/grey_600"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_bottom_border_grey"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <Spinner
             android:id="@+id/spnTransAsuransiOperator"
@@ -116,7 +118,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="No HP ini digunakan untuk menerima sms konfirmasi" />
+        android:text="No HP ini digunakan untuk menerima sms konfirmasi"
+        android:textSize="10dp"/>
 
     <Button
         android:id="@+id/btnTransAsuransiBayar"
@@ -126,6 +129,24 @@
         android:background="@drawable/background_round_corner_green"
         android:text="Cek Tagihan"
         android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+    <com.eklanku.otuChat.ui.views.ARTextView
+        android:id="@+id/tvPilihNominal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/density_4"
+        android:text="Pilih Asuransi"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:background="@drawable/rounded_shape_payment"
+        android:padding="4dp"/>
+
+    <ListView
+        android:id="@+id/listAsuransi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"/>
 
 </LinearLayout>

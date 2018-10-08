@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -48,6 +49,7 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -82,6 +84,9 @@ public class TransMultiFinance extends AppCompatActivity {
     Utils utilsAlert;
     String titleAlert = "Multi Finance";
 
+    ListView listFinance;
+    ArrayList<String> idFinance;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +103,7 @@ public class TransMultiFinance extends AppCompatActivity {
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
+        listFinance = findViewById(R.id.listFinance);
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
         if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){
@@ -130,6 +136,8 @@ public class TransMultiFinance extends AppCompatActivity {
                 cek_transaksi();
             }
         });
+
+        initializeResources();
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
@@ -142,6 +150,7 @@ public class TransMultiFinance extends AppCompatActivity {
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
                 loadingDialog.dismiss();
                 nama_operator = new String[0];
+                idFinance = new ArrayList<>();
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
                 spnOperator.setAdapter(adapter);
                 if (response.isSuccessful()) {
@@ -155,11 +164,12 @@ public class TransMultiFinance extends AppCompatActivity {
 
                         for (int i = 0; i < result.size(); i++) {
                             nama_operator[i] = result.get(i).getName();
+                            idFinance.add(result.get(i).getCode());
                         }
 
                         adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
-                        spnOperator.setAdapter(adapter);
-                        spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        listFinance.setAdapter(adapter);
+                        /*spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 selected_operator = result.get(position).getCode();
@@ -169,7 +179,7 @@ public class TransMultiFinance extends AppCompatActivity {
                             public void onNothingSelected(AdapterView<?> parent) {
 
                             }
-                        });
+                        });*/
                     } else {
                         utilsAlert.globalDialog(TransMultiFinance.this, titleAlert, error);
                         //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
@@ -402,51 +412,6 @@ public class TransMultiFinance extends AppCompatActivity {
         });
     }
 
-    /*==========================================================payment lama====================================================*/
-    /*
-    private void cek_transaksi() {
-        loadingDialog = ProgressDialog.show(TransMultiFinance.this, "Harap Tunggu", "Cek Transaksi...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        String nominal="";
-
-        Log.d("OPPO-1", "cek_transaksi - transmultifinance: "+PreferenceUtil.getNumberPhone(this)));
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), selected_operator, nominal, txtNo.getText().toString(), "financebyr");
-//        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", selected_operator, nominal, txtNo.getText().toString(), "financebyr");
-        transBeliCall.enqueue(new Callback<TransBeliResponse>() {
-            @Override
-            public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus().toString();
-                    String error  = response.body().getError();
-
-                    if ( status.equals("OK") ) {
-                        List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi       = new Intent(getBaseContext(), TransKonfirmasi.class);
-                        inKonfirmasi.putExtra("transaksi", trans.get(0).getTransaksi());
-                        inKonfirmasi.putExtra("harga", trans.get(0).getHarga());
-                        inKonfirmasi.putExtra("id_pel", trans.get(0).getIdPel());
-                        inKonfirmasi.putExtra("jenis", trans.get(0).getJenis());
-                        inKonfirmasi.putExtra("pin", trans.get(0).getPin());
-                        inKonfirmasi.putExtra("cmd_save", trans.get(0).getCmdSave());
-                        startActivity(inKonfirmasi);
-                    } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TransBeliResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_TRANSBELI", t.getMessage().toString());
-            }
-        });
-    }*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -470,5 +435,20 @@ public class TransMultiFinance extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void initializeResources() {
+        listFinance = (ListView) findViewById(R.id.listFinance);
+        listFinance.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!validateIdpel()) {
+                    return;
+                }
+                selected_operator =  idFinance.get(position);
+                cek_transaksi();
+            }
+        });
+
     }
 }

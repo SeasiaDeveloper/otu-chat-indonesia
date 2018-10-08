@@ -16,12 +16,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -46,6 +49,7 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -140,10 +144,12 @@ public class TransPdam extends AppCompatActivity {
     ApiInterfacePayment mApiInterfacePayment;
     PreferenceManager preferenceManager;
 
-    String strUserID,strAccessToken,strAplUse = "OTU";
+    String strUserID, strAccessToken, strAplUse = "OTU";
 
     Utils utilsAlert;
     String titleAlert = "PDAM";
+    ListView listwilayah;
+    ArrayList<String> id_wilayah;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -153,11 +159,12 @@ public class TransPdam extends AppCompatActivity {
         utilsAlert = new Utils(TransPdam.this);
 
         ButterKnife.bind(this);
-        prefs      = getSharedPreferences("app", Context.MODE_PRIVATE);
+        prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnWilayah = (Spinner) findViewById(R.id.spnTransPdamWilayah);
-        txtNo      = (EditText) findViewById(R.id.txtTransPdamNo);
-        layoutNo   = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
-        btnBayar   = (Button) findViewById(R.id.btnTransPdamBayar);
+        txtNo = (EditText) findViewById(R.id.txtTransPdamNo);
+        layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
+        btnBayar = (Button) findViewById(R.id.btnTransPdamBayar);
+        listwilayah = findViewById(R.id.listWilayah);
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -171,10 +178,10 @@ public class TransPdam extends AppCompatActivity {
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
-        if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){
-            String no = PreferenceUtil.getNumberPhone(this).replace("+62","0");
+        if (PreferenceUtil.getNumberPhone(this).startsWith("+62")) {
+            String no = PreferenceUtil.getNumberPhone(this).replace("+62", "0");
             txtno_hp.setText(no);
-        }else{
+        } else {
             txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
         }
 
@@ -200,12 +207,14 @@ public class TransPdam extends AppCompatActivity {
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( !validateIdpel() ) {
+                if (!validateIdpel()) {
                     return;
                 }
                 cek_transaksi();
             }
         });
+
+        initializeResources();
 
     }
 
@@ -240,6 +249,7 @@ public class TransPdam extends AppCompatActivity {
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
                 loadingDialog.dismiss();
                 nama_wilayah = new String[0];
+                id_wilayah = new ArrayList<>();
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_wilayah);
                 spnWilayah.setAdapter(adapter);
                 if (response.isSuccessful()) {
@@ -253,11 +263,13 @@ public class TransPdam extends AppCompatActivity {
 
                         for (int i = 0; i < result.size(); i++) {
                             nama_wilayah[i] = result.get(i).getName();
+                            id_wilayah.add(result.get(i).getCode());
                         }
 
                         adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_wilayah);
-                        spnWilayah.setAdapter(adapter);
-                        spnWilayah.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        listwilayah.setAdapter(adapter);
+
+                        /*spnWilayah.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 load_id = result.get(position).getCode();
@@ -267,7 +279,7 @@ public class TransPdam extends AppCompatActivity {
                             public void onNothingSelected(AdapterView<?> parent) {
 
                             }
-                        });
+                        });*/
                     } else {
                         utilsAlert.globalDialog(TransPdam.this, titleAlert, error);
                         //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
@@ -312,15 +324,15 @@ public class TransPdam extends AppCompatActivity {
     }
 
     private void requestFocus(View view) {
-        if ( view.requestFocus() ) {
+        if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 
     private void cek_transaksi() {
+        Log.d("OPPO-1", "cek_transaksi: "+load_id);
         loadingDialog = ProgressDialog.show(TransPdam.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
-
         Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, load_id, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
@@ -328,13 +340,13 @@ public class TransPdam extends AppCompatActivity {
                 loadingDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus().toString();
-                    String error  = response.body().getRespMessage();
+                    String error = response.body().getRespMessage();
 
-                    Log.d("OPPO-1", "onResponse - error: "+error);
+                    Log.d("OPPO-1", "onResponse - error: " + error);
 
-                    if ( status.equals("SUCCESS") ) {
+                    if (status.equals("SUCCESS")) {
 
-                        Intent inKonfirmasi       = new Intent(getBaseContext(), TransKonfirmasi.class);
+                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasi.class);
                         inKonfirmasi.putExtra("userID", response.body().getUserID());
                         inKonfirmasi.putExtra("accessToken", strAccessToken);
                         inKonfirmasi.putExtra("status", status);
@@ -456,5 +468,20 @@ public class TransPdam extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void initializeResources() {
+        listwilayah = (ListView) findViewById(R.id.listWilayah);
+        listwilayah.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!validateIdpel()) {
+                    return;
+                }
+                load_id =  id_wilayah.get(position);
+                cek_transaksi();
+            }
+        });
+
     }
 }

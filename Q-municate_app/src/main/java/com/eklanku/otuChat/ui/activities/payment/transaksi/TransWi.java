@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,14 +87,14 @@ public class TransWi extends AppCompatActivity {
     String strOpsel;
     String code;
 
-    /*AlertDialog.Builder dialog;
-    LayoutInflater inflater;
-    View dialogView;*/
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
 
     Utils utilsAlert;
     String titleAlert = "Wifi ID";
+
+    ListView listWifiID;
+    ArrayList<String> idWifiID;
 
 
     @Override
@@ -110,6 +111,7 @@ public class TransWi extends AppCompatActivity {
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
         btnBayar = (Button) findViewById(R.id.btnTransWifiBayar);
+        listWifiID = findViewById(R.id.listWifiID);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -131,7 +133,8 @@ public class TransWi extends AppCompatActivity {
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+        //loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+        loadProduct(strUserID, strAccessToken, strAplUse, strProductType);
 
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,50 +176,9 @@ public class TransWi extends AppCompatActivity {
                 dialog.show();
                 return;
 
-                /*AlertDialog dialog = new AlertDialog.Builder(TransWi.this)
-                        .setTitle("Transaksi")
-                        .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: "+txtNo.getText().toString()+"\nVoucher: "+code)
-                        .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                cek_transaksi();
-                            }
-                        })
-                        .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create();
-                dialog.show();
-                return;*/
-
-                /*dialog = new AlertDialog.Builder(TransWi.this);
-                inflater = getLayoutInflater();
-                dialogView = inflater.inflate(R.layout.activity_alert_dialog, null);
-                dialog.setView(dialogView);
-                dialog.setCancelable(true);
-                dialog.setIcon(R.mipmap.ic_launcher);
-                dialog.setTitle("Peringatan Transaksi!!!");
-
-                dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        cek_transaksi();
-                    }
-                });
-
-                dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });*/
-
-                // ((Button)dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.button_border);
-            }
+                }
         });
+        initializeResources();
     }
 
     private class txtWatcher implements TextWatcher {
@@ -347,6 +309,7 @@ public class TransWi extends AppCompatActivity {
                         List<String> listPrice = new ArrayList<String>();
                         List<String> listNama = new ArrayList<String>();
                         List<String> listEp = new ArrayList<String>();
+                        idWifiID = new ArrayList<>();
                         listPrice.clear();
                         listNama.clear();
                         listEp.clear();
@@ -355,15 +318,15 @@ public class TransWi extends AppCompatActivity {
                             String name = products.get(i).getName();
                             String price = products.get(i).getPrice();
                             String ep = products.get(i).getEp();
-
+                            idWifiID.add(products.get(i).getCode());
                             listNama.add(name);
                             listEp.add(ep);
                             listPrice.add(price);
                         }
 
                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
-                        spnNominal.setAdapter(adapter);
-                        spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        listWifiID.setAdapter(adapter);
+                        /*spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 code = products.get(position).getCode();
@@ -373,7 +336,7 @@ public class TransWi extends AppCompatActivity {
                             public void onNothingSelected(AdapterView<?> parent) {
 
                             }
-                        });
+                        });*/
 
                     } else {
                         utilsAlert.globalDialog(TransWi.this, titleAlert, respMessage);
@@ -480,6 +443,53 @@ public class TransWi extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void initializeResources() {
+        listWifiID = (ListView) findViewById(R.id.listWifiID);
+
+        listWifiID.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!validateIdpel()) {
+                    return;
+                }
+                code = idWifiID.get(position);
+                final Dialog dialog = new Dialog(TransWi.this);
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.activity_alert_dialog);
+                dialog.setCancelable(false);
+                dialog.setTitle("Peringatan Transaksi!!!");
+
+                btnYes = (Button) dialog.findViewById(R.id.btn_yes);
+                btnNo = (Button) dialog.findViewById(R.id.btn_no);
+                txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
+                txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+                txtnomor.setText(txtNo.getText().toString());
+                txtvoucher.setText(code);
+
+
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cek_transaksi();
+                        dialog.dismiss();
+                    }
+                });
+
+                btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                return;
+            }
+        });
+
     }
 
 }

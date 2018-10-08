@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -139,6 +140,8 @@ public class TransPaketData extends AppCompatActivity {
 
     RelativeLayout layOprPaket;
     ARTextView laytxOprPaket;
+    ListView listPaketdata;
+    ArrayList<String> id_paket;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -162,6 +165,7 @@ public class TransPaketData extends AppCompatActivity {
         txOpr = findViewById(R.id.txOpr);
         layOprPaket = findViewById(R.id.layOprPaket);
         laytxOprPaket = findViewById(R.id.textView35);
+        listPaketdata = findViewById(R.id.listPaketdata);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -220,54 +224,11 @@ public class TransPaketData extends AppCompatActivity {
 
                 dialog.show();
                 return;
-
-
-                /*AlertDialog dialog = new AlertDialog.Builder(TransPaketData.this)
-                        .setTitle("Transaksi")
-                        .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: "+txtNo.getText().toString()+"\nVoucher: "+code)
-                        .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                cek_transaksi();
-                            }
-                        })
-                        .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create();
-                dialog.show();
-                return;*/
-
-                /*dialog = new AlertDialog.Builder(TransPaketData.this);
-                inflater = getLayoutInflater();
-                dialogView = inflater.inflate(R.layout.activity_alert_dialog, null);
-                dialog.setView(dialogView);
-                dialog.setCancelable(true);
-                dialog.setIcon(R.mipmap.ic_launcher);
-                dialog.setTitle("Peringatan Transaksi!!!");*/
-
-                /*dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        cek_transaksi();
-                    }
-                });
-
-                dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });*/
-
-                // ((Button)dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.button_border);
-
             }
 
         });
+
+        initializeResources();
     }
 
     private class txtWatcher implements TextWatcher {
@@ -405,6 +366,7 @@ public class TransPaketData extends AppCompatActivity {
                         List<String> listPrice = new ArrayList<String>();
                         List<String> listNama = new ArrayList<String>();
                         List<String> listEp = new ArrayList<String>();
+                        id_paket = new ArrayList<>();
                         listPrice.clear();
                         listNama.clear();
                         listEp.clear();
@@ -413,7 +375,7 @@ public class TransPaketData extends AppCompatActivity {
                             String name = products.get(i).getName();
                             String price = products.get(i).getPrice();
                             String ep = products.get(i).getEp();
-
+                            id_paket.add(products.get(i).getCode());
                             listNama.add(name);
                             listEp.add(ep);
                             listPrice.add(price);
@@ -421,8 +383,8 @@ public class TransPaketData extends AppCompatActivity {
 
                         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, list);
                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
-                        spnNama.setAdapter(adapter);
-                        spnNama.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        listPaketdata.setAdapter(adapter);
+                        /*spnNama.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 code = products.get(position).getCode();
@@ -433,7 +395,7 @@ public class TransPaketData extends AppCompatActivity {
                             public void onNothingSelected(AdapterView<?> parent) {
 
                             }
-                        });
+                        });*/
 
                     } else {
                         utilsAlert.globalDialog(TransPaketData.this, titleAlert, respMessage);
@@ -453,231 +415,6 @@ public class TransPaketData extends AppCompatActivity {
         });
     }
 
-   /* public void cekPrefix(CharSequence s) {
-        if (s.length() >= 6) {
-            String nohp = "";
-
-            //handling 62 and +62
-            if (s.toString().startsWith("62")) {
-                nohp = s.toString().substring(0, 2).replace("62", "0") + s.toString().substring(2, 5);
-            } else if (s.toString().startsWith("+62")) {
-                nohp = s.toString().substring(0, 3).replace("+62", "0") + s.toString().substring(3, 6);
-            } else {
-                nohp = s.toString().substring(0, 4);
-            }
-
-            try {
-                for (int i = 0; i < mJsonArray.length(); i++) {
-                    String nama = mJsonArray.getJSONObject(i).getString("name");
-                    String idx = mJsonArray.getJSONObject(i).getString("idx");
-                    String no = mJsonArray.getJSONObject(i).getString("no");
-
-                    Log.d("OPPO-1", "cekPrefix - nama: "+nama);
-                    Log.d("OPPO-1", "cekPrefix - idx: "+idx);
-                    Log.d("OPPO-1", "cekPrefix - no: "+no);
-
-                    if (no.contains(nohp)) {
-                        txtopr.setText(nama);
-                        Context c = getApplicationContext();
-                        int id = c.getResources().getIdentifier("mipmap/" + nama, null, c.getPackageName());
-                        imgopr.setImageResource(id);
-                        opr = idx;
-                        break;
-                    } else {
-                        Log.d("OPPO-1", "data tidak ditemukan ");
-                        opr = "";
-                        txtopr.setText("");
-                        imgopr.setImageResource(0);
-                        nominal = new String[0];
-                        denom = new String[0];
-                        point = new String[0];
-                        spinnerAdapter = new SpinnerPaymentAdapter(getApplicationContext(), denom, nominal, point);
-                        spnNama.setAdapter(spinnerAdapter);
-                        btnBayar.setEnabled(false);
-                    }
-
-                }
-
-                Log.d("OPPO-1", "load data trx lama: " + load_id + " baru: " + opr);
-                Log.d("OPPO-1", "cek opr: " + cek_opr);
-
-
-                if (!load_id.equalsIgnoreCase(opr)) {
-                    Log.d("OPPO-1", "load data trx - 2");
-                    cek_opr = false;
-                }
-
-                if (!opr.equalsIgnoreCase("") && !cek_opr) {
-                    Log.d("OPPO-1", "load data trx");
-                    cek_opr = true;
-                    load_id = opr;
-                    btnBayar.setEnabled(true);
-                    load_data();
-                }
-
-            } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(), "Koneksi internet gagal:\n" + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-        } else if (s.length() < 4) {
-            txtopr.setText("");
-            imgopr.setImageResource(0);
-            nominal = new String[0];
-            denom = new String[0];
-            point = new String[0];
-            spinnerAdapter = new SpinnerPaymentAdapter(getApplicationContext(), denom, nominal, point);
-            spnNama.setAdapter(spinnerAdapter);
-            btnBayar.setEnabled(false);
-            cek_opr = false;
-        } else if (s.length() >= 8 && s.length() <= 13) {
-            btnBayar.setEnabled(true);
-        }
-        *//*else if (s.length() < 8) {
-            btnBayar.setEnabled(false);
-        } else if (s.length() > 13) {
-            btnBayar.setEnabled(false);
-        }*//*
-    }
-
-    private void load_data() {
-        loadingDialog = ProgressDialog.show(TransPaketData.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Log.d("OPPO-1", "cek_transaksi - transpaket: "+PreferenceUtil.getNumberPhone(this)));
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, PreferenceUtil.getNumberPhone(this)));
-        dataCall.enqueue(new Callback<LoadDataResponse>() {
-            @Override
-            public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
-                nominal = new String[0];
-                adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, nominal);
-                spnNama.setAdapter(adapter);
-
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String error = response.body().getError();
-
-                    if (status.equals("OK")) {
-                        final List<DataNominal> result = response.body().getResult();
-                        nominal = new String[result.size()];
-                        selected_nominal = result.get(0).getProductKode();
-
-                        Locale localeID = new Locale("in", "ID");
-                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
-
-                        DecimalFormat decimal = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-                        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-                        dfs.setCurrencySymbol("");
-                        dfs.setMonetaryDecimalSeparator(',');
-                        dfs.setGroupingSeparator('.');
-                        decimal.setDecimalFormatSymbols(dfs);
-
-                        for (int i = 0; i < result.size(); i++) {
-                            nominal[i] = result.get(i).getProductName() + " | " + format.format(result.get(i).getHargaJual()) + " (" + decimal.format(result.get(i).getEpoint()) + ")";
-                        }
-
-                        adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, nominal);
-                        spnNama.setAdapter(adapter);
-                        spnNama.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                selected_nominal = result.get(position).getProductKode();//getH2hCode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_LOADDATA", t.getMessage().toString());
-            }
-        });
-    }
-
-    public void load_data2() {
-        loadingDialog = ProgressDialog.show(TransPaketData.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Log.d("OPPO-1", "cek_transaksi - transpaket: "+PreferenceUtil.getNumberPhone(this)));
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, PreferenceUtil.getNumberPhone(this)));
-//        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, "085334059170");
-        dataCall.enqueue(new Callback<LoadDataResponse>() {
-
-            @Override
-            public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
-                nominal = new String[0];
-                denom = new String[0];
-                point = new String[0];
-                spinnerAdapter = new SpinnerPaymentAdapter(getApplicationContext(), denom, nominal, point);
-                spnNama.setAdapter(spinnerAdapter);
-
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String error = response.body().getError();
-
-                    if (status.equals("OK")) {
-                        final List<DataNominal> result = response.body().getResult();
-                        nominal = new String[result.size()];
-                        denom = new String[result.size()];
-                        point = new String[result.size()];
-                        selected_nominal = result.get(0).getProductKode();
-
-                        Locale localeID = new Locale("in", "ID");
-                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
-
-                        DecimalFormat decimal = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-                        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-                        dfs.setCurrencySymbol("");
-                        dfs.setMonetaryDecimalSeparator(',');
-                        dfs.setGroupingSeparator('.');
-                        decimal.setDecimalFormatSymbols(dfs);
-
-                        for (int i = 0; i < result.size(); i++) {
-                            denom[i] = result.get(i).getProductName();
-                            nominal[i] = format.format(result.get(i).getHargaJual());
-                            point[i] = "point : " + decimal.format(result.get(i).getEpoint());
-                        }
-
-                        spinnerAdapter = new SpinnerPaymentAdapter(getApplicationContext(), denom, nominal, point);
-                        spnNama.setAdapter(spinnerAdapter);
-                        // adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, nominal);
-                        // spnNama.setAdapter(adapter);
-                        spnNama.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                selected_nominal = result.get(position).getProductKode();//getH2hCode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-
-            }
-        });
-    }*/
 
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransPaketData.this, "Harap Tunggu", "Cek Transaksi...");
@@ -839,7 +576,7 @@ public class TransPaketData extends AppCompatActivity {
                 layOprPaket.setVisibility(View.GONE);
                 laytxOprPaket.setVisibility(View.GONE);
             } else if (s.length() >= 8 && s.length() <= 13) {
-                btnBayar.setEnabled(true);
+                btnBayar.setEnabled(false);
                 layOprPaket.setVisibility(View.GONE);
                 laytxOprPaket.setVisibility(View.GONE);
             }
@@ -847,5 +584,51 @@ public class TransPaketData extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void initializeResources() {
+        listPaketdata = (ListView) findViewById(R.id.listPaketdata);
+        listPaketdata.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!validateIdpel()) {
+                    return;
+                }
+
+                final Dialog dialog = new Dialog(TransPaketData.this);
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.activity_alert_dialog);
+                dialog.setCancelable(false);
+                dialog.setTitle("Peringatan Transaksi!!!");
+
+                code = id_paket.get(position);
+                btnYes = (Button) dialog.findViewById(R.id.btn_yes);
+                btnNo = (Button) dialog.findViewById(R.id.btn_no);
+                txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
+                txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+                txtnomor.setText(txtNo.getText().toString());
+                txtvoucher.setText(code);
+                btnYes.setText("YA, Lanjutkan");
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        cek_transaksi();
+                        dialog.dismiss();
+                    }
+                });
+
+                btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                return;
+            }
+        });
+
     }
 }
