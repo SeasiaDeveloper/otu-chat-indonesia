@@ -135,6 +135,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:${rootProject.googlePlayServicesVersion}"
     implementation "com.google.android.gms:play-services-location:${rootProject.googlePlayServicesVersion}"
     implementation "com.google.android.gms:play-services-analytics:${rootProject.googlePlayServicesVersion}"
+    implementation "com.google.android.gms:play-services-vision:${rootProject.googlePlayServicesVersion}"
 
     implementation "com.firebase:firebase-jobdispatcher-with-gcm-dep:${rootProject.firebaseDispatcherVersion}"
     implementation "com.google.firebase:firebase-auth:${rootProject.firebaseAuthVersion}"

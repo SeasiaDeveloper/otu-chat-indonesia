@@ -201,6 +201,9 @@
             android:name=".ui.activities.about.AboutActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activities.barcode.WebQRCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activities.others.PreviewImageActivity"
             android:screenOrientation="portrait" />
         <activity

@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/topLayout"
+    style="@style/MatchParent"
+    android:keepScreenOn="true"
+    android:orientation="vertical">
+
+    <com.eklanku.otuChat.ui.views.barcode.CameraSourcePreview
+        android:id="@+id/preview"
+        style="@style/MatchParent">
+
+        <!-- Scanner overlay animation -->
+        <com.eklanku.otuChat.ui.views.barcode.BarCodeScannerOverlay
+            style="@style/MatchParent"
+            android:background="@color/barcode_overlay_background_color"
+            android:paddingBottom="@dimen/barcode_overlay_padding"
+            app:line_color="@color/barcode_overlay_line_color"
+            app:line_speed="6"
+            app:line_speed_slowdown="2"
+            app:line_width="4"
+            app:square_height="@dimen/barcode_overlay_square_height"
+            app:square_width="@dimen/barcode_overlay_square_width" />
+
+    </com.eklanku.otuChat.ui.views.barcode.CameraSourcePreview>
+
+</LinearLayout>

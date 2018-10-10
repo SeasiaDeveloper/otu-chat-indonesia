@@ -177,6 +177,12 @@ public class ServiceManager {
                 .subscribe(subscriber);
     }
 
+    public Observable<Void> upgradeWebSessionToken(String webToken) {
+        return QMAuthService.getInstance().upgradeWebSessionToken(webToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public Observable<Void> resetPassword(String email) {
         return QMAuthService.getInstance().resetPassword(email)
                 .subscribeOn(Schedulers.io())

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="barcode_scanner_rect_width">230</integer>
+    <integer name="barcode_scanner_rect_height">230</integer>
+    <integer name="barcode_scanner_line_width">4</integer>
+    <integer name="barcode_scanner_line_speed">5</integer>
+</resources>

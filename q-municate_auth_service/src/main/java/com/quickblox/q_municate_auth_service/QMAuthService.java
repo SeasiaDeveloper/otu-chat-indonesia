@@ -1,6 +1,7 @@
 package com.quickblox.q_municate_auth_service;
 
 
+import com.connectycube.auth.ConnectycubeAuth;
 import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.core.exception.ResponseException;
 import com.connectycube.core.server.Performer;
@@ -138,13 +139,18 @@ public class QMAuthService extends QMBaseService {
         return result;
     }
 
-    public void  logoutSync() throws ResponseException {
+    public void logoutSync() throws ResponseException {
         ConnectycubeUsers.signOut().perform();
         authorized = false;
         notifyLogout(this);
     }
 
-    public Observable<Void> resetPassword(String email){
+    public Observable<Void> upgradeWebSessionToken(String webToken) {
+        Performer<Void> performer = ConnectycubeAuth.upgradeWebSessionTokenToCurrentUser(webToken);
+        return performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+    }
+
+    public Observable<Void> resetPassword(String email) {
         Performer<Void> performer = ConnectycubeUsers.resetPassword(email);
         final Observable<Void> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
         return observable;

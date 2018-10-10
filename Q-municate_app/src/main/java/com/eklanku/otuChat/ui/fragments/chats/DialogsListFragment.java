@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
+import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -91,7 +92,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
 import com.yyydjk.library.BannerLayout;
 
 public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>> {
@@ -235,6 +235,9 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
                 break;
             case R.id.action_start_about:
                 AboutActivity.start(getActivity());
+                break;
+                case R.id.action_web_qr_code:
+                WebQRCodeActivity.start(getActivity());
                 break;
             default:
                 return super.onOptionsItemSelected(item);

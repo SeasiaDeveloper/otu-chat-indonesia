@@ -100,6 +100,9 @@
     <!-- Chat Conversation -->
     <color name="right_bubble_tint_color">#B1F0B2</color>
 
+    <color name="barcode_overlay_background_color">#55000000</color>
+    <color name="barcode_overlay_line_color">#7323DC</color>
+
     <!-- Otu payment screen -->
     <color name="color_payment_contact_us_gray">#676767</color>
     <color name="color_payment_list_icon_text">#4D4D4D</color>

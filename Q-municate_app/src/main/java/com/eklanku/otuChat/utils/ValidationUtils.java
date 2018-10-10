@@ -269,4 +269,9 @@ public class ValidationUtils {
         return matcher.matches();
     }
 
+    public static boolean isValidWebQRCode(String webQRCode) {
+        Pattern charsAndNumbersPattern = Pattern.compile(
+                "^(?=.*[a-z])(?=.*[0-9])[a-z0-9]+$", Pattern.CASE_INSENSITIVE);
+        return !(webQRCode == null || webQRCode.isEmpty()) && charsAndNumbersPattern.matcher(webQRCode).matches();
+    }
 }
