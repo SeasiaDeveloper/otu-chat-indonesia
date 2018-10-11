@@ -147,7 +147,7 @@ public class HistoryBalanceActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.title_riwayat_saldo));
     }
 
-    @Override
+   /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -155,5 +155,16 @@ public class HistoryBalanceActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
+   @Override
+   public boolean onOptionsItemSelected(MenuItem item) {
+       // Handle item selection
+       switch (item.getItemId()) {
+           case android.R.id.home:
+               finish();
+               return true;
+           default:
+               return super.onOptionsItemSelected(item);
+       }
+   }
 }

@@ -36,10 +36,10 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mLinRiwayatSaldo = findViewById(R.id.linRiwayatSaldo);
-        mLinRiwayatTransaksi =  findViewById(R.id.linRiwayatTransaksi);
-        mLinRiwayatDeposit =  findViewById(R.id.linRiwayatDeposit);
-        mLinRiwayatPenarikan =  findViewById(R.id.linRiwayatPenarikan);
-        mLinRiwayatBonus =  findViewById(R.id.linRiwayatBonus);
+        mLinRiwayatTransaksi = findViewById(R.id.linRiwayatTransaksi);
+        mLinRiwayatDeposit = findViewById(R.id.linRiwayatDeposit);
+        mLinRiwayatPenarikan = findViewById(R.id.linRiwayatPenarikan);
+        mLinRiwayatBonus = findViewById(R.id.linRiwayatBonus);
 
         mLinRiwayatSaldo.setOnClickListener(this);
         mLinRiwayatTransaksi.setOnClickListener(this);
@@ -47,13 +47,16 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
         mLinRiwayatPenarikan.setOnClickListener(this);
         mLinRiwayatBonus.setOnClickListener(this);
 
-        Log.d("OPPO-1","oke");
+        Log.d("OPPO-1", "oke");
 
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case android.R.id.home:
+                finish();
+                break;
             case R.id.linRiwayatSaldo:
                 if (menuDialog()) {
                     startActivity(new Intent(RiwayatActivity.this, HistoryBalanceActivity.class));
@@ -81,6 +84,7 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
+
     private boolean menuDialog() {
         if (!PreferenceUtil.isLoginStatus(RiwayatActivity.this)) {
             android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(RiwayatActivity.this)
