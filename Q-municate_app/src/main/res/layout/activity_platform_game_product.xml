@@ -78,7 +78,7 @@
         android:background="@drawable/rounded_shape_payment"
         android:text="Pilih Voucher : "
         android:textColor="@color/white"
-        android:padding="4dp"/>
+        android:padding="@dimen/density_8"/>
 
 
     <ListView

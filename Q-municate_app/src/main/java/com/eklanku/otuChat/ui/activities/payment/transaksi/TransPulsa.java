@@ -586,6 +586,7 @@ public class TransPulsa extends AppCompatActivity {
                 if (!validateIdpel()) {
                     return;
                 }
+                Toast.makeText(TransPulsa.this, "TEST", Toast.LENGTH_SHORT).show();
                 code = id_paket.get(position);
                 dialogWarning(code);
             }
