@@ -8,7 +8,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2"
-        android:layout_margin="8dp"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -18,17 +17,12 @@
             android:layout_height="wrap_content"
             android:text="denom"
             android:textColor="@color/black"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/nominal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/denom"
-            android:layout_alignParentRight="true"
-            android:paddingEnd="@dimen/density_8"
-            android:paddingRight="8dp"
-            android:paddingBottom="4dp"
             android:text="nominal"
             android:textColor="@color/colorTextOtu"
             android:textSize="16dp" />
@@ -40,8 +34,9 @@
         android:id="@+id/point"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
         android:gravity="center"
+        android:layout_marginEnd="@dimen/density_8"
         android:text="point"
         android:textColor="@color/material_green_500"
         android:textSize="12dp"
@@ -49,7 +44,8 @@
 
     <Button
         android:layout_width="0dp"
-        android:layout_margin="8dp"
+        android:layout_marginTop="@dimen/density_8"
+        android:layout_marginBottom="@dimen/density_8"
         android:background="@drawable/custom_pilih"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
