@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +50,8 @@ public class HistoryBalanceActivity extends AppCompatActivity {
 
     Dialog loadingDialog;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,17 +59,20 @@ public class HistoryBalanceActivity extends AppCompatActivity {
 
         setActionBar();
 
-        Button btnBack  = (Button) findViewById(R.id.btnHistoryBack);
+        /*Button btnBack  = (Button) findViewById(R.id.btnHistoryBack);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
-        });
+        });*/
 
         ButterKnife.bind(this);
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
         preferenceManager = new PreferenceManager(this);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
@@ -133,57 +140,6 @@ public class HistoryBalanceActivity extends AppCompatActivity {
         }
     }
 
-    //====================================== get history
-    /*public void loadHistoryTransaksi() {
-        loadingDialog = ProgressDialog.show(HistoryBalanceActivity.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-
-
-        Call<DataHistoryOTU> dataCall = mApiInterfacePayment.getHistoryTrx("EKL0003937", strApIUse, "cf35cc06989f9f84ef48c0e18ca4ee91", "3");
-        dataCall.enqueue(new Callback<DataHistoryOTU>() {
-            @Override
-            public void onResponse(Call<DataHistoryOTU> call, Response<DataHistoryOTU> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String msg = response.body().getRespMessage();
-                    Log.d("OPPO-1", "onResponse: "+response.body().getListData());
-                    if (status.equalsIgnoreCase("SUCCESS")) {
-                        final List<DataDetailHistosryOTU> result = response.body().getListData();
-                        for (int i = 0; i < result.size(); i++) {
-                            mutasi_id = result.get(i).getMutasi_id();
-                            sisa_saldo = result.get(i).getSisa_saldo();
-                            uang_masuk = result.get(i).getUang_masuk();
-                            uang_keluar = result.get(i).getUang_keluar();
-                            keterangan = result.get(i).getKeterangan();
-                            tgl_mutasi = result.get(i).getTgl_mutasi();
-                            mutasi_status = result.get(i).getMutasi_status();
-
-                            Log.d("OPPO-1", "onResponse: "+mutasi_id);
-                            Log.d("OPPO-1", "onResponse: "+sisa_saldo);
-                            Log.d("OPPO-1", "onResponse: "+uang_masuk);
-                            Log.d("OPPO-1", "onResponse: "+uang_keluar);
-                            Log.d("OPPO-1", "onResponse: "+keterangan);
-                            Log.d("OPPO-1", "onResponse: "+tgl_mutasi);
-                            Log.d("OPPO-1", "onResponse: "+mutasi_status);
-
-                        }
-                    } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataHistoryOTU> call, Throwable t) {
-//                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_LOADDATA", t.getMessage().toString());
-            }
-        });
-    }*/
 
     private void setActionBar() {
         Toolbar mToolBar = (Toolbar) findViewById(R.id.toolbar);

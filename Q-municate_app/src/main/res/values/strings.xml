@@ -511,6 +511,7 @@
 
 
     <string name="minimal_pengisian_saldo">Minimal pangisian saldo Rp 10.000</string>
+    <string name="minimal_transfer_saldo">Minimal transfer saldo Rp 10.000</string>
     <string name="riwayat_saldo">Riwayat saldo</string>
     <string name="riwayat_transaksi">Riwayat Transaksi</string>
     <string name="riwayat_deposit">Riwayat Deposit</string>

@@ -69,9 +69,9 @@
         android:id="@+id/btn_non_aktif_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_key_light"
+        android:drawableLeft="@drawable/ic_key_nonaktif"
         android:drawablePadding="5dp"
-        android:drawableStart="@drawable/ic_key_light"
+        android:drawableStart="@drawable/ic_key_nonaktif"
         android:drawableTint="@color/red_700"
         android:gravity="left|center_vertical"
         android:paddingLeft="14dp"
@@ -79,5 +79,9 @@
         android:textAllCaps="false"
         android:background="@null"
         android:textColor="@color/grey_600" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/grey_400" />
 
 </LinearLayout>

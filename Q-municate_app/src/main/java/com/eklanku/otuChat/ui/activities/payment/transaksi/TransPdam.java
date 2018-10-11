@@ -228,9 +228,9 @@ public class TransPdam extends AppCompatActivity {
             return false;
         }
 
-        if (id_pel.length() < 8) {
+        if (id_pel.length() < 6) {
 //            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 8 digit nomor");
+            layoutNo.setError("Masukkan minimal 6 digit nomor");
             requestFocus(txtNo);
             return false;
         }

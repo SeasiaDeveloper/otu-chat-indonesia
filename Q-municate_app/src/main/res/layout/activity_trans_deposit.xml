@@ -5,8 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:background="@color/white"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transfer.TransDeposit">
+
+    <View android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/grey_400" />
 
     <TextView
         android:layout_width="match_parent"
@@ -17,6 +23,8 @@
         android:textStyle="bold"
         android:visibility="gone" />
 
+
+
     <com.eklanku.otuChat.ui.views.ARTextView
         android:id="@+id/textView14"
         android:layout_width="match_parent"
@@ -24,6 +32,8 @@
         android:layout_marginTop="@dimen/density_4"
         android:text="Masukkan Tujuan"
         android:textColor="@color/grey_600"
+        android:layout_marginLeft="@dimen/density_16"
+        android:layout_marginRight="@dimen/density_16"
         android:textSize="16sp" />
 
     <android.support.design.widget.TextInputLayout
@@ -41,8 +51,26 @@
             android:textColor="@color/grey_600"
             android:inputType="text"
             android:paddingBottom="@dimen/density_8"
-            android:paddingTop="@dimen/density_8" />
+            android:paddingTop="@dimen/density_8"
+            android:layout_marginLeft="@dimen/density_16"
+            android:layout_marginRight="@dimen/density_16"/>
     </android.support.design.widget.TextInputLayout>
+
+
+
+    <View android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/grey_400" />
+
+    <View android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@color/grey_300" />
+
+    <View android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/grey_400" />
 
     <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
@@ -51,7 +79,9 @@
         android:text="Masukkan Nominal Transfer"
         android:textColor="@color/grey_600"
         android:paddingTop="@dimen/density_16"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:layout_marginLeft="@dimen/density_16"
+        android:layout_marginRight="@dimen/density_16"/>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/txtLayoutTransDepositJml"
@@ -68,17 +98,51 @@
             android:inputType="number"
             android:background="@drawable/custom_bottom_border_grey"
             android:paddingBottom="@dimen/density_8"
-            android:paddingTop="@dimen/density_8" />
+            android:paddingTop="@dimen/density_8"
+            android:layout_marginLeft="@dimen/density_16"
+            android:layout_marginRight="@dimen/density_16"/>
     </android.support.design.widget.TextInputLayout>
 
-
-    <Button
-        android:id="@+id/btnTransDeposit"
+    <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
-        android:background="@drawable/background_round_corner_green"
-        android:text="Transfer"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+        android:textColor="@color/red_800"
+        android:textSize="10sp"
+        android:layout_marginTop="@dimen/density_5"
+        android:layout_marginLeft="@dimen/density_16"
+        android:layout_marginRight="@dimen/density_16"
+        android:text="@string/minimal_transfer_saldo"/>
+
+    <View android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/grey_400" />
+
+    <View android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@color/grey_300" />
+
+    <View android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/grey_400" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16sp">
+
+        <Button
+            android:id="@+id/btnTransDeposit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/density_16"
+            android:background="@drawable/background_round_corner_green"
+            android:text="Transfer"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
 </LinearLayout>
