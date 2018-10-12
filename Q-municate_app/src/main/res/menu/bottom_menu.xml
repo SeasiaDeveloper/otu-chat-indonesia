@@ -15,5 +15,4 @@
         android:id="@+id/navigation_payment"
         android:icon="@drawable/ic_tabs_payment_otu"
         android:title="@string/payment" />
-
 </menu>

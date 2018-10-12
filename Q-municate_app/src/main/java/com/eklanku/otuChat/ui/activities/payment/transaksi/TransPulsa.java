@@ -496,6 +496,7 @@ public class TransPulsa extends AppCompatActivity {
     String oprPulsa = "";
     String tempOprPulsa = "";
     boolean statOprPulsa = false;
+    boolean otherOpr = true;
 
     public void cekPrefix(CharSequence s) {
         try {
@@ -506,57 +507,70 @@ public class TransPulsa extends AppCompatActivity {
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.indosat);
                     statOprPulsa = true;
-
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_telkomsel).contains(nomorHp)) {
                     oprPulsa = "Telkomsel";
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.telkomsel);
                     statOprPulsa = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_xl).contains(nomorHp)) {
                     oprPulsa = "XL";
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.xl);
                     statOprPulsa = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_tri).contains(nomorHp)) {
                     oprPulsa = "Three";
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.three);
                     statOprPulsa = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_smartfren).contains(nomorHp)) {
                     oprPulsa = "Smart";
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.smart);
                     statOprPulsa = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_axis).contains(nomorHp)) {
                     oprPulsa = "Axis";
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.axis);
                     statOprPulsa = true;
+                    otherOpr = false;
                 } else {
                     layOpr.setVisibility(View.VISIBLE);
                     txLayOpr.setVisibility(View.VISIBLE);
-                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
                     statOprPulsa = false;
                     tempOprPulsa = "";
                     btnBayar.setEnabled(true);
+                    oprPulsa = "";
                 }
 
                 Log.d("OPPO-1", "opr baru: " + oprPulsa + " tempOprPulsa: " + tempOprPulsa);
                 Log.d("OPPO-1", "statOprPulsa: " + statOprPulsa);
+                Log.d("OPPO-1", "other opr: " + otherOpr);
 
                 if (!oprPulsa.equalsIgnoreCase(tempOprPulsa) && statOprPulsa) {
-                    Log.d("OPPO-1", "cekPrefix: 2");
                     loadProduct(strUserID, strAccessToken, strAplUse, oprPulsa);
                     tempOprPulsa = oprPulsa;
                     statOprPulsa = false;
                     btnBayar.setEnabled(true);
                     layOpr.setVisibility(View.GONE);
                     txLayOpr.setVisibility(View.GONE);
+                    otherOpr = true;
+                }
+
+                if(otherOpr && oprPulsa.equalsIgnoreCase("")){
+                    Log.d("OPPO-1", "cekPrefix: ");
+                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+                    otherOpr = false;
                 }
 
             } else if (s.length() < 4) {
                 listPulsa.setAdapter(adapter);
                 statOprPulsa = false;
+                otherOpr = true;
                 tempOprPulsa = "";
                 txOpr.setText("");
                 imgOpr.setImageResource(0);

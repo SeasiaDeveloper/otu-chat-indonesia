@@ -509,6 +509,8 @@ public class TransPaketData extends AppCompatActivity {
     String tempPaket = "";
     boolean statPaket = false;
 
+    boolean otherOpr = true;
+
     public void cekPrefix(CharSequence s) {
         try {
             if (s.length() >= 4) {
@@ -518,43 +520,50 @@ public class TransPaketData extends AppCompatActivity {
                     imgOpr.setImageResource(R.mipmap.xl);
                     txOpr.setText("XL DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_axis).contains(nomorHp)) {
                     oprPaket = "AXIS DATA";
                     imgOpr.setImageResource(R.mipmap.axis);
                     txOpr.setText("AXIS DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_smartfren).contains(nomorHp)) {
                     oprPaket = "SMARTFREN DATA";
                     imgOpr.setImageResource(R.mipmap.smart);
                     txOpr.setText("SMARTFREN DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_tri).contains(nomorHp)) {
                     oprPaket = "TRI DATA";
                     imgOpr.setImageResource(R.mipmap.three);
                     txOpr.setText("TRI DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_indosat).contains(nomorHp)) {
                     oprPaket = "ISAT DATA";
                     imgOpr.setImageResource(R.mipmap.indosat);
                     txOpr.setText("ISAT DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_bolt).contains(nomorHp)) {
                     oprPaket = "BOLT";
                     imgOpr.setImageResource(R.mipmap.bolt);
                     txOpr.setText("BOLT");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_telkomsel).contains(nomorHp)) {
                     oprPaket = "TSEL DATA";
                     imgOpr.setImageResource(R.mipmap.telkomsel);
                     txOpr.setText("TSEL DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else {
                     statPaket = false;
                     tempPaket = "";
                     layOprPaket.setVisibility(View.VISIBLE);
                     laytxOprPaket.setVisibility(View.VISIBLE);
-                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
                     btnBayar.setEnabled(true);
+                    oprPaket = "";
                 }
 
                 if (!oprPaket.equalsIgnoreCase(tempPaket) && statPaket) {
@@ -564,13 +573,21 @@ public class TransPaketData extends AppCompatActivity {
                     layOprPaket.setVisibility(View.GONE);
                     laytxOprPaket.setVisibility(View.GONE);
                     btnBayar.setEnabled(true);
+                    otherOpr = true;
                 }
-                Log.d("OPPO-1", "cekPrefix: " + oprPaket);
+
+                if(otherOpr && oprPaket.equalsIgnoreCase("")){
+                    Log.d("OPPO-1", "cekPrefix: ");
+                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+                    otherOpr = false;
+                }
+
             } else if (s.length() < 4) {
                 spnNama.setAdapter(adapter);
                 tempPaket = "";
                 btnBayar.setEnabled(false);
                 statPaket = false;
+                otherOpr = true;
                 imgOpr.setImageResource(0);
                 txOpr.setText("");
                 layOprPaket.setVisibility(View.GONE);
