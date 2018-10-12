@@ -128,6 +128,9 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         ImageView view = (ImageView) holder.itemView.findViewById(R.id.message_status_image_view);
         setViewVisibility(holder.avatar, View.GONE);
 
+        TextView timeView = holder.itemView.findViewById(R.id.custom_msg_text_time_message);
+        setMsgTime(timeView, chatMessage);
+
         if (chatMessage.getState() != null) {
             setMessageStatus(view, State.DELIVERED.equals(
                     chatMessage.getState()), State.READ.equals(chatMessage.getState()));

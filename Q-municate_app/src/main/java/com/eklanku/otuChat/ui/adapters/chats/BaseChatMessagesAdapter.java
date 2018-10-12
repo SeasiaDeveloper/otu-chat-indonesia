@@ -116,6 +116,10 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         setViewVisibility(viewHolder.itemView.findViewById(R.id.msg_bubble_background), View.VISIBLE);
     }
 
+    protected void setMsgTime(TextView timeView, CombinationMessage chatMessage) {
+        timeView.setText(getDate(chatMessage.getDateSent()));
+    }
+
     protected void setViewVisibility(View view, int visibility) {
         if (view != null) {
             view.setVisibility(visibility);
