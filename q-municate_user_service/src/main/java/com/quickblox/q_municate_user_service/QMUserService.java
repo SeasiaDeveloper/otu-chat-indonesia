@@ -5,6 +5,8 @@ import com.connectycube.core.exception.ResponseException;
 import com.connectycube.core.request.PagedRequestBuilder;
 import com.connectycube.core.server.Performer;
 import com.connectycube.extensions.RxJavaPerformProcessor;
+import com.connectycube.users.model.ConnectycubeAddressBookContact;
+import com.connectycube.users.model.ConnectycubeAddressBookResponse;
 import com.quickblox.q_municate_base_service.QMBaseService;
 import com.quickblox.q_municate_user_service.cache.QMUserCache;
 import com.quickblox.q_municate_user_service.cache.QMUserMemoryCache;
@@ -363,6 +365,33 @@ public class QMUserService extends QMBaseService {
         });
 
         return result;
+    }
+
+    public Observable<ConnectycubeAddressBookResponse> uploadAddressBook(ArrayList<ConnectycubeAddressBookContact> localBook) {
+        return uploadAddressBook(localBook, null);
+    }
+
+    public Observable<ConnectycubeAddressBookResponse> uploadAddressBook(ArrayList<ConnectycubeAddressBookContact> localBook, String UDID) {
+        Performer<ConnectycubeAddressBookResponse> performer = ConnectycubeUsers.uploadAddressBook(localBook, UDID, false);
+        return performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+    }
+
+    public Observable<ConnectycubeAddressBookResponse> uploadAddressBookForce(ArrayList<ConnectycubeAddressBookContact> localBook) {
+        return uploadAddressBookForce(localBook, null);
+    }
+
+    public Observable<ConnectycubeAddressBookResponse> uploadAddressBookForce(ArrayList<ConnectycubeAddressBookContact> localBook, String UDID) {
+        Performer<ConnectycubeAddressBookResponse> performer = ConnectycubeUsers.uploadAddressBook(localBook, UDID, true);
+        return performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+    }
+
+    public Observable<ArrayList<ConnectycubeAddressBookContact>> getAddressBook() {
+        return getAddressBook(null);
+    }
+
+    public Observable<ArrayList<ConnectycubeAddressBookContact>> getAddressBook(String UDID) {
+        Performer<ArrayList<ConnectycubeAddressBookContact>> performer = ConnectycubeUsers.getAddressBook(UDID);
+        return performer.convertTo(RxJavaPerformProcessor.INSTANCE);
     }
 
 

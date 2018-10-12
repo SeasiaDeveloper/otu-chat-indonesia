@@ -42,6 +42,7 @@ import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
+import com.eklanku.otuChat.utils.helpers.AddressBookHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -282,6 +283,7 @@ public class MainActivity extends BaseLoggableActivity {
         setUpActionBarWithUpButton();
         synchContacts();
 
+        syncAddressBook();
         if (!isChatInitializedAndUserLoggedIn()) {
             loginChat();
         }
@@ -761,6 +763,10 @@ public class MainActivity extends BaseLoggableActivity {
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     private static final int PER_PAGE = 200; //5; //200;
     private static final int COUNTRY_CODE = 62; // 91; 62;
+
+    private void syncAddressBook() {
+        AddressBookHelper.getInstance().uploadAddressBook();
+    }
 
     private void synchContacts() {
         if (!mDbHelper.isContactsExists()) {
