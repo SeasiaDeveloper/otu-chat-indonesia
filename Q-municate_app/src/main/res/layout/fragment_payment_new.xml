@@ -18,13 +18,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.yyydjk.library.BannerLayout
-                android:id="@+id/bannerLayout"
-                android:layout_width="match_parent"
-                android:layout_height="125dp"
-                app:autoPlayDuration="4000"
-                app:scrollDuration="1000" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -36,147 +29,168 @@
                     android:id="@+id/div1"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/density_2"
-                    android:layout_below="@+id/laySaldo"
+                    android:layout_below="@+id/layout_"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
                     android:background="@color/colorTextOtu"
                     android:orientation="vertical"
                     android:visibility="gone" />
 
-                <android.support.v7.widget.LinearLayoutCompat
-                    android:id="@+id/laySaldo"
+                <LinearLayout
+                    android:id="@+id/layout_"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/layout_saldo"
-                    android:gravity="center_vertical"
                     android:orientation="vertical">
 
-                    <FrameLayout
+                    <android.support.v7.widget.LinearLayoutCompat
+                        android:id="@+id/laySaldo"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
 
-                        <LinearLayout
+                        <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_height="wrap_content">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/custom_saldo_top"
-                                android:gravity="center_vertical"
-                                android:orientation="vertical"
-                                android:paddingLeft="20dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="20dp"
-                                android:paddingBottom="5dp">
+                                android:orientation="vertical">
 
-                                <TextView
-                                    android:id="@+id/labelSaldo"
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
+                                    android:background="@drawable/custom_saldo_top"
                                     android:gravity="center_vertical"
-                                    android:text="Saldo"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_12"
-                                    android:textStyle="bold" />
+                                    android:orientation="vertical"
+                                    android:paddingLeft="20dp"
+                                    android:paddingTop="5dp"
+                                    android:paddingRight="20dp"
+                                    android:paddingBottom="5dp">
 
-                                <TextView
-                                    android:id="@+id/tvSaldo"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_alignParentStart="true"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_toStartOf="@+id/btDeposit"
-                                    android:layout_toLeftOf="@+id/btDeposit"
-                                    android:gravity="end|center_vertical"
-                                    android:text="RP 0.00"
-                                    android:textAlignment="textEnd"
-                                    android:textColor="@color/color_yellow_payment_amount"
-                                    android:textSize="@dimen/text_16"
-                                    android:textStyle="bold" />
+                                    <TextView
+                                        android:id="@+id/labelSaldo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:gravity="center_vertical"
+                                        android:text="Saldo"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text_12"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvSaldo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_toStartOf="@+id/btDeposit"
+                                        android:layout_toLeftOf="@+id/btDeposit"
+                                        android:gravity="end|center_vertical"
+                                        android:text="RP 0.00"
+                                        android:textAlignment="textEnd"
+                                        android:textColor="@color/color_yellow_payment_amount"
+                                        android:textSize="@dimen/text_16"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/custom_saldo_bottom"
+                                    android:gravity="center_vertical"
+                                    android:orientation="vertical"
+                                    android:paddingLeft="20dp"
+                                    android:paddingTop="5dp"
+                                    android:paddingRight="20dp"
+                                    android:paddingBottom="5dp">
+
+                                    <TextView
+                                        android:id="@+id/labelBonus"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:gravity="center_vertical"
+                                        android:text="Bonus"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text_12"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvBonus"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_toStartOf="@+id/btDeposit"
+                                        android:layout_toLeftOf="@+id/btDeposit"
+                                        android:gravity="end|center_vertical"
+                                        android:text="0.00"
+                                        android:textAlignment="textEnd"
+                                        android:textColor="@color/color_yellow_payment_amount"
+                                        android:textSize="@dimen/text_12"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+
+                                <android.support.v7.widget.LinearLayoutCompat
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/bg_payment_light_green_round"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    android:paddingLeft="20dp"
+                                    android:paddingTop="10dp"
+                                    android:paddingRight="20dp"
+                                    android:paddingBottom="10dp"
+                                    android:visibility="gone" />
 
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/custom_saldo_bottom"
-                                android:gravity="center_vertical"
-                                android:orientation="vertical"
-                                android:paddingLeft="20dp"
-                                android:paddingTop="5dp"
-                                android:paddingRight="20dp"
-                                android:paddingBottom="5dp">
-
-                                <TextView
-                                    android:id="@+id/labelBonus"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:gravity="center_vertical"
-                                    android:text="Bonus"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/text_12"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/tvBonus"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_alignParentStart="true"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_toStartOf="@+id/btDeposit"
-                                    android:layout_toLeftOf="@+id/btDeposit"
-                                    android:gravity="end|center_vertical"
-                                    android:text="0.00"
-                                    android:textAlignment="textEnd"
-                                    android:textColor="@color/color_yellow_payment_amount"
-                                    android:textSize="@dimen/text_12"
-                                    android:textStyle="bold" />
-
-                            </LinearLayout>
-
-                            <android.support.v7.widget.LinearLayoutCompat
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                android:background="@drawable/bg_payment_light_green_round"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:paddingLeft="20dp"
-                                android:paddingTop="10dp"
-                                android:paddingRight="20dp"
-                                android:paddingBottom="10dp"
-                                android:visibility="gone" />
-
-                        </LinearLayout>
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginRight="10dp"
-                            android:gravity="center_vertical">
-
-                            <Button
-                                android:id="@+id/btDeposit"
+                            <RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginStart="5dp"
-                                android:layout_marginLeft="5dp"
-                                android:background="@drawable/button_round_yellow"
-                                android:text="Isi Saldo"
-                                android:textColor="@color/default_text_icon_otu_color"
-                                android:textSize="@dimen/text_12"
-                                android:textStyle="bold" />
-                        </RelativeLayout>
-                    </FrameLayout>
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="10dp"
+                                android:gravity="center_vertical">
 
-                </android.support.v7.widget.LinearLayoutCompat>
+                                <Button
+                                    android:id="@+id/btDeposit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:background="@drawable/button_round_yellow"
+                                    android:text="Isi Saldo"
+                                    android:textColor="@color/default_text_icon_otu_color"
+                                    android:textSize="@dimen/text_12"
+                                    android:textStyle="bold" />
+                            </RelativeLayout>
+                        </FrameLayout>
 
+                    </android.support.v7.widget.LinearLayoutCompat>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/density_8"
+                        android:layout_marginBottom="@dimen/density_8"
+                        android:layout_height="wrap_content">
+
+                        <com.yyydjk.library.BannerLayout
+                            android:id="@+id/bannerLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="125dp"
+
+                            app:autoPlayDuration="4000"
+                            app:scrollDuration="1000" />
+
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/txt1"
@@ -582,9 +596,9 @@
 
                     <LinearLayout
                         android:id="@+id/layout_ppob"
-                        android:layout_marginTop="@dimen/density_8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/density_8"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:paddingLeft="@dimen/density_8"

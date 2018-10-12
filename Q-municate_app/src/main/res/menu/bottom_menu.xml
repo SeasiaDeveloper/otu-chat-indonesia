@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_tabs_payment_otu"
         android:title="@string/payment" />
 
+    <item
+        android:id="@+id/navigation_pengaturan"
+        android:icon="@drawable/ic_otu_pengaturan"
+        android:title="@string/payment" />
+
 </menu>
