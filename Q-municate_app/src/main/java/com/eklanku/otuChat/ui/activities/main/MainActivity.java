@@ -38,6 +38,7 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
+import com.eklanku.otuChat.ui.activities.settings.SettingTabPaymentFragment;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;

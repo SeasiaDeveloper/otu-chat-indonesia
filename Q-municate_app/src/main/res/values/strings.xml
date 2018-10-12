@@ -114,6 +114,9 @@
     <string name="dialog_no_chats">Untuk memulai obrolan,\n tekan tombol yang ada\ndi bawah layar anda.</string>
     <string name="dialog_no_chats_before_image_string">Untuk memulai obrolan,\n tekan tombol</string>
     <string name="dialog_no_chats_after_image_string">yang ada\ndi bawah layar anda.</string>
+    <string name="dialog_no_call">Untuk memulai panggilan,\n tekan tombol yang ada\ndi bawah layar anda.</string>
+    <string name="dialog_no_call_before_image_string">Untuk memulai panggilan,\n tekan tombol</string>
+    <string name="dialog_no_call_after_image_string">yang ada\ndi bawah layar anda.</string>
     <string name="dialog_reply">Reply</string>
     <string name="dialog_user_is_not_friend">User is not your friend</string>
     <string name="dialog_confirm_sending_attach">Do you really want to send %1$s?</string>
@@ -337,6 +340,7 @@
     <string name="chats">Chats</string>
     <string name="call">Calls</string>
     <string name="payment">Payments</string>
+    <string name="setting">Setting</string>
 
     <plurals name="days">
         <item quantity="one">%1$d day</item>
