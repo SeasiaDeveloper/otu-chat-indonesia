@@ -634,8 +634,8 @@ public class TransPdam extends AppCompatActivity {
                         return;
                     }
                     load_id = viewHolder.txtId.getText().toString();
-                    //cek_transaksi();
-                    Toast.makeText(mContext, "" + load_id, Toast.LENGTH_SHORT).show();
+                    cek_transaksi();
+                    //Toast.makeText(mContext, "" + load_id, Toast.LENGTH_SHORT).show();
                 }
             });
 

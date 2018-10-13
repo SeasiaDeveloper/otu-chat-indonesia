@@ -220,8 +220,9 @@ public class TransAsuransi extends AppCompatActivity {
                             idAsuransi.add(result.get(i).getCode());
                         }
 
-                        adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
-                        listAsuransi.setAdapter(adapter);
+                        /*adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);*/
+                        spinnerPpobAdapter = new SpinnerPpobAdapter(getBaseContext(), nama_operator);
+                        listAsuransi.setAdapter(spinnerPpobAdapter);
                         /*spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
