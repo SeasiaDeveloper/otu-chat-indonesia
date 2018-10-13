@@ -12,14 +12,14 @@
         android:id="@+id/btn_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableStart="@drawable/ic_yellow_profile"
         android:drawableLeft="@drawable/ic_yellow_profile"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_yellow_profile"
         android:gravity="left|center_vertical"
-        android:paddingLeft="20dp"
+        android:padding="@dimen/density_24"
         android:text="Profil"
         android:textAllCaps="false"
-        android:background="@null"
         android:textColor="@color/grey_600" />
 
     <View
@@ -31,14 +31,15 @@
         android:id="@+id/btn_reset_pin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:padding="@dimen/density_24"
+        android:drawableStart="@drawable/change_password_icon"
         android:drawableLeft="@drawable/change_password_icon"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/change_password_icon"
         android:gravity="left|center_vertical"
         android:paddingLeft="20dp"
         android:text="Reset PIN"
         android:textAllCaps="false"
-        android:background="@null"
         android:textColor="@color/grey_600" />
 
     <View
@@ -50,14 +51,14 @@
         android:id="@+id/btn_reset_pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:padding="@dimen/density_24"
+        android:drawableStart="@drawable/change_password_icon"
         android:drawableLeft="@drawable/change_password_icon"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/change_password_icon"
         android:gravity="left|center_vertical"
-        android:paddingLeft="20dp"
         android:text="Reset Password"
         android:textAllCaps="false"
-        android:background="@null"
         android:textColor="@color/grey_600" />
 
     <View
@@ -69,16 +70,17 @@
         android:id="@+id/btn_non_aktif_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_key_nonaktif"
-        android:drawablePadding="5dp"
+        android:padding="@dimen/density_24"
+        android:background="@null"
         android:drawableStart="@drawable/ic_key_nonaktif"
+        android:drawableLeft="@drawable/ic_key_nonaktif"
+        android:drawablePadding="10dp"
         android:drawableTint="@color/red_700"
         android:gravity="left|center_vertical"
-        android:paddingLeft="14dp"
         android:text="NON AKTIF ACCOUNT"
         android:textAllCaps="false"
-        android:background="@null"
         android:textColor="@color/grey_600" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"

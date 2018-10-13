@@ -128,8 +128,8 @@ public class CallFragment extends Fragment implements LoadingData {
         call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), TestActivity.class));
-                Toast.makeText(getActivity(), "TEST", Toast.LENGTH_SHORT).show();
+               /* startActivity(new Intent(getActivity(), TestActivity.class));*/
+                Toast.makeText(getActivity(), "Sedang dalam pengembangan", Toast.LENGTH_SHORT).show();
             }
         });
 

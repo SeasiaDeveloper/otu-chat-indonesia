@@ -256,6 +256,20 @@ public class MainActivity extends BaseLoggableActivity {
                     }
 
                     break;
+
+                case R.id.navigation_pengaturan:
+                    fragment = new SettingTabPaymentFragment();
+
+                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
+                        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
+                        strUserID = user.get(preferenceManager.KEY_USERID);
+                        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
+                    }
+                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
+                        logOutPayment();
+                    }
+
+                    break;
             }
             return loadFragment(fragment);
         }

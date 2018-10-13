@@ -91,12 +91,12 @@ public class PaymentFragment extends Fragment {
     Context context;
     TextView //lblUsername,
             lblSaldo;
-    Button btnDeposit;
+    TextView btnDeposit;
     ImageButton btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
             btnTv, btnPaket, btnSMS, btnEtool, btnWi;
-    ImageButton btnRiwayat, btnTransfer, btnPengaturan;
-    Button btnCallme;
+    ImageButton btnRiwayat, btnTransfer /*btnPengaturan*/;
+    ImageButton btnCallme;
     /* Button btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
              btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
              btnTv, btnPaket, btnCallme, btnSMS, btnEtool, btnWi;*/
@@ -196,10 +196,10 @@ public class PaymentFragment extends Fragment {
         btnTv = view.findViewById(R.id.btnTv);
         btnTelkom = view.findViewById(R.id.btnTelkom);
         btnPaket = view.findViewById(R.id.btnPaket);
-        btnCallme = view.findViewById(R.id.btCallMe);
+        btnCallme = view.findViewById(R.id.btnCallMe);
         btnRiwayat = view.findViewById(R.id.btnRiwayat);
         btnTransfer = view.findViewById(R.id.btnTransfer);
-        btnPengaturan = view.findViewById(R.id.btnPengaturan);
+        //btnPengaturan = view.findViewById(R.id.btnPengaturan);
 
         btnWi = view.findViewById(R.id.btn_wifi_id);
         btnSMS = view.findViewById(R.id.btn_sms);
@@ -221,7 +221,7 @@ public class PaymentFragment extends Fragment {
         btnTelkom.setOnClickListener(new buttonListener());
         btnPaket.setOnClickListener(new buttonListener());
         btnRiwayat.setOnClickListener(new buttonListener());
-        btnPengaturan.setOnClickListener(new buttonListener());
+        //btnPengaturan.setOnClickListener(new buttonListener());
         btnTransfer.setOnClickListener(new buttonListener());
         btnCallme.setOnClickListener(new buttonListener());
 
@@ -310,7 +310,7 @@ public class PaymentFragment extends Fragment {
                 case R.id.btnPGN:
                     startActivity(new Intent(context, TransPGN.class));
                     break;
-                case R.id.btCallMe:
+                case R.id.btnCallMe:
                     startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://eklanku.com/max")));
                     break;
                 case R.id.btn_wifi_id:
@@ -335,11 +335,11 @@ public class PaymentFragment extends Fragment {
                         startActivity(new Intent(context, TransDeposit.class));
                     }
                     break;
-                case R.id.btnPengaturan:
+               /* case R.id.btnPengaturan:
                     if (menuDialog()) {
                         startActivity(new Intent(context, SettingTabPaymentActivity.class));
                     }
-                    break;
+                    break;*/
                 default:
                     Toast.makeText(context, getResources().getString(R.string.error_fungsi), Toast.LENGTH_SHORT).show();
 

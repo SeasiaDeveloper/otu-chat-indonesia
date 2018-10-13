@@ -112,9 +112,9 @@
     <string name="dialog_hint_message">Type a message</string>
     <string name="account_exist">Have a ccount?</string>
     <string name="dialog_no_chats">Untuk memulai obrolan,\n tekan tombol yang ada\ndi bawah layar anda.</string>
+    <string name="dialog_no_call">Untuk memulai panggilan,\n tekan tombol yang ada\ndi bawah layar anda.</string>
     <string name="dialog_no_chats_before_image_string">Untuk memulai obrolan,\n tekan tombol</string>
     <string name="dialog_no_chats_after_image_string">yang ada\ndi bawah layar anda.</string>
-    <string name="dialog_no_call">Untuk memulai panggilan,\n tekan tombol yang ada\ndi bawah layar anda.</string>
     <string name="dialog_no_call_before_image_string">Untuk memulai panggilan,\n tekan tombol</string>
     <string name="dialog_no_call_after_image_string">yang ada\ndi bawah layar anda.</string>
     <string name="dialog_reply">Reply</string>

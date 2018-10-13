@@ -40,11 +40,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawablePadding="10dp"
-                android:drawableTop="@drawable/ic_voucher_game_cherry"
-                android:gravity="center"
-                android:padding="10dp"
+                android:drawablePadding="@dimen/density_8"
                 android:text="@string/dialog_no_call"
+                android:drawableTop="@drawable/ic_tabs_call_otu"
+                android:gravity="center"
+                android:padding="@dimen/density_8"
                 android:textColor="@color/color_no_msg"
                 android:textSize="@dimen/text_size"
                 android:visibility="gone" />
@@ -56,7 +56,7 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_dialogs_new_call"
         style="@style/FabStyle"
-        android:src="@drawable/ic_tabs_chat_otu"
+        android:src="@drawable/ic_tabs_call_otu"
         android:theme="@style/FabStyle"
         app:backgroundTint="@color/white"
         app:borderWidth="2dp" />

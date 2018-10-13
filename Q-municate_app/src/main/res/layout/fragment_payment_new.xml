@@ -21,9 +21,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:paddingRight="10dp">
+                android:paddingLeft="@dimen/density_8"
+                android:paddingTop="@dimen/density_8"
+                android:paddingRight="@dimen/density_8">
 
                 <LinearLayout
                     android:id="@+id/div1"
@@ -63,36 +63,57 @@
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/custom_saldo_top"
                                     android:gravity="center_vertical"
-                                    android:orientation="vertical"
+                                    android:orientation="horizontal"
                                     android:paddingLeft="20dp"
                                     android:paddingTop="5dp"
                                     android:paddingRight="20dp"
                                     android:paddingBottom="5dp">
 
-                                    <TextView
-                                        android:id="@+id/labelSaldo"
-                                        android:layout_width="wrap_content"
+                                    <LinearLayout
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:gravity="center_vertical"
-                                        android:text="Saldo"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text_12"
-                                        android:textStyle="bold" />
+                                        android:layout_weight="2"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/labelSaldo"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:gravity="center_vertical"
+                                            android:text="Saldo"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_12"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tvSaldo"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:layout_alignParentStart="true"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_toStartOf="@+id/btDeposit"
+                                            android:layout_toLeftOf="@+id/btDeposit"
+                                            android:gravity="end|center_vertical"
+                                            android:text="RP 0.00"
+                                            android:textAlignment="textEnd"
+                                            android:textColor="@color/color_yellow_payment_amount"
+                                            android:textSize="@dimen/text_16"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
 
                                     <TextView
-                                        android:id="@+id/tvSaldo"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:layout_alignParentStart="true"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_toStartOf="@+id/btDeposit"
-                                        android:layout_toLeftOf="@+id/btDeposit"
-                                        android:gravity="end|center_vertical"
-                                        android:text="RP 0.00"
-                                        android:textAlignment="textEnd"
-                                        android:textColor="@color/color_yellow_payment_amount"
-                                        android:textSize="@dimen/text_16"
+                                        android:id="@+id/btDeposit"
+                                        android:layout_marginTop="@dimen/density_8"
+                                        android:layout_width="0dp"
+                                        android:layout_marginBottom="@dimen/density_8"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:background="@drawable/button_round_yellow"
+                                        android:gravity="center"
+                                        android:text="ISI SALDO"
+                                        android:textColor="@color/default_text_icon_otu_color"
+                                        android:textSize="@dimen/text_12"
                                         android:textStyle="bold" />
 
                                 </LinearLayout>
@@ -102,37 +123,124 @@
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/custom_saldo_bottom"
                                     android:gravity="center_vertical"
-                                    android:orientation="vertical"
+                                    android:orientation="horizontal"
                                     android:paddingLeft="20dp"
                                     android:paddingTop="5dp"
                                     android:paddingRight="20dp"
                                     android:paddingBottom="5dp">
 
-                                    <TextView
-                                        android:id="@+id/labelBonus"
-                                        android:layout_width="wrap_content"
+                                    <LinearLayout
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:gravity="center_vertical"
-                                        android:text="Bonus"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/text_12"
-                                        android:textStyle="bold" />
+                                        android:layout_weight="2"
+                                        android:orientation="vertical">
 
-                                    <TextView
-                                        android:id="@+id/tvBonus"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:layout_alignParentStart="true"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_toStartOf="@+id/btDeposit"
-                                        android:layout_toLeftOf="@+id/btDeposit"
-                                        android:gravity="end|center_vertical"
-                                        android:text="0.00"
-                                        android:textAlignment="textEnd"
-                                        android:textColor="@color/color_yellow_payment_amount"
-                                        android:textSize="@dimen/text_12"
-                                        android:textStyle="bold" />
+                                        <TextView
+                                            android:id="@+id/labelBonus"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_vertical"
+                                            android:gravity="center_vertical"
+                                            android:text="Bonus"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_12"
+                                            android:textStyle="bold" />
+
+                                        <TextView
+                                            android:id="@+id/tvBonus"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:gravity="end|center_vertical"
+                                            android:text="0.00"
+                                            android:textAlignment="textEnd"
+                                            android:textColor="@color/color_yellow_payment_amount"
+                                            android:textSize="@dimen/text_12"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <ImageButton
+                                            android:id="@+id/btnTransfer"
+                                            android:layout_width="@dimen/density_24"
+                                            android:layout_height="@dimen/density_24"
+                                            android:layout_marginBottom="@dimen/density_4"
+                                            android:background="@null"
+                                            android:scaleType="centerInside"
+                                            android:src="@drawable/ic_transfer_" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="TRANSFER"
+                                            android:textAlignment="center"
+                                            android:textAllCaps="true"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_8"
+                                            android:textStyle="bold" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <ImageButton
+                                            android:id="@+id/btnRiwayat"
+                                            android:layout_width="@dimen/density_24"
+                                            android:layout_height="@dimen/density_24"
+                                            android:layout_marginBottom="@dimen/density_4"
+                                            android:background="@null"
+                                            android:scaleType="centerInside"
+                                            android:src="@drawable/ic_riwayat_" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="RIWAYAT"
+                                            android:textAlignment="center"
+                                            android:textAllCaps="true"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_8"
+                                            android:textStyle="bold" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <ImageButton
+                                            android:id="@+id/btnCallMe"
+                                            android:layout_width="@dimen/density_24"
+                                            android:layout_height="@dimen/density_24"
+                                            android:layout_marginBottom="@dimen/density_4"
+                                            android:background="@null"
+                                            android:scaleType="centerInside"
+                                            android:src="@drawable/ic_eklankumax_" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="EKLANKUMAX"
+                                            android:textAlignment="center"
+                                            android:textAllCaps="true"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/text_8"
+                                            android:textStyle="bold" />
+
+                                    </LinearLayout>
 
                                 </LinearLayout>
 
@@ -150,7 +258,7 @@
 
                             </LinearLayout>
 
-                            <RelativeLayout
+                            <!--<RelativeLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -170,22 +278,21 @@
                                     android:textColor="@color/default_text_icon_otu_color"
                                     android:textSize="@dimen/text_12"
                                     android:textStyle="bold" />
-                            </RelativeLayout>
+                            </RelativeLayout>-->
                         </FrameLayout>
 
                     </android.support.v7.widget.LinearLayoutCompat>
 
                     <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/density_8"
-                        android:layout_marginBottom="@dimen/density_8"
-                        android:layout_height="wrap_content">
+                        android:layout_marginBottom="@dimen/density_8">
 
                         <com.yyydjk.library.BannerLayout
                             android:id="@+id/bannerLayout"
                             android:layout_width="match_parent"
                             android:layout_height="125dp"
-
                             app:autoPlayDuration="4000"
                             app:scrollDuration="1000" />
 
@@ -1041,7 +1148,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -1054,71 +1162,71 @@
             android:paddingBottom="@dimen/density_4"
             android:shadowColor="@color/colorTextOtuDark">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+            <!-- <LinearLayout
+                 android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="1"
+                 android:gravity="center"
+                 android:orientation="vertical">
 
 
-                <ImageButton
-                    android:id="@+id/btnRiwayat"
-                    android:layout_width="@dimen/density_30"
-                    android:layout_height="@dimen/density_30"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/density_4"
-                    android:background="@null"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_green_riwayat" />
+                 <ImageButton
+                     android:id="@+id/btnRiwayat"
+                     android:layout_width="@dimen/density_30"
+                     android:layout_height="@dimen/density_30"
+                     android:layout_centerHorizontal="true"
+                     android:layout_marginBottom="@dimen/density_4"
+                     android:background="@null"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/ic_green_riwayat" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btnPulsa"
-                    android:layout_centerHorizontal="true"
-                    android:text="RIWAYAT"
-                    android:textAlignment="center"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorTextOtuDark"
-                    android:textSize="@dimen/text_10"
-                    android:textStyle="bold" />
+                 <TextView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@id/btnPulsa"
+                     android:layout_centerHorizontal="true"
+                     android:text="RIWAYAT"
+                     android:textAlignment="center"
+                     android:textAllCaps="true"
+                     android:textColor="@color/colorTextOtuDark"
+                     android:textSize="@dimen/text_10"
+                     android:textStyle="bold" />
 
-            </LinearLayout>
+             </LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+            <!-- <LinearLayout
+                 android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="1"
+                 android:gravity="center"
+                 android:orientation="vertical">
 
 
-                <ImageButton
-                    android:id="@+id/btnTransfer"
-                    android:layout_width="@dimen/density_30"
-                    android:layout_height="@dimen/density_30"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/density_4"
-                    android:background="@null"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_otu_transfer" />
+                 <ImageButton
+                     android:id="@+id/btnTransfer"
+                     android:layout_width="@dimen/density_30"
+                     android:layout_height="@dimen/density_30"
+                     android:layout_centerHorizontal="true"
+                     android:layout_marginBottom="@dimen/density_4"
+                     android:background="@null"
+                     android:scaleType="centerInside"
+                     android:src="@drawable/ic_otu_transfer" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/btnPulsa"
-                    android:layout_centerHorizontal="true"
-                    android:text="TRANSFER"
-                    android:textAlignment="center"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorTextOtuDark"
-                    android:textSize="@dimen/text_10"
-                    android:textStyle="bold" />
+                 <TextView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_below="@id/btnPulsa"
+                     android:layout_centerHorizontal="true"
+                     android:text="TRANSFER"
+                     android:textAlignment="center"
+                     android:textAllCaps="true"
+                     android:textColor="@color/colorTextOtuDark"
+                     android:textSize="@dimen/text_10"
+                     android:textStyle="bold" />
 
-            </LinearLayout>
+             </LinearLayout>-->
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -1148,22 +1256,22 @@
                     android:textSize="@dimen/text_10"
                     android:textStyle="bold" />
 
-            </LinearLayout>
+            </LinearLayout>-->
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btCallMe"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginLeft="@dimen/density_8"
-            android:layout_marginTop="@dimen/density_8"
-            android:layout_marginRight="@dimen/density_8"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/icon_button_light_gray_shadow"
-            android:shadowColor="@color/colorTextOtuDark"
-            android:text="Semua Bisa Gratis !"
-            android:textColor="@color/default_text_icon_otu_color" />
+        <!-- <Button
+             android:id="@+id/btCallMe"
+             android:layout_width="match_parent"
+             android:layout_height="30dp"
+             android:layout_marginLeft="@dimen/density_8"
+             android:layout_marginTop="@dimen/density_8"
+             android:layout_marginRight="@dimen/density_8"
+             android:layout_marginBottom="12dp"
+             android:background="@drawable/icon_button_light_gray_shadow"
+             android:shadowColor="@color/colorTextOtuDark"
+             android:text="Semua Bisa Gratis !"
+             android:textColor="@color/default_text_icon_otu_color" />-->
 
     </LinearLayout>
 
