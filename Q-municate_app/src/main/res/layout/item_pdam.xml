@@ -1,7 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:padding="@dimen/density_8"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvId"
@@ -15,9 +16,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
-        android:layoutDirection="ltr"
         android:padding="@dimen/density_8"
         android:paddingLeft="2dp"
-        android:singleLine="true"
-        android:text="NAMA" />
-</LinearLayout>
+        android:text="NAMA"
+        android:singleLine="true"/>
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/density_4"
+        android:layout_marginEnd="@dimen/density_4"
+        android:text="Pilih"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/rounded_shape_payment"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:focusable="false"
+        android:clickable="false"
+        android:focusableInTouchMode="false"/>
+
+
+
+</RelativeLayout>

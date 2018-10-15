@@ -181,10 +181,10 @@ public class CallFragment extends Fragment implements LoadingData {
         String textAfterImage = getString(R.string.dialog_no_call_after_image_string);
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(textBeforeImage + " ").append(" ");
-        builder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.default_text_icon_otu_color)), 14, 22, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.default_text_icon_otu_color)), 14, 23, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        Drawable chat = getResources().getDrawable(R.drawable.ic_small_chat);
-        chat.setBounds(0, 0, 40, 30);
+        Drawable chat = getResources().getDrawable(R.drawable.ic_tabs_call_otu);
+        chat.setBounds(0, 0, 27, 27);
         builder.setSpan(new ImageSpan(chat, ImageSpan.ALIGN_BASELINE),
                 builder.length() - 1, builder.length(), 0);
         builder.append(" " + textAfterImage);
