@@ -7,12 +7,33 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.activities.main.MainActivity">
 
-    <RelativeLayout
-        android:id="@+id/container"
-        app:layout_constraintTop_toTopOf="@+id/navigation"
+    <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?actionBarSize" />
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.yyydjk.library.BannerLayout
+                android:id="@+id/bannerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                app:autoPlayDuration="4000"
+                app:scrollDuration="1000" />
+
+            <RelativeLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="?actionBarSize" />
+
+        </LinearLayout>
+
+    </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

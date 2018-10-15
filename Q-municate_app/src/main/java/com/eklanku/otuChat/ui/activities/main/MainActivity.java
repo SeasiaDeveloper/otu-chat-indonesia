@@ -43,7 +43,12 @@ import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.google.firebase.auth.FirebaseAuth;
+import com.nineoldandroids.view.ViewHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.quickblox.chat.model.QBChatDialog;
@@ -124,7 +129,7 @@ import com.quickblox.core.request.QBPagedRequestBuilder;
 import com.quickblox.users.QBUsers;
 import com.quickblox.users.model.QBUser;
 
-public class MainActivity extends BaseLoggableActivity {
+public class MainActivity extends BaseLoggableActivity implements ObservableScrollViewCallbacks {
 
     @Bind(R.id.bannerLayout)
     BannerLayout bannerSlider;
@@ -162,6 +167,7 @@ public class MainActivity extends BaseLoggableActivity {
     String strApIUse = "OTU";
 
     private static String[] banner_promo;
+    BannerLayout bannerLayout;
 
    /* boolean isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
     String firstLaunch = Application.getFirstLaunch(getApplicationContext());
@@ -174,6 +180,11 @@ public class MainActivity extends BaseLoggableActivity {
 
     private static final int REQUEST_READ_PHONE_STATE = 0;
     boolean doubleBackToExitPressedOnce = false;
+
+    private View mImageView;
+    private View mToolbarView;
+    private ObservableScrollView mScrollView;
+    private int mParallaxImageHeight;
 
     private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -303,13 +314,21 @@ public class MainActivity extends BaseLoggableActivity {
 
         Activity activity = this;
 
-       /* if (!activity.isFinishing()) {
-            loadBanner();
-        }*/
 
 
         addDialogsAction();
         openPushDialogIfPossible();
+
+        mToolbarView = findViewById(R.id.toolbar_view);
+
+        mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
+        mScrollView.setScrollViewCallbacks(this);
+        mParallaxImageHeight = getResources().getDimensionPixelSize(R.dimen.density_200);
+
+
+        if (!activity.isFinishing()) {
+            loadBanner();
+        }
 
         /*tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewPager);
@@ -373,6 +392,28 @@ public class MainActivity extends BaseLoggableActivity {
         loadFragment(new DialogsListFragment());
 
         mainActivity = this;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        onScrollChanged(mScrollView.getCurrentScrollY(), false, false);
+    }
+
+    @Override
+    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+        int baseColor = getResources().getColor(R.color.primary);
+        float alpha = Math.min(1, (float) scrollY / mParallaxImageHeight);
+        mToolbarView.setBackgroundColor(ScrollUtils.getColorWithAlpha(alpha, baseColor));
+        ViewHelper.setTranslationY(bannerSlider, scrollY / 2);
+    }
+
+    @Override
+    public void onDownMotionEvent() {
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
     }
 
     private boolean loadFragment(Fragment fragment) {

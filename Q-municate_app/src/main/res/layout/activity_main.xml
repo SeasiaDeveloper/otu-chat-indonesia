@@ -41,13 +41,13 @@
         android:layout_height="wrap_content"
         android:background="@color/bg_main" />
 
-    <com.yyydjk.library.BannerLayout
+   <!-- <com.yyydjk.library.BannerLayout
         android:id="@+id/bannerLayout"
         android:layout_width="match_parent"
         android:layout_height="125dp"
         android:visibility="gone"
         app:autoPlayDuration="4000"
-        app:scrollDuration="1000" />
+        app:scrollDuration="1000" />-->
 
     <FrameLayout
         android:layout_width="match_parent"
