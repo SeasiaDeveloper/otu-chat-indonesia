@@ -4,11 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.yyydjk.library.BannerLayout
-        android:id="@+id/bannerLayout"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="125dp"
-        app:autoPlayDuration="4000"
-        app:scrollDuration="1000" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/density_4"
+        android:layout_marginLeft="@dimen/density_4"
+        android:layout_marginTop="@dimen/density_4"
+        android:layout_marginEnd="@dimen/density_4"
+        android:layout_marginRight="@dimen/density_4"
+        android:layout_marginBottom="@dimen/density_4"
+        app:cardCornerRadius="@dimen/density_4">
+
+        <com.yyydjk.library.BannerLayout
+            android:id="@+id/bannerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            app:autoPlayDuration="4000"
+            app:scrollDuration="1000" />
+
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>
