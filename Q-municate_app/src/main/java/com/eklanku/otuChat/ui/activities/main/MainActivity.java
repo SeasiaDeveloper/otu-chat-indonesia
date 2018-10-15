@@ -227,9 +227,9 @@ public class MainActivity extends BaseLoggableActivity {
                         strUserID = user.get(preferenceManager.KEY_USERID);
                         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
                     }
-                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-                        logOutPayment();
-                    }
+//                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
+//                        logOutPayment();
+//                    }
                     break;
                 case R.id.navigation_call:
                     fragment = new CallFragment();
@@ -239,9 +239,9 @@ public class MainActivity extends BaseLoggableActivity {
                         strUserID = user.get(preferenceManager.KEY_USERID);
                         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
                     }
-                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
+                   /* if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
                         logOutPayment();
-                    }
+                    }*/
 
                     break;
                 case R.id.navigation_payment:
@@ -265,9 +265,9 @@ public class MainActivity extends BaseLoggableActivity {
                         strUserID = user.get(preferenceManager.KEY_USERID);
                         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
                     }
-                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
+                    /*if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
                         logOutPayment();
-                    }
+                    }*/
 
                     break;
             }
