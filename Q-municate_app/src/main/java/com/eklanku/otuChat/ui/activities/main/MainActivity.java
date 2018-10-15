@@ -257,7 +257,7 @@ public class MainActivity extends BaseLoggableActivity {
 
                     break;
 
-                case R.id.navigation_pengaturan:
+               /* case R.id.navigation_pengaturan:
                     fragment = new SettingTabPaymentFragment();
 
                     if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
@@ -269,7 +269,7 @@ public class MainActivity extends BaseLoggableActivity {
                         logOutPayment();
                     }
 
-                    break;
+                    break;*/
             }
             return loadFragment(fragment);
         }
