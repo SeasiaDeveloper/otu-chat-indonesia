@@ -40,6 +40,7 @@ import com.eklanku.otuChat.ui.fragments.base.BaseLoaderFragment;
 import com.eklanku.otuChat.ui.fragments.search.ContactsFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
 import com.eklanku.otuChat.utils.PreferenceUtil;
+import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBDialogType;
 import com.quickblox.core.helper.CollectionsUtil;
@@ -170,15 +171,15 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         dialogsListView.setAdapter(dialogsListAdapter);
 
         View header = getLayoutInflater().inflate(R.layout.header_banner, null);
-        banner = view.findViewById(R.id.bannerLayout);
+        banner = header.findViewById(R.id.bannerLayout);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
         Activity activity = getActivity();
 
         if (activity != null && isAdded())
-        loadBanner();
+            loadBanner();
 
-        //dialogsListView.addHeaderView(header);
+        dialogsListView.addHeaderView(header);
 
         return view;
     }
@@ -379,6 +380,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     }
 
     private void updateOrAddDialog(String dialogId, boolean updatePosition) {
+
         QBChatDialog qbChatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
         DialogWrapper dialogWrapper = new DialogWrapper(getContext(), dataManager, qbChatDialog);
         if (updateDialogsProcess == State.finished || dialogsListAdapter.getCount() != 0) {
@@ -389,7 +391,11 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
             dialogsListAdapter.moveToFirstPosition(dialogWrapper);
         }
 
-        int start = dialogsListView.getFirstVisiblePosition();
+        int start = dialogsListView.getFirstVisiblePosition() + 1;
+        //Toast.makeText(getActivity(), "AYIK-1 " + start, Toast.LENGTH_SHORT).show();
+        //start -= dialogsListView.getHeaderViewsCount();
+        //Toast.makeText(getActivity(), "AYIK-2 " + start, Toast.LENGTH_SHORT).show();
+        Log.d("AYIK", "ayik:chats->" + dialogsListView.getLastVisiblePosition() + " " + dialogsListView.getFirstVisiblePosition());
         for (int i = start, j = dialogsListView.getLastVisiblePosition(); i <= j; i++) {
             DialogWrapper result = (DialogWrapper) dialogsListView.getItemAtPosition(i);
             if (result.getChatDialog().getDialogId().equals(dialogId)) {
@@ -402,6 +408,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
     @OnItemClick(R.id.chats_listview)
     void startChat(int position) {
+        position -= dialogsListView.getHeaderViewsCount();
         QBChatDialog chatDialog = dialogsListAdapter.getItem(position).getChatDialog();
 
         if (!baseActivity.checkNetworkAvailableWithError() && isFirstOpeningDialog(chatDialog.getDialogId())) {
