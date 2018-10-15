@@ -18,18 +18,28 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.yyydjk.library.BannerLayout
-                android:id="@+id/bannerLayout"
+            <android.support.v7.widget.CardView
+                android:id="@+id/cv_main"
                 android:layout_width="match_parent"
-                android:layout_height="125dp"
-                app:autoPlayDuration="4000"
-                app:scrollDuration="1000" />
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/density_4"
+                app:cardCornerRadius="@dimen/density_4">
+
+                <com.yyydjk.library.BannerLayout
+                    android:id="@+id/bannerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="125dp"
+                    app:autoPlayDuration="4000"
+                    app:scrollDuration="1000" />
+
+            </android.support.v7.widget.CardView>
 
             <RelativeLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="?actionBarSize" />
+
 
         </LinearLayout>
 

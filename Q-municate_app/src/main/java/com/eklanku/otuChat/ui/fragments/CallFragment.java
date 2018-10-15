@@ -113,7 +113,7 @@ public class CallFragment extends Fragment implements LoadingData {
         frameLayoutEmpty.setVisibility(View.VISIBLE);
         emptyListTextView.setVisibility(View.VISIBLE);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-        loadBanner();
+        //loadBanner();
         setEmptyMessage();
         // Inflate the layout for this fragment
         //setHasOptionsMenu(true);

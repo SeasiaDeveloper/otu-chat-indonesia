@@ -154,8 +154,8 @@ public class PaymentFragment extends Fragment {
 
         Activity activity = getActivity();
 
-        if (activity != null && isAdded())
-            loadBanner();
+        /*if (activity != null && isAdded())
+            loadBanner();*/
 
         return mView;
     }

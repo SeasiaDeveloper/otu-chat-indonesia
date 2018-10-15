@@ -21,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -168,6 +169,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     private static String[] banner_promo;
     BannerLayout bannerLayout;
+    CardView cvMain;
 
    /* boolean isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
     String firstLaunch = Application.getFirstLaunch(getApplicationContext());
@@ -320,6 +322,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         openPushDialogIfPossible();
 
         mToolbarView = findViewById(R.id.toolbar_view);
+        cvMain = findViewById(R.id.cv_main);
 
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
         mScrollView.setScrollViewCallbacks(this);
@@ -405,7 +408,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         int baseColor = getResources().getColor(R.color.primary);
         float alpha = Math.min(1, (float) scrollY / mParallaxImageHeight);
         mToolbarView.setBackgroundColor(ScrollUtils.getColorWithAlpha(alpha, baseColor));
-        ViewHelper.setTranslationY(bannerSlider, scrollY / 2);
+        ViewHelper.setTranslationY(cvMain, scrollY / 2);
     }
 
     @Override
