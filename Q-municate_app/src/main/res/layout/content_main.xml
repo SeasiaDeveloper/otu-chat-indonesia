@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
+            <!--<android.support.v7.widget.CardView
                 android:id="@+id/cv_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,7 +32,281 @@
                     app:autoPlayDuration="4000"
                     app:scrollDuration="1000" />
 
-            </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView>-->
+
+            <LinearLayout
+                android:id="@+id/layout_"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/laySaldo"
+                    android:layout_marginTop="@dimen/density_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/density_4"
+                    android:paddingLeft="@dimen/density_4"
+                    android:paddingEnd="@dimen/density_4"
+                    android:paddingRight="@dimen/density_4">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/custom_saldo_top"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingLeft="20dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="20dp"
+                                android:paddingBottom="5dp">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/labelSaldo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:gravity="center_vertical"
+                                        android:text="Saldo"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text_12"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvSaldo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_toStartOf="@+id/btDeposit"
+                                        android:layout_toLeftOf="@+id/btDeposit"
+                                        android:gravity="end|center_vertical"
+                                        android:text="RP 0.00"
+                                        android:textAlignment="textEnd"
+                                        android:textColor="@color/color_yellow_payment_amount"
+                                        android:textSize="@dimen/text_16"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/btDeposit"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/density_8"
+                                    android:layout_marginBottom="@dimen/density_8"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/button_round_yellow"
+                                    android:gravity="center"
+                                    android:text="ISI SALDO"
+                                    android:textColor="@color/default_text_icon_otu_color"
+                                    android:textSize="@dimen/text_12"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/custom_saldo_bottom"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingLeft="20dp"
+                                android:paddingTop="5dp"
+                                android:paddingRight="20dp"
+                                android:paddingBottom="5dp">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/labelBonus"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:gravity="center_vertical"
+                                        android:text="Bonus"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text_12"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvBonus"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:gravity="end|center_vertical"
+                                        android:text="0.00"
+                                        android:textAlignment="textEnd"
+                                        android:textColor="@color/color_yellow_payment_amount"
+                                        android:textSize="@dimen/text_12"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <ImageButton
+                                        android:id="@+id/btnTransfer"
+                                        android:layout_width="@dimen/density_24"
+                                        android:layout_height="@dimen/density_24"
+                                        android:layout_marginBottom="@dimen/density_4"
+                                        android:background="@null"
+                                        android:scaleType="centerInside"
+                                        android:src="@drawable/ic_transfer_" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="TRANSFER"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text_8"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <ImageButton
+                                        android:id="@+id/btnRiwayat"
+                                        android:layout_width="@dimen/density_24"
+                                        android:layout_height="@dimen/density_24"
+                                        android:layout_marginBottom="@dimen/density_4"
+                                        android:background="@null"
+                                        android:scaleType="centerInside"
+                                        android:src="@drawable/ic_riwayat_" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="RIWAYAT"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text_8"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <ImageButton
+                                        android:id="@+id/btnCallMe"
+                                        android:layout_width="@dimen/density_24"
+                                        android:layout_height="@dimen/density_24"
+                                        android:layout_marginBottom="@dimen/density_4"
+                                        android:background="@null"
+                                        android:scaleType="centerInside"
+                                        android:src="@drawable/ic_eklankumax_" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="EKLANKUMAX"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/text_8"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <android.support.v7.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:background="@drawable/bg_payment_light_green_round"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingLeft="20dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="20dp"
+                                android:paddingBottom="10dp"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+                        <!--<RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center_vertical">
+
+                            <Button
+                                android:id="@+id/btDeposit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginLeft="5dp"
+                                android:background="@drawable/button_round_yellow"
+                                android:text="Isi Saldo"
+                                android:textColor="@color/default_text_icon_otu_color"
+                                android:textSize="@dimen/text_12"
+                                android:textStyle="bold" />
+                        </RelativeLayout>-->
+                    </FrameLayout>
+
+                </LinearLayout>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/density_4"
+                    android:layout_marginBottom="@dimen/density_4"
+                    app:cardCornerRadius="@dimen/density_4">
+
+                    <com.yyydjk.library.BannerLayout
+                        android:id="@+id/bannerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="125dp"
+                        app:autoPlayDuration="4000"
+                        app:scrollDuration="1000" />
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/container"

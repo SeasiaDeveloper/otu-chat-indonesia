@@ -90,7 +90,7 @@ import java.util.Locale;
 public class PaymentFragment extends Fragment {
     Context context;
     TextView //lblUsername,
-            lblSaldo;
+            lblSaldo, lblSaldoMain;
     TextView btnDeposit;
     ImageButton btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
@@ -141,6 +141,43 @@ public class PaymentFragment extends Fragment {
         initializeResources(mView);
         ButterKnife.bind(this, mView);
 
+        lblSaldoMain = getActivity().findViewById(R.id.tvSaldo);
+        btnDeposit = getActivity().findViewById(R.id.btDeposit);
+        btnCallme = getActivity().findViewById(R.id.btnCallMe);
+        btnRiwayat = getActivity().findViewById(R.id.btnRiwayat);
+        btnTransfer = getActivity().findViewById(R.id.btnTransfer);
+
+        btnDeposit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context, TopupOrder.class));
+            }
+        });
+
+        btnCallme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://eklanku.com/max")));
+            }
+        });
+        btnRiwayat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (menuDialog()) {
+                    startActivity(new Intent(getActivity(), RiwayatActivity.class));
+                }
+            }
+        });
+        btnTransfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (menuDialog()) {
+                    startActivity(new Intent(context, TransDeposit.class));
+                }
+            }
+        });
+        //textview.setText("text");
+
         TextView txt1 = mView.findViewById(R.id.txt1);
         txt1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,7 +219,7 @@ public class PaymentFragment extends Fragment {
     private void initializeResources(View view) {
         // lblUsername = (TextView) view.findViewById(R.id.lblPaymentUser);
         lblSaldo = (TextView) view.findViewById(R.id.tvSaldo);
-        btnDeposit = view.findViewById(R.id.btDeposit);
+
         btnMultiFinance = view.findViewById(R.id.btnMultiFinance);
         btnKartuKredit = view.findViewById(R.id.btnKartuKredit);
         btnAsuransi = view.findViewById(R.id.btnAsuransi);
@@ -196,9 +233,6 @@ public class PaymentFragment extends Fragment {
         btnTv = view.findViewById(R.id.btnTv);
         btnTelkom = view.findViewById(R.id.btnTelkom);
         btnPaket = view.findViewById(R.id.btnPaket);
-        btnCallme = view.findViewById(R.id.btnCallMe);
-        btnRiwayat = view.findViewById(R.id.btnRiwayat);
-        btnTransfer = view.findViewById(R.id.btnTransfer);
         //btnPengaturan = view.findViewById(R.id.btnPengaturan);
 
         btnWi = view.findViewById(R.id.btn_wifi_id);
@@ -206,7 +240,7 @@ public class PaymentFragment extends Fragment {
         btnEtool = view.findViewById(R.id.btn_etool);
         btnPajak = view.findViewById(R.id.btnPajak);
 
-        btnDeposit.setOnClickListener(new buttonListener());
+        //btnDeposit.setOnClickListener(new buttonListener());
         btnMultiFinance.setOnClickListener(new buttonListener());
         btnKartuKredit.setOnClickListener(new buttonListener());
         btnAsuransi.setOnClickListener(new buttonListener());
@@ -220,10 +254,10 @@ public class PaymentFragment extends Fragment {
         btnTv.setOnClickListener(new buttonListener());
         btnTelkom.setOnClickListener(new buttonListener());
         btnPaket.setOnClickListener(new buttonListener());
-        btnRiwayat.setOnClickListener(new buttonListener());
+        //btnRiwayat.setOnClickListener(new buttonListener());
         //btnPengaturan.setOnClickListener(new buttonListener());
-        btnTransfer.setOnClickListener(new buttonListener());
-        btnCallme.setOnClickListener(new buttonListener());
+        //btnTransfer.setOnClickListener(new buttonListener());
+        //btnCallme.setOnClickListener(new buttonListener());
 
         btnEtool.setOnClickListener(new buttonListener());
         btnSMS.setOnClickListener(new buttonListener());
@@ -259,9 +293,9 @@ public class PaymentFragment extends Fragment {
             }
 
             switch (v.getId()) {
-                case R.id.btDeposit:
+                /*case R.id.btDeposit:
                     startActivity(new Intent(context, TopupOrder.class));
-                    break;
+                    break;*/
 
                 case R.id.btnPln:
                     startActivity(new Intent(context, TransPln.class));
@@ -310,9 +344,9 @@ public class PaymentFragment extends Fragment {
                 case R.id.btnPGN:
                     startActivity(new Intent(context, TransPGN.class));
                     break;
-                case R.id.btnCallMe:
+               /* case R.id.btnCallMe:
                     startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://eklanku.com/max")));
-                    break;
+                    break;*/
                 case R.id.btn_wifi_id:
                     startActivity(new Intent(context, TransWi.class));
                     break;
@@ -325,16 +359,16 @@ public class PaymentFragment extends Fragment {
                 case R.id.btnPajak:
                     startActivity(new Intent(context, TransPajak.class));
                     break;
-                case R.id.btnRiwayat:
+               /* case R.id.btnRiwayat:
                     if (menuDialog()) {
                         startActivity(new Intent(context, RiwayatActivity.class));
                     }
-                    break;
-                case R.id.btnTransfer:
+                    break;*/
+               /* case R.id.btnTransfer:
                     if (menuDialog()) {
                         startActivity(new Intent(context, TransDeposit.class));
                     }
-                    break;
+                    break;*/
                /* case R.id.btnPengaturan:
                     if (menuDialog()) {
                         startActivity(new Intent(context, SettingTabPaymentActivity.class));
@@ -547,7 +581,7 @@ public class PaymentFragment extends Fragment {
 
                         Log.d("OPPO-1", "onResponse: " + rupiah);
 
-                        lblSaldo.setText(rupiah);
+                        lblSaldoMain.setText(rupiah);
                     } else {
                         Toast.makeText(getActivity(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
                     }

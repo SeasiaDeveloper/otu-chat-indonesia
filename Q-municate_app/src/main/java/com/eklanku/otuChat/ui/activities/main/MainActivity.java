@@ -27,6 +27,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -169,7 +170,9 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     private static String[] banner_promo;
     BannerLayout bannerLayout;
-    CardView cvMain;
+    //CardView cvMain;
+    //public static TextView lblSaldo;
+    LinearLayout layoutCollaps, layoutSaldo;
 
    /* boolean isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
     String firstLaunch = Application.getFirstLaunch(getApplicationContext());
@@ -240,13 +243,17 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         strUserID = user.get(preferenceManager.KEY_USERID);
                         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
                     }
+
 //                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
 //                        logOutPayment();
 //                    }
+
+                    layoutSaldo.setVisibility(View.GONE);
                     break;
                 case R.id.navigation_call:
                     fragment = new CallFragment();
 
+                    layoutSaldo.setVisibility(View.GONE);
                     if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
                         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
                         strUserID = user.get(preferenceManager.KEY_USERID);
@@ -268,9 +275,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         cekMember();
                     }
 
+                    layoutSaldo.setVisibility(View.VISIBLE);
+
                     break;
 
-                case R.id.navigation_pengaturan:
+                /*case R.id.navigation_pengaturan:
                     fragment = new SettingTabPaymentFragment();
 
                     if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
@@ -278,11 +287,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         strUserID = user.get(preferenceManager.KEY_USERID);
                         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
                     }
-                    /*if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
+                    *//*if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
                         logOutPayment();
-                    }*/
-
-                    break;
+                    }*//*
+                    layoutSaldo.setVisibility(View.GONE);
+                    break;*/
             }
             return loadFragment(fragment);
         }
@@ -294,7 +303,10 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
+        //lblSaldo = (TextView) findViewById(R.id.tvSaldo);
+        layoutCollaps = findViewById(R.id.layout_);
+        layoutSaldo = findViewById(R.id.laySaldo);
+        layoutSaldo.setVisibility(View.GONE);
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -314,23 +326,20 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             loginChat();
         }
 
-        Activity activity = this;
-
-
-
         addDialogsAction();
         openPushDialogIfPossible();
 
         mToolbarView = findViewById(R.id.toolbar_view);
-        cvMain = findViewById(R.id.cv_main);
+        //cvMain = findViewById(R.id.cv_main);
 
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
         mScrollView.setScrollViewCallbacks(this);
         mParallaxImageHeight = getResources().getDimensionPixelSize(R.dimen.density_200);
 
-
+        Activity activity = this;
         if (!activity.isFinishing()) {
             loadBanner();
+            //loadDeposite(strUserID,strAccessToken);
         }
 
         /*tabLayout = findViewById(R.id.tablayout);
@@ -408,7 +417,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         int baseColor = getResources().getColor(R.color.primary);
         float alpha = Math.min(1, (float) scrollY / mParallaxImageHeight);
         mToolbarView.setBackgroundColor(ScrollUtils.getColorWithAlpha(alpha, baseColor));
-        ViewHelper.setTranslationY(cvMain, scrollY / 2);
+        ViewHelper.setTranslationY(layoutCollaps, scrollY / 2);
     }
 
     @Override
@@ -1095,6 +1104,49 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                     }
                 });
         builder.show();
+    }
+
+    public void loadDeposite(String strUserID, String strAccessToken) {
+        //Log.d("AYIK", "OnLoad userID " + strUserID + " accessToken " + strAccessToken);
+        Call<DataDeposit> userCall = mApiInterfacePayment.getSaldo(strUserID, strApIUse, strAccessToken);
+        userCall.enqueue(new Callback<DataDeposit>() {
+            @Override
+            public void onResponse(Call<DataDeposit> call, Response<DataDeposit> response) {
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String error = response.body().getRespMessage();
+                    String balance = response.body().getBalance();
+                    Log.d("OPPO-1", "onResponse: " + balance);
+
+                    if (status.equals("SUCCESS")) {
+                        Double total = 0.0d;
+                        try {
+                            if (balance != null && !balance.trim().isEmpty())
+                                total = Double.valueOf(balance);
+                        } catch (Exception e) {
+                            total = 0.0d;
+                        }
+                        Locale localeID = new Locale("in", "ID");
+                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
+                        String rupiah = format.format(total);
+
+                        Log.d("OPPO-1", "onResponse: " + rupiah);
+
+                        //lblSaldo.setText(rupiah);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataDeposit> call, Throwable t) {
+                Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
   /*  @Override
