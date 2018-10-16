@@ -267,7 +267,7 @@ public class MainActivity extends BaseLoggableActivity {
                     }
                     /*if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
                         logOutPayment();
-                    }*/
+                    }
 
                     break;*/
             }
