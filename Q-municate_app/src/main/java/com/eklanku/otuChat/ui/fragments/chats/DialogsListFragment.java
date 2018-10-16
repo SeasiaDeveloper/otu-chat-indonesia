@@ -2,13 +2,18 @@ package com.eklanku.otuChat.ui.fragments.chats;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.MotionEventCompat;
+import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -16,20 +21,27 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -41,6 +53,7 @@ import com.eklanku.otuChat.ui.fragments.search.ContactsFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBDialogType;
 import com.quickblox.core.helper.CollectionsUtil;
@@ -161,6 +174,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         addObservers();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
@@ -174,15 +188,49 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         banner = header.findViewById(R.id.bannerLayout);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
-        Activity activity = getActivity();
+        //Activity activity = getActivity();
+        /*if (activity != null && isAdded())
+            loadBanner();*/
 
-        if (activity != null && isAdded())
-            loadBanner();
+        //dialogsListView.addHeaderView(header, null, false);
 
-        dialogsListView.addHeaderView(header);
+       /* Animation slide_down = AnimationUtils.loadAnimation(getActivity(),
+                R.anim.slide_down);
+
+        Animation slide_up = AnimationUtils.loadAnimation(getActivity(),
+                R.anim.slide_up);
+
+
+        dialogsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int mLastFirstVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                if (mLastFirstVisibleItem < firstVisibleItem) {
+                    Log.i("AYIK SCROLLING DOWN", "TRUE");
+                    banner.setVisibility(View.VISIBLE);
+                    //banner.startAnimation(slide_down);
+                }
+                if (mLastFirstVisibleItem > firstVisibleItem) {
+                    Log.i("AYIK SCROLLING UP", "TRUE");
+                    banner.setVisibility(View.GONE);
+                    //banner.startAnimation(slide_up);
+                }
+                mLastFirstVisibleItem = firstVisibleItem;
+
+            }
+        });*/
 
         return view;
     }
+
 
     @Override
     public void initActionBar() {
@@ -391,11 +439,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
             dialogsListAdapter.moveToFirstPosition(dialogWrapper);
         }
 
-        int start = dialogsListView.getFirstVisiblePosition() + 1;
-        //Toast.makeText(getActivity(), "AYIK-1 " + start, Toast.LENGTH_SHORT).show();
-        //start -= dialogsListView.getHeaderViewsCount();
-        //Toast.makeText(getActivity(), "AYIK-2 " + start, Toast.LENGTH_SHORT).show();
-        Log.d("AYIK", "ayik:chats->" + dialogsListView.getLastVisiblePosition() + " " + dialogsListView.getFirstVisiblePosition());
+        int start = dialogsListView.getFirstVisiblePosition();
         for (int i = start, j = dialogsListView.getLastVisiblePosition(); i <= j; i++) {
             DialogWrapper result = (DialogWrapper) dialogsListView.getItemAtPosition(i);
             if (result.getChatDialog().getDialogId().equals(dialogId)) {
@@ -408,8 +452,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
     @OnItemClick(R.id.chats_listview)
     void startChat(int position) {
-        position -= dialogsListView.getHeaderViewsCount();
-        QBChatDialog chatDialog = dialogsListAdapter.getItem(position).getChatDialog();
+        QBChatDialog chatDialog = dialogsListAdapter.getItem(position - 1).getChatDialog();
 
         if (!baseActivity.checkNetworkAvailableWithError() && isFirstOpeningDialog(chatDialog.getDialogId())) {
             return;
@@ -821,6 +864,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
                 }
             }
         }
+
     }
 
     private <T> T getObjFromBundle(Bundle data) {
