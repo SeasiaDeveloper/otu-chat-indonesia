@@ -25,6 +25,7 @@ import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.adapters.base.BaseListAdapter;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
+import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.quickblox.q_municate_core.models.DialogWrapper;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_user_service.model.QMUser;

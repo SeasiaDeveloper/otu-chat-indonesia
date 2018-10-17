@@ -40,11 +40,11 @@ import android.widget.TextView;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
-=======
+=======*/
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
->>>>>>> origin/feature/migration
+//>>>>>>> origin/feature/migration
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -55,17 +55,17 @@ import com.eklanku.otuChat.ui.fragments.base.BaseLoaderFragment;
 import com.eklanku.otuChat.ui.fragments.search.ContactsFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
 import com.eklanku.otuChat.utils.PreferenceUtil;
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.chat.model.QBDialogType;
 import com.quickblox.core.helper.CollectionsUtil;
-=======
+=======*/
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.connectycube.core.helper.CollectionsUtil;
->>>>>>> origin/feature/migration
+//>>>>>>> origin/feature/migration
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.about.AboutActivity;
 import com.eklanku.otuChat.ui.activities.chats.GroupDialogActivity;
