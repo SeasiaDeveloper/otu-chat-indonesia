@@ -291,12 +291,34 @@
     <style name="OverFlowPayment" parent="@android:style/Widget.Holo.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_chat_overflow</item>
     </style>
+
     <style name="BubbleTextFrame.Left">
         <item name="android:background">@drawable/left_chat_bubble</item>
     </style>
 
     <style name="BubbleTextFrame.Right">
         <item name="android:background">@drawable/bg_chat_right_bubble</item>
+    </style>
+
+    <!--style for right and left text message frame-->
+    <style name="WidgetTextMsgFrame">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/padding_small</item>
+    </style>
+
+    <!--style for right and left Attach message frame-->
+    <style name="ListItemAttachMessage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/padding_small</item>
+    </style>
+
+    <!--style for right and left Audio message frame-->
+    <style name="ListItemAudioMessage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/padding_small</item>
     </style>
 
     <style name="ImageViewAttach.Right">
@@ -356,6 +378,7 @@
         <item name="colorAccent">@color/default_text_icon_otu_color</item>
         <item name="fabSize">normal</item>
     </style>
+
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>

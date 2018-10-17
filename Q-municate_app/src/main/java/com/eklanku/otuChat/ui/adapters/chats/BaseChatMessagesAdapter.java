@@ -12,11 +12,11 @@ import android.widget.TextView;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.quickblox.chat.model.QBChatDialog;
-import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.utils.DateUtils;
 import com.eklanku.otuChat.utils.FileUtils;
+import com.quickblox.chat.model.QBChatDialog;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_core.qb.commands.chat.QBUpdateStatusMessageCommand;
@@ -30,6 +30,8 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+;
 
 
 public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessage> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
@@ -73,6 +75,14 @@ public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessag
         headerTextView.setText(DateUtils.toTodayYesterdayFullMonthDate(combinationMessage.getCreatedDate()));
     }
 
+    private static void updateBubbleChatRetainedPadding(View view, int resourceID) {
+        int bottom = view.getPaddingBottom();
+        int top = view.getPaddingTop();
+        int right = view.getPaddingRight();
+        int left = view.getPaddingLeft();
+        view.setBackgroundResource(resourceID);
+        view.setPadding(left, top, right, bottom);
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -133,21 +143,82 @@ public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessag
     }
 
     @Override
+    protected void onBindViewMsgRightHolder(QBMessagesAdapter.TextMessageHolder holder, CombinationMessage chatMessage, int position) {
+        int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        super.onBindViewMsgRightHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewMsgLeftHolder(QBMessagesAdapter.TextMessageHolder holder, CombinationMessage chatMessage, int position) {
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.left_chat_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        super.onBindViewMsgRightHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewAttachRightHolder(QBMessagesAdapter.ImageAttachHolder holder, CombinationMessage chatMessage, int position) {
+        int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        super.onBindViewAttachRightHolder(holder, chatMessage, position);
+    }
+
+    @Override
     protected void onBindViewAttachLeftHolder(ImageAttachHolder holder, CombinationMessage chatMessage, int position) {
         updateMessageState(chatMessage, chatDialog);
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.left_chat_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewAttachLeftHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewAttachRightAudioHolder(AudioAttachHolder holder, CombinationMessage chatMessage, int position) {
+        updateMessageState(chatMessage, chatDialog);
+        int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        super.onBindViewAttachLeftAudioHolder(holder, chatMessage, position);
     }
 
     @Override
     protected void onBindViewAttachLeftAudioHolder(AudioAttachHolder holder, CombinationMessage chatMessage, int position) {
         updateMessageState(chatMessage, chatDialog);
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.left_chat_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewAttachLeftAudioHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewAttachRightVideoHolder(VideoAttachHolder holder, CombinationMessage chatMessage, int position) {
+        updateMessageState(chatMessage, chatDialog);
+        int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        super.onBindViewAttachLeftVideoHolder(holder, chatMessage, position);
     }
 
     @Override
     protected void onBindViewAttachLeftVideoHolder(VideoAttachHolder holder, CombinationMessage chatMessage, int position) {
         updateMessageState(chatMessage, chatDialog);
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.left_chat_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewAttachLeftVideoHolder(holder, chatMessage, position);
+    }
+
+    private boolean isPreviousMsgIn(int position) {
+        if (position == 0) {
+            return false;
+        }
+        int viewType = getItemViewType(position - 1);
+        return viewType == TYPE_TEXT_LEFT || viewType == TYPE_ATTACH_LEFT || viewType == TYPE_ATTACH_LEFT_AUDIO
+                || viewType == TYPE_ATTACH_LEFT_VIDEO;
+    }
+
+    private boolean isPreviousMsgOut(int position) {
+        if (position == 0) {
+            return false;
+        }
+        int viewType = getItemViewType(position - 1);
+        return viewType == TYPE_TEXT_RIGHT || viewType == TYPE_ATTACH_RIGHT || viewType == TYPE_ATTACH_RIGHT_AUDIO
+                || viewType == TYPE_ATTACH_RIGHT_VIDEO;
     }
 
     public void addAllInBegin(List<CombinationMessage> collection) {
@@ -160,7 +231,7 @@ public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessag
         notifyItemRangeInserted(chatMessages.size() - collection.size(), chatMessages.size());
     }
 
-    public void setList(List <CombinationMessage> collection, boolean notifyDataChanged){
+    public void setList(List<CombinationMessage> collection, boolean notifyDataChanged) {
         chatMessages = collection;
         if (notifyDataChanged) {
             this.notifyDataSetChanged();

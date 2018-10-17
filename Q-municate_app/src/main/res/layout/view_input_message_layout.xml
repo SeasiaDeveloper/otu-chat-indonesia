@@ -71,6 +71,10 @@
                 style="@style/ChatActionButtonStyle"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+<<<<<<< HEAD
+=======
+                android:background="?attr/selectableItemBackgroundBorderless"
+>>>>>>> origin/feature/redesign
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_attach_white" />
 
@@ -79,6 +83,10 @@
                 style="@style/ChatActionButtonStyle"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+<<<<<<< HEAD
+=======
+                android:background="?attr/selectableItemBackgroundBorderless"
+>>>>>>> origin/feature/redesign
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_camera_white" />
 

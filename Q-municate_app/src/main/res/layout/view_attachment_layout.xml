@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MatchWidth"
+    android:layout_gravity="center"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/WrapContent"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_attach_document"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_big"
+            android:layout_marginTop="@dimen/padding_common"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@drawable/bg_ic_document"
+            android:text="@string/dialog_attach_btn_document"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_attach_camera"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_big"
+            android:layout_marginTop="@dimen/padding_common"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@drawable/bg_ic_camera"
+            android:text="@string/dialog_attach_btn_camera"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_attach_gallery"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_big"
+            android:layout_marginTop="@dimen/padding_common"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@drawable/bg_ic_gallery"
+            android:text="@string/dialog_attach_btn_gallery"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/WrapContent"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_attach_audio"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_big"
+            android:layout_marginTop="@dimen/padding_common"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@drawable/bg_ic_audio"
+            android:text="@string/dialog_attach_btn_audio"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_attach_location"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_big"
+            android:layout_marginTop="@dimen/padding_common"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@drawable/bg_ic_location"
+            android:text="@string/dialog_attach_btn_location"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_attach_contact"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_big"
+            android:layout_marginTop="@dimen/padding_common"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@drawable/bg_ic_contact"
+            android:text="@string/dialog_attach_btn_contact"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+</LinearLayout>

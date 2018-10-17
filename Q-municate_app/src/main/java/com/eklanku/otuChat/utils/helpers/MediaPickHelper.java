@@ -26,4 +26,8 @@ public class MediaPickHelper {
     private void showMediaSourcePickerDialog(FragmentManager fm, MediaPickHelperFragment fragment) {
         MediaSourcePickDialogFragment.show(fm,fragment);
     }
+
+    public void pickAnMediaFromActivity(FragmentActivity activity, int requestCode) {
+        MediaPickManager.start(activity, requestCode);
+    }
 }
