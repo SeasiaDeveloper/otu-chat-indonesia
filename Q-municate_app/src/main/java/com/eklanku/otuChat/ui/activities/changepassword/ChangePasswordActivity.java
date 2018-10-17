@@ -22,7 +22,7 @@ import com.quickblox.q_municate_core.qb.commands.chat.QBLogoutAndDestroyChatComm
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import butterknife.Bind;
 import butterknife.OnTextChanged;
@@ -42,7 +42,7 @@ public class ChangePasswordActivity extends BaseLoggableActivity {
     @Bind(R.id.new_password_edittext)
     EditText newPasswordEditText;
 
-    private QBUser qbUser;
+    private ConnectycubeUser connectycubeUser;
     private String oldPasswordText;
 
     public static void start(Context context) {
@@ -112,7 +112,7 @@ public class ChangePasswordActivity extends BaseLoggableActivity {
     private void initFields() {
         title = getString(R.string.change_password_title);
         canPerformLogout.set(false);
-        qbUser = AppSession.getSession().getUser();
+        connectycubeUser = AppSession.getSession().getUser();
     }
 
     private void addActions() {
@@ -144,7 +144,7 @@ public class ChangePasswordActivity extends BaseLoggableActivity {
                         oldPasswordText, newPasswordText)) {
             updatePasswords(oldPasswordText, newPasswordText);
             showProgress();
-            ServiceManager.getInstance().changePasswordUser(qbUser).subscribe(new Subscriber<QMUser>() {
+            ServiceManager.getInstance().changePasswordUser(connectycubeUser).subscribe(new Subscriber<QMUser>() {
                 @Override
                 public void onCompleted() {
 
@@ -173,8 +173,8 @@ public class ChangePasswordActivity extends BaseLoggableActivity {
     }
 
     private void updatePasswords(String oldPasswordText, String newPasswordText) {
-        qbUser.setOldPassword(oldPasswordText);
-        qbUser.setPassword(newPasswordText);
+        connectycubeUser.setOldPassword(oldPasswordText);
+        connectycubeUser.setPassword(newPasswordText);
     }
 
     private void clearFields() {
@@ -186,7 +186,7 @@ public class ChangePasswordActivity extends BaseLoggableActivity {
         newPasswordEditText.setText(ConstsCore.EMPTY_STRING);
     }
 
-    private void saveUserCredentials(QBUser user) {
+    private void saveUserCredentials(ConnectycubeUser user) {
         user.setPassword(newPasswordEditText.getText().toString());
         AppSession.getSession().updateUser(user);
     }

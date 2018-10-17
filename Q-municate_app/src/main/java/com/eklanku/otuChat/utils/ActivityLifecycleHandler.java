@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
-import com.quickblox.auth.model.QBProvider;
-import com.quickblox.auth.session.QBSessionManager;
-import com.quickblox.core.helper.Lo;
-import com.quickblox.chat.QBChatService;
+import com.connectycube.auth.model.ConnectycubeProvider;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
+import com.connectycube.core.helper.Lo;
+import com.connectycube.chat.ConnectycubeChatService;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.utils.helpers.FirebaseAuthHelper;
 import com.quickblox.q_municate_core.models.AppSession;
@@ -44,8 +44,8 @@ public class ActivityLifecycleHandler implements Application.ActivityLifecycleCa
                 boolean networkAvailable = ((BaseActivity) activity).isNetworkAvailable();
                 Log.d(TAG, "networkAvailable" + networkAvailable);
                 if (canLogin && !QBLoginChatCompositeCommand.isRunning()) {
-                    if (QBProvider.FIREBASE_PHONE.equals(QBSessionManager.getInstance().getSessionParameters().getSocialProvider())
-                            && !QBSessionManager.getInstance().isValidActiveSession()){
+                    if (ConnectycubeProvider.FIREBASE_PHONE.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider())
+                            && !ConnectycubeSessionManager.getInstance().isValidActiveSession()){
                         Log.d(TAG, "start refresh Firebase token");
                         new FirebaseAuthHelper(activity).refreshInternalFirebaseToken(new FirebaseAuthHelper.RequestFirebaseIdTokenCallback() {
                             @Override
@@ -109,7 +109,7 @@ public class ActivityLifecycleHandler implements Application.ActivityLifecycleCa
     }
 
     private boolean isLoggedIn() {
-        return QBChatService.getInstance().isLoggedIn();
+        return ConnectycubeChatService.getInstance().isLoggedIn();
     }
 
     public void onActivitySaveInstanceState(Activity activity, Bundle outState) {

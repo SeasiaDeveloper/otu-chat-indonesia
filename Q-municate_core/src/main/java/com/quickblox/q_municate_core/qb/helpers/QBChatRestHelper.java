@@ -3,18 +3,18 @@ package com.quickblox.q_municate_core.qb.helpers;
 import android.content.Context;
 import android.util.Log;
 
-import com.quickblox.auth.QBAuth;
-import com.quickblox.auth.model.QBProvider;
-import com.quickblox.auth.session.QBSessionManager;
-import com.quickblox.chat.QBChatService;
-import com.quickblox.chat.connections.tcp.QBTcpChatConnectionFabric;
-import com.quickblox.chat.connections.tcp.QBTcpConfigurationBuilder;
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.auth.ConnectycubeAuth;
+import com.connectycube.auth.model.ConnectycubeProvider;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
+import com.connectycube.chat.ConnectycubeChatService;
+import com.connectycube.chat.connections.tcp.TcpChatConnectionFabric;
+import com.connectycube.chat.connections.tcp.TcpConfigurationBuilder;
+import com.connectycube.core.EntityCallback;
+import com.connectycube.core.exception.ResponseException;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.SmackException;
@@ -28,7 +28,7 @@ public class QBChatRestHelper extends BaseHelper {
     private static final String TAG = QBChatRestHelper.class.getSimpleName();
     private static final int AUTO_PRESENCE_INTERVAL_IN_SECONDS = 30;
 
-    private QBChatService chatService;
+    private ConnectycubeChatService chatService;
     private ConnectionListener connectionListener = new ChatConnectionListener();
 
     public QBChatRestHelper(Context context) {
@@ -36,28 +36,28 @@ public class QBChatRestHelper extends BaseHelper {
     }
 
     public synchronized void initChatService() throws XMPPException, SmackException {
-        QBChatService.setDefaultPacketReplyTimeout(ConstsCore.DEFAULT_PACKET_REPLY_TIMEOUT);
+        ConnectycubeChatService.setDefaultPacketReplyTimeout(ConstsCore.DEFAULT_PACKET_REPLY_TIMEOUT);
 
-        QBTcpConfigurationBuilder configurationBuilder = new QBTcpConfigurationBuilder()
+        TcpConfigurationBuilder configurationBuilder = new TcpConfigurationBuilder()
                 .setSocketTimeout(0);
 
-        QBChatService.setConnectionFabric(new QBTcpChatConnectionFabric(configurationBuilder));
+        ConnectycubeChatService.setConnectionFabric(new TcpChatConnectionFabric(configurationBuilder));
 
-        chatService = QBChatService.getInstance();
+        chatService = ConnectycubeChatService.getInstance();
 
         chatService.removeConnectionListener(connectionListener);
         chatService.addConnectionListener(connectionListener);
     }
 
-    public synchronized void login(QBUser user) throws XMPPException, IOException, SmackException {
+    public synchronized void login(ConnectycubeUser user) throws XMPPException, IOException, SmackException {
         if (!chatService.isLoggedIn() && user != null) {
-            if (QBProvider.FIREBASE_PHONE.equals(QBSessionManager.getInstance().getSessionParameters().getSocialProvider())
-                    && !QBSessionManager.getInstance().isValidActiveSession()){
+            if (ConnectycubeProvider.FIREBASE_PHONE.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider())
+                    && !ConnectycubeSessionManager.getInstance().isValidActiveSession()){
                 CoreSharedHelper coreSharedHelper = new CoreSharedHelper(context);
                 String currentFirebaseAccessToken = coreSharedHelper.getFirebaseToken();
-                if (!QBSessionManager.getInstance().getSessionParameters().getAccessToken().equals(currentFirebaseAccessToken)) {
-                    QBAuth.createSessionUsingFirebase(coreSharedHelper.getFirebaseProjectId(), currentFirebaseAccessToken).perform();
-                    user.setPassword(QBSessionManager.getInstance().getToken());
+                if (!ConnectycubeSessionManager.getInstance().getSessionParameters().getAccessToken().equals(currentFirebaseAccessToken)) {
+                    ConnectycubeAuth.createSessionUsingFirebase(coreSharedHelper.getFirebaseProjectId(), currentFirebaseAccessToken).perform();
+                    user.setPassword(ConnectycubeSessionManager.getInstance().getToken());
                     AppSession.getSession().updateUser(user);
                 }
             }
@@ -66,7 +66,7 @@ public class QBChatRestHelper extends BaseHelper {
         }
     }
     
-    public synchronized void logout() throws QBResponseException, SmackException.NotConnectedException {
+    public synchronized void logout() throws ResponseException, SmackException.NotConnectedException {
         if (chatService != null) {
             chatService.logout();
         }
@@ -83,10 +83,10 @@ public class QBChatRestHelper extends BaseHelper {
     private void tryReloginToChatUsingNewToken(){
         if (!chatService.isLoggedIn()
                 && chatService.getUser() != null
-                && QBSessionManager.getInstance().getSessionParameters() != null
-                && QBSessionManager.getInstance().getSessionParameters().getSocialProvider() != null){
+                && ConnectycubeSessionManager.getInstance().getSessionParameters() != null
+                && ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider() != null){
 
-            chatService.login(AppSession.getSession().getUser(), (QBEntityCallback) null);
+            chatService.login(AppSession.getSession().getUser(), (EntityCallback) null);
         }
     }
 
@@ -111,7 +111,7 @@ public class QBChatRestHelper extends BaseHelper {
         public void connectionClosedOnError(Exception e) {
             Log.e(TAG, "connectionClosedOnError, error: " + e.getMessage());
             //TODO VT temp solution before test in SDK
-            //need renew user password in QBChatService for user which was logged in
+            //need renew user password in ConnectycubeChatService for user which was logged in
             //via social provider
             tryReloginToChatUsingNewToken();
         }
@@ -130,7 +130,7 @@ public class QBChatRestHelper extends BaseHelper {
         public void reconnectionFailed(Exception error) {
             Log.e(TAG, "reconnectionFailed() " + error.getMessage());
             //TODO VT temp solution before test in SDK
-            //need renew user password in QBChatService for user which was logged in
+            //need renew user password in ConnectycubeChatService for user which was logged in
             //via social provider
             tryReloginToChatUsingNewToken();
         }

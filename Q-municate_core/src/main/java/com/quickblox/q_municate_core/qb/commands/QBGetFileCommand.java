@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.quickblox.content.QBContent;
-import com.quickblox.content.model.QBFile;
+import com.connectycube.storage.ConnectycubeStorage;
+import com.connectycube.storage.model.ConnectycubeFile;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.service.QBService;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
@@ -28,10 +28,10 @@ public class QBGetFileCommand extends ServiceCommand {
     public Bundle perform(Bundle extras) throws Exception {
         Integer fileId = extras.getInt(QBServiceConsts.EXTRA_FILE_ID);
 
-        QBFile qbFile = QBContent.getFile(fileId).perform();
+        ConnectycubeFile connectycubeFile = ConnectycubeStorage.getFile(fileId).perform();
 
         Bundle result = new Bundle();
-        result.putSerializable(QBServiceConsts.EXTRA_FILE, qbFile);
+        result.putSerializable(QBServiceConsts.EXTRA_FILE, connectycubeFile);
 
         return result;
     }

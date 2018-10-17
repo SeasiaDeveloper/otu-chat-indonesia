@@ -7,7 +7,7 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.quickblox.q_municate_user_service.model.QMUserColumns;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -155,7 +155,7 @@ public class QMUserMemoryCache extends Observable implements QMUserCache {
         return result;
     }
 
-    private String getValueByColumn(QBUser user, String column){
+    private String getValueByColumn(ConnectycubeUser user, String column){
         String result = null;
         switch (column){
             case  QMUserColumns.ID:

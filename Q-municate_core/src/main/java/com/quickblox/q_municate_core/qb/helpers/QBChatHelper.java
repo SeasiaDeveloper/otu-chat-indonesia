@@ -8,30 +8,30 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.quickblox.chat.JIDHelper;
-import com.quickblox.chat.QBChatService;
-import com.quickblox.chat.QBRestChatService;
-import com.quickblox.chat.QBSystemMessagesManager;
-import com.quickblox.chat.exception.QBChatException;
-import com.quickblox.chat.listeners.QBChatDialogMessageListener;
-import com.quickblox.chat.listeners.QBChatDialogParticipantListener;
-import com.quickblox.chat.listeners.QBChatDialogTypingListener;
-import com.quickblox.chat.listeners.QBMessageStatusListener;
-import com.quickblox.chat.listeners.QBSystemMessageListener;
-import com.quickblox.chat.model.QBAttachment;
-import com.quickblox.chat.model.QBChatMessage;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
-import com.quickblox.chat.model.QBPresence;
-import com.quickblox.chat.utils.DialogUtils;
-import com.quickblox.content.QBContent;
-import com.quickblox.content.model.QBFile;
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.helper.CollectionsUtil;
-import com.quickblox.core.helper.StringifyArrayList;
-import com.quickblox.core.request.QBRequestGetBuilder;
-import com.quickblox.core.request.QBRequestUpdateBuilder;
+import com.connectycube.chat.JIDHelper;
+import com.connectycube.chat.ConnectycubeChatService;
+import com.connectycube.chat.ConnectycubeRestChatService;
+import com.connectycube.chat.SystemMessagesManager;
+import com.connectycube.chat.exception.ChatException;
+import com.connectycube.chat.listeners.ChatDialogMessageListener;
+import com.connectycube.chat.listeners.ChatDialogParticipantListener;
+import com.connectycube.chat.listeners.ChatDialogTypingListener;
+import com.connectycube.chat.listeners.MessageStatusListener;
+import com.connectycube.chat.listeners.SystemMessageListener;
+import com.connectycube.chat.model.ConnectycubeAttachment;
+import com.connectycube.chat.model.ConnectycubeChatMessage;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
+import com.connectycube.chat.model.ConnectycubePresence;
+import com.connectycube.chat.utils.DialogUtils;
+import com.connectycube.storage.ConnectycubeStorage;
+import com.connectycube.storage.model.ConnectycubeFile;
+import com.connectycube.core.EntityCallback;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.helper.CollectionsUtil;
+import com.connectycube.core.helper.StringifyArrayList;
+import com.connectycube.core.request.RequestGetBuilder;
+import com.connectycube.core.request.RequestUpdateBuilder;
 import com.quickblox.q_municate_core.R;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.CombinationMessage;
@@ -55,7 +55,7 @@ import com.quickblox.q_municate_db.utils.DialogTransformUtils;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import org.jivesoftware.smack.AbstractConnectionListener;
 import org.jivesoftware.smack.ConnectionListener;
@@ -76,18 +76,18 @@ public class QBChatHelper extends BaseThreadPoolHelper{
     private static final String TAG = QBChatHelper.class.getSimpleName();
 
 
-    private QBChatService chatService;
-    private QBUser chatCreator;
-    private QBChatDialog currentDialog;
+    private ConnectycubeChatService chatService;
+    private ConnectycubeUser chatCreator;
+    private ConnectycubeChatDialog currentDialog;
     protected DataManager dataManager;
     private TypingListener typingListener;
     private PrivateChatMessagesStatusListener privateChatMessagesStatusListener;
     private List<QBNotificationChatListener> notificationChatListeners = new CopyOnWriteArrayList<>();
     private final AllChatMessagesListener allChatMessagesListener;
-    private final SystemMessageListener systemMessagesListener;
-    private QBSystemMessagesManager systemMessagesManager;
-    private List<QBChatDialog> groupDialogsList;
-    private QBChatDialogParticipantListener participantListener;
+    private final QMSystemMessageListener systemMessagesListener;
+    private SystemMessagesManager systemMessagesManager;
+    private List<ConnectycubeChatDialog> groupDialogsList;
+    private ChatDialogParticipantListener participantListener;
     private final ConnectionListener chatConnectionListener;
 
 
@@ -95,7 +95,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         super(context);
         participantListener = new ParticipantListener();
         allChatMessagesListener = new AllChatMessagesListener();
-        systemMessagesListener = new SystemMessageListener();
+        systemMessagesListener = new QMSystemMessageListener();
         typingListener = new TypingListener();
         privateChatMessagesStatusListener = new PrivateChatMessagesStatusListener();
 
@@ -106,7 +106,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         dataManager = DataManager.getInstance();
     }
 
-    public synchronized void initCurrentChatDialog(QBChatDialog dialog, Bundle additional) throws QBResponseException {
+    public synchronized void initCurrentChatDialog(ConnectycubeChatDialog dialog, Bundle additional) throws ResponseException {
         currentDialog = dialog;
         initCurrentDialogForChatIfPossible();
     }
@@ -114,7 +114,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
     private void initCurrentDialogForChatIfPossible() {
         if (currentDialog != null && chatService != null && chatService.isLoggedIn()) {
             currentDialog.initForChat(chatService);
-            if (QBDialogType.GROUP.equals(currentDialog.getType())) {
+            if (ConnectycubeDialogType.GROUP.equals(currentDialog.getType())) {
                 tryJoinRoomChat(currentDialog);
                 currentDialog.addParticipantListener(participantListener);
             } else {
@@ -123,13 +123,13 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
     }
 
-    public synchronized void closeChat(QBChatDialog chatDialog, Bundle additional) {
+    public synchronized void closeChat(ConnectycubeChatDialog chatDialog, Bundle additional) {
         if (currentDialog != null
                 && currentDialog.getDialogId().equals(chatDialog.getDialogId())
                 && chatService != null
                 && chatService.isLoggedIn()) {
             chatDialog.initForChat(chatService);
-            if (QBDialogType.GROUP.equals(currentDialog.getType())) {
+            if (ConnectycubeDialogType.GROUP.equals(currentDialog.getType())) {
                 if (currentDialog.getParticipantListeners().contains(participantListener)) {
                     currentDialog.removeParticipantListener(participantListener);
                 }
@@ -145,11 +145,11 @@ public class QBChatHelper extends BaseThreadPoolHelper{
 
     public void initChatService() {
         Log.v(TAG, "initChatService()");
-        this.chatService = QBChatService.getInstance();
+        this.chatService = ConnectycubeChatService.getInstance();
         chatService.addConnectionListener(chatConnectionListener);
     }
 
-    public void init(QBUser chatCreator) {
+    public void init(ConnectycubeUser chatCreator) {
         Log.v(TAG, "init()");
         this.chatCreator = chatCreator;
 
@@ -162,7 +162,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         chatService.getMessageStatusesManager().addMessageStatusListener(privateChatMessagesStatusListener);
         chatService.getIncomingMessagesManager().addDialogMessageListener(allChatMessagesListener);
 
-        systemMessagesManager = QBChatService.getInstance().getSystemMessagesManager();
+        systemMessagesManager = ConnectycubeChatService.getInstance().getSystemMessagesManager();
         systemMessagesManager.addSystemMessageListener(systemMessagesListener);
     }
 
@@ -174,27 +174,27 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         notificationChatListeners.add(notificationChatListener);
     }
 
-    public void sendChatMessage(String message) throws QBResponseException {
-        QBChatMessage qbChatMessage = getQBChatMessage(message);
+    public void sendChatMessage(String message) throws ResponseException {
+        ConnectycubeChatMessage qbChatMessage = getConnectycubeChatMessage(message);
         sendAndSaveChatMessage(qbChatMessage, currentDialog);
     }
 
 
 
-    public void sendChatReplyMessage(String message, String replyMessage) throws QBResponseException {
-        QBChatMessage qbChatMessage = getQBChatMessage(message);
+    public void sendChatReplyMessage(String message, String replyMessage) throws ResponseException {
+        ConnectycubeChatMessage qbChatMessage = getConnectycubeChatMessage(message);
         qbChatMessage.setProperty("replyMessage",replyMessage);
         sendAndSaveChatMessage(qbChatMessage, currentDialog);
     }
 
 
-    public void sendMessageWithAttachment(Attachment.Type attachmentType, Object attachmentObject, String localPath) throws QBResponseException {
+    public void sendMessageWithAttachment(Attachment.Type attachmentType, Object attachmentObject, String localPath) throws ResponseException {
         String messageBody = "";
-        QBAttachment attachment = null;
+        ConnectycubeAttachment attachment = null;
         switch (attachmentType) {
             case IMAGE:
                 messageBody = context.getString(R.string.dlg_attached_last_message);
-                attachment = getAttachmentImage((QBFile) attachmentObject, localPath);
+                attachment = getAttachmentImage((ConnectycubeFile) attachmentObject, localPath);
                 break;
             case LOCATION:
                 messageBody = context.getString(R.string.dlg_location_last_message);
@@ -202,11 +202,11 @@ public class QBChatHelper extends BaseThreadPoolHelper{
                 break;
             case VIDEO:
                 messageBody = context.getString(R.string.dlg_attached_video_last_message);
-                attachment = getAttachmentVideo((QBFile) attachmentObject, localPath);
+                attachment = getAttachmentVideo((ConnectycubeFile) attachmentObject, localPath);
                 break;
             case AUDIO:
                 messageBody = context.getString(R.string.dlg_attached_audio_last_message);
-                attachment = getAttachmentAudio((QBFile) attachmentObject, localPath);
+                attachment = getAttachmentAudio((ConnectycubeFile) attachmentObject, localPath);
                 break;
             case DOC:
                 break;
@@ -214,19 +214,19 @@ public class QBChatHelper extends BaseThreadPoolHelper{
                 break;
         }
 
-        QBChatMessage message = getQBChatMessage(messageBody);
+        ConnectycubeChatMessage message = getConnectycubeChatMessage(messageBody);
         message.addAttachment(attachment);
 
         sendAndSaveChatMessage(message, currentDialog);
     }
 
-    public void sendMessageReplyWithAttachment(Attachment.Type attachmentType, Object attachmentObject, String localPath, String replyMessage) throws QBResponseException {
+    public void sendMessageReplyWithAttachment(Attachment.Type attachmentType, Object attachmentObject, String localPath, String replyMessage) throws ResponseException {
         String messageBody = "";
-        QBAttachment attachment = null;
+        ConnectycubeAttachment attachment = null;
         switch (attachmentType) {
             case IMAGE:
                 messageBody = context.getString(R.string.dlg_attached_last_message);
-                attachment = getAttachmentImage((QBFile) attachmentObject, localPath);
+                attachment = getAttachmentImage((ConnectycubeFile) attachmentObject, localPath);
                 break;
             case LOCATION:
                 messageBody = context.getString(R.string.dlg_location_last_message);
@@ -234,11 +234,11 @@ public class QBChatHelper extends BaseThreadPoolHelper{
                 break;
             case VIDEO:
                 messageBody = context.getString(R.string.dlg_attached_video_last_message);
-                attachment = getAttachmentVideo((QBFile) attachmentObject, localPath);
+                attachment = getAttachmentVideo((ConnectycubeFile) attachmentObject, localPath);
                 break;
             case AUDIO:
                 messageBody = context.getString(R.string.dlg_attached_audio_last_message);
-                attachment = getAttachmentAudio((QBFile) attachmentObject, localPath);
+                attachment = getAttachmentAudio((ConnectycubeFile) attachmentObject, localPath);
                 break;
             case DOC:
                 break;
@@ -246,28 +246,28 @@ public class QBChatHelper extends BaseThreadPoolHelper{
                 break;
         }
 
-        QBChatMessage message = getQBChatMessage(messageBody);
+        ConnectycubeChatMessage message = getConnectycubeChatMessage(messageBody);
         message.setProperty("replyMessage",replyMessage);
         message.addAttachment(attachment);
 
         sendAndSaveChatMessage(message, currentDialog);
     }
 
-    public void sendAndSaveChatMessage(QBChatMessage qbChatMessage, QBChatDialog chatDialog) throws QBResponseException {
-        addNecessaryPropertyForQBChatMessage(qbChatMessage, chatDialog.getDialogId());
+    public void sendAndSaveChatMessage(ConnectycubeChatMessage qbChatMessage, ConnectycubeChatDialog chatDialog) throws ResponseException {
+        addNecessaryPropertyForConnectycubeChatMessage(qbChatMessage, chatDialog.getDialogId());
 
         sendChatMessage(qbChatMessage, chatDialog);
-        if (QBDialogType.PRIVATE.equals(chatDialog.getType())) {
+        if (ConnectycubeDialogType.PRIVATE.equals(chatDialog.getType())) {
             DbUtils.updateDialogModifiedDate(dataManager, chatDialog, ChatUtils.getMessageDateSent(qbChatMessage), false);
             DbUtils.saveMessageOrNotificationToCache(context, dataManager, chatDialog.getDialogId(), qbChatMessage, State.SYNC, true);
         }
     }
 
-    public void sendChatMessage(QBChatMessage message, QBChatDialog chatDialog) throws QBResponseException {
+    public void sendChatMessage(ConnectycubeChatMessage message, ConnectycubeChatDialog chatDialog) throws ResponseException {
         message.setMarkable(true);
         chatDialog.initForChat(chatService);
 
-        if (QBDialogType.GROUP.equals(chatDialog.getType())) {
+        if (ConnectycubeDialogType.GROUP.equals(chatDialog.getType())) {
             if (!chatDialog.isJoined()) {
                 tryJoinRoomChat(chatDialog);
             }
@@ -280,27 +280,27 @@ public class QBChatHelper extends BaseThreadPoolHelper{
             error = context.getString(R.string.dlg_fail_connection);
         }
         if (error != null) {
-            throw new QBResponseException(error);
+            throw new ResponseException(error);
         }
     }
 
 
-    protected void addNecessaryPropertyForQBChatMessage(QBChatMessage qbChatMessage, String dialogId) {
+    protected void addNecessaryPropertyForConnectycubeChatMessage(ConnectycubeChatMessage qbChatMessage, String dialogId) {
         long time = DateUtilsCore.getCurrentTime();
         qbChatMessage.setDialogId(dialogId);
         qbChatMessage.setProperty(ChatNotificationUtils.PROPERTY_DATE_SENT, time + ConstsCore.EMPTY_STRING);
     }
 
-    public List<QBChatDialog> getDialogs(QBRequestGetBuilder qbRequestGetBuilder, Bundle returnedBundle) throws QBResponseException {
-        List<QBChatDialog> qbDialogsList = QBRestChatService.getChatDialogs(null, qbRequestGetBuilder).perform();
+    public List<ConnectycubeChatDialog> getDialogs(RequestGetBuilder qbRequestGetBuilder, Bundle returnedBundle) throws ResponseException {
+        List<ConnectycubeChatDialog> qbDialogsList = ConnectycubeRestChatService.getChatDialogs(null, qbRequestGetBuilder).perform();
         return qbDialogsList;
     }
 
 
-    public List<QBChatMessage> getDialogMessages(QBRequestGetBuilder customObjectRequestBuilder,
-                                                 Bundle returnedBundle, QBChatDialog qbDialog,
-                                                 long lastDateLoad) throws QBResponseException {
-        List<QBChatMessage> qbMessagesList = QBRestChatService.getDialogMessages(qbDialog,
+    public List<ConnectycubeChatMessage> getDialogMessages(RequestGetBuilder customObjectRequestBuilder,
+                                                 Bundle returnedBundle, ConnectycubeChatDialog qbDialog,
+                                                 long lastDateLoad) throws ResponseException {
+        List<ConnectycubeChatMessage> qbMessagesList = ConnectycubeRestChatService.getDialogMessages(qbDialog,
                 customObjectRequestBuilder).perform();
 
         if (qbMessagesList != null && !qbMessagesList.isEmpty()) {
@@ -310,21 +310,21 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         return qbMessagesList;
     }
 
-    public void deleteDialog(String dialogId, QBDialogType dialogType) {
+    public void deleteDialog(String dialogId, ConnectycubeDialogType dialogType) {
         try {
-            if (QBDialogType.GROUP.equals(dialogType)){
+            if (ConnectycubeDialogType.GROUP.equals(dialogType)){
                 prepareAndSendNotificationsToOpponents(dialogId);
             }
 
-            QBRestChatService.deleteDialog(dialogId, false).perform();
-        } catch (QBResponseException e) {
+            ConnectycubeRestChatService.deleteDialog(dialogId, false).perform();
+        } catch (ResponseException e) {
             ErrorUtils.logError(e);
         }
 
         DbUtils.deleteDialogLocal(dataManager, dialogId);
     }
 
-    public void saveDialogsToCache(List<QBChatDialog> qbDialogsList, boolean allDialogs){
+    public void saveDialogsToCache(List<ConnectycubeChatDialog> qbDialogsList, boolean allDialogs){
         if (qbDialogsList != null && !qbDialogsList.isEmpty()) {
             FinderUnknownUsers finderUnknownUsers = new FinderUnknownUsers(context, AppSession.getSession().getUser(), qbDialogsList);
             finderUnknownUsers.find();
@@ -337,8 +337,8 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
     }
 
-    private void prepareAndSendNotificationsToOpponents(String dialogId) throws QBResponseException {
-        QBChatDialog storeChatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
+    private void prepareAndSendNotificationsToOpponents(String dialogId) throws ResponseException {
+        ConnectycubeChatDialog storeChatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
         if (storeChatDialog == null || storeChatDialog.getDialogId() == null) {
             return;
         }
@@ -347,7 +347,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
                 ChatUtils.createOccupantsIdsFromDialogOccupantsList(dataManager.getDialogOccupantDataManager()
                         .getActualDialogOccupantsByDialog(storeChatDialog.getDialogId()));
         storeChatDialog.setOccupantsIds(actualOpponentsIds);
-        storeChatDialog.initForChat(QBChatService.getInstance());
+        storeChatDialog.initForChat(ConnectycubeChatService.getInstance());
 
         List<Integer> occupantsIdsList = new ArrayList<>();
         occupantsIdsList.add(AppSession.getSession().getUser().getId());
@@ -356,9 +356,9 @@ public class QBChatHelper extends BaseThreadPoolHelper{
                 DialogNotification.Type.OCCUPANTS_DIALOG, occupantsIdsList, true);
     }
 
-    private QBChatMessage getQBChatMessage(String body) {
+    private ConnectycubeChatMessage getConnectycubeChatMessage(String body) {
         long time = DateUtilsCore.getCurrentTime();
-        QBChatMessage chatMessage = new QBChatMessage();
+        ConnectycubeChatMessage chatMessage = new ConnectycubeChatMessage();
         chatMessage.setBody(body);
         chatMessage.setProperty(ChatNotificationUtils.PROPERTY_DATE_SENT, String.valueOf(time));
         chatMessage.setSaveToHistory(ChatNotificationUtils.VALUE_SAVE_TO_HISTORY);
@@ -366,8 +366,8 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         return chatMessage;
     }
 
-    private QBAttachment getAttachment(QBFile file, String attachType, String contentType) {
-        QBAttachment attachment = new QBAttachment(attachType);
+    private ConnectycubeAttachment getAttachment(ConnectycubeFile file, String attachType, String contentType) {
+        ConnectycubeAttachment attachment = new ConnectycubeAttachment(attachType);
         attachment.setId(file.getUid());
         attachment.setName(file.getName());
         attachment.setContentType(contentType);
@@ -375,8 +375,8 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         return attachment;
     }
 
-    private QBAttachment getAttachmentImage(QBFile file, String localPath) {
-        QBAttachment attachment = getAttachment(file, QBAttachment.IMAGE_TYPE, MimeTypeAttach.IMAGE_MIME);
+    private ConnectycubeAttachment getAttachmentImage(ConnectycubeFile file, String localPath) {
+        ConnectycubeAttachment attachment = getAttachment(file, ConnectycubeAttachment.IMAGE_TYPE, MimeTypeAttach.IMAGE_MIME);
 
         if (!TextUtils.isEmpty(localPath)) {
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -389,16 +389,16 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         return attachment;
     }
 
-    private QBAttachment getAttachmentLocation(String location) {
-        QBAttachment attachment = new QBAttachment(Attachment.Type.LOCATION.toString().toLowerCase());
+    private ConnectycubeAttachment getAttachmentLocation(String location) {
+        ConnectycubeAttachment attachment = new ConnectycubeAttachment(Attachment.Type.LOCATION.toString().toLowerCase());
         attachment.setData(location);
         attachment.setId(String.valueOf(location.hashCode()));
 
         return attachment;
     }
 
-    private QBAttachment getAttachmentAudio(QBFile file, String localPath) {
-        QBAttachment attachment = getAttachment(file, QBAttachment.AUDIO_TYPE, MimeTypeAttach.AUDIO_MIME);
+    private ConnectycubeAttachment getAttachmentAudio(ConnectycubeFile file, String localPath) {
+        ConnectycubeAttachment attachment = getAttachment(file, ConnectycubeAttachment.AUDIO_TYPE, MimeTypeAttach.AUDIO_MIME);
 
         if (!TextUtils.isEmpty(localPath)) {
             int durationSec = MediaUtils.getMetaData(localPath).durationSec();
@@ -407,8 +407,8 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         return attachment;
     }
 
-    private QBAttachment getAttachmentVideo(QBFile file, String localPath) {
-        QBAttachment attachment = getAttachment(file, QBAttachment.VIDEO_TYPE, MimeTypeAttach.VIDEO_MIME);
+    private ConnectycubeAttachment getAttachmentVideo(ConnectycubeFile file, String localPath) {
+        ConnectycubeAttachment attachment = getAttachment(file, ConnectycubeAttachment.VIDEO_TYPE, MimeTypeAttach.VIDEO_MIME);
 
         if (!TextUtils.isEmpty(localPath)) {
             MediaUtils.MetaData metaData = MediaUtils.getMetaData(localPath);
@@ -427,19 +427,19 @@ public class QBChatHelper extends BaseThreadPoolHelper{
                 } else {
                     currentDialog.sendStopTypingNotification();
                 }
-            } catch (XMPPException | SmackException.NotConnectedException /*| QBResponseException*/ e) {
+            } catch (XMPPException | SmackException.NotConnectedException /*| ResponseException*/ e) {
                 ErrorUtils.logError(e);
             }
         }
     }
 
-    public QBChatDialog createPrivateChatOnRest(int opponentId) throws QBResponseException {
-        QBChatDialog dialog = QBRestChatService.createChatDialog(DialogUtils.buildPrivateDialog(opponentId)).perform();
+    public ConnectycubeChatDialog createPrivateChatOnRest(int opponentId) throws ResponseException {
+        ConnectycubeChatDialog dialog = ConnectycubeRestChatService.createChatDialog(DialogUtils.buildPrivateDialog(opponentId)).perform();
         return dialog;
     }
 
-    public QBChatDialog createPrivateDialogIfNotExist(int userId) throws QBResponseException {
-        QBChatDialog existingPrivateDialog = ChatUtils.getExistPrivateDialog(dataManager, userId);
+    public ConnectycubeChatDialog createPrivateDialogIfNotExist(int userId) throws ResponseException {
+        ConnectycubeChatDialog existingPrivateDialog = ChatUtils.getExistPrivateDialog(dataManager, userId);
         if (existingPrivateDialog == null) {
             existingPrivateDialog = createPrivateChatOnRest(userId);
             DbUtils.saveDialogToCache(dataManager, existingPrivateDialog, false);
@@ -447,7 +447,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         return existingPrivateDialog;
     }
 
-    protected void checkForSendingNotification(boolean ownMessage, QBChatMessage qbChatMessage, QMUser user,
+    protected void checkForSendingNotification(boolean ownMessage, ConnectycubeChatMessage qbChatMessage, QMUser user,
                                                boolean isPrivateChat) {
         String dialogId = qbChatMessage.getDialogId();
         if (qbChatMessage.getId() == null || dialogId == null) {
@@ -468,7 +468,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
     }
 
-    private void sendNotificationBroadcast(String action, QBChatMessage chatMessage, QMUser user, String dialogId,
+    private void sendNotificationBroadcast(String action, ConnectycubeChatMessage chatMessage, QMUser user, String dialogId,
                                            boolean isPrivateMessage) {
         Intent intent = new Intent(action);
         String messageBody = chatMessage.getBody();
@@ -476,7 +476,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
 
         if (!CollectionsUtil.isEmpty(chatMessage.getAttachments())) {
             //in current version we can send only one attachment
-            QBAttachment attachment = chatMessage.getAttachments().iterator().next();
+            ConnectycubeAttachment attachment = chatMessage.getAttachments().iterator().next();
             extraChatMessage = context.getResources().getString(R.string.was_attached, attachment.getType());
         } else {
             extraChatMessage = messageBody;
@@ -498,7 +498,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    protected Message parseReceivedMessage(QBChatMessage qbChatMessage) {
+    protected Message parseReceivedMessage(ConnectycubeChatMessage qbChatMessage) {
         long dateSent = ChatUtils.getMessageDateSent(qbChatMessage);
         String attachUrl = ChatUtils.getAttachUrlIfExists(qbChatMessage);
         String dialogId = qbChatMessage.getDialogId();
@@ -518,7 +518,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         DialogOccupant dialogOccupant = dataManager.getDialogOccupantDataManager().getDialogOccupant(dialogId, qbChatMessage.getSenderId());
         if (dialogOccupant == null) {
             dialogOccupant = new DialogOccupant();
-            QBChatDialog chatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
+            ConnectycubeChatDialog chatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
             if (chatDialog != null) {
                 dialogOccupant.setDialog(DialogTransformUtils.createLocalDialog(chatDialog));
             }
@@ -537,7 +537,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
 //            } else {
 //                attachment.setType(Attachment.Type.IMAGE);
 //            }
-            if (getAttachmentType(qbChatMessage.getAttachments()).equalsIgnoreCase(QBAttachment.PHOTO_TYPE)) {
+            if (getAttachmentType(qbChatMessage.getAttachments()).equalsIgnoreCase(ConnectycubeAttachment.IMAGE_TYPE)) {
                 attachment.setType(Attachment.Type.IMAGE);
             } else {
                 attachment.setType(Attachment.Type.valueOf(getAttachmentType(qbChatMessage.getAttachments()).toUpperCase()));
@@ -549,30 +549,30 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         return message;
     }
 
-    private String getAttachmentType(Collection<QBAttachment> attachments) {
-        QBAttachment attachment = attachments.iterator().next();
+    private String getAttachmentType(Collection<ConnectycubeAttachment> attachments) {
+        ConnectycubeAttachment attachment = attachments.iterator().next();
         return attachment.getType();
     }
 
     //Update message status
 
-    public void updateStatusNotificationMessageRead(QBChatDialog chatDialog, CombinationMessage combinationMessage) throws Exception {
+    public void updateStatusNotificationMessageRead(ConnectycubeChatDialog chatDialog, CombinationMessage combinationMessage) throws Exception {
         updateStatusMessageReadServer(chatDialog, combinationMessage, true);
         DbUtils.updateStatusNotificationMessageLocal(dataManager, combinationMessage.toDialogNotification());
     }
 
-    public void updateStatusMessageRead(QBChatDialog chatDialog, CombinationMessage combinationMessage,
+    public void updateStatusMessageRead(ConnectycubeChatDialog chatDialog, CombinationMessage combinationMessage,
                                         boolean isOnline) throws Exception {
         updateStatusMessageReadServer(chatDialog, combinationMessage, isOnline);
         DbUtils.updateStatusMessageLocal(dataManager, combinationMessage.toMessage());
     }
 
-    public void updateStatusMessageReadServer(QBChatDialog chatDialog, CombinationMessage combinationMessage,
+    public void updateStatusMessageReadServer(ConnectycubeChatDialog chatDialog, CombinationMessage combinationMessage,
                                               boolean isOnline) throws Exception {
         if (isOnline) {
             chatDialog.initForChat(chatService);
 
-            QBChatMessage qbChatMessage = new QBChatMessage();
+            ConnectycubeChatMessage qbChatMessage = new ConnectycubeChatMessage();
             qbChatMessage.setId(combinationMessage.getMessageId());
             qbChatMessage.setDialogId(chatDialog.getDialogId());
             qbChatMessage.setSenderId(combinationMessage.getDialogOccupant().getUser().getId());
@@ -581,16 +581,16 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         } else {
             StringifyArrayList<String> messagesIdsList = new StringifyArrayList<String>();
             messagesIdsList.add(combinationMessage.getMessageId());
-            QBRestChatService.markMessagesAsRead(chatDialog.getDialogId(), messagesIdsList).perform();
+            ConnectycubeRestChatService.markMessagesAsRead(chatDialog.getDialogId(), messagesIdsList).perform();
         }
     }
 
     //Group dialogs
 
-    private void createGroupDialogByNotification(QBChatMessage qbChatMessage, DialogNotification.Type notificationType) {
+    private void createGroupDialogByNotification(ConnectycubeChatMessage qbChatMessage, DialogNotification.Type notificationType) {
         qbChatMessage.setBody(context.getString(R.string.cht_notification_message));
 
-        QBChatDialog qbDialog = ChatNotificationUtils.parseDialogFromQBMessage(context, qbChatMessage, qbChatMessage.getBody(), QBDialogType.GROUP);
+        ConnectycubeChatDialog qbDialog = ChatNotificationUtils.parseDialogFromQBMessage(context, qbChatMessage, qbChatMessage.getBody(), ConnectycubeDialogType.GROUP);
 
         qbDialog.getOccupants().add(chatCreator.getId());
         DbUtils.saveDialogToCache(dataManager, qbDialog);
@@ -611,11 +611,11 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         checkForSendingNotification(ownMessage, qbChatMessage, user, false);
     }
 
-    public synchronized void tryJoinRoomChatsPage(List<QBChatDialog> qbDialogsList, boolean needClean) {
+    public synchronized void tryJoinRoomChatsPage(List<ConnectycubeChatDialog> qbDialogsList, boolean needClean) {
         if (!qbDialogsList.isEmpty()) {
             initGroupDialogsList(needClean);
-            for (QBChatDialog dialog : qbDialogsList) {
-                if (!QBDialogType.PRIVATE.equals(dialog.getType())) {
+            for (ConnectycubeChatDialog dialog : qbDialogsList) {
+                if (!ConnectycubeDialogType.PRIVATE.equals(dialog.getType())) {
                     groupDialogsList.add(dialog);
                     tryJoinRoomChat(dialog, null);
                 }
@@ -624,12 +624,12 @@ public class QBChatHelper extends BaseThreadPoolHelper{
     }
 
     public void tryJoinRoomChats() {
-        List<QBChatDialog> qbDialogsList = dataManager.getQBChatDialogDataManager().getAll();
+        List<ConnectycubeChatDialog> qbDialogsList = dataManager.getConnectycubeChatDialogDataManager().getAll();
         if (CollectionsUtil.isEmpty(qbDialogsList)) {
             return;
         }
-        for (QBChatDialog dialog : qbDialogsList) {
-            if (QBDialogType.PRIVATE != dialog.getType()) {
+        for (ConnectycubeChatDialog dialog : qbDialogsList) {
+            if (ConnectycubeDialogType.PRIVATE != dialog.getType()) {
                 tryJoinRoomChat(dialog, null);
             }
         }
@@ -645,7 +645,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
     }
 
-    public void tryJoinRoomChat(QBChatDialog dialog) {
+    public void tryJoinRoomChat(ConnectycubeChatDialog dialog) {
         try {
             joinRoomChat(dialog);
         } catch (Exception e) {
@@ -653,18 +653,18 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
     }
 
-    public void tryJoinRoomChat(QBChatDialog dialog, QBEntityCallback<Void> callback) {
+    public void tryJoinRoomChat(ConnectycubeChatDialog dialog, EntityCallback<Void> callback) {
         joinRoomChat(dialog, callback);
     }
 
-    public void joinRoomChat(QBChatDialog dialog, QBEntityCallback<Void> callback) {
+    public void joinRoomChat(ConnectycubeChatDialog dialog, EntityCallback<Void> callback) {
         dialog.initForChat(chatService);
         if (!dialog.isJoined()) { //join only to unjoined dialogs
             dialog.join(history(), callback); //join asynchronously, this doesn't block current thread to enqueue join for next dialog
         }
     }
 
-    public void joinRoomChat(QBChatDialog dialog) throws XMPPException, SmackException {
+    public void joinRoomChat(ConnectycubeChatDialog dialog) throws XMPPException, SmackException {
         dialog.initForChat(chatService);
         if (!dialog.isJoined()) { //join only to unjoined dialogs
             dialog.join(history());
@@ -679,7 +679,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
 
     public void leaveDialogs() throws XMPPException, SmackException.NotConnectedException {
         if (groupDialogsList != null) {
-            for (QBChatDialog dialog : groupDialogsList) {
+            for (ConnectycubeChatDialog dialog : groupDialogsList) {
                 if (dialog.isJoined()) {
                     dialog.leave();
                 }
@@ -687,7 +687,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
     }
 
-    public void leaveRoomChat(QBChatDialog chatDialog) throws Exception {
+    public void leaveRoomChat(ConnectycubeChatDialog chatDialog) throws Exception {
         chatDialog.initForChat(chatService);
         chatDialog.leave();
         List<Integer> userIdsList = new ArrayList<Integer>();
@@ -695,65 +695,65 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         removeUsersFromDialog(chatDialog, userIdsList);
     }
 
-    public boolean isDialogJoined(QBChatDialog dialog) {
+    public boolean isDialogJoined(ConnectycubeChatDialog dialog) {
         return dialog.isJoined();
     }
 
-    public void sendGroupMessageToFriends(QBChatDialog qbDialog, DialogNotification.Type notificationType,
-                                          Collection<Integer> occupantsIdsList, boolean leavedFromDialog) throws QBResponseException {
-        QBChatMessage chatMessage = ChatNotificationUtils.createGroupMessageAboutUpdateChat(context, qbDialog,
+    public void sendGroupMessageToFriends(ConnectycubeChatDialog qbDialog, DialogNotification.Type notificationType,
+                                          Collection<Integer> occupantsIdsList, boolean leavedFromDialog) throws ResponseException {
+        ConnectycubeChatMessage chatMessage = ChatNotificationUtils.createGroupMessageAboutUpdateChat(context, qbDialog,
                 notificationType, occupantsIdsList, leavedFromDialog);
         sendChatMessage(chatMessage, qbDialog);
     }
 
-    public QBChatDialog addUsersToDialog(String dialogId, List<Integer> userIdsList) throws Exception {
+    public ConnectycubeChatDialog addUsersToDialog(String dialogId, List<Integer> userIdsList) throws Exception {
         StringifyArrayList<Integer> occupantsIdsList = new StringifyArrayList<>(userIdsList);
-        QBChatDialog chatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
+        ConnectycubeChatDialog chatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
 
-        QBRequestUpdateBuilder requestBuilder = new QBRequestUpdateBuilder();
-        requestBuilder.push(com.quickblox.chat.Consts.DIALOG_OCCUPANTS, occupantsIdsList.getItemsAsString());
+        RequestUpdateBuilder requestBuilder = new RequestUpdateBuilder();
+        requestBuilder.push(com.connectycube.chat.Consts.DIALOG_OCCUPANTS, occupantsIdsList.getItemsAsString());
         return updateDialog(chatDialog, requestBuilder);
     }
 
-    public void removeUsersFromDialog(QBChatDialog chatDialog, List<Integer> userIdsList) throws QBResponseException {
-        QBRequestUpdateBuilder requestBuilder = new QBRequestUpdateBuilder();
-        requestBuilder.pullAll(com.quickblox.chat.Consts.DIALOG_OCCUPANTS, userIdsList.toArray());
+    public void removeUsersFromDialog(ConnectycubeChatDialog chatDialog, List<Integer> userIdsList) throws ResponseException {
+        RequestUpdateBuilder requestBuilder = new RequestUpdateBuilder();
+        requestBuilder.pullAll(com.connectycube.chat.Consts.DIALOG_OCCUPANTS, userIdsList.toArray());
         updateDialog(chatDialog, requestBuilder);
-        DataManager.getInstance().getQBChatDialogDataManager().deleteById(chatDialog.getDialogId());
+        DataManager.getInstance().getConnectycubeChatDialogDataManager().deleteById(chatDialog.getDialogId());
     }
 
-    public QBChatDialog updateDialog(QBChatDialog dialog) throws QBResponseException {
-        return updateDialog(dialog, (QBRequestUpdateBuilder) null);
+    public ConnectycubeChatDialog updateDialog(ConnectycubeChatDialog dialog) throws ResponseException {
+        return updateDialog(dialog, (RequestUpdateBuilder) null);
     }
 
-    public QBChatDialog updateDialog(QBChatDialog dialog, File inputFile) throws QBResponseException {
-        QBFile file = QBContent.uploadFileTask(inputFile, true, (String) null).perform();
+    public ConnectycubeChatDialog updateDialog(ConnectycubeChatDialog dialog, File inputFile) throws ResponseException {
+        ConnectycubeFile file = ConnectycubeStorage.uploadFileTask(inputFile, true, (String) null).perform();
         dialog.setPhoto(file.getPublicUrl());
-        return updateDialog(dialog, (QBRequestUpdateBuilder) null);
+        return updateDialog(dialog, (RequestUpdateBuilder) null);
     }
 
-    private QBChatDialog updateDialog(QBChatDialog chatDialog, QBRequestUpdateBuilder requestBuilder) throws QBResponseException {
-        QBChatDialog updatedDialog = QBRestChatService.updateGroupChatDialog(chatDialog, requestBuilder).perform();
+    private ConnectycubeChatDialog updateDialog(ConnectycubeChatDialog chatDialog, RequestUpdateBuilder requestBuilder) throws ResponseException {
+        ConnectycubeChatDialog updatedDialog = ConnectycubeRestChatService.updateChatDialog(chatDialog, requestBuilder).perform();
         return updatedDialog;
     }
 
-    public QBChatDialog createGroupChat(String name, List<Integer> friendIdsList, String photoUrl) throws Exception {
+    public ConnectycubeChatDialog createGroupChat(String name, List<Integer> friendIdsList, String photoUrl) throws Exception {
         ArrayList<Integer> occupantIdsList = (ArrayList<Integer>) ChatUtils.getOccupantIdsWithUser(friendIdsList);
 
-        QBChatDialog dialogToCreate = new QBChatDialog();
+        ConnectycubeChatDialog dialogToCreate = new ConnectycubeChatDialog();
         dialogToCreate.setName(name);
-        dialogToCreate.setType(QBDialogType.GROUP);
+        dialogToCreate.setType(ConnectycubeDialogType.GROUP);
         dialogToCreate.setOccupantsIds(occupantIdsList);
         dialogToCreate.setPhoto(photoUrl);
 
-        QBChatDialog qbDialog = QBRestChatService.createChatDialog(dialogToCreate).perform();
+        ConnectycubeChatDialog qbDialog = ConnectycubeRestChatService.createChatDialog(dialogToCreate).perform();
         DbUtils.saveDialogToCache(dataManager, qbDialog);
 
         joinRoomChat(qbDialog);
 
         sendSystemMessageAboutCreatingGroupChat(qbDialog, friendIdsList);
 
-        QBChatMessage chatMessage = ChatNotificationUtils.createGroupMessageAboutCreateGroupChat(context, qbDialog, photoUrl);
+        ConnectycubeChatMessage chatMessage = ChatNotificationUtils.createGroupMessageAboutCreateGroupChat(context, qbDialog, photoUrl);
         sendChatMessage(chatMessage, qbDialog);
 
         return qbDialog;
@@ -761,8 +761,8 @@ public class QBChatHelper extends BaseThreadPoolHelper{
 
     //System messages
     //
-    public void sendSystemMessage(QBChatMessage chatMessage, int opponentId, String dialogId) {
-        addNecessaryPropertyForQBChatMessage(chatMessage, dialogId);
+    public void sendSystemMessage(ConnectycubeChatMessage chatMessage, int opponentId, String dialogId) {
+        addNecessaryPropertyForConnectycubeChatMessage(chatMessage, dialogId);
         chatMessage.setRecipientId(opponentId);
         try {
             systemMessagesManager.sendSystemMessage(chatMessage);
@@ -771,41 +771,41 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
     }
 
-    public void sendSystemMessageAboutCreatingGroupChat(QBChatDialog dialog, List<Integer> friendIdsList) throws Exception {
+    public void sendSystemMessageAboutCreatingGroupChat(ConnectycubeChatDialog dialog, List<Integer> friendIdsList) throws Exception {
         for (Integer friendId : friendIdsList) {
             try {
                 sendSystemMessageAboutCreatingGroupChat(dialog, friendId);
-            } catch (QBResponseException e) {
+            } catch (ResponseException e) {
                 ErrorUtils.logError(e);
             }
         }
     }
 
-    private void sendSystemMessageAboutCreatingGroupChat(QBChatDialog dialog, Integer friendId) throws Exception {
-        QBChatMessage chatMessageForSending = ChatNotificationUtils
+    private void sendSystemMessageAboutCreatingGroupChat(ConnectycubeChatDialog dialog, Integer friendId) throws Exception {
+        ConnectycubeChatMessage chatMessageForSending = ChatNotificationUtils
                 .createSystemMessageAboutCreatingGroupChat(context, dialog);
 
-        addNecessaryPropertyForQBChatMessage(chatMessageForSending, dialog.getDialogId());
+        addNecessaryPropertyForConnectycubeChatMessage(chatMessageForSending, dialog.getDialogId());
         sendSystemMessage(chatMessageForSending, friendId, dialog.getDialogId());
     }
 
-    public QBFile loadAttachFile(File inputFile) throws Exception {
-        QBFile file;
+    public ConnectycubeFile loadAttachFile(File inputFile) throws Exception {
+        ConnectycubeFile file;
 
         try {
-            file = QBContent.uploadFileTask(inputFile, true, null).perform();
-        } catch (QBResponseException exc) {
+            file = ConnectycubeStorage.uploadFileTask(inputFile, true, null).perform();
+        } catch (ResponseException exc) {
             throw new Exception(context.getString(R.string.dlg_fail_upload_attach));
         }
 
         return file;
     }
 
-    private void updateGroupDialogByNotification(QBChatMessage qbChatMessage) {
+    private void updateGroupDialogByNotification(ConnectycubeChatMessage qbChatMessage) {
         String dialogId = qbChatMessage.getDialogId();
-        QBChatDialog qbDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
+        ConnectycubeChatDialog qbDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
         if (qbDialog == null) {
-            qbDialog = ChatNotificationUtils.parseDialogFromQBMessage(context, qbChatMessage, QBDialogType.GROUP);
+            qbDialog = ChatNotificationUtils.parseDialogFromQBMessage(context, qbChatMessage, ConnectycubeDialogType.GROUP);
         }
 
         ChatNotificationUtils.updateDialogFromQBMessage(context, dataManager, qbChatMessage, qbDialog);
@@ -819,7 +819,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    private void onChatMessageReceived(String dialogId, QBChatMessage chatMessage, Integer senderId) {
+    private void onChatMessageReceived(String dialogId, ConnectycubeChatMessage chatMessage, Integer senderId) {
         boolean ownMessage = chatMessage.getSenderId().equals(chatCreator.getId());
 
         if (ChatNotificationUtils.isNotificationMessage(chatMessage)) {
@@ -839,16 +839,16 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
 
         QMUser user = QMUserService.getInstance().getUserCache().get((long) senderId);
-        QBChatDialog chatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
+        ConnectycubeChatDialog chatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
 
-        //Can receive message from unknown dialog only for QBDialogType.PRIVATE
+        //Can receive message from unknown dialog only for ConnectycubeDialogType.PRIVATE
         if (chatDialog == null) {
-            chatDialog = ChatNotificationUtils.parseDialogFromQBMessage(context, chatMessage, QBDialogType.PRIVATE);
+            chatDialog = ChatNotificationUtils.parseDialogFromQBMessage(context, chatMessage, ConnectycubeDialogType.PRIVATE);
             ChatUtils.addOccupantsToQBDialog(chatDialog, chatMessage);
             DbUtils.saveDialogToCache(dataManager, chatDialog, false);
         }
 
-        boolean isPrivateChatMessage = QBDialogType.PRIVATE.equals(chatDialog.getType());
+        boolean isPrivateChatMessage = ConnectycubeDialogType.PRIVATE.equals(chatDialog.getType());
         boolean needNotifyObserver = true;
 
         DbUtils.updateDialogModifiedDate(dataManager, chatDialog, ChatUtils.getMessageDateSent(chatMessage), false);
@@ -861,12 +861,12 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         checkForSendingNotification(ownMessage, chatMessage, user, isPrivateChatMessage);
     }
 
-    private boolean isNotificationToGroupChat(QBChatMessage chatMessage) {
+    private boolean isNotificationToGroupChat(ConnectycubeChatMessage chatMessage) {
         String updatedInfo = (String) chatMessage.getProperty(ChatNotificationUtils.PROPERTY_ROOM_UPDATE_INFO);
         return updatedInfo != null;
     }
 
-    private boolean isNotificationDeletedGroupChat(QBChatMessage chatMessage) {
+    private boolean isNotificationDeletedGroupChat(ConnectycubeChatMessage chatMessage) {
         String deletedOccupantsIdsString = (String) chatMessage.getProperty(ChatNotificationUtils.PROPERTY_ROOM_DELETED_OCCUPANTS_IDS);
         return deletedOccupantsIdsString != null;
     }
@@ -878,7 +878,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    private void friendRequestMessageReceived(QBChatMessage qbChatMessage, DialogNotification.Type notificationType) {
+    private void friendRequestMessageReceived(ConnectycubeChatMessage qbChatMessage, DialogNotification.Type notificationType) {
         String dialogId = qbChatMessage.getDialogId();
         Message message = parseReceivedMessage(qbChatMessage);
 
@@ -889,9 +889,9 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         DialogNotification dialogNotification = ChatUtils.convertMessageToDialogNotification(message);
         dialogNotification.setType(notificationType);
 
-        QBChatDialog chatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
+        ConnectycubeChatDialog chatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
         if (chatDialog == null) {
-            QBChatDialog newChatDialog = ChatNotificationUtils.parseDialogFromQBMessage(context, qbChatMessage, QBDialogType.PRIVATE);
+            ConnectycubeChatDialog newChatDialog = ChatNotificationUtils.parseDialogFromQBMessage(context, qbChatMessage, ConnectycubeDialogType.PRIVATE);
             ArrayList<Integer> occupantsIdsList = ChatUtils.createOccupantsIdsFromPrivateMessage(chatCreator.getId(), qbChatMessage.getSenderId());
             newChatDialog.setOccupantsIds(occupantsIdsList);
             DbUtils.saveDialogToCache(dataManager, newChatDialog, false);
@@ -907,7 +907,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
 
     interface QBNotificationChatListener {
 
-        void onReceivedNotification(String notificationType, QBChatMessage chatMessage);
+        void onReceivedNotification(String notificationType, ConnectycubeChatMessage chatMessage);
     }
 
     private class ChatConnectionListener extends AbstractConnectionListener{
@@ -923,10 +923,10 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
     }
 
-    private class AllChatMessagesListener implements QBChatDialogMessageListener {
+    private class AllChatMessagesListener implements ChatDialogMessageListener {
 
         @Override
-        public void processMessage(final String dialogId, final QBChatMessage qbChatMessage, final Integer senderId) {
+        public void processMessage(final String dialogId, final ConnectycubeChatMessage qbChatMessage, final Integer senderId) {
             threadPoolExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -936,12 +936,12 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
 
         @Override
-        public void processError(String dialogId, QBChatException exception, QBChatMessage qbChatMessage, Integer integer) {
+        public void processError(String dialogId, ChatException exception, ConnectycubeChatMessage qbChatMessage, Integer integer) {
             //TODO VT need implement for process error message
         }
     }
 
-    private class PrivateChatMessagesStatusListener implements QBMessageStatusListener {
+    private class PrivateChatMessagesStatusListener implements MessageStatusListener {
 
         @Override
         public void processMessageDelivered(String messageId, String dialogId, Integer userId) {
@@ -954,7 +954,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
     }
 
-    private class TypingListener implements QBChatDialogTypingListener {
+    private class TypingListener implements ChatDialogTypingListener {
 
         @Override
         public void processUserIsTyping(String dialogId, Integer userId) {
@@ -967,10 +967,10 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
     }
 
-    private class SystemMessageListener implements QBSystemMessageListener {
+    private class QMSystemMessageListener implements SystemMessageListener {
 
         @Override
-        public void processMessage(final QBChatMessage qbChatMessage) {
+        public void processMessage(final ConnectycubeChatMessage qbChatMessage) {
             threadPoolExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -987,7 +987,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
 
         @Override
-        public void processError(QBChatException e, QBChatMessage qbChatMessage) {
+        public void processError(ChatException e, ConnectycubeChatMessage qbChatMessage) {
             ErrorUtils.logError(e);
         }
     }
@@ -995,7 +995,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
     private class PrivateChatNotificationListener implements QBNotificationChatListener {
 
         @Override
-        public void onReceivedNotification(String notificationTypeString, QBChatMessage chatMessage) {
+        public void onReceivedNotification(String notificationTypeString, ConnectycubeChatMessage chatMessage) {
             NotificationType notificationType = NotificationType.parseByValue(
                     Integer.parseInt(notificationTypeString));
             switch (notificationType) {
@@ -1026,13 +1026,13 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         }
     }
 
-    private class ParticipantListener implements QBChatDialogParticipantListener {
+    private class ParticipantListener implements ChatDialogParticipantListener {
 
         @Override
-        public void processPresence(String dialogId, QBPresence presence) {
+        public void processPresence(String dialogId, ConnectycubePresence presence) {
             boolean validData = currentDialog != null && presence.getUserId() != null && currentDialog.getRoomJid() != null;
             if (validData && currentDialog.getRoomJid().equals(JIDHelper.INSTANCE.getRoomJidByDialogId(dialogId))) {
-                notifyUpdatingDialogDetails(presence.getUserId(), QBPresence.Type.online.equals(presence.getType()));
+                notifyUpdatingDialogDetails(presence.getUserId(), ConnectycubePresence.Type.online.equals(presence.getType()));
             }
         }
     }

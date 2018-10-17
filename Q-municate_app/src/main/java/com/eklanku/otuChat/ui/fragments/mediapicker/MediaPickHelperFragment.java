@@ -14,7 +14,7 @@ import com.eklanku.otuChat.utils.MediaUtils;
 import com.eklanku.otuChat.utils.listeners.OnMediaPickedListener;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_db.models.Attachment;
-import com.quickblox.ui.kit.chatmessage.adapter.utils.LocationUtils;
+import com.connectycube.ui.chatmessage.adapter.utils.LocationUtils;
 
 
 public class MediaPickHelperFragment extends Fragment {

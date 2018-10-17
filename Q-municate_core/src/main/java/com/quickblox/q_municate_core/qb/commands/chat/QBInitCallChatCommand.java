@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.quickblox.chat.QBChatService;
+import com.connectycube.chat.ConnectycubeChatService;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.models.CallPushParams;
 import com.quickblox.q_municate_core.qb.helpers.QBCallChatHelper;
@@ -35,7 +35,7 @@ public class QBInitCallChatCommand extends ServiceCommand {
     @Override
     public Bundle perform(Bundle extras) throws Exception {
         if (extras == null || extras.getSerializable(QBServiceConsts.EXTRA_CALL_ACTIVITY) == null) { // global init
-            qbCallChatHelper.init(QBChatService.getInstance());
+            qbCallChatHelper.init(ConnectycubeChatService.getInstance());
             Log.d("test_crash_1", "+++ perform 1 +++");
         } else {
             // init call activity

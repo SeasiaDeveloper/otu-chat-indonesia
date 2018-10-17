@@ -33,7 +33,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${rootProject.supportVersion}"
     testImplementation 'junit:junit:4.12'
     api project(path: ':q-municate_base_cache')
-    api "com.quickblox:quickblox-android-sdk-core:${rootProject.qbSdkVersion}"
-    api "com.quickblox:quickblox-android-sdk-extensions:${rootProject.qbSdkVersion}"
+    api "com.connectycube:connectycube-android-sdk-core:${rootProject.cbSdkVersion}"
+    api "com.connectycube:connectycube-android-sdk-extensions:${rootProject.cbSdkVersion}"
     api 'io.reactivex:rxandroid:1.2.1'
 }

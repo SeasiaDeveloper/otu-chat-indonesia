@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.quickblox.chat.model.QBChatDialog;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
@@ -24,7 +24,7 @@ public class QBUpdateStatusMessageCommand extends ServiceCommand {
         this.chatHelper = chatHelper;
     }
 
-    public static void start(Context context, QBChatDialog dialog, CombinationMessage combinationMessage, boolean forPrivate) {
+    public static void start(Context context, ConnectycubeChatDialog dialog, CombinationMessage combinationMessage, boolean forPrivate) {
         Intent intent = new Intent(QBServiceConsts.UPDATE_STATUS_MESSAGE_ACTION, null, context, QBService.class);
         intent.putExtra(QBServiceConsts.EXTRA_DIALOG, dialog);
         intent.putExtra(QBServiceConsts.EXTRA_MESSAGE, combinationMessage);
@@ -34,7 +34,7 @@ public class QBUpdateStatusMessageCommand extends ServiceCommand {
 
     @Override
     public Bundle perform(Bundle extras) throws Exception {
-        QBChatDialog chatDialog = (QBChatDialog) extras.getSerializable(QBServiceConsts.EXTRA_DIALOG);
+        ConnectycubeChatDialog chatDialog = (ConnectycubeChatDialog) extras.getSerializable(QBServiceConsts.EXTRA_DIALOG);
         CombinationMessage combinationMessage = (CombinationMessage) extras.getSerializable(QBServiceConsts.EXTRA_MESSAGE);
         try {
             if (combinationMessage.getNotificationType() != null) {

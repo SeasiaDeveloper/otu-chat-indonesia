@@ -11,8 +11,8 @@ import com.eklanku.otuChat.ui.adapters.base.BaseFilterAdapter;
 import com.eklanku.otuChat.ui.adapters.base.BaseViewHolder;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.adapters.base.BaseClickListenerViewHolder;
@@ -67,7 +67,7 @@ public class LocalSearchAdapter extends BaseFilterAdapter<DialogSearchWrapper, B
 
         String label;
 
-        if (QBDialogType.PRIVATE.equals(dialogWrapper.getChatDialog().getType())) {
+        if (ConnectycubeDialogType.PRIVATE.equals(dialogWrapper.getChatDialog().getType())) {
             QMUser opponentUser = dialogWrapper.getOpponentUser();
             setOnlineStatus(viewHolder, opponentUser);
             displayAvatarImage(opponentUser.getAvatar(), viewHolder.avatarImageView);

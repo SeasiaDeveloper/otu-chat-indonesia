@@ -11,7 +11,7 @@ import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.utils.ValidationUtils;
 import com.eklanku.otuChat.utils.image.ImageLoaderUtils;
 import com.quickblox.q_municate_core.models.AppSession;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
     protected List<T> objectsList;
     protected Resources resources;
 
-    protected QBUser currentUser;
+    protected ConnectycubeUser currentUser;
 
     public BaseListAdapter(Context context, List<T> objectsList) {
         this.context = context;

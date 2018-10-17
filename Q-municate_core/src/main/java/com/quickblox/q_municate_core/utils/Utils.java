@@ -9,11 +9,11 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.core.exception.ResponseException;
 import com.quickblox.q_municate_core.models.UserCustomData;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +45,7 @@ public class Utils {
         return null;
     }
 
-    public static boolean isTokenDestroyedError(QBResponseException e) {
+    public static boolean isTokenDestroyedError(ResponseException e) {
         List<String> errors = e.getErrors();
         for (String error : errors) {
             if (ConstsCore.TOKEN_REQUIRED_ERROR.equals(error)) {
@@ -55,7 +55,7 @@ public class Utils {
         return false;
     }
 
-    public static boolean isExactError(QBResponseException e, String msgError) {
+    public static boolean isExactError(ResponseException e, String msgError) {
         Log.d(Utils.class.getSimpleName(), "");
         List<String> errors = e.getErrors();
         for (String error : errors) {
@@ -79,11 +79,11 @@ public class Utils {
         }
     }
 
-    public static QBUser friendToUser(QMUser friend) {
+    public static ConnectycubeUser friendToUser(QMUser friend) {
         if (friend == null) {
             return null;
         }
-        QBUser user = new QBUser();
+        ConnectycubeUser user = new ConnectycubeUser();
         user.setId(friend.getId());
         user.setFullName(friend.getFullName());
         return user;

@@ -10,8 +10,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.result.HttpStatus;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.result.HttpStatus;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.eklanku.otuChat.utils.ToastUtils;

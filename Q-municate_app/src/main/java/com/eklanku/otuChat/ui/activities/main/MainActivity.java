@@ -53,8 +53,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.nineoldandroids.view.ViewHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
@@ -125,11 +125,11 @@ import android.provider.ContactsContract;
 
 import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.request.QBPagedRequestBuilder;
-import com.quickblox.users.QBUsers;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.core.EntityCallback;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.request.PagedRequestBuilder;
+import com.connectycube.users.ConnectycubeUsers;
+import com.connectycube.users.model.ConnectycubeUser;
 
 public class MainActivity extends BaseLoggableActivity implements ObservableScrollViewCallbacks {
 
@@ -451,7 +451,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     private void openPushDialogIfPossible() {
         CoreSharedHelper sharedHelper = CoreSharedHelper.getInstance();
         if (sharedHelper.needToOpenDialog()) {
-            QBChatDialog chatDialog = DataManager.getInstance().getQBChatDialogDataManager()
+            ConnectycubeChatDialog chatDialog = DataManager.getInstance().getConnectycubeChatDialogDataManager()
                     .getByDialogId(sharedHelper.getPushDialogId());
             QMUser user = QMUserService.getInstance().getUserCache().get((long) sharedHelper.getPushUserId());
             if (chatDialog != null) {
@@ -460,8 +460,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         }
     }
 
-    private void startDialogActivity(QBChatDialog chatDialog, QMUser user) {
-        if (QBDialogType.PRIVATE.equals(chatDialog.getType())) {
+    private void startDialogActivity(ConnectycubeChatDialog chatDialog, QMUser user) {
+        if (ConnectycubeDialogType.PRIVATE.equals(chatDialog.getType())) {
             startPrivateChatActivity(user, chatDialog);
         } else {
             startGroupChatActivity(chatDialog);
@@ -902,7 +902,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     }
 
     private void sendContact() {
-        QBPagedRequestBuilder pagedRequestBuilder = new QBPagedRequestBuilder();
+        PagedRequestBuilder pagedRequestBuilder = new PagedRequestBuilder();
         pagedRequestBuilder.setPage(1);
         pagedRequestBuilder.setPerPage(arrayPhone.size());
 
@@ -912,12 +912,12 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             }
         }
 
-        QBUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new QBEntityCallback<ArrayList<QBUser>>() {
+        ConnectycubeUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new EntityCallback<ArrayList<ConnectycubeUser>>() {
             @Override
-            public void onSuccess(ArrayList<QBUser> users, Bundle params) {
+            public void onSuccess(ArrayList<ConnectycubeUser> users, Bundle params) {
                 if (users.size() > 0) {
                     for (int j = 0; j < users.size(); ++j) {
-                        if (!mDbHelper.isQbUser(users.get(j).getPhone())) {
+                        if (!mDbHelper.isConnectycubeUser(users.get(j).getPhone())) {
                             mDbHelper.updateContact(users.get(j).getPhone(), users.get(j).getId());
                         }
                     }
@@ -927,7 +927,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             }
 
             @Override
-            public void onError(QBResponseException errors) {
+            public void onError(ResponseException errors) {
                 Log.e("Error", errors.getErrors().toString());
             }
         });

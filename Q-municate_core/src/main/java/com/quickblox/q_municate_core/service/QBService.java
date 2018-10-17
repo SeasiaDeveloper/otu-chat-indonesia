@@ -10,8 +10,8 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.quickblox.chat.QBChatService;
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.chat.ConnectycubeChatService;
+import com.connectycube.core.exception.ResponseException;
 import com.quickblox.q_municate_core.core.command.CompositeServiceCommand;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.models.AppSession;
@@ -530,7 +530,7 @@ public class QBService extends Service {
             public void run() {
                 try {
                     command.execute(intent.getExtras());
-                } catch (QBResponseException e) {
+                } catch (ResponseException e) {
                     ErrorUtils.logError(e);
                     if (Utils.isTokenDestroyedError(e)) {
                         forceReLogin();
@@ -575,7 +575,7 @@ public class QBService extends Service {
             String action = intent.getAction();
             if (action != null && QBServiceConsts.RE_LOGIN_IN_CHAT_SUCCESS_ACTION.equals(action)) {
                 ((QBChatHelper) getHelper(CHAT_HELPER)).init(AppSession.getSession().getUser());
-                ((QBCallChatHelper) getHelper(CALL_CHAT_HELPER)).init(QBChatService.getInstance());
+                ((QBCallChatHelper) getHelper(CALL_CHAT_HELPER)).init(ConnectycubeChatService.getInstance());
             }
         }
 

@@ -1,7 +1,7 @@
 package com.quickblox.q_municate_base_service;
 
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.users.model.ConnectycubeUser;
 
 public interface QMServiceManagerListener {
 
@@ -10,7 +10,7 @@ public interface QMServiceManagerListener {
      *
      *  @return QBUUser instance
      */
-    QBUser getCurrentUser();
+    ConnectycubeUser getCurrentUser();
 
     /**
      *  Check is current session is authorized

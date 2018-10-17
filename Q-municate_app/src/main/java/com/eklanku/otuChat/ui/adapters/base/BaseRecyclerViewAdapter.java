@@ -10,7 +10,7 @@ import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.utils.listeners.OnRecycleItemClickListener;
 import com.eklanku.otuChat.utils.image.ImageLoaderUtils;
 import com.quickblox.q_municate_core.models.AppSession;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +22,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseClickListenerVie
     protected final BaseActivity baseActivity;
     protected final LayoutInflater layoutInflater;
     protected final Resources resources;
-    protected QBUser currentQbUser;
+    protected ConnectycubeUser currentConnectycubeUser;
 
     // Package private because we need access in BaseViewHolder but not in child classes
     OnRecycleItemClickListener<T> onRecycleItemClickListener;
@@ -37,7 +37,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends BaseClickListenerVie
     public BaseRecyclerViewAdapter(BaseActivity baseActivity, List<T> objectsList) {
         this(baseActivity);
         this.objectsList = objectsList;
-        currentQbUser = AppSession.getSession().getUser();
+        currentConnectycubeUser = AppSession.getSession().getUser();
     }
 
     public void setList(List<T> items) {

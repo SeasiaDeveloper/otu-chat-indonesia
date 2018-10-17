@@ -24,8 +24,8 @@ import com.eklanku.otuChat.utils.ToastUtils;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.eklanku.otuChat.utils.listeners.SelectUsersListener;
 import com.eklanku.otuChat.utils.listeners.simple.SimpleOnRecycleItemClickListener;
-import com.quickblox.chat.QBChatService;
-import com.quickblox.chat.model.QBChatDialog;
+import com.connectycube.chat.ConnectycubeChatService;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_user_service.model.QMUser;
 
@@ -44,7 +44,7 @@ public class NewGroupDialogActivity extends BaseFriendsListActivity implements S
 
     private boolean isFirst = true;
     private DbHelper mDbHelper;
-    private QBChatDialog qbDialog;
+    private ConnectycubeChatDialog qbDialog;
     private ContactsAdapter contactsAdapter;
 
     public static void start(Context context) {
@@ -62,8 +62,8 @@ public class NewGroupDialogActivity extends BaseFriendsListActivity implements S
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         /*mDbHelper = new DbHelper(this);
-        qbDialog = (QBChatDialog) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_DIALOG);
-        qbDialog.initForChat(QBChatService.getInstance());
+        qbDialog = (ConnectycubeChatDialog) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_DIALOG);
+        qbDialog.initForChat(ConnectycubeChatService.getInstance());
         contactsModels = mDbHelper.getContactsExcept(qbDialog.getOccupants());
         contactsModels = new ArrayList<>();
 

@@ -19,6 +19,6 @@ android {
 dependencies {
     implementation "com.j256.ormlite:ormlite-android:${rootProject.ormliteAndroidVersion}"
     implementation "com.j256.ormlite:ormlite-core:${rootProject.ormliteCoreVersion}"
-    implementation "com.quickblox:quickblox-android-sdk-chat:${rootProject.qbSdkVersion}"
+    implementation "com.connectycube:connectycube-android-sdk-chat:${rootProject.cbSdkVersion}"
     implementation project(path: ':q-municate_user_service')
 }

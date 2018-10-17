@@ -5,16 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.connectycube.auth.session.ConnectycubeSessionParameters;
+import com.connectycube.auth.session.SessionListenerImpl;
 import com.eklanku.otuChat.service.SessionJobService;
-import com.quickblox.auth.model.QBProvider;
-import com.quickblox.auth.session.QBSessionListenerImpl;
-import com.quickblox.auth.session.QBSessionManager;
-import com.quickblox.auth.session.QBSessionParameters;
+import com.connectycube.auth.model.ConnectycubeProvider;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.eklanku.otuChat.service.SessionJobService;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.utils.helpers.FirebaseAuthHelper;
 import com.quickblox.q_municate_core.models.AppSession;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 public class SessionListener {
 
@@ -26,30 +26,30 @@ public class SessionListener {
 
     public SessionListener(){
         listener = new QBSessionListener();
-        QBSessionManager.getInstance().addListener(listener);
+        ConnectycubeSessionManager.getInstance().addListener(listener);
     }
 
-    private static class QBSessionListener extends QBSessionListenerImpl {
+    private static class QBSessionListener extends SessionListenerImpl {
 
         @Override
-        public void onSessionUpdated(QBSessionParameters sessionParameters) {
+        public void onSessionUpdated(ConnectycubeSessionParameters sessionParameters) {
             Log.d(TAG, "onSessionUpdated pswd:" + sessionParameters.getUserPassword()
                     + ", iserId : " + sessionParameters.getUserId());
-            QBUser qbUser = AppSession.getSession().getUser();
+            ConnectycubeUser connectycubeUser = AppSession.getSession().getUser();
             if (sessionParameters.getSocialProvider() != null) {
-                qbUser.setPassword(QBSessionManager.getInstance().getToken());
+                connectycubeUser.setPassword(ConnectycubeSessionManager.getInstance().getToken());
             } else {
-                qbUser.setPassword(sessionParameters.getUserPassword());
+                connectycubeUser.setPassword(sessionParameters.getUserPassword());
             }
-            AppSession.getSession().updateUser(qbUser);
+            AppSession.getSession().updateUser(connectycubeUser);
         }
 
         @Override
         public void onProviderSessionExpired(String provider) {
             Log.d(TAG, "onProviderSessionExpired :" +provider );
 
-            if (QBProvider.FIREBASE_PHONE.equals(provider)
-                    || QBProvider.TWITTER_DIGITS.equals(provider)) { //for correct migration from TWITTER_DIGITS to FIREBASE_PHONE
+            if (ConnectycubeProvider.FIREBASE_PHONE.equals(provider)
+                    || ConnectycubeProvider.TWITTER_DIGITS.equals(provider)) { //for correct migration from TWITTER_DIGITS to FIREBASE_PHONE
 
                 new FirebaseAuthHelper(App.getInstance()).refreshInternalFirebaseToken(new FirebaseAuthHelper.RequestFirebaseIdTokenCallback() {
                     @Override

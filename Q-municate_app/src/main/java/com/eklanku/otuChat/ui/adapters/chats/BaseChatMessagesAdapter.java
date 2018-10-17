@@ -16,14 +16,18 @@ import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.utils.DateUtils;
 import com.eklanku.otuChat.utils.FileUtils;
+/*<<<<<<< HEAD
 import com.quickblox.chat.model.QBChatDialog;
+=======*/
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+>>>>>>> origin/feature/migration
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_core.qb.commands.chat.QBUpdateStatusMessageCommand;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.models.State;
-import com.quickblox.ui.kit.chatmessage.adapter.QBMessagesAdapter;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.ui.chatmessage.adapter.ConnectycubeChatAdapter;
+import com.connectycube.users.model.ConnectycubeUser;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import java.util.List;
@@ -34,17 +38,18 @@ import butterknife.ButterKnife;
 ;
 
 
-public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessage> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
+
+public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<CombinationMessage> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
     private static final String TAG = BaseChatMessagesAdapter.class.getSimpleName();
     protected static final int TYPE_REQUEST_MESSAGE = 100;
-    protected QBUser currentUser;
+    protected ConnectycubeUser currentUser;
     protected final BaseActivity baseActivity;
     protected FileUtils fileUtils;
 
     private DataManager dataManager;
-    protected QBChatDialog chatDialog;
+    protected ConnectycubeChatDialog chatDialog;
 
-    BaseChatMessagesAdapter(BaseActivity baseActivity, QBChatDialog dialog, List<CombinationMessage> chatMessages) {
+    BaseChatMessagesAdapter(BaseActivity baseActivity, ConnectycubeChatDialog dialog, List<CombinationMessage> chatMessages) {
         super(baseActivity, chatMessages);
         this.baseActivity = baseActivity;
         chatDialog = dialog;
@@ -94,7 +99,7 @@ public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessag
     }
 
     @Override
-    protected RequestListener getRequestListener(QBMessageViewHolder holder, int position) {
+    protected RequestListener getRequestListener(MessageViewHolder holder, int position) {
         CombinationMessage chatMessage = getItem(position);
 
         return new ImageRequestListener((ImageAttachHolder) holder, isIncoming(chatMessage));
@@ -132,7 +137,7 @@ public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessag
         return chatMessage.isIncoming(currentUser.getId());
     }
 
-    protected void updateMessageState(CombinationMessage message, QBChatDialog dialog) {
+    protected void updateMessageState(CombinationMessage message, ConnectycubeChatDialog dialog) {
         if (!State.READ.equals(message.getState()) && baseActivity.isNetworkAvailable()) {
             message.setState(State.READ);
             Log.d(TAG, "updateMessageState");
@@ -143,21 +148,33 @@ public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessag
     }
 
     @Override
+<<<<<<< HEAD
     protected void onBindViewMsgRightHolder(QBMessagesAdapter.TextMessageHolder holder, CombinationMessage chatMessage, int position) {
+=======
+    protected void onBindViewMsgRightHolder(ConnectycubeChatAdapter.TextMessageHolder holder, CombinationMessage chatMessage, int position) {
+>>>>>>> origin/feature/migration
         int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewMsgRightHolder(holder, chatMessage, position);
     }
 
     @Override
+<<<<<<< HEAD
     protected void onBindViewMsgLeftHolder(QBMessagesAdapter.TextMessageHolder holder, CombinationMessage chatMessage, int position) {
+=======
+    protected void onBindViewMsgLeftHolder(ConnectycubeChatAdapter.TextMessageHolder holder, CombinationMessage chatMessage, int position) {
+>>>>>>> origin/feature/migration
         int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.left_chat_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewMsgRightHolder(holder, chatMessage, position);
     }
 
     @Override
+<<<<<<< HEAD
     protected void onBindViewAttachRightHolder(QBMessagesAdapter.ImageAttachHolder holder, CombinationMessage chatMessage, int position) {
+=======
+    protected void onBindViewAttachRightHolder(ConnectycubeChatAdapter.ImageAttachHolder holder, CombinationMessage chatMessage, int position) {
+>>>>>>> origin/feature/migration
         int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewAttachRightHolder(holder, chatMessage, position);
@@ -279,7 +296,7 @@ public class BaseChatMessagesAdapter extends QBMessagesAdapter<CombinationMessag
         }
     }
 
-    protected static class RequestsViewHolder extends QBMessageViewHolder {
+    protected static class RequestsViewHolder extends MessageViewHolder {
         @Nullable
         @Bind(R.id.message_textview)
         TextView messageTextView;

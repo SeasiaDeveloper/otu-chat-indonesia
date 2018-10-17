@@ -6,11 +6,11 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.eklanku.otuChat.R;;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 public class GoogleAnalyticsHelper {
 
-    public static void pushAnalyticsData(Context context, QBUser user, String action) {
+    public static void pushAnalyticsData(Context context, ConnectycubeUser user, String action) {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
         Tracker tracker = analytics.newTracker(context.getString(R.string.google_analytics_tracking_id));
 

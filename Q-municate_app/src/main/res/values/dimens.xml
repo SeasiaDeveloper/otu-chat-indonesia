@@ -139,5 +139,8 @@
     <dimen name="chat_text_less_margin_left_right">10dp</dimen>
     <dimen name="chat_text_more_margin_left_right">15dp</dimen>
 
+    <dimen name="barcode_overlay_padding">32dp</dimen>
+    <dimen name="barcode_overlay_square_height">230dp</dimen>
+    <dimen name="barcode_overlay_square_width">230dp</dimen>
 
 </resources>

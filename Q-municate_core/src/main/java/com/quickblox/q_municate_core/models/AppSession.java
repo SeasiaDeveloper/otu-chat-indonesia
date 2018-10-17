@@ -3,11 +3,11 @@ package com.quickblox.q_municate_core.models;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.quickblox.auth.model.QBProvider;
-import com.quickblox.auth.session.QBSessionManager;
-import com.quickblox.auth.session.QBSessionParameters;
+import com.connectycube.auth.model.ConnectycubeProvider;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
+import com.connectycube.auth.session.ConnectycubeSessionParameters;
 import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,14 +19,14 @@ public class AppSession implements Serializable {
 
     private CoreSharedHelper coreSharedHelper;
     private LoginType loginType;
-    private QBUser qbUser;
+    private ConnectycubeUser connectycubeUser;
 
     private ChatState chatState = ChatState.FOREGROUND;
 
-    private AppSession(QBUser qbUser) {
+    private AppSession(ConnectycubeUser connectycubeUser) {
         coreSharedHelper = CoreSharedHelper.getInstance();
-        this.qbUser = qbUser;
-        this.loginType = getLoginTypeBySessionParameters(QBSessionManager.getInstance().getSessionParameters());
+        this.connectycubeUser = connectycubeUser;
+        this.loginType = getLoginTypeBySessionParameters(ConnectycubeSessionManager.getInstance().getSessionParameters());
         save();
     }
 
@@ -38,7 +38,7 @@ public class AppSession implements Serializable {
         return chatState;
     }
 
-    public static void startSession(QBUser user) {
+    public static void startSession(ConnectycubeUser user) {
         activeSession = new AppSession(user);
     }
 
@@ -53,29 +53,29 @@ public class AppSession implements Serializable {
         int userId = CoreSharedHelper.getInstance().getUserId();
         String userFullName = CoreSharedHelper.getInstance().getUserFullName();
 
-        QBUser qbUser = new QBUser();
-        qbUser.setId(userId);
-        qbUser.setEmail(CoreSharedHelper.getInstance().getUserEmail());
-        qbUser.setPassword(CoreSharedHelper.getInstance().getUserPassword());
-        qbUser.setFullName(userFullName);
-        qbUser.setFacebookId(CoreSharedHelper.getInstance().getFBId());
-        qbUser.setTwitterId(CoreSharedHelper.getInstance().getTwitterId());
-        qbUser.setTwitterDigitsId(CoreSharedHelper.getInstance().getTwitterDigitsId());
-        qbUser.setCustomData(CoreSharedHelper.getInstance().getUserCustomData());
+        ConnectycubeUser connectycubeUser = new ConnectycubeUser();
+        connectycubeUser.setId(userId);
+        connectycubeUser.setEmail(CoreSharedHelper.getInstance().getUserEmail());
+        connectycubeUser.setPassword(CoreSharedHelper.getInstance().getUserPassword());
+        connectycubeUser.setFullName(userFullName);
+        connectycubeUser.setFacebookId(CoreSharedHelper.getInstance().getFBId());
+        connectycubeUser.setTwitterId(CoreSharedHelper.getInstance().getTwitterId());
+        connectycubeUser.setTwitterDigitsId(CoreSharedHelper.getInstance().getTwitterDigitsId());
+        connectycubeUser.setCustomData(CoreSharedHelper.getInstance().getUserCustomData());
 
-        activeSession = new AppSession(qbUser);
+        activeSession = new AppSession(connectycubeUser);
 
         return activeSession;
     }
 
     public static boolean isSessionExistOrNotExpired(long expirationTime) {
-            QBSessionManager qbSessionManager = QBSessionManager.getInstance();
-            String token = qbSessionManager.getToken();
+            ConnectycubeSessionManager sessionManager = ConnectycubeSessionManager.getInstance();
+            String token = sessionManager.getToken();
             if (token == null) {
                 Log.d("AppSession", "token == null");
                 return false;
             }
-            Date tokenExpirationDate = qbSessionManager.getTokenExpirationDate();
+            Date tokenExpirationDate = sessionManager.getTokenExpirationDate();
             long tokenLiveOffset = tokenExpirationDate.getTime() - System.currentTimeMillis();
             return tokenLiveOffset > expirationTime;
     }
@@ -94,20 +94,20 @@ public class AppSession implements Serializable {
         activeSession = null;
     }
 
-    public QBUser getUser() {
-        return qbUser;
+    public ConnectycubeUser getUser() {
+        return connectycubeUser;
     }
 
     public void save() {
-        saveUser(qbUser);
+        saveUser(connectycubeUser);
     }
 
-    public void updateUser(QBUser qbUser) {
-        this.qbUser = qbUser;
-        saveUser(this.qbUser);
+    public void updateUser(ConnectycubeUser connectycubeUser) {
+        this.connectycubeUser = connectycubeUser;
+        saveUser(this.connectycubeUser);
     }
 
-    private void saveUser(QBUser user) {
+    private void saveUser(ConnectycubeUser user) {
         coreSharedHelper.saveUserId(user.getId());
         coreSharedHelper.saveUserEmail(user.getEmail());
         coreSharedHelper.saveUserPassword(user.getPassword());
@@ -119,18 +119,18 @@ public class AppSession implements Serializable {
     }
 
     public boolean isLoggedIn() {
-        return QBSessionManager.getInstance().getSessionParameters() != null;
+        return ConnectycubeSessionManager.getInstance().getSessionParameters() != null;
     }
 
     public boolean isSessionExist() {
-        return !TextUtils.isEmpty(QBSessionManager.getInstance().getToken());
+        return !TextUtils.isEmpty(ConnectycubeSessionManager.getInstance().getToken());
     }
 
     public LoginType getLoginType() {
         return loginType;
     }
 
-    private LoginType getLoginTypeBySessionParameters(QBSessionParameters sessionParameters){
+    private LoginType getLoginTypeBySessionParameters(ConnectycubeSessionParameters sessionParameters){
         LoginType result = null;
         if(sessionParameters == null){
             return null;
@@ -138,11 +138,11 @@ public class AppSession implements Serializable {
         String socialProvider = sessionParameters.getSocialProvider();
         if(socialProvider == null){
             result = LoginType.EMAIL;
-        } else if (socialProvider.equals(QBProvider.FACEBOOK)){
+        } else if (socialProvider.equals(ConnectycubeProvider.FACEBOOK)){
             result = LoginType.FACEBOOK;
-        } else if (socialProvider.equals(QBProvider.FIREBASE_PHONE)){
+        } else if (socialProvider.equals(ConnectycubeProvider.FIREBASE_PHONE)){
             result = LoginType.FIREBASE_PHONE;
-        } else if (socialProvider.equals(QBProvider.TWITTER_DIGITS)){ //for correct migration from TWITTER_DIGITS to FIREBASE_PHONE
+        } else if (socialProvider.equals(ConnectycubeProvider.TWITTER_DIGITS)){ //for correct migration from TWITTER_DIGITS to FIREBASE_PHONE
             result = LoginType.FIREBASE_PHONE;
         }
 

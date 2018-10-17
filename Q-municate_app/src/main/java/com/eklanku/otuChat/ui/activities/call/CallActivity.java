@@ -19,15 +19,16 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Chronometer;
 
+import com.connectycube.videochat.RTCSession;
+import com.connectycube.videochat.SignalingSpec;
+import com.connectycube.videochat.callbacks.RTCClientVideoTracksCallbacks;
+import com.connectycube.videochat.exception.RTCSignalException;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.fragments.call.ConversationCallFragment;
 import com.eklanku.otuChat.ui.fragments.call.IncomingCallFragment;
-import com.quickblox.chat.QBChatService;
+import com.connectycube.chat.ConnectycubeChatService;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.others.ExitActivity;
-import com.eklanku.otuChat.ui.fragments.call.ConversationCallFragment;
-import com.eklanku.otuChat.ui.fragments.call.IncomingCallFragment;
 import com.eklanku.otuChat.utils.StringUtils;
 import com.eklanku.otuChat.utils.ToastUtils;
 import com.eklanku.otuChat.utils.helpers.PowerManagerHelper;
@@ -43,18 +44,14 @@ import com.quickblox.q_municate_core.utils.call.SettingsUtil;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.models.Friend;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
-import com.quickblox.videochat.webrtc.BaseSession;
-import com.quickblox.videochat.webrtc.QBRTCClient;
-import com.quickblox.videochat.webrtc.QBRTCSession;
-import com.quickblox.videochat.webrtc.QBRTCSessionDescription;
-import com.quickblox.videochat.webrtc.QBRTCTypes;
-import com.quickblox.videochat.webrtc.QBSignalingSpec;
-import com.quickblox.videochat.webrtc.callbacks.QBRTCClientSessionCallbacks;
-import com.quickblox.videochat.webrtc.callbacks.QBRTCClientVideoTracksCallbacks;
-import com.quickblox.videochat.webrtc.callbacks.QBRTCSessionConnectionCallbacks;
-import com.quickblox.videochat.webrtc.callbacks.QBRTCSignalingCallback;
-import com.quickblox.videochat.webrtc.exception.QBRTCSignalException;
+import com.connectycube.users.model.ConnectycubeUser;
+import com.connectycube.videochat.BaseSession;
+import com.connectycube.videochat.RTCClient;
+import com.connectycube.videochat.RTCSessionDescription;
+import com.connectycube.videochat.RTCTypes;
+import com.connectycube.videochat.callbacks.RTCClientSessionCallbacks;
+import com.connectycube.videochat.callbacks.RTCSessionConnectionCallbacks;
+import com.connectycube.videochat.callbacks.RTCSignalingCallback;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -64,7 +61,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 
-public class CallActivity extends BaseLoggableActivity implements QBRTCClientSessionCallbacks, QBRTCSessionConnectionCallbacks, QBRTCSignalingCallback {
+public class CallActivity extends BaseLoggableActivity implements RTCClientSessionCallbacks, RTCSessionConnectionCallbacks, RTCSignalingCallback {
 
     public static final int CALL_ACTIVITY_CLOSE = 1000;
     public static final int CALL_ACTIVITY_CLOSE_WIFI_DISABLED = 1001;
@@ -74,8 +71,8 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     @Bind(R.id.timer_chronometer)
     Chronometer timerChronometer;
 
-    private QBRTCTypes.QBConferenceType qbConferenceType;
-    private List<QBUser> opponentsList;
+    private RTCTypes.ConferenceType conferenceType;
+    private List<ConnectycubeUser> opponentsList;
     private Runnable showIncomingCallWindowTask;
     private Handler showIncomingCallWindowTaskHandler;
     private BroadcastReceiver wifiStateReceiver;
@@ -83,15 +80,15 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     private String hangUpReason;
     private boolean isInComingCall;
     private boolean isInFront;
-    private QBRTCClient qbRtcClient;
+    private RTCClient qbRtcClient;
     private boolean wifiEnabled = true;
     private RingtonePlayer ringtonePlayer;
     private boolean isStarted = false;
 
-    private QBRTCSessionUserCallback qbRtcSessionUserCallback;
+    private RTCSessionUserCallback qbRtcSessionUserCallback;
     private QBCallChatHelper qbCallChatHelper;
     private StartConversationReason startConversationReason;
-    private QBRTCSessionDescription qbRtcSessionDescription;
+    private RTCSessionDescription rtcSessionDescription;
     private ActionBar actionBar;
     private AudioStreamReceiver audioStreamReceiver;
     private String ACTION_ANSWER_CALL = "action_answer_call";
@@ -101,13 +98,13 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     private boolean isNewAppTask;
     private boolean isCallAlreadyInit;
 
-    public static void start(Activity activity, List<QBUser> qbUsersList, QBRTCTypes.QBConferenceType qbConferenceType,
-                             QBRTCSessionDescription qbRtcSessionDescription) {
+    public static void start(Activity activity, List<ConnectycubeUser> ConnectycubeUsersList, RTCTypes.ConferenceType conferenceType,
+                             RTCSessionDescription rtcSessionDescription) {
         Intent intent = new Intent(activity, CallActivity.class);
-        intent.putExtra(QBServiceConsts.EXTRA_OPPONENTS, (Serializable) qbUsersList);
-        intent.putExtra(QBServiceConsts.EXTRA_CONFERENCE_TYPE, qbConferenceType);
+        intent.putExtra(QBServiceConsts.EXTRA_OPPONENTS, (Serializable) ConnectycubeUsersList);
+        intent.putExtra(QBServiceConsts.EXTRA_CONFERENCE_TYPE, conferenceType);
         intent.putExtra(QBServiceConsts.EXTRA_START_CONVERSATION_REASON_TYPE, StartConversationReason.OUTCOME_CALL_MADE);
-        intent.putExtra(QBServiceConsts.EXTRA_SESSION_DESCRIPTION, qbRtcSessionDescription);
+        intent.putExtra(QBServiceConsts.EXTRA_SESSION_DESCRIPTION, rtcSessionDescription);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         activity.startActivityForResult(intent, CALL_ACTIVITY_CLOSE);
     }
@@ -187,8 +184,8 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     private void initCallFragment() {
         switch (startConversationReason) {
             case INCOME_CALL_FOR_ACCEPTION:
-                if (qbRtcSessionDescription != null) {
-                    addIncomingCallFragment(qbRtcSessionDescription);
+                if (rtcSessionDescription != null) {
+                    addIncomingCallFragment(rtcSessionDescription);
                     isInComingCall = true;
                     initIncomingCallTask();
                 }
@@ -270,22 +267,22 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     }
 
     @Override
-    public void onSuccessSendingPacket(QBSignalingSpec.QBSignalCMD qbSignalCMD, Integer integer) {
+    public void onSuccessSendingPacket(SignalingSpec.SignalCMD qbSignalCMD, Integer integer) {
     }
 
     @Override
-    public void onErrorSendingPacket(QBSignalingSpec.QBSignalCMD qbSignalCMD, Integer userId,
-                                     QBRTCSignalException e) {
+    public void onErrorSendingPacket(SignalingSpec.SignalCMD qbSignalCMD, Integer userId,
+                                     RTCSignalException e) {
         ToastUtils.longToast(R.string.dlg_signal_error);
     }
 
     @Override
-    public void onReceiveNewSession(final QBRTCSession session) {
+    public void onReceiveNewSession(final RTCSession session) {
         Log.d(TAG, "Session " + session.getSessionID() + " are income");
     }
 
     @Override
-    public void onUserNotAnswer(QBRTCSession session, Integer userID) {
+    public void onUserNotAnswer(RTCSession session, Integer userID) {
         if (!session.equals(getCurrentSession())) {
             return;
         }
@@ -298,7 +295,7 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     }
 
     @Override
-    public void onCallRejectByUser(QBRTCSession session, Integer userID, Map<String, String> userInfo) {
+    public void onCallRejectByUser(RTCSession session, Integer userID, Map<String, String> userInfo) {
         if (!session.equals(getCurrentSession())) {
             return;
         }
@@ -311,7 +308,7 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     }
 
     @Override
-    public void onCallAcceptByUser(QBRTCSession session, Integer userId, Map<String, String> userInfo) {
+    public void onCallAcceptByUser(RTCSession session, Integer userId, Map<String, String> userInfo) {
         if (!session.equals(getCurrentSession())) {
             return;
         }
@@ -324,7 +321,7 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     }
 
     @Override
-    public void onReceiveHangUpFromUser(final QBRTCSession session, final Integer userID, Map<String, String> map) {
+    public void onReceiveHangUpFromUser(final RTCSession session, final Integer userID, Map<String, String> map) {
         if (session.equals(getCurrentSession())) {
 
             if (qbRtcSessionUserCallback != null) {
@@ -339,12 +336,12 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     }
 
     @Override
-    public void onUserNoActions(QBRTCSession qbrtcSession, Integer integer) {
+    public void onUserNoActions(RTCSession qbrtcSession, Integer integer) {
         startIncomeCallTimer(0);
     }
 
     @Override
-    public void onSessionClosed(final QBRTCSession session) {
+    public void onSessionClosed(final RTCSession session) {
         Log.d(TAG, "Session " + session.getSessionID() + " start stop session");
 
         if (session.equals(getCurrentSession())) {
@@ -370,7 +367,7 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     }
 
     @Override
-    public void onSessionStartClose(final QBRTCSession session) {
+    public void onSessionStartClose(final RTCSession session) {
         session.removeSessionCallbacksListener(CallActivity.this);
         if (currentFragment instanceof ConversationCallFragment && session.equals(getCurrentSession())) {
             ((ConversationCallFragment) currentFragment).actionButtonsEnabled(false);
@@ -378,17 +375,17 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     }
 
     @Override
-    public void onStartConnectToUser(QBRTCSession session, Integer userID) {
+    public void onStartConnectToUser(RTCSession session, Integer userID) {
 
     }
 
     @Override
-    public void onStateChanged(QBRTCSession qbrtcSession, BaseSession.QBRTCSessionState qbrtcSessionState) {
+    public void onStateChanged(RTCSession qbrtcSession, BaseSession.RTCSessionState qbrtcSessionState) {
 
     }
 
     @Override
-    public void onConnectedToUser(QBRTCSession session, final Integer userID) {
+    public void onConnectedToUser(RTCSession session, final Integer userID) {
         forbiddenCloseByWifiState();
         if (isInComingCall) {
             stopIncomeCallTimer();
@@ -397,7 +394,7 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     }
 
     @Override
-    public void onConnectionClosedForUser(QBRTCSession session, Integer userID) {
+    public void onConnectionClosedForUser(RTCSession session, Integer userID) {
         // Close app after session close of network was disabled
         if (hangUpReason != null && hangUpReason.equals(QBServiceConsts.EXTRA_WIFI_DISABLED)) {
             Intent returnIntent = new Intent();
@@ -408,17 +405,17 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     }
 
     @Override
-    public void onDisconnectedFromUser(QBRTCSession session, Integer userID) {
+    public void onDisconnectedFromUser(RTCSession session, Integer userID) {
 
     }
 
     @Override
-    public void onDisconnectedTimeoutFromUser(QBRTCSession session, Integer userID) {
+    public void onDisconnectedTimeoutFromUser(RTCSession session, Integer userID) {
 
     }
 
     @Override
-    public void onConnectionFailedWithUser(QBRTCSession session, Integer userID) {
+    public void onConnectionFailedWithUser(RTCSession session, Integer userID) {
 
     }
 
@@ -438,10 +435,10 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     }
 
     private void initFields() {
-        opponentsList = (List<QBUser>) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_OPPONENTS);
-        qbConferenceType = (QBRTCTypes.QBConferenceType) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_CONFERENCE_TYPE);
+        opponentsList = (List<ConnectycubeUser>) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_OPPONENTS);
+        conferenceType = (RTCTypes.ConferenceType) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_CONFERENCE_TYPE);
         startConversationReason = (StartConversationReason) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_START_CONVERSATION_REASON_TYPE);
-        qbRtcSessionDescription = (QBRTCSessionDescription) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_SESSION_DESCRIPTION);
+        rtcSessionDescription = (RTCSessionDescription) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_SESSION_DESCRIPTION);
         CallPushParams callPushParams = (CallPushParams) getIntent().getSerializableExtra(QBServiceConsts.EXTRA_PUSH_CALL);
 
         if (callPushParams != null) {
@@ -451,7 +448,7 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
         }
         initRingtonePlayer();
         // Add activity as callback to RTCClient
-        qbRtcClient = QBRTCClient.getInstance(this);
+        qbRtcClient = RTCClient.getInstance(this);
     }
 
     private void initRingtonePlayer() {
@@ -541,7 +538,7 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
         return getSupportFragmentManager().findFragmentById(R.id.container_fragment);
     }
 
-    private void addIncomingCallFragment(QBRTCSessionDescription qbRtcSessionDescription) {
+    private void addIncomingCallFragment(RTCSessionDescription qbRtcSessionDescription) {
         Log.d(TAG, "QBRTCSession in addIncomingCallFragment is " + qbRtcSessionDescription);
         if (isInFront) {
             Fragment fragment = new IncomingCallFragment();
@@ -563,25 +560,25 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
     }
 
     public void checkPermissionsAndStartCall(StartConversationReason startConversationReason) {
-        if (systemPermissionHelper.isAllPermissionsGrantedForCallByType(qbConferenceType)) {
+        if (systemPermissionHelper.isAllPermissionsGrantedForCallByType(conferenceType)) {
             startConversationFragment(startConversationReason);
         } else {
-            systemPermissionHelper.requestPermissionsForCallByType(qbConferenceType);
+            systemPermissionHelper.requestPermissionsForCallByType(conferenceType);
         }
     }
 
     public void addConversationCallFragment() {
         Log.d(TAG, "addConversationCallFragment()");
 
-        QBRTCSession newSessionWithOpponents = qbRtcClient.createNewSessionWithOpponents(
-                UserFriendUtils.getFriendIdsList(opponentsList), qbConferenceType);
+        RTCSession newSessionWithOpponents = qbRtcClient.createNewSessionWithOpponents(
+                UserFriendUtils.getFriendIdsList(opponentsList), conferenceType);
         SettingsUtil.setSettingsStrategy(this, opponentsList);
 
         if (qbCallChatHelper != null) {
             qbCallChatHelper.initCurrentSession(newSessionWithOpponents, this, this);
 
             ConversationCallFragment fragment = ConversationCallFragment
-                    .newInstance(opponentsList, opponentsList.get(0).getFullName(), qbConferenceType,
+                    .newInstance(opponentsList, opponentsList.get(0).getFullName(), conferenceType,
                             StartConversationReason.OUTCOME_CALL_MADE,
                             qbCallChatHelper.getCurrentRtcSession().getSessionID());
 
@@ -592,25 +589,25 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
         }
     }
 
-    public List<QBUser> getOpponentsList() {
+    public List<ConnectycubeUser> getOpponentsList() {
         return opponentsList;
     }
 
-    public void setOpponentsList(List<QBUser> qbUsers) {
-        this.opponentsList = qbUsers;
+    public void setOpponentsList(List<ConnectycubeUser> connectycubeUsers) {
+        this.opponentsList = connectycubeUsers;
     }
 
     public void addConversationFragmentReceiveCall() {
         if (qbCallChatHelper != null) {
-            QBRTCSession session = qbCallChatHelper.getCurrentRtcSession();
+            RTCSession session = qbCallChatHelper.getCurrentRtcSession();
 
             if (session != null) {
-                Integer myId = QBChatService.getInstance().getUser().getId();
+                Integer myId = ConnectycubeChatService.getInstance().getUser().getId();
                 ArrayList<Integer> opponentsWithoutMe = new ArrayList<>(session.getOpponents());
                 opponentsWithoutMe.remove(new Integer(myId));
                 opponentsWithoutMe.add(session.getCallerID());
 
-                ArrayList<QBUser> newOpponents = (ArrayList<QBUser>) UserFriendUtils
+                ArrayList<ConnectycubeUser> newOpponents = (ArrayList<ConnectycubeUser>) UserFriendUtils
                         .getUsersByIDs(opponentsWithoutMe.toArray(new Integer[opponentsWithoutMe.size()]),
                                 opponentsList);
                 SettingsUtil.setSettingsStrategy(this, newOpponents);
@@ -642,7 +639,7 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
         }
     }
 
-    public QBRTCSession getCurrentSession() {
+    public RTCSession getCurrentSession() {
         if (qbCallChatHelper != null) {
             return qbCallChatHelper.getCurrentRtcSession();
         } else {
@@ -650,7 +647,7 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
         }
     }
 
-    public void addVideoTrackCallbacksListener(QBRTCClientVideoTracksCallbacks videoTracksCallbacks) {
+    public void addVideoTrackCallbacksListener(RTCClientVideoTracksCallbacks videoTracksCallbacks) {
         if (getCurrentSession() != null) {
             getCurrentSession().addVideoTrackCallbacksListener(videoTracksCallbacks);
         }
@@ -666,7 +663,7 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
         switch (requestCode) {
             case SystemPermissionHelper.PERMISSIONS_FOR_CALL_REQUEST: {
                 if (grantResults.length > 0) {
-                    if (!systemPermissionHelper.isAllPermissionsGrantedForCallByType(qbConferenceType)) {
+                    if (!systemPermissionHelper.isAllPermissionsGrantedForCallByType(conferenceType)) {
                         showToastDeniedPermissions(permissions, grantResults);
                     }
                 }
@@ -698,19 +695,19 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
                 getString(R.string.denied_permission_message, StringUtils.createCompositeString(deniedPermissions)));
     }
 
-    public void addTCClientConnectionCallback(QBRTCSessionConnectionCallbacks clientConnectionCallbacks) {
+    public void addTCClientConnectionCallback(RTCSessionConnectionCallbacks clientConnectionCallbacks) {
         if (getCurrentSession() != null) {
             getCurrentSession().addSessionCallbacksListener(clientConnectionCallbacks);
         }
     }
 
-    public void removeRTCClientConnectionCallback(QBRTCSessionConnectionCallbacks clientConnectionCallbacks) {
+    public void removeRTCClientConnectionCallback(RTCSessionConnectionCallbacks clientConnectionCallbacks) {
         if (getCurrentSession() != null) {
             getCurrentSession().removeSessionCallbacksListener(clientConnectionCallbacks);
         }
     }
 
-    public void addRTCSessionUserCallback(QBRTCSessionUserCallback qbRtcSessionUserCallback) {
+    public void addRTCSessionUserCallback(RTCSessionUserCallback qbRtcSessionUserCallback) {
         this.qbRtcSessionUserCallback = qbRtcSessionUserCallback;
     }
 
@@ -733,14 +730,14 @@ public class CallActivity extends BaseLoggableActivity implements QBRTCClientSes
         }
     }
 
-    public interface QBRTCSessionUserCallback {
+    public interface RTCSessionUserCallback {
 
-        void onUserNotAnswer(QBRTCSession session, Integer userId);
+        void onUserNotAnswer(RTCSession session, Integer userId);
 
-        void onCallRejectByUser(QBRTCSession session, Integer userId, Map<String, String> userInfo);
+        void onCallRejectByUser(RTCSession session, Integer userId, Map<String, String> userInfo);
 
-        void onCallAcceptByUser(QBRTCSession session, Integer userId, Map<String, String> userInfo);
+        void onCallAcceptByUser(RTCSession session, Integer userId, Map<String, String> userInfo);
 
-        void onReceiveHangUpFromUser(QBRTCSession session, Integer userId);
+        void onReceiveHangUpFromUser(RTCSession session, Integer userId);
     }
 }

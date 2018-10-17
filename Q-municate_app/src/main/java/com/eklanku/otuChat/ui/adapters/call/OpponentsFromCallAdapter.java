@@ -9,10 +9,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.eklanku.otuChat.ui.views.RTCGLVideoView;
-import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.views.RTCGLVideoView;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.videochat.view.RTCSurfaceView;
+import com.eklanku.otuChat.R;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class OpponentsFromCallAdapter extends RecyclerView.Adapter<OpponentsFrom
     private int paddingLeft = 0;
 
     private Context context;
-    private List<QBUser> opponents;
+    private List<ConnectycubeUser> opponents;
     private int gridWidth;
     private boolean showVideoView;
     private LayoutInflater inflater;
@@ -36,7 +35,7 @@ public class OpponentsFromCallAdapter extends RecyclerView.Adapter<OpponentsFrom
     private OnAdapterEventListener adapterListener;
 
 
-    public OpponentsFromCallAdapter(Context context, List<QBUser> users, int width, int height, int gridWidth,
+    public OpponentsFromCallAdapter(Context context, List<ConnectycubeUser> users, int width, int height, int gridWidth,
             int columns, int itemMargin, boolean showVideoView) {
         this.context = context;
         this.opponents = users;
@@ -84,7 +83,7 @@ public class OpponentsFromCallAdapter extends RecyclerView.Adapter<OpponentsFrom
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final QBUser user = opponents.get(position);
+        final ConnectycubeUser user = opponents.get(position);
 
         holder.setUserId(user.getId());
         if (position == (opponents.size() -1 )) {
@@ -103,13 +102,13 @@ public class OpponentsFromCallAdapter extends RecyclerView.Adapter<OpponentsFrom
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView connectionStatus;
-        RTCGLVideoView opponentView;
+        RTCSurfaceView opponentView;
         private int userId;
 
         public ViewHolder(View itemView) {
             super(itemView);
             connectionStatus = (TextView) itemView.findViewById(R.id.connectionStatus);
-            opponentView = (RTCGLVideoView) itemView.findViewById(R.id.opponentView);
+            opponentView = itemView.findViewById(R.id.opponentView);
         }
 
         public void setStatus(String status) {
@@ -125,7 +124,7 @@ public class OpponentsFromCallAdapter extends RecyclerView.Adapter<OpponentsFrom
             return userId;
         }
 
-        public RTCGLVideoView getOpponentView() {
+        public RTCSurfaceView getOpponentView() {
             return opponentView;
         }
 

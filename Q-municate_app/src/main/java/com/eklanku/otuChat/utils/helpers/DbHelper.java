@@ -82,7 +82,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    public boolean isQbUser(String phoneNumber) {
+    public boolean isConnectycubeUser(String phoneNumber) {
         SQLiteDatabase db = this.getReadableDatabase();
         String Query = "Select * from " + TABLE_ACCOUNT + " where " + KEY_REG_TYPE + " = '1' AND "+ KEY_LOGIN + " = '" + phoneNumber + "'";
         Cursor cursor = db.rawQuery(Query, null);

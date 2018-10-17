@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.quickblox.chat.model.QBChatDialog;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
 import com.quickblox.q_municate_core.service.QBService;
@@ -37,10 +37,10 @@ public class QBAddFriendsToGroupCommand extends ServiceCommand {
         String dialogId = extras.getString(QBServiceConsts.EXTRA_DIALOG_ID);
         ArrayList<Integer> friendIdsList = (ArrayList<Integer>) extras.getSerializable(QBServiceConsts.EXTRA_FRIENDS);
 
-        QBChatDialog qbDialog = chatHelper.addUsersToDialog(dialogId, friendIdsList);
+        ConnectycubeChatDialog qbDialog = chatHelper.addUsersToDialog(dialogId, friendIdsList);
 
         if (qbDialog != null) {
-            DataManager.getInstance().getQBChatDialogDataManager().update(qbDialog);
+            DataManager.getInstance().getConnectycubeChatDialogDataManager().update(qbDialog);
             DbUtils.saveDialogsOccupants(DataManager.getInstance(), qbDialog, true);
         }
 

@@ -6,16 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.quickblox.chat.QBChatService;
-import com.quickblox.chat.QBRoster;
-import com.quickblox.chat.listeners.QBRosterListener;
-import com.quickblox.chat.listeners.QBSubscriptionListener;
-import com.quickblox.chat.model.QBChatMessage;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBPresence;
-import com.quickblox.chat.model.QBRosterEntry;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.request.QBPagedRequestBuilder;
+import com.connectycube.chat.ConnectycubeChatService;
+import com.connectycube.chat.ConnectycubeRoster;
+import com.connectycube.chat.listeners.RosterListener;
+import com.connectycube.chat.listeners.SubscriptionListener;
+import com.connectycube.chat.model.ConnectycubeChatMessage;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubePresence;
+import com.connectycube.chat.model.ConnectycubeRosterEntry;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.request.PagedRequestBuilder;
 import com.quickblox.q_municate_core.R;
 import com.quickblox.q_municate_core.models.NotificationType;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
@@ -56,7 +56,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
     private static final String ROSTER_INIT_ERROR = "ROSTER isn't initialized. Please make relogin";
 
     private QBRestHelper restHelper;
-    private QBRoster roster;
+    private ConnectycubeRoster roster;
     private QBChatHelper chatHelper;
     private DataManager dataManager;
     private Timer userLoadingTimer;
@@ -77,10 +77,10 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         initThreads();
         restHelper = new QBRestHelper(context);
         dataManager = DataManager.getInstance();
-        roster = QBChatService.getInstance().getRoster(QBRoster.SubscriptionMode.mutual,
-                new SubscriptionListener());
-        roster.setSubscriptionMode(QBRoster.SubscriptionMode.mutual);
-        roster.addRosterListener(new RosterListener());
+        roster = ConnectycubeChatService.getInstance().getRoster(ConnectycubeRoster.SubscriptionMode.mutual,
+                new QMSubscriptionListener());
+        roster.setSubscriptionMode(ConnectycubeRoster.SubscriptionMode.mutual);
+        roster.addRosterListener(new QMRosterListener());
         userLoadingTimer = new Timer();
     }
 
@@ -103,7 +103,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
     public void acceptFriend(int userId) throws Exception {
         roster.confirmSubscription(userId);
 
-        QBChatMessage chatMessage = ChatNotificationUtils.createPrivateMessageAboutFriendsRequests(context,
+        ConnectycubeChatMessage chatMessage = ChatNotificationUtils.createPrivateMessageAboutFriendsRequests(context,
                 NotificationType.FRIENDS_ACCEPT);
         sendNotificationToFriend(chatMessage, userId);
     }
@@ -113,7 +113,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         clearRosterEntry(userId);
         deleteFriendOrUserRequest(userId);
 
-        QBChatMessage chatMessage = ChatNotificationUtils.createPrivateMessageAboutFriendsRequests(context,
+        ConnectycubeChatMessage chatMessage = ChatNotificationUtils.createPrivateMessageAboutFriendsRequests(context,
                 NotificationType.FRIENDS_REJECT);
         sendNotificationToFriend(chatMessage, userId);
     }
@@ -122,7 +122,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         roster.unsubscribe(userId);
         clearRosterEntry(userId);
 
-        QBChatMessage qbChatMessage = ChatNotificationUtils.createPrivateMessageAboutFriendsRequests(context,
+        ConnectycubeChatMessage qbChatMessage = ChatNotificationUtils.createPrivateMessageAboutFriendsRequests(context,
                 NotificationType.FRIENDS_REMOVE);
         qbChatMessage.setRecipientId(userId);
         sendNotificationToFriend(qbChatMessage, userId);
@@ -135,31 +135,31 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
 
         try {
             loadAndSaveUser(userId);
-        } catch (QBResponseException e){
+        } catch (ResponseException e){
             //TODO FIXME fix suppressing exception when moving to service
         }
 
-        QBChatMessage chatMessage = ChatNotificationUtils.createPrivateMessageAboutFriendsRequests(context,
+        ConnectycubeChatMessage chatMessage = ChatNotificationUtils.createPrivateMessageAboutFriendsRequests(context,
                 NotificationType.FRIENDS_REQUEST);
         sendNotificationToFriend(chatMessage, userId);
     }
 
-    private synchronized void sendNotificationToFriend(QBChatMessage qbChatMessage, int userId) throws QBResponseException {
-        QBChatDialog qbDialog = chatHelper.createPrivateDialogIfNotExist(userId);
+    private synchronized void sendNotificationToFriend(ConnectycubeChatMessage qbChatMessage, int userId) throws ResponseException {
+        ConnectycubeChatDialog qbDialog = chatHelper.createPrivateDialogIfNotExist(userId);
         if (qbDialog != null) {
             chatHelper.sendAndSaveChatMessage(qbChatMessage, qbDialog);
         }
     }
 
     private void clearRosterEntry(int userId) throws Exception {
-        QBRosterEntry rosterEntry = roster.getEntry(userId);
+        ConnectycubeRosterEntry rosterEntry = roster.getEntry(userId);
         if (rosterEntry != null && roster.contains(userId)) {
             roster.removeEntry(rosterEntry);
         }
     }
 
     private boolean isInvited(int userId) {
-        QBRosterEntry rosterEntry = roster.getEntry(userId);
+        ConnectycubeRosterEntry rosterEntry = roster.getEntry(userId);
         if (rosterEntry == null) {
             return false;
         }
@@ -180,7 +180,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         }
     }
 
-    public Collection<Integer> updateFriendList() throws QBResponseException {
+    public Collection<Integer> updateFriendList() throws ResponseException {
         Collection<Integer> userIdsList = new ArrayList<>();
 
         if (roster != null) {
@@ -196,11 +196,11 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
     }
 
     private Collection<Integer> createFriendList(
-            Collection<QBRosterEntry> rosterEntryCollection) throws QBResponseException {
+            Collection<ConnectycubeRosterEntry> rosterEntryCollection) throws ResponseException {
         Collection<Integer> friendList = new ArrayList<>();
         Collection<Integer> userList = new ArrayList<>();
 
-        for (QBRosterEntry rosterEntry : rosterEntryCollection) {
+        for (ConnectycubeRosterEntry rosterEntry : rosterEntryCollection) {
             if (!UserFriendUtils.isOutgoingFriend(rosterEntry) && !UserFriendUtils.isNoneFriend(rosterEntry)) {
                 friendList.add(rosterEntry.getUserId());
             } else if (UserFriendUtils.isNoneFriend(rosterEntry)){
@@ -222,22 +222,22 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         dataManager.getFriendDataManager().deleteByUserId(userId);
     }
 
-    private void updateFriends(Collection<Integer> friendIdsList) throws QBResponseException {
-        QBPagedRequestBuilder requestBuilder = new QBPagedRequestBuilder();
+    private void updateFriends(Collection<Integer> friendIdsList) throws ResponseException {
+        PagedRequestBuilder requestBuilder = new PagedRequestBuilder();
         requestBuilder.setPage(ConstsCore.USERS_PAGE_NUM);
         requestBuilder.setPerPage(ConstsCore.USERS_PER_PAGE);
         List<QMUser> qmUsers = QMUserService.getInstance().getUsersByIDsSync(friendIdsList, requestBuilder);
         saveUsersAndFriends(qmUsers);
     }
 
-    private void updateUsersAndFriends(Collection<Integer> idsList) throws QBResponseException {
+    private void updateUsersAndFriends(Collection<Integer> idsList) throws ResponseException {
         for (Integer userId : idsList) {
             updateFriend(userId);
         }
     }
 
-    private void updateFriend(int userId) throws QBResponseException {
-        QBRosterEntry rosterEntry = roster.getEntry(userId);
+    private void updateFriend(int userId) throws ResponseException {
+        ConnectycubeRosterEntry rosterEntry = roster.getEntry(userId);
 
         QMUser newUser = loadAndSaveUser(userId);
 
@@ -309,20 +309,20 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         }
     }
 
-    private void deleteFriends(Collection<Integer> userIdsList) throws QBResponseException {
+    private void deleteFriends(Collection<Integer> userIdsList) throws ResponseException {
         for (Integer userId : userIdsList) {
             deleteFriend(userId);
         }
     }
 
     @Nullable
-    private QMUser loadAndSaveUser(int userId) throws QBResponseException {
+    private QMUser loadAndSaveUser(int userId) throws ResponseException {
         QMUser user = QMUserService.getInstance().getUserSync(userId, true);
         return user;
     }
 
-    private boolean isUserOnline(QBPresence presence) {
-        return QBPresence.Type.online.equals(presence.getType());
+    private boolean isUserOnline(ConnectycubePresence presence) {
+        return ConnectycubePresence.Type.online.equals(presence.getType());
     }
 
     public boolean isUserOnline(int userId) {
@@ -356,7 +356,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    private void loadAndSaveUsers(Collection<Integer> userList, UserRequest.RequestStatus status) throws QBResponseException {
+    private void loadAndSaveUsers(Collection<Integer> userList, UserRequest.RequestStatus status) throws ResponseException {
         if (!userList.isEmpty()) {
             List<QMUser> loadedUserList = QMUserService.getInstance().getUsersByIDsSync(userList, null);
             for (QMUser user : loadedUserList) {
@@ -372,13 +372,13 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
             try {
                 loadAndSaveUsers(userLoadingIdsList, UserRequest.RequestStatus.INCOMING);
                 //                notifyContactRequest();
-            } catch (QBResponseException e) {
+            } catch (ResponseException e) {
                 ErrorUtils.logError(e);
             }
         }
     }
 
-    private class RosterListener implements QBRosterListener {
+    private class QMRosterListener implements RosterListener {
 
         @Override
         public void entriesDeleted(final Collection<Integer> userIdsList) {
@@ -387,7 +387,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
                 public void run() {
                     try {
                         deleteFriends(userIdsList);
-                    } catch (QBResponseException e) {
+                    } catch (ResponseException e) {
                         Log.e(TAG, ENTRIES_DELETED_ERROR, e);
                     }
                 }
@@ -405,7 +405,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
                 public void run() {
                     try {
                         updateUsersAndFriends(idsList);
-                    } catch (QBResponseException e) {
+                    } catch (ResponseException e) {
                         Log.e(TAG, ENTRIES_UPDATING_ERROR, e);
                     }
                 }
@@ -413,13 +413,13 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         }
 
         @Override
-        public void presenceChanged(QBPresence presence) {
+        public void presenceChanged(ConnectycubePresence presence) {
             QMUser user =  QMUserService.getInstance().getUserCache().get((long)presence.getUserId());
             if (user == null) {
                 ErrorUtils.logError(TAG, PRESENCE_CHANGE_ERROR + presence.getUserId());
             } else {
                 //Save user's last online status
-                if (QBPresence.Type.online.equals(presence.getType())){
+                if (ConnectycubePresence.Type.online.equals(presence.getType())){
                     user.setLastRequestAt(new Date(System.currentTimeMillis()));
                     QMUserService.getInstance().getUserCache().update(user);
                 }
@@ -429,7 +429,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         }
     }
 
-    private class SubscriptionListener implements QBSubscriptionListener {
+    private class QMSubscriptionListener implements SubscriptionListener {
 
         @Override
         public void subscriptionRequested(int userId) {

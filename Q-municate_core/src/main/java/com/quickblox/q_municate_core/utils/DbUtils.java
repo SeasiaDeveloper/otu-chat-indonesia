@@ -3,10 +3,10 @@ package com.quickblox.q_municate_core.utils;
 import android.content.Context;
 import android.util.Log;
 
-import com.quickblox.chat.model.QBAttachment;
-import com.quickblox.chat.model.QBChatMessage;
-import com.quickblox.chat.model.QBChatDialog ;
-import com.quickblox.core.helper.CollectionsUtil;
+import com.connectycube.chat.model.ConnectycubeAttachment;
+import com.connectycube.chat.model.ConnectycubeChatMessage;
+import com.connectycube.chat.model.ConnectycubeChatDialog ;
+import com.connectycube.core.helper.CollectionsUtil;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.qb.helpers.QBRestHelper;
 import com.quickblox.q_municate_db.managers.DataManager;
@@ -39,49 +39,49 @@ public class DbUtils {
         return dialogOccupant;
     }
 
-    public static void saveDialogToCache(DataManager dataManager, QBChatDialog qbDialog) {
-        dataManager.getQBChatDialogDataManager().createOrUpdate(qbDialog);
+    public static void saveDialogToCache(DataManager dataManager, ConnectycubeChatDialog qbDialog) {
+        dataManager.getConnectycubeChatDialogDataManager().createOrUpdate(qbDialog);
         saveDialogsOccupants(dataManager, qbDialog);
     }
 
-    public static void saveDialogToCache(DataManager dataManager, QBChatDialog qbDialog, boolean notify) {
-        dataManager.getQBChatDialogDataManager().createOrUpdate(qbDialog, notify);
+    public static void saveDialogToCache(DataManager dataManager, ConnectycubeChatDialog qbDialog, boolean notify) {
+        dataManager.getConnectycubeChatDialogDataManager().createOrUpdate(qbDialog, notify);
         saveDialogsOccupants(dataManager, qbDialog);
     }
 
-    private static void saveDialogsOccupants(DataManager dataManager, QBChatDialog qbDialog) {
+    private static void saveDialogsOccupants(DataManager dataManager, ConnectycubeChatDialog qbDialog) {
         if (qbDialog.getOccupants() != null && !qbDialog.getOccupants().isEmpty()) {
             saveDialogsOccupants(dataManager, qbDialog, false);
         }
     }
 
-    public static void saveDialogsToCacheAll(DataManager dataManager, List<QBChatDialog > qbChatDialogsList,
-            QBChatDialog  currentDialog) {
-        dataManager.getQBChatDialogDataManager().createOrUpdateAll(qbChatDialogsList);
+    public static void saveDialogsToCacheAll(DataManager dataManager, List<ConnectycubeChatDialog > connectycubeChatDialogsList,
+            ConnectycubeChatDialog  currentDialog) {
+        dataManager.getConnectycubeChatDialogDataManager().createOrUpdateAll(connectycubeChatDialogsList);
 
-        saveDialogsOccupants(dataManager, qbChatDialogsList);
+        saveDialogsOccupants(dataManager, connectycubeChatDialogsList);
 
-        saveTempMessages(dataManager, qbChatDialogsList, currentDialog);
+        saveTempMessages(dataManager, connectycubeChatDialogsList, currentDialog);
     }
 
-    public static void saveDialogsToCacheByIds(DataManager dataManager, List<QBChatDialog > qbChatDialogsList, QBChatDialog  currentDialog) {
-        saveDialogsOccupants(dataManager, qbChatDialogsList);
-        saveTempMessagesUnread(dataManager, qbChatDialogsList, currentDialog);
+    public static void saveDialogsToCacheByIds(DataManager dataManager, List<ConnectycubeChatDialog > connectycubeChatDialogsList, ConnectycubeChatDialog  currentDialog) {
+        saveDialogsOccupants(dataManager, connectycubeChatDialogsList);
+        saveTempMessagesUnread(dataManager, connectycubeChatDialogsList, currentDialog);
 
-        for (QBChatDialog qbDialog : qbChatDialogsList) {
-            dataManager.getQBChatDialogDataManager().createOrUpdate(qbDialog);
+        for (ConnectycubeChatDialog qbDialog : connectycubeChatDialogsList) {
+            dataManager.getConnectycubeChatDialogDataManager().createOrUpdate(qbDialog);
         }
     }
 
-    public static void saveTempMessages(DataManager dataManager, List<QBChatDialog > qbChatDialogsList,
-            QBChatDialog  currentDialog) {
+    public static void saveTempMessages(DataManager dataManager, List<ConnectycubeChatDialog > connectycubeChatDialogsList,
+            ConnectycubeChatDialog  currentDialog) {
         dataManager.getMessageDataManager()
-                .createOrUpdateAll(ChatUtils.createTempLocalMessagesList(dataManager, qbChatDialogsList, currentDialog));
+                .createOrUpdateAll(ChatUtils.createTempLocalMessagesList(dataManager, connectycubeChatDialogsList, currentDialog));
     }
 
-    public static void saveTempMessagesUnread(DataManager dataManager, List<QBChatDialog > qbChatDialogsList,
-                                              QBChatDialog  currentDialog) {
-        List<Message> messageList = ChatUtils.createTempUnreadMessagesList(dataManager, qbChatDialogsList, currentDialog);
+    public static void saveTempMessagesUnread(DataManager dataManager, List<ConnectycubeChatDialog > connectycubeChatDialogsList,
+                                              ConnectycubeChatDialog  currentDialog) {
+        List<Message> messageList = ChatUtils.createTempUnreadMessagesList(dataManager, connectycubeChatDialogsList, currentDialog);
         dataManager.getMessageDataManager()
                 .createOrUpdateAll(messageList);
     }
@@ -92,7 +92,7 @@ public class DbUtils {
                 message.getCreatedDate(), true);
     }
 
-    public static List<DialogOccupant> saveDialogsOccupants(DataManager dataManager, QBChatDialog qbDialog, boolean onlyNewOccupant) {
+    public static List<DialogOccupant> saveDialogsOccupants(DataManager dataManager, ConnectycubeChatDialog qbDialog, boolean onlyNewOccupant) {
         List<DialogOccupant> dialogOccupantsList = ChatUtils.createDialogOccupantsList(dataManager, qbDialog, onlyNewOccupant);
         if (!dialogOccupantsList.isEmpty()) {
             dataManager.getDialogOccupantDataManager().createOrUpdateAll(dialogOccupantsList);
@@ -108,8 +108,8 @@ public class DbUtils {
         dataManager.getDialogOccupantDataManager().createOrUpdate(dialogOccupant, notify);
     }
 
-    public static void saveDialogsOccupants(DataManager dataManager, List<QBChatDialog> qbDialogsList) {
-        for (QBChatDialog qbDialog : qbDialogsList) {
+    public static void saveDialogsOccupants(DataManager dataManager, List<ConnectycubeChatDialog> qbDialogsList) {
+        for (ConnectycubeChatDialog qbDialog : qbDialogsList) {
             saveDialogsOccupants(dataManager, qbDialog, false);
         }
     }
@@ -142,9 +142,9 @@ public class DbUtils {
     }
 
     public static void saveMessagesToCache(Context context, DataManager dataManager,
-            List<QBChatMessage> qbMessagesList, String dialogId) {
+            List<ConnectycubeChatMessage> qbMessagesList, String dialogId) {
         for (int i = 0; i < qbMessagesList.size(); i++) {
-            QBChatMessage qbChatMessage = qbMessagesList.get(i);
+            ConnectycubeChatMessage qbChatMessage = qbMessagesList.get(i);
 
 
             State msgState = State.SYNC;
@@ -160,7 +160,7 @@ public class DbUtils {
     }
 
     public static void saveMessageOrNotificationToCache(Context context, DataManager dataManager,
-            String dialogId, QBChatMessage qbChatMessage, State state, boolean notify) {
+            String dialogId, ConnectycubeChatMessage qbChatMessage, State state, boolean notify) {
         DialogOccupant dialogOccupant;
         if (qbChatMessage.getSenderId() == null) {
             dialogOccupant = dataManager.getDialogOccupantDataManager()
@@ -182,7 +182,7 @@ public class DbUtils {
         } else {
             Message message = ChatUtils.createLocalMessage(qbChatMessage, dialogOccupant, state);
             if (qbChatMessage.getAttachments() != null && !qbChatMessage.getAttachments().isEmpty()) {
-                ArrayList<QBAttachment> attachmentsList = new ArrayList<QBAttachment>(
+                ArrayList<ConnectycubeAttachment> attachmentsList = new ArrayList<ConnectycubeAttachment>(
                         qbChatMessage.getAttachments());
                 Attachment attachment = ChatUtils.createLocalAttachment(attachmentsList.get(0), context, message.getMessageId().hashCode());
                 message.setAttachment(attachment);
@@ -195,7 +195,7 @@ public class DbUtils {
 
     public static void updateDialogModifiedDate(DataManager dataManager, String dialogId, long modifiedDate,
             boolean notify) {
-        QBChatDialog dialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
+        ConnectycubeChatDialog dialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
         updateDialogModifiedDate(dataManager, dialog, modifiedDate, notify);
     }
 
@@ -204,11 +204,11 @@ public class DbUtils {
         updateDialogModifiedDate(dataManager, dialogId, modifiedDate, notify);
     }
 
-    public static void updateDialogModifiedDate(DataManager dataManager, QBChatDialog dialog, long modifiedDate,
+    public static void updateDialogModifiedDate(DataManager dataManager, ConnectycubeChatDialog dialog, long modifiedDate,
             boolean notify) {
         if (dialog != null) {
             dialog.setLastMessageDateSent(modifiedDate);
-            dataManager.getQBChatDialogDataManager().update(dialog, notify);
+            dataManager.getConnectycubeChatDialogDataManager().update(dialog, notify);
         }
     }
 
@@ -226,7 +226,7 @@ public class DbUtils {
     }
 
     public static void saveDialogNotificationToCache(Context context, DataManager dataManager,
-            DialogOccupant dialogOccupant, QBChatMessage qbChatMessage, boolean notify) {
+            DialogOccupant dialogOccupant, ConnectycubeChatMessage qbChatMessage, boolean notify) {
         DialogNotification dialogNotification = ChatUtils.createLocalDialogNotification(context, dataManager,
                 qbChatMessage, dialogOccupant);
         saveDialogNotificationToCache(dataManager, dialogNotification, notify);
@@ -240,7 +240,7 @@ public class DbUtils {
     }
 
     public static void deleteDialogLocal(DataManager dataManager, String dialogId) {
-        dataManager.getQBChatDialogDataManager().deleteById(dialogId);
+        dataManager.getConnectycubeChatDialogDataManager().deleteById(dialogId);
     }
 
     public static void updateDialogOccupants(DataManager dataManager, String dialogId,
@@ -257,13 +257,13 @@ public class DbUtils {
         dataManager.getDialogOccupantDataManager().update(dialogOccupant);
     }
 
-    public static void updateDialogsOccupantsStatusesIfNeeded(DataManager dataManager, List<QBChatDialog> qbDialogsList) {
-        for (QBChatDialog qbDialog : qbDialogsList) {
+    public static void updateDialogsOccupantsStatusesIfNeeded(DataManager dataManager, List<ConnectycubeChatDialog> qbDialogsList) {
+        for (ConnectycubeChatDialog qbDialog : qbDialogsList) {
             updateDialogOccupantsStatusesIfNeeded(dataManager, qbDialog);
         }
     }
 
-    public static void updateDialogOccupantsStatusesIfNeeded(DataManager dataManager, QBChatDialog qbDialog) {
+    public static void updateDialogOccupantsStatusesIfNeeded(DataManager dataManager, ConnectycubeChatDialog qbDialog) {
         List<DialogOccupant> oldDialogOccupantsList = dataManager.getDialogOccupantDataManager().getDialogOccupantsListByDialogId(qbDialog.getDialogId());
         List<DialogOccupant> updatedDialogOccupantsList = new ArrayList<>();
         List<DialogOccupant> newDialogOccupantsList = dataManager.getDialogOccupantDataManager().getActualDialogOccupantsByIds(

@@ -7,13 +7,13 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.quickblox.auth.session.QBSettings;
-import com.quickblox.chat.QBChatService;
-import com.quickblox.chat.connections.tcp.QBTcpChatConnectionFabric;
-import com.quickblox.chat.connections.tcp.QBTcpConfigurationBuilder;
-import com.quickblox.core.LogLevel;
-import com.quickblox.core.QBHttpConnectionConfig;
-import com.quickblox.core.ServiceZone;
+import com.connectycube.auth.session.ConnectycubeSettings;
+import com.connectycube.chat.ConnectycubeChatService;
+import com.connectycube.chat.connections.tcp.TcpChatConnectionFabric;
+import com.connectycube.chat.connections.tcp.TcpConfigurationBuilder;
+import com.connectycube.core.LogLevel;
+import com.connectycube.core.ConnectycubeHttpConnectionConfig;
+import com.connectycube.core.ServiceZone;
 import com.eklanku.otuChat.BuildConfig;
 import com.eklanku.otuChat.utils.ActivityLifecycleHandler;
 import com.eklanku.otuChat.utils.StringObfuscator;
@@ -72,32 +72,32 @@ public class App extends MultiDexApplication {
     }
 
     private void initQb() {
-        QBSettings.getInstance().init(getApplicationContext(),
+        ConnectycubeSettings.getInstance().init(getApplicationContext(),
                 StringObfuscator.getApplicationId(),
                 StringObfuscator.getAuthKey(),
                 StringObfuscator.getAuthSecret());
-        QBSettings.getInstance().setAccountKey(StringObfuscator.getAccountKey());
+        ConnectycubeSettings.getInstance().setAccountKey(StringObfuscator.getAccountKey());
 
         initDomains();
         initHTTPConfig();
 
-        QBTcpConfigurationBuilder configurationBuilder = new QBTcpConfigurationBuilder()
+        TcpConfigurationBuilder configurationBuilder = new TcpConfigurationBuilder()
                 .setAutojoinEnabled(false)
                 .setSocketTimeout(0);
 
-        QBChatService.setConnectionFabric(new QBTcpChatConnectionFabric(configurationBuilder));
-        QBChatService.setDebugEnabled(true);
+        ConnectycubeChatService.setConnectionFabric(new TcpChatConnectionFabric(configurationBuilder));
+        ConnectycubeChatService.setDebugEnabled(true);
     }
 
     private void initDomains() {
-        QBSettings.getInstance().setEndpoints(StringObfuscator.getApiEndpoint(), StringObfuscator.getChatEndpoint(), ServiceZone.PRODUCTION);
-        QBSettings.getInstance().setZone(ServiceZone.PRODUCTION);
-        QBSettings.getInstance().setLogLevel(LogLevel.DEBUG);
+        ConnectycubeSettings.getInstance().setEndpoints(StringObfuscator.getApiEndpoint(), StringObfuscator.getChatEndpoint(), ServiceZone.PRODUCTION);
+        ConnectycubeSettings.getInstance().setZone(ServiceZone.PRODUCTION);
+        ConnectycubeSettings.getInstance().setLogLevel(LogLevel.DEBUG);
     }
 
     private void initHTTPConfig(){
-        QBHttpConnectionConfig.setConnectTimeout(ConstsCore.HTTP_TIMEOUT_IN_SECONDS);
-        QBHttpConnectionConfig.setReadTimeout(ConstsCore.HTTP_TIMEOUT_IN_SECONDS);
+        ConnectycubeHttpConnectionConfig.setConnectTimeout(ConstsCore.HTTP_TIMEOUT_IN_SECONDS);
+        ConnectycubeHttpConnectionConfig.setReadTimeout(ConstsCore.HTTP_TIMEOUT_IN_SECONDS);
     }
 
     private void initDb() {

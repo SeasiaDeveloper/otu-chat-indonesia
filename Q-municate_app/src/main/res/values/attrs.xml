@@ -22,7 +22,16 @@
         <attr name="mainMirror" format="boolean" />
         <attr name="secondMirror" format="boolean" />
         <attr name="mainCoords" format="reference" />
-        <attr name="secondCoords" format="reference"/>
+        <attr name="secondCoords" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="BarCodeScannerOverlay">
+        <attr name="square_width" format="dimension" />
+        <attr name="square_height" format="dimension" />
+        <attr name="line_color" format="color" />
+        <attr name="line_width" format="integer" />
+        <attr name="line_speed" format="integer" />
+        <attr name="line_speed_slowdown" format="integer" />
     </declare-styleable>
 
 </resources>

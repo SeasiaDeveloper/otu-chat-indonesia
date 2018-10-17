@@ -33,10 +33,10 @@ import android.widget.ProgressBar;
 
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.ProgressDialogFragment;
-import com.quickblox.auth.model.QBProvider;
-import com.quickblox.auth.session.QBSessionManager;
-import com.quickblox.chat.QBChatService;
-import com.quickblox.chat.model.QBChatDialog;
+import com.connectycube.auth.model.ConnectycubeProvider;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
+import com.connectycube.chat.ConnectycubeChatService;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
@@ -307,7 +307,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
     }
 
     private void unregisterConnectionListener() {
-        QBChatService.getInstance().removeConnectionListener(chatConnectionListener);
+        ConnectycubeChatService.getInstance().removeConnectionListener(chatConnectionListener);
     }
 
     @Override
@@ -326,8 +326,8 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
             initChatConnectionListener();
         }
 
-        QBChatService.getInstance().removeConnectionListener(chatConnectionListener);
-        QBChatService.getInstance().addConnectionListener(chatConnectionListener);
+        ConnectycubeChatService.getInstance().removeConnectionListener(chatConnectionListener);
+        ConnectycubeChatService.getInstance().addConnectionListener(chatConnectionListener);
     }
 
     @Override
@@ -378,7 +378,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
         broadcastCommandMap = new HashMap<>();
         fragmentsStatusChangingSet = new HashSet<>();
         fragmentsServiceConnectionSet = new HashSet<>();
-        serviceConnection = new QBChatServiceConnection();
+        serviceConnection = new ConnectycubeChatServiceConnection();
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         snackbarClientPriority = new SparseArray<>();
@@ -665,9 +665,9 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
     protected void loginChat() {
         isDialogLoading = true;
         showSnackbar(R.string.dialog_loading_dialogs, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
-        if (QBSessionManager.getInstance().getSessionParameters() != null
-                && QBProvider.FIREBASE_PHONE.equals(QBSessionManager.getInstance().getSessionParameters().getSocialProvider())
-                && !QBSessionManager.getInstance().isValidActiveSession()) {
+        if (ConnectycubeSessionManager.getInstance().getSessionParameters() != null
+                && ConnectycubeProvider.FIREBASE_PHONE.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider())
+                && !ConnectycubeSessionManager.getInstance().isValidActiveSession()) {
 
             new FirebaseAuthHelper(BaseActivity.this).refreshInternalFirebaseToken(new FirebaseAuthHelper.RequestFirebaseIdTokenCallback() {
                 @Override
@@ -690,14 +690,14 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
     }
 
     public boolean isChatInitializedAndUserLoggedIn() {
-        return isAppInitialized() && QBChatService.getInstance().isLoggedIn();
+        return isAppInitialized() && ConnectycubeChatService.getInstance().isLoggedIn();
     }
 
-    public void startPrivateChatActivity(QMUser user, QBChatDialog dialog) {
+    public void startPrivateChatActivity(QMUser user, ConnectycubeChatDialog dialog) {
         PrivateDialogActivity.start(this, user, dialog);
     }
 
-    public void startGroupChatActivity(QBChatDialog chatDialog) {
+    public void startGroupChatActivity(ConnectycubeChatDialog chatDialog) {
         GroupDialogActivity.start(this, chatDialog);
     }
 
@@ -980,7 +980,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
         }
     }
 
-    private class QBChatServiceConnection implements ServiceConnection {
+    private class ConnectycubeChatServiceConnection implements ServiceConnection {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder binder) {

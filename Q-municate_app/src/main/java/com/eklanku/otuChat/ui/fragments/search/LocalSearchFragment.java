@@ -20,8 +20,8 @@ import android.view.ViewGroup;
 import com.eklanku.otuChat.ui.adapters.search.LocalSearchAdapter;
 import com.eklanku.otuChat.ui.fragments.base.BaseLoaderFragment;
 import com.eklanku.otuChat.ui.views.recyclerview.SimpleDividerItemDecoration;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.eklanku.otuChat.utils.DialogsUtils;
@@ -204,7 +204,7 @@ public class LocalSearchFragment extends BaseLoaderFragment<List<DialogSearchWra
 
             @Override
             public void onItemClicked(View view, DialogSearchWrapper dialogSearchWrapper, int position) {
-                if (QBDialogType.PRIVATE.equals(dialogSearchWrapper.getChatDialog().getType())) {
+                if (ConnectycubeDialogType.PRIVATE.equals(dialogSearchWrapper.getChatDialog().getType())) {
                     startPrivateChatActivity(dialogSearchWrapper.getChatDialog());
                 } else {
                     startGroupChatActivity(dialogSearchWrapper.getChatDialog());
@@ -213,7 +213,7 @@ public class LocalSearchFragment extends BaseLoaderFragment<List<DialogSearchWra
         });
     }
 
-    private void startPrivateChatActivity(QBChatDialog chatDialog) {
+    private void startPrivateChatActivity(ConnectycubeChatDialog chatDialog) {
         List<DialogOccupant> occupantsList = dataManager.getDialogOccupantDataManager()
                 .getDialogOccupantsListByDialogId(chatDialog.getDialogId());
         QMUser occupant = ChatUtils.getOpponentFromPrivateDialog(
@@ -226,14 +226,14 @@ public class LocalSearchFragment extends BaseLoaderFragment<List<DialogSearchWra
     private void addObservers() {
         dataManager.getUserRequestDataManager().addObserver(commonObserver);
         dataManager.getFriendDataManager().addObserver(commonObserver);
-        dataManager.getQBChatDialogDataManager().addObserver(commonObserver);
+        dataManager.getConnectycubeChatDialogDataManager().addObserver(commonObserver);
     }
 
     private void deleteObservers() {
         if (dataManager != null) {
             dataManager.getUserRequestDataManager().deleteObserver(commonObserver);
             dataManager.getFriendDataManager().deleteObserver(commonObserver);
-            dataManager.getQBChatDialogDataManager().deleteObserver(commonObserver);
+            dataManager.getConnectycubeChatDialogDataManager().deleteObserver(commonObserver);
         }
     }
 
@@ -263,7 +263,7 @@ public class LocalSearchFragment extends BaseLoaderFragment<List<DialogSearchWra
         }
     }
 
-    private void startGroupChatActivity(QBChatDialog chatDialog) {
+    private void startGroupChatActivity(ConnectycubeChatDialog chatDialog) {
         GroupDialogActivity.start(baseActivity, chatDialog);
     }
 
@@ -320,11 +320,11 @@ public class LocalSearchFragment extends BaseLoaderFragment<List<DialogSearchWra
         protected List<DialogSearchWrapper> getItems() {
             Log.d(TAG, "getItems() chatDialogs startRow= " + startRow + ", perPage= " + perPage + ", loadAll= " + loadAll);
 
-            List<QBChatDialog> dialogsList = loadAll ? dataManager.getQBChatDialogDataManager().getAllSorted() :
-                    dataManager.getQBChatDialogDataManager().getSkippedSorted(startRow, perPage);
+            List<ConnectycubeChatDialog> dialogsList = loadAll ? dataManager.getConnectycubeChatDialogDataManager().getAllSorted() :
+                    dataManager.getConnectycubeChatDialogDataManager().getSkippedSorted(startRow, perPage);
 
             List<DialogSearchWrapper> wrappedList = new ArrayList<>(dialogsList.size());
-            for (QBChatDialog dialog : dialogsList){
+            for (ConnectycubeChatDialog dialog : dialogsList){
                 wrappedList.add(new DialogSearchWrapper(getContext(), dataManager, dialog));
             }
 
@@ -332,7 +332,7 @@ public class LocalSearchFragment extends BaseLoaderFragment<List<DialogSearchWra
         }
 
         private void retrieveAllDialogsFromCacheByPages() {
-            long dialogsCount = DataManager.getInstance().getQBChatDialogDataManager().getAllCount();
+            long dialogsCount = DataManager.getInstance().getConnectycubeChatDialogDataManager().getAllCount();
             boolean isCacheEmpty = dialogsCount <= 0;
 
             if(isCacheEmpty) {
@@ -377,10 +377,10 @@ public class LocalSearchFragment extends BaseLoaderFragment<List<DialogSearchWra
                 Log.v(TAG, "CommonObserver.update() observerKey = " + observerKey);
                 Log.v(TAG, "action = " + action);
 
-                if (observerKey.equals(dataManager.getQBChatDialogDataManager().getObserverKey())) {
+                if (observerKey.equals(dataManager.getConnectycubeChatDialogDataManager().getObserverKey())) {
                     if (((Bundle) data).getSerializable(BaseManager.EXTRA_OBJECT) != null) {
                         Dialog dialog = (Dialog) ((Bundle) data).getSerializable(BaseManager.EXTRA_OBJECT);
-                        QBChatDialog chatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialog.getDialogId());
+                        ConnectycubeChatDialog chatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialog.getDialogId());
                         DialogSearchWrapper wrappedChatDialog = new DialogSearchWrapper(baseActivity, dataManager, chatDialog);
 
                         if (action == BaseManager.DELETE_ACTION) {

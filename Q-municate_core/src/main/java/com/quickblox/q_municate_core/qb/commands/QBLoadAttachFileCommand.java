@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.quickblox.content.model.QBFile;
+import com.connectycube.storage.model.ConnectycubeFile;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
 import com.quickblox.q_municate_core.service.QBService;
@@ -36,10 +36,10 @@ public class QBLoadAttachFileCommand extends ServiceCommand {
         File file = (File) extras.getSerializable(QBServiceConsts.EXTRA_FILE);
         String dialogId = (String) extras.getSerializable(QBServiceConsts.EXTRA_DIALOG_ID);
 
-        QBFile qbFile = chatHelper.loadAttachFile(file);
+        ConnectycubeFile connectycubeFile = chatHelper.loadAttachFile(file);
 
         Bundle result = new Bundle();
-        result.putSerializable(QBServiceConsts.EXTRA_ATTACH_FILE, qbFile);
+        result.putSerializable(QBServiceConsts.EXTRA_ATTACH_FILE, connectycubeFile);
         result.putString(QBServiceConsts.EXTRA_DIALOG_ID, dialogId);
         result.putString(QBServiceConsts.EXTRA_FILE_PATH, file.getAbsolutePath());
 

@@ -27,12 +27,12 @@ import com.eklanku.otuChat.ui.activities.location.MapsActivity;
 import com.eklanku.otuChat.ui.activities.others.PreviewImageActivity;
 import com.eklanku.otuChat.ui.adapters.chats.GroupChatMessagesAdapter;
 import com.eklanku.otuChat.utils.ChatDialogUtils;
-import com.quickblox.chat.QBRestChatService;
-import com.quickblox.chat.model.QBAttachment;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.content.model.QBFile;
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.chat.ConnectycubeRestChatService;
+import com.connectycube.chat.model.ConnectycubeAttachment;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.storage.model.ConnectycubeFile;
+import com.connectycube.core.EntityCallback;
+import com.connectycube.core.exception.ResponseException;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_core.qb.commands.chat.QBLoadDialogByIdsCommand;
@@ -42,8 +42,8 @@ import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.models.Attachment;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.eklanku.otuChat.R;
-import com.quickblox.ui.kit.chatmessage.adapter.media.video.ui.VideoPlayerActivity;
-import com.quickblox.ui.kit.chatmessage.adapter.media.view.QBPlaybackControlView;
+import com.connectycube.ui.chatmessage.adapter.media.video.ui.VideoPlayerActivity;
+import com.connectycube.ui.chatmessage.adapter.media.view.ConnectycubePlaybackControlView;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.util.ArrayList;
@@ -69,14 +69,14 @@ public class GroupDialogActivity extends BaseDialogActivity {
         context.startActivity(intent);
     }
 
-    public static void start(Context context, QBChatDialog chatDialog) {
+    public static void start(Context context, ConnectycubeChatDialog chatDialog) {
         Intent intent = new Intent(context, GroupDialogActivity.class);
         intent.putExtra(QBServiceConsts.EXTRA_DIALOG, chatDialog);
         intent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
         context.startActivity(intent);
     }
 
-    public static void startForResult(Fragment fragment, QBChatDialog chatDialog, int requestCode) {
+    public static void startForResult(Fragment fragment, ConnectycubeChatDialog chatDialog, int requestCode) {
         Intent intent = new Intent(fragment.getActivity(), GroupDialogActivity.class);
         intent.putExtra(QBServiceConsts.EXTRA_DIALOG, chatDialog);
         fragment.startActivityForResult(intent, requestCode);
@@ -105,30 +105,30 @@ public class GroupDialogActivity extends BaseDialogActivity {
                 else if (combinationMessagesList.get(position).getAttachments() != null) {
                     String fileId = "";
                     String fileType = "";
-                    QBAttachment qbAttachment = null;
-                    for (QBAttachment attachment : combinationMessagesList.get(position).getAttachments()) {
+                    ConnectycubeAttachment connectycubeAttachment = null;
+                    for (ConnectycubeAttachment attachment : combinationMessagesList.get(position).getAttachments()) {
                         fileId = attachment.getId();
                         fileType = attachment.getType();
-                        qbAttachment = attachment;
+                        connectycubeAttachment = attachment;
                         break;
                     }
-                    Log.v("Attachment", QBFile.getPrivateUrlForUID(fileId));
+                    Log.v("Attachment", ConnectycubeFile.getPrivateUrlForUID(fileId));
                     //fileType = fileType.toUpperCase();
                     Log.v("FileType", "FileType: " + fileType);
                     if (fileType.equals("image"))
-                        PreviewImageActivity.start(GroupDialogActivity.this, QBFile.getPrivateUrlForUID(fileId));
+                        PreviewImageActivity.start(GroupDialogActivity.this, ConnectycubeFile.getPrivateUrlForUID(fileId));
                     else if (fileType.equals("video")) {
                         canPerformLogout.set(false);
-                        VideoPlayerActivity.start(GroupDialogActivity.this, Uri.parse(QBFile.getPrivateUrlForUID(fileId)));
+                        VideoPlayerActivity.start(GroupDialogActivity.this, Uri.parse(ConnectycubeFile.getPrivateUrlForUID(fileId)));
                     } else if (fileType.equals("location")) {
                         canPerformLogout.set(false);
-                        MapsActivity.startMapForResult(GroupDialogActivity.this, qbAttachment.getData());
+                        MapsActivity.startMapForResult(GroupDialogActivity.this, connectycubeAttachment.getData());
                     }
                 }
             }
 
             @Override
-            public void onAudioItemClick(QBPlaybackControlView playbackView, int position) {
+            public void onAudioItemClick(ConnectycubePlaybackControlView playbackView, int position) {
                 if (isMultipleMessageSelect)
                     select(position);
                 else
@@ -285,7 +285,7 @@ public class GroupDialogActivity extends BaseDialogActivity {
 
                 case R.id.action_reply:
                     if (longPressPosition != -1) {
-                        //if(QBMessagesAdapter.TextMessageHolder)
+                        //if(ConnectycubeChatAdapter.TextMessageHolder)
                         if (selectedMessagesList.size() == 1) {
 
                             LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -378,7 +378,7 @@ public class GroupDialogActivity extends BaseDialogActivity {
                     for (int i = 0; i < selectedMessagesList.size(); i++) {
                         messagesIds.add(selectedMessagesList.get(i).getMessageId());
                     }
-                    QBRestChatService.deleteMessages(messagesIds, false).performAsync(new QBEntityCallback<Void>() {
+                    ConnectycubeRestChatService.deleteMessages(messagesIds, false).performAsync(new EntityCallback<Void>() {
                         @Override
                         public void onSuccess(Void aVoid, Bundle bundle) {
                             if (combinationMessagesList.size() > 0) {
@@ -392,7 +392,7 @@ public class GroupDialogActivity extends BaseDialogActivity {
                         }
 
                         @Override
-                        public void onError(QBResponseException e) {
+                        public void onError(ResponseException e) {
                             e.printStackTrace();
 
                         }
@@ -437,7 +437,7 @@ public class GroupDialogActivity extends BaseDialogActivity {
     public interface ItemClickListener {
         public void onItemClick(int position);
 
-        public void onAudioItemClick(QBPlaybackControlView playbackView, int position);
+        public void onAudioItemClick(ConnectycubePlaybackControlView playbackView, int position);
 
         public void onItemLongClick(int position);
     }

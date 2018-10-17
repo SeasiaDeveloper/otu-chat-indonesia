@@ -1,15 +1,15 @@
 package com.eklanku.otuChat.utils;
 
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.utils.ChatUtils;
 import com.quickblox.q_municate_db.managers.DataManager;
 
 public class ChatDialogUtils {
 
-    public static String getTitleForChatDialog(QBChatDialog chatDialog, DataManager dataManager) {
-        if (QBDialogType.GROUP.equals(chatDialog.getType())) {
+    public static String getTitleForChatDialog(ConnectycubeChatDialog chatDialog, DataManager dataManager) {
+        if (ConnectycubeDialogType.GROUP.equals(chatDialog.getType())) {
             return chatDialog.getName();
         } else {
             Integer currentUserId = AppSession.getSession().getUser().getId();
@@ -17,7 +17,7 @@ public class ChatDialogUtils {
         }
     }
 
-    public static Integer getPrivateChatOpponentId(QBChatDialog chatDialog, Integer currentUserId){
+    public static Integer getPrivateChatOpponentId(ConnectycubeChatDialog chatDialog, Integer currentUserId){
         for (Integer opponentID : chatDialog.getOccupants()){
             if (!opponentID.equals(currentUserId)){
                 return opponentID;

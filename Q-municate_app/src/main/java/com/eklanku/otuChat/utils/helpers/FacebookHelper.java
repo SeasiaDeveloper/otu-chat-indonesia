@@ -10,7 +10,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.quickblox.auth.session.QBSessionManager;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
 
 import java.util.ArrayList;

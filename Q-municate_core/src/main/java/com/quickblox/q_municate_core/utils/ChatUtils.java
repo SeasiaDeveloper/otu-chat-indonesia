@@ -4,11 +4,11 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.quickblox.auth.session.QBSettings;
-import com.quickblox.chat.model.QBAttachment;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBChatMessage;
-import com.quickblox.core.helper.CollectionsUtil;
+import com.connectycube.auth.session.ConnectycubeSettings;
+import com.connectycube.chat.model.ConnectycubeAttachment;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeChatMessage;
+import com.connectycube.core.helper.CollectionsUtil;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_core.models.NotificationType;
@@ -23,8 +23,8 @@ import com.quickblox.q_municate_db.models.Message;
 import com.quickblox.q_municate_db.models.State;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.ui.kit.chatmessage.adapter.utils.LocationUtils;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.ui.chatmessage.adapter.utils.LocationUtils;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,17 +37,17 @@ public class ChatUtils {
 
     public static final String OCCUPANT_IDS_DIVIDER = ",";
 
-    public static String getAttachUrlFromMessage(Collection<QBAttachment> attachmentsCollection) {
+    public static String getAttachUrlFromMessage(Collection<ConnectycubeAttachment> attachmentsCollection) {
         if (!CollectionsUtil.isEmpty(attachmentsCollection)) {
-            ArrayList<QBAttachment> attachmentsList = new ArrayList<>(attachmentsCollection);
+            ArrayList<ConnectycubeAttachment> attachmentsList = new ArrayList<>(attachmentsCollection);
             return attachmentsList.get(0).getUrl();
         }
         return ConstsCore.EMPTY_STRING;
     }
 
-    public static String getAttachUrlIfExists(QBChatMessage chatMessage) {
+    public static String getAttachUrlIfExists(ConnectycubeChatMessage chatMessage) {
         String attachURL = ConstsCore.EMPTY_STRING;
-        Collection<QBAttachment> attachmentCollection = chatMessage.getAttachments();
+        Collection<ConnectycubeAttachment> attachmentCollection = chatMessage.getAttachments();
         if (!CollectionsUtil.isEmpty(attachmentCollection)) {
             attachURL = getAttachUrlFromMessage(attachmentCollection);
         }
@@ -85,7 +85,7 @@ public class ChatUtils {
     }
 
     public static List<Integer> getOccupantIdsWithUser(List<Integer> friendIdsList) {
-        QBUser user = AppSession.getSession().getUser();
+        ConnectycubeUser user = AppSession.getSession().getUser();
         ArrayList<Integer> occupantIdsList = new ArrayList<>(friendIdsList);
         occupantIdsList.add(user.getId());
         return occupantIdsList;
@@ -95,12 +95,12 @@ public class ChatUtils {
         return TextUtils.join(OCCUPANT_IDS_DIVIDER, occupantIdsList);
     }
 
-    public static QBChatDialog getExistPrivateDialog(DataManager dataManager, int opponentId) {
+    public static ConnectycubeChatDialog getExistPrivateDialog(DataManager dataManager, int opponentId) {
         DialogOccupant dialogOccupant = dataManager.getDialogOccupantDataManager()
                 .getDialogOccupantForPrivateChat(opponentId);
 
         if (dialogOccupant != null) {
-            return dataManager.getQBChatDialogDataManager().getByDialogId(dialogOccupant.getDialog().getDialogId());
+            return dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogOccupant.getDialog().getDialogId());
         } else {
             return null;
         }
@@ -131,20 +131,20 @@ public class ChatUtils {
         return stringBuilder.toString().substring(ConstsCore.ZERO_INT_VALUE, stringBuilder.length() - 2);
     }
 
-    public static List<ParcelableQBDialog> qBDialogsToParcelableQBDialogs(List<QBChatDialog> dialogList) {
+    public static List<ParcelableQBDialog> qBDialogsToParcelableQBDialogs(List<ConnectycubeChatDialog> dialogList) {
         List<ParcelableQBDialog> parcelableDialogList = new ArrayList<ParcelableQBDialog>(dialogList.size());
-        for (QBChatDialog dialog : dialogList) {
-            ParcelableQBDialog parcelableQBChatDialog = new ParcelableQBDialog(dialog);
-            parcelableDialogList.add(parcelableQBChatDialog);
+        for (ConnectycubeChatDialog dialog : dialogList) {
+            ParcelableQBDialog parcelableConnectycubeChatDialog = new ParcelableQBDialog(dialog);
+            parcelableDialogList.add(parcelableConnectycubeChatDialog);
         }
         return parcelableDialogList;
     }
 
 
-    public static List<QBChatDialog> parcelableQBDialogsToQBDialogs(List<ParcelableQBDialog> parcelableQBDialogsList) {
-        List<QBChatDialog> qbDialogsList = new ArrayList<QBChatDialog>(parcelableQBDialogsList.size());
+    public static List<ConnectycubeChatDialog> parcelableQBDialogsToQBDialogs(List<ParcelableQBDialog> parcelableQBDialogsList) {
+        List<ConnectycubeChatDialog> qbDialogsList = new ArrayList<ConnectycubeChatDialog>(parcelableQBDialogsList.size());
         for (ParcelableQBDialog parcelableQBDialog : parcelableQBDialogsList) {
-            QBChatDialog qbDialog = parcelableQBDialog.getDialog();
+            ConnectycubeChatDialog qbDialog = parcelableQBDialog.getDialog();
             qbDialogsList.add(qbDialog);
         }
         return qbDialogsList;
@@ -170,10 +170,10 @@ public class ChatUtils {
     }
 
     public static List<Message> createTempLocalMessagesList(DataManager dataManager,
-                                                            List<QBChatDialog> qbDialogsList, QBChatDialog currentDialog) {
+                                                            List<ConnectycubeChatDialog> qbDialogsList, ConnectycubeChatDialog currentDialog) {
         List<Message> messagesList = new ArrayList<>();
 
-        for (QBChatDialog qbDialog : qbDialogsList) {
+        for (ConnectycubeChatDialog qbDialog : qbDialogsList) {
             // dialog is opened
             Log.d(TAG, "Fix double message currentDialog = " + currentDialog);
             if (currentDialog != null && qbDialog.getDialogId().equals(currentDialog.getDialogId())) {
@@ -191,10 +191,10 @@ public class ChatUtils {
     }
 
     public static List<Message> createTempUnreadMessagesList(DataManager dataManager,
-                                                             List<QBChatDialog> qbDialogsList, QBChatDialog currentDialog) {
+                                                             List<ConnectycubeChatDialog> qbDialogsList, ConnectycubeChatDialog currentDialog) {
         List<Message> messagesList = new ArrayList<>();
 
-        for (QBChatDialog qbDialog : qbDialogsList) {
+        for (ConnectycubeChatDialog qbDialog : qbDialogsList) {
             if (currentDialog != null && qbDialog.getDialogId().equals(currentDialog.getDialogId())) {
                 Log.d(TAG, "currentDialog = " + currentDialog + " currentDialogID = " + currentDialog.getDialogId());
                 continue;
@@ -217,7 +217,7 @@ public class ChatUtils {
         return messagesList;
     }
 
-    private static DialogOccupant getDialogOccupant(DataManager dataManager, QBChatDialog qbDialog) {
+    private static DialogOccupant getDialogOccupant(DataManager dataManager, ConnectycubeChatDialog qbDialog) {
         int randomUserId = getRandomUserFromOccupantsList(qbDialog.getOccupants());
         DialogOccupant dialogOccupant = dataManager.getDialogOccupantDataManager()
                 .getDialogOccupant(qbDialog.getDialogId(), randomUserId);
@@ -258,7 +258,7 @@ public class ChatUtils {
         return message;
     }
 
-    public static List<DialogOccupant> createDialogOccupantsList(DataManager dataManager, QBChatDialog qbDialog, boolean onlyNewOccupant) {
+    public static List<DialogOccupant> createDialogOccupantsList(DataManager dataManager, ConnectycubeChatDialog qbDialog, boolean onlyNewOccupant) {
         List<DialogOccupant> dialogOccupantsList = new ArrayList<>(qbDialog.getOccupants().size());
 
         List<Integer> userIdsForSave = new ArrayList<>();
@@ -335,7 +335,7 @@ public class ChatUtils {
         return occupantsIdsList;
     }
 
-    public static Message createLocalMessage(QBChatMessage qbChatMessage, DialogOccupant dialogOccupant, State state) {
+    public static Message createLocalMessage(ConnectycubeChatMessage qbChatMessage, DialogOccupant dialogOccupant, State state) {
         long dateSent = getMessageDateSent(qbChatMessage);
         Message message = new Message();
         message.setMessageId(qbChatMessage.getId());
@@ -360,17 +360,17 @@ public class ChatUtils {
         return message;
     }
 
-    private static boolean messageIsRead(QBChatMessage qbChatMessage) {
+    private static boolean messageIsRead(ConnectycubeChatMessage qbChatMessage) {
         return qbChatMessage.getReadIds() != null
                 && qbChatMessage.getReadIds().contains(qbChatMessage.getRecipientId());
     }
 
-    private static boolean messageIsDelivered(QBChatMessage qbChatMessage) {
+    private static boolean messageIsDelivered(ConnectycubeChatMessage qbChatMessage) {
         return qbChatMessage.getDeliveredIds() != null
                 && qbChatMessage.getDeliveredIds().contains(qbChatMessage.getRecipientId());
     }
 
-    public static long getMessageDateSent(QBChatMessage qbChatMessage) {
+    public static long getMessageDateSent(ConnectycubeChatMessage qbChatMessage) {
         long dateSent;
         String dateSentString = (String) qbChatMessage.getProperty(ChatNotificationUtils.PROPERTY_DATE_SENT);
         try {
@@ -382,42 +382,42 @@ public class ChatUtils {
     }
 
     public static String getRoomJid(String dialogId) {
-        return QBSettings.getInstance().getApplicationId()
+        return ConnectycubeSettings.getInstance().getApplicationId()
                 .concat("_")
                 .concat(dialogId)
                 .concat(ConstsCore.CHAT_MUC)
-                .concat(QBSettings.getInstance().getChatEndpoint());
+                .concat(ConnectycubeSettings.getInstance().getChatEndpoint());
     }
 
-    public static Attachment createLocalAttachment(QBAttachment qbAttachment, Context context, int internalAttachmentId) {
+    public static Attachment createLocalAttachment(ConnectycubeAttachment connectycubeAttachment, Context context, int internalAttachmentId) {
         Attachment attachment = new Attachment();
-        String remoteUrl = qbAttachment.getUrl();
-        if (qbAttachment.getType().equalsIgnoreCase(QBAttachment.LOCATION_TYPE)) {
+        String remoteUrl = connectycubeAttachment.getUrl();
+        if (connectycubeAttachment.getType().equalsIgnoreCase(connectycubeAttachment.LOCATION_TYPE)) {
             attachment.setType(Attachment.Type.LOCATION);
-            attachment.setAdditionalInfo(qbAttachment.getData());
-            remoteUrl = LocationUtils.getRemoteUri(qbAttachment.getData(), LocationUtils.defaultUrlLocationParams(context));
-        } else if(qbAttachment.getType().equalsIgnoreCase(QBAttachment.PHOTO_TYPE)){
+            attachment.setAdditionalInfo(connectycubeAttachment.getData());
+            remoteUrl = LocationUtils.getRemoteUri(connectycubeAttachment.getData(), LocationUtils.defaultUrlLocationParams(context));
+        } else if(connectycubeAttachment.getType().equalsIgnoreCase(connectycubeAttachment.IMAGE_TYPE)){
             attachment.setType(Attachment.Type.IMAGE);
         }else {
-            attachment.setType(Attachment.Type.valueOf(qbAttachment.getType().toUpperCase()));
+            attachment.setType(Attachment.Type.valueOf(connectycubeAttachment.getType().toUpperCase()));
         }
 
-        if (qbAttachment.getId() == null) {
-            qbAttachment.setId(String.valueOf(internalAttachmentId));
+        if (connectycubeAttachment.getId() == null) {
+            connectycubeAttachment.setId(String.valueOf(internalAttachmentId));
         }
-        attachment.setAttachmentId(qbAttachment.getId());
+        attachment.setAttachmentId(connectycubeAttachment.getId());
         attachment.setRemoteUrl(remoteUrl);
-        attachment.setName(qbAttachment.getName());
-        attachment.setSize(qbAttachment.getSize());
-        attachment.setHeight(qbAttachment.getHeight());
-        attachment.setWidth(qbAttachment.getWidth());
-        attachment.setDuration(qbAttachment.getDuration());
+        attachment.setName(connectycubeAttachment.getName());
+        attachment.setSize(connectycubeAttachment.getSize());
+        attachment.setHeight(connectycubeAttachment.getHeight());
+        attachment.setWidth(connectycubeAttachment.getWidth());
+        attachment.setDuration(connectycubeAttachment.getDuration());
         return attachment;
     }
 
 
     public static DialogNotification createLocalDialogNotification(Context context, DataManager dataManager,
-                                                                   QBChatMessage qbChatMessage,
+                                                                   ConnectycubeChatMessage qbChatMessage,
                                                                    DialogOccupant dialogOccupant) {
         DialogNotification dialogNotification = new DialogNotification();
         dialogNotification.setDialogNotificationId(qbChatMessage.getId());
@@ -496,12 +496,12 @@ public class ChatUtils {
         return dialogNotification;
     }
 
-    public static List<DialogNotification> readAllDialogNotification(List<DialogNotification> dialogNotificationsList, QBUser currentQbUser) {
+    public static List<DialogNotification> readAllDialogNotification(List<DialogNotification> dialogNotificationsList, ConnectycubeUser currentConnectycubeUser) {
         List<DialogNotification> updateDialogNotificationsList = new ArrayList<>(dialogNotificationsList.size());
 
         for (DialogNotification dialogNotification : dialogNotificationsList) {
             if (!State.READ.equals(dialogNotification.getState())
-                    && currentQbUser.getId().intValue() != dialogNotification.getDialogOccupant().getUser().getId().intValue()) {
+                    && currentConnectycubeUser.getId().intValue() != dialogNotification.getDialogOccupant().getUser().getId().intValue()) {
                 dialogNotification.setState(State.READ);
                 updateDialogNotificationsList.add(dialogNotification);
             }
@@ -510,12 +510,12 @@ public class ChatUtils {
         return updateDialogNotificationsList;
     }
 
-    public static List<Message> readAllMessages(List<Message> messagesList, QBUser currentQbUser) {
+    public static List<Message> readAllMessages(List<Message> messagesList, ConnectycubeUser currentConnectycubeUser) {
         List<Message> updateMessagesList = new ArrayList<>(messagesList.size());
 
         for (Message message : messagesList) {
             if (!State.READ.equals(message.getState())
-                    && currentQbUser.getId().intValue() != message.getDialogOccupant().getUser().getId().intValue()) {
+                    && currentConnectycubeUser.getId().intValue() != message.getDialogOccupant().getUser().getId().intValue()) {
                 message.setState(State.READ);
                 updateMessagesList.add(message);
             }
@@ -641,7 +641,7 @@ public class ChatUtils {
         return dialogOccupant;
     }
 
-    public static void addOccupantsToQBDialog(QBChatDialog qbDialog, QBChatMessage qbChatMessage) {
+    public static void addOccupantsToQBDialog(ConnectycubeChatDialog qbDialog, ConnectycubeChatMessage qbChatMessage) {
         qbDialog.setOccupantsIds(new ArrayList<Integer>(2));
         qbDialog.getOccupants().add(qbChatMessage.getSenderId());
         qbDialog.getOccupants().add(qbChatMessage.getRecipientId());

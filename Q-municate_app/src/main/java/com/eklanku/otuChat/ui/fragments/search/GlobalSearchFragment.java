@@ -15,7 +15,7 @@ import com.eklanku.otuChat.ui.fragments.base.BaseFragment;
 import com.eklanku.otuChat.ui.views.recyclerview.SimpleDividerItemDecoration;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
-import com.quickblox.core.request.QBPagedRequestBuilder;
+import com.connectycube.core.request.PagedRequestBuilder;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.utils.listeners.UserOperationListener;
 import com.eklanku.otuChat.utils.listeners.SearchListener;
@@ -36,7 +36,7 @@ import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.managers.base.BaseManager;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -70,7 +70,7 @@ public class GlobalSearchFragment extends BaseFragment implements SearchListener
     private DataManager dataManager;
     private Observer commonObserver;
     private GlobalSearchAdapter globalSearchAdapter;
-    private List<QBUser> usersList;
+    private List<ConnectycubeUser> usersList;
     private String searchQuery;
     private boolean excludedMe;
 
@@ -177,7 +177,7 @@ public class GlobalSearchFragment extends BaseFragment implements SearchListener
         swipyRefreshLayout.setEnabled(false);
     }
 
-    private void initContactsList(List<QBUser> usersList) {
+    private void initContactsList(List<ConnectycubeUser> usersList) {
         globalSearchAdapter = new GlobalSearchAdapter(baseActivity, usersList);
         globalSearchAdapter.setFriendListHelper(friendListHelper);
         contactsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -188,10 +188,10 @@ public class GlobalSearchFragment extends BaseFragment implements SearchListener
     }
 
     private void initCustomListeners() {
-        globalSearchAdapter.setOnRecycleItemClickListener(new SimpleOnRecycleItemClickListener<QBUser>() {
+        globalSearchAdapter.setOnRecycleItemClickListener(new SimpleOnRecycleItemClickListener<ConnectycubeUser>() {
 
             @Override
-            public void onItemClicked(View view, QBUser user, int position) {
+            public void onItemClicked(View view, ConnectycubeUser user, int position) {
                 boolean isFriend = dataManager.getFriendDataManager().existsByUserId(user.getId());
                 boolean outgoingUser = dataManager.getUserRequestDataManager()
                         .existsByUserId(user.getId());
@@ -208,7 +208,7 @@ public class GlobalSearchFragment extends BaseFragment implements SearchListener
         globalSearchAdapter.setList(usersList);
     }
 
-    private void updateContactsList(List<QBUser> usersList) {
+    private void updateContactsList(List<ConnectycubeUser> usersList) {
         this.usersList = usersList;
         globalSearchAdapter.setList(usersList);
         globalSearchAdapter.setFilter(searchQuery);
@@ -261,7 +261,7 @@ public class GlobalSearchFragment extends BaseFragment implements SearchListener
     private void searchUsers() {
         if (!TextUtils.isEmpty(searchQuery) && checkSearchDataWithError(searchQuery)) {
 
-            QBPagedRequestBuilder requestBuilder = new QBPagedRequestBuilder();
+            PagedRequestBuilder requestBuilder = new PagedRequestBuilder();
             requestBuilder.setPage(page);
             requestBuilder.setPerPage(ConstsCore.FL_FRIENDS_PER_PAGE);
 
@@ -281,12 +281,12 @@ public class GlobalSearchFragment extends BaseFragment implements SearchListener
                         }
 
                         @Override
-                        public void onNext(List<QMUser> qbUsers) {
+                        public void onNext(List<QMUser> connectycubeUsers) {
 
-                            if (qbUsers != null && !qbUsers.isEmpty()) {
-                                checkForExcludeMe(qbUsers);
+                            if (connectycubeUsers != null && !connectycubeUsers.isEmpty()) {
+                                checkForExcludeMe(connectycubeUsers);
 
-                                usersList.addAll(qbUsers);
+                                usersList.addAll(connectycubeUsers);
 
                                 updateContactsList(usersList);
                             }
@@ -326,8 +326,8 @@ public class GlobalSearchFragment extends BaseFragment implements SearchListener
     }
 
     private void checkForExcludeMe(Collection<QMUser> usersCollection) {
-        QBUser qbUser = AppSession.getSession().getUser();
-        QMUser me = QMUser.convert(qbUser);
+        ConnectycubeUser connectycubeUser = AppSession.getSession().getUser();
+        QMUser me = QMUser.convert(connectycubeUser);
         if (usersCollection.contains(me)) {
             usersCollection.remove(me);
             excludedMe = true;

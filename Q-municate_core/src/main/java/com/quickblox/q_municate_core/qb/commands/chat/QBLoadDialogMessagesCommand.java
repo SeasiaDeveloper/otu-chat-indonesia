@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.quickblox.chat.Consts;
-import com.quickblox.chat.model.QBChatMessage;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.request.QBMessageGetBuilder;
+import com.connectycube.chat.Consts;
+import com.connectycube.chat.model.ConnectycubeChatMessage;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.request.MessageGetBuilder;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
 import com.quickblox.q_municate_core.service.QBService;
@@ -26,7 +26,7 @@ public class QBLoadDialogMessagesCommand extends ServiceCommand {
         this.chatHelper = chatHelper;
     }
 
-    public static void start(Context context, QBChatDialog dialog, long lastDateLoad, boolean isLoadOldMessages) {
+    public static void start(Context context, ConnectycubeChatDialog dialog, long lastDateLoad, boolean isLoadOldMessages) {
         Intent intent = new Intent(QBServiceConsts.LOAD_DIALOG_MESSAGES_ACTION, null, context,
                 QBService.class);
         intent.putExtra(QBServiceConsts.EXTRA_DIALOG, dialog);
@@ -37,12 +37,12 @@ public class QBLoadDialogMessagesCommand extends ServiceCommand {
 
     @Override
     public Bundle perform(Bundle extras) throws Exception {
-        QBChatDialog dialog = (QBChatDialog) extras.getSerializable(QBServiceConsts.EXTRA_DIALOG);
+        ConnectycubeChatDialog dialog = (ConnectycubeChatDialog) extras.getSerializable(QBServiceConsts.EXTRA_DIALOG);
         long lastDateLoad = extras.getLong(QBServiceConsts.EXTRA_DATE_LAST_UPDATE_HISTORY);
         boolean isLoadOldMessages = extras.getBoolean(QBServiceConsts.EXTRA_LOAD_MORE);
 
         Bundle returnedBundle = new Bundle();
-        QBMessageGetBuilder messageGetBuilder = new QBMessageGetBuilder();
+        MessageGetBuilder messageGetBuilder = new MessageGetBuilder();
         messageGetBuilder.setLimit(ConstsCore.DIALOG_MESSAGES_PER_PAGE);
 
         if (isLoadOldMessages) {
@@ -59,7 +59,7 @@ public class QBLoadDialogMessagesCommand extends ServiceCommand {
 
         messageGetBuilder.markAsRead(false);
 
-        List<QBChatMessage> dialogMessagesList = chatHelper.getDialogMessages(messageGetBuilder,
+        List<ConnectycubeChatMessage> dialogMessagesList = chatHelper.getDialogMessages(messageGetBuilder,
                 returnedBundle, dialog, lastDateLoad);
 
         Bundle bundleResult = new Bundle();

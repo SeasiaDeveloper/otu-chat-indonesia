@@ -20,10 +20,9 @@ import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.chats.NewMessageActivity;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
-import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsModelGroup;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.core.exception.ResponseException;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.qb.commands.chat.QBCreatePrivateChatCommand;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
@@ -33,7 +32,7 @@ import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.models.DialogOccupant;
 import com.quickblox.q_municate_db.utils.DialogTransformUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,7 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
 
     private final Context context;
     private DataManager dataManager = DataManager.getInstance();
-    private QBUser qbUser = AppSession.getSession().getUser();
+    private ConnectycubeUser connectycubeUser = AppSession.getSession().getUser();
     private boolean isToGroup = false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -129,17 +128,17 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            //QBChatDialog privateDialog = new QBChatDialog();
+                            //ConnectycubeChatDialog privateDialog = new ConnectycubeChatDialog();
                             QBChatHelper chatHelper = new QBChatHelper(context);
-                            QBChatDialog privateDialog = null;
+                            ConnectycubeChatDialog privateDialog = null;
                             try {
                                 privateDialog = chatHelper.createPrivateDialogIfNotExist(contact.getId_user());
                                 List<DialogOccupant> occupantsList = dataManager.getDialogOccupantDataManager()
                                         .getDialogOccupantsListByDialogId(privateDialog.getDialogId());
-                                QMUser opponent = ChatUtils.getOpponentFromPrivateDialog(UserFriendUtils.createLocalUser(qbUser), occupantsList);
+                                QMUser opponent = ChatUtils.getOpponentFromPrivateDialog(UserFriendUtils.createLocalUser(connectycubeUser), occupantsList);
                                 checkForOpenChat(opponent);
 
-                            } catch (QBResponseException e) {
+                            } catch (ResponseException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -196,7 +195,7 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
     private void checkForOpenChat(QMUser user) {
         DialogOccupant dialogOccupant = dataManager.getDialogOccupantDataManager().getDialogOccupantForPrivateChat(user.getId());
         if (dialogOccupant != null && dialogOccupant.getDialog() != null) {
-            QBChatDialog chatDialog = DialogTransformUtils.createQBDialogFromLocalDialog(dataManager, dialogOccupant.getDialog());
+            ConnectycubeChatDialog chatDialog = DialogTransformUtils.createQBDialogFromLocalDialog(dataManager, dialogOccupant.getDialog());
             startPrivateChat(chatDialog, user);
         } else {
             QBCreatePrivateChatCommand.start(context, user);
@@ -204,7 +203,7 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
         }
     }
 
-    private void startPrivateChat(QBChatDialog dialog, QMUser selectedUser) {
+    private void startPrivateChat(ConnectycubeChatDialog dialog, QMUser selectedUser) {
         PrivateDialogActivity.start(context, selectedUser, dialog);
     }
 }

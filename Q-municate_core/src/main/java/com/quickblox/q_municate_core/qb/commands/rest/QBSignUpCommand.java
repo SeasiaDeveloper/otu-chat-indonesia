@@ -8,8 +8,8 @@ import android.util.Log;
 import com.quickblox.q_municate_core.core.command.CompositeServiceCommand;
 import com.quickblox.q_municate_core.service.QBService;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
-import com.quickblox.users.QBUsers;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.ConnectycubeUsers;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.io.File;
 
@@ -19,7 +19,7 @@ public class QBSignUpCommand extends CompositeServiceCommand {
         super(context, successAction, failAction);
     }
 
-    public static void start(Context context, QBUser user, File image) {
+    public static void start(Context context, ConnectycubeUser user, File image) {
         Intent intent = new Intent(QBServiceConsts.SIGNUP_ACTION, null, context, QBService.class);
         intent.putExtra(QBServiceConsts.EXTRA_USER, user);
         intent.putExtra(QBServiceConsts.EXTRA_FILE, image);
@@ -28,10 +28,10 @@ public class QBSignUpCommand extends CompositeServiceCommand {
 
     @Override
     public Bundle perform(Bundle extras) throws Exception {
-        QBUser user = (QBUser) extras.getSerializable(QBServiceConsts.EXTRA_USER);
+        ConnectycubeUser user = (ConnectycubeUser) extras.getSerializable(QBServiceConsts.EXTRA_USER);
         Log.i("SignUpCommand", "login with user login:" + user.getLogin());
 
-        QBUsers.signUp(user).perform();
+        ConnectycubeUsers.signUp(user).perform();
         return extras;
     }
 }

@@ -31,16 +31,16 @@ import com.eklanku.otuChat.ui.adapters.friends.FriendsAdapter;
 import com.eklanku.otuChat.ui.adapters.search.ContactsAdapter;
 import com.eklanku.otuChat.ui.adapters.search.ContactsAdapterGroup;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
-import com.quickblox.chat.QBChatService;
-import com.quickblox.chat.model.QBChatDialog;
+import com.connectycube.chat.ConnectycubeChatService;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.adapters.friends.FriendsAdapter;
 import com.eklanku.otuChat.utils.KeyboardUtils;
 import com.eklanku.otuChat.utils.listeners.simple.SimpleOnRecycleItemClickListener;
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.request.QBPagedRequestBuilder;
+import com.connectycube.core.EntityCallback;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.request.PagedRequestBuilder;
 import com.quickblox.q_municate_core.core.command.Command;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.qb.commands.chat.QBCreatePrivateChatCommand;
@@ -52,8 +52,8 @@ import com.quickblox.q_municate_db.models.DialogOccupant;
 import com.quickblox.q_municate_db.models.Friend;
 import com.quickblox.q_municate_db.utils.DialogTransformUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.QBUsers;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.ConnectycubeUsers;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
     private int intCurrentPage = 0;
 
     public boolean isToGroup = false;
-    private QBChatDialog qbDialog;
+    private ConnectycubeChatDialog qbDialog;
     public List<Integer> friendIdsList;
     private List<Integer> occupants;
 
@@ -115,8 +115,8 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
         mIsNewMessage = getIntent().getBooleanExtra("isNewMessage", false);
         if (getIntent().hasExtra("isToGroup")) {
             isToGroup = getIntent().getBooleanExtra("isToGroup", false);
-            qbDialog = (QBChatDialog) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_DIALOG);
-            qbDialog.initForChat(QBChatService.getInstance());
+            qbDialog = (ConnectycubeChatDialog) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_DIALOG);
+            qbDialog.initForChat(ConnectycubeChatService.getInstance());
             addAction(QBServiceConsts.ADD_FRIENDS_TO_GROUP_SUCCESS_ACTION, new AddFriendsToGroupSuccessCommand());
         }
 
@@ -281,7 +281,7 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
     private void checkForOpenChat(QMUser user) {
         DialogOccupant dialogOccupant = dataManager.getDialogOccupantDataManager().getDialogOccupantForPrivateChat(user.getId());
         if (dialogOccupant != null && dialogOccupant.getDialog() != null) {
-            QBChatDialog chatDialog = DialogTransformUtils.createQBDialogFromLocalDialog(dataManager, dialogOccupant.getDialog());
+            ConnectycubeChatDialog chatDialog = DialogTransformUtils.createQBDialogFromLocalDialog(dataManager, dialogOccupant.getDialog());
             startPrivateChat(chatDialog);
         } else {
             if (checkNetworkAvailableWithError()) {
@@ -291,7 +291,7 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
         }
     }
 
-    private void startPrivateChat(QBChatDialog dialog) {
+    private void startPrivateChat(ConnectycubeChatDialog dialog) {
         PrivateDialogActivity.start(this, selectedUser, dialog);
         finish();
     }
@@ -313,7 +313,7 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
         @Override
         public void execute(Bundle bundle) {
             hideProgress();
-            QBChatDialog qbDialog = (QBChatDialog) bundle.getSerializable(QBServiceConsts.EXTRA_DIALOG);
+            ConnectycubeChatDialog qbDialog = (ConnectycubeChatDialog) bundle.getSerializable(QBServiceConsts.EXTRA_DIALOG);
             startPrivateChat(qbDialog);
         }
     }
@@ -410,14 +410,14 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
     }
 
     private void sendContact() {
-        QBPagedRequestBuilder pagedRequestBuilder = new QBPagedRequestBuilder();
+        PagedRequestBuilder pagedRequestBuilder = new PagedRequestBuilder();
         pagedRequestBuilder.setPage(1);
         pagedRequestBuilder.setPerPage(arrayPhone.size());
 
 
-        QBUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new QBEntityCallback<ArrayList<QBUser>>() {
+        ConnectycubeUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new EntityCallback<ArrayList<ConnectycubeUser>>() {
             @Override
-            public void onSuccess(ArrayList<QBUser> users, Bundle params) {
+            public void onSuccess(ArrayList<ConnectycubeUser> users, Bundle params) {
                 boolean isUpdateContact = false;
                 if (!mIsNewMessage) {
                     for (int i = 0; i < arrayPhone.size(); i++) {
@@ -435,7 +435,7 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
                             int position = arrayPhone.indexOf(users.get(j).getPhone());
                             if (position >= 0) {
                                 if (!mIsNewMessage) {
-                                    if (!mDbHelper.isQbUser(users.get(j).getPhone())) {
+                                    if (!mDbHelper.isConnectycubeUser(users.get(j).getPhone())) {
                                         isUpdateContact = true;
                                         mDbHelper.updateContact(users.get(j).getPhone(), users.get(j).getId());
                                     }
@@ -476,7 +476,7 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
             }
 
             @Override
-            public void onError(QBResponseException errors) {
+            public void onError(ResponseException errors) {
                 Log.e("Error", errors.getErrors().toString());
             }
         });

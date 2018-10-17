@@ -26,12 +26,12 @@ import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.adapters.search.ContactsAdapter;
 import com.eklanku.otuChat.ui.fragments.base.BaseFragment;
 import com.eklanku.otuChat.R;
-import com.quickblox.core.Consts;
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.request.QBPagedRequestBuilder;
-import com.quickblox.users.QBUsers;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.core.Consts;
+import com.connectycube.core.EntityCallback;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.request.PagedRequestBuilder;
+import com.connectycube.users.ConnectycubeUsers;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
 
@@ -232,14 +232,14 @@ public class ContactsFragment extends BaseFragment implements MenuItemCompat.OnA
 
     private void sendContact() {
         Log.v("Contacts", "Contacts: " + arrayPhone.toString());
-        QBPagedRequestBuilder pagedRequestBuilder = new QBPagedRequestBuilder();
+        PagedRequestBuilder pagedRequestBuilder = new PagedRequestBuilder();
         pagedRequestBuilder.setPage(intCurrentPage);
         pagedRequestBuilder.setPerPage(arrayPhone.size());
 
 
-        QBUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new QBEntityCallback<ArrayList<QBUser>>() {
+        ConnectycubeUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new EntityCallback<ArrayList<ConnectycubeUser>>() {
             @Override
-            public void onSuccess(ArrayList<QBUser> users, Bundle params) {
+            public void onSuccess(ArrayList<ConnectycubeUser> users, Bundle params) {
                 dialog.dismiss();
                 Log.i(TAG, ">>> Users: " + users.toString());
                 Log.i(TAG, "currentPage: " + params.getInt(Consts.CURR_PAGE));
@@ -281,7 +281,7 @@ public class ContactsFragment extends BaseFragment implements MenuItemCompat.OnA
             }
 
             @Override
-            public void onError(QBResponseException errors) {
+            public void onError(ResponseException errors) {
                 Log.e("Error", errors.getErrors().toString());
             }
         });

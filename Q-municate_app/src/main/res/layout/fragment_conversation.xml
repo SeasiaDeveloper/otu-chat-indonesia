@@ -8,13 +8,13 @@
     android:keepScreenOn="true"
     >
 
-    <com.quickblox.videochat.webrtc.view.QBRTCSurfaceView
+    <com.connectycube.videochat.view.RTCSurfaceView
         android:id="@+id/remote_video_view"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         />
 
-    <com.quickblox.videochat.webrtc.view.QBRTCSurfaceView
+    <com.connectycube.videochat.view.RTCSurfaceView
         android:id="@+id/local_video_view"
         style="@style/LocalVideoViewStyle"
         android:visibility="invisible"

@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.eklanku.otuChat.ui.adapters.friends.FriendsAdapter;
 import com.eklanku.otuChat.ui.adapters.friends.SelectableFriendsAdapter;
-import com.quickblox.chat.QBChatService;
-import com.quickblox.chat.model.QBChatDialog;
+import com.connectycube.chat.ConnectycubeChatService;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.others.BaseFriendsListActivity;
 import com.eklanku.otuChat.ui.adapters.friends.FriendsAdapter;
@@ -33,10 +33,10 @@ public class AddFriendsToGroupActivity extends BaseFriendsListActivity {
 
     public static final int RESULT_ADDED_FRIENDS = 9123;
 
-    private QBChatDialog qbDialog;
+    private ConnectycubeChatDialog qbDialog;
     private List<Integer> friendIdsList;
 
-    public static void start(Activity activity, QBChatDialog qbDialog) {
+    public static void start(Activity activity, ConnectycubeChatDialog qbDialog) {
         Intent intent = new Intent(activity, AddFriendsToGroupActivity.class);
         intent.putExtra(QBServiceConsts.EXTRA_DIALOG, qbDialog);
         activity.startActivityForResult(intent, RESULT_ADDED_FRIENDS);
@@ -69,8 +69,8 @@ public class AddFriendsToGroupActivity extends BaseFriendsListActivity {
 
     @Override
     protected List<QMUser> getFriendsList() {
-        qbDialog = (QBChatDialog) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_DIALOG);
-        qbDialog.initForChat(QBChatService.getInstance());
+        qbDialog = (ConnectycubeChatDialog) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_DIALOG);
+        qbDialog.initForChat(ConnectycubeChatService.getInstance());
         List<Friend> friendsList = dataManager.getFriendDataManager().getAllForGroupDetails(qbDialog.getOccupants());
         if (!friendsList.isEmpty()) {
             List<Integer> actualFriendIdsList = UserFriendUtils.getFriendIdsListFromList(friendsList);

@@ -20,7 +20,7 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
-import com.quickblox.auth.model.QBProvider;
+import com.connectycube.auth.model.ConnectycubeProvider;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
@@ -31,13 +31,13 @@ import com.eklanku.otuChat.utils.helpers.FlurryAnalyticsHelper;
 import com.eklanku.otuChat.utils.helpers.GoogleAnalyticsHelper;
 import com.eklanku.otuChat.utils.helpers.FacebookHelper;
 import com.eklanku.otuChat.utils.helpers.FirebaseAuthHelper;
-import com.quickblox.auth.session.QBSessionManager;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.LoginType;
 import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import butterknife.Bind;
 import butterknife.OnTextChanged;
@@ -186,7 +186,7 @@ public abstract class BaseAuthActivity extends BaseActivity {
         }
     }
 
-    protected void startMainActivity(QBUser user) {
+    protected void startMainActivity(ConnectycubeUser user) {
         AppSession.getSession().updateUser(user);
         startMainActivity();
     }
@@ -201,9 +201,9 @@ public abstract class BaseAuthActivity extends BaseActivity {
         appSharedHelper.saveFirstAuth(true);
         appSharedHelper.saveSavedRememberMe(true);
         appSharedHelper.saveUsersImportInitialized(true);
-        QBUser user = new QBUser(null, userPassword, userEmail);
+        ConnectycubeUser user = new ConnectycubeUser(null, userPassword, userEmail);
 
-        serviceManager.login(user).subscribe(new Observer<QBUser>() {
+        serviceManager.login(user).subscribe(new Observer<ConnectycubeUser>() {
             @Override
             public void onCompleted() {
 
@@ -217,8 +217,8 @@ public abstract class BaseAuthActivity extends BaseActivity {
             }
 
             @Override
-            public void onNext(QBUser qbUser) {
-                performLoginSuccessAction(qbUser);
+            public void onNext(ConnectycubeUser connectycubeUser) {
+                performLoginSuccessAction(connectycubeUser);
             }
         });
     }
@@ -228,9 +228,9 @@ public abstract class BaseAuthActivity extends BaseActivity {
         finish();
     }
 
-    private void performLoginSuccessAction(QBUser user) {
+    private void performLoginSuccessAction(ConnectycubeUser user) {
         user.setPassword(user.getLogin());
-        user.setOldPassword(QBSessionManager.getInstance().getToken());
+        user.setOldPassword(ConnectycubeSessionManager.getInstance().getToken());
         ServiceManager.getInstance().updateUserPassword(user).subscribe(new Subscriber<QMUser>() {
             @Override
             public void onCompleted() {
@@ -258,7 +258,7 @@ public abstract class BaseAuthActivity extends BaseActivity {
         //FlurryAnalyticsHelper.pushAnalyticsData(this);
     }
 
-    private Observer<QBUser> socialLoginObserver = new Observer<QBUser>() {
+    private Observer<ConnectycubeUser> socialLoginObserver = new Observer<ConnectycubeUser>() {
         @Override
         public void onCompleted() {
 
@@ -272,8 +272,8 @@ public abstract class BaseAuthActivity extends BaseActivity {
         }
 
         @Override
-        public void onNext(QBUser qbUser) {
-            performLoginSuccessAction(qbUser);
+        public void onNext(ConnectycubeUser connectycubeUser) {
+            performLoginSuccessAction(connectycubeUser);
         }
     };
 
@@ -283,7 +283,7 @@ public abstract class BaseAuthActivity extends BaseActivity {
         public void onSuccess(LoginResult loginResult) {
             Log.d(TAG, "+++ FacebookCallback call onSuccess from BaseAuthActivity +++");
             showProgress();
-            serviceManager.login(QBProvider.FACEBOOK, loginResult.getAccessToken().getToken(), null)
+            serviceManager.login(ConnectycubeProvider.FACEBOOK, loginResult.getAccessToken().getToken(), null)
                     .subscribe(socialLoginObserver);
         }
 
@@ -306,7 +306,7 @@ public abstract class BaseAuthActivity extends BaseActivity {
         public void onSuccess(String authToken) {
             Log.d(TAG, "FirebaseAuthCallback onSuccess()");
             showProgress();
-            serviceManager.login(QBProvider.FIREBASE_PHONE, authToken, appSharedHelper.getFirebaseProjectId())
+            serviceManager.login(ConnectycubeProvider.FIREBASE_PHONE, authToken, appSharedHelper.getFirebaseProjectId())
                     .subscribe(socialLoginObserver);
         }
 

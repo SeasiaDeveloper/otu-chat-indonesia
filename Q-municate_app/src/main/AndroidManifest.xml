@@ -201,13 +201,16 @@
             android:name=".ui.activities.about.AboutActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activities.barcode.WebQRCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activities.others.PreviewImageActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.location.MapsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.quickblox.ui.kit.chatmessage.adapter.media.video.ui.VideoPlayerActivity"
+            android:name="com.connectycube.ui.chatmessage.adapter.media.video.ui.VideoPlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:launchMode="singleTop"
             android:theme="@style/VideoPlayerTheme">
@@ -231,25 +234,25 @@
             android:value="${fabricApiKey}"
             tools:replace="android:value" />
         <meta-data
-            android:name="com.quickblox.messages.TYPE"
+            android:name="com.connectycube.pushnotifications.TYPE"
             android:value="FCM" />
         <meta-data
-            android:name="com.quickblox.messages.SENDER_ID"
+            android:name="com.connectycube.pushnotifications.SENDER_ID"
             android:value="@string/sender_id" />
         <meta-data
-            android:name="com.quickblox.messages.QB_ENVIRONMENT"
+            android:name="com.connectycube.pushnotifications.ENVIRONMENT"
             android:value="PRODUCTION" />
 
         <service
             android:name="com.quickblox.q_municate_core.service.QBService"
             android:icon="@mipmap/ic_launcher" />
-        <service android:name=".fcm.FcmPushListenerService">
+        <service android:name=".fcm.FirebasePushListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name="com.quickblox.messages.services.fcm.QBFcmPushInstanceIDService"
+            android:name="com.connectycube.pushnotifications.services.fcm.FcmPushInstanceIDService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

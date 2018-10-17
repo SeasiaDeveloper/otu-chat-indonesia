@@ -3,7 +3,7 @@ package com.quickblox.q_municate_core.qb.helpers;
 import android.content.Context;
 import android.util.Log;
 
-import com.quickblox.core.exception.QBResponseException;
+import com.connectycube.core.exception.ResponseException;
 import com.quickblox.q_municate_core.utils.UserFriendUtils;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
@@ -22,7 +22,7 @@ public class QBRestHelper extends BaseHelper {
         try {
             QMUser user = QMUserService.getInstance().getUserSync(userId, true);
             resultUser = user;
-        } catch (QBResponseException e) {
+        } catch (ResponseException e) {
             // user not found
             resultUser = createDeletedUser(userId);
         }
@@ -40,7 +40,7 @@ public class QBRestHelper extends BaseHelper {
             if(resultUser.isEmpty()){
                 createDeletedUser(userIds.iterator().next());
             }
-        } catch (QBResponseException e) {
+        } catch (ResponseException e) {
             Log.e(TAG, "failed load users" + e);
         }
 

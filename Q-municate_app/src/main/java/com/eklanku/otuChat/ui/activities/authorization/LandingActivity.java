@@ -46,10 +46,10 @@ import com.facebook.accountkit.ui.SkinManager;
 import com.facebook.accountkit.ui.UIManager;
 
 
-import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.QBErrors;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.request.QBPagedRequestBuilder;
+import com.connectycube.core.EntityCallback;
+import com.connectycube.core.ConnectycubeErrors;
+import com.connectycube.core.exception.ResponseException;
+import com.connectycube.core.request.PagedRequestBuilder;
 import com.quickblox.q_municate_core.core.command.Command;
 import com.quickblox.q_municate_core.models.LoginType;
 import com.quickblox.q_municate_core.qb.commands.rest.QBSignUpCommand;
@@ -57,8 +57,8 @@ import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.QBUsers;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.ConnectycubeUsers;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -271,13 +271,13 @@ public class LandingActivity extends BaseAuthActivity {
         loginType = LoginType.FIREBASE_PHONE;
         ArrayList<String> arrayPhone = new ArrayList<>();
         arrayPhone.add(strPhoneNumber);
-        QBPagedRequestBuilder pagedRequestBuilder = new QBPagedRequestBuilder();
+        PagedRequestBuilder pagedRequestBuilder = new PagedRequestBuilder();
         pagedRequestBuilder.setPage(1);
         pagedRequestBuilder.setPerPage(1);
 
-        QBUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new QBEntityCallback<ArrayList<QBUser>>() {
+        ConnectycubeUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new EntityCallback<ArrayList<ConnectycubeUser>>() {
             @Override
-            public void onSuccess(ArrayList<QBUser> users, Bundle params) {
+            public void onSuccess(ArrayList<ConnectycubeUser> users, Bundle params) {
 
                 Log.d(TAG, "onSuccess: users "+users);
                 if (users.size() > 0) {
@@ -288,7 +288,7 @@ public class LandingActivity extends BaseAuthActivity {
             }
 
             @Override
-            public void onError(QBResponseException errors) {
+            public void onError(ResponseException errors) {
                 Log.e("Error", errors.getErrors().toString());
             }
         });
@@ -298,9 +298,9 @@ public class LandingActivity extends BaseAuthActivity {
         appSharedHelper.saveFirstAuth(true);
         appSharedHelper.saveSavedRememberMe(true);
         appSharedHelper.saveUsersImportInitialized(true);
-        QBUser user = new QBUser(userPhone, userPhone, null);
+        ConnectycubeUser user = new ConnectycubeUser(userPhone, userPhone, null);
 
-        serviceManager.login(user).subscribe(new Observer<QBUser>() {
+        serviceManager.login(user).subscribe(new Observer<ConnectycubeUser>() {
             @Override
             public void onCompleted() {
 
@@ -324,13 +324,13 @@ public class LandingActivity extends BaseAuthActivity {
             }
 
             @Override
-            public void onNext(QBUser qbUser) {
-                performLoginSuccessAction(qbUser);
+            public void onNext(ConnectycubeUser connectycubeUser) {
+                performLoginSuccessAction(connectycubeUser);
             }
         });
     }
 
-    private void performLoginSuccessAction(QBUser user) {
+    private void performLoginSuccessAction(ConnectycubeUser user) {
         hideProgress();
         startMainActivity(user);
         // send analytics data
@@ -339,19 +339,19 @@ public class LandingActivity extends BaseAuthActivity {
     }
 
     protected void signUpWithNumber(String userPhone) {
-        QBUser qbUser = new QBUser(userPhone, userPhone, null);
-        qbUser.setPhone(userPhone);
-        qbUser.setFullName(userPhone);
+        ConnectycubeUser connectycubeUser = new ConnectycubeUser(userPhone, userPhone, null);
+        connectycubeUser.setPhone(userPhone);
+        connectycubeUser.setFullName(userPhone);
         appSharedHelper.saveUsersImportInitialized(false);
         DataManager.getInstance().clearAllTables();
-        QBSignUpCommand.start(LandingActivity.this, qbUser, null);
+        QBSignUpCommand.start(LandingActivity.this, connectycubeUser, null);
     }
 
     private class SignUpSuccessAction implements Command {
 
         @Override
         public void execute(Bundle bundle) throws Exception {
-            QBUser user = (QBUser) bundle.getSerializable(QBServiceConsts.EXTRA_USER);
+            ConnectycubeUser user = (ConnectycubeUser) bundle.getSerializable(QBServiceConsts.EXTRA_USER);
             login(user.getLogin());
         }
     }

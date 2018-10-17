@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.quickblox.chat.model.QBChatDialog;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
 import com.quickblox.q_municate_core.service.QBService;
@@ -32,7 +32,7 @@ public class QBCreatePrivateChatCommand extends ServiceCommand {
     protected Bundle perform(Bundle extras) throws Exception {
         Integer friendId = (Integer) extras.getSerializable(QBServiceConsts.EXTRA_FRIEND);
 
-        QBChatDialog privateDialog = chatHelper.createPrivateDialogIfNotExist(friendId);
+        ConnectycubeChatDialog privateDialog = chatHelper.createPrivateDialogIfNotExist(friendId);
         extras.putSerializable(QBServiceConsts.EXTRA_DIALOG, privateDialog);
         return extras;
     }

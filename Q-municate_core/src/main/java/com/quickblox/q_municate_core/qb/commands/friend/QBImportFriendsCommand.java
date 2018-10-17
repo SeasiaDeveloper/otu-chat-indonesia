@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.quickblox.core.request.QBPagedRequestBuilder;
+import com.connectycube.core.request.PagedRequestBuilder;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.qb.helpers.QBFriendListHelper;
 import com.quickblox.q_municate_core.service.QBService;
@@ -12,7 +12,7 @@ import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_core.utils.UserFriendUtils;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.quickblox.users.model.QBUser;
+import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +45,10 @@ public class QBImportFriendsCommand extends ServiceCommand {
 
         Bundle params = new Bundle();
 
-        QBPagedRequestBuilder requestBuilder = null;
+        PagedRequestBuilder requestBuilder = null;
 
-        List<QBUser> realFriendsFacebookList = null;
-        List<QBUser> realFriendsContactsList = null;
+        List<ConnectycubeUser> realFriendsFacebookList = null;
+        List<ConnectycubeUser> realFriendsContactsList = null;
 
         if (!friendsFacebookList.isEmpty()) {
             List<QMUser> realQMFriendsFacebookList=  QMUserService.getInstance().getUsersByFacebookIdSync(friendsFacebookList, requestBuilder, true);
@@ -79,8 +79,8 @@ public class QBImportFriendsCommand extends ServiceCommand {
         return result;
     }
 
-    private List<Integer> getSelectedUsersList(List<QBUser> realFriendsFacebookList,
-            List<QBUser> realFriendsContactsList) {
+    private List<Integer> getSelectedUsersList(List<ConnectycubeUser> realFriendsFacebookList,
+            List<ConnectycubeUser> realFriendsContactsList) {
         List<Integer> userIdsList = new ArrayList<Integer>();
 
         if (realFriendsFacebookList != null && !realFriendsFacebookList.isEmpty()) {

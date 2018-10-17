@@ -16,7 +16,7 @@ import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.quickblox.auth.session.QBSettings;
+import com.connectycube.auth.session.ConnectycubeSettings;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.profile.EditProfilActivity;
@@ -69,7 +69,7 @@ public class SettingsActivityOtu extends BaseLoggableActivity {
     }
 
     private void fillUI() {
-//        pushNotificationSwitch.setChecked(QBSettings.getInstance().isEnablePushNotification());
+//        pushNotificationSwitch.setChecked(ConnectycubeSettings.getInstance().isEnablePushNotification());
 //        changePasswordView.setVisibility(
 //                LoginType.EMAIL.equals(AppSession.getSession().getLoginType()) ? View.VISIBLE : View.GONE);
         fullNameTextView.setText(user.getFullName());

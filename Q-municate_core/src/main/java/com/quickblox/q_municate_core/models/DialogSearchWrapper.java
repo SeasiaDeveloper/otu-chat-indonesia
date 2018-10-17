@@ -2,8 +2,8 @@ package com.quickblox.q_municate_core.models;
 
 import android.content.Context;
 
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
+import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.quickblox.q_municate_core.R;
 import com.quickblox.q_municate_core.utils.ChatUtils;
 import com.quickblox.q_municate_core.utils.UserFriendUtils;
@@ -22,13 +22,13 @@ import java.util.List;
 
 public class DialogSearchWrapper implements Serializable {
 
-    private QBChatDialog chatDialog;
+    private ConnectycubeChatDialog chatDialog;
 
     private QMUser opponentUser;
 
     private String label;
 
-    public DialogSearchWrapper (Context context, DataManager dataManager, QBChatDialog chatDialog) {
+    public DialogSearchWrapper (Context context, DataManager dataManager, ConnectycubeChatDialog chatDialog) {
         this.chatDialog = chatDialog;
         transform(context, dataManager);
     }
@@ -36,7 +36,7 @@ public class DialogSearchWrapper implements Serializable {
     private void transform(Context context, DataManager dataManager){
         List<DialogOccupant> dialogOccupantsList = dataManager.getDialogOccupantDataManager().getDialogOccupantsListByDialogId(chatDialog.getDialogId());
 
-        if (QBDialogType.PRIVATE.equals(chatDialog.getType())) {
+        if (ConnectycubeDialogType.PRIVATE.equals(chatDialog.getType())) {
             QMUser currentUser = UserFriendUtils.createLocalUser(AppSession.getSession().getUser());
             opponentUser = ChatUtils.getOpponentFromPrivateDialog(currentUser, dialogOccupantsList);
         } else {
@@ -50,7 +50,7 @@ public class DialogSearchWrapper implements Serializable {
         }
     }
 
-    public QBChatDialog getChatDialog() {
+    public ConnectycubeChatDialog getChatDialog() {
         return chatDialog;
     }
 
