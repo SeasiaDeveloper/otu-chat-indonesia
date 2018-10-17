@@ -3,24 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F5ED"
+    android:background="@android:color/transparent"
     android:orientation="vertical">
-
+   <!-- android:background="#F7F5ED"-->
     <include layout="@layout/shadow_view" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@android:color/transparent"
         android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:background="@android:color/transparent"
             android:paddingBottom="@dimen/density_30"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:background="@android:color/transparent"
                 android:layout_height="match_parent">
 
                 <LinearLayout
@@ -30,12 +33,13 @@
                     android:layout_below="@+id/layout_"
                     android:layout_marginTop="@dimen/density_8"
                     android:layout_marginBottom="@dimen/density_8"
-                    android:background="@color/colorTextOtu"
+                    android:background="@android:color/transparent"
                     android:orientation="vertical"
                     android:visibility="gone" />
 
                 <LinearLayout
                     android:visibility="gone"
+                    android:background="@android:color/transparent"
                     android:id="@+id/layout_"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -43,6 +47,7 @@
 
                     <android.support.v7.widget.LinearLayoutCompat
                         android:id="@+id/laySaldo"
+                        android:background="@android:color/transparent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -314,6 +319,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/div1"
+                    android:background="@android:color/transparent"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_marginStart="@dimen/density_8"
@@ -326,11 +332,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txt1"
-                    android:layout_marginStart="@dimen/density_8"
-                    android:layout_marginLeft="@dimen/density_8"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
                     android:layout_marginTop="@dimen/density_8"
-                    android:layout_marginEnd="@dimen/density_8"
-                    android:layout_marginRight="@dimen/density_8">
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4">
 
                     <LinearLayout
                         android:id="@+id/layout_topup"
@@ -714,11 +720,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/cv_topup"
-                    android:layout_marginStart="@dimen/density_8"
-                    android:layout_marginLeft="@dimen/density_8"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
                     android:layout_marginTop="@dimen/density_8"
-                    android:layout_marginEnd="@dimen/density_8"
-                    android:layout_marginRight="@dimen/density_8"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
                     android:layout_marginBottom="@dimen/density_16">
 
                     <LinearLayout
