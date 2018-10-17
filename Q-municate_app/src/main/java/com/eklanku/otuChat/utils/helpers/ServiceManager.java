@@ -207,6 +207,12 @@ public class ServiceManager {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<ArrayList<ConnectycubeUser>> getRegisteredContacts() {
+        return userService.getRegisteredContacts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public Observable<Void> resetPassword(String email) {
         return QMAuthService.getInstance().resetPassword(email)
                 .subscribeOn(Schedulers.io())

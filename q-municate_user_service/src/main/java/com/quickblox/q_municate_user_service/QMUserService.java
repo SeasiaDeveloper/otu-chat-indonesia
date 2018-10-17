@@ -395,6 +395,17 @@ public class QMUserService extends QMBaseService {
     }
 
 
+    public Observable<ArrayList<ConnectycubeUser>> getRegisteredContacts() {
+        Performer<ArrayList<ConnectycubeUser>> performer = ConnectycubeUsers.getRegisteredUsersFromAddressBook(null, false);
+        return performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+    }
+
+    public Observable<ArrayList<ConnectycubeUser>> getRegisteredContacts(String UDID, boolean compact) {
+        Performer<ArrayList<ConnectycubeUser>> performer = ConnectycubeUsers.getRegisteredUsersFromAddressBook(UDID, compact);
+        return performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+    }
+
+
     private Observable<QMUser> getUserByColumn(final String column, final String value,  boolean forceLoad){
         Observable<QMUser> result = null;
 

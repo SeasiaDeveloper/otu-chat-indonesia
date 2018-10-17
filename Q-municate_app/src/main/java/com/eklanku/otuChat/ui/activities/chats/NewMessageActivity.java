@@ -30,6 +30,7 @@ import com.eklanku.otuChat.ui.activities.contacts.ContactsModelGroup;
 import com.eklanku.otuChat.ui.adapters.friends.FriendsAdapter;
 import com.eklanku.otuChat.ui.adapters.search.ContactsAdapter;
 import com.eklanku.otuChat.ui.adapters.search.ContactsAdapterGroup;
+import com.eklanku.otuChat.utils.helpers.AddressBookHelper;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.connectycube.chat.ConnectycubeChatService;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
@@ -60,6 +61,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import rx.Observable;
 
 public class NewMessageActivity extends BaseLoggableActivity implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
@@ -77,8 +79,6 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
     private static final String TAG = ContactsActivity.class.getSimpleName();
 
     private static boolean mIsNewMessage = false;
-
-    private DbHelper mDbHelper;
 
     private ArrayList<String> arrayPhone;
     private ArrayList<String> arrayName;
@@ -140,7 +140,7 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
             if (contactsModels.size() > 0)
                 isFirst = false;
         }
-        readContacts();
+//        readContacts();
 
         contactsAdapter = new ContactsAdapterGroup(contactsModels, this);
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -324,78 +324,99 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
         startActivity(intent);
     }
 
-    public void readContacts() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
-            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
-        } else {
-            intCurrentPage++;
-            if (startPosition == 0 && isFirst) {
-                dialog = ProgressDialog.show(this, null, "Please Wait...");
-            }
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        arrayPhone.clear();
-                        ContentResolver cr = getContentResolver();
-                        Cursor cur;
-
-                        String limit = String.valueOf(startPosition) + ", " + PER_PAGE;
-
-                        cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, "UPPER(" + ContactsContract.Contacts.DISPLAY_NAME + ") ASC LIMIT " + limit);
-                        if (cur.getCount() > 0) {
-                            arrayName.clear();
-                            while (cur.moveToNext()) {
-                                String id = cur.getString(cur.getColumnIndex(BaseColumns._ID));
-                                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                                            new String[]{id}, null);
-                                    while (pCur.moveToNext()) {
-                                        String phonenumber = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                                        String contactname = pCur.getString(pCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                                        phonenumber = phonenumber.replaceAll("[+()-]", "");
-                                        phonenumber = phonenumber.replaceAll(" ", "");
-                                        if (phonenumber.startsWith("0")) {
-                                            phonenumber = phonenumber.replaceFirst("0", String.valueOf(COUNTRY_CODE));
-                                        } else if (!phonenumber.startsWith(String.valueOf(COUNTRY_CODE))) {
-                                            phonenumber = COUNTRY_CODE + phonenumber;
-                                        }
-                                        if (!arrayPhone.contains(phonenumber.trim())) {
-                                            if (!phonenumber.isEmpty()) {
-                                                arrayPhone.add(phonenumber);
-                                                arrayName.add(contactname);
-                                            }
-                                        }
-                                    }
-                                    pCur.close();
-                                }
-                            }
-                        } else {
-                            isload = false;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isload) {
-                                sendContact();
-                            } else {
-                                if (dialog != null && dialog.isShowing() != false) {
-                                    dialog.dismiss();
-                                }
-                            }
-                        }
-                    });
-                }
-
-            }).start();
-        }
+    @Override
+    public void onConnectedToService(QBService service) {
+        super.onConnectedToService(service);
+        updateContactListAndRoster();
     }
+
+    private void updateContactListAndRoster() {
+        AddressBookHelper.getInstance().updateRosterContactList(friendListHelper, mDbHelper, AppSession.getSession().getUser().getPassword()).onErrorResumeNext(e -> Observable.empty()).subscribe(success -> {
+            Log.d(TAG, "updateRosterContactList success= " + success);
+            contactsModels.clear();
+            if (mIsNewMessage) {
+                contactsModels.addAll(mDbHelper.getContactsSelectedGroup());
+            } else if (isToGroup) {
+                contactsModels.addAll(mDbHelper.getContactsExceptGroup(qbDialog.getOccupants()));
+            } else {
+                contactsModels.addAll(mDbHelper.getContactsGroup());
+            }
+            contactsAdapter.notifyDataSetChanged();
+        });
+    }
+
+//    public void readContacts() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+//            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+//            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+//        } else {
+//            intCurrentPage++;
+//            if (startPosition == 0 && isFirst) {
+//                dialog = ProgressDialog.show(this, null, "Please Wait...");
+//            }
+//
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        arrayPhone.clear();
+//                        ContentResolver cr = getContentResolver();
+//                        Cursor cur;
+//
+//                        String limit = String.valueOf(startPosition) + ", " + PER_PAGE;
+//
+//                        cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, "UPPER(" + ContactsContract.Contacts.DISPLAY_NAME + ") ASC LIMIT " + limit);
+//                        if (cur.getCount() > 0) {
+//                            arrayName.clear();
+//                            while (cur.moveToNext()) {
+//                                String id = cur.getString(cur.getColumnIndex(BaseColumns._ID));
+//                                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+//                                    Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+//                                            new String[]{id}, null);
+//                                    while (pCur.moveToNext()) {
+//                                        String phonenumber = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                                        String contactname = pCur.getString(pCur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+//                                        phonenumber = phonenumber.replaceAll("[+()-]", "");
+//                                        phonenumber = phonenumber.replaceAll(" ", "");
+//                                        if (phonenumber.startsWith("0")) {
+//                                            phonenumber = phonenumber.replaceFirst("0", String.valueOf(COUNTRY_CODE));
+//                                        } else if (!phonenumber.startsWith(String.valueOf(COUNTRY_CODE))) {
+//                                            phonenumber = COUNTRY_CODE + phonenumber;
+//                                        }
+//                                        if (!arrayPhone.contains(phonenumber.trim())) {
+//                                            if (!phonenumber.isEmpty()) {
+//                                                arrayPhone.add(phonenumber);
+//                                                arrayName.add(contactname);
+//                                            }
+//                                        }
+//                                    }
+//                                    pCur.close();
+//                                }
+//                            }
+//                        } else {
+//                            isload = false;
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (isload) {
+//                                sendContact();
+//                            } else {
+//                                if (dialog != null && dialog.isShowing() != false) {
+//                                    dialog.dismiss();
+//                                }
+//                            }
+//                        }
+//                    });
+//                }
+//
+//            }).start();
+//        }
+//    }
 
     private class AddFriendsToGroupSuccessCommand implements Command {
 
@@ -409,76 +430,77 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
         }
     }
 
-    private void sendContact() {
-        PagedRequestBuilder pagedRequestBuilder = new PagedRequestBuilder();
-        pagedRequestBuilder.setPage(1);
-        pagedRequestBuilder.setPerPage(arrayPhone.size());
-
-
-        ConnectycubeUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new EntityCallback<ArrayList<ConnectycubeUser>>() {
-            @Override
-            public void onSuccess(ArrayList<ConnectycubeUser> users, Bundle params) {
-                boolean isUpdateContact = false;
-                if (!mIsNewMessage) {
-                    for (int i = 0; i < arrayPhone.size(); i++) {
-                        if (!mDbHelper.isPhoneNumberExists(arrayPhone.get(i))) {
-                            isUpdateContact = true;
-                            mDbHelper.insertContact(new ContactsModel(arrayPhone.get(i), arrayName.get(i), "0"));
-                        }
-                    }
-                }
-
-                if (users.size() > 0) {
-                    for (int j = 0; j < users.size(); j++) {
-                        if (arrayPhone.contains(users.get(j).getPhone())) {
-                            //addAsFriend(users.get(j));
-                            int position = arrayPhone.indexOf(users.get(j).getPhone());
-                            if (position >= 0) {
-                                if (!mIsNewMessage) {
-                                    if (!mDbHelper.isConnectycubeUser(users.get(j).getPhone())) {
-                                        isUpdateContact = true;
-                                        mDbHelper.updateContact(users.get(j).getPhone(), users.get(j).getId());
-                                    }
-                                } else {
-                                    if (!mDbHelper.isPhoneNumberExists(users.get(j).getPhone())) {
-                                        isUpdateContact = true;
-                                        ContactsModel objContact = new ContactsModel(arrayPhone.get(position), arrayName.get(position), "1", users.get(j).getId());
-                                        mDbHelper.insertContact(objContact);
-                                    } else {
-                                        isUpdateContact = true;
-                                        mDbHelper.updateContact(users.get(j).getPhone(), users.get(j).getId());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (dialog != null && dialog.isShowing())
-                    dialog.dismiss();
-                if (isUpdateContact) {
-                    try {
-                        contactsModels.clear();
-                        if (mIsNewMessage) {
-                            contactsModels.addAll(mDbHelper.getContactsSelectedGroup());
-                        } else if (isToGroup) {
-                            contactsModels.addAll(mDbHelper.getContactsExceptGroup(qbDialog.getOccupants()));
-                        } else {
-                            contactsModels.addAll(mDbHelper.getContactsGroup());
-                        }
-                        contactsAdapter.notifyDataSetChanged();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                startPosition = intCurrentPage * PER_PAGE;
-                readContacts();
-            }
-
-            @Override
-            public void onError(ResponseException errors) {
-                Log.e("Error", errors.getErrors().toString());
-            }
-        });
-    }
+//    private void sendContact() {
+//        PagedRequestBuilder pagedRequestBuilder = new PagedRequestBuilder();
+//        pagedRequestBuilder.setPage(1);
+//        pagedRequestBuilder.setPerPage(arrayPhone.size());
+//
+//
+//        ConnectycubeUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new EntityCallback<ArrayList<ConnectycubeUser>>() {
+//            @Override
+//            public void onSuccess(ArrayList<ConnectycubeUser> users, Bundle params) {
+//                boolean isUpdateContact = false;
+//                if (!mIsNewMessage) {
+//                    for (int i = 0; i < arrayPhone.size(); i++) {
+//                        if (!mDbHelper.isPhoneNumberExists(arrayPhone.get(i))) {
+//                            isUpdateContact = true;
+//                            mDbHelper.insertContact(new ContactsModel(arrayPhone.get(i), arrayName.get(i), "0"));
+//                        }
+//                    }
+//                }
+//
+//                if (users.size() > 0) {
+//                    for (int j = 0; j < users.size(); j++) {
+//                        if (arrayPhone.contains(users.get(j).getPhone())) {
+//                            //addAsFriend(users.get(j));
+//                            int position = arrayPhone.indexOf(users.get(j).getPhone());
+//                            if (position >= 0) {
+//                                if (!mIsNewMessage) {
+//                                    if (!mDbHelper.isConnectycubeUser(users.get(j).getPhone())) {
+//                                        isUpdateContact = true;
+//                                        mDbHelper.updateContact(users.get(j).getPhone(), users.get(j).getId());
+//                                    }
+//                                } else {
+//                                    if (!mDbHelper.isPhoneNumberExists(users.get(j).getPhone())) {
+//                                        isUpdateContact = true;
+//                                        ContactsModel objContact = new ContactsModel(arrayPhone.get(position), arrayName.get(position), "1", users.get(j).getId());
+//                                        Log.d("NewMessageActivity", "sendContact getUsersByPhoneNumbers ContactsModel isReg_type 1 objContact= " + objContact.getId());
+//                                        mDbHelper.insertContact(objContact);
+//                                    } else {
+//                                        isUpdateContact = true;
+//                                        mDbHelper.updateContact(users.get(j).getPhone(), users.get(j).getId());
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                if (dialog != null && dialog.isShowing())
+//                    dialog.dismiss();
+//                if (isUpdateContact) {
+//                    try {
+//                        contactsModels.clear();
+//                        if (mIsNewMessage) {
+//                            contactsModels.addAll(mDbHelper.getContactsSelectedGroup());
+//                        } else if (isToGroup) {
+//                            contactsModels.addAll(mDbHelper.getContactsExceptGroup(qbDialog.getOccupants()));
+//                        } else {
+//                            contactsModels.addAll(mDbHelper.getContactsGroup());
+//                        }
+//                        contactsAdapter.notifyDataSetChanged();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                startPosition = intCurrentPage * PER_PAGE;
+//                readContacts();
+//            }
+//
+//            @Override
+//            public void onError(ResponseException errors) {
+//                Log.e("Error", errors.getErrors().toString());
+//            }
+//        });
+//    }
 }
