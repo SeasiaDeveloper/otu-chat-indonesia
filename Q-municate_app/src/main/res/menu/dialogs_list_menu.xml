@@ -2,10 +2,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/action_search_"
         android:icon="@drawable/ic_search_chat"
         android:title="@string/action_bar_search"
-        app:showAsAction="ifRoom" />
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_contact"
+        android:title="Contact"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/ic_notifications"
+        android:title="Notification"
+        app:showAsAction="always" />
+
+
 
     <item
         android:id="@+id/action_start_settings"

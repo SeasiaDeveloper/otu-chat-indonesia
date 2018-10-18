@@ -34,7 +34,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/density_4"
-                app:border_color="@color/dark_gray"
+                app:border_color="@android:color/transparent"
                 app:border_width="@dimen/avatar_border_width"
                 app:oval="true" />
 

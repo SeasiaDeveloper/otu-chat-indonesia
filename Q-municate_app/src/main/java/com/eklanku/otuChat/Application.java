@@ -22,7 +22,7 @@ public class Application extends App{
     public void onCreate() {
         super.onCreate();
         setFirstLaunch(this);
-        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/CenturyGothic.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
+        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/arial.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
     }
 
     private static void setFirstLaunch(Context context) {

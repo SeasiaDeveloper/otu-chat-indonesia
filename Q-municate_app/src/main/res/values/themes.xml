@@ -40,7 +40,7 @@
     </style>
 
     <style name="OverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_chat_overflow</item>
+        <item name="android:src">@drawable/ic_setting</item>
     </style>
 
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light.DarkActionBar">

@@ -289,7 +289,7 @@
     </style>
 
     <style name="OverFlowPayment" parent="@android:style/Widget.Holo.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_chat_overflow</item>
+        <item name="android:src">@drawable/ic_setting</item>
     </style>
 
     <style name="BubbleTextFrame.Left">

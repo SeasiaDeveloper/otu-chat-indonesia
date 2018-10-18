@@ -6,7 +6,7 @@
     android:background="@android:color/transparent"
     android:orientation="vertical">
     <!-- android:background="#F7F5ED"-->
-    <include layout="@layout/shadow_view" />
+    <!--<include layout="@layout/shadow_view" />-->
 
     <ScrollView
         android:layout_width="match_parent"
