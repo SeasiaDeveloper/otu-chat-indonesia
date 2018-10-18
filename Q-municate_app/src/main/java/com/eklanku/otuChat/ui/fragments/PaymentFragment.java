@@ -45,9 +45,11 @@ import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryPenarikanActivit
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryTrxActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
+import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
 import com.eklanku.otuChat.ui.activities.payment.topup.AlertSyarat;
@@ -191,9 +193,13 @@ public class PaymentFragment extends Fragment {
 
         Activity activity = getActivity();
 
-        /*if (activity != null && isAdded())
-            loadBanner();*/
+        if (activity != null && isAdded()) {
+            loadBanner();
+            if (!PreferenceUtil.isMemberStatus(getActivity())) {
+                cekMember();
+            }
 
+        }
         return mView;
     }
 
@@ -210,6 +216,7 @@ public class PaymentFragment extends Fragment {
             Activity activity = getActivity();
             if (activity != null && isAdded())
                 loadDeposite(strUserID, strAccessToken);
+
 
         } else {
             //Toast.makeText(context, "NOT DEPOSITE " + PreferenceUtil.isLoginStatus(getActivity()), Toast.LENGTH_SHORT).show();
@@ -336,13 +343,16 @@ public class PaymentFragment extends Fragment {
                     startActivity(new Intent(context, TransMultiFinance.class));
                     break;
                 case R.id.btnKartuKredit:
-                    startActivity(new Intent(context, TransKartuKredit.class));
+                   // startActivity(new Intent(context, TransKartuKredit.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.btnAsuransi:
-                    startActivity(new Intent(context, TransAsuransi.class));
+                    //startActivity(new Intent(context, TransAsuransi.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.btnPGN:
-                    startActivity(new Intent(context, TransPGN.class));
+                    //startActivity(new Intent(context, TransPGN.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
                /* case R.id.btnCallMe:
                     startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://eklanku.com/max")));
@@ -357,7 +367,8 @@ public class PaymentFragment extends Fragment {
                     startActivity(new Intent(context, TransSMS.class));
                     break;
                 case R.id.btnPajak:
-                    startActivity(new Intent(context, TransPajak.class));
+//                    startActivity(new Intent(context, TransPajak.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
                /* case R.id.btnRiwayat:
                     if (menuDialog()) {
@@ -682,6 +693,41 @@ public class PaymentFragment extends Fragment {
                 banner.setViewUrls(urls);
             }
         });
+    }
+
+    private void cekMember() {
+        Call<DataProfile> isMember = apiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(getActivity()), "OTU");
+
+        isMember.enqueue(new Callback<DataProfile>() {
+            @Override
+            public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String msg = response.body().getRespMessage();
+                    String errNumber = response.body().getErrNumber();
+                    if (errNumber.equalsIgnoreCase("0")) {
+                        PreferenceUtil.setMemberStatus(getActivity(), true);
+                    } else if (errNumber.equalsIgnoreCase("5")) {
+                        lauchRegister();
+                    } else {
+                        Toast.makeText(getActivity(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataProfile> call, Throwable t) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void lauchRegister() {
+        Intent register = new Intent(getActivity(), Register.class);
+        startActivity(register);
+        //finish();
     }
 
 }

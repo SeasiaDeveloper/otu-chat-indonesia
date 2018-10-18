@@ -37,6 +37,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
@@ -46,7 +47,9 @@ import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 //>>>>>>> origin/feature/migration
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
+import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
@@ -191,9 +194,14 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         banner = header.findViewById(R.id.bannerLayout);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
-        //Activity activity = getActivity();
-        /*if (activity != null && isAdded())
-            loadBanner();*/
+        Activity activity = getActivity();
+        if (activity != null && isAdded()) {
+            loadBanner();
+            if (!PreferenceUtil.isMemberStatus(getActivity())) {
+                cekMember();
+            }
+
+        }
 
         //dialogsListView.addHeaderView(header, null, false);
 
@@ -938,6 +946,41 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
                 banner.setViewUrls(urls);
             }
         });
+    }
+
+    private void cekMember() {
+        Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(getActivity()), "OTU");
+
+        isMember.enqueue(new Callback<DataProfile>() {
+            @Override
+            public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String msg = response.body().getRespMessage();
+                    String errNumber = response.body().getErrNumber();
+                    if (errNumber.equalsIgnoreCase("0")) {
+                        PreferenceUtil.setMemberStatus(getActivity(), true);
+                    } else if (errNumber.equalsIgnoreCase("5")) {
+                        lauchRegister();
+                    } else {
+                        Toast.makeText(getActivity(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataProfile> call, Throwable t) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void lauchRegister() {
+        Intent register = new Intent(getActivity(), Register.class);
+        startActivity(register);
+        //finish();
     }
 
 }
