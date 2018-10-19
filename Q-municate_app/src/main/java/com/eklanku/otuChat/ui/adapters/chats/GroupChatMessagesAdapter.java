@@ -3,7 +3,6 @@ package com.eklanku.otuChat.ui.adapters.chats;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.chats.GroupDialogActivity;
-import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.eklanku.otuChat.utils.ColorUtils;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.storage.model.ConnectycubeFile;
@@ -23,9 +21,7 @@ import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_db.models.State;
 import com.eklanku.otuChat.R;
-import com.connectycube.ui.chatmessage.adapter.ConnectycubeChatAdapter;
 import com.connectycube.ui.chatmessage.adapter.media.video.thumbnails.VideoThumbnail;
-import com.connectycube.ui.chatmessage.adapter.media.view.ConnectycubePlaybackControlView;
 import com.connectycube.ui.chatmessage.adapter.utils.LinkUtils;
 
 import org.json.JSONArray;
@@ -84,7 +80,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
         opponentNameTextView.setTextColor(colorUtils.getRandomTextColorById(chatMessage.getDialogOccupant().getUser().getId()));
         opponentNameTextView.setText(senderName);
 
-        TextView customMessageTimeTextView = (TextView) holder.itemView.findViewById(R.id.custom_msg_text_time_message);
+        TextView customMessageTimeTextView = (TextView) holder.itemView.findViewById(R.id.custom_msg_text_time_message_top_left);
         customMessageTimeTextView.setText(getDate(chatMessage.getDateSent()));
 
         updateMessageState(chatMessage, chatDialog);
