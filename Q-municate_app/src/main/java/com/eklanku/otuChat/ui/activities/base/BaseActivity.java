@@ -37,14 +37,12 @@ import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.connectycube.chat.ConnectycubeChatService;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
-import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
 import com.eklanku.otuChat.ui.activities.call.CallActivity;
 import com.eklanku.otuChat.ui.activities.chats.GroupDialogActivity;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
-import com.eklanku.otuChat.ui.fragments.dialogs.base.ProgressDialogFragment;
 import com.eklanku.otuChat.utils.ToastUtils;
 import com.eklanku.otuChat.utils.bridges.ActionBarBridge;
 import com.eklanku.otuChat.utils.bridges.ConnectionBridge;
@@ -52,6 +50,8 @@ import com.eklanku.otuChat.utils.bridges.LoadingBridge;
 import com.eklanku.otuChat.utils.bridges.SnackbarBridge;
 import com.eklanku.otuChat.utils.broadcasts.NetworkChangeReceiver;
 import com.eklanku.otuChat.utils.helpers.ActivityUIHelper;
+import com.eklanku.otuChat.utils.helpers.AddressBookHelper;
+import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.eklanku.otuChat.utils.helpers.FirebaseAuthHelper;
 import com.eklanku.otuChat.utils.helpers.LoginHelper;
 import com.eklanku.otuChat.utils.helpers.SharedHelper;
@@ -72,7 +72,6 @@ import com.quickblox.q_municate_user_service.model.QMUser;
 
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.XMPPConnection;
-import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -81,11 +80,14 @@ import java.util.Map;
 import java.util.Set;
 
 import butterknife.ButterKnife;
+import rx.Observable;
 
 public abstract class BaseActivity extends AppCompatActivity implements ActionBarBridge, ConnectionBridge, LoadingBridge, SnackbarBridge {
 
     private static final String TAG = BaseActivity.class.getSimpleName();
     protected static boolean appInitialized;
+
+    public DbHelper mDbHelper;
 
     protected App app;
     protected Toolbar toolbar;
@@ -380,6 +382,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
         fragmentsServiceConnectionSet = new HashSet<>();
         serviceConnection = new ConnectycubeChatServiceConnection();
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        mDbHelper = new DbHelper(this);
 
         snackbarClientPriority = new SparseArray<>();
     }
@@ -710,6 +713,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
     protected void performLoginChatSuccessAction(Bundle bundle) {
         blockUI(false);
+        updateRosterContactList();
         Log.d("OPPO-1", "authenticated: 6");
         hideSnackBar(R.string.error_disconnected);
         QBInitCallChatCommand.start(this, CallActivity.class, null);
@@ -721,6 +725,13 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
         blockUI(true);
         hideSnackBar(R.string.dialog_loading_dialogs);
         showSnackbar(R.string.error_disconnected, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
+    }
+
+
+    private void updateRosterContactList() {
+        AddressBookHelper.getInstance().updateRosterContactList(friendListHelper, mDbHelper, AppSession.getSession().getUser().getPassword()).onErrorResumeNext(e -> Observable.empty()).subscribe(success -> {
+            Log.d(TAG, "updateRosterContactList success= " + success);
+        });
     }
 
     @Override

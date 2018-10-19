@@ -23,23 +23,29 @@ import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.core.exception.ResponseException;
+import com.eklanku.otuChat.utils.DateUtils;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.qb.commands.chat.QBCreatePrivateChatCommand;
 import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
+import com.quickblox.q_municate_core.qb.helpers.QBFriendListHelper;
 import com.quickblox.q_municate_core.utils.ChatUtils;
+import com.quickblox.q_municate_core.utils.OnlineStatusUtils;
 import com.quickblox.q_municate_core.utils.UserFriendUtils;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.models.DialogOccupant;
 import com.quickblox.q_municate_db.utils.DialogTransformUtils;
+import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyViewHolder> implements Filterable {
+    private QBFriendListHelper qbFriendListHelper;
 
     private List<ContactsModel> contactsModels;
     private List<ContactsModel> mainList;
@@ -54,7 +60,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     PreferenceManager preferenceManager;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTvUsername, mTvMessage, mTvPhonenumber;
+        public TextView mTvUsername, mTvMessage, mTvPhonenumber, contactStatus;
         public ImageView mIvChat;
         public RelativeLayout mRlContacts;
         public CheckBox mChkSelect;
@@ -69,6 +75,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             mTvMessage = (TextView) view.findViewById(R.id.tvMessage);
             mRlContacts = (RelativeLayout) view.findViewById(R.id.rlContacts);
             mChkSelect = (CheckBox) view.findViewById(R.id.chkSelect);
+            contactStatus = view.findViewById(R.id.contact_status);
 //            mCreateGroup = (ImageView) view.findViewById(R.id.btn_create_group);
 //            mInvitePeople = (ImageView) view.findViewById(R.id.btn_invite_people);
 
@@ -83,7 +90,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         isToGroup = ((ContactsActivity) context).isToGroup;
     }
 
-
+    public void setFriendListHelper(QBFriendListHelper qbFriendListHelper) {
+        this.qbFriendListHelper = qbFriendListHelper;
+        notifyDataSetChanged();
+    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -125,9 +135,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             holder.mChkSelect.setVisibility(View.GONE);
             if (contact.getIsReg_type().equals("1")) {
                 holder.mIvChat.setVisibility(View.GONE);
+                holder.contactStatus.setVisibility(View.VISIBLE);
+                setStatus(holder.contactStatus, contact.getId_user());
                 //holder.mTvMessage.setText("Using this App");
             } else {
                 holder.mIvChat.setVisibility(View.VISIBLE);
+                holder.contactStatus.setVisibility(View.GONE);
                 //holder.mTvMessage.setText("Invite");
             }
         }
@@ -171,6 +184,16 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         });
     }
 
+    private void setStatus(TextView textView, int userId) {
+        boolean online = qbFriendListHelper != null && qbFriendListHelper.isUserOnline(userId);
+
+        textView.setText(OnlineStatusUtils.getOnlineStatus(online));
+        if (online) {
+            textView.setTextColor(context.getResources().getColor(R.color.green));
+        } else {
+            textView.setTextColor(context.getResources().getColor(R.color.gray));
+        }
+    }
 
     @Override
     public Filter getFilter() {

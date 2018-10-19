@@ -16,6 +16,7 @@ import com.connectycube.chat.model.ConnectycubePresence;
 import com.connectycube.chat.model.ConnectycubeRosterEntry;
 import com.connectycube.core.exception.ResponseException;
 import com.connectycube.core.request.PagedRequestBuilder;
+import com.connectycube.users.model.ConnectycubeUser;
 import com.quickblox.q_municate_core.R;
 import com.quickblox.q_municate_core.models.NotificationType;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
@@ -53,6 +54,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
     private static final String ENTRIES_UPDATING_ERROR = "Failed to update friends list";
     private static final String ENTRIES_DELETED_ERROR = "Failed to delete friends";
     private static final String SUBSCRIPTION_ERROR = "Failed to confirm subscription";
+    private static final String CREATE_ENTRY_ERROR = "Failed to create subscription";
     private static final String ROSTER_INIT_ERROR = "ROSTER isn't initialized. Please make relogin";
 
     private QBRestHelper restHelper;
@@ -77,9 +79,8 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         initThreads();
         restHelper = new QBRestHelper(context);
         dataManager = DataManager.getInstance();
-        roster = ConnectycubeChatService.getInstance().getRoster(ConnectycubeRoster.SubscriptionMode.mutual,
+        roster = ConnectycubeChatService.getInstance().getRoster(ConnectycubeRoster.SubscriptionMode.manual,
                 new QMSubscriptionListener());
-        roster.setSubscriptionMode(ConnectycubeRoster.SubscriptionMode.mutual);
         roster.addRosterListener(new QMRosterListener());
         userLoadingTimer = new Timer();
     }
@@ -434,10 +435,33 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         @Override
         public void subscriptionRequested(int userId) {
             try {
-                createUserRequest(userId);
+                Log.d(TAG, "subscriptionRequested");
+                roster.confirmSubscription(userId);
             } catch (Exception e) {
                 Log.e(TAG, SUBSCRIPTION_ERROR, e);
             }
         }
+    }
+
+    public void subscribeToAllUsers(ArrayList<ConnectycubeUser> users) {
+        for (ConnectycubeUser user : users) {
+            if (!isUserSubscribed(user.getId())) {
+                Log.d(TAG, "roster.createEntry " + user.getId());
+                try {
+                    roster.createEntry(user.getId(), user.getFullName(), null);
+                } catch (Exception e) {
+                    Log.e(TAG, CREATE_ENTRY_ERROR, e.getCause());
+                }
+            }
+        }
+    }
+
+    private boolean isUserSubscribed(int userId) {
+        ConnectycubeRosterEntry rosterEntry = roster.getEntry(userId);
+        if (rosterEntry == null) {
+            return false;
+        }
+        boolean isSubscribedFromUser = rosterEntry.getType() == RosterPacket.ItemType.from;
+        return !isSubscribedFromUser;
     }
 }

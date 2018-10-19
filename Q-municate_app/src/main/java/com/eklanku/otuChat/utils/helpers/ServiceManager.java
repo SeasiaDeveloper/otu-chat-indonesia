@@ -4,6 +4,8 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.connectycube.users.model.ConnectycubeAddressBookContact;
+import com.connectycube.users.model.ConnectycubeAddressBookResponse;
 import com.eklanku.otuChat.App;
 import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;
@@ -29,6 +31,7 @@ import com.quickblox.q_municate_user_service.model.QMUser;
 import com.connectycube.users.model.ConnectycubeUser;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -179,6 +182,33 @@ public class ServiceManager {
 
     public Observable<Void> upgradeWebSessionToken(String webToken) {
         return QMAuthService.getInstance().upgradeWebSessionToken(webToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ConnectycubeAddressBookResponse> uploadAddressBook(ArrayList<ConnectycubeAddressBookContact> localBook) {
+        return userService.uploadAddressBook(localBook)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ArrayList<ConnectycubeAddressBookContact>> getAddressBook() {
+        return userService.getAddressBook()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ConnectycubeAddressBookResponse> deleteAddressBook(ArrayList<ConnectycubeAddressBookContact> localBook) {
+        for (ConnectycubeAddressBookContact c : localBook) {
+            c.setIsDestroy(true);
+        }
+        return userService.uploadAddressBook(localBook)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ArrayList<ConnectycubeUser>> getRegisteredContacts() {
+        return userService.getRegisteredContacts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

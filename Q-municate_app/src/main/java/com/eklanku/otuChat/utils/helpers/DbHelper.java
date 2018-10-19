@@ -129,6 +129,29 @@ public class DbHelper extends SQLiteOpenHelper {
         return mArray;
     }
 
+    public ArrayList<ContactsModel> getContactsSortedByRegType() {
+        ArrayList<ContactsModel> mArray = new ArrayList<ContactsModel>();
+        String selectQuery = "SELECT  * FROM " + TABLE_ACCOUNT + " ORDER BY "+KEY_REG_TYPE+" DESC, " + KEY_FULL_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        try {
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                mArray.clear();
+                do {
+                    mArray.add(new ContactsModel(cursor.getString(cursor.getColumnIndex(KEY_LOGIN)),
+                            cursor.getString(cursor.getColumnIndex(KEY_FULL_NAME)),
+                            cursor.getString(cursor.getColumnIndex(KEY_REG_TYPE)),
+                            Integer.valueOf(cursor.getString(cursor.getColumnIndex(KEY_USER_ID)))));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mArray;
+    }
+
     public ArrayList<ContactsModelGroup> getContactsGroup() {
         ArrayList<ContactsModelGroup> mArray = new ArrayList<ContactsModelGroup>();
         String selectQuery = "SELECT  * FROM " + TABLE_ACCOUNT + " ORDER BY "+KEY_FULL_NAME+" ASC";
