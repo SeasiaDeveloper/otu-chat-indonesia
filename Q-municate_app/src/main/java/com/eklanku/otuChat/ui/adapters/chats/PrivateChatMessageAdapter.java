@@ -195,8 +195,13 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     @Override
     protected void onBindViewMsgLeftHolder(TextMessageHolder holder, CombinationMessage chatMessage, int position) {
+        TextView timeView = holder.itemView.findViewById(R.id.custom_msg_text_time_message_left_bottom);
+        setViewVisibility(timeView, View.VISIBLE);
+        setMsgTime(timeView, chatMessage);
+
         LinearLayout linearLayout = (LinearLayout) holder.itemView.findViewById(R.id.msg_custom_widget_frame_top);
         setViewVisibility(holder.avatar, View.GONE);
+        setViewVisibility(holder.timeTextMessageTextView, View.GONE);
         setViewVisibility(linearLayout, View.GONE);
         handleMessageClickListener(holder, position);
         updateMessageState(chatMessage, chatDialog);

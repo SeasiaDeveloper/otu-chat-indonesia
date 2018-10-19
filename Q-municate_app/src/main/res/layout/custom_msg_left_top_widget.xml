@@ -14,7 +14,7 @@
         tools:text="Oppponent Name" />
 
     <TextView
-        android:id="@+id/custom_msg_text_time_message"
+        android:id="@+id/custom_msg_text_time_message_top_left"
         style="@style/WrapContent"
         tools:text="12:42" />
 </LinearLayout>
