@@ -35,9 +35,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-;
-
-
 public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<CombinationMessage> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
     private static final String TAG = BaseChatMessagesAdapter.class.getSimpleName();
     protected static final int TYPE_REQUEST_MESSAGE = 100;
