@@ -45,14 +45,11 @@ import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
-<<<<<<< HEAD
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
-=======
 import com.eklanku.otuChat.utils.helpers.AddressBookHelper;
->>>>>>> origin/feature/address_book
 import com.google.firebase.auth.FirebaseAuth;
 import com.nineoldandroids.view.ViewHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;

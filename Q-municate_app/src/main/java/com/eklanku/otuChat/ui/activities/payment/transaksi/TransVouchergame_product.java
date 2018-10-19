@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -94,11 +96,36 @@ public class TransVouchergame_product extends AppCompatActivity{
         String jnsGame = extras.getString("jnsGame");
 
         Log.d("OPPO-1", "onCreate: "+jnsGame);
+        noPel.addTextChangedListener(new txtWatcher(noPel));
 
         loadProduct(strUserID, strAccessToken, strAplUse, jnsGame);
 
         initializeResources();
 
+    }
+
+    private class txtWatcher implements TextWatcher {
+
+        private View view;
+
+        private txtWatcher(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            validateIdpel();
+        }
     }
 
 
@@ -310,7 +337,7 @@ public class TransVouchergame_product extends AppCompatActivity{
             return false;
         }
 
-        layoutNo.setErrorEnabled(false);
+        //layoutNo.setErrorEnabled(false);
         return true;
     }
 
