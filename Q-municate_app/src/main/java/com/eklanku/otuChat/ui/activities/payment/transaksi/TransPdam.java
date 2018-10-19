@@ -244,14 +244,14 @@ public class TransPdam extends AppCompatActivity {
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
-        loadingDialog = ProgressDialog.show(TransPdam.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
+        //loadingDialog = ProgressDialog.show(TransPdam.this, "Harap Tunggu", "Mengambil Data...");
+        //loadingDialog.setCanceledOnTouchOutside(true);
 
         Call<LoadDataResponse> dataCall = mApiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
+                //loadingDialog.dismiss();
                 nama_wilayah = new String[0];
                 id_wilayah = new ArrayList<>();
 
@@ -311,7 +311,7 @@ public class TransPdam extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
+                //loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransPdam.this, titleAlert, getResources().getString(R.string.error_api));
                 //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }

@@ -55,7 +55,7 @@
                 android:id="@+id/txtLayoutTransPulsaNo"
                 android:layout_width="260dp"
                 android:textColorHint="@color/grey_600"
-                app:hintEnabled="false"
+                app:hintEnabled="true"
                 android:layout_height="wrap_content">
 
                 <EditText
