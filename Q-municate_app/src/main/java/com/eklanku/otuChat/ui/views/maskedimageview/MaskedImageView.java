@@ -13,7 +13,7 @@ import android.util.AttributeSet;
 import android.view.InflateException;
 import android.widget.ImageView;
 
-import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.R;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 
 public class MaskedImageView extends ImageView {

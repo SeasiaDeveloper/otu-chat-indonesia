@@ -145,10 +145,10 @@ dependencies {
 
     implementation "com.nostra13.universalimageloader:universal-image-loader:${rootProject.universalImageLoaderVersion}"
     implementation 'com.flurry.android:analytics:6.2.0'
-    implementation 'com.android.support:support-v13:27.1.1'
+    implementation 'com.android.support:support-v13:28.+'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.support:support-vector-drawable:26.1.0'
+    implementation 'com.android.support:support-v4:28.+'
+    implementation 'com.android.support:support-vector-drawable:28.+'
     annotationProcessor "com.jakewharton:butterknife:${rootProject.butterknifeVersion}"
     implementation "com.jakewharton:butterknife:${rootProject.butterknifeVersion}"
     implementation "com.afollestad.material-dialogs:core:${rootProject.materialDialogsVersion}"
