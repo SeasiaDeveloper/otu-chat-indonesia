@@ -245,22 +245,23 @@ public class TransPulsa extends AppCompatActivity {
 
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
+        txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
             //Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Kolom nomor tidak boleh kosong");
+            txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
         if (id_pel.length() < 8) {
             //Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 8 digit nomor");
+            txtNo.setError("Masukkan minimal 8 digit nomor");
             requestFocus(txtNo);
             return false;
         }
 
-        layoutNo.setErrorEnabled(false);
+        //txtNo.setError(null);
         return true;
     }
 
@@ -561,7 +562,7 @@ public class TransPulsa extends AppCompatActivity {
                     otherOpr = true;
                 }
 
-                if(otherOpr && oprPulsa.equalsIgnoreCase("")){
+                if (otherOpr && oprPulsa.equalsIgnoreCase("")) {
                     Log.d("OPPO-1", "cekPrefix: ");
                     loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
                     otherOpr = false;
@@ -600,7 +601,7 @@ public class TransPulsa extends AppCompatActivity {
                 if (!validateIdpel()) {
                     return;
                 }
-                
+
                 code = id_paket.get(position);
                 dialogWarning(code);
             }
