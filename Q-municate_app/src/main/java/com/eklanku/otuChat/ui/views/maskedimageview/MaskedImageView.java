@@ -3,6 +3,7 @@ package com.eklanku.otuChat.ui.views.maskedimageview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -16,7 +17,7 @@ import android.widget.ImageView;
 import com.eklanku.otuChat.R;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 
-public class MaskedImageView extends ImageView {
+public class MaskedImageView extends android.support.v7.widget.AppCompatImageView {
 
     private Paint maskedPaint;
     private Paint copyPaint;
@@ -64,7 +65,8 @@ public class MaskedImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         int sc = canvas.saveLayer(boundsRectF, copyPaint,
-                Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG);
+                Canvas.ALL_SAVE_FLAG | Canvas.ALL_SAVE_FLAG);
+        /*  Canvas.HAS_ALPHA_LAYER_SAVE_FLAG | Canvas.FULL_COLOR_LAYER_SAVE_FLAG);*/
 
         maskDrawable.setBounds(boundsRect);
         maskDrawable.draw(canvas);

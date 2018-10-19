@@ -22,7 +22,7 @@ repositories {
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
+    buildToolsVersion '28.0.3'
     flavorDimensions rootProject.dimensionDefault
 
     defaultConfig {
