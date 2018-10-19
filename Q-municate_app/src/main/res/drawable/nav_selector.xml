@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@android:color/darker_gray" android:state_checked="false" />
+<<<<<<< HEAD
+    <item android:color="@color/grey_400" android:state_checked="false" />
+=======
+>>>>>>> fea9c6da61f01bec43dfd2352942599cdd44af8d
     <item android:color="@color/colorTextOtuDark" />
 </selector>

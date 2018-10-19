@@ -224,22 +224,22 @@ public class TransPdam extends AppCompatActivity {
 
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
-
+        txtNo.setError(null);
         if (id_pel.isEmpty()) {
 //            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Kolom nomor tidak boleh kosong");
+            txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
         if (id_pel.length() < 6) {
 //            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 6 digit nomor");
+            txtNo.setError("Masukkan minimal 6 digit nomor");
             requestFocus(txtNo);
             return false;
         }
 
-        layoutNo.setErrorEnabled(false);
+        //layoutNo.setErrorEnabled(false);
         return true;
     }
 
