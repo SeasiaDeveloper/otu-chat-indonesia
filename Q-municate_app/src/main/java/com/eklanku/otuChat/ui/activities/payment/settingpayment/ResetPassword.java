@@ -101,8 +101,8 @@ public class ResetPassword extends AppCompatActivity {
                     String msg = response.body().getRespMessage();
                     Log.d("OPPO-1", "resetPass: " + status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                        utilsAlert.globalDialog(ResetPassword.this, titleAlert, msg);
-                        //Toast.makeText(getBaseContext(), "SUCCESS RESET PASS [" + msg + "]", Toast.LENGTH_SHORT).show();
+                        //utilsAlert.globalDialog(ResetPassword.this, titleAlert, msg);
+                        Toast.makeText(getBaseContext(), "SUCCESS RESET PASS [" + msg + "]", Toast.LENGTH_SHORT).show();
                         logOutPayment();
                     }
                     /*else {

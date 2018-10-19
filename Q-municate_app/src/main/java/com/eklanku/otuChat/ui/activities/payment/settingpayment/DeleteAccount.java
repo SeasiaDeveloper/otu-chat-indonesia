@@ -95,8 +95,8 @@ public class DeleteAccount extends AppCompatActivity {
                     String msg = response.body().getRespMessage();
 
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                        utilsAlert.globalDialog(DeleteAccount.this, titleAlert, msg);
-                        //Toast.makeText(DeleteAccount.this, msg, Toast.LENGTH_SHORT).show();
+                       // utilsAlert.globalDialog(DeleteAccount.this, titleAlert, msg);
+                        Toast.makeText(DeleteAccount.this, msg, Toast.LENGTH_SHORT).show();
                         /*PreferenceUtil.setMemberStatus(DeleteAccount.this, false);
                         Intent register = new Intent(getBaseContext(), Register.class);
                         register.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

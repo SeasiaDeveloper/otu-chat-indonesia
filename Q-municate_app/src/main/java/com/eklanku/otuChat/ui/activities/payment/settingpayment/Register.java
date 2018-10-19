@@ -192,8 +192,8 @@ public class Register extends AppCompatActivity {
                     Log.d("OPPO-1", "onResponse: " + status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         //run main activity
-                        utilsAlert.globalDialog(Register.this, titleAlert, "Register Berhasil");
-                        //Toast.makeText(Register.this, "Register berhasil", Toast.LENGTH_SHORT).show();
+                      //  utilsAlert.globalDialog(Register.this, titleAlert, "Register Berhasil");
+                        Toast.makeText(Register.this, "Register berhasil", Toast.LENGTH_SHORT).show();
                         PreferenceUtil.setMemberStatus(Register.this, true);
                         //MainActivity.start(Register.this);
                         startActivity(new Intent(Register.this, MainActivity.class));

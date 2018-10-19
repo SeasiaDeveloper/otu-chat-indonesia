@@ -132,8 +132,8 @@ public class ResetPIN extends AppCompatActivity {
                     String msg = response.body().getRespMessage();
                     Log.d("OPPO-1", "apprResetPIN: "+status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                        utilsAlert.globalDialog(ResetPIN.this, titleAlert, msg);
-                        //Toast.makeText(getBaseContext(), status+":"+msg, Toast.LENGTH_SHORT).show();
+                        //utilsAlert.globalDialog(ResetPIN.this, titleAlert, msg);
+                        Toast.makeText(getBaseContext(), status+":"+msg, Toast.LENGTH_SHORT).show();
                         finish();
                     }else{
                         utilsAlert.globalDialog(ResetPIN.this, titleAlert, msg);

@@ -238,6 +238,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
                     fragment = new DialogsListFragment();
 
+
                     if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
                         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
                         strUserID = user.get(preferenceManager.KEY_USERID);

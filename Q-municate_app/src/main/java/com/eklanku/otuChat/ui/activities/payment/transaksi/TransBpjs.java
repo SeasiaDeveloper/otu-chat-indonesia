@@ -260,15 +260,15 @@ public class TransBpjs extends AppCompatActivity {
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
-        loadingDialog = ProgressDialog.show(TransBpjs.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
+        //loadingDialog = ProgressDialog.show(TransBpjs.this, "Harap Tunggu", "Mengambil Data...");
+        //loadingDialog.setCanceledOnTouchOutside(true);
 
         Log.d("OPPO-1", "accessToken: "+accessToken);
         Call<LoadDataResponse> dataCall = mApiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
+                //loadingDialog.dismiss();
                 nama_operator = new String[0];
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
                 spnBpjs.setAdapter(adapter);
@@ -311,7 +311,7 @@ public class TransBpjs extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
+               // loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransBpjs.this, titleAlert, getResources().getString(R.string.error_api));
                 //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }

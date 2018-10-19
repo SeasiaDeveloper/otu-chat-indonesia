@@ -390,14 +390,14 @@ public class TransPln extends AppCompatActivity {
     }
 
     private void loadProviderPPOB(String userID, String accessToken, String aplUse, String productGroup) {
-        loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
+//        loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
+//        loadingDialog.setCanceledOnTouchOutside(true);
 
         Call<LoadDataResponse> dataCall = apiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
+//                loadingDialog.dismiss();
                 nama_operator = new String[0];
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
                 spinnerProvider.setAdapter(adapter);
@@ -439,7 +439,7 @@ public class TransPln extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
+//                loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
                 //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
