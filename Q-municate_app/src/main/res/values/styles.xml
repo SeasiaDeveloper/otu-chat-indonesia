@@ -348,6 +348,11 @@
         <item name="android:background">@drawable/left_chat_bubble</item>
     </style>
 
+    <style name="CustomWidgetFrame.Left">
+        <item name="android:layout_gravity">right</item>
+    </style>
+
+
     <style name="AppThemeToolbarWhite" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
 
