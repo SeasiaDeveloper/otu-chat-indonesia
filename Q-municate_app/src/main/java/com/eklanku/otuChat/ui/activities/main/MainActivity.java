@@ -149,6 +149,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     private static String[] banner_promo;
     BannerLayout bannerLayout;
     LinearLayout layoutCollaps, layoutSaldo;
+    ImageView img;
+    TextView txt;
 
    /* boolean isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
     String firstLaunch = Application.getFirstLaunch(getApplicationContext());
@@ -276,6 +278,16 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_right);
+        View header = navigationView.inflateHeaderView(R.layout.nav_header);
+        img = header.findViewById(R.id.circleView);
+        txt = header.findViewById(R.id.profile_name);
 
         preferenceManager = new PreferenceManager(this);
 
@@ -324,17 +336,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             }
         });
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_right);
-        View header = navigationView.inflateHeaderView(R.layout.nav_header);
-        ImageView img = header.findViewById(R.id.circleView);
-        TextView txt = header.findViewById(R.id.profile_name);
-        txt.setText("Nama SAYA");
+
+
+
+
 
         //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.drawer_layout));
         //navigationView.setNavigationItemSelectedListener(this);
@@ -402,6 +408,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         Log.d(TAG, "initFields()");
         mDbHelper = new DbHelper(this);
         title = " " + AppSession.getSession().getUser().getFullName();
+        txt.setText(AppSession.getSession().getUser().getFullName());
         importFriendsSuccessAction = new ImportFriendsSuccessAction();
         importFriendsFailAction = new ImportFriendsFailAction();
         facebookHelper = new FacebookHelper(MainActivity.this);
@@ -510,6 +517,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     private void actualizeCurrentTitle() {
         if (AppSession.getSession().getUser().getFullName() != null) {
             title = " " + AppSession.getSession().getUser().getFullName();
+            txt.setText(AppSession.getSession().getUser().getFullName());
         }
     }
 
@@ -572,6 +580,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         } else {
             setActionBarIcon(MediaUtils.getRoundIconDrawable(this,
                     BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_user)));
+            img.setImageResource(R.drawable.placeholder_user);
         }
     }
 
@@ -582,6 +591,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedBitmap) {
                         setActionBarIcon(MediaUtils.getRoundIconDrawable(MainActivity.this, loadedBitmap));
+                        img.setImageBitmap(loadedBitmap);
                     }
                 });
     }
@@ -1203,8 +1213,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         Intent resetPin = new Intent(MainActivity.this, ResetPIN.class);
                         startActivity(resetPin);
                         break;
-                    case R.id.action_logout:
-                        logOutPayment();
+                    case R.id.nav_logout:
+                        warningLogoutpay();
                         break;
                 }
 
@@ -1216,6 +1226,12 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             }
         });
     }
+
+    public void setContentSideMenu(){
+
+    }
+
+
 
   /*  @Override
     protected void onPause() {
