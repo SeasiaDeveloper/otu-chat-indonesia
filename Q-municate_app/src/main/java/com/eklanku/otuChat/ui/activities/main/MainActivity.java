@@ -327,9 +327,10 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 //        drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_right);
         View header = navigationView.inflateHeaderView(R.layout.nav_header);
         ImageView img= header.findViewById(R.id.circleView);
+
         TextView txt = header.findViewById(R.id.profile_name);
         txt.setText("Nama SAYA");
 
@@ -338,7 +339,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
         //display the right navigation drawer
         displayRightNavigation();
-
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mainActivity = this;
     }
 
@@ -1157,25 +1158,15 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         navigationViewRight.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                // Handle navigation view item clicks here.
-                int id = item.getItemId();
-
-               /* if (id == R.id.nav_camera_right) {
-                    // Handle the camera action
-                } else if (id == R.id.nav_gallery_right) {
-
-                } else if (id == R.id.nav_slideshow_right) {
-
-                } else if (id == R.id.nav_manage_right) {
-
-                } else if (id == R.id.nav_share_right) {
-
-                } else if (id == R.id.nav_send_right) {
-
-                }*/
-
+                // Handle navigation view item clicks here
                 switch (item.getItemId()) {
-                    case R.id.account_settings:
+                    case R.id.action_web_qr_code:
+                        WebQRCodeActivity.start(MainActivity.this);
+                        break;
+                    case R.id.action_notification:
+                        Toast.makeText(MainActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
+                        break;
+                    /*case R.id.account_settings:
                         drawer.openDrawer(GravityCompat.END);
                         break;
                     case R.id.action_search:
@@ -1193,16 +1184,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         break;
                     case R.id.action_start_about:
                         AboutActivity.start(MainActivity.this);
-                        break;
-                    case R.id.action_web_qr_code:
-                        WebQRCodeActivity.start(MainActivity.this);
-                        break;
-                    case R.id.action_notification:
-                        Toast.makeText(MainActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
-                        break;
+                        break;*/
+
                 }
 
-                Toast.makeText(MainActivity.this, "Handle from navigation right", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Handle from navigation right", Toast.LENGTH_SHORT).show();
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.END);
                 return true;

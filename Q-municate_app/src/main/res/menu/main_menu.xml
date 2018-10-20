@@ -12,7 +12,6 @@
     <item
         android:id="@+id/action_notification"
         android:icon="@drawable/ic_notifications"
-        android:visible="false"
         android:title="Notification"
         app:showAsAction="always" />
 
