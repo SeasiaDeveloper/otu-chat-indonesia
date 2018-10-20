@@ -48,6 +48,7 @@ import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
@@ -92,6 +93,7 @@ import com.quickblox.q_municate_user_service.model.QMUser;
 import com.yyydjk.library.BannerLayout;
 
 import butterknife.Bind;
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -151,6 +153,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     private static String[] banner_promo;
     BannerLayout bannerLayout;
     LinearLayout layoutCollaps, layoutSaldo;
+    CircleImageView img;
+    TextView txt, txtEkl;
 
    /* boolean isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
     String firstLaunch = Application.getFirstLaunch(getApplicationContext());
@@ -279,6 +283,17 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_right);
+        View header = navigationView.inflateHeaderView(R.layout.nav_header);
+        img = header.findViewById(R.id.profile_image);
+        txt = header.findViewById(R.id.profile_name);
+        txtEkl = header.findViewById(R.id.tvEkl);
 
         preferenceManager = new PreferenceManager(this);
 
@@ -329,17 +344,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             }
         });
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_right);
-        View header = navigationView.inflateHeaderView(R.layout.nav_header);
-        ImageView img = header.findViewById(R.id.circleView);
-        TextView txt = header.findViewById(R.id.profile_name);
-        txt.setText("Nama SAYA");
 
         //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.drawer_layout));
         //navigationView.setNavigationItemSelectedListener(this);
@@ -348,6 +352,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         displayRightNavigation();
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         navigationView.setItemIconTintList(null);
+        txtEkl.setText(strUserID);
         mainActivity = this;
     }
 
@@ -408,6 +413,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         Log.d(TAG, "initFields()");
         mDbHelper = new DbHelper(this);
         title = " " + AppSession.getSession().getUser().getFullName();
+        txt.setText(AppSession.getSession().getUser().getFullName());
         importFriendsSuccessAction = new ImportFriendsSuccessAction();
         importFriendsFailAction = new ImportFriendsFailAction();
         facebookHelper = new FacebookHelper(MainActivity.this);
@@ -461,9 +467,9 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     public void warningLogoutpay() {
         android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(MainActivity.this)
-                .setTitle("PERINGATAN!!!")
-                .setMessage("Untuk meningkatkan Kemanan Silahkan Login terlebih dahulu")
-                .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                /*.setTitle("PERINGATAN!!!")*/
+                .setMessage("Yakin logout?")
+                .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         logOutPayment();
@@ -484,7 +490,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     public void logOutPayment() {
 
-        ProgressDialog progressDialog= new ProgressDialog(this);
+        ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Sedang logout, mohon tunggu.");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -525,6 +531,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     private void actualizeCurrentTitle() {
         if (AppSession.getSession().getUser().getFullName() != null) {
             title = " " + AppSession.getSession().getUser().getFullName();
+            txt.setText(AppSession.getSession().getUser().getFullName());
         }
     }
 
@@ -587,6 +594,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         } else {
             setActionBarIcon(MediaUtils.getRoundIconDrawable(this,
                     BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_user)));
+            img.setImageResource(R.drawable.placeholder_user);
         }
     }
 
@@ -597,6 +605,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedBitmap) {
                         setActionBarIcon(MediaUtils.getRoundIconDrawable(MainActivity.this, loadedBitmap));
+                        img.setImageBitmap(loadedBitmap);
                     }
                 });
     }
@@ -1146,11 +1155,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         return true;
     }*/
 
-    private void launchContactsActivity() {
-        Intent intent = new Intent(MainActivity.this, ContactsActivity.class);
-        startActivity(intent);
-    }
-
     private void displayRightNavigation() {
         final NavigationView navigationViewRight = (NavigationView) findViewById(R.id.nav_view_right);
         navigationViewRight.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -1165,19 +1169,28 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         Toast.makeText(MainActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.action_profile:
-                        Intent profile = new Intent(MainActivity.this, Profile.class);
-                        startActivity(profile);
+                        if(menuDialog()){
+                            Intent profile = new Intent(MainActivity.this, Profile.class);
+                            startActivity(profile);
+                        }
+
                         break;
                     case R.id.action_resetpass:
-                        Intent resetPass = new Intent(MainActivity.this, ResetPassword.class);
-                        startActivity(resetPass);
+                        if(menuDialog()){
+                            Intent resetPass = new Intent(MainActivity.this, ResetPassword.class);
+                            startActivity(resetPass);
+                        }
+
                         break;
                     case R.id.action_resetpin:
-                        Intent resetPin = new Intent(MainActivity.this, ResetPIN.class);
-                        startActivity(resetPin);
+                        if(menuDialog()){
+                            Intent resetPin = new Intent(MainActivity.this, ResetPIN.class);
+                            startActivity(resetPin);
+                        }
+
                         break;
                     case R.id.nav_logout:
-                        logOutPayment();
+                        warningLogoutpay();
                         break;
                 }
 
@@ -1190,6 +1203,28 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         });
     }
 
+    private boolean menuDialog() {
+        if (!PreferenceUtil.isLoginStatus(MainActivity.this)) {
+            android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(MainActivity.this)
+                    .setTitle("PERINGATAN!!!")
+                    .setMessage("Untuk meningkatkan Kemanan Silahkan Login terlebih dahulu")
+                    .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(MainActivity.this, PaymentLogin.class));
+                        }
+                    })
+                    .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create();
+            dialog.show();
+            return false;
+        } else return true;
+    }
 
   /*  @Override
     protected void onPause() {

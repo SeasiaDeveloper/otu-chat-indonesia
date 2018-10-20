@@ -94,7 +94,7 @@ import java.util.Locale;
 public class PaymentFragment extends Fragment {
     Context context;
     public TextView //lblUsername,
-            lblSaldo, lblSaldoMain;
+            lblSaldo, lblSaldoMain, txtEklmain;
     TextView btnDeposit;
     ImageButton btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
