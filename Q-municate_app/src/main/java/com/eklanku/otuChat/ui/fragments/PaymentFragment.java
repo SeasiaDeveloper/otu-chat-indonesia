@@ -93,7 +93,7 @@ import java.util.Locale;
 
 public class PaymentFragment extends Fragment {
     Context context;
-    TextView //lblUsername,
+    public TextView //lblUsername,
             lblSaldo, lblSaldoMain;
     TextView btnDeposit;
     ImageButton btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
@@ -223,8 +223,6 @@ public class PaymentFragment extends Fragment {
             Activity activity = getActivity();
             if (activity != null && isAdded())
                 loadDeposite(strUserID, strAccessToken);
-
-
         } else {
             //Toast.makeText(context, "NOT DEPOSITE " + PreferenceUtil.isLoginStatus(getActivity()), Toast.LENGTH_SHORT).show();
         }

@@ -1,6 +1,7 @@
 package com.eklanku.otuChat.ui.activities.main;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -145,6 +146,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     String strUserID;
     String strAccessToken;
     String strApIUse = "OTU";
+    PaymentFragment paymentFragment;
 
     private static String[] banner_promo;
     BannerLayout bannerLayout;
@@ -167,6 +169,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     private ObservableScrollView mScrollView;
     private int mParallaxImageHeight;
     DrawerLayout drawer;
+    TextView tvSaldo;
 
     private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -224,7 +227,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
                     fragment = new DialogsListFragment();
 
-
                     if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
                         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
                         strUserID = user.get(preferenceManager.KEY_USERID);
@@ -272,6 +274,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         //lblSaldo = (TextView) findViewById(R.id.tvSaldo);
         layoutCollaps = findViewById(R.id.layout_);
         layoutSaldo = findViewById(R.id.laySaldo);
+        tvSaldo = findViewById(R.id.tvSaldo);
         layoutSaldo.setVisibility(View.GONE);
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
@@ -282,6 +285,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
+
+        paymentFragment = new PaymentFragment();
 
         populate();
         initFields();
@@ -342,6 +347,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         //display the right navigation drawer
         displayRightNavigation();
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        navigationView.setItemIconTintList(null);
         mainActivity = this;
     }
 
@@ -477,12 +483,18 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     }
 
     public void logOutPayment() {
-        Log.d("OPPO-1", strUserID + ", " + strAccessToken + ", " + getCurrentTime());
+
+        ProgressDialog progressDialog= new ProgressDialog(this);
+        progressDialog.setMessage("Sedang logout, mohon tunggu.");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         Call<ResetPassResponse> callResetPass = mApiInterfacePayment.postLogoutPayment(strUserID, strAccessToken, getCurrentTime());
         callResetPass.enqueue(new Callback<ResetPassResponse>() {
 
             @Override
             public void onResponse(Call<ResetPassResponse> call, Response<ResetPassResponse> response) {
+                progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
@@ -490,6 +502,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         Toast.makeText(MainActivity.this, "SUCCESS LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
                         PreferenceUtil.setLoginStatus(MainActivity.this, false);
+                        tvSaldo.setText("0.00");
+                        //paymentFragment.lblSaldoMain.setText("0.00");
                     } else {
                         Toast.makeText(MainActivity.this, "FAILED LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
                     }
@@ -501,6 +515,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             @Override
             public void onFailure(Call<ResetPassResponse> call, Throwable t) {
+                progressDialog.dismiss();
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 //Log.d("API_TRANSBELI", t.getMessage().toString());
             }
@@ -1074,48 +1089,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         builder.show();
     }
 
-    public void loadDeposite(String strUserID, String strAccessToken) {
-        //Log.d("AYIK", "OnLoad userID " + strUserID + " accessToken " + strAccessToken);
-        Call<DataDeposit> userCall = mApiInterfacePayment.getSaldo(strUserID, strApIUse, strAccessToken);
-        userCall.enqueue(new Callback<DataDeposit>() {
-            @Override
-            public void onResponse(Call<DataDeposit> call, Response<DataDeposit> response) {
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String error = response.body().getRespMessage();
-                    String balance = response.body().getBalance();
-                    Log.d("OPPO-1", "onResponse: " + balance);
-
-                    if (status.equals("SUCCESS")) {
-                        Double total = 0.0d;
-                        try {
-                            if (balance != null && !balance.trim().isEmpty())
-                                total = Double.valueOf(balance);
-                        } catch (Exception e) {
-                            total = 0.0d;
-                        }
-                        Locale localeID = new Locale("in", "ID");
-                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
-                        String rupiah = format.format(total);
-
-                        Log.d("OPPO-1", "onResponse: " + rupiah);
-
-                        //lblSaldo.setText(rupiah);
-                    } else {
-                        Toast.makeText(MainActivity.this, "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataDeposit> call, Throwable t) {
-                Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
 
     /*@SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -1203,7 +1176,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         Intent resetPin = new Intent(MainActivity.this, ResetPIN.class);
                         startActivity(resetPin);
                         break;
-                    case R.id.action_logout:
+                    case R.id.nav_logout:
                         logOutPayment();
                         break;
                 }
@@ -1216,6 +1189,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             }
         });
     }
+
 
   /*  @Override
     protected void onPause() {

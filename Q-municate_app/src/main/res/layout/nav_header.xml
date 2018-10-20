@@ -4,20 +4,21 @@
     android:id="@+id/navigation_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorTextOtu"
     android:gravity="bottom"
-    android:orientation="horizontal"
-    android:paddingTop="@dimen/density_48"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/density_16"
     android:paddingBottom="@dimen/density_8"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
         android:id="@+id/circleView"
+        android:layout_margin="@dimen/density_8"
         android:layout_width="@dimen/density_100"
         android:layout_height="@dimen/density_100"
         android:layout_gravity="center"
         android:paddingBottom="@dimen/density_8"
-        android:src="@drawable/logo_qb" />
+        android:src="@drawable/ic_default" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,18 +27,38 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="WELCOME" />
-
-        <TextView
             android:id="@+id/profile_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/density_8"
             android:maxLines="2"
             android:text="NAMA"
+            android:gravity="center"
+            android:textColor="@color/white"
             android:textSize="@dimen/text_16"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvEkl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/density_8"
+            android:maxLines="2"
+            android:text="EKL000000"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_14"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/density_8"
+            android:maxLines="2"
+            android:text="Hanya denga OTU, semua jadi dekat."
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_14"
             android:textStyle="bold" />
 
     </LinearLayout>

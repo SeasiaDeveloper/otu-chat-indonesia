@@ -57,8 +57,7 @@
     </item>
 
     <group
-        android:id="@+id/action_logout"
-        android:checkableBehavior="single">
+        android:id="@+id/action_logout">
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_nav_right_logout"
