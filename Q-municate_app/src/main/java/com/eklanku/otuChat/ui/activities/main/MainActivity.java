@@ -14,33 +14,36 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabItem;
-import android.support.design.widget.TabLayout;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.Application;
 import com.eklanku.otuChat.ReferrerReceiver;
+import com.eklanku.otuChat.ui.activities.about.AboutActivity;
 import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
+import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
+import com.eklanku.otuChat.ui.activities.feedback.FeedbackActivity;
+import com.eklanku.otuChat.ui.activities.invitefriends.InviteFriendsActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
-import com.eklanku.otuChat.ui.activities.settings.SettingTabPaymentFragment;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
@@ -51,18 +54,13 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.eklanku.otuChat.utils.helpers.AddressBookHelper;
-import com.eklanku.otuChat.utils.helpers.AddressBookHelper;
-import com.google.firebase.auth.FirebaseAuth;
 import com.nineoldandroids.view.ViewHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.base.BaseActivity;
-import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
-import com.eklanku.otuChat.ui.activities.payment.models.RegisterResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClient;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -71,7 +69,6 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfaceProfile;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivityOtu;
-import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.chats.DialogsListFragment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.helpers.FacebookHelper;
@@ -81,7 +78,6 @@ import com.eklanku.otuChat.utils.MediaUtils;
 
 import com.quickblox.q_municate_core.core.command.Command;
 import com.quickblox.q_municate_core.models.AppSession;
-import com.quickblox.q_municate_core.models.DialogWrapper;
 import com.quickblox.q_municate_core.models.UserCustomData;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_core.utils.Utils;
@@ -96,7 +92,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import rx.Observable;
-import rx.functions.Action1;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -107,8 +102,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
-
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
@@ -118,25 +111,11 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.RECEIVE_SMS;
 import static android.Manifest.permission.RECORD_AUDIO;
-import static android.Manifest.permission.VIBRATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.provider.BaseColumns;
-import android.provider.ContactsContract;
-
-import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
-import com.connectycube.core.EntityCallback;
-import com.connectycube.core.exception.ResponseException;
-import com.connectycube.core.request.PagedRequestBuilder;
-import com.connectycube.users.ConnectycubeUsers;
-import com.connectycube.users.model.ConnectycubeUser;
 
-public class MainActivity extends BaseLoggableActivity implements ObservableScrollViewCallbacks {
+public class MainActivity extends BaseLoggableActivity implements ObservableScrollViewCallbacks/*, NavigationView.OnNavigationItemSelectedListener*/ {
 
     @Bind(R.id.bannerLayout)
     BannerLayout bannerSlider;
@@ -147,15 +126,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     private ImportFriendsSuccessAction importFriendsSuccessAction;
     private ImportFriendsFailAction importFriendsFailAction;
-
-    //ayik
-    /*Toolbar toolbar;
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    PageAdapter pageAdapter;
-    TabItem tabChats;
-    TabItem tabStatus;
-    TabItem tabCalls;*/
 
     Intent intent;
     public static final int REQUEST_CODE_LOGOUT = 300;
@@ -175,8 +145,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     private static String[] banner_promo;
     BannerLayout bannerLayout;
-    //CardView cvMain;
-    //public static TextView lblSaldo;
     LinearLayout layoutCollaps, layoutSaldo;
 
    /* boolean isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
@@ -195,6 +163,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     private View mToolbarView;
     private ObservableScrollView mScrollView;
     private int mParallaxImageHeight;
+    DrawerLayout drawer;
 
     private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -230,6 +199,15 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (drawer.isDrawerOpen(GravityCompat.END)) {
+            drawer.closeDrawer(GravityCompat.END);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -250,10 +228,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
                     }
 
-//                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-//                        logOutPayment();
-//                    }
-
                     layoutSaldo.setVisibility(View.GONE);
                     break;
                 case R.id.navigation_call:
@@ -265,9 +239,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         strUserID = user.get(preferenceManager.KEY_USERID);
                         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
                     }
-                   /* if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-                        logOutPayment();
-                    }*/
 
                     break;
                 case R.id.navigation_payment:
@@ -285,28 +256,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
                     break;
 
-
-               /* case R.id.navigation_pengaturan:
-=======
-                /*case R.id.navigation_pengaturan:
->>>>>>> 98ec7323b604b24ea4af934e918e2b49186ff6ed
-                    fragment = new SettingTabPaymentFragment();
-
-                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-                        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
-                        strUserID = user.get(preferenceManager.KEY_USERID);
-                        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
-                    }
-                    *//*if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-                        logOutPayment();
-<<<<<<< HEAD
-                    }
-
-=======
-                    }*//*
-                    layoutSaldo.setVisibility(View.GONE);
->>>>>>> 98ec7323b604b24ea4af934e918e2b49186ff6ed
-                    break;*/
             }
             return loadFragment(fragment);
         }
@@ -357,59 +306,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             //loadDeposite(strUserID,strAccessToken);
         }
 
-        /*tabLayout = findViewById(R.id.tablayout);
-        viewPager = findViewById(R.id.viewPager);
-
-        pageAdapter = new PageAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pageAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));*/
-
-        /*viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
-            public void onPageScrollStateChanged(int state) {
-            }
-
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            public void onPageSelected(int position) {
-                if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-                    HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
-                    strUserID = user.get(preferenceManager.KEY_USERID);
-                    strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
-                }
-                switch (position) {
-                    case 0:
-//                        if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-//                            logOutPayment();
-//                        }
-//                        break;
-                    case 1:
-//                        if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-//                            logOutPayment();
-//                        }
-//                        break;
-                    case 2:
-
-                        if (!PreferenceUtil.isMemberStatus(MainActivity.this)) {
-
-                            cekMember();
-                        }
-                        // DO NOTHING
-                        break;
-                    default:
-                        //DO NOTHING
-                }
-            }
-        });
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        viewPager.setCurrentItem(0);
-        tabLayout.getTabAt(2).setCustomView(R.layout.custom_tabs_payment);
-        tabLayout.getTabAt(1).setCustomView(R.layout.custom_tabs_calls);
-        tabLayout.getTabAt(0).setCustomView(R.layout.custom_tab_chats);*/
-
         preferenceManager = new PreferenceManager(this);
 
         if (!PreferenceUtil.isFirstLaunch(this)) {
@@ -424,6 +320,24 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.inflateHeaderView(R.layout.nav_header);
+        ImageView img= header.findViewById(R.id.circleView);
+        TextView txt = header.findViewById(R.id.profile_name);
+        txt.setText("Nama SAYA");
+
+        //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.drawer_layout));
+        //navigationView.setNavigationItemSelectedListener(this);
+
+        //display the right navigation drawer
+        displayRightNavigation();
 
         mainActivity = this;
     }
@@ -1175,6 +1089,126 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             }
         });
 
+    }
+
+    /*@SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+       *//* if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }*//*
+
+        switch (item.getItemId()) {
+            case R.id.account_settings:
+                drawer.openDrawer(GravityCompat.END);
+                break;
+            case R.id.action_search:
+                launchContactsActivity();
+                break;
+            case R.id.action_start_invite_friends:
+                InviteFriendsActivity.start(this);
+                break;
+            case R.id.action_start_feedback:
+                FeedbackActivity.start(this);
+                break;
+            case R.id.action_start_settings:
+                //SettingsActivity.startForResult(DialogsListFragment.class);
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_start_about:
+                AboutActivity.start(this);
+                break;
+            case R.id.action_web_qr_code:
+                WebQRCodeActivity.start(this);
+                break;
+            case R.id.action_notification:
+                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        //Toast.makeText(MainActivity.this, "Handle from navigation right", Toast.LENGTH_SHORT).show();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }*/
+
+    private void launchContactsActivity() {
+        Intent intent = new Intent(MainActivity.this, ContactsActivity.class);
+        startActivity(intent);
+    }
+
+    private void displayRightNavigation() {
+        final NavigationView navigationViewRight = (NavigationView) findViewById(R.id.nav_view_right);
+        navigationViewRight.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Handle navigation view item clicks here.
+                int id = item.getItemId();
+
+               /* if (id == R.id.nav_camera_right) {
+                    // Handle the camera action
+                } else if (id == R.id.nav_gallery_right) {
+
+                } else if (id == R.id.nav_slideshow_right) {
+
+                } else if (id == R.id.nav_manage_right) {
+
+                } else if (id == R.id.nav_share_right) {
+
+                } else if (id == R.id.nav_send_right) {
+
+                }*/
+
+                switch (item.getItemId()) {
+                    case R.id.account_settings:
+                        drawer.openDrawer(GravityCompat.END);
+                        break;
+                    case R.id.action_search:
+                        launchContactsActivity();
+                        break;
+                    case R.id.action_start_invite_friends:
+                        InviteFriendsActivity.start(MainActivity.this);
+                        break;
+                    case R.id.action_start_feedback:
+                        FeedbackActivity.start(MainActivity.this);
+                        break;
+                    case R.id.action_start_settings:
+                        //SettingsActivity.startForResult(DialogsListFragment.class);
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        break;
+                    case R.id.action_start_about:
+                        AboutActivity.start(MainActivity.this);
+                        break;
+                    case R.id.action_web_qr_code:
+                        WebQRCodeActivity.start(MainActivity.this);
+                        break;
+                    case R.id.action_notification:
+                        Toast.makeText(MainActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+
+                Toast.makeText(MainActivity.this, "Handle from navigation right", Toast.LENGTH_SHORT).show();
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.END);
+                return true;
+
+            }
+        });
     }
 
   /*  @Override

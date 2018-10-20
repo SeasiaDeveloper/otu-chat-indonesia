@@ -10,7 +10,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -109,6 +111,7 @@ public class PaymentFragment extends Fragment {
     HashMap<String, String> user;
     private BannerLayout banner;
     private static String[] banner_promo;
+    DrawerLayout drawer;
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -202,6 +205,8 @@ public class PaymentFragment extends Fragment {
             }
 
         }
+
+        drawer = getActivity().findViewById(R.id.drawer_layout);
         return mView;
     }
 
@@ -407,7 +412,7 @@ public class PaymentFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.payment_menu, menu);
+        inflater.inflate(R.menu.main_menu, menu);
 
     }
 
@@ -434,7 +439,7 @@ public class PaymentFragment extends Fragment {
         } else return true;
     }
 
-    @Override
+  /*  @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -506,11 +511,11 @@ public class PaymentFragment extends Fragment {
                 Activity activity = getActivity();
                 if (activity != null && isAdded())
                     logOutPayment();
-                /*loadingDialog = ProgressDialog.show(getActivity(), "Harap Tunggu", "Melakukan proses logout");
+                *//*loadingDialog = ProgressDialog.show(getActivity(), "Harap Tunggu", "Melakukan proses logout");
                 loadingDialog.setCanceledOnTouchOutside(true);
                 preferenceManager.createUserPayment("", "", false);
                 PreferenceUtil.setLoginStatus(getActivity(), false);
-                //logout(strUserID, strAccessToken);*/
+                //logout(strUserID, strAccessToken);*//*
                 break;
 
             case R.id.referal:
@@ -520,6 +525,17 @@ public class PaymentFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
 
+    }*/
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            drawer.openDrawer(GravityCompat.END);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /*  private void dialog() {
