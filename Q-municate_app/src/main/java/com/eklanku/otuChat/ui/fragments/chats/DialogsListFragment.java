@@ -194,14 +194,14 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         banner = header.findViewById(R.id.bannerLayout);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
-        Activity activity = getActivity();
+       /* Activity activity = getActivity();
         if (activity != null && isAdded()) {
             loadBanner();
             if (!PreferenceUtil.isMemberStatus(getActivity())) {
                 cekMember();
             }
 
-        }
+        }*/
 
         //dialogsListView.addHeaderView(header, null, false);
 

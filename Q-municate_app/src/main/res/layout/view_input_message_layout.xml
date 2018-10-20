@@ -16,28 +16,35 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/new_chat_input_message_height"
-            android:layout_margin="6dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/density_2"
             android:layout_toStartOf="@id/action_buttons_view"
             android:layout_toLeftOf="@id/action_buttons_view"
             android:background="@drawable/rounded_shape_message">
 
             <com.rockerhieu.emojicon.EmojiconEditText
                 android:id="@+id/message_edittext"
-                style="@style/MatchParent"
+                android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/smile_panel_imagebutton"
                 android:layout_toRightOf="@+id/smile_panel_imagebutton"
                 android:autoLink="all"
                 android:background="@null"
                 android:clickable="true"
+                android:singleLine="false"
+                android:maxLength ="2000"
+                android:isScrollContainer="true"
+                android:inputType="textMultiLine"
+                android:padding="5dp"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:hint="@string/dialog_hint_message"
-                android:maxLines="5"
+                android:maxLines="20"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_color_message"
                 android:textSize="14sp"
-                emojicon:emojiconSize="@dimen/chat_emoji_item_preview_size" />
+                emojicon:emojiconSize="@dimen/chat_emoji_item_preview_size"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent" />
 
             <ImageButton
                 android:id="@+id/smile_panel_imagebutton"

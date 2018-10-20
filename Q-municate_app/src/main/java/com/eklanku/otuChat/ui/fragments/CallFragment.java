@@ -128,7 +128,7 @@ public class CallFragment extends Fragment implements LoadingData {
             }
         });*/
 
-        Activity activity = getActivity();
+        /*Activity activity = getActivity();
         if (activity != null && isAdded()) {
 
             // isi fungsi loadbanner, cek member
@@ -137,7 +137,7 @@ public class CallFragment extends Fragment implements LoadingData {
                 cekMember();
             }
 
-        }
+        }*/
 
         call.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -18,7 +18,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -253,6 +255,31 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         if (isNetworkAvailable()) {
             deleteTempMessagesAsync();
         }
+
+        messageEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                getSize();
+            }
+        });
+    }
+
+
+    private void getSize() {
+        if (messageEditText.getLineCount() == messageEditText.getMaxLines()) {
+            messageEditText.setMaxLines((messageEditText.getLineCount() + 1));
+        }
+        // Log.e("lenth", editText.getContentDescription().length()+"");
 
     }
 

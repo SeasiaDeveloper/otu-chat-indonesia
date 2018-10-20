@@ -152,7 +152,9 @@ public class PaymentFragment extends Fragment {
         btnDeposit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(context, TopupOrder.class));
+                if (menuDialog()) {
+                    startActivity(new Intent(context, TopupOrder.class));
+                }
             }
         });
 
@@ -194,7 +196,7 @@ public class PaymentFragment extends Fragment {
         Activity activity = getActivity();
 
         if (activity != null && isAdded()) {
-            loadBanner();
+            //loadBanner();
             if (!PreferenceUtil.isMemberStatus(getActivity())) {
                 cekMember();
             }
@@ -343,7 +345,7 @@ public class PaymentFragment extends Fragment {
                     startActivity(new Intent(context, TransMultiFinance.class));
                     break;
                 case R.id.btnKartuKredit:
-                   // startActivity(new Intent(context, TransKartuKredit.class));
+                    // startActivity(new Intent(context, TransKartuKredit.class));
                     Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.btnAsuransi:
@@ -697,7 +699,7 @@ public class PaymentFragment extends Fragment {
 
     private void cekMember() {
         Call<DataProfile> isMember = apiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(getActivity()), "OTU");
-
+        Toast.makeText(context, "" + PreferenceUtil.getNumberPhone(getActivity()), Toast.LENGTH_SHORT).show();
         isMember.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {

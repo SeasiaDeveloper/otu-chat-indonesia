@@ -164,7 +164,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
 =======*/
     protected void onBindViewMsgLeftHolder(ConnectycubeChatAdapter.TextMessageHolder holder, CombinationMessage chatMessage, int position) {
 //>>>>>>> origin/feature/migration
-        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.left_chat_bubble;
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.bg_chat_left_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewMsgRightHolder(holder, chatMessage, position);
     }

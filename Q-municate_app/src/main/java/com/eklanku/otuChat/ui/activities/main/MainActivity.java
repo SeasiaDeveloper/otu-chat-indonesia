@@ -41,6 +41,7 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.settings.SettingTabPaymentFragment;
+import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
@@ -416,6 +417,13 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         }
 
         loadFragment(new DialogsListFragment());
+
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
 
         mainActivity = this;
     }
