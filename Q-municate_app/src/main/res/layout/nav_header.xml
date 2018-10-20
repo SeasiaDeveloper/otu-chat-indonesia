@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark"
+    android:gravity="bottom"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/density_48"
+    android:paddingBottom="@dimen/density_8"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <ImageView
+        android:id="@+id/circleView"
+        android:layout_width="@dimen/density_100"
+        android:layout_height="@dimen/density_100"
+        android:layout_gravity="center"
+        android:paddingBottom="@dimen/density_8"
+        android:src="@drawable/logo_qb" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="WELCOME" />
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/density_8"
+            android:maxLines="2"
+            android:text="NAMA"
+            android:textSize="@dimen/text_16"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

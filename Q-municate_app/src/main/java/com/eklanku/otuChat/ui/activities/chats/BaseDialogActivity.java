@@ -832,12 +832,12 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         if (TextUtils.isEmpty(charSequence) || TextUtils.isEmpty(charSequence.toString().trim())) {
             sendButton.setVisibility(View.GONE);
             //attachButton.setVisibility(View.VISIBLE);
-            //attachCamera.setVisibility(View.VISIBLE);
+            attachCamera.setVisibility(View.VISIBLE);
             recordAudioButton.setVisibility(View.VISIBLE);
         } else {
             sendButton.setVisibility(View.VISIBLE);
             //attachButton.setVisibility(View.GONE);
-            //attachCamera.setVisibility(View.GONE);
+            attachCamera.setVisibility(View.GONE);
             recordAudioButton.setVisibility(View.GONE);
         }
     }

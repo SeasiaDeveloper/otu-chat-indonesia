@@ -2,11 +2,11 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/default_text_icon_otu_color"/>
+            <solid android:color="#39bc4a"/>
             <corners android:radius="48dp" />
             <stroke
                 android:width="2dp"
-                android:color="@color/default_text_icon_otu_color"/>
+                android:color="#39bc4a"/>
         </shape>
     </item>
 </selector>

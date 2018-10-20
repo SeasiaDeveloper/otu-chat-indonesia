@@ -9,6 +9,46 @@
         android:id="@+id/toolbar_view"
         layout="@layout/toolbar_main" />
 
+    <!-- <android.support.design.widget.NavigationView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:visibility="gone"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/activity_main_drawer">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:fillViewport="true"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.design.widget.NavigationView
+                    android:id="@+id/nav_view"
+                    app:elevation="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    app:itemIconTint="#0097a7"
+                    app:menu="@menu/activity_main_drawer">
+                </android.support.design.widget.NavigationView>
+
+                <LinearLayout
+                    android:id="@+id/spacer_to_bottom"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <include layout="@layout/nav_footer" />
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.design.widget.NavigationView>-->
+
     <include layout="@layout/content_main" />
 
     <!--<LinearLayout-->
@@ -41,121 +81,121 @@
         android:layout_height="wrap_content"
         android:background="@color/bg_main" />
 
-   <!-- <com.yyydjk.library.BannerLayout
-        android:id="@+id/bannerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="125dp"
-        android:visibility="gone"
-        app:autoPlayDuration="4000"
-        app:scrollDuration="1000" />-->
+    <!-- <com.yyydjk.library.BannerLayout
+         android:id="@+id/bannerLayout"
+         android:layout_width="match_parent"
+         android:layout_height="125dp"
+         android:visibility="gone"
+         app:autoPlayDuration="4000"
+         app:scrollDuration="1000" />-->
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!-- <FrameLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:orientation="vertical">
+             <FrameLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="bottom"
+                 android:orientation="vertical">
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tablayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill"
-                    android:background="@color/text_white"
-                    android:clickable="true"
-                    android:focusable="auto"
-                    android:visibility="visible"
-                    app:tabGravity="fill"
-                    app:tabIndicatorColor="@color/default_text_icon_otu_color"
-                    app:tabIndicatorHeight="4dp"
-                    app:tabMaxWidth="0dp"
-                    app:tabMode="fixed"
-                    app:tabPaddingEnd="0dp"
-                    app:tabPaddingStart="0dp"
-                    app:tabTextColor="@color/colorGray">
+                 <android.support.design.widget.TabLayout
+                     android:id="@+id/tablayout"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_gravity="fill"
+                     android:background="@color/text_white"
+                     android:clickable="true"
+                     android:focusable="auto"
+                     android:visibility="visible"
+                     app:tabGravity="fill"
+                     app:tabIndicatorColor="@color/default_text_icon_otu_color"
+                     app:tabIndicatorHeight="4dp"
+                     app:tabMaxWidth="0dp"
+                     app:tabMode="fixed"
+                     app:tabPaddingEnd="0dp"
+                     app:tabPaddingStart="0dp"
+                     app:tabTextColor="@color/colorGray">
 
-                    <!--<android.support.design.widget.TabItem-->
-                    <!--android:id="@+id/tabChats"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:icon="@drawable/ic_tabs_chat_otu"-->
-                    <!--android:text="@string/chats"-->
-                    <!--/>-->
+                     &lt;!&ndash;<android.support.design.widget.TabItem&ndash;&gt;
+                     &lt;!&ndash;android:id="@+id/tabChats"&ndash;&gt;
+                     &lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;
+                     &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;
+                     &lt;!&ndash;android:icon="@drawable/ic_tabs_chat_otu"&ndash;&gt;
+                     &lt;!&ndash;android:text="@string/chats"&ndash;&gt;
+                     &lt;!&ndash;/>&ndash;&gt;
 
-                    <!--<android.support.design.widget.TabItem-->
-                    <!--android:id="@+id/tabCalls"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:icon="@drawable/ic_tabs_call_otu"-->
-                    <!--android:text="@string/call" />-->
+                     &lt;!&ndash;<android.support.design.widget.TabItem&ndash;&gt;
+                     &lt;!&ndash;android:id="@+id/tabCalls"&ndash;&gt;
+                     &lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;
+                     &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;
+                     &lt;!&ndash;android:icon="@drawable/ic_tabs_call_otu"&ndash;&gt;
+                     &lt;!&ndash;android:text="@string/call" />&ndash;&gt;
 
-                    <!--<android.support.design.widget.TabItem-->
-                    <!--android:id="@+id/tabPayments"-->
-                    <!--android:icon="@drawable/ic_tabs_payment_otu"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/payment" />-->
+                     &lt;!&ndash;<android.support.design.widget.TabItem&ndash;&gt;
+                     &lt;!&ndash;android:id="@+id/tabPayments"&ndash;&gt;
+                     &lt;!&ndash;android:icon="@drawable/ic_tabs_payment_otu"&ndash;&gt;
+                     &lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;
+                     &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;
+                     &lt;!&ndash;android:text="@string/payment" />&ndash;&gt;
 
-                </android.support.design.widget.TabLayout>
+                 </android.support.design.widget.TabLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:background="@android:color/transparent"
+                     android:baselineAligned="false"
+                     android:orientation="horizontal">
 
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/white" />
+                     <FrameLayout
+                         android:layout_width="0dp"
+                         android:layout_height="match_parent"
+                         android:layout_weight="1"
+                         android:background="@color/white" />
 
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/white" />
+                     <FrameLayout
+                         android:layout_width="0dp"
+                         android:layout_height="match_parent"
+                         android:layout_weight="1"
+                         android:background="@color/white" />
 
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/white" />
+                     <FrameLayout
+                         android:layout_width="0dp"
+                         android:layout_height="match_parent"
+                         android:layout_weight="1"
+                         android:background="@color/white" />
 
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/white" />
-                </LinearLayout>
+                     <FrameLayout
+                         android:layout_width="0dp"
+                         android:layout_height="match_parent"
+                         android:layout_weight="1"
+                         android:background="@color/white" />
+                 </LinearLayout>
 
-            </FrameLayout>
+             </FrameLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="0dp"
+                 android:layout_weight="1"
+                 android:orientation="vertical"
+                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/viewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="@color/white" />
-            </LinearLayout>
+                 <android.support.v4.view.ViewPager
+                     android:id="@+id/viewPager"
+                     android:layout_width="match_parent"
+                     android:layout_height="0dp"
+                     android:layout_weight="1"
+                     android:background="@color/white" />
+             </LinearLayout>
 
-        </LinearLayout>
-    </FrameLayout>
+         </LinearLayout>
+     </FrameLayout>-->
 
 </LinearLayout>

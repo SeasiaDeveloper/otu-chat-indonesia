@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/one"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_produk"
+            android:icon="@drawable/logo_qb"
+            android:title="UTAMA" />
+    </group>
+
+    <item android:title="PROFILE">
+        <menu>
+            <item
+                android:id="@+id/nav_pesanan"
+                android:icon="@drawable/logo_qb"
+                android:title="PROFILE" />
+
+            <item
+                android:id="@+id/nav_keranjang"
+                android:icon="@drawable/logo_qb"
+                android:title="AKUN" />
+        </menu>
+    </item>
+
+    <item android:title="LAIN_LAIN">
+        <menu>
+            <item
+                android:id="@+id/contact_us"
+                android:icon="@drawable/logo_qb"
+                android:title="OTU Web" />
+            <item
+                android:id="@+id/help_center"
+                android:icon="@drawable/logo_qb"
+                android:title="Notifikasi" />
+
+        </menu>
+    </item>
+
+    <group
+        android:id="@+id/logout"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/logo_qb"
+            android:title="LOGOUT" />
+    </group>
+
+</menu>
