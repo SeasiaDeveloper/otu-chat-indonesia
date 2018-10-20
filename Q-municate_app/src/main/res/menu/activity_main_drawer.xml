@@ -13,38 +13,56 @@
     <item android:title="PROFILE">
         <menu>
             <item
-                android:id="@+id/nav_pesanan"
-                android:icon="@drawable/logo_qb"
-                android:title="PROFILE" />
+                android:id="@+id/action_profile"
+                android:icon="@drawable/ic_yellow_profile"
+                android:title="Profil" />
+
+            <!--<item-->
+                <!--android:id="@+id/action_akun"-->
+                <!--android:icon="@drawable/change_password_icon"-->
+                <!--android:title="Akun" />-->
+        </menu>
+    </item>
+
+    <item android:title="AKUN">
+
+        <menu>
+            <item
+                android:id="@+id/action_resetpass"
+                android:icon="@drawable/change_password_icon"
+                android:iconTint="@color/red"
+                android:title="Ganti Password" />
 
             <item
-                android:id="@+id/nav_keranjang"
-                android:icon="@drawable/logo_qb"
-                android:title="AKUN" />
+                android:id="@+id/action_resetpin"
+                android:icon="@drawable/change_password_icon"
+                android:iconTint="@color/red"
+                android:title="Ganti PIN" />
         </menu>
+
     </item>
 
     <item android:title="LAIN_LAIN">
         <menu>
             <item
                 android:id="@+id/action_web_qr_code"
-                android:icon="@drawable/logo_qb"
+                android:icon="@drawable/ic_nav_right_computer"
                 android:title="OTU Web" />
             <item
                 android:id="@+id/action_notification"
-                android:icon="@drawable/logo_qb"
+                android:icon="@drawable/ic_nav_right_notification_red"
                 android:title="Notifikasi" />
 
         </menu>
     </item>
 
     <group
-        android:id="@+id/logout"
+        android:id="@+id/action_logout"
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/logo_qb"
-            android:title="LOGOUT" />
+            android:icon="@drawable/ic_nav_right_logout"
+            android:title="Keluar" />
     </group>
 
 </menu>

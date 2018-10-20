@@ -43,7 +43,10 @@ import com.eklanku.otuChat.ui.activities.invitefriends.InviteFriendsActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
@@ -329,7 +332,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.inflateHeaderView(R.layout.nav_header);
-        ImageView img= header.findViewById(R.id.circleView);
+        ImageView img = header.findViewById(R.id.circleView);
         TextView txt = header.findViewById(R.id.profile_name);
         txt.setText("Nama SAYA");
 
@@ -448,6 +451,29 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             return null;
         }
+    }
+
+    public void warningLogoutpay(){
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(MainActivity.this)
+                .setTitle("PERINGATAN!!!")
+                .setMessage("Untuk meningkatkan Kemanan Silahkan Login terlebih dahulu")
+                .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        logOutPayment();
+                    }
+                })
+                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
+        return;
+
+
     }
 
     public void logOutPayment() {
@@ -1199,6 +1225,21 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         break;
                     case R.id.action_notification:
                         Toast.makeText(MainActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.action_profile:
+                        Intent profile = new Intent(MainActivity.this, Profile.class);
+                        startActivity(profile);
+                        break;
+                    case R.id.action_resetpass:
+                        Intent resetPass = new Intent(MainActivity.this, ResetPassword.class);
+                        startActivity(resetPass);
+                        break;
+                    case R.id.action_resetpin:
+                        Intent resetPin = new Intent(MainActivity.this, ResetPIN.class);
+                        startActivity(resetPin);
+                        break;
+                    case R.id.action_logout:
+                        logOutPayment();
                         break;
                 }
 

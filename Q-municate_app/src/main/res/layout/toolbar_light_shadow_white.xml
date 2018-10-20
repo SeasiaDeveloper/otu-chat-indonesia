@@ -23,6 +23,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             app:titleTextColor="@color/default_text_icon_otu_color"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
             app:navigationIcon="@drawable/baseline_arrow_back"
             android:background="@color/white"
             app:popupTheme="@style/AppTheme.PopupOverlay"
@@ -30,8 +31,15 @@
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
             app:contentInsetStartWithNavigation="0dp"
-            app:subtitleTextColor="@color/material_green_a200"
-            android:layout_height="?actionBarSize">
+            app:subtitleTextColor="@color/black"
+            app:subtitleTextAppearance="@style/Toolbar.SubTitleText"
+            android:layout_height="?actionBarSize"
+            android:contentInsetLeft="0dp"
+            android:contentInsetStart="0dp"
+            android:contentInsetRight="0dp"
+            android:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetEnd="0dp">
 
             <ProgressBar
                 android:id="@+id/toolbar_progressbar"

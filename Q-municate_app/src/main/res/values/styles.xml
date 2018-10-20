@@ -392,4 +392,13 @@
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Toolbar.SubTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">13sp</item>
+    </style>
+
 </resources>
