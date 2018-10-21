@@ -23,12 +23,9 @@ import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.Utils;
-import com.google.firebase.auth.FirebaseAuth;
+
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+
 import com.quickblox.q_municate_core.models.AppSession;
 
 import java.text.SimpleDateFormat;
@@ -84,9 +81,9 @@ public class Register extends AppCompatActivity {
         referrerDataRaw = userReferal.get(preferenceManager.KEY_REFF_RAW);
         referrerDataDecoded = userReferal.get(preferenceManager.KEY_REFF_DECODE);
 
-        if(referrerDataRaw!=null){
+        if (referrerDataRaw != null) {
             txtReferal.setText(referrerDataRaw);
-        }else{
+        } else {
             txtReferal.setText("EKL0000000");
         }
 
@@ -130,15 +127,12 @@ public class Register extends AppCompatActivity {
 
 
     public void Resgister() {
-        /*loadingDialog = ProgressDialog.show(Register.this, "Harap Tunggu", "Proses Register...");
-        loadingDialog.setCanceledOnTouchOutside(true);*/
         progressDialog.setMessage("Proses Register...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        //btnNext.setEnabled(false);
 
-        Log.d("OPPO-1", "Resgister: " + PreferenceUtil.getNumberPhone(this));
-        Log.d("OPPO-1", "Resgister: " + strApIUse);
+        //okHttpClient
+
         Call<DataProfile> callProfil = mApiInterfacePayment.getTokenRegister(PreferenceUtil.getNumberPhone(this), strApIUse);
         callProfil.enqueue(new Callback<DataProfile>() {
             @Override
@@ -148,8 +142,7 @@ public class Register extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
-                    Log.d("OPPO-1", "onResponse: " + status);
-                    Log.d("OPPO-1", "onResponsemsg: " + msg);
+
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         String tokenRegister = response.body().getRegisterToken();
                         //send token to get data profile
@@ -158,12 +151,10 @@ public class Register extends AppCompatActivity {
                     } else {
                         progressDialog.dismiss();
                         utilsAlert.globalDialog(Register.this, titleAlert, msg);
-                        //Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     progressDialog.dismiss();
                     utilsAlert.globalDialog(Register.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -173,8 +164,7 @@ public class Register extends AppCompatActivity {
                 //loadingDialog.dismiss();
                 progressDialog.dismiss();
                 utilsAlert.globalDialog(Register.this, titleAlert, getResources().getString(R.string.error_api));
-               // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_TRANSBELI", t.getMessage().toString());
+
             }
         });
     }
@@ -189,22 +179,19 @@ public class Register extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
-                    Log.d("OPPO-1", "onResponse: " + status);
+
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                        //run main activity
-                      //  utilsAlert.globalDialog(Register.this, titleAlert, "Register Berhasil");
+
                         Toast.makeText(Register.this, "Register berhasil", Toast.LENGTH_SHORT).show();
                         PreferenceUtil.setMemberStatus(Register.this, true);
-                        //MainActivity.start(Register.this);
                         startActivity(new Intent(Register.this, MainActivity.class));
                         finish();
                     } else {
                         utilsAlert.globalDialog(Register.this, titleAlert, msg);
-                        //Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
+
                     }
                 } else {
                     utilsAlert.globalDialog(Register.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -212,8 +199,7 @@ public class Register extends AppCompatActivity {
             public void onFailure(Call<DataProfile> call, Throwable t) {
                 progressDialog.dismiss();
                 utilsAlert.globalDialog(Register.this, titleAlert, getResources().getString(R.string.error_api));
-               // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_TRANSBELI", t.getMessage().toString());
+
             }
         });
 
@@ -221,7 +207,7 @@ public class Register extends AppCompatActivity {
 
     //cek apakah member sudah terdaftar atau belum
     private void isMember() {
-        Call<DataProfile> isMember = mApiInterfacePayment.isMember( AppSession.getSession().getUser().getLogin(), "OTU");
+        Call<DataProfile> isMember = mApiInterfacePayment.isMember(AppSession.getSession().getUser().getLogin(), "OTU");
 
 //        Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this)), strApIUse);
         isMember.enqueue(new Callback<DataProfile>() {
