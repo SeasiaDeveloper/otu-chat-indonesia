@@ -294,7 +294,10 @@ public class TransDeposit extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransDeposit.this, "Harap Tunggu", "Memproses Transfer Deposit...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<DetailTransferResponse> transDepositCall = mApiInterfacePayment.postRequestTransfer(strUserID, strAccessToken, strApIUse, txtNo.getText().toString(), txtJml.getText().toString(), txtPin.getText().toString());
+        String secCode = txtPin.getText().toString() + "x@2016ekl";
+        String strSecurityCode = com.eklanku.otuChat.ui.activities.main.Utils.md5(secCode);
+
+        Call<DetailTransferResponse> transDepositCall = mApiInterfacePayment.postRequestTransfer(strUserID, strAccessToken, strApIUse, txtNo.getText().toString(), txtJml.getText().toString(), strSecurityCode);
         transDepositCall.enqueue(new Callback<DetailTransferResponse>() {
             @Override
             public void onResponse(Call<DetailTransferResponse> call, Response<DetailTransferResponse> response) {
@@ -305,8 +308,10 @@ public class TransDeposit extends AppCompatActivity {
 
                     if (status.equals("SUCCESS")) {
                         utilsAlert.globalDialog(TransDeposit.this, titleAlert, error);
+                        finish();
                     } else {
                         utilsAlert.globalDialog(TransDeposit.this, titleAlert, error);
+                        finish();
                         //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
