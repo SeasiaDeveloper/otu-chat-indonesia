@@ -17,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.DataCekMemberTransfer;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailCekMemberTransfer;
 import com.eklanku.otuChat.ui.activities.payment.models.DetailTransferResponse;
+import com.eklanku.otuChat.ui.activities.payment.models.ResetPINResponse;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
@@ -46,7 +48,7 @@ import java.util.List;
 
 public class TransDeposit extends AppCompatActivity {
 
-    EditText txtNo, txtJml, txtNamaTujuan;
+    EditText txtNo, txtJml, txtNamaTujuan, txtPin;
     TextInputLayout layoutNo, layoutJml;
     Button btnTransfer;
 
@@ -65,6 +67,7 @@ public class TransDeposit extends AppCompatActivity {
     View dialogView;
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo, btnCekMember;
+    LinearLayout layoutTrf;
 
     Utils utilsAlert;
     String titleAlert = "Deposit";
@@ -84,6 +87,8 @@ public class TransDeposit extends AppCompatActivity {
         layoutJml = (TextInputLayout) findViewById(R.id.txtLayoutTransDepositJml);
         txtNamaTujuan = findViewById(R.id.txtNamaTujuan);
         btnCekMember = findViewById(R.id.btnCekMember);
+        layoutTrf = findViewById(R.id.layout_trf);
+        layoutTrf.setVisibility(View.GONE);
 
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
@@ -103,9 +108,13 @@ public class TransDeposit extends AppCompatActivity {
         btnCekMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*if (!validateIdpel()) {
+                    return;
+                }*/
                 loadNamaTujuanTransfer();
             }
         });
+
 
         btnTransfer = (Button) findViewById(R.id.btnTransDeposit);
         btnTransfer.setOnClickListener(new View.OnClickListener() {
@@ -182,20 +191,20 @@ public class TransDeposit extends AppCompatActivity {
         }
 
         if (id_pel.isEmpty()) {
-            layoutNo.setError("Kolom no tujuan tidak boleh kosong");
-            layoutNo.setBackgroundColor(getResources().getColor(android.R.color.background_light));
+            txtNo.setError("Kolom no tujuan tidak boleh kosong");
+            //layoutNo.setBackgroundColor(getResources().getColor(android.R.color.background_light));
             requestFocus(txtNo);
             return false;
         } else if (id_jml.isEmpty()) {
-            layoutJml.setError("Kolom nominal tidak boleh kosong");
-            layoutJml.setBackgroundColor(getResources().getColor(android.R.color.background_light));
+            txtNo.setError("Kolom nominal tidak boleh kosong");
+            //layoutJml.setBackgroundColor(getResources().getColor(android.R.color.background_light));
             requestFocus(txtJml);
             return false;
-        } else if(id_pel.toUpperCase().equals(strUserID)){
-            layoutNo.setError("ID EKL tujuan transfer TIDAK boleh sama dengan ID pribadi");
+        } else if (id_pel.toUpperCase().equals(strUserID)) {
+            txtNo.setError("ID EKL tujuan transfer TIDAK boleh sama dengan ID pribadi");
             return false;
-        } else if(id_pel.equals(ValNoHP)){
-            layoutNo.setError("Nomor HP tujuan transfer TIDAK boleh sama dengan ID pribadi");
+        } else if (id_pel.equals(ValNoHP)) {
+            txtNo.setError("Nomor HP tujuan transfer TIDAK boleh sama dengan ID pribadi");
             return false;
         }
 
@@ -257,15 +266,15 @@ public class TransDeposit extends AppCompatActivity {
                         intent.putExtra("status", response.body().getStatus());
                         intent.putExtra("error", error);
 
-                        Log.d("OPPO-1", "userID: "+response.body().getUserID());
-                        Log.d("OPPO-1", "accessToken: "+response.body().getAccessToken());
-                        Log.d("OPPO-1", "nominal: "+response.body().getNominal());
-                        Log.d("OPPO-1", "idTujuan: "+response.body().getIdTujuan());
-                        Log.d("OPPO-1", "namaPemilik: "+response.body().getNamaPemilik());
-                        Log.d("OPPO-1", "refID: "+response.body().getRefID());
-                        Log.d("OPPO-1", "respTime: "+response.body().getRespTime());
-                        Log.d("OPPO-1", "status: "+response.body().getStatus());
-                        Log.d("OPPO-1", "error: "+error);
+                        Log.d("OPPO-1", "userID: " + response.body().getUserID());
+                        Log.d("OPPO-1", "accessToken: " + response.body().getAccessToken());
+                        Log.d("OPPO-1", "nominal: " + response.body().getNominal());
+                        Log.d("OPPO-1", "idTujuan: " + response.body().getIdTujuan());
+                        Log.d("OPPO-1", "namaPemilik: " + response.body().getNamaPemilik());
+                        Log.d("OPPO-1", "refID: " + response.body().getRefID());
+                        Log.d("OPPO-1", "respTime: " + response.body().getRespTime());
+                        Log.d("OPPO-1", "status: " + response.body().getStatus());
+                        Log.d("OPPO-1", "error: " + error);
 
                         startActivity(intent);
                         finish();
@@ -289,7 +298,7 @@ public class TransDeposit extends AppCompatActivity {
         });
     }
 
-    public void cekAntrianTransfer(){
+    public void cekAntrianTransfer() {
         Call<DetailTransferResponse> transDepositCall = mApiInterfacePayment.antrianTransfer(strUserID, strAccessToken, strApIUse);
         transDepositCall.enqueue(new Callback<DetailTransferResponse>() {
             @Override
@@ -310,15 +319,15 @@ public class TransDeposit extends AppCompatActivity {
                         intent.putExtra("status", response.body().getStatus());
                         intent.putExtra("error", error);
 
-                        Log.d("OPPO-1", "userID: "+response.body().getUserID());
-                        Log.d("OPPO-1", "accessToken: "+response.body().getAccessToken());
-                        Log.d("OPPO-1", "nominal: "+response.body().getNominal());
-                        Log.d("OPPO-1", "idTujuan: "+response.body().getIdTujuan());
-                        Log.d("OPPO-1", "namaPemilik: "+response.body().getNamaPemilik());
-                        Log.d("OPPO-1", "refID: "+response.body().getRefID());
-                        Log.d("OPPO-1", "respTime: "+response.body().getRespTime());
-                        Log.d("OPPO-1", "status: "+response.body().getStatus());
-                        Log.d("OPPO-1", "error: "+error);
+                        Log.d("OPPO-1", "userID: " + response.body().getUserID());
+                        Log.d("OPPO-1", "accessToken: " + response.body().getAccessToken());
+                        Log.d("OPPO-1", "nominal: " + response.body().getNominal());
+                        Log.d("OPPO-1", "idTujuan: " + response.body().getIdTujuan());
+                        Log.d("OPPO-1", "namaPemilik: " + response.body().getNamaPemilik());
+                        Log.d("OPPO-1", "refID: " + response.body().getRefID());
+                        Log.d("OPPO-1", "respTime: " + response.body().getRespTime());
+                        Log.d("OPPO-1", "status: " + response.body().getStatus());
+                        Log.d("OPPO-1", "error: " + error);
 
                         startActivity(intent);
                         finish();
@@ -352,10 +361,10 @@ public class TransDeposit extends AppCompatActivity {
         }
     }
 
-    public void loadNamaTujuanTransfer(){
+    public void loadNamaTujuanTransfer() {
         loadingDialog = ProgressDialog.show(TransDeposit.this, "Harap Tunggu", "Cek Member...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Call<DataCekMemberTransfer> transDepositCall = mApiInterfacePayment.getCekMemberTransfer(strUserID, strApIUse, txtNo.getText().toString(),strAccessToken);
+        Call<DataCekMemberTransfer> transDepositCall = mApiInterfacePayment.getCekMemberTransfer(strUserID, strApIUse, txtNo.getText().toString(), strAccessToken);
         transDepositCall.enqueue(new Callback<DataCekMemberTransfer>() {
             @Override
             public void onResponse(Call<DataCekMemberTransfer> call, Response<DataCekMemberTransfer> response) {
@@ -366,13 +375,23 @@ public class TransDeposit extends AppCompatActivity {
 
                     if (status.equals("SUCCESS")) {
                         final List<DataDetailCekMemberTransfer> ckmember = response.body().getDatarespon();
-                        for(int i = 0; i < ckmember.size(); i++){
+                        for (int i = 0; i < ckmember.size(); i++) {
                             txtNamaTujuan.setText(ckmember.get(i).getNama_member());
+                            String status_member = ckmember.get(i).getStatus_member();
+                            if (status_member.equals("Active")) {
+                                layoutTrf.setVisibility(View.VISIBLE);
+                            } else {
+                                layoutTrf.setVisibility(View.GONE);
+                                Toast.makeText(TransDeposit.this, "Member tidak aktif", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     } else {
+                        layoutTrf.setVisibility(View.GONE);
+                        Toast.makeText(TransDeposit.this, "Gagal cek member, periksa kembali kode member", Toast.LENGTH_SHORT).show();
                         //utilsAlert.globalDialog(TransDeposit.this, titleAlert, error);
                     }
                 } else {
+                    layoutTrf.setVisibility(View.GONE);
                     //utilsAlert.globalDialog(TransDeposit.this, titleAlert, getResources().getString(R.string.error_api));
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
@@ -381,7 +400,36 @@ public class TransDeposit extends AppCompatActivity {
             @Override
             public void onFailure(Call<DataCekMemberTransfer> call, Throwable t) {
                 loadingDialog.dismiss();
+                layoutTrf.setVisibility(View.GONE);
                 //utilsAlert.globalDialog(TransDeposit.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                Log.d("API_TRANSBELI", t.getMessage().toString());
+            }
+        });
+    }
+
+    public void getKey() {
+        loadingDialog = ProgressDialog.show(TransDeposit.this, "Harap Tunggu", "Load Get key...");
+        loadingDialog.setCanceledOnTouchOutside(true);
+        Call<ResetPINResponse> callResetPass = mApiInterfacePayment.postResetPin(strUserID, strApIUse, strAccessToken);
+        callResetPass.enqueue(new Callback<ResetPINResponse>() {
+            @Override
+            public void onResponse(Call<ResetPINResponse> call, Response<ResetPINResponse> response) {
+                loadingDialog.dismiss();
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String msg = response.body().getRespMessage();
+                    Log.d("OPPO-1", "getKey: " + status);
+                    if (status.equalsIgnoreCase("SUCCESS")) {
+                        //jalankan approve
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResetPINResponse> call, Throwable t) {
+                loadingDialog.dismiss();
+                utilsAlert.globalDialog(TransDeposit.this, titleAlert, getResources().getString(R.string.error_api));
                 //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
