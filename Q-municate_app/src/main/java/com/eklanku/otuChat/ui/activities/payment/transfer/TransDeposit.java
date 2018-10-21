@@ -89,6 +89,10 @@ public class TransDeposit extends AppCompatActivity {
         btnCekMember = findViewById(R.id.btnCekMember);
         layoutTrf = findViewById(R.id.layout_trf);
         layoutTrf.setVisibility(View.GONE);
+        txtPin = findViewById(R.id.txt_pin);
+        btnTransfer = (Button) findViewById(R.id.btnTransDeposit);
+        btnTransfer.setBackgroundResource(R.drawable.background_round_corner_green);
+        btnTransfer.setEnabled(true);
 
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
@@ -108,15 +112,15 @@ public class TransDeposit extends AppCompatActivity {
         btnCekMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (!validateIdpel()) {
+                if (!validateCekMember()) {
                     return;
-                }*/
+                }
                 loadNamaTujuanTransfer();
             }
         });
 
 
-        btnTransfer = (Button) findViewById(R.id.btnTransDeposit);
+
         btnTransfer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,21 +194,60 @@ public class TransDeposit extends AppCompatActivity {
             ValNoHP = (PreferenceUtil.getNumberPhone(this));
         }
 
-        if (id_pel.isEmpty()) {
+        /*if (id_pel.isEmpty()) {
             txtNo.setError("Kolom no tujuan tidak boleh kosong");
             //layoutNo.setBackgroundColor(getResources().getColor(android.R.color.background_light));
             requestFocus(txtNo);
             return false;
-        } else if (id_jml.isEmpty()) {
+        } else */
+
+            if (id_jml.isEmpty()) {
             txtNo.setError("Kolom nominal tidak boleh kosong");
             //layoutJml.setBackgroundColor(getResources().getColor(android.R.color.background_light));
             requestFocus(txtJml);
             return false;
-        } else if (id_pel.toUpperCase().equals(strUserID)) {
+        }/* else if (id_pel.toUpperCase().equals(strUserID)) {
             txtNo.setError("ID EKL tujuan transfer TIDAK boleh sama dengan ID pribadi");
             return false;
         } else if (id_pel.equals(ValNoHP)) {
             txtNo.setError("Nomor HP tujuan transfer TIDAK boleh sama dengan ID pribadi");
+            return false;
+        }*/
+
+
+
+       /* int varLen=10;
+        if(id_pel.matches("-?\\d+(.\\d+)?")()){
+
+        }*/
+        layoutJml.setErrorEnabled(false);
+        return true;
+    }
+
+    private boolean validateCekMember() {
+        String id_pel = txtNo.getText().toString().trim();
+        String id_jml = txtJml.getText().toString().trim();
+        String nomorHP = PreferenceUtil.getNumberPhone(this);
+        String ValNoHP = "";
+        if (PreferenceUtil.getNumberPhone(this).startsWith("+62")) {
+            ValNoHP = PreferenceUtil.getNumberPhone(this).replace("+62", "0");
+        } else {
+            ValNoHP = (PreferenceUtil.getNumberPhone(this));
+        }
+
+        txtNo.setError(null);
+
+        if (id_pel.isEmpty()) {
+            txtNo.setError("Kolom no tujuan tidak boleh kosong");
+            requestFocus(txtNo);
+            return false;
+        } else if (id_pel.toUpperCase().equals(strUserID)) {
+            txtNo.setError("ID EKL tujuan transfer TIDAK boleh sama dengan ID pribadi");
+            requestFocus(txtNo);
+            return false;
+        } else if (id_pel.equals(ValNoHP)) {
+            txtNo.setError("Nomor HP tujuan transfer TIDAK boleh sama dengan ID pribadi");
+            requestFocus(txtNo);
             return false;
         }
 
@@ -242,10 +285,16 @@ public class TransDeposit extends AppCompatActivity {
     }*/
 
     public void cek_transaksi() {
+        Log.d("OPPO-1", "cek_transaksi: "+strUserID);
+        Log.d("OPPO-1", "cek_transaksi: "+strAccessToken);
+        Log.d("OPPO-1", "cek_transaksi: "+strApIUse);
+        Log.d("OPPO-1", "cek_transaksi: "+txtNo.getText().toString());
+        Log.d("OPPO-1", "cek_transaksi: "+txtJml.getText().toString());
+        Log.d("OPPO-1", "cek_transaksi: "+txtPin.getText().toString());
         loadingDialog = ProgressDialog.show(TransDeposit.this, "Harap Tunggu", "Memproses Transfer Deposit...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<DetailTransferResponse> transDepositCall = mApiInterfacePayment.postRequestTransfer(strUserID, strAccessToken, strApIUse, txtNo.getText().toString(), txtJml.getText().toString());
+        Call<DetailTransferResponse> transDepositCall = mApiInterfacePayment.postRequestTransfer(strUserID, strAccessToken, strApIUse, txtNo.getText().toString(), txtJml.getText().toString(), txtPin.getText().toString());
         transDepositCall.enqueue(new Callback<DetailTransferResponse>() {
             @Override
             public void onResponse(Call<DetailTransferResponse> call, Response<DetailTransferResponse> response) {
@@ -255,29 +304,7 @@ public class TransDeposit extends AppCompatActivity {
                     String error = response.body().getRespMessage();
 
                     if (status.equals("SUCCESS")) {
-                        Intent intent = new Intent(getBaseContext(), TransConfirm.class);
-                        intent.putExtra("userID", response.body().getUserID());
-                        intent.putExtra("accessToken", response.body().getAccessToken());
-                        intent.putExtra("nominal", response.body().getNominal());
-                        intent.putExtra("idTujuan", response.body().getIdTujuan());
-                        intent.putExtra("namaPemilik", response.body().getNamaPemilik());
-                        intent.putExtra("refID", response.body().getRefID());
-                        intent.putExtra("respTime", response.body().getRespTime());
-                        intent.putExtra("status", response.body().getStatus());
-                        intent.putExtra("error", error);
-
-                        Log.d("OPPO-1", "userID: " + response.body().getUserID());
-                        Log.d("OPPO-1", "accessToken: " + response.body().getAccessToken());
-                        Log.d("OPPO-1", "nominal: " + response.body().getNominal());
-                        Log.d("OPPO-1", "idTujuan: " + response.body().getIdTujuan());
-                        Log.d("OPPO-1", "namaPemilik: " + response.body().getNamaPemilik());
-                        Log.d("OPPO-1", "refID: " + response.body().getRefID());
-                        Log.d("OPPO-1", "respTime: " + response.body().getRespTime());
-                        Log.d("OPPO-1", "status: " + response.body().getStatus());
-                        Log.d("OPPO-1", "error: " + error);
-
-                        startActivity(intent);
-                        finish();
+                        utilsAlert.globalDialog(TransDeposit.this, titleAlert, error);
                     } else {
                         utilsAlert.globalDialog(TransDeposit.this, titleAlert, error);
                         //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
@@ -380,8 +407,12 @@ public class TransDeposit extends AppCompatActivity {
                             String status_member = ckmember.get(i).getStatus_member();
                             if (status_member.equals("Active")) {
                                 layoutTrf.setVisibility(View.VISIBLE);
+                                btnTransfer.setBackgroundResource(R.drawable.background_round_corner_green);
+                                btnTransfer.setEnabled(true);
                             } else {
                                 layoutTrf.setVisibility(View.GONE);
+                                btnTransfer.setBackgroundResource(R.drawable.custom_round);
+                                btnTransfer.setEnabled(true);
                                 Toast.makeText(TransDeposit.this, "Member tidak aktif", Toast.LENGTH_SHORT).show();
                             }
                         }

@@ -296,7 +296,8 @@ public interface ApiInterfacePayment {
             @Field("accessToken") String accessToken,
             @Field("aplUse") String aplUse,
             @Field("tujuan") String tujuan,
-            @Field("nominal") String nominal
+            @Field("nominal") String nominal,
+            @Field("pin") String pin
     );
 
     //konfirm transfer

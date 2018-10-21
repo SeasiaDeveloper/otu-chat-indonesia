@@ -68,7 +68,9 @@
             android:background="@drawable/background_round_corner_green"
             android:padding="8sp"
             android:text="Cek Member"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:paddingTop="@dimen/density_8"/>
 
     </LinearLayout>
 
@@ -125,36 +127,13 @@
         android:id="@+id/layout_trf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:orientation="vertical">
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/txtLayoutPin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:hintEnabled="false">
-
-            <EditText
-                android:id="@+id/txt_pin"
-                android:layout_marginStart="@dimen/density_16"
-                android:layout_marginLeft="@dimen/density_16"
-                android:layout_marginEnd="@dimen/density_16"
-                android:layout_marginRight="@dimen/density_16"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/custom_bottom_border_grey"
-                android:ems="10"
-                android:hint="PIN"
-                android:inputType="text"
-                android:padding="@dimen/density_8"
-                android:textColor="@color/grey_600" />
-        </android.support.design.widget.TextInputLayout>
 
         <com.eklanku.otuChat.ui.views.ARTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginTop="@dimen/density_16"
             android:layout_marginRight="@dimen/density_16"
             android:paddingTop="@dimen/density_16"
             android:text="Masukkan Nominal Transfer"
@@ -190,6 +169,33 @@
             android:text="@string/minimal_transfer_saldo"
             android:textColor="@color/red_800"
             android:textSize="10sp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/txtLayoutPin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintEnabled="false"
+            android:layout_marginTop="@dimen/density_8">
+
+            <EditText
+                android:id="@+id/txt_pin"
+                android:layout_marginStart="@dimen/density_16"
+                android:layout_marginLeft="@dimen/density_16"
+                android:layout_marginEnd="@dimen/density_16"
+                android:layout_marginRight="@dimen/density_16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:drawableLeft="@drawable/ic_key"
+                android:drawableStart="@drawable/ic_key"
+                android:ems="10"
+                android:hint="Masukkan PIN"
+                android:inputType="textPassword"
+                android:paddingBottom="@dimen/density_16"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingStart="@dimen/density_8"
+                android:paddingTop="@dimen/density_16" /> />
+        </android.support.design.widget.TextInputLayout>
 
         <View
             android:layout_width="match_parent"
