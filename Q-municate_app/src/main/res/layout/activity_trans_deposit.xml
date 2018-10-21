@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transfer.TransDeposit">
 
-    <View android:layout_width="match_parent"
+    <View
+        android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
@@ -23,51 +24,100 @@
         android:textStyle="bold"
         android:visibility="gone" />
 
-
-
     <com.eklanku.otuChat.ui.views.ARTextView
         android:id="@+id/textView14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/density_16"
         android:layout_marginTop="@dimen/density_4"
+        android:layout_marginRight="@dimen/density_16"
         android:text="Masukkan Tujuan"
         android:textColor="@color/grey_600"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/txtLayoutTransDepositTujuan"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView14"
+            app:hintEnabled="false">
+
+            <EditText
+                android:id="@+id/txtTransDepositTujuan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/density_16"
+                android:layout_marginRight="@dimen/density_16"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:ems="10"
+                android:inputType="text"
+                android:paddingTop="@dimen/density_8"
+                android:paddingBottom="@dimen/density_8"
+                android:textColor="@color/grey_600" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnCekMember"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="@drawable/background_round_corner_green"
+            android:text="Cek Member"
+            android:textColor="@color/white"
+            android:padding="8sp"/>
+
+    </LinearLayout>
+
+
+    <com.eklanku.otuChat.ui.views.ARTextView
+        android:id="@+id/textVie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_4"
         android:layout_marginRight="@dimen/density_16"
+        android:text="Nama Tujuan Transfer"
+        android:textColor="@color/grey_600"
         android:textSize="16sp" />
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/txtLayoutTransDepositTujuan"
+        android:id="@+id/txtLayoutNamaTujuan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:hintEnabled="false">
 
         <EditText
-            android:id="@+id/txtTransDepositTujuan"
+            android:id="@+id/txtNamaTujuan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/density_16"
+            android:layout_marginRight="@dimen/density_16"
             android:background="@drawable/custom_bottom_border_grey"
             android:ems="10"
-            android:textColor="@color/grey_600"
             android:inputType="text"
-            android:paddingBottom="@dimen/density_8"
             android:paddingTop="@dimen/density_8"
-            android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginRight="@dimen/density_16"/>
+            android:paddingBottom="@dimen/density_8"
+            android:textColor="@color/grey_600" />
     </android.support.design.widget.TextInputLayout>
 
 
-
-    <View android:layout_width="match_parent"
+    <View
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="5dp"
         android:background="@color/grey_400" />
 
-    <View android:layout_width="match_parent"
+    <View
+        android:layout_width="match_parent"
         android:layout_height="4dp"
         android:background="@color/grey_300" />
 
-    <View android:layout_width="match_parent"
+    <View
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginBottom="5dp"
         android:background="@color/grey_400" />
@@ -75,13 +125,13 @@
     <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/density_16"
         android:layout_marginTop="@dimen/density_4"
+        android:layout_marginRight="@dimen/density_16"
+        android:paddingTop="@dimen/density_16"
         android:text="Masukkan Nominal Transfer"
         android:textColor="@color/grey_600"
-        android:paddingTop="@dimen/density_16"
-        android:textSize="16sp"
-        android:layout_marginLeft="@dimen/density_16"
-        android:layout_marginRight="@dimen/density_16"/>
+        android:textSize="16sp" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/txtLayoutTransDepositJml"
@@ -93,36 +143,39 @@
             android:id="@+id/txtTransDepositJml"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:textColor="@color/grey_600"
-            android:inputType="number"
-            android:background="@drawable/custom_bottom_border_grey"
-            android:paddingBottom="@dimen/density_8"
-            android:paddingTop="@dimen/density_8"
             android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginRight="@dimen/density_16"/>
+            android:layout_marginRight="@dimen/density_16"
+            android:background="@drawable/custom_bottom_border_grey"
+            android:ems="10"
+            android:inputType="number"
+            android:paddingTop="@dimen/density_8"
+            android:paddingBottom="@dimen/density_8"
+            android:textColor="@color/grey_600" />
     </android.support.design.widget.TextInputLayout>
 
     <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/red_800"
-        android:textSize="10sp"
-        android:layout_marginTop="@dimen/density_5"
         android:layout_marginLeft="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_5"
         android:layout_marginRight="@dimen/density_16"
-        android:text="@string/minimal_transfer_saldo"/>
+        android:text="@string/minimal_transfer_saldo"
+        android:textColor="@color/red_800"
+        android:textSize="10sp" />
 
-    <View android:layout_width="match_parent"
+    <View
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="5dp"
         android:background="@color/grey_400" />
 
-    <View android:layout_width="match_parent"
+    <View
+        android:layout_width="match_parent"
         android:layout_height="4dp"
         android:background="@color/grey_300" />
 
-    <View android:layout_width="match_parent"
+    <View
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginBottom="5dp"
         android:background="@color/grey_400" />

@@ -42,8 +42,11 @@ import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
 import com.eklanku.otuChat.ui.activities.feedback.FeedbackActivity;
 import com.eklanku.otuChat.ui.activities.invitefriends.InviteFriendsActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
+import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.DeleteAccount;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
@@ -154,7 +157,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     BannerLayout bannerLayout;
     LinearLayout layoutCollaps, layoutSaldo;
     CircleImageView img;
-    TextView txt, txtEkl;
+    TextView txt, txtEkl, tvStarMember;
 
    /* boolean isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
     String firstLaunch = Application.getFirstLaunch(getApplicationContext());
@@ -294,6 +297,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         img = header.findViewById(R.id.profile_image);
         txt = header.findViewById(R.id.profile_name);
         txtEkl = header.findViewById(R.id.tvEkl);
+        tvStarMember = header.findViewById(R.id.tvStarMember);
 
         preferenceManager = new PreferenceManager(this);
 
@@ -326,6 +330,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         Activity activity = this;
         if (!activity.isFinishing()) {
             loadBanner();
+            LoadSaldoBonus(strUserID, strAccessToken);
             //loadDeposite(strUserID,strAccessToken);
         }
 
@@ -1192,6 +1197,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                     case R.id.nav_logout:
                         warningLogoutpay();
                         break;
+
+                    case R.id.action_hapusakun:
+                        Intent nonAktif = new Intent(MainActivity.this, DeleteAccount.class);
+                        startActivity(nonAktif);
+                        break;
                 }
 
                 //Toast.makeText(MainActivity.this, "Handle from navigation right", Toast.LENGTH_SHORT).show();
@@ -1224,6 +1234,72 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             dialog.show();
             return false;
         } else return true;
+    }
+
+
+    public void LoadSaldoBonus(String strUserID, String strAccessToken) {
+
+        Call<DataSaldoBonus> userCall = mApiInterfacePayment.getSaldodetail(strUserID, strApIUse, strAccessToken);
+        userCall.enqueue(new Callback<DataSaldoBonus>() {
+            @Override
+            public void onResponse(Call<DataSaldoBonus> call, Response<DataSaldoBonus> response) {
+
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String error = response.body().getRespMessage();
+                    String id_member = "", sisa_uang = "", carier_member = "", bonus_member = "";
+                    Log.d("OPPO-1", "OnLoad userID " + strUserID + " response.isSuccessful()) " + response.isSuccessful());
+                    if (status.equals("SUCCESS")) {
+
+                        final List<DataDetailSaldoBonus> products = response.body().getBalance();
+                        for (int i = 0; i < products.size(); i++) {
+                            id_member = products.get(i).getId_member();
+                            sisa_uang = products.get(i).getSisa_uang();
+                            carier_member = products.get(i).getCarier_member();
+                            bonus_member = products.get(i).getBonus_member();
+                        }
+
+                        Double total = 0.0d;
+                        try {
+                            if (sisa_uang != null && !sisa_uang.trim().isEmpty())
+                                total = Double.valueOf(sisa_uang);
+                        } catch (Exception e) {
+                            total = 0.0d;
+                        }
+                        Locale localeID = new Locale("in", "ID");
+                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
+                        String rupiah = format.format(total);
+
+                        Double nomBonus = 0.0d;
+                        try {
+                            if (nomBonus != null && !bonus_member.trim().isEmpty()) {
+                                nomBonus = Double.valueOf(bonus_member);
+                            } else {
+                                nomBonus = 0.0d;
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        String rupiahBonus = format.format(nomBonus);
+
+                        Log.d("OPPO-1", "onResponse: " + rupiahBonus);
+                        tvStarMember.setText(carier_member);
+
+                    } else {
+                       // Toast.makeText(MainActivity.this, "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    //Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataSaldoBonus> call, Throwable t) {
+               // Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
   /*  @Override

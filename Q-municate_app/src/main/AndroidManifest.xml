@@ -325,21 +325,21 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity android:name=".ui.activities.payment.settingpayment.ResetPassword"
-            android:label="Profil"
+            android:label="Ganti Password"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity android:name=".ui.activities.payment.settingpayment.Profile"
-            android:label="Reset Password"
+            android:label="Profil"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity android:name=".ui.activities.payment.settingpayment.ResetPIN"
-            android:label="Profil"
+            android:label="Ganti PIN"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -350,7 +350,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.settingpayment.DeleteAccount">
+        <activity android:name=".ui.activities.payment.settingpayment.DeleteAccount"
+            android:label="Non Aktif Akun"
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />

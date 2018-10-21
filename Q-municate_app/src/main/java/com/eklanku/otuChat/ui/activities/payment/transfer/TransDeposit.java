@@ -26,6 +26,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.models.DataCekMemberTransfer;
+import com.eklanku.otuChat.ui.activities.payment.models.DataDetailCekMemberTransfer;
 import com.eklanku.otuChat.ui.activities.payment.models.DetailTransferResponse;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -36,13 +38,15 @@ import com.eklanku.otuChat.ui.activities.payment.models.DetailTransferResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupKonfirmResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.Utils;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class TransDeposit extends AppCompatActivity {
 
-    EditText txtNo, txtJml;
+    EditText txtNo, txtJml, txtNamaTujuan;
     TextInputLayout layoutNo, layoutJml;
     Button btnTransfer;
 
@@ -60,7 +64,7 @@ public class TransDeposit extends AppCompatActivity {
     LayoutInflater inflater;
     View dialogView;
     TextView txtnomor, txtvoucher;
-    Button btnYes, btnNo;
+    Button btnYes, btnNo, btnCekMember;
 
     Utils utilsAlert;
     String titleAlert = "Deposit";
@@ -78,6 +82,8 @@ public class TransDeposit extends AppCompatActivity {
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransDepositTujuan);
         txtJml = (EditText) findViewById(R.id.txtTransDepositJml);
         layoutJml = (TextInputLayout) findViewById(R.id.txtLayoutTransDepositJml);
+        txtNamaTujuan = findViewById(R.id.txtNamaTujuan);
+        btnCekMember = findViewById(R.id.btnCekMember);
 
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
@@ -92,7 +98,14 @@ public class TransDeposit extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //cek antrian
-        cekAntrianTransfer();
+        //cekAntrianTransfer();
+
+        btnCekMember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNamaTujuanTransfer();
+            }
+        });
 
         btnTransfer = (Button) findViewById(R.id.btnTransDeposit);
         btnTransfer.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +173,13 @@ public class TransDeposit extends AppCompatActivity {
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
         String id_jml = txtJml.getText().toString().trim();
+        String nomorHP = PreferenceUtil.getNumberPhone(this);
+        String ValNoHP = "";
+        if (PreferenceUtil.getNumberPhone(this).startsWith("+62")) {
+            ValNoHP = PreferenceUtil.getNumberPhone(this).replace("+62", "0");
+        } else {
+            ValNoHP = (PreferenceUtil.getNumberPhone(this));
+        }
 
         if (id_pel.isEmpty()) {
             layoutNo.setError("Kolom no tujuan tidak boleh kosong");
@@ -171,7 +191,15 @@ public class TransDeposit extends AppCompatActivity {
             layoutJml.setBackgroundColor(getResources().getColor(android.R.color.background_light));
             requestFocus(txtJml);
             return false;
+        } else if(id_pel.toUpperCase().equals(strUserID)){
+            layoutNo.setError("ID EKL tujuan transfer TIDAK boleh sama dengan ID pribadi");
+            return false;
+        } else if(id_pel.equals(ValNoHP)){
+            layoutNo.setError("Nomor HP tujuan transfer TIDAK boleh sama dengan ID pribadi");
+            return false;
         }
+
+
 
        /* int varLen=10;
         if(id_pel.matches("-?\\d+(.\\d+)?")()){
@@ -185,6 +213,7 @@ public class TransDeposit extends AppCompatActivity {
         }
 
         layoutNo.setErrorEnabled(false);
+        layoutJml.setErrorEnabled(false);
         return true;
     }
 
@@ -321,5 +350,41 @@ public class TransDeposit extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void loadNamaTujuanTransfer(){
+        loadingDialog = ProgressDialog.show(TransDeposit.this, "Harap Tunggu", "Cek Member...");
+        loadingDialog.setCanceledOnTouchOutside(true);
+        Call<DataCekMemberTransfer> transDepositCall = mApiInterfacePayment.getCekMemberTransfer(strUserID, strApIUse, txtNo.getText().toString(),strAccessToken);
+        transDepositCall.enqueue(new Callback<DataCekMemberTransfer>() {
+            @Override
+            public void onResponse(Call<DataCekMemberTransfer> call, Response<DataCekMemberTransfer> response) {
+                loadingDialog.dismiss();
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String error = response.body().getRespMessage();
+
+                    if (status.equals("SUCCESS")) {
+                        final List<DataDetailCekMemberTransfer> ckmember = response.body().getDatarespon();
+                        for(int i = 0; i < ckmember.size(); i++){
+                            txtNamaTujuan.setText(ckmember.get(i).getNama_member());
+                        }
+                    } else {
+                        //utilsAlert.globalDialog(TransDeposit.this, titleAlert, error);
+                    }
+                } else {
+                    //utilsAlert.globalDialog(TransDeposit.this, titleAlert, getResources().getString(R.string.error_api));
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataCekMemberTransfer> call, Throwable t) {
+                loadingDialog.dismiss();
+                //utilsAlert.globalDialog(TransDeposit.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                Log.d("API_TRANSBELI", t.getMessage().toString());
+            }
+        });
     }
 }

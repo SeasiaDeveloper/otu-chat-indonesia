@@ -47,7 +47,9 @@ import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryPenarikanActivit
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryTrxActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
+import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
@@ -95,7 +97,7 @@ public class PaymentFragment extends Fragment {
     Context context;
     public TextView //lblUsername,
             lblSaldo, lblSaldoMain, txtEklmain;
-    TextView btnDeposit;
+    TextView btnDeposit, tvBonus;
     ImageButton btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
             btnTv, btnPaket, btnSMS, btnEtool, btnWi;
@@ -151,6 +153,7 @@ public class PaymentFragment extends Fragment {
         btnCallme = getActivity().findViewById(R.id.btnCallMe);
         btnRiwayat = getActivity().findViewById(R.id.btnRiwayat);
         btnTransfer = getActivity().findViewById(R.id.btnTransfer);
+        tvBonus = getActivity().findViewById(R.id.tvBonus);
 
         btnDeposit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,7 +225,9 @@ public class PaymentFragment extends Fragment {
 
             Activity activity = getActivity();
             if (activity != null && isAdded())
-                loadDeposite(strUserID, strAccessToken);
+                //loadDeposite(strUserID, strAccessToken);
+                LoadSaldoBonus(strUserID, strAccessToken);
+
         } else {
             //Toast.makeText(context, "NOT DEPOSITE " + PreferenceUtil.isLoginStatus(getActivity()), Toast.LENGTH_SHORT).show();
         }
@@ -583,16 +588,16 @@ public class PaymentFragment extends Fragment {
 
 
     public void loadDeposite(String strUserID, String strAccessToken) {
-        //Log.d("AYIK", "OnLoad userID " + strUserID + " accessToken " + strAccessToken);
+        Log.d("AYIK", "OnLoad userID " + strUserID + " accessToken " + strAccessToken);
         Call<DataDeposit> userCall = apiInterfacePayment.getSaldo(strUserID, strApIUse, strAccessToken);
         userCall.enqueue(new Callback<DataDeposit>() {
             @Override
             public void onResponse(Call<DataDeposit> call, Response<DataDeposit> response) {
+                Log.d("AYIK", "OnLoad userID " + strUserID + " response.isSuccessful()) " + response.isSuccessful());
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String error = response.body().getRespMessage();
                     String balance = response.body().getBalance();
-                    Log.d("OPPO-1", "onResponse: " + balance);
 
                     if (status.equals("SUCCESS")) {
                         Double total = 0.0d;
@@ -606,9 +611,26 @@ public class PaymentFragment extends Fragment {
                         NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
                         String rupiah = format.format(total);
 
-                        Log.d("OPPO-1", "onResponse: " + rupiah);
+                        /*Double nomBonus = 0.0d;
+                        try{
+                            if(nomBonus != null && !bonus.trim().isEmpty()){
+                                nomBonus = Double.valueOf(bonus);
+                            }else{
+                                nomBonus = 0.0d;
+                            }
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        String rupiahBonus = format.format(nomBonus);
+
+                        Log.d("OPPO-1", "onResponse: " + rupiahBonus);
+                        tvBonus.setText(rupiahBonus);
+                        */
 
                         lblSaldoMain.setText(rupiah);
+
                     } else {
                         Toast.makeText(getActivity(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
                     }
@@ -619,6 +641,74 @@ public class PaymentFragment extends Fragment {
 
             @Override
             public void onFailure(Call<DataDeposit> call, Throwable t) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    public void LoadSaldoBonus(String strUserID, String strAccessToken){
+
+        Call<DataSaldoBonus> userCall = apiInterfacePayment.getSaldodetail(strUserID, strApIUse, strAccessToken);
+        userCall.enqueue(new Callback<DataSaldoBonus>() {
+            @Override
+            public void onResponse(Call<DataSaldoBonus> call, Response<DataSaldoBonus> response) {
+
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String error = response.body().getRespMessage();
+                    String id_member = "", sisa_uang = "", carier_member = "",bonus_member = "";
+                    Log.d("OPPO-1", "OnLoad userID " + strUserID + " response.isSuccessful()) " + response.isSuccessful());
+                    if (status.equals("SUCCESS")) {
+
+                        final List<DataDetailSaldoBonus> products = response.body().getBalance();
+                        for (int i = 0; i < products.size(); i++) {
+                            id_member = products.get(i).getId_member();
+                            sisa_uang = products.get(i).getSisa_uang();
+                            carier_member = products.get(i).getCarier_member();
+                            bonus_member = products.get(i).getBonus_member();
+                        }
+
+                        Double total = 0.0d;
+                        try {
+                            if (sisa_uang != null && !sisa_uang.trim().isEmpty())
+                                total = Double.valueOf(sisa_uang);
+                        } catch (Exception e) {
+                            total = 0.0d;
+                        }
+                        Locale localeID = new Locale("in", "ID");
+                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
+                        String rupiah = format.format(total);
+
+                        Double nomBonus = 0.0d;
+                        try{
+                            if(nomBonus != null && !bonus_member.trim().isEmpty()){
+                                nomBonus = Double.valueOf(bonus_member);
+                            }else{
+                                nomBonus = 0.0d;
+                            }
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        String rupiahBonus = format.format(nomBonus);
+
+                        Log.d("OPPO-1", "onResponse: " + rupiahBonus);
+                        tvBonus.setText("Rp"+nomBonus);
+
+                        lblSaldoMain.setText(rupiah);
+
+                    } else {
+                        Toast.makeText(getActivity(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataSaldoBonus> call, Throwable t) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });

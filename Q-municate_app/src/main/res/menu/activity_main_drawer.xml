@@ -29,15 +29,21 @@
         <menu>
             <item
                 android:id="@+id/action_resetpass"
-                android:icon="@drawable/change_password_icon"
+                android:icon="@drawable/ic_key"
                 android:iconTint="@color/red"
                 android:title="Ganti Password" />
 
             <item
                 android:id="@+id/action_resetpin"
-                android:icon="@drawable/change_password_icon"
+                android:icon="@drawable/ic_key"
                 android:iconTint="@color/red"
                 android:title="Ganti PIN" />
+
+            <item
+                android:id="@+id/action_hapusakun"
+                android:icon="@drawable/ic_key"
+                android:iconTint="@color/red"
+                android:title="Non Aktif Akun Payment" />
         </menu>
 
     </item>

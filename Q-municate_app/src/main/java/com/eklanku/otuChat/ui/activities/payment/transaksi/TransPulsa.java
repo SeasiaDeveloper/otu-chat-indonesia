@@ -501,8 +501,22 @@ public class TransPulsa extends AppCompatActivity {
 
     public void cekPrefix(CharSequence s) {
         try {
-            if (s.length() >= 4) {
-                String nomorHp = s.toString().substring(0, 4);
+            if (s.length() >= 6) {
+                String nomorHP1 = s.toString().substring(0,2);
+                String nomorHp = "";
+                String valNomorHp = "", valNomorHP2 = "";
+                if(nomorHP1.startsWith("+6")){
+                    valNomorHp = nomorHP1.replace("+6","0");
+                    nomorHp = valNomorHp + s.toString().substring(3,6);
+                }else if(nomorHP1.startsWith("62")){
+                    valNomorHp = nomorHP1.replace("62","0");
+                    nomorHp = valNomorHp + s.toString().substring(2,5);
+                }else{
+                    nomorHp = s.toString().substring(0, 4);
+                }
+
+                Log.d("OPPO-1", "cekPrefix: "+nomorHp);
+
                 if (Arrays.asList(prefix_indosat).contains(nomorHp)) {
                     oprPulsa = "Indosat";
                     txOpr.setText(oprPulsa);
