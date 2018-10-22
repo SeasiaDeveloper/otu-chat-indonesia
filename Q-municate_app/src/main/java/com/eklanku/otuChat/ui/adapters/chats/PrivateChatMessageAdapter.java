@@ -125,18 +125,14 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     @Override
     protected void onBindViewMsgRightHolder(final TextMessageHolder holder, CombinationMessage chatMessage, final int position) {
-        ImageView view = (ImageView) holder.itemView.findViewById(R.id.message_status_image_view);
+        ImageView signInView = (ImageView) holder.itemView.findViewById(R.id.message_status_image_view);
         setViewVisibility(holder.avatar, View.GONE);
 
         TextView timeView = holder.itemView.findViewById(R.id.custom_msg_text_time_message);
         setMsgTime(timeView, chatMessage);
 
-        if (chatMessage.getState() != null) {
-            setMessageStatus(view, State.DELIVERED.equals(
-                    chatMessage.getState()), State.READ.equals(chatMessage.getState()));
-        } else {
-            view.setImageResource(android.R.color.transparent);
-        }
+        showSendStatusView(signInView, chatMessage);
+
         handleMessageClickListener(holder, position);
         addReplyView(holder, chatMessage, position);
 
@@ -320,7 +316,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     @Override
     protected void onBindViewAttachRightHolder(ImageAttachHolder holder, CombinationMessage chatMessage, int position) {
-        showSendStatusView(holder, chatMessage);
+        showSendStatusView(holder.signAttachView, chatMessage);
         handleMessageClickListener(holder, position);
         addReplyView(holder, chatMessage, position);
         attachmentClick(holder.attachImageView, holder.itemView, chatMessage, position);
@@ -338,7 +334,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     @Override
     protected void onBindViewAttachRightVideoHolder(VideoAttachHolder holder, CombinationMessage chatMessage, int position) {
-        showSendStatusView(holder, chatMessage);
+        showSendStatusView(holder.signAttachView, chatMessage);
         handleMessageClickListener(holder, position);
         addReplyView(holder, chatMessage, position);
         attachmentClick(holder.attachImageView, holder.itemView, chatMessage, position);
@@ -365,20 +361,19 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     @Override
     protected void onBindViewAttachRightAudioHolder(AudioAttachHolder holder, CombinationMessage chatMessage, int position) {
-        showSendStatusView(holder, chatMessage);
+        showSendStatusView(holder.signAttachView, chatMessage);
         handleMessageClickListener(holder, position);
         addReplyView(holder, chatMessage, position);
         attachmentAudioClick(holder, position);
         super.onBindViewAttachRightAudioHolder(holder, chatMessage, position);
     }
 
-    private void showSendStatusView(BaseAttachHolder holder, CombinationMessage chatMessage) {
-        ImageView signAttachView = holder.signAttachView;
+    private void showSendStatusView(ImageView signView, CombinationMessage chatMessage) {
         if (chatMessage.getState() != null) {
-            setMessageStatus(signAttachView, State.DELIVERED.equals(
-                    chatMessage.getState()), State.READ.equals(chatMessage.getState()));
+            setMessageStatus(signView, State.DELIVERED.equals(
+                    chatMessage.getState()), State.READ.equals(chatMessage.getState()), State.SYNC.equals(chatMessage.getState()));
         } else {
-            signAttachView.setImageResource(android.R.color.transparent);
+            signView.setImageResource(android.R.color.transparent);
         }
     }
 
@@ -489,16 +484,18 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         }
     }
 
-    protected void setMessageStatus(ImageView imageView, boolean messageDelivered, boolean messageRead) {
-        imageView.setImageResource(getMessageStatusIconId(messageDelivered, messageRead));
+    protected void setMessageStatus(ImageView imageView, boolean messageDelivered, boolean messageRead, boolean messageSent) {
+        imageView.setImageResource(getMessageStatusIconId(messageDelivered, messageRead, messageSent));
     }
 
-    protected int getMessageStatusIconId(boolean isDelivered, boolean isRead) {
+    protected int getMessageStatusIconId(boolean isDelivered, boolean isRead, boolean isSent) {
         int iconResourceId = 0;
 
         if (isRead) {
             iconResourceId = R.drawable.ic_status_msg_sent_receive_blue;
         } else if (isDelivered) {
+            iconResourceId = R.drawable.ic_status_msg_bg_delivered;
+        } else if (isSent) {
             iconResourceId = R.drawable.ic_status_msg_sent_gray;
         }
 

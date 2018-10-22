@@ -300,10 +300,14 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
             case R.id.action_start_settings:
                 SettingsActivity.startForResult(this);
                 break;
+            case R.id.action_notification:
+                Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
+                //SettingsActivity.startForResult(this);
+                break;
             case R.id.action_start_about:
                 AboutActivity.start(getActivity());
                 break;
-                case R.id.action_web_qr_code:
+            case R.id.action_web_qr_code:
                 WebQRCodeActivity.start(getActivity());
                 break;
             default:
