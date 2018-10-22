@@ -308,10 +308,10 @@ public class TransDeposit extends AppCompatActivity {
 
                     if (status.equals("SUCCESS")) {
                         utilsAlert.globalDialog(TransDeposit.this, titleAlert, error);
-                        finish();
+
                     } else {
                         utilsAlert.globalDialog(TransDeposit.this, titleAlert, error);
-                        finish();
+
                         //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {

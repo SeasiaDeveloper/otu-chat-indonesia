@@ -54,32 +54,19 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_14"
                 android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/density_8"
-                android:gravity="center"
-                android:maxLines="2"
-                android:text=" - "
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_14"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvStarMember"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/density_8"
-                android:gravity="center"
-                android:maxLines="2"
-                android:text="FREE"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_14"
-                android:textStyle="bold" />
-
-
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvStarMember"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/density_8"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="FREE"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_14"
+            android:textStyle="bold" />
 
 
         <TextView
@@ -88,7 +75,7 @@
             android:layout_marginBottom="@dimen/density_8"
             android:gravity="center"
             android:maxLines="2"
-            android:text="Hanya denga OTU, semua jadi dekat."
+            android:text="Hanya dengan OTU, semua jadi dekat."
             android:textColor="@color/white"
             android:textSize="@dimen/text_14"
             android:textStyle="bold" />

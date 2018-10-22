@@ -47,8 +47,9 @@ public class Utils {
                 if (message.equalsIgnoreCase("SERVER BUSY, PLEASE TRY AGAIN LATER")) {
                     activity.startActivity(new Intent(context, PaymentLogin.class));
                     PreferenceUtil.setLoginStatus(context, false);
-                    activity.finish();
                 }
+
+                activity.finish();
             }
         });
 

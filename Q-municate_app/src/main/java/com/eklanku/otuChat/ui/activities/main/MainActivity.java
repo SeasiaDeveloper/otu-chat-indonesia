@@ -1174,21 +1174,21 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         Toast.makeText(MainActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.action_profile:
-                        if(menuDialog()){
+                        if (menuDialog()) {
                             Intent profile = new Intent(MainActivity.this, Profile.class);
                             startActivity(profile);
                         }
 
                         break;
                     case R.id.action_resetpass:
-                        if(menuDialog()){
+                        if (menuDialog()) {
                             Intent resetPass = new Intent(MainActivity.this, ResetPassword.class);
                             startActivity(resetPass);
                         }
 
                         break;
                     case R.id.action_resetpin:
-                        if(menuDialog()){
+                        if (menuDialog()) {
                             Intent resetPin = new Intent(MainActivity.this, ResetPIN.class);
                             startActivity(resetPin);
                         }
@@ -1285,10 +1285,14 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         String rupiahBonus = format.format(nomBonus);
 
                         Log.d("OPPO-1", "onResponse: " + rupiahBonus);
-                        tvStarMember.setText(carier_member);
+                        if (carier_member.equals("FREE")) {
+                            tvStarMember.setText("REGULER");
+                        } else {
+                            tvStarMember.setText(carier_member);
+                        }
 
                     } else {
-                       // Toast.makeText(MainActivity.this, "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(MainActivity.this, "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     //Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
@@ -1297,7 +1301,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             @Override
             public void onFailure(Call<DataSaldoBonus> call, Throwable t) {
-               // Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
