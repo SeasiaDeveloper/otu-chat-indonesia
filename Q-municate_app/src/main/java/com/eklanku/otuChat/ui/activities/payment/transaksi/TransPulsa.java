@@ -657,4 +657,9 @@ public class TransPulsa extends AppCompatActivity {
         dialog.show();
         return;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

@@ -54,6 +54,7 @@ public class Utils {
 
         dialog.show();
         Window window = dialog.getWindow();
+        assert window != null;
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
         /*AlertDialog.Builder builder = new AlertDialog.Builder(context);
