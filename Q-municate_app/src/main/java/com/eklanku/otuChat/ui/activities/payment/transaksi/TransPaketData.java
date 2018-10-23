@@ -514,7 +514,7 @@ public class TransPaketData extends AppCompatActivity {
 
     public void cekPrefix(CharSequence s) {
         try {
-            if (s.length() >= 4) {
+            if (s.length() >= 6) {
                 String nomorHP1 = s.toString().substring(0,2);
                 String nomorHp = "";
                 String valNomorHp = "", valNomorHP2 = "";

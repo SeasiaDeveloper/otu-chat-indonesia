@@ -929,7 +929,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/btn_etool"
                             android:layout_centerHorizontal="true"
-                            android:text="E-Tool"
+                            android:text="E-Toll"
                             android:textAlignment="center"
                             android:textAllCaps="true"
                             android:textColor="@color/color_payment_list_icon_text"
