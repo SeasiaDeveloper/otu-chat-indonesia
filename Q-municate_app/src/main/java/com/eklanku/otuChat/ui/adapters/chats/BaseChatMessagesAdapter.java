@@ -164,7 +164,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
 =======*/
     protected void onBindViewMsgLeftHolder(ConnectycubeChatAdapter.TextMessageHolder holder, CombinationMessage chatMessage, int position) {
 //>>>>>>> origin/feature/migration
-        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.bg_chat_left_bubble;
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_buble_edgeless : R.drawable.bg_chat_left_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewMsgRightHolder(holder, chatMessage, position);
     }
@@ -183,7 +183,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
     @Override
     protected void onBindViewAttachLeftHolder(ImageAttachHolder holder, CombinationMessage chatMessage, int position) {
         updateMessageState(chatMessage, chatDialog);
-        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.left_chat_bubble;
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_buble_edgeless : R.drawable.bg_chat_left_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewAttachLeftHolder(holder, chatMessage, position);
     }
@@ -199,7 +199,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
     @Override
     protected void onBindViewAttachLeftAudioHolder(AudioAttachHolder holder, CombinationMessage chatMessage, int position) {
         updateMessageState(chatMessage, chatDialog);
-        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.left_chat_bubble;
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_buble_edgeless : R.drawable.bg_chat_left_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewAttachLeftAudioHolder(holder, chatMessage, position);
     }
@@ -215,7 +215,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
     @Override
     protected void onBindViewAttachLeftVideoHolder(VideoAttachHolder holder, CombinationMessage chatMessage, int position) {
         updateMessageState(chatMessage, chatDialog);
-        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.left_chat_bubble_edgeless : R.drawable.left_chat_bubble;
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_buble_edgeless : R.drawable.bg_chat_left_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewAttachLeftVideoHolder(holder, chatMessage, position);
     }
