@@ -204,11 +204,21 @@ public class QBChatHelper extends BaseThreadPoolHelper{
                 messageBody = context.getString(R.string.dlg_attached_video_last_message);
                 attachment = getAttachmentVideo((ConnectycubeFile) attachmentObject, localPath);
                 break;
+            case VOICE:
+                messageBody = context.getString(R.string.dlg_attached_voice_last_message);
+                attachment = getAttachmentAudio((ConnectycubeFile) attachmentObject, localPath);
+                break;
             case AUDIO:
                 messageBody = context.getString(R.string.dlg_attached_audio_last_message);
                 attachment = getAttachmentAudio((ConnectycubeFile) attachmentObject, localPath);
                 break;
             case DOC:
+                messageBody = context.getString(R.string.dlg_attached_doc_last_message);
+                attachment = getAttachmentDocument((ConnectycubeFile) attachmentObject, localPath);
+                break;
+            case CONTACT:
+                messageBody = context.getString(R.string.dlg_attached_contact_last_message);
+                attachment = getAttachmentContact((String) attachmentObject);
                 break;
             case OTHER:
                 break;
@@ -236,11 +246,21 @@ public class QBChatHelper extends BaseThreadPoolHelper{
                 messageBody = context.getString(R.string.dlg_attached_video_last_message);
                 attachment = getAttachmentVideo((ConnectycubeFile) attachmentObject, localPath);
                 break;
+            case VOICE:
+                messageBody = context.getString(R.string.dlg_attached_voice_last_message);
+                attachment = getAttachmentAudio((ConnectycubeFile) attachmentObject, localPath);
+                break;
             case AUDIO:
                 messageBody = context.getString(R.string.dlg_attached_audio_last_message);
                 attachment = getAttachmentAudio((ConnectycubeFile) attachmentObject, localPath);
                 break;
             case DOC:
+                messageBody = context.getString(R.string.dlg_attached_doc_last_message);
+                attachment = getAttachmentDocument((ConnectycubeFile) attachmentObject, localPath);
+                break;
+            case CONTACT:
+                messageBody = context.getString(R.string.dlg_attached_contact_last_message);
+                attachment = getAttachmentContact((String) attachmentObject);
                 break;
             case OTHER:
                 break;
@@ -397,6 +417,14 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         return attachment;
     }
 
+    private ConnectycubeAttachment getAttachmentContact(String contact) {
+        ConnectycubeAttachment attachment = new ConnectycubeAttachment(Attachment.Type.CONTACT.toString().toLowerCase());
+        attachment.setData(contact);
+        attachment.setId(String.valueOf(contact.hashCode()));
+
+        return attachment;
+    }
+
     private ConnectycubeAttachment getAttachmentAudio(ConnectycubeFile file, String localPath) {
         ConnectycubeAttachment attachment = getAttachment(file, ConnectycubeAttachment.AUDIO_TYPE, MimeTypeAttach.AUDIO_MIME);
 
@@ -404,6 +432,11 @@ public class QBChatHelper extends BaseThreadPoolHelper{
             int durationSec = MediaUtils.getMetaData(localPath).durationSec();
             attachment.setDuration(durationSec);
         }
+        return attachment;
+    }
+
+    private ConnectycubeAttachment getAttachmentDocument(ConnectycubeFile file, String localPath) {
+        ConnectycubeAttachment attachment = getAttachment(file, Attachment.Type.DOC.toString().toLowerCase(), MimeTypeAttach.DOC_MIME);
         return attachment;
     }
 

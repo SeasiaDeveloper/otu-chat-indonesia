@@ -337,7 +337,7 @@
 
     <style name="BubbleAttachFrame.Right">
         <item name="android:background">@drawable/bg_chat_right_bubble</item>
-        <item name="android:layout_marginRight">@dimen/chat_imageview_margin_right</item>
+        <item name="android:paddingRight">@dimen/chat_imageview_margin_right</item>
     </style>
 
     <style name="BubbleAttachAudioFrame.Right">
@@ -350,6 +350,18 @@
 
     <style name="CustomWidgetFrame.Left">
         <item name="android:layout_gravity">right</item>
+    </style>
+
+    <style name="ImageViewAttachDoc.Right">
+        <item name="android:paddingRight">@dimen/chat_imageview_margin_right</item>
+    </style>
+
+    <style name="ImageViewAttachDoc">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/bg_ic_document</item>
     </style>
 
 

@@ -72,6 +72,8 @@
     <dimen name="chat_input_message_round_button_height">41dp</dimen>
     <dimen name="chat_input_attach_button_height">24dp</dimen>
     <dimen name="chat_input_message_smile_button_height">37dp</dimen>
+    <dimen name="chat_attach_document_width">130dp</dimen>
+    <dimen name="chat_attach_document_height">130dp</dimen>
 
     <dimen name="avatar_border_width">1dp</dimen>
 

@@ -33,6 +33,11 @@ public class ErrorUtils {
         Log.e(tag, errorMsg);
     }
 
+    public static void logError(String tag, Throwable e) {
+        String errorMsg = !TextUtils.isEmpty(e.getMessage()) ? e.getMessage() : "";
+        Log.e(tag, errorMsg, e);
+    }
+
     public static void logError(Exception e) {
         e.printStackTrace();
     }

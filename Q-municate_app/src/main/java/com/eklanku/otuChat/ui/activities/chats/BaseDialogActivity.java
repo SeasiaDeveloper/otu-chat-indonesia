@@ -1,5 +1,6 @@
 package com.eklanku.otuChat.ui.activities.chats;
 
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -42,6 +44,10 @@ import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.adapters.chats.BaseChatMessagesAdapter;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.ui.views.recyclerview.WrapContentLinearLayoutManager;
+import com.eklanku.otuChat.utils.FileUtils;
+import com.eklanku.otuChat.utils.MimeType;
+import com.eklanku.otuChat.utils.helpers.MediaPickManager;
+import com.eklanku.otuChat.utils.helpers.files.FileOpenHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.connectycube.chat.ConnectycubeChatService;
@@ -193,6 +199,8 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     private ImageAttachClickListener imageAttachClickListener;
     private LinkPreviewClickListener linkPreviewClickListener;
     private VideoAttachClickListener videoAttachClickListener;
+    private ChatAttachClickListener docAttachClickListener;
+    private ChatAttachClickListener contactAttachClickListener;
     private MediaRecordListenerImpl recordListener;
     private Handler mainThreadHandler;
     private View emojiconsFragment;
@@ -214,6 +222,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     private Vibrator vibro;
     private int lastVisiblePosition;
     private MessagesScrollListener messagesScrollListener;
+    protected FileUtils fileUtils;
 
 
     @Override
@@ -306,7 +315,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     @OnClick(R.id.btn_attach_document)
     void attachPanelDocument(View view) {
-        Toast.makeText(this, "Comming soon", Toast.LENGTH_SHORT).show();
+        mediaPickHelper.pickAnMediaFromActivity(this, MediaUtils.DOCUMENT_REQUEST_CODE);
     }
 
     @OnClick(R.id.btn_attach_camera)
@@ -321,7 +330,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     @OnClick(R.id.btn_attach_audio)
     void attachPanelAudio(View view) {
-        Toast.makeText(this, "Comming soon", Toast.LENGTH_SHORT).show();
+        mediaPickHelper.pickAnMediaFromActivity(this, MediaUtils.AUDIO_REQUEST_CODE);
     }
 
     @OnClick(R.id.btn_attach_location)
@@ -331,7 +340,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     @OnClick(R.id.btn_attach_contact)
     void attachPanelContact(View view) {
-        Toast.makeText(this, "Comming soon", Toast.LENGTH_SHORT).show();
+        mediaPickHelper.pickAnMediaFromActivity(this, MediaUtils.CONTACT_REQUEST_CODE);
     }
 
     @Override
@@ -537,6 +546,8 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         messagesAdapter.setAttachImageClickListener(imageAttachClickListener);
         messagesAdapter.setAttachVideoClickListener(videoAttachClickListener);
         messagesAdapter.setLinkPreviewClickListener(linkPreviewClickListener, false);
+        messagesAdapter.setAttachDocClickListener(docAttachClickListener);
+        messagesAdapter.setAttachContactClickListener(contactAttachClickListener);
     }
 
     private void addAudioRecorderListener() {
@@ -550,6 +561,8 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             messagesAdapter.removeAttachImageClickListener(imageAttachClickListener);
             messagesAdapter.removeAttachVideoClickListener(videoAttachClickListener);
             messagesAdapter.removeLinkPreviewClickListener();
+            messagesAdapter.removeAttachDocClickListener();
+            messagesAdapter.removeAttachContactClickListener();
         }
     }
 
@@ -622,11 +635,14 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         imageAttachClickListener = new ImageAttachClickListener();
         linkPreviewClickListener = new LinkPreviewClickListenerImpl();
         videoAttachClickListener = new VideoAttachClickListener();
+        docAttachClickListener = new DocAttachClickListener();
+        contactAttachClickListener = new ContactAttachClickListener();
         recordListener = new MediaRecordListenerImpl();
         currentChatDialog = (ConnectycubeChatDialog) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_DIALOG);
         combinationMessagesList = new ArrayList<>();
         vibro = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         messagesScrollListener = new MessagesScrollListener();
+        fileUtils = new FileUtils();
     }
 
     private void initCustomUI() {
@@ -781,11 +797,16 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                             case LOCATION:
                                 sendMessageWithAttachment(dialogId, Attachment.Type.LOCATION, attachment, null);
                                 break;
+                            case CONTACT:
+                                Log.d(TAG, "AMBRA sendMessageWithAttachment Contact");
+                                break;
                             case IMAGE:
                             case AUDIO:
+                            case VOICE:
+                            case DOC:
                             case VIDEO:
                                 showProgress();
-                                QBLoadAttachFileCommand.start(BaseDialogActivity.this, (File) attachment, dialogId);
+                                QBLoadAttachFileCommand.start(BaseDialogActivity.this, (File) attachment, type, dialogId);
                                 break;
                         }
                     }
@@ -1350,8 +1371,9 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             ConnectycubeFile file = (ConnectycubeFile) bundle.getSerializable(QBServiceConsts.EXTRA_ATTACH_FILE);
             String dialogId = (String) bundle.getSerializable(QBServiceConsts.EXTRA_DIALOG_ID);
             String localPath = (String) bundle.getSerializable(QBServiceConsts.EXTRA_FILE_PATH);
+            Attachment.Type type = (Attachment.Type) bundle.getSerializable(QBServiceConsts.EXTRA_ATTACHMENT_TYPE);
 
-            sendMessageWithAttachment(dialogId, StringUtils.getAttachmentTypeByFileName(file.getName()), file, localPath);
+            sendMessageWithAttachment(dialogId, type, file, localPath);
             hideProgress();
         }
     }
@@ -1489,6 +1511,30 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         }
     }
 
+    protected class DocAttachClickListener implements ChatAttachClickListener {
+
+        @Override
+        public void onItemClicked(ConnectycubeAttachment attachment, int position) {
+            Log.d(TAG, "AMBRA DocAttachClickListener onItemClicked");
+        }
+    }
+
+    protected void startShowDoc(File file) {
+        try {
+            FileOpenHelper.openFile(BaseDialogActivity.this, file);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(BaseDialogActivity.this, "No handler for this type of file.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    protected class ContactAttachClickListener implements ChatAttachClickListener {
+
+        @Override
+        public void onItemClicked(ConnectycubeAttachment attachment, int position) {
+            Log.d(TAG, "AMBRA ContactAttachClickListener onItemClicked");
+        }
+    }
+
     protected class RecordTouchListener implements RecordAudioButton.RecordTouchEventListener {
 
         @Override
@@ -1549,8 +1595,8 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         @Override
         public void onMediaRecorded(File file) {
             audioViewVisibility(View.INVISIBLE);
-            if(ValidationUtils.validateAttachment(getSupportFragmentManager(), getResources().getStringArray(R.array.supported_attachment_types), Attachment.Type.AUDIO, file)){
-                startLoadAttachFile(Attachment.Type.AUDIO, file, currentChatDialog.getDialogId());
+            if(ValidationUtils.validateAttachment(getSupportFragmentManager(), getResources().getStringArray(R.array.supported_attachment_types), Attachment.Type.VOICE, file)){
+                startLoadAttachFile(Attachment.Type.VOICE, file, currentChatDialog.getDialogId());
             } else {
                 audioRecordErrorAnimate();
             }

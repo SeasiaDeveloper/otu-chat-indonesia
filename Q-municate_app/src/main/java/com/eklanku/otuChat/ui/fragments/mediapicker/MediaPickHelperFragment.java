@@ -11,6 +11,7 @@ import android.support.v4.util.Pair;
 import com.eklanku.otuChat.tasks.GetFilepathFromUriTask;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.utils.MediaUtils;
+import com.eklanku.otuChat.utils.StringUtils;
 import com.eklanku.otuChat.utils.listeners.OnMediaPickedListener;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_db.models.Attachment;
@@ -83,7 +84,8 @@ public class MediaPickHelperFragment extends Fragment {
                     data.setData(MediaUtils.getValidUri(MediaUtils.getLastUsedCameraFile(), this.getContext()));
                 }
 
-                new GetFilepathFromUriTask(getChildFragmentManager(), listener,
+                Attachment.Type type = StringUtils.getAttachmentTypeByRequestCode(requestCode);
+                new GetFilepathFromUriTask(getChildFragmentManager(), listener, type,
                         getArguments().getInt(ARG_REQUEST_CODE)).execute(data);
             }
         } else {

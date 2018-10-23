@@ -66,7 +66,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
 
     @Override
     protected MessageViewHolder onCreateCustomViewHolder(ViewGroup parent, int viewType) {
-        return viewType == TYPE_REQUEST_MESSAGE ? new RequestsViewHolder(inflater.inflate(R.layout.item_notification_message, parent, false)) : null;
+        return viewType == TYPE_REQUEST_MESSAGE ? new RequestsViewHolder(inflater.inflate(R.layout.item_notification_message, parent, false)) : super.onCreateCustomViewHolder(parent, viewType);
     }
 
     @Override

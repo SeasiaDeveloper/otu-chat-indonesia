@@ -13,6 +13,7 @@ import android.util.Log;
 import com.eklanku.otuChat.tasks.GetFilepathFromUriTask;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.utils.MediaUtils;
+import com.eklanku.otuChat.utils.StringUtils;
 import com.eklanku.otuChat.utils.listeners.OnMediaPickedListener;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_db.models.Attachment;
@@ -68,12 +69,25 @@ public class MediaPickManager extends Fragment {
                 MediaUtils.startMapForResult(this);
                 setupActivityToBeNonLoggable(getActivity());
                 break;
+            case MediaUtils.AUDIO_REQUEST_CODE:
+                MediaUtils.startAudioPicker(this);
+                setupActivityToBeNonLoggable(getActivity());
+                break;
+            case MediaUtils.DOCUMENT_REQUEST_CODE:
+                MediaUtils.startDocumentPicker(this);
+                setupActivityToBeNonLoggable(getActivity());
+                break;
+            case MediaUtils.CONTACT_REQUEST_CODE:
+                MediaUtils.startContactForResult(this);
+                setupActivityToBeNonLoggable(getActivity());
+                break;
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "AMBRA onActivityResult requestCode= " + requestCode);
         if (isResultFromMediaPick(requestCode, resultCode, data)) {
             if (requestCode == MediaUtils.IMAGE_VIDEO_LOCATION_REQUEST_CODE) {
                 if (data != null) {
@@ -84,6 +98,8 @@ public class MediaPickManager extends Fragment {
                             new Pair<>(ConstsCore.LONGITUDE_PARAM, longitude));
                     listener.onMediaPicked(requestCode, Attachment.Type.LOCATION, location);
                 }
+            } else if (requestCode == MediaUtils.CONTACT_REQUEST_CODE) {
+                Log.d(TAG, "AMBRA onActivityResult equestCode == MediaUtils.CONTACT_REQUEST_CODE");
             } else {
                 if ((requestCode == MediaUtils.CAMERA_PHOTO_REQUEST_CODE || requestCode == MediaUtils.CAMERA_VIDEO_REQUEST_CODE) && (data == null || data.getData() == null)) {
                     // Hacky way to get EXTRA_OUTPUT param to work.
@@ -93,7 +109,9 @@ public class MediaPickManager extends Fragment {
                     data.setData(MediaUtils.getValidUri(MediaUtils.getLastUsedCameraFile(), this.getContext()));
                 }
 
-                new GetFilepathFromUriTask(getChildFragmentManager(), listener,
+                Attachment.Type type = StringUtils.getAttachmentTypeByRequestCode(requestCode);
+                Log.d(TAG, "AMBRA onActivityResult new GetFilepathFromUriTask type= " + type);
+                new GetFilepathFromUriTask(getChildFragmentManager(), listener, type,
                         getArguments().getInt(ARG_REQUEST_CODE)).execute(data);
             }
         } else {
@@ -106,7 +124,7 @@ public class MediaPickManager extends Fragment {
 
     private boolean isResultFromMediaPick(int requestCode, int resultCode, Intent data) {
         return resultCode == Activity.RESULT_OK && ((requestCode == MediaUtils.CAMERA_PHOTO_REQUEST_CODE || requestCode == MediaUtils.CAMERA_VIDEO_REQUEST_CODE) || (requestCode == MediaUtils.GALLERY_REQUEST_CODE && data != null)
-                || (requestCode == MediaUtils.IMAGE_VIDEO_LOCATION_REQUEST_CODE && data != null));
+                || (requestCode == MediaUtils.IMAGE_VIDEO_LOCATION_REQUEST_CODE && data != null) || (requestCode == MediaUtils.AUDIO_REQUEST_CODE || requestCode == MediaUtils.DOCUMENT_REQUEST_CODE || requestCode == MediaUtils.CONTACT_REQUEST_CODE));
     }
 
     public void stop(FragmentManager fm) {

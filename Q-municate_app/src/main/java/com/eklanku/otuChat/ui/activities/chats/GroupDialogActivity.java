@@ -33,6 +33,7 @@ import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.storage.model.ConnectycubeFile;
 import com.connectycube.core.EntityCallback;
 import com.connectycube.core.exception.ResponseException;
+import com.eklanku.otuChat.utils.helpers.files.FileDownloadManager;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_core.qb.commands.chat.QBLoadDialogByIdsCommand;
@@ -40,12 +41,14 @@ import com.quickblox.q_municate_core.service.QBService;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.models.Attachment;
+import com.quickblox.q_municate_db.utils.ErrorUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.eklanku.otuChat.R;
 import com.connectycube.ui.chatmessage.adapter.media.video.ui.VideoPlayerActivity;
 import com.connectycube.ui.chatmessage.adapter.media.view.ConnectycubePlaybackControlView;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -123,6 +126,26 @@ public class GroupDialogActivity extends BaseDialogActivity {
                     } else if (fileType.equals("location")) {
                         canPerformLogout.set(false);
                         MapsActivity.startMapForResult(GroupDialogActivity.this, connectycubeAttachment.getData());
+                    } else if (fileType.equals("doc")) {
+                        canPerformLogout.set(false);
+                        String fileName = connectycubeAttachment.getName();
+                        showProgress();
+                        FileDownloadManager.getInstance().downLoadFile(fileName, fileId, fileUtils).subscribe(new rx.Observer<File>() {
+                            @Override
+                            public void onCompleted() {
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                ErrorUtils.logError(TAG, e);
+                            }
+
+                            @Override
+                            public void onNext(File file) {
+                                hideProgress();
+                                startShowDoc(file);
+                            }
+                        });
                     }
                 }
             }

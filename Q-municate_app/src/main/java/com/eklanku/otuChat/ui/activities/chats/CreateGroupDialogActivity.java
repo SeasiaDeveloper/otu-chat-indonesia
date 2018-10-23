@@ -183,7 +183,7 @@ public class CreateGroupDialogActivity extends BaseFriendsListActivity implement
                 showProgress();
 
                 if (imageUri != null) {
-                    QBLoadAttachFileCommand.start(CreateGroupDialogActivity.this, MediaUtils.getCreatedFileFromUri(imageUri), null);
+                    QBLoadAttachFileCommand.start(CreateGroupDialogActivity.this, MediaUtils.getCreatedFileFromUri(imageUri), Attachment.Type.IMAGE, null);
                 } else {
                     createGroupChat();
                 }

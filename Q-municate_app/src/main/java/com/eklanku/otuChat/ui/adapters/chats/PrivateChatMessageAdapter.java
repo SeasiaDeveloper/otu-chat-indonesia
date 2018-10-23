@@ -368,6 +368,24 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         super.onBindViewAttachRightAudioHolder(holder, chatMessage, position);
     }
 
+    @Override
+    protected void onBindViewAttachRightDocHolder(DocViewHolder holder, CombinationMessage chatMessage, int position) {
+        showSendStatusView(holder.signAttachView, chatMessage);
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachRightDocHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewAttachLeftDocHolder(DocViewHolder holder, CombinationMessage chatMessage, int position) {
+        setViewVisibility(holder.avatar, View.GONE);
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachLeftDocHolder(holder, chatMessage, position);
+    }
+
     private void showSendStatusView(ImageView signView, CombinationMessage chatMessage) {
         if (chatMessage.getState() != null) {
             setMessageStatus(signView, State.DELIVERED.equals(
@@ -412,7 +430,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     @Override
     protected MessageViewHolder onCreateCustomViewHolder(ViewGroup parent, int viewType) {
-        return viewType == TYPE_REQUEST_MESSAGE ? new FriendsViewHolder(inflater.inflate(R.layout.item_friends_notification_message, parent, false)) : null;
+        return viewType == TYPE_REQUEST_MESSAGE ? new FriendsViewHolder(inflater.inflate(R.layout.item_friends_notification_message, parent, false)) : super.onCreateCustomViewHolder(parent, viewType);
     }
 
     @Override

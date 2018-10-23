@@ -171,7 +171,9 @@ public class Attachment implements Serializable {
         IMAGE(2),
         DOC(3),
         LOCATION(4),
-        OTHER(5);
+        VOICE(5),
+        CONTACT(6),
+        OTHER(7);
 
         private int code;
 

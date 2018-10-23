@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ListItemTextMessage.Right"
+    android:id="@+id/msg_linear_layout"
+    android:gravity="end"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_small">
+
+    <LinearLayout
+        android:id="@+id/msg_bubble_background"
+        style="@style/BubbleTextFrame.Right"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/msg_image_attach"
+            style="@style/ImageViewAttachDoc.Right"
+            android:paddingRight="0dp" />
+
+        <LinearLayout
+            android:id="@+id/msg_linear_list_item_right"
+            style="@style/LinearWidgetTextMsg.Right"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/msg_text_message"
+                style="@style/TextViewTextMsg.Right"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingLeft="0dp"
+                android:typeface="serif"
+                tools:text="message the long one message" />
+
+            <LinearLayout
+                style="@style/LinearWidgetTextMsg.Right"
+                android:layout_gravity="end"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/msg_text_time_message"
+                    style="@style/TextViewTimeMsg.Right"
+                    android:paddingRight="0dp"
+                    android:visibility="visible"
+                    tools:text="15.05" />
+
+                <ImageView
+                    android:id="@+id/message_status_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top"
+                    android:paddingLeft="@dimen/padding_small"
+                    android:scaleType="fitCenter"
+                    tools:src="@drawable/ic_status_msg_sent_receive_blue" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -122,6 +122,8 @@
     <string name="dialog_attach_audio">attachment audio</string>
     <string name="dialog_attach_video">attachment video</string>
     <string name="dialog_location">location</string>
+    <string name="dialog_document">document</string>
+    <string name="dialog_contact">contact</string>
     <string name="dialog_now_typing">Typing…</string>
     <string name="dialog_message_reject_friend">Do you really want to reject contact request from %1$s?</string>
     <string name="dialog_ctx_menu_reply">Reply</string>

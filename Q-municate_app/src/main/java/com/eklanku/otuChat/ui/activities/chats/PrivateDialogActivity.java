@@ -8,14 +8,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -24,13 +22,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
 import com.eklanku.otuChat.ui.activities.call.CallActivity;
 import com.eklanku.otuChat.ui.activities.location.MapsActivity;
 import com.eklanku.otuChat.ui.activities.others.PreviewImageActivity;
@@ -39,8 +34,8 @@ import com.eklanku.otuChat.ui.adapters.chats.PrivateChatMessageAdapter;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.utils.DateUtils;
 import com.eklanku.otuChat.utils.ToastUtils;
+import com.eklanku.otuChat.utils.helpers.files.FileDownloadManager;
 import com.eklanku.otuChat.utils.listeners.FriendOperationListener;
-import com.google.gson.Gson;
 import com.connectycube.chat.ConnectycubeRestChatService;
 import com.connectycube.chat.model.ConnectycubeAttachment;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
@@ -48,23 +43,19 @@ import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.connectycube.storage.model.ConnectycubeFile;
 import com.connectycube.core.EntityCallback;
 import com.connectycube.core.exception.ResponseException;
-import com.connectycube.core.server.Performer;
 import com.quickblox.q_municate_core.core.command.Command;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_core.qb.commands.friend.QBAcceptFriendCommand;
-import com.quickblox.q_municate_core.qb.commands.friend.QBAddFriendCommand;
 import com.quickblox.q_municate_core.qb.commands.friend.QBRejectFriendCommand;
-import com.quickblox.q_municate_core.qb.helpers.QBChatHelper;
-import com.quickblox.q_municate_core.qb.helpers.QBFriendListHelper;
 import com.quickblox.q_municate_core.service.QBService;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
-import com.quickblox.q_municate_core.utils.DbUtils;
 import com.quickblox.q_municate_core.utils.OnlineStatusUtils;
 import com.quickblox.q_municate_core.utils.UserFriendUtils;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.managers.FriendDataManager;
 import com.quickblox.q_municate_db.models.Attachment;
 import com.quickblox.q_municate_db.models.Friend;
+import com.quickblox.q_municate_db.utils.ErrorUtils;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.eklanku.otuChat.R;
@@ -74,10 +65,10 @@ import com.connectycube.users.model.ConnectycubeUser;
 import com.connectycube.videochat.RTCTypes;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
-import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.utils.StringUtils;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -193,6 +184,26 @@ public class PrivateDialogActivity extends BaseDialogActivity {
                     } else if (fileType.equals("location")) {
                         canPerformLogout.set(false);
                         MapsActivity.startMapForResult(PrivateDialogActivity.this, connectycubeAttachment.getData());
+                    } else if (fileType.equals("doc")) {
+                        canPerformLogout.set(false);
+                        String fileName = connectycubeAttachment.getName();
+                        showProgress();
+                        FileDownloadManager.getInstance().downLoadFile(fileName, fileId, fileUtils).subscribe(new rx.Observer<File>() {
+                            @Override
+                            public void onCompleted() {
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                ErrorUtils.logError(TAG, e);
+                            }
+
+                            @Override
+                            public void onNext(File file) {
+                                hideProgress();
+                                startShowDoc(file);
+                            }
+                        });
                     }
                 }
             }
