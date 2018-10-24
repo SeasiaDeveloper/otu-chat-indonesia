@@ -100,7 +100,7 @@ public class PaymentFragment extends Fragment {
     TextView btnDeposit, tvBonus;
     ImageButton btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
-            btnTv, btnPaket, btnSMS, btnEtool, btnWi;
+            btnTv, btnPaket, btnSMS, btnEtool, btnWi, btnhotel, btnpesawat, btnkeretapai;
     ImageButton btnRiwayat, btnTransfer /*btnPengaturan*/;
     ImageButton btnCallme;
     /* Button btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
@@ -256,6 +256,9 @@ public class PaymentFragment extends Fragment {
         btnSMS = view.findViewById(R.id.btn_sms);
         btnEtool = view.findViewById(R.id.btn_etool);
         btnPajak = view.findViewById(R.id.btnPajak);
+        btnhotel = view.findViewById(R.id.btnhotel);
+        btnpesawat = view.findViewById(R.id.btnPesawat);
+        btnkeretapai = view.findViewById(R.id.btnKAI);
 
         //btnDeposit.setOnClickListener(new buttonListener());
         btnMultiFinance.setOnClickListener(new buttonListener());
@@ -271,6 +274,9 @@ public class PaymentFragment extends Fragment {
         btnTv.setOnClickListener(new buttonListener());
         btnTelkom.setOnClickListener(new buttonListener());
         btnPaket.setOnClickListener(new buttonListener());
+        btnhotel.setOnClickListener(new buttonListener());
+        btnpesawat.setOnClickListener(new buttonListener());
+        btnkeretapai.setOnClickListener(new buttonListener());
         //btnRiwayat.setOnClickListener(new buttonListener());
         //btnPengaturan.setOnClickListener(new buttonListener());
         //btnTransfer.setOnClickListener(new buttonListener());
@@ -377,6 +383,18 @@ public class PaymentFragment extends Fragment {
                     startActivity(new Intent(context, TransSMS.class));
                     break;
                 case R.id.btnPajak:
+//                    startActivity(new Intent(context, TransPajak.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.btnhotel:
+//                    startActivity(new Intent(context, TransPajak.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.btnPesawat:
+//                    startActivity(new Intent(context, TransPajak.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.btnKAI:
 //                    startActivity(new Intent(context, TransPajak.class));
                     Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;

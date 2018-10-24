@@ -312,6 +312,7 @@ public class WebServiceHandler {
                             cellList.add(new CellModel("4", vMutasi_Status));
 
 
+
                             list.add(cellList);
                         }
 
@@ -468,6 +469,7 @@ public class WebServiceHandler {
                             cellList.add(new CellModel("1", result.get(i).getKeterangan()));
                             cellList.add(new CellModel("2", result.get(i).getJenis_bonus()));
                             cellList.add(new CellModel("3", vMutasi_Status));
+                            cellList.add(new CellModel("4", result.get(i).getJml_bonus()));
                             list.add(cellList);
                         }
 
@@ -494,6 +496,5 @@ public class WebServiceHandler {
             }
         });
     }
-
 
 }
