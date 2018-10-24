@@ -1226,7 +1226,7 @@
                                     android:layout_centerHorizontal="true"
                                     android:background="@drawable/bg_payment_list_icon"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_pgn" />
+                                    android:src="@drawable/ic_hotel" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivhotel"
@@ -1266,7 +1266,7 @@
                                     android:layout_centerHorizontal="true"
                                     android:background="@drawable/bg_payment_list_icon"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_pajak" />
+                                    android:src="@drawable/ic_pesawat" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivPesawat"
@@ -1278,7 +1278,7 @@
                                     android:layout_marginBottom="10dp"
                                     android:elevation="2dp"
                                     android:visibility="gone"
-                                    app:srcCompat="@drawable/ic_pajak" />
+                                    app:srcCompat="@drawable/ic_pesawat" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -1307,7 +1307,7 @@
                                     android:layout_centerHorizontal="true"
                                     android:background="@drawable/bg_payment_list_icon"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_asuransi" />
+                                    android:src="@drawable/ic_kereta_api" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivKAI"
@@ -1319,7 +1319,7 @@
                                     android:layout_marginBottom="10dp"
                                     android:elevation="2dp"
                                     android:visibility="gone"
-                                    app:srcCompat="@drawable/ic_asuransi" />
+                                    app:srcCompat="@drawable/ic_kereta_api" />
 
                                 <TextView
                                     android:layout_width="match_parent"
