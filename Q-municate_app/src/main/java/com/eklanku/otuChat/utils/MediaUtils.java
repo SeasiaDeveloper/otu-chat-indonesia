@@ -28,6 +28,7 @@ import android.util.TypedValue;
 import android.webkit.MimeTypeMap;
 
 import com.eklanku.otuChat.App;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsShareActivity;
 import com.eklanku.otuChat.ui.activities.location.MapsActivity;
 import com.eklanku.otuChat.R;;
 import com.quickblox.q_municate_core.utils.ConstsCore;
@@ -214,8 +215,8 @@ public class MediaUtils {
 
     public static void startContactForResult(Fragment fragment) {
         Log.d(TAG, "AMBRA startContactForResult");
-//        Intent intent = new Intent(fragment.getContext(), ContactsActivity.class);
-//        fragment.startActivityForResult(intent, IMAGE_VIDEO_LOCATION_REQUEST_CODE);
+        Intent intent = new Intent(fragment.getContext(), ContactsShareActivity.class);
+        fragment.startActivityForResult(intent, CONTACT_REQUEST_CODE);
     }
 
     private static void setIntentAudioPicker(Intent intent) {

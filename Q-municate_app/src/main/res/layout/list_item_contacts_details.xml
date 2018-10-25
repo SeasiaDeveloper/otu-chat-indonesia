@@ -1,0 +1,85 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlContacts"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/ivIcon"
+            android:layout_width="47dp"
+            android:layout_height="47dp"
+            android:layout_margin="@dimen/padding_common"
+            android:layout_marginLeft="@dimen/padding_common"
+            android:layout_marginRight="@dimen/padding_common"
+            android:background="@drawable/drawable_circle_background" />
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:id="@+id/contact_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            tools:text="PhoneNumber Name Name" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/divider_horizontal" />
+
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:background="@drawable/divider_horizontal">-->
+
+    <!--</FrameLayout>-->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/phone_view"
+            android:layout_width="47dp"
+            android:layout_height="47dp"
+            android:layout_margin="@dimen/padding_common"
+            android:layout_marginLeft="@dimen/padding_common"
+            android:layout_marginRight="@dimen/padding_common"
+            android:background="@drawable/ic_phone" />
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:id="@+id/contact_number_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            tools:text="+10430002589" />
+
+        <CheckBox
+            android:id="@+id/chkSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</LinearLayout>

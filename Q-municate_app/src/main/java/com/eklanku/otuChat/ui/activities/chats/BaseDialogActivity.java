@@ -798,7 +798,8 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                                 sendMessageWithAttachment(dialogId, Attachment.Type.LOCATION, attachment, null);
                                 break;
                             case CONTACT:
-                                Log.d(TAG, "AMBRA sendMessageWithAttachment Contact");
+                                Log.d(TAG, "AMBRA sendMessageWithAttachment Contact!!!");
+                                sendMessageWithAttachment(dialogId, Attachment.Type.CONTACT, attachment, null);
                                 break;
                             case IMAGE:
                             case AUDIO:

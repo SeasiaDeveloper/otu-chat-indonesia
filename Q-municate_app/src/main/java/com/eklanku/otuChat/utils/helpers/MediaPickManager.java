@@ -12,12 +12,15 @@ import android.util.Log;
 
 import com.eklanku.otuChat.tasks.GetFilepathFromUriTask;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.utils.MediaUtils;
 import com.eklanku.otuChat.utils.StringUtils;
 import com.eklanku.otuChat.utils.listeners.OnMediaPickedListener;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_db.models.Attachment;
 import com.connectycube.ui.chatmessage.adapter.utils.LocationUtils;
+
+import java.util.ArrayList;
 
 public class MediaPickManager extends Fragment {
     private static final String ARG_REQUEST_CODE = "requestCode";
@@ -100,6 +103,14 @@ public class MediaPickManager extends Fragment {
                 }
             } else if (requestCode == MediaUtils.CONTACT_REQUEST_CODE) {
                 Log.d(TAG, "AMBRA onActivityResult equestCode == MediaUtils.CONTACT_REQUEST_CODE");
+                if (data != null) {
+                    Log.d(TAG, "AMBRA onActivityResult data= " + data);
+                    Bundle bundle = data.getExtras();
+                    String contacts = bundle.getString(ConstsCore.EXTRA_CONTACTS);
+                    Log.d(TAG, "AMBRA onActivityResult bundle= " + bundle);
+                    listener.onMediaPicked(requestCode, Attachment.Type.CONTACT, contacts);
+                }
+
             } else {
                 if ((requestCode == MediaUtils.CAMERA_PHOTO_REQUEST_CODE || requestCode == MediaUtils.CAMERA_VIDEO_REQUEST_CODE) && (data == null || data.getData() == null)) {
                     // Hacky way to get EXTRA_OUTPUT param to work.

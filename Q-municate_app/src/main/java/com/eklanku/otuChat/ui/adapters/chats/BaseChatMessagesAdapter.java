@@ -19,12 +19,15 @@ import android.widget.TextView;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.connectycube.chat.model.ConnectycubeAttachment;
 import com.connectycube.ui.chatmessage.adapter.listeners.ChatAttachClickListener;
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.utils.DateUtils;
 import com.eklanku.otuChat.utils.FileUtils;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.eklanku.otuChat.utils.helpers.ContactJsonHelper;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_core.qb.commands.chat.QBUpdateStatusMessageCommand;
@@ -35,6 +38,7 @@ import com.connectycube.ui.chatmessage.adapter.ConnectycubeChatAdapter;
 import com.connectycube.users.model.ConnectycubeUser;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -79,10 +83,10 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
                 return new DocViewHolder(inflater.inflate(R.layout.list_item_attach_left_doc, parent, false));
             case TYPE_ATTACH_RIGHT_CONTACT:
                 Log.d(TAG, "AMBRA onCreateCustomViewHolder TYPE_ATTACH_RIGHT_CONTACT");
-                return new ContactViewHolder(inflater.inflate(R.layout.item_notification_message, parent, false));
+                return new ContactViewHolder(inflater.inflate(R.layout.list_item_attach_right_doc, parent, false));
             case TYPE_ATTACH_LEFT_CONTACT:
                 Log.d(TAG, "AMBRA onCreateCustomViewHolder TYPE_ATTACH_LEFT_CONTACT");
-                return new ContactViewHolder(inflater.inflate(R.layout.item_notification_message, parent, false));
+                return new ContactViewHolder(inflater.inflate(R.layout.list_item_attach_left_doc, parent, false));
             default:
                 Log.d(TAG, "AMBRA default");
                 return super.onCreateCustomViewHolder(parent, viewType);
@@ -309,6 +313,10 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
 
     protected void onBindViewAttachRightContactHolder(ContactViewHolder holder, CombinationMessage chatMessage, int position) {
         Log.d(TAG, "AMBRA onBindViewAttachRightContactHolder");
+        ConnectycubeAttachment attachment = getAttach(position);
+        String contactsJson = attachment.getData();
+        ArrayList<ContactsModel> contacts = ContactJsonHelper.convertJsonContactToList(contactsJson);
+        Log.d(TAG, "AMBRA onBindViewAttachRightContactHolder contacts.size= " + contacts.size());
     }
 
     protected void onBindViewAttachLeftContactHolder(ContactViewHolder holder, CombinationMessage chatMessage, int position) {
@@ -430,26 +438,17 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
     }
 
     protected static class ContactViewHolder extends MessageViewHolder {
-        @Nullable
-        @Bind(R.id.message_textview)
+        @Bind(R.id.msg_text_message)
         TextView messageTextView;
 
-        @Nullable
-        @Bind(R.id.time_text_message_textview)
-        TextView timeTextMessageTextView;
+        @Bind(R.id.msg_text_time_message)
+        TextView attachTextTime;
 
-        @Nullable
-        @Bind(R.id.accept_friend_imagebutton)
-        ImageView acceptFriendImageView;
+        @Bind(R.id.message_status_image_view)
+        ImageView status_view;
 
-        @Nullable
-        @Bind(R.id.divider_view)
-        View dividerView;
-
-        @Nullable
-        @Bind(R.id.reject_friend_imagebutton)
-        ImageView rejectFriendImageView;
-
+        @Bind(R.id.msg_image_attach)
+        ImageView imageView;
 
         public ContactViewHolder(View view) {
             super(view);
