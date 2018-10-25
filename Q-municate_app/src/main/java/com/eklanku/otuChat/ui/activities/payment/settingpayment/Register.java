@@ -81,7 +81,7 @@ public class Register extends AppCompatActivity {
         referrerDataRaw = userReferal.get(preferenceManager.KEY_REFF_RAW);
         referrerDataDecoded = userReferal.get(preferenceManager.KEY_REFF_DECODE);
 
-        if (referrerDataRaw != null) {
+        if (referrerDataRaw != null && referrerDataRaw.startsWith("EKL")) {
             txtReferal.setText(referrerDataRaw);
         } else {
             txtReferal.setText("EKL0000000");

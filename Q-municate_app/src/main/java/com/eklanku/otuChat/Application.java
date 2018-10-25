@@ -14,6 +14,7 @@ import java.util.Date;
 
 public class Application extends App{
 
+    // play
     private static final String FIRST_LAUNCH = "FIRST_LAUNCH";
     private static final String REFERRER_DATE = "REFERRER_DATE";
     private static final String REFERRER_DATA = "REFERRER_DATA";
