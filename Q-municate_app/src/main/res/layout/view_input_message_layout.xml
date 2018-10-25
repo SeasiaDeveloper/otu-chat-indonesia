@@ -46,7 +46,7 @@
                 android:singleLine="false"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray_color_message"
-                android:textSize="19sp"
+                android:textSize="17sp"
                 emojicon:emojiconSize="@dimen/chat_emoji_item_preview_size" />
 
             <ImageButton

@@ -184,6 +184,7 @@
 
     <style name="TextViewTextMsg.Left">
         <item name="android:typeface">serif</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:paddingLeft">@dimen/chat_text_more_margin_left_right</item>
         <item name="android:paddingRight">@dimen/chat_text_less_margin_left_right</item>
@@ -211,6 +212,7 @@
 
     <style name="TextViewTextMsg.Right">
         <item name="android:typeface">serif</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:paddingRight">@dimen/chat_text_more_margin_left_right</item>
         <item name="android:paddingLeft">@dimen/chat_text_less_margin_left_right</item>
@@ -296,10 +298,12 @@
 
     <style name="BubbleTextFrame.Left">
         <item name="android:background">@drawable/left_chat_bubble</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="BubbleTextFrame.Right">
         <item name="android:background">@drawable/bg_chat_right_bubble</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <!--style for right and left text message frame-->
@@ -334,19 +338,23 @@
     <style name="BubbleAttachFrame.Left">
         <item name="android:background">@drawable/left_chat_bubble</item>
         <item name="android:paddingLeft">@dimen/chat_imageview_margin_right</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="BubbleAttachFrame.Right">
         <item name="android:background">@drawable/bg_chat_right_bubble</item>
         <item name="android:layout_marginRight">@dimen/chat_imageview_margin_right</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="BubbleAttachAudioFrame.Right">
         <item name="android:background">@drawable/bg_chat_right_bubble</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="BubbleAttachAudioFrame.Left">
         <item name="android:background">@drawable/left_chat_bubble</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="CustomWidgetFrame.Left">

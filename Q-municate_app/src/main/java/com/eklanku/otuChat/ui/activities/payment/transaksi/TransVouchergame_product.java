@@ -330,12 +330,12 @@ public class TransVouchergame_product extends AppCompatActivity{
             return false;
         }
 
-        if (id_pel.length() < 8) {
+      /*  if (id_pel.length() < 8) {
             //Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
             noPel.setError("Masukkan minimal 8 digit nomor");
             requestFocus(noPel);
             return false;
-        }
+        }*/
 
         //layoutNo.setErrorEnabled(false);
         return true;
