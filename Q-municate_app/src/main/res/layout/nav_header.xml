@@ -4,7 +4,7 @@
     android:id="@+id/navigation_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorTextOtu"
+    android:background="@drawable/ic_nav_header"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingTop="@dimen/density_16"

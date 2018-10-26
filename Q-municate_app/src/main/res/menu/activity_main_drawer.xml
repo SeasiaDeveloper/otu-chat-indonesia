@@ -14,13 +14,9 @@
         <menu>
             <item
                 android:id="@+id/action_profile"
-                android:icon="@drawable/ic_yellow_profile"
+                android:icon="@drawable/ic_nav_profil"
                 android:title="Profil" />
 
-            <!--<item-->
-                <!--android:id="@+id/action_akun"-->
-                <!--android:icon="@drawable/change_password_icon"-->
-                <!--android:title="Akun" />-->
         </menu>
     </item>
 
@@ -29,20 +25,17 @@
         <menu>
             <item
                 android:id="@+id/action_resetpass"
-                android:icon="@drawable/ic_key"
-                android:iconTint="@color/red"
+                android:icon="@drawable/ic_nav_password"
                 android:title="Ganti Password" />
 
             <item
                 android:id="@+id/action_resetpin"
-                android:icon="@drawable/ic_key"
-                android:iconTint="@color/red"
+                android:icon="@drawable/ic_nav_pin"
                 android:title="Ganti PIN" />
 
             <item
                 android:id="@+id/action_hapusakun"
-                android:icon="@drawable/ic_key"
-                android:iconTint="@color/red"
+                android:icon="@drawable/ic_nonaktif"
                 android:title="Non Aktif Akun Payment" />
         </menu>
 
@@ -52,11 +45,11 @@
         <menu>
             <item
                 android:id="@+id/action_web_qr_code"
-                android:icon="@drawable/ic_nav_right_computer"
+                android:icon="@drawable/ic_nav_otuweb"
                 android:title="OTU Web" />
             <item
                 android:id="@+id/action_notification"
-                android:icon="@drawable/ic_nav_right_notification_red"
+                android:icon="@drawable/ic_notifikasi"
                 android:title="Notifikasi" />
 
         </menu>
@@ -66,7 +59,7 @@
         android:id="@+id/action_logout">
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_nav_right_logout"
+            android:icon="@drawable/ic_keluar"
             android:title="Keluar" />
     </group>
 
