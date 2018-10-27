@@ -104,13 +104,15 @@
                     android:textColor="@color/grey_600"
                     android:textSize="16sp" />
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/txtLayoutTransPulsaNo"
-                        android:layout_width="280dp"
+                        android:layout_width="0dp"
+                        android:layout_weight="7"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/density_4"
                         app:hintEnabled="false">
@@ -128,12 +130,12 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:srcCompat="@drawable/ic_otu_pln"
-                        android:layout_alignParentRight="true"/>
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_otu_pln"/>
 
-                </RelativeLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/layout_spinner_nominal"
@@ -187,7 +189,7 @@
                     android:id="@+id/layout_transaksi_ke"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/density_4"
+                    android:layout_marginTop="@dimen/density_8"
                     android:orientation="vertical">
 
                     <com.eklanku.otuChat.ui.views.ARTextView

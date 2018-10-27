@@ -9,7 +9,6 @@
     android:background="@color/white"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransBpjs">
 
-
     <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,13 +17,16 @@
         android:textColor="@color/grey_600"
         android:textSize="16sp" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/density_8"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/txtLayoutTransPulsaNo"
-            android:layout_width="280dp"
+            android:layout_width="0dp"
+            android:layout_weight="7"
             android:layout_height="wrap_content"
             app:hintEnabled="false">
 
@@ -41,11 +43,11 @@
         </android.support.design.widget.TextInputLayout>
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_pay_bpjs"
-            android:layout_alignParentRight="true"/>
-    </RelativeLayout>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:src="@drawable/ic_otu_bpjs"/>
+    </LinearLayout>
 
 
 
