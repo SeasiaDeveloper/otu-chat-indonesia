@@ -199,7 +199,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
     @Override
     protected void onBindViewAttachLeftAudioHolder(AudioAttachHolder holder, CombinationMessage chatMessage, int position) {
         updateMessageState(chatMessage, chatDialog);
-        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_buble_edgeless : R.drawable.bg_chat_left_bubble;
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_dark_edgeless : R.drawable.bg_chat_left_dark;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
         super.onBindViewAttachLeftAudioHolder(holder, chatMessage, position);
     }
