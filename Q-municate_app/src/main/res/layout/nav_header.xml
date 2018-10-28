@@ -8,15 +8,14 @@
     android:gravity="center"
     android:orientation="vertical"
     android:paddingTop="@dimen/density_16"
-    android:paddingBottom="@dimen/density_8"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:paddingBottom="@dimen/density_8">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_margin="@dimen/density_8"
-        android:background="@drawable/ic_default"
+        android:background="@drawable/placeholder_user"
         app:civ_border_width="0dp" />
 
     <LinearLayout
