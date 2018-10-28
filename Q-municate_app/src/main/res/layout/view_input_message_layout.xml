@@ -2,114 +2,109 @@
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    android:gravity="center_vertical"
     android:orientation="horizontal"
     android:padding="5dp">
 
-    <RelativeLayout
-        android:id="@+id/message_relativelayout"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/density_4"
-        android:layout_marginRight="@dimen/density_4"
-        android:gravity="center_vertical"
         android:layout_weight="1"
-        android:background="@drawable/custom_input_message">
-
-        <RelativeLayout
-            android:layout_centerVertical="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/density_2"
-            android:layout_toStartOf="@id/action_buttons_view"
-            android:layout_toLeftOf="@id/action_buttons_view"
-            android:background="@drawable/rounded_shape_message">
-
-            <com.rockerhieu.emojicon.EmojiconEditText
-                android:id="@+id/message_edittext"
-                style="@style/MatchParent"
-                android:layout_centerInParent="true"
-                android:layout_toEndOf="@+id/smile_panel_imagebutton"
-                android:layout_toRightOf="@+id/smile_panel_imagebutton"
-                android:autoLink="all"
-                android:background="@null"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center_vertical"
-                android:hint="@string/dialog_hint_message"
-                android:inputType="textMultiLine"
-                android:isScrollContainer="true"
-                android:maxLength="2000"
-                android:maxLines="20"
-                android:padding="5dp"
-                android:singleLine="false"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray_color_message"
-                android:textSize="17sp"
-                emojicon:emojiconSize="@dimen/chat_emoji_item_preview_size" />
-
-            <ImageButton
-                android:id="@+id/smile_panel_imagebutton"
-                style="@style/ChatActionSmileButtonStyle"
-                android:layout_margin="2dp"
-                android:layout_centerVertical="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_smile_green"/>
-
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/gray"
-            android:visibility="gone" />
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/action_buttons_view"
-            style="@style/WrapContent"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:gravity="bottom"
-            android:layout_alignParentRight="true"
-           android:layout_margin="@dimen/density_8">
+            android:id="@+id/message_relativelayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:background="@drawable/custom_input_message"
+            android:orientation="horizontal"
+            android:paddingEnd="@dimen/density_8"
+            android:paddingRight="@dimen/density_8">
 
-            <ImageButton
-                android:id="@+id/attach_button"
-                style="@style/ChatActionButtonStyle"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_attach_white" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/density_2"
+                android:layout_weight="6"
+                android:background="@drawable/rounded_shape_message"
+                android:gravity="bottom">
 
-            <ImageButton
-                android:id="@+id/attach_camera"
-                style="@style/ChatActionButtonStyle"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_camera_white" />
+                <ImageButton
+                    android:id="@+id/smile_panel_imagebutton"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/chat_input_message_smile_button_height"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_button_general"
+                    android:src="@drawable/ic_smile_green" />
+
+                <com.rockerhieu.emojicon.EmojiconEditText
+                    android:id="@+id/message_edittext"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:width="0dp"
+                    android:autoLink="all"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:hint="@string/dialog_hint_message"
+                    android:inputType="textMultiLine"
+                    android:isScrollContainer="true"
+                    android:maxLength="2000"
+                    android:maxLines="20"
+                    android:padding="5dp"
+                    android:singleLine="false"
+                    android:text="@string/app_name"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_color_message"
+                    android:textSize="17sp"
+                    emojicon:emojiconSize="@dimen/chat_emoji_item_preview_size" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/action_buttons_view"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/density_4"
+                android:layout_weight="2"
+                android:gravity="bottom">
+
+                <ImageButton
+                    android:id="@+id/attach_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_attach_white" />
+
+                <ImageButton
+                    android:id="@+id/attach_camera"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="@dimen/density_4"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_camera_white" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
         <include
             layout="@layout/view_input_audio_container"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
-    </RelativeLayout>
-
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/send_button"
         style="@style/ChatRoundActionButtonStyle"
         android:background="@drawable/background_round_icon_voice"
         android:onClick="sendMessage"
-        android:padding="9dp"
-        android:scaleType="fitCenter"
         android:src="@drawable/ic_send_message"
         android:visibility="gone" />
 
@@ -117,7 +112,7 @@
         android:id="@+id/chat_record_audio_button"
         style="@style/ChatRoundActionButtonStyle"
         android:background="@drawable/background_round_icon_voice"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_sound_attachment" />
+        android:src="@drawable/ic_sound_attachment"
+        android:visibility="visible" />
 
 </LinearLayout>
