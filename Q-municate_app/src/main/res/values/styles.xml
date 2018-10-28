@@ -104,6 +104,7 @@
         <item name="android:gravity">center</item>
         <item name="android:typeface">serif</item>
         <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:layout_gravity">bottom</item>
     </style>
 
 
@@ -112,6 +113,7 @@
         <item name="android:layout_height">@dimen/chat_input_message_smile_button_height</item>
         <item name="android:background">@drawable/selector_button_general</item>
         <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">bottom</item>
     </style>
 
     <!--<style name="BubbleTextFrame.Left">
@@ -124,6 +126,7 @@
         <item name="android:background">@drawable/selector_button_general</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">7dp</item>
+        <item name="android:layout_gravity">bottom</item>
     </style>
 
     <style name="SettingsButtonStyle">
@@ -299,11 +302,15 @@
     <style name="BubbleTextFrame.Left">
         <item name="android:background">@drawable/left_chat_bubble</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">40dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
     </style>
 
     <style name="BubbleTextFrame.Right">
         <item name="android:background">@drawable/bg_chat_right_bubble</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">0dp</item>
     </style>
 
     <!--style for right and left text message frame-->
@@ -339,22 +346,32 @@
         <item name="android:background">@drawable/left_chat_bubble</item>
         <item name="android:paddingLeft">@dimen/chat_imageview_margin_right</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">40dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
+
     </style>
 
     <style name="BubbleAttachFrame.Right">
         <item name="android:background">@drawable/bg_chat_right_bubble</item>
-        <item name="android:layout_marginRight">@dimen/chat_imageview_margin_right</item>
+        <!--<item name="android:layout_marginRight">@dimen/chat_imageview_margin_right</item>-->
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">0dp</item>
     </style>
 
     <style name="BubbleAttachAudioFrame.Right">
         <item name="android:background">@drawable/bg_chat_right_bubble</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">0dp</item>
+
     </style>
 
     <style name="BubbleAttachAudioFrame.Left">
         <item name="android:background">@drawable/left_chat_bubble</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">40dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
     </style>
 
     <style name="CustomWidgetFrame.Left">

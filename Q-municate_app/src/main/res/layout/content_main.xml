@@ -175,7 +175,7 @@
                                         android:layout_marginBottom="@dimen/density_4"
                                         android:background="@null"
                                         android:scaleType="centerInside"
-                                        android:src="@drawable/ic_transfer_" />
+                                        app:srcCompat="@drawable/ic_transfer_" />
 
                                     <TextView
                                         android:layout_width="match_parent"
@@ -203,7 +203,7 @@
                                         android:layout_marginBottom="@dimen/density_4"
                                         android:background="@null"
                                         android:scaleType="centerInside"
-                                        android:src="@drawable/ic_riwayat_" />
+                                        app:srcCompat="@drawable/ic_riwayat_" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -231,7 +231,7 @@
                                         android:layout_marginBottom="@dimen/density_4"
                                         android:background="@null"
                                         android:scaleType="centerInside"
-                                        android:src="@drawable/ic_eklankumax_" />
+                                        app:srcCompat="@drawable/ic_eklankumax_" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
