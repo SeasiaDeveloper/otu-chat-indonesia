@@ -1182,7 +1182,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     private void stopRecord() {
-        audioViewVisibility(View.INVISIBLE);
+        audioViewVisibility(View.GONE);
         stopChronometer();
         audioRecorder.stopRecord();
     }
@@ -1190,10 +1190,10 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     public void cancelRecord() {
         stopChronometer();
         setMessageAttachViewsEnable(true);
-        setRecorderViewsVisibility(View.INVISIBLE);
+        setRecorderViewsVisibility(View.GONE);
         animateCanceling();
         vibrate(DURATION_VIBRATE);
-        audioViewPostDelayVisibility(View.INVISIBLE);
+        audioViewPostDelayVisibility(View.GONE);
         audioRecorder.cancelRecord();
     }
 
@@ -1575,7 +1575,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
         @Override
         public void onMediaRecorded(File file) {
-            audioViewVisibility(View.INVISIBLE);
+            audioViewVisibility(View.GONE);
             if(ValidationUtils.validateAttachment(getSupportFragmentManager(), getResources().getStringArray(R.array.supported_attachment_types), Attachment.Type.AUDIO, file)){
                 startLoadAttachFile(Attachment.Type.AUDIO, file, currentChatDialog.getDialogId());
             } else {
