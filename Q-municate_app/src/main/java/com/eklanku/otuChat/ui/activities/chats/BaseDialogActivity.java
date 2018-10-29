@@ -180,6 +180,9 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     @Bind(R.id.view_attach_stub)
     View attachViewPanel;
 
+    @Bind(R.id.layrootchat)
+    LinearLayout layrootChat;
+
     private String replyMessage = null;
 
     private boolean isReplyMessage = false;
@@ -282,9 +285,11 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             public void onGlobalLayout() {
 
                 if (isKeyboardShown(messageEditText.getRootView())) {
-                    Toast.makeText(BaseDialogActivity.this, "KEYOBARD ACTIVE", Toast.LENGTH_SHORT).show();
+                    layrootChat.setBackgroundResource(R.mipmap.pattern_otu_nasional_02);
+                    //Toast.makeText(BaseDialogActivity.this, "KEYOBARD ACTIVE", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(BaseDialogActivity.this, "KEYOBARD ACTIVE", Toast.LENGTH_SHORT).show();
+                    layrootChat.setBackgroundResource(R.mipmap.pattern_otu_nasional_01);
+                    //Toast.makeText(BaseDialogActivity.this, "KEYOBARD ACTIVE", Toast.LENGTH_SHORT).show();
                 }
 
             }
