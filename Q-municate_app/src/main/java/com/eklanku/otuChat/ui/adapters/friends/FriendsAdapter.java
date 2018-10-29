@@ -114,8 +114,8 @@ public class FriendsAdapter extends BaseFilterAdapter<QMUser, BaseClickListenerV
             viewHolder.labelTextView.setTextColor(baseActivity.getResources().getColor(R.color.green));
         } else {
             viewHolder.labelTextView.setText(baseActivity.getString(R.string.last_seen,
-                    DateUtils.toTodayYesterdayShortDateWithoutYear2(user.getLastRequestAt().getTime()),
-                    DateUtils.formatDateSimpleTime(user.getLastRequestAt().getTime())));
+                    DateUtils.toTodayYesterdayShortDateWithoutYear2(user.getLastRequestAt() != null ? user.getLastRequestAt().getTime() : 0),
+                    DateUtils.formatDateSimpleTime(user.getLastRequestAt() != null ? user.getLastRequestAt().getTime() : 0)));
             viewHolder.labelTextView.setTextColor(baseActivity.getResources().getColor(R.color.dark_gray));
         }
     }

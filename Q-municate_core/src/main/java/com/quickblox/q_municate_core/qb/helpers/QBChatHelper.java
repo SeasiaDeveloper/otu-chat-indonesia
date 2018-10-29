@@ -100,8 +100,6 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         privateChatMessagesStatusListener = new PrivateChatMessagesStatusListener();
 
         chatConnectionListener = new ChatConnectionListener();
-        QBNotificationChatListener notificationChatListener = new PrivateChatNotificationListener();
-        addNotificationChatListener(notificationChatListener);
 
         dataManager = DataManager.getInstance();
     }
@@ -878,32 +876,6 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    private void friendRequestMessageReceived(ConnectycubeChatMessage qbChatMessage, DialogNotification.Type notificationType) {
-        String dialogId = qbChatMessage.getDialogId();
-        Message message = parseReceivedMessage(qbChatMessage);
-
-        if (!QMUserService.getInstance().getUserCache().exists((long) qbChatMessage.getSenderId())) {
-            QBRestHelper.loadAndSaveUser(qbChatMessage.getSenderId());
-        }
-
-        DialogNotification dialogNotification = ChatUtils.convertMessageToDialogNotification(message);
-        dialogNotification.setType(notificationType);
-
-        ConnectycubeChatDialog chatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
-        if (chatDialog == null) {
-            ConnectycubeChatDialog newChatDialog = ChatNotificationUtils.parseDialogFromQBMessage(context, qbChatMessage, ConnectycubeDialogType.PRIVATE);
-            ArrayList<Integer> occupantsIdsList = ChatUtils.createOccupantsIdsFromPrivateMessage(chatCreator.getId(), qbChatMessage.getSenderId());
-            newChatDialog.setOccupantsIds(occupantsIdsList);
-            DbUtils.saveDialogToCache(dataManager, newChatDialog, false);
-        }
-
-        DialogOccupant dialogOccupant = dataManager.getDialogOccupantDataManager().getDialogOccupant(dialogId, qbChatMessage.getSenderId());
-        DbUtils.saveDialogNotificationToCache(context, dataManager, dialogOccupant, qbChatMessage, false);
-
-        if (dialogOccupant != null) {
-            checkForSendingNotification(false, qbChatMessage, dialogOccupant.getUser(), true);
-        }
-    }
 
     interface QBNotificationChatListener {
 
@@ -989,40 +961,6 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         @Override
         public void processError(ChatException e, ConnectycubeChatMessage qbChatMessage) {
             ErrorUtils.logError(e);
-        }
-    }
-
-    private class PrivateChatNotificationListener implements QBNotificationChatListener {
-
-        @Override
-        public void onReceivedNotification(String notificationTypeString, ConnectycubeChatMessage chatMessage) {
-            NotificationType notificationType = NotificationType.parseByValue(
-                    Integer.parseInt(notificationTypeString));
-            switch (notificationType) {
-                case FRIENDS_REQUEST:
-                    friendRequestMessageReceived(chatMessage, DialogNotification.Type.FRIENDS_REQUEST);
-                    break;
-                case FRIENDS_ACCEPT:
-                    friendRequestMessageReceived(chatMessage, DialogNotification.Type.FRIENDS_ACCEPT);
-                    break;
-                case FRIENDS_REJECT:
-                    friendRequestMessageReceived(chatMessage, DialogNotification.Type.FRIENDS_REJECT);
-                    break;
-                case FRIENDS_REMOVE:
-                    friendRequestMessageReceived(chatMessage, DialogNotification.Type.FRIENDS_REMOVE);
-                    clearFriendOrUserRequestLocal(chatMessage.getSenderId());
-                    break;
-            }
-        }
-
-        private void clearFriendOrUserRequestLocal(int userId) {
-            boolean friend = dataManager.getFriendDataManager().existsByUserId(userId);
-            boolean outgoingUserRequest = dataManager.getUserRequestDataManager().existsByUserId(userId);
-            if (friend) {
-                dataManager.getFriendDataManager().deleteByUserId(userId);
-            } else if (outgoingUserRequest) {
-                dataManager.getUserRequestDataManager().deleteByUserId(userId);
-            }
         }
     }
 

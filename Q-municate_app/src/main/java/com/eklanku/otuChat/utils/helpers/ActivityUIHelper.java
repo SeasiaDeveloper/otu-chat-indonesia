@@ -47,22 +47,6 @@ public class ActivityUIHelper {
         return DataManager.getInstance().getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
     }
 
-    public void showContactRequestNotification(Bundle extras) {
-        int senderUserId = extras.getInt(QBServiceConsts.EXTRA_USER_ID);
-        QMUser senderUser = QMUserService.getInstance().getUserCache().get((long) senderUserId);
-        DialogOccupant dialogOccupant = DataManager.getInstance().getDialogOccupantDataManager().getDialogOccupantForPrivateChat(senderUserId);
-
-        if (dialogOccupant != null && senderUser != null) {
-            String dialogId = dialogOccupant.getDialog().getDialogId();
-            if (isChatDialogExist(dialogId)) {
-                String message = baseActivity.getString(R.string.snackbar_new_contact_request_title, senderUser.getFullName());
-                if (!TextUtils.isEmpty(message)) {
-                    showNewNotification(getChatDialogForNotification(dialogId), senderUser, message);
-                }
-            }
-        }
-    }
-
     private void showNewNotification(final ConnectycubeChatDialog chatDialog, final QMUser senderUser, String message) {
         baseActivity.hideSnackBar();
         baseActivity.showSnackbar(message, Snackbar.LENGTH_LONG, R.string.dialog_reply,
