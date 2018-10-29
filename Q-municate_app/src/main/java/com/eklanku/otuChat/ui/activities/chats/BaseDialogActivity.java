@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,10 +22,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -217,6 +220,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     private int lastVisiblePosition;
     private MessagesScrollListener messagesScrollListener;
 
+    int key = 0;
 
     @Override
     protected int getContentResId() {
@@ -272,6 +276,39 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                 getSize();
             }
         });
+
+        messageEditText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                if (isKeyboardShown(messageEditText.getRootView())) {
+                    Toast.makeText(BaseDialogActivity.this, "KEYOBARD ACTIVE", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(BaseDialogActivity.this, "KEYOBARD ACTIVE", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+    }
+
+
+    private boolean isKeyboardShown(View rootView) {
+        /* 128dp = 32dp * 4, minimum button height 32dp and generic 4 rows soft keyboard */
+        final int SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD = 128;
+
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        /* heightDiff = rootView height - status bar height (r.top) - visible frame height (r.bottom - r.top) */
+        int heightDiff = rootView.getBottom() - r.bottom;
+        /* Threshold size: dp to pixels, multiply with display density */
+        boolean isKeyboardShown = heightDiff > SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD * dm.density;
+
+        Log.d(TAG, "isKeyboardShown ? " + isKeyboardShown + ", heightDiff:" + heightDiff + ", density:" + dm.density
+                + "root view height:" + rootView.getHeight() + ", rect:" + r);
+
+        return isKeyboardShown;
     }
 
 
@@ -391,11 +428,21 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
         checkMessageSendingPossibility();
         resumeMediaPlayer();
+
+        /*switch (key) {
+            case 0:
+                Toast.makeText(this, "NOT ACTIVE", Toast.LENGTH_SHORT).show();
+                break;
+            case 1:
+                Toast.makeText(this, "ACTIVE", Toast.LENGTH_SHORT).show();
+                break;
+        }*/
+
     }
 
     private void checkLoginToChatOrShowError() {
         Log.d("OPPO-1", "authenticated: 7");
-        if (!ConnectycubeChatService.getInstance().isLoggedIn()){
+        if (!ConnectycubeChatService.getInstance().isLoggedIn()) {
             showSnackbar(R.string.error_disconnected, Snackbar.LENGTH_INDEFINITE);
         }
     }
@@ -442,7 +489,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    private void returnResult(){
+    private void returnResult() {
         if (getCallingActivity() != null) {
             Log.i(TAG, "return result to " + getCallingActivity().getShortClassName());
             Intent intent = new Intent();
@@ -472,7 +519,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     @Override
     public void onMediaPicked(int requestCode, Attachment.Type type, Object attachment) {
         canPerformLogout.set(true);
-        if(ValidationUtils.validateAttachment(getSupportFragmentManager(), getResources().getStringArray(R.array.supported_attachment_types), type, attachment)){
+        if (ValidationUtils.validateAttachment(getSupportFragmentManager(), getResources().getStringArray(R.array.supported_attachment_types), type, attachment)) {
             startLoadAttachFile(type, attachment, currentChatDialog.getDialogId());
         }
     }
@@ -505,18 +552,18 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     private void resumeMediaPlayer() {
-        if(mediaManager.isMediaPlayerReady()) {
+        if (mediaManager.isMediaPlayerReady()) {
             mediaManager.resumePlay();
         }
     }
 
     private void suspendMediaPlayer() {
-        if(mediaManager.isMediaPlayerReady()) {
+        if (mediaManager.isMediaPlayerReady()) {
             mediaManager.suspendPlay();
         }
     }
 
-    private void deleteTempMessagesAsync(){
+    private void deleteTempMessagesAsync() {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
@@ -525,7 +572,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         });
     }
 
-    private void loadNextPartMessagesAsync(){
+    private void loadNextPartMessagesAsync() {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
@@ -534,7 +581,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         });
     }
 
-    private void cancelTasks(){
+    private void cancelTasks() {
         threadPool.shutdownNow();
     }
 
@@ -581,7 +628,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     private void clearAudioRecorder() {
-        if(audioRecorder != null) {
+        if (audioRecorder != null) {
             audioRecorder.removeMediaRecordListener();
             stopRecordIfNeed();
         }
@@ -601,7 +648,6 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         checkMessageSendingPossibility();
         startLoadDialogMessages(false);
     }
-
 
 
     protected void setLayoutForReply(View viewReply) {
@@ -792,7 +838,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                 .getRoundIconDrawable(this, BitmapFactory.decodeResource(getResources(), drawableResId)));
     }
 
-    protected void setCustomParameter(String replyMessage, boolean isReplyMessage){
+    protected void setCustomParameter(String replyMessage, boolean isReplyMessage) {
         this.replyMessage = replyMessage;
         this.isReplyMessage = isReplyMessage;
     }
@@ -874,7 +920,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     protected boolean needScrollBottom(int countAddedMessages) {
-        if (lastVisiblePosition + countAddedMessages < messagesAdapter.getItemCount() - 1){
+        if (lastVisiblePosition + countAddedMessages < messagesAdapter.getItemCount() - 1) {
             return false;
         }
 
@@ -895,6 +941,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             }
         }, DELAY_SCROLLING_LIST);
     }
+
     protected void sendMessage() {
         boolean error = false;
         try {
@@ -915,10 +962,11 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             messageEditText.setText(ConstsCore.EMPTY_STRING);
         }
     }
+
     protected void sendMessage(boolean isReply) {
         boolean error = false;
         try {
-            if(isReply) {
+            if (isReply) {
                 chatHelper.sendChatReplyMessage(messageEditText.getText().toString(), replyMessage);
             } else {
                 chatHelper.sendChatMessage(messageEditText.getText().toString());
@@ -950,7 +998,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     }
 
-    protected long getMessageDateForLoad(boolean isLoadOldMessages){
+    protected long getMessageDateForLoad(boolean isLoadOldMessages) {
         long messageDateSent;
         List<DialogOccupant> dialogOccupantsList = dataManager.getDialogOccupantDataManager().getDialogOccupantsListByDialogId(currentChatDialog.getDialogId());
         List<Long> dialogOccupantsIdsList = ChatUtils.getIdsFromDialogOccupantsList(dialogOccupantsList);
@@ -960,13 +1008,13 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
         message = dataManager.getMessageDataManager().getMessageByDialogId(isLoadOldMessages, dialogOccupantsIdsList);
         dialogNotification = dataManager.getDialogNotificationDataManager().getDialogNotificationByDialogId(isLoadOldMessages, dialogOccupantsIdsList);
-        messageDateSent =  ChatUtils.getDialogMessageCreatedDate(!isLoadOldMessages, message, dialogNotification);
+        messageDateSent = ChatUtils.getDialogMessageCreatedDate(!isLoadOldMessages, message, dialogNotification);
 
         return messageDateSent;
     }
 
-    protected long getMessageDateForLoadByCurrentList(boolean isLoadOld){
-        if (combinationMessagesList.size() == 0){
+    protected long getMessageDateForLoadByCurrentList(boolean isLoadOld) {
+        if (combinationMessagesList.size() == 0) {
             return 0;
         }
 
@@ -999,7 +1047,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     protected List<CombinationMessage>
-    buildLimitedCombinationMessagesListByDate(long createDate, boolean moreDate, long limit){
+    buildLimitedCombinationMessagesListByDate(long createDate, boolean moreDate, long limit) {
         if (currentChatDialog == null || currentChatDialog.getDialogId() == null) {
             return new ArrayList<>();
         }
@@ -1084,7 +1132,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     protected void hideAttachPanelIfNeed() {
-        if(isAttachLayoutShowing()) {
+        if (isAttachLayoutShowing()) {
             attachViewPanel.setVisibility(View.GONE);
         }
     }
@@ -1129,14 +1177,14 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         recordAudioButton.setEnabled(enable);
     }
 
-    private void replaceMessageInCurrentList(CombinationMessage combinationMessage){
-        if (combinationMessagesList.contains(combinationMessage)){
+    private void replaceMessageInCurrentList(CombinationMessage combinationMessage) {
+        if (combinationMessagesList.contains(combinationMessage)) {
             int positionOldMessage = combinationMessagesList.indexOf(combinationMessage);
             combinationMessagesList.set(positionOldMessage, combinationMessage);
         }
     }
 
-    private void updateMessageItemInAdapter(CombinationMessage combinationMessage){
+    private void updateMessageItemInAdapter(CombinationMessage combinationMessage) {
         replaceMessageInCurrentList(combinationMessage);
         if (combinationMessagesList.contains(combinationMessage)) {
             messagesAdapter.notifyItemChanged(combinationMessagesList.indexOf(combinationMessage));
@@ -1145,20 +1193,20 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         }
     }
 
-    private void addMessageItemToAdapter(CombinationMessage combinationMessage){
+    private void addMessageItemToAdapter(CombinationMessage combinationMessage) {
         combinationMessagesList.add(combinationMessage);
         messagesAdapter.setList(combinationMessagesList, true);
         scrollMessagesToBottom(1);
     }
 
-    private void afterLoadingMessagesActions(){
+    private void afterLoadingMessagesActions() {
         messageSwipeRefreshLayout.setRefreshing(false);
         hideActionBarProgress();
         isLoadingMessages = false;
     }
 
     private boolean checkRecordPermission() {
-        if(systemPermissionHelper.isAllAudioRecordPermissionGranted()) {
+        if (systemPermissionHelper.isAllAudioRecordPermissionGranted()) {
             return true;
         } else {
             systemPermissionHelper.requestAllPermissionForAudioRecord();
@@ -1249,12 +1297,12 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     protected abstract void updateMessagesList();
 
-    protected void sendMessageWithAttachment(String dialogId, Attachment.Type attachmentType, Object attachmentObject, String localPath){
+    protected void sendMessageWithAttachment(String dialogId, Attachment.Type attachmentType, Object attachmentObject, String localPath) {
         if (!dialogId.equals(currentChatDialog.getDialogId())) {
             return;
         }
         try {
-            if(isReplyMessage && replyMessage!=null) {
+            if (isReplyMessage && replyMessage != null) {
                 chatHelper.sendMessageReplyWithAttachment(attachmentType, attachmentObject, localPath, replyMessage);
                 clearReply();
                 clearLayout();
@@ -1311,7 +1359,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                 DialogNotification dialogNotification = (DialogNotification) observableData.getSerializable(DialogNotificationDataManager.EXTRA_OBJECT);
 
                 Log.i(TAG, "==== DialogNotificationObserver  'update' ====observableData= " + observableData);
-                if(dialogNotification != null && dialogNotification.getDialogOccupant().getDialog().getDialogId().equals(currentChatDialog.getDialogId())) {
+                if (dialogNotification != null && dialogNotification.getDialogOccupant().getDialog().getDialogId().equals(currentChatDialog.getDialogId())) {
                     needUpdatePosition = true;
                     CombinationMessage combinationMessage = new CombinationMessage(dialogNotification);
                     if (action == DialogNotificationDataManager.UPDATE_ACTION) {
@@ -1328,7 +1376,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                     }
 
                     if (action == DialogNotificationDataManager.DELETE_BY_ID_ACTION
-                            ||action == DialogNotificationDataManager.DELETE_ACTION) {
+                            || action == DialogNotificationDataManager.DELETE_ACTION) {
                         combinationMessagesList.clear();
                         loadNextPartMessagesFromDb(false, true);
                     }
@@ -1345,9 +1393,9 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             if (data != null) {
                 String observerKey = ((Bundle) data).getString(DialogDataManager.EXTRA_OBSERVE_KEY);
                 if (observerKey.equals(dataManager.getConnectycubeChatDialogDataManager().getObserverKey())) {
-                    Dialog dialog = (Dialog)((Bundle)data).getSerializable(BaseManager.EXTRA_OBJECT);
+                    Dialog dialog = (Dialog) ((Bundle) data).getSerializable(BaseManager.EXTRA_OBJECT);
                     currentChatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(currentChatDialog.getDialogId());
-                    if(currentChatDialog != null) {
+                    if (currentChatDialog != null) {
                         if (dialog != null && dialog.getDialogId().equals(currentChatDialog.getDialogId())) {
                             // need init current dialog after getting from DB
                             initCurrentDialog();
@@ -1404,7 +1452,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                     && totalEntries != ConstsCore.ZERO_INT_VALUE
                     && dialogId.equals(currentChatDialog.getDialogId())) {
 
-                threadPool.execute(new Runnable(){
+                threadPool.execute(new Runnable() {
                     @Override
                     public void run() {
                         loadNextPartMessagesFromDb(isLoadedOldMessages, false);
@@ -1456,7 +1504,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             }
 
             if (!isLoadingMessages) {
-                if (combinationMessagesList.size() == 0){
+                if (combinationMessagesList.size() == 0) {
                     startLoadDialogMessages(true);
                     return;
                 }
@@ -1464,7 +1512,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                 long oldestMessageInDb = getMessageDateForLoad(true);
                 long oldestMessageInCurrentList = combinationMessagesList.get(0).getCreatedDate();
 
-                if ((oldestMessageInCurrentList - oldestMessageInDb) > 0 && oldestMessageInDb != 0){
+                if ((oldestMessageInCurrentList - oldestMessageInDb) > 0 && oldestMessageInDb != 0) {
                     loadNextPartMessagesFromDb(true, true);
                     messageSwipeRefreshLayout.setRefreshing(false);
                 } else {
@@ -1491,7 +1539,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     }
 
-    protected class LocationAttachClickListener implements ChatAttachClickListener{
+    protected class LocationAttachClickListener implements ChatAttachClickListener {
 
         @Override
         public void onItemClicked(ConnectycubeAttachment attachment, int position) {
@@ -1520,7 +1568,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
         @Override
         public void onStartClick(View v) {
-            if(checkRecordPermission()) {
+            if (checkRecordPermission()) {
                 startRecord();
             }
         }
@@ -1576,7 +1624,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         @Override
         public void onMediaRecorded(File file) {
             audioViewVisibility(View.GONE);
-            if(ValidationUtils.validateAttachment(getSupportFragmentManager(), getResources().getStringArray(R.array.supported_attachment_types), Attachment.Type.AUDIO, file)){
+            if (ValidationUtils.validateAttachment(getSupportFragmentManager(), getResources().getStringArray(R.array.supported_attachment_types), Attachment.Type.AUDIO, file)) {
                 startLoadAttachFile(Attachment.Type.AUDIO, file, currentChatDialog.getDialogId());
             } else {
                 audioRecordErrorAnimate();
@@ -1623,12 +1671,10 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            WrapContentLinearLayoutManager layoutManager1  = (WrapContentLinearLayoutManager) recyclerView.getLayoutManager();
+            WrapContentLinearLayoutManager layoutManager1 = (WrapContentLinearLayoutManager) recyclerView.getLayoutManager();
             lastVisiblePosition = layoutManager1.findLastVisibleItemPosition();
         }
     }
-
-
 
 
 }
