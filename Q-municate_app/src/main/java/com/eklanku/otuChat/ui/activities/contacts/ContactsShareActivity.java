@@ -27,7 +27,10 @@ import com.quickblox.q_municate_core.utils.ConstsCore;
 import java.util.ArrayList;
 
 import butterknife.Bind;
+import ezvcard.VCard;
+import ezvcard.parameter.VCardParameters;
 import rx.Observable;
+import rx.Observer;
 
 public class ContactsShareActivity extends BaseLoggableActivity implements SearchView.OnQueryTextListener {
     private static final String TAG = ContactsShareActivity.class.getSimpleName();
@@ -61,6 +64,33 @@ public class ContactsShareActivity extends BaseLoggableActivity implements Searc
         recyclerViewContacts.setLayoutManager(linearLayoutManager);
         recyclerViewContacts.setItemAnimator(new DefaultItemAnimator());
         recyclerViewContacts.setAdapter(contactsAdapter);
+        AddressBookHelper.getInstance().getContactVCardList().subscribe(new Observer<ArrayList<VCard>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "AMBRA onError contactVCardListObservable= " + e);
+            }
+
+            @Override
+            public void onNext(ArrayList<VCard> vCards) {
+                Log.d(TAG, "AMBRA onNext contactVCardListObservable= " + vCards.size());
+                int i = 0;
+                for (VCard vCard : vCards) {
+                    String fullName = vCard.getFormattedName().getValue();
+                    String lastName = vCard.getStructuredName().getFamily();
+                    String number = vCard.getTelephoneNumbers().get(0).getText();
+                    Log.d(TAG, "AMBRA onNext fullName= " + fullName + ", lastName= " + lastName + ", number= " + number);
+                    if(i++ == 5) {
+                        break;
+                    }
+                }
+            }
+        });
+
     }
 
     @Override

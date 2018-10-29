@@ -1,6 +1,8 @@
 package com.eklanku.otuChat.utils.helpers;
 
+import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -11,11 +13,17 @@ import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.quickblox.q_municate_core.qb.helpers.QBFriendListHelper;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import ezvcard.Ezvcard;
+import ezvcard.VCard;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class AddressBookHelper {
     public static final String REG_TYPE_REGISTERED = "1";
@@ -149,5 +157,49 @@ public class AddressBookHelper {
             phoneNumber = COUNTRY_CODE + phoneNumber;
         }
         return phoneNumber;
+    }
+
+    public Observable<ArrayList<VCard>> getContactVCardList() {
+        return getContactVCardListObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private Observable<ArrayList<VCard>> getContactVCardListObservable() {
+        return Observable.defer(() -> {
+            ArrayList<VCard> contacts = null;
+            try {
+                contacts = contactVCardList();
+            } catch (IOException e) {
+                Observable.error(e);
+            }
+            return Observable.just(contacts);
+        });
+    }
+
+    private ArrayList<VCard> contactVCardList() throws IOException {
+        ArrayList<VCard> contacts = new ArrayList<>();
+
+        Cursor phones = App.getInstance().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+
+        if (phones != null) {
+            while (phones.moveToNext()) {
+                String vCardStr = getVCardFromUri(phones);
+                VCard vcard = Ezvcard.parse(vCardStr).first();
+                contacts.add(vcard);
+            }
+            phones.close();
+        }
+        return contacts;
+    }
+
+    private String getVCardFromUri(Cursor phones) throws IOException {
+        String lookupKey = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
+        AssetFileDescriptor fd = App.getInstance().getContentResolver().openAssetFileDescriptor(uri, "r");
+        FileInputStream fis = fd.createInputStream();
+        byte[] b = new byte[(int) fd.getDeclaredLength()];
+        fis.read(b);
+        return new String(b);
     }
 }

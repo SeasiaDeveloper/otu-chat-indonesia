@@ -187,6 +187,8 @@ dependencies {
     //textview improve
     implementation 'com.codesgood:justifiedtextview:1.0.2'
     implementation 'com.ms-square:expandableTextView:0.1.4'
+    //vcard
+    implementation 'com.googlecode.ez-vcard:ez-vcard:0.10.4'
 }
 
 def changeApkFileName(variant) {
