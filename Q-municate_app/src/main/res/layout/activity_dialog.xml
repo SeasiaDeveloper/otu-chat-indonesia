@@ -2,7 +2,6 @@
     android:id="@+id/layrootchat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/pattern_otu_nasional_01"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar_light_shadow_white" />
