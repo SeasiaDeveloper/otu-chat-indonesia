@@ -82,6 +82,7 @@ public class LandingActivity extends BaseAuthActivity {
     private String TAG = "AYIK";
     //================================================
 
+    private int loginTryCount = 0;
     public ServiceManager serviceManager;
     private SignUpSuccessAction signUpSuccessAction;
 
@@ -269,32 +270,11 @@ public class LandingActivity extends BaseAuthActivity {
 
         Log.d(TAG, "authenticateWithNumber: "+strPhoneNumber);
         loginType = LoginType.FIREBASE_PHONE;
-        ArrayList<String> arrayPhone = new ArrayList<>();
-        arrayPhone.add(strPhoneNumber);
-        PagedRequestBuilder pagedRequestBuilder = new PagedRequestBuilder();
-        pagedRequestBuilder.setPage(1);
-        pagedRequestBuilder.setPerPage(1);
-
-        ConnectycubeUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new EntityCallback<ArrayList<ConnectycubeUser>>() {
-            @Override
-            public void onSuccess(ArrayList<ConnectycubeUser> users, Bundle params) {
-
-                Log.d(TAG, "onSuccess: users "+users);
-                if (users.size() > 0) {
-                    login(strPhoneNumber);
-                } else {
-                    signUpWithNumber(strPhoneNumber);
-                }
-            }
-
-            @Override
-            public void onError(ResponseException errors) {
-                Log.e("Error", errors.getErrors().toString());
-            }
-        });
+        login(strPhoneNumber);
     }
 
     protected void login(String userPhone) {
+        loginTryCount++;
         appSharedHelper.saveFirstAuth(true);
         appSharedHelper.saveSavedRememberMe(true);
         appSharedHelper.saveUsersImportInitialized(true);
@@ -309,16 +289,23 @@ public class LandingActivity extends BaseAuthActivity {
             @Override
             public void onError(Throwable e) {
                 Log.d("LOGIN ERROR", "onError" + e.getMessage());
-                hideProgress();
+                if (loginTryCount <= 2)
+                {
+                    signUpWithNumber(userPhone);
+                }
+                else
+                {
+                    hideProgress();
 
-                OneButtonDialogFragment.show(getSupportFragmentManager(), R.string.dlg_auth_error_message, false, new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        loginType = LoginType.FIREBASE_PHONE;
-                        startSocialLogin();
-                    }
-                });
+                    OneButtonDialogFragment.show(getSupportFragmentManager(), R.string.dlg_auth_error_message, false, new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            loginType = LoginType.FIREBASE_PHONE;
+                            startSocialLogin();
+                        }
+                    });
+                }
                 //AuthUtils.parseExceptionMessage(LandingActivity.this, e.getMessage());
 
             }
