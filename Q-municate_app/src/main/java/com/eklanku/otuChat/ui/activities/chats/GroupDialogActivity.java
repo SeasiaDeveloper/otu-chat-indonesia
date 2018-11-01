@@ -318,6 +318,9 @@ public class GroupDialogActivity extends BaseDialogActivity {
                                         mActionMode.finish();
                                     }
                                     finishAction();
+                                    //v.setVisibility(View.GONE);
+                                    clearLayout();
+                                    clearReply();
                                 }
                             });
                             Log.v("ReplyMessage MAIN", selectedMessagesList.get(0).toString());

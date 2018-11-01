@@ -18,6 +18,7 @@
             android:layout_marginEnd="@dimen/density_4"
             android:layout_marginRight="@dimen/density_4"
             android:background="@drawable/custom_input_message"
+            android:gravity="bottom"
             android:orientation="horizontal"
             android:paddingEnd="@dimen/density_8"
             android:paddingRight="@dimen/density_8">
@@ -64,32 +65,33 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/action_buttons_view"
+            <!--  <LinearLayout
+                  android:id="@+id/action_buttons_view"
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_marginBottom="@dimen/density_4"
+                  android:layout_weight="2"
+                  android:gravity="bottom">-->
+
+            <ImageButton
+                android:id="@+id/attach_button"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/density_4"
-                android:layout_weight="2"
-                android:gravity="bottom">
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_attach_white" />
 
-                <ImageButton
-                    android:id="@+id/attach_button"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_attach_white" />
+            <ImageButton
+                android:id="@+id/attach_camera"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/density_8"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_camera_white" />
 
-                <ImageButton
-                    android:id="@+id/attach_camera"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginBottom="@dimen/density_4"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_camera_white" />
-
-            </LinearLayout>
+            <!-- </LinearLayout>-->
 
         </LinearLayout>
 

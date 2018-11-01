@@ -208,14 +208,15 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     private void addReplyView(RecyclerView.ViewHolder holder, CombinationMessage chatMessage, int position) {
         try {
-            int padLeft = 5;
-            int padRight = 5;
+            int padLeft = 10;
+            int padRight = 10;
 
             if (opponentUser != null && opponentUser.getId().equals(chatMessage.getDialogOccupant().getUser().getId())) {
-                padLeft = 15;
-            } else {
-                padRight = 15;
-            }
+                padLeft = 20;
+                padRight = 0;
+            } /*else {
+                padRight = 5;
+            }*/
 
             if (position < 5) {
                 Log.v("Positions", "Positions: " + position);

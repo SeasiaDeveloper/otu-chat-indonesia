@@ -317,7 +317,12 @@
     <style name="WidgetTextMsgFrame">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">@dimen/padding_small</item>
+        <item name="android:paddingRight">@dimen/padding_small</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:paddingEnd">@dimen/padding_small</item>
+        <item name="android:paddingLeft">@dimen/padding_small</item>
+        <item name="android:paddingStart">@dimen/padding_small</item>
     </style>
 
     <!--style for right and left Attach message frame-->

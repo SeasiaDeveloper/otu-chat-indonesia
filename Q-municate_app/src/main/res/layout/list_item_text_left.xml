@@ -5,8 +5,7 @@
     android:id="@+id/msg_message_text_view_left"
     style="@style/WidgetTextMsgFrame"
     custom:widget_id_bottom="@layout/custom_msg_left_bottom_widget"
-    custom:widget_id_top="@layout/custom_msg_left_top_widget"
-    android:padding="4dp">
+    custom:widget_id_top="@layout/custom_msg_left_top_widget">
 
     <!--style="@style/ListItemTextMessage.Left"-->
 </com.connectycube.ui.chatmessage.adapter.widget.MessageTextViewLeft>

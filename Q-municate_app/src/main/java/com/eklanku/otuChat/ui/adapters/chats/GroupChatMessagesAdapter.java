@@ -343,14 +343,15 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
 
     private void addReplyView(RecyclerView.ViewHolder holder, CombinationMessage chatMessage, int position) {
         try {
-            int padLeft = 5;
-            int padRight = 5;
-            Log.v("User IDs", "User IDs: "+AppSession.getSession().getUser().getId() +" == "+ chatMessage.getDialogOccupant().getUser().getId());
+            int padLeft = 20;
+            int padRight = 0;
+            Log.v("User IDs", "User IDs: " + AppSession.getSession().getUser().getId() + " == " + chatMessage.getDialogOccupant().getUser().getId());
             if (AppSession.getSession().getUser().getId().equals(chatMessage.getDialogOccupant().getUser().getId())) {
-                padRight = 15;
-            } else {
+                padLeft = 10;
+                padRight = 10;
+            } /*else {
                 padLeft = 15;
-            }
+            }*/
 
             if (position < 5) {
                 Log.v("Positions", "Positions: " + position);
@@ -388,9 +389,10 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
                         llReplyMain.setLayoutParams(lpReply);
 
                         TextView tvMessage = (TextView) v.findViewById(R.id.tvName);
+                        tvMessage.setPadding(8, 0, 8, 0);
 
 
-                        if ( AppSession.getSession().getUser().getId() == obj.getInt("senderID")) {
+                        if (AppSession.getSession().getUser().getId() == obj.getInt("senderID")) {
                             tvMessage.setText("You");
                         } else {
                             tvMessage.setText(chatMessage.getDialogOccupant().getUser().getFullName());

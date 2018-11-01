@@ -35,9 +35,11 @@ import com.eklanku.otuChat.ui.activities.payment.models.TopupDetailM;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupOrderResponse;
 import com.eklanku.otuChat.utils.Utils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,6 +71,7 @@ public class TopupOrder extends AppCompatActivity {
 
     Utils utilsAlert;
     String titleAlert = "Topup";
+    String live;
 
 
     @Override
@@ -112,10 +115,10 @@ public class TopupOrder extends AppCompatActivity {
         ck_Setuju.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ck_Setuju.isChecked()){
+                if (ck_Setuju.isChecked()) {
                     btnTopup.setBackgroundResource(R.drawable.background_round_corner_green);
                     btnTopup.setEnabled(true);
-                }else{
+                } else {
                     btnTopup.setBackgroundResource(R.drawable.custom_round);
                     btnTopup.setEnabled(false);
                 }
@@ -151,30 +154,37 @@ public class TopupOrder extends AppCompatActivity {
             @Override
             public void onResponse(Call<TopupOrderResponse> call, Response<TopupOrderResponse> response) {
                 loadingDialog.dismiss();
+                //Log.d("AYIK", "loaddatabank:" + response.toString() + "\n" + strUserID + "\n" + strAccessToken + "\n" + strApIUse);
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     error = response.body().getRespMessage();
 
                     if (status.equals("SUCCESS")) {
                         final List<TopupDetailM> result = response.body().getBanklist();
+
                         SpinnerBankAdapter adapter = new SpinnerBankAdapter(getApplicationContext(), result);
+                        //Log.d("AYIK", "loaddatabanklist:" + result.size() + "\n" + result.toString());
+
                         spnDataBank.setAdapter(adapter);
                         spnDataBank.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 String isActive = result.get(position).getIsactive();
-                                if(isActive.equalsIgnoreCase("Live")){
+                                if (isActive.equalsIgnoreCase("Live")) {
                                     norek = result.get(position).getNorec();
                                     nama = result.get(position).getBank();
                                     an = result.get(position).getAnbank();
+                                    live = result.get(position).getIsactive();
 
+                                    Log.d("AYIK", "loaddatabank:" + live);
 
-                                }else{
-                                    //Toast.makeText(TopupOrder.this, "No Rekening tidak aktif", Toast.LENGTH_SHORT).show();
-                                    utilsAlert.globalDialog(TopupOrder.this, titleAlert, "No Rekening tidak aktif");
+                                } else {
+                                    Toast.makeText(TopupOrder.this, "No Rekening tidak aktif", Toast.LENGTH_SHORT).show();
+                                    //utilsAlert.globalDialog(TopupOrder.this, titleAlert, "No Rekening tidak aktif");
 
                                 }
                             }
+
                             @Override
                             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -208,7 +218,12 @@ public class TopupOrder extends AppCompatActivity {
             intent.putExtra("nominal", edNominal.getText().toString());
             intent.putExtra("nama", nama);
             startActivity(intent);*/
-            depositOrder();
+
+            if (live.equalsIgnoreCase("Live")) {
+                depositOrder();
+            } else {
+                Toast.makeText(TopupOrder.this, "No Rekening Bank tidak aktif, silahkan pilih Bank yang lain", Toast.LENGTH_SHORT).show();
+            }
 
         }
     }
@@ -231,7 +246,7 @@ public class TopupOrder extends AppCompatActivity {
                         Intent intent = new Intent(getBaseContext(), TopupBilling.class);
                         intent.putExtra("bank", nama);
                         intent.putExtra("nominal", response.body().getNominal());
-                        intent.putExtra("pesan",error );
+                        intent.putExtra("pesan", error);
                         startActivity(intent);
                         finish();
                     } else {

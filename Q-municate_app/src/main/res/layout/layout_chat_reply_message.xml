@@ -3,12 +3,8 @@
     android:id="@+id/item_reply"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
-    android:layout_marginLeft="@dimen/density_8"
-    android:layout_marginStart="@dimen/density_8"
-    android:layout_marginRight="@dimen/density_8"
-    android:layout_marginEnd="@dimen/density_8"
+    android:gravity="center"
+    android:layout_margin="@dimen/density_8"
     android:layout_weight="1"
     android:orientation="vertical">
 
@@ -31,6 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginEnd="@dimen/density_8"
+            android:layout_marginRight="@dimen/density_8"
             android:background="@drawable/custom_quote"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -47,8 +45,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
                     android:text="@string/app_name"
-                    android:textColor="@color/blue" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/tvTypeMessage"
@@ -56,6 +56,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLength="16"
+                    android:textColor="@color/dark_gray"
                     android:singleLine="true"
                     android:text="@string/app_name" />
 
