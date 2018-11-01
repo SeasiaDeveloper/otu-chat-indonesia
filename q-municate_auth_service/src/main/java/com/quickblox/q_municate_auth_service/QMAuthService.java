@@ -39,15 +39,14 @@ public class QMAuthService extends QMBaseService {
         Observable<ConnectycubeUser> result = null;
         Performer<ConnectycubeUser> performer = ConnectycubeUsers.signIn(user);
         final Observable<ConnectycubeUser> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
-        result = observable.flatMap(new Func1<ConnectycubeUser, Observable<ConnectycubeUser>>() {
+        result = observable.map(new Func1<ConnectycubeUser, ConnectycubeUser>() {
             @Override
-            public Observable<ConnectycubeUser> call(ConnectycubeUser connectycubeUser) {
+            public ConnectycubeUser call(ConnectycubeUser connectycubeUser) {
                 authorized = true;
                 notifyLogin(connectycubeUser);
-                return observable;
+                return connectycubeUser;
             }
         });
-
         return result;
     }
 
@@ -70,12 +69,12 @@ public class QMAuthService extends QMBaseService {
             performer = ConnectycubeUsers.signInUsingSocialProvider(socialProvider, accessToken, accessTokenSecret);
         }
         final Observable<ConnectycubeUser> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
-        result = observable.flatMap(new Func1<ConnectycubeUser, Observable<ConnectycubeUser>>() {
+        result = observable.map(new Func1<ConnectycubeUser, ConnectycubeUser>() {
             @Override
-            public Observable<ConnectycubeUser> call(ConnectycubeUser connectycubeUser) {
+            public ConnectycubeUser call(ConnectycubeUser connectycubeUser) {
                 authorized = true;
                 notifyLogin(connectycubeUser);
-                return observable;
+                return connectycubeUser;
             }
         });
         return result;
@@ -106,12 +105,12 @@ public class QMAuthService extends QMBaseService {
         Observable<ConnectycubeUser> result = null;
         Performer<ConnectycubeUser> performer = ConnectycubeUsers.signUpSignInTask(user);
         final Observable<ConnectycubeUser> observable = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
-        result = observable.flatMap(new Func1<ConnectycubeUser, Observable<ConnectycubeUser>>() {
+        result = observable.map(new Func1<ConnectycubeUser, ConnectycubeUser>() {
             @Override
-            public Observable<ConnectycubeUser> call(ConnectycubeUser connectycubeUser) {
+            public ConnectycubeUser call(ConnectycubeUser connectycubeUser) {
                 authorized = true;
                 notifyLogin(connectycubeUser);
-                return observable;
+                return connectycubeUser;
             }
         });
         return result;
