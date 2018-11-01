@@ -7,14 +7,16 @@
     android:background="@drawable/ic_nav_header"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingTop="@dimen/density_16"
+    android:paddingTop="@dimen/density_8"
     android:paddingBottom="@dimen/density_8">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_margin="@dimen/density_8"
+        android:layout_width="@dimen/density_100"
+        app:civ_border_width="@dimen/density_4"
+        app:civ_border_color="@color/colorTextOtu"
+        android:layout_height="@dimen/density_100"
+    android:layout_marginBottom="@dimen/density_8"
         android:background="@drawable/placeholder_user" />
 
     <LinearLayout
@@ -51,24 +53,34 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_14"
                 android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginStart="@dimen/density_8"
+                android:layout_marginLeft="@dimen/density_8"
+                android:layout_marginEnd="@dimen/density_8"
+                android:layout_marginRight="@dimen/density_8"
+                android:text="-" />
+
+            <TextView
+                android:id="@+id/tvStarMember"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/density_8"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="FREE"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_14"
+                android:textStyle="bold" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvStarMember"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/density_8"
-            android:gravity="center"
-            android:maxLines="2"
-            android:text="FREE"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_14"
-            android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/density_8"
             android:gravity="center"
             android:maxLines="2"
             android:text="Hanya dengan OTU, semua jadi dekat."

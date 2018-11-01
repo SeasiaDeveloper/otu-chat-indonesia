@@ -556,6 +556,10 @@ public class PaymentFragment extends Fragment {
             drawer.openDrawer(GravityCompat.END);
         }
 
+        if (id == R.id.action_notification) {
+            Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

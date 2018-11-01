@@ -2,6 +2,7 @@ package com.eklanku.otuChat.ui.adapters.payment;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,10 @@ public class SpinnerBankAdapter extends BaseAdapter {
 
         final TopupDetailM item = datas.get(position);
 
-        if(!item.getIsactive().equalsIgnoreCase("Live")){
+        //Log.d("AYIK", "loaddatabankadapter:" + item + "\n" + item.getBank());
+
+
+        if (!item.getIsactive().equalsIgnoreCase("Live")) {
             text_denom.setTextColor(Color.GRAY);
             text_nominal.setTextColor(Color.GRAY);
             text_point.setTextColor(Color.GRAY);
@@ -58,15 +62,15 @@ public class SpinnerBankAdapter extends BaseAdapter {
 
         text_denom.setText("Bank " + item.getBank());
         text_nominal.setText("No. Rekening " + item.getNorec());
-        text_point.setText(""+ item.getAnbank());
+        text_point.setText("" + item.getAnbank());
 
-        if(item.getBank().equals("BNI")){
+        if (item.getBank().equals("BNI")) {
             imgBank.setImageResource(R.drawable.ic_bni);
-        }else if(item.getBank().equals("BCA")){
+        } else if (item.getBank().equals("BCA")) {
             imgBank.setImageResource(R.drawable.ic_bca);
-        }else if(item.getBank().equals("MANDIRI")){
+        } else if (item.getBank().equals("MANDIRI")) {
             imgBank.setImageResource(R.drawable.ic_mandiri);
-        }else if(item.getBank().equals("BRI")){
+        } else if (item.getBank().equals("BRI")) {
             imgBank.setImageResource(R.drawable.ic_bri);
         }
 

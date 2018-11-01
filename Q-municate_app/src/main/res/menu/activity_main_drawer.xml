@@ -10,7 +10,16 @@
             android:title="UTAMA" />
     </group>-->
 
-    <item android:title="PROFILE">
+     <group
+        android:id="@+id/one"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_profile"
+            android:icon="@drawable/ic_nav_profil"
+            android:title="Profil" />
+    </group>
+
+    <!--<item android:title="PROFILE">
         <menu>
             <item
                 android:id="@+id/action_profile"
@@ -18,7 +27,7 @@
                 android:title="Profil" />
 
         </menu>
-    </item>
+    </item>-->
 
     <item android:title="AKUN">
 
