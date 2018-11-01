@@ -17,6 +17,7 @@ import com.connectycube.extensions.RxJavaPerformProcessor;
 import com.connectycube.pushnotifications.services.ConnectycubePushManager;
 import com.connectycube.pushnotifications.services.SubscribeService;
 import com.eklanku.otuChat.App;
+import com.facebook.accountkit.AccountKit;
 import com.quickblox.q_municate_auth_service.QMAuthService;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.LoginType;
@@ -172,6 +173,7 @@ public class ServiceManager {
                 .map(new Func1<Void, Void>() {
                     @Override
                     public Void call(Void aVoid) {
+                        AccountKit.logOut();
                         clearDataAfterLogOut();
                         return null;
                     }
