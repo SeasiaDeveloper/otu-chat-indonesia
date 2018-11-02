@@ -71,8 +71,8 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
         //MessageTextViewRight x = holder.itemView.findViewById(R.id.msg_message_text_view_right);
 
-        EmojiconTextView timeView = holder.itemView.findViewById(R.id.custom_msg_text_time_message);
-        timeView.setUseSystemDefault(false);
+        TextView timeView = holder.itemView.findViewById(R.id.custom_msg_text_time_message);
+        //timeView.setUseSystemDefault(false);
         setMsgTime(timeView, chatMessage);
 
         showSendStatusView(signInView, chatMessage);

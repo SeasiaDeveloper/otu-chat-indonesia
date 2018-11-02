@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.rockerhieu.emojicon.EmojiconTextView
+    <TextView
         android:id="@+id/custom_msg_text_time_message"
         style="@style/TextViewTimeMsg.Right"
         android:paddingRight="0dp"
