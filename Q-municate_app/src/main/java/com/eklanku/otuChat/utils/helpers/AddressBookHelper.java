@@ -2,7 +2,6 @@ package com.eklanku.otuChat.utils.helpers;
 
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.connectycube.users.model.ConnectycubeAddressBookContact;
 import com.connectycube.users.model.ConnectycubeAddressBookResponse;

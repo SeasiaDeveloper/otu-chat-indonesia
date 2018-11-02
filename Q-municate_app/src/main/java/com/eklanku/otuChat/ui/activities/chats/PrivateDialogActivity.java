@@ -39,7 +39,6 @@ import com.eklanku.otuChat.ui.adapters.chats.PrivateChatMessageAdapter;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.utils.DateUtils;
 import com.eklanku.otuChat.utils.ToastUtils;
-import com.eklanku.otuChat.utils.listeners.FriendOperationListener;
 import com.google.gson.Gson;
 import com.connectycube.chat.ConnectycubeRestChatService;
 import com.connectycube.chat.model.ConnectycubeAttachment;
@@ -89,7 +88,6 @@ import butterknife.OnClick;
 
 public class PrivateDialogActivity extends BaseDialogActivity {
 
-    private FriendOperationAction friendOperationAction;
     private QMUser opponentUser;
     private FriendObserver friendObserver;
     private BroadcastReceiver typingMessageBroadcastReceiver;
@@ -128,18 +126,6 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         return intent;
     }
 
-    @Override
-    protected void addActions() {
-        super.addActions();
-
-        addAction(QBServiceConsts.ACCEPT_FRIEND_SUCCESS_ACTION, new AcceptFriendSuccessAction());
-        addAction(QBServiceConsts.ACCEPT_FRIEND_FAIL_ACTION, failAction);
-
-        addAction(QBServiceConsts.REJECT_FRIEND_SUCCESS_ACTION, new RejectFriendSuccessAction());
-        addAction(QBServiceConsts.REJECT_FRIEND_FAIL_ACTION, failAction);
-
-        updateBroadcastActionList();
-    }
 
     @Override
     protected void updateActionBar() {
@@ -163,7 +149,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
 
     @Override
     protected void initChatAdapter() {
-        messagesAdapter = new PrivateChatMessageAdapter(this, opponentUser, combinationMessagesList, friendOperationAction, currentChatDialog, new ItemClickListener() {
+        messagesAdapter = new PrivateChatMessageAdapter(this, opponentUser, combinationMessagesList, currentChatDialog, new ItemClickListener() {
 
             @Override
             public void onItemClick(int position) {
@@ -227,7 +213,6 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         super.initMessagesRecyclerView();
         messagesRecyclerView.addItemDecoration(
                 new StickyRecyclerHeadersDecoration(messagesAdapter));
-        findLastFriendsRequest(true);
 
         messagesRecyclerView.setAdapter(messagesAdapter);
         scrollMessagesToBottom(0);
@@ -240,7 +225,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
 
     @Override
     protected void updateMessagesList() {
-        findLastFriendsRequest(false);
+
     }
 
     @Override
@@ -529,7 +514,6 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     @Override
     protected void initFields() {
         super.initFields();
-        friendOperationAction = new FriendOperationAction();
         friendObserver = new FriendObserver();
         typingMessageBroadcastReceiver = new TypingStatusBroadcastReceiver();
         opponentUser = (QMUser) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_OPPONENT);
@@ -568,13 +552,6 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         dataManager.getFriendDataManager().deleteObserver(friendObserver);
     }
 
-    private void findLastFriendsRequest(boolean needNotifyAdapter) {
-        ((PrivateChatMessageAdapter) messagesAdapter).findLastFriendsRequestMessagesPosition();
-        if (needNotifyAdapter) {
-            messagesAdapter.notifyDataSetChanged();
-        }
-    }
-
     private void setOnlineStatus(QMUser user) {
         if (user != null) {
             if (friendListHelper != null) {
@@ -609,53 +586,6 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         CallActivity.start(PrivateDialogActivity.this, connectycubeUserList, ConferenceType, null);
     }
 
-    private void acceptUser(final int userId) {
-        if (isNetworkAvailable()) {
-            if (!isChatInitializedAndUserLoggedIn()) {
-                ToastUtils.longToast(R.string.call_chat_service_is_initializing);
-                return;
-            }
-
-            showProgress();
-            QBAcceptFriendCommand.start(this, userId);
-        } else {
-            ToastUtils.longToast(R.string.dlg_fail_connection);
-            return;
-        }
-    }
-
-    private void rejectUser(final int userId) {
-        if (isNetworkAvailable()) {
-            if (!isChatInitializedAndUserLoggedIn()) {
-                ToastUtils.longToast(R.string.call_chat_service_is_initializing);
-                return;
-            }
-
-            showRejectUserDialog(userId);
-        } else {
-            ToastUtils.longToast(R.string.dlg_fail_connection);
-            return;
-        }
-    }
-
-    private void showRejectUserDialog(final int userId) {
-        QMUser user = QMUserService.getInstance().getUserCache().get((long) userId);
-        if (user == null) {
-            return;
-        }
-
-        TwoButtonsDialogFragment.show(getSupportFragmentManager(),
-                getString(R.string.dialog_message_reject_friend, user.getFullName()),
-                new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        showProgress();
-                        QBRejectFriendCommand.start(PrivateDialogActivity.this, userId);
-                    }
-                });
-    }
-
     private void updateCurrentChatFromDB() {
         ConnectycubeChatDialog updatedDialog = null;
         if (currentChatDialog != null) {
@@ -678,43 +608,6 @@ public class PrivateDialogActivity extends BaseDialogActivity {
 
     private void hideTypingStatus() {
         setOnlineStatus(opponentUser);
-    }
-
-    private class FriendOperationAction implements FriendOperationListener {
-
-        @Override
-        public void onAcceptUserClicked(int position, int userId) {
-            operationItemPosition = position;
-            acceptUser(userId);
-        }
-
-        @Override
-        public void onRejectUserClicked(int position, int userId) {
-            operationItemPosition = position;
-            rejectUser(userId);
-        }
-    }
-
-    private class AcceptFriendSuccessAction implements Command {
-
-        @Override
-        public void execute(Bundle bundle) {
-            ((PrivateChatMessageAdapter) messagesAdapter).clearLastRequestMessagePosition();
-            messagesAdapter.notifyItemChanged(operationItemPosition);
-            startLoadDialogMessages(false);
-            hideProgress();
-        }
-    }
-
-    private class RejectFriendSuccessAction implements Command {
-
-        @Override
-        public void execute(Bundle bundle) {
-            ((PrivateChatMessageAdapter) messagesAdapter).clearLastRequestMessagePosition();
-            messagesAdapter.notifyItemChanged(operationItemPosition);
-            startLoadDialogMessages(false);
-            hideProgress();
-        }
     }
 
     private class FriendObserver implements Observer {

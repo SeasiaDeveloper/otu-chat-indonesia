@@ -76,7 +76,7 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
     private static final int PER_PAGE = 200; //5; //200;
     private static final int COUNTRY_CODE = 62; // 91; 62;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
-    private static final String TAG = ContactsActivity.class.getSimpleName();
+    private static final String TAG = NewMessageActivity.class.getSimpleName();
 
     private static boolean mIsNewMessage = false;
 
@@ -124,7 +124,6 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
         arrayName = new ArrayList<>();
         contactsModels = new ArrayList<>();
         friendIdsList = new ArrayList<>();
-
         if (mIsNewMessage) {
             contactsModels = mDbHelper.getContactsSelectedGroup();
             if (contactsModels.size() > 0)
@@ -141,7 +140,7 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
                 isFirst = false;
         }
 //        readContacts();
-
+        showProgressDialog(isFirst);
         contactsAdapter = new ContactsAdapterGroup(contactsModels, this);
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         friendsRecyclerView.setLayoutManager(linearLayoutManager);
@@ -156,6 +155,12 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
         initCustomListeners();
 
         addActions();*/
+    }
+
+    private void showProgressDialog(boolean show) {
+        if(show) {
+            showProgress();
+        }
     }
 
     @Override
@@ -333,6 +338,7 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
     private void updateContactListAndRoster() {
         AddressBookHelper.getInstance().updateRosterContactList(friendListHelper, mDbHelper, AppSession.getSession().getUser().getPassword()).onErrorResumeNext(e -> Observable.empty()).subscribe(success -> {
             Log.d(TAG, "updateRosterContactList success= " + success);
+            hideProgress();
             contactsModels.clear();
             if (mIsNewMessage) {
                 contactsModels.addAll(mDbHelper.getContactsSelectedGroup());

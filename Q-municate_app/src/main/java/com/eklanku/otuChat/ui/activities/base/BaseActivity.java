@@ -471,7 +471,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
         Log.v(TAG, "registerBroadcastReceivers()");
         IntentFilter globalActionsIntentFilter = new IntentFilter();
         globalActionsIntentFilter.addAction(QBServiceConsts.GOT_CHAT_MESSAGE_LOCAL);
-        globalActionsIntentFilter.addAction(QBServiceConsts.GOT_CONTACT_REQUEST);
         globalActionsIntentFilter.addAction(QBServiceConsts.FORCE_RELOGIN);
         globalActionsIntentFilter.addAction(QBServiceConsts.TYPING_MESSAGE);
         IntentFilter networkIntentFilter = new IntentFilter(NetworkChangeReceiver.ACTION_LOCAL_CONNECTIVITY);
@@ -594,10 +593,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
         activityUIHelper.showChatMessageNotification(extras);
     }
 
-    protected void onReceivedContactRequestNotification(Bundle extras) {
-        activityUIHelper.showContactRequestNotification(extras);
-    }
-
     private Handler getHandler() {
         if (handler == null) {
             handler = new Handler();
@@ -637,12 +632,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
         }
     }
 
-
-    public void onReceiveContactRequestAction(Bundle extras) {
-        if (needShowReceivedNotification()) {
-            onReceivedContactRequestNotification(extras);
-        }
-    }
 
     public QBService getService() {
         return service;
@@ -969,8 +958,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
                     if (QBServiceConsts.GOT_CHAT_MESSAGE_LOCAL.equals(intent.getAction())) {
                         onReceiveChatMessageAction(intent.getExtras());
-                    } else if (QBServiceConsts.GOT_CONTACT_REQUEST.equals(intent.getAction())) {
-                        onReceiveContactRequestAction(intent.getExtras());
                     } else if (QBServiceConsts.FORCE_RELOGIN.equals(intent.getAction())) {
                         //                        onReceiveForceReloginAction(intent.getExtras());
                     } else if (QBServiceConsts.REFRESH_SESSION.equals(intent.getAction())) {
