@@ -71,6 +71,7 @@ import com.connectycube.ui.chatmessage.adapter.media.video.ui.VideoPlayerActivit
 import com.connectycube.ui.chatmessage.adapter.media.view.ConnectycubePlaybackControlView;
 import com.connectycube.users.model.ConnectycubeUser;
 import com.connectycube.videochat.RTCTypes;
+import com.rockerhieu.emojicon.EmojiconTextView;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
@@ -331,7 +332,8 @@ public class PrivateDialogActivity extends BaseDialogActivity {
                                 tvMessage.setText("You");
                             }
 
-                            TextView tvType = (TextView) v.findViewById(R.id.tvTypeMessage);
+                            EmojiconTextView tvType = /*(TextView)*/ v.findViewById(R.id.tvTypeMessage);
+                            tvType.setUseSystemDefault(false);
                             tvType.setText(selectedMessagesList.get(0).getBody());
 
                             ImageView mIvClear = (ImageView) v.findViewById(R.id.ivClear);

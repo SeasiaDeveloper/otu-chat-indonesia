@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.connectycube.ui.chatmessage.adapter.widget.MessageTextViewRight;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.R;;
@@ -26,6 +27,7 @@ import com.quickblox.q_municate_db.models.DialogNotification;
 import com.quickblox.q_municate_db.models.State;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.connectycube.ui.chatmessage.adapter.media.video.thumbnails.VideoThumbnail;
+import com.rockerhieu.emojicon.EmojiconTextView;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import org.json.JSONArray;
@@ -67,7 +69,10 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         ImageView signInView = (ImageView) holder.itemView.findViewById(R.id.message_status_image_view);
         setViewVisibility(holder.avatar, View.GONE);
 
-        TextView timeView = holder.itemView.findViewById(R.id.custom_msg_text_time_message);
+        //MessageTextViewRight x = holder.itemView.findViewById(R.id.msg_message_text_view_right);
+
+        EmojiconTextView timeView = holder.itemView.findViewById(R.id.custom_msg_text_time_message);
+        timeView.setUseSystemDefault(false);
         setMsgTime(timeView, chatMessage);
 
         showSendStatusView(signInView, chatMessage);
@@ -146,6 +151,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
     }
 
     private void addReplyView(RecyclerView.ViewHolder holder, CombinationMessage chatMessage, int position) {
+        int x = 0;
         try {
             int padLeft = 10;
             int padRight = 10;
@@ -153,6 +159,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
             if (opponentUser != null && opponentUser.getId().equals(chatMessage.getDialogOccupant().getUser().getId())) {
                 padLeft = 20;
                 padRight = 0;
+                x = 1;
             } /*else {
                 padRight = 5;
             }*/
@@ -187,10 +194,19 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
                         if (insertPoint.getChildCount() >= 2) {
                             insertPoint.removeViewAt(0);
                         }
-                        LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View v = vi.inflate(R.layout.layout_chat_reply_message, null);
 
-                        LinearLayout llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
+                        LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View v;
+                        LinearLayout llReplyMain;
+                        if (x == 0) {
+                            v = vi.inflate(R.layout.layout_chat_reply_message, null);
+                            llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
+                        } else {
+                            v = vi.inflate(R.layout.layout_chat_reply_message_left, null);
+                            llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMainleft);
+                        }
+
+                        //llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
 
                         LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         lpReply.setMargins(padLeft, 5, padRight, 5);

@@ -112,6 +112,7 @@
     <dimen name="density_2">2dp</dimen>
     <dimen name="density_4">4dp</dimen>
     <dimen name="density_5">5dp</dimen>
+    <dimen name="density_6">6dp</dimen>
     <dimen name="density_8">8dp</dimen>
     <dimen name="density_10">10dp</dimen>
     <dimen name="density_12">12dp</dimen>

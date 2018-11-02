@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llReplyMain"
+        android:id="@+id/llReplyMainleft"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:layout_marginEnd="@dimen/density_8"
             android:layout_marginRight="@dimen/density_8"
-            android:background="@drawable/custom_quote"
+            android:background="@drawable/custom_quote_left"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="5dp">
