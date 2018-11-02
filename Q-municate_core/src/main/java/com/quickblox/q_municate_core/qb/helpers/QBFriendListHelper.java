@@ -195,10 +195,8 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         Collection<Integer> friendList = new ArrayList<>();
         if (!roster.getEntries().isEmpty()) {
             for (ConnectycubeRosterEntry rosterEntry : roster.getEntries()) {
-                if(QMUserService.getInstance().getUserCache().get(Long.valueOf(rosterEntry.getUserId())) == null) {
-                    userIdsList.add(rosterEntry.getUserId());
-                }
-                if(dataManager.getFriendDataManager().getByUserId(rosterEntry.getUserId()) == null) {
+                userIdsList.add(rosterEntry.getUserId());
+                if (dataManager.getFriendDataManager().getByUserId(rosterEntry.getUserId()) == null) {
                     friendList.add(rosterEntry.getUserId());
                 }
             }
