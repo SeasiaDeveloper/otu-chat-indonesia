@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -167,7 +166,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
 //>>>>>>> origin/feature/migration
         int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_buble_edgeless : R.drawable.bg_chat_left_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
-        super.onBindViewMsgRightHolder(holder, chatMessage, position);
+        super.onBindViewMsgLeftHolder(holder, chatMessage, position);
     }
 
     @Override
@@ -178,6 +177,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
 //>>>>>>> origin/feature/migration
         int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        holder.attachImageView.setAdjustViewBounds(true);
         super.onBindViewAttachRightHolder(holder, chatMessage, position);
     }
 
@@ -186,6 +186,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         updateMessageState(chatMessage, chatDialog);
         int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_buble_edgeless : R.drawable.bg_chat_left_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        holder.attachImageView.setAdjustViewBounds(true);
         super.onBindViewAttachLeftHolder(holder, chatMessage, position);
     }
 
@@ -194,7 +195,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         updateMessageState(chatMessage, chatDialog);
         int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
-        super.onBindViewAttachLeftAudioHolder(holder, chatMessage, position);
+        super.onBindViewAttachRightAudioHolder(holder, chatMessage, position);
     }
 
     @Override
@@ -210,7 +211,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         updateMessageState(chatMessage, chatDialog);
         int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
-        super.onBindViewAttachLeftVideoHolder(holder, chatMessage, position);
+        super.onBindViewAttachRightVideoHolder(holder, chatMessage, position);
     }
 
     @Override
