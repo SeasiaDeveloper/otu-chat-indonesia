@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -106,6 +107,7 @@ public class SplashActivity extends BaseAuthActivity {
             startLandingActivity();
         }*/
         fBaseConf();
+
     }
 
     private void processPushIntent() {
@@ -114,6 +116,8 @@ public class SplashActivity extends BaseAuthActivity {
     }
 
     private void startLandingActivity() {
+        ServiceManager.getInstance().initUserTable();
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {

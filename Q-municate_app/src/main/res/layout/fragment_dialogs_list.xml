@@ -5,19 +5,9 @@
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F5ED"
     tools:ignore="RtlHardcoded,RtlSymmetry">
 
     <include layout="@layout/shadow_view" />
-
-
-    <!-- <com.yyydjk.library.BannerLayout
-         android:id="@+id/bannerLayout"
-         android:layout_width="match_parent"
-         android:layout_height="125dp"
-         android:visibility="gone"
-         app:autoPlayDuration="4000"
-         app:scrollDuration="1000" />-->
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -39,6 +29,7 @@
         android:id="@+id/frameEmptyList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#F7F5ED"
         android:visibility="gone">
 
         <com.eklanku.otuChat.ui.views.ARTextView

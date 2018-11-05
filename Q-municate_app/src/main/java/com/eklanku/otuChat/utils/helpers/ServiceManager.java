@@ -16,7 +16,7 @@ import com.connectycube.core.server.Performer;
 import com.connectycube.extensions.RxJavaPerformProcessor;
 import com.connectycube.pushnotifications.services.ConnectycubePushManager;
 import com.connectycube.pushnotifications.services.SubscribeService;
-import com.eklanku.otuChat.App;
+import com.eklanku.otuChat.Application;
 import com.facebook.accountkit.AccountKit;
 import com.quickblox.q_municate_auth_service.QMAuthService;
 import com.quickblox.q_municate_core.models.AppSession;
@@ -95,17 +95,31 @@ public class ServiceManager {
 
                         connectycubeUser.setPassword(password);
 
-                        saveOwnerUser(connectycubeUser);
-
                         AppSession.startSession(connectycubeUser);
-
                         return connectycubeUser;
                     }
+                })
+                .flatMap(connectycubeUser -> {
+                    Observable<Object> observable1 = Observable.fromCallable(() -> {
+                        saveOwnerUser(connectycubeUser);
+                        return null;
+                    })
+                            .subscribeOn(Schedulers.io());
+
+                    Observable<Object> observable2 = Observable.fromCallable(() -> {
+                        GoogleAnalyticsHelper.pushAnalyticsData(Application.getInstance().getApplicationContext(), connectycubeUser, "User Sign In");
+                        FlurryAnalyticsHelper.pushAnalyticsData(Application.getInstance().getApplicationContext());
+                        return null;
+                    })
+                            .subscribeOn(Schedulers.io());
+
+                    return Observable.zip(observable1, observable2,  (r1, r2) -> connectycubeUser);
                 })
                 .observeOn(AndroidSchedulers.mainThread());
 
         return result;
     }
+
 
     public Observable<ConnectycubeUser> login(final String socialProvider, final String accessToken, final String accessTokenSecret) {
         Observable<ConnectycubeUser> result = authService.login(socialProvider, accessToken, accessTokenSecret).subscribeOn(Schedulers.io())
@@ -355,6 +369,10 @@ public class ServiceManager {
         QMUserService.getInstance().getUserCache().createOrUpdate(user);
     }
 
+    public void initUserTable() {
+      ConnectycubeUser user = new ConnectycubeUser(1);
+      saveOwnerUser(user);
+    }
 
     private boolean hasUserCustomData(ConnectycubeUser user) {
         if (TextUtils.isEmpty(user.getCustomData())) {
