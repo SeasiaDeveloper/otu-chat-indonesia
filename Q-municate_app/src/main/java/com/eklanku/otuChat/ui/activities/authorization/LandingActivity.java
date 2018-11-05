@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -31,8 +30,6 @@ import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.PhoneNumber;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;*/
-import com.eklanku.otuChat.utils.helpers.FlurryAnalyticsHelper;
-import com.eklanku.otuChat.utils.helpers.GoogleAnalyticsHelper;
 import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.facebook.accountkit.AccessToken;
 import com.facebook.accountkit.Account;
@@ -52,7 +49,6 @@ import com.connectycube.core.ConnectycubeErrors;
 import com.connectycube.core.exception.ResponseException;
 import com.connectycube.core.request.PagedRequestBuilder;
 import com.quickblox.q_municate_core.core.command.Command;
-import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.LoginType;
 import com.quickblox.q_municate_core.qb.commands.rest.QBSignUpCommand;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
@@ -315,33 +311,15 @@ public class LandingActivity extends BaseAuthActivity {
 
             @Override
             public void onNext(ConnectycubeUser connectycubeUser) {
-                Log.d("LOGIN", "onNext");
-                Log.d("LOGIN", "onCompleted " + Thread.currentThread().getName());
-                Log.d("LOGIN", "onCompleted start");
-                performLoginSuccessAction(connectycubeUser);
-                Log.d("LOGIN", "onCompleted end");
+                 performLoginSuccessAction();
             }
         });
     }
 
-    private void performLoginSuccessAction(ConnectycubeUser user) {
-
+    private void performLoginSuccessAction() {
         hideProgress();
 
-        //AppSession.getSession().updateUser(user);
-
         startMainActivity();
-//        // send analytics data
-//        GoogleAnalyticsHelper.pushAnalyticsData(this, user, "User Sign In");
-//        FlurryAnalyticsHelper.pushAnalyticsData(this);
-
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-
     }
 
     protected void signUpWithNumber(String userPhone) {

@@ -1,7 +1,6 @@
 package com.eklanku.otuChat.utils.helpers;
 
 import android.content.Context;
-import android.os.Debug;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -17,7 +16,6 @@ import com.connectycube.core.server.Performer;
 import com.connectycube.extensions.RxJavaPerformProcessor;
 import com.connectycube.pushnotifications.services.ConnectycubePushManager;
 import com.connectycube.pushnotifications.services.SubscribeService;
-import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.Application;
 import com.facebook.accountkit.AccountKit;
 import com.quickblox.q_municate_auth_service.QMAuthService;
@@ -81,7 +79,6 @@ public class ServiceManager {
                 .map(new Func1<ConnectycubeUser, ConnectycubeUser>() {
                     @Override
                     public ConnectycubeUser call(ConnectycubeUser connectycubeUser) {
-                        Log.d("LOGIN", "map call " + Thread.currentThread().getName());
                         CoreSharedHelper.getInstance().saveUsersImportInitialized(true);
 
                         String password = userPassword;
@@ -103,27 +100,20 @@ public class ServiceManager {
                     }
                 })
                 .flatMap(connectycubeUser -> {
-                    Log.d("LOGIN", "flatMap call " + Thread.currentThread().getName());
-                    Observable<Object> run1 = Observable.fromCallable(() -> {
-                        Log.d("LOGIN", "run1 start");
+                    Observable<Object> observable1 = Observable.fromCallable(() -> {
                         saveOwnerUser(connectycubeUser);
-                        Log.d("LOGIN", "run1 end ");
                         return null;
                     })
-                            .subscribeOn(Schedulers.io())
-                            .doOnNext(str -> Log.d("LOGIN", "run1 " + Thread.currentThread().getName()));
-                    Observable<Object> run2 = Observable.fromCallable(() -> {
-                        Log.d("LOGIN", "run2 start");
+                            .subscribeOn(Schedulers.io());
+
+                    Observable<Object> observable2 = Observable.fromCallable(() -> {
                         GoogleAnalyticsHelper.pushAnalyticsData(Application.getInstance().getApplicationContext(), connectycubeUser, "User Sign In");
                         FlurryAnalyticsHelper.pushAnalyticsData(Application.getInstance().getApplicationContext());
-                        Log.d("LOGIN", "run2 end");
                         return null;
                     })
-                            .subscribeOn(Schedulers.io())
-                            .doOnNext(str -> Log.d("LOGIN", "run2 " + Thread.currentThread().getName()));
+                            .subscribeOn(Schedulers.io());
 
-                    return Observable.zip(run1, run2,  (r1, r2) -> connectycubeUser)
-                            .doOnNext(str -> Log.d("LOGIN", "after zip " + Thread.currentThread().getName()));
+                    return Observable.zip(observable1, observable2,  (r1, r2) -> connectycubeUser);
                 })
                 .observeOn(AndroidSchedulers.mainThread());
 
