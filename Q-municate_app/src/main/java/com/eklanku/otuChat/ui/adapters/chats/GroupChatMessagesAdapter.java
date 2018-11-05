@@ -397,7 +397,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
                        /* v = vi.inflate(R.layout.layout_chat_reply_message, null);
                         llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);*/
 
-                        LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         lpReply.setMargins(padLeft, 5, padRight, 5);
                         llReplyMain.setLayoutParams(lpReply);
 

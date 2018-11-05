@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         //MessageTextViewRight x = holder.itemView.findViewById(R.id.msg_message_text_view_right);
 
         TextView timeView = holder.itemView.findViewById(R.id.custom_msg_text_time_message);
+        //timeView.setGravity(Gravity.END | Gravity.RIGHT);
         //timeView.setUseSystemDefault(false);
         setMsgTime(timeView, chatMessage);
 
@@ -208,7 +210,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
                         //llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
 
-                        LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         lpReply.setMargins(padLeft, 5, padRight, 5);
                         llReplyMain.setLayoutParams(lpReply);
 
