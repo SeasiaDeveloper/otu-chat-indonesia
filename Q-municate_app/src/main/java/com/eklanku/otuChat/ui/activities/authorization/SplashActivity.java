@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -37,6 +38,7 @@ import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
+import com.quickblox.q_municate_user_service.QMUserService;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -106,6 +108,7 @@ public class SplashActivity extends BaseAuthActivity {
             startLandingActivity();
         }*/
         fBaseConf();
+
     }
 
     private void processPushIntent() {
@@ -114,6 +117,10 @@ public class SplashActivity extends BaseAuthActivity {
     }
 
     private void startLandingActivity() {
+        Log.d("LOGIN", "initUserTable start");
+        ServiceManager.getInstance().initUserTable();
+        Log.d("LOGIN", "initUserTable end");
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {

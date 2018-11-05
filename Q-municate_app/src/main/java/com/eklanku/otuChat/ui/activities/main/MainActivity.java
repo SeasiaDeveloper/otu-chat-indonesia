@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -126,8 +127,8 @@ import com.eklanku.otuChat.utils.helpers.DbHelper;
 
 public class MainActivity extends BaseLoggableActivity implements ObservableScrollViewCallbacks/*, NavigationView.OnNavigationItemSelectedListener*/ {
 
-    @Bind(R.id.bannerLayout)
-    BannerLayout bannerSlider;
+//    @Bind(R.id.bannerLayout)
+   // BannerLayout bannerSlider;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -275,14 +276,17 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("LOGIN", "Main onCreate start");
+        Debug.startMethodTracing("cpu.trace");
         super.onCreate(savedInstanceState);
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+//        BottomNavigationView navigation = findViewById(R.id.navigation);
+//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //lblSaldo = (TextView) findViewById(R.id.tvSaldo);
-        layoutCollaps = findViewById(R.id.layout_);
-        layoutSaldo = findViewById(R.id.laySaldo);
-        tvSaldo = findViewById(R.id.tvSaldo);
-        layoutSaldo.setVisibility(View.GONE);
+//        layoutCollaps = findViewById(R.id.layout_);
+//        layoutSaldo = findViewById(R.id.laySaldo);
+//        tvSaldo = findViewById(R.id.tvSaldo);
+//        layoutSaldo.setVisibility(View.GONE);
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -328,11 +332,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         mParallaxImageHeight = getResources().getDimensionPixelSize(R.dimen.density_200);
 
         Activity activity = this;
-        if (!activity.isFinishing()) {
-            loadBanner();
-            LoadSaldoBonus(strUserID, strAccessToken);
-            //loadDeposite(strUserID,strAccessToken);
-        }
+//        if (!activity.isFinishing()) {
+//            loadBanner();
+//            LoadSaldoBonus(strUserID, strAccessToken);
+//            //loadDeposite(strUserID,strAccessToken);
+//        }
 
         preferenceManager = new PreferenceManager(this);
 
@@ -359,6 +363,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         navigationView.setItemIconTintList(null);
         txtEkl.setText(strUserID);
         mainActivity = this;
+        Log.d("LOGIN", "Main onCreate end");
+        Debug.stopMethodTracing();
     }
 
     @Override
@@ -922,7 +928,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 //    }
 
     public void loadBanner() {
-        bannerSlider.setImageLoader(new GlideImageLoader());
+        //bannerSlider.setImageLoader(new GlideImageLoader());
         List<String> urls = new ArrayList<>();
         Call<LoadBanner> callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(MainActivity.this), strApIUse);
         callLoadBanner.enqueue(new Callback<LoadBanner>() {
@@ -957,7 +963,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
                         urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
                     }
-                    bannerSlider.setViewUrls(urls);
+                    //bannerSlider.setViewUrls(urls);
                 }
             }
 
@@ -968,7 +974,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
                 urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
 
-                bannerSlider.setViewUrls(urls);
+                //bannerSlider.setViewUrls(urls);
             }
         });
     }
