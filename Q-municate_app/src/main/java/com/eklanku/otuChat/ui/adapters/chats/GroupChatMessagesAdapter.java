@@ -342,6 +342,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
     }
 
     private void addReplyView(RecyclerView.ViewHolder holder, CombinationMessage chatMessage, int position) {
+        int x = 1;
         try {
             int padLeft = 20;
             int padRight = 0;
@@ -349,6 +350,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
             if (AppSession.getSession().getUser().getId().equals(chatMessage.getDialogOccupant().getUser().getId())) {
                 padLeft = 10;
                 padRight = 10;
+                x = 0;
             } /*else {
                 padLeft = 15;
             }*/
@@ -380,11 +382,22 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
                             insertPoint.removeViewAt(0);
                         }
                         LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View v = vi.inflate(R.layout.layout_chat_reply_message, null);
 
-                        LinearLayout llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
+                        View v;
+                        LinearLayout llReplyMain;
 
-                        LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        if (x == 0) {
+                            v = vi.inflate(R.layout.layout_chat_reply_message, null);
+                            llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
+                        } else {
+                            v = vi.inflate(R.layout.layout_chat_reply_message_left, null);
+                            llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMainleft);
+                        }
+
+                       /* v = vi.inflate(R.layout.layout_chat_reply_message, null);
+                        llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);*/
+
+                        LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         lpReply.setMargins(padLeft, 5, padRight, 5);
                         llReplyMain.setLayoutParams(lpReply);
 

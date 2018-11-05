@@ -3,13 +3,13 @@
     android:id="@+id/item_reply"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:gravity="end"
+    android:gravity="center"
     android:layout_margin="@dimen/density_8"
     android:layout_weight="1"
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/llReplyMain"
+        android:id="@+id/llReplyMainleft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -26,10 +26,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_marginEnd="@dimen/density_8"
             android:layout_marginRight="@dimen/density_8"
-            android:background="@drawable/custom_quote"
+            android:background="@drawable/custom_quote_left"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="5dp">

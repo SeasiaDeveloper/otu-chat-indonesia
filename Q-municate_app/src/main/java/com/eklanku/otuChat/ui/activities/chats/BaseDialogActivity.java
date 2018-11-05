@@ -96,6 +96,7 @@ import com.connectycube.ui.chatmessage.adapter.media.recorder.exceptions.MediaRe
 import com.connectycube.ui.chatmessage.adapter.media.recorder.listeners.MediaRecordListener;
 import com.connectycube.ui.chatmessage.adapter.media.recorder.view.RecordAudioButton;
 import com.connectycube.ui.chatmessage.adapter.media.video.ui.VideoPlayerActivity;
+import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
 import com.rockerhieu.emojicon.emoji.Emojicon;
@@ -142,7 +143,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     RecyclerView messagesRecyclerView;
 
     @Bind(R.id.message_edittext)
-    EditText messageEditText;
+    EmojiconEditText messageEditText;
 
     @Bind(R.id.attach_button)
     ImageButton attachButton;
@@ -279,6 +280,8 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                 getSize();
             }
         });
+
+        messageEditText.setUseSystemDefault(false);
     }
 
 

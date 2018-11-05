@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.connectycube.ui.chatmessage.adapter.widget.MessageTextViewRight;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.utils.DateUtils;
-import com.eklanku.otuChat.utils.listeners.FriendOperationListener;
 import com.connectycube.storage.model.ConnectycubeFile;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_db.managers.DataManager;
@@ -27,6 +28,7 @@ import com.quickblox.q_municate_db.models.DialogNotification;
 import com.quickblox.q_municate_db.models.State;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.connectycube.ui.chatmessage.adapter.media.video.thumbnails.VideoThumbnail;
+import com.rockerhieu.emojicon.EmojiconTextView;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import org.json.JSONArray;
@@ -43,9 +45,6 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
     private static final int SECOND_IN_MILLIS = 1000;
 
     private static int EMPTY_POSITION = -1;
-    private int lastRequestPosition = EMPTY_POSITION;
-    private int lastInfoRequestPosition = EMPTY_POSITION;
-    private FriendOperationListener friendOperationListener;
     PrivateDialogActivity.ItemClickListener itemClickListener;
     ArrayList<CombinationMessage> selectedMessagesList;
 
@@ -53,9 +52,8 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     protected DataManager dataManager;
 
-    public PrivateChatMessageAdapter(BaseActivity baseActivity, QMUser opponentUser, List<CombinationMessage> chatMessages, FriendOperationListener friendOperationListener, ConnectycubeChatDialog chatDialog, PrivateDialogActivity.ItemClickListener itemClickListener) {
+    public PrivateChatMessageAdapter(BaseActivity baseActivity, QMUser opponentUser, List<CombinationMessage> chatMessages, ConnectycubeChatDialog chatDialog, PrivateDialogActivity.ItemClickListener itemClickListener) {
         super(baseActivity, chatDialog, chatMessages);
-        this.friendOperationListener = friendOperationListener;
         dataManager = DataManager.getInstance();
         this.itemClickListener = itemClickListener;
         this.opponentUser = opponentUser;
@@ -68,67 +66,15 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
     }
 
     @Override
-    protected void onBindViewCustomHolder(MessageViewHolder holder, CombinationMessage chatMessage, final int position) {
-        Log.d(TAG, "onBindViewCustomHolder combinationMessage getBody= " + chatMessage.getBody());
-        Log.d("OPPO-1", "onBindViewCustomHolder: "+chatMessage.getBody());
-        FriendsViewHolder friendsViewHolder = (FriendsViewHolder) holder;
-
-        boolean friendsRequestMessage = DialogNotification.Type.FRIENDS_REQUEST.equals(
-                chatMessage.getNotificationType());
-        boolean friendsInfoRequestMessage = chatMessage.getNotificationType() != null && !friendsRequestMessage;
-
-        TextView textView = (TextView) holder.itemView.findViewById(R.id.message_textview);
-        TextView timeTextMessageTextView = (TextView) holder.itemView.findViewById(R.id.time_text_message_textview);
-        textView.setTextIsSelectable(false);
-
-        if (friendsRequestMessage) {
-            textView.setText(chatMessage.getBody());
-            timeTextMessageTextView.setText(DateUtils.formatDateSimpleTime(chatMessage.getCreatedDate() * SECOND_IN_MILLIS));
-
-            setVisibilityFriendsActions(friendsViewHolder, View.GONE);
-        } else if (friendsInfoRequestMessage) {
-            Log.d(TAG, "friendsInfoRequestMessage onBindViewCustomHolder combinationMessage getBody= " + chatMessage.getBody());
-            textView.setText(chatMessage.getBody());
-            timeTextMessageTextView.setText(DateUtils.formatDateSimpleTime(chatMessage.getCreatedDate() * SECOND_IN_MILLIS));
-
-            setVisibilityFriendsActions(friendsViewHolder, View.GONE);
-
-            lastInfoRequestPosition = position;
-        } else {
-            Log.d(TAG, "else onBindViewCustomHolderr combinationMessage getBody= " + chatMessage.getBody());
-            textView.setText(chatMessage.getBody());
-            timeTextMessageTextView.setText(DateUtils.formatDateSimpleTime(chatMessage.getCreatedDate() * SECOND_IN_MILLIS));
-        }
-
-        if (!State.READ.equals(chatMessage.getState()) && isIncoming(chatMessage) && baseActivity.isNetworkAvailable()) {
-            updateMessageState(chatMessage, chatDialog);
-        }
-        // check if last messageCombination is request messageCombination
-        boolean lastRequestMessage = (position == getItemCount() - 1 && friendsRequestMessage);
-        if (lastRequestMessage) {
-            findLastFriendsRequest();
-        }
-
-
-        // check if friend was rejected/deleted.
-        if (lastRequestPosition != EMPTY_POSITION && lastRequestPosition < lastInfoRequestPosition) {
-            lastRequestPosition = EMPTY_POSITION;
-        } else if ((lastRequestPosition != EMPTY_POSITION && lastRequestPosition == position)) { // set visible friends actions
-            setVisibilityFriendsActions((FriendsViewHolder) holder, View.VISIBLE);
-            initListeners((FriendsViewHolder) holder, position, chatMessage.getDialogOccupant().getUser().getId());
-        }
-
-        textView.setFocusable(false);
-        textView.setTextIsSelectable(false);
-        textView.setClickable(false);
-    }
-
-    @Override
     protected void onBindViewMsgRightHolder(final TextMessageHolder holder, CombinationMessage chatMessage, final int position) {
         ImageView signInView = (ImageView) holder.itemView.findViewById(R.id.message_status_image_view);
         setViewVisibility(holder.avatar, View.GONE);
 
+        //MessageTextViewRight x = holder.itemView.findViewById(R.id.msg_message_text_view_right);
+
         TextView timeView = holder.itemView.findViewById(R.id.custom_msg_text_time_message);
+        //timeView.setGravity(Gravity.END | Gravity.RIGHT);
+        //timeView.setUseSystemDefault(false);
         setMsgTime(timeView, chatMessage);
 
         showSendStatusView(signInView, chatMessage);
@@ -207,6 +153,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
     }
 
     private void addReplyView(RecyclerView.ViewHolder holder, CombinationMessage chatMessage, int position) {
+        int x = 0;
         try {
             int padLeft = 10;
             int padRight = 10;
@@ -214,6 +161,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
             if (opponentUser != null && opponentUser.getId().equals(chatMessage.getDialogOccupant().getUser().getId())) {
                 padLeft = 20;
                 padRight = 0;
+                x = 1;
             } /*else {
                 padRight = 5;
             }*/
@@ -248,12 +196,21 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
                         if (insertPoint.getChildCount() >= 2) {
                             insertPoint.removeViewAt(0);
                         }
+
                         LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View v = vi.inflate(R.layout.layout_chat_reply_message, null);
+                        View v;
+                        LinearLayout llReplyMain;
+                        if (x == 0) {
+                            v = vi.inflate(R.layout.layout_chat_reply_message, null);
+                            llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
+                        } else {
+                            v = vi.inflate(R.layout.layout_chat_reply_message_left, null);
+                            llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMainleft);
+                        }
 
-                        LinearLayout llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
+                        //llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
 
-                        LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         lpReply.setMargins(padLeft, 5, padRight, 5);
                         llReplyMain.setLayoutParams(lpReply);
 
@@ -401,88 +358,8 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
     }
 
     @Override
-    public int getItemViewType(int position) {
-        CombinationMessage combinationMessage = getItem(position);
-
-        if (combinationMessage.getNotificationType() != null) {
-            Log.d(TAG, "combinationMessage.getNotificationType()" + combinationMessage.getNotificationType());
-            return TYPE_REQUEST_MESSAGE;
-        }
-        return super.getItemViewType(position);
-    }
-
-    @Override
-    protected MessageViewHolder onCreateCustomViewHolder(ViewGroup parent, int viewType) {
-        return viewType == TYPE_REQUEST_MESSAGE ? new FriendsViewHolder(inflater.inflate(R.layout.item_friends_notification_message, parent, false)) : null;
-    }
-
-    @Override
     protected void showAttachUI(ImageAttachHolder viewHolder, boolean isIncoming) {
         setViewVisibility(viewHolder.itemView.findViewById(R.id.msg_bubble_background), View.VISIBLE);
-    }
-
-    public void findLastFriendsRequestMessagesPosition() {
-        new FindLastFriendsRequestThread().run();
-    }
-
-    private void findLastFriendsRequest() {
-        for (int i = 0; i < getList().size(); i++) {
-            findLastFriendsRequest(i, getList().get(i));
-        }
-    }
-
-    public void clearLastRequestMessagePosition() {
-        lastRequestPosition = EMPTY_POSITION;
-    }
-
-    private void findLastFriendsRequest(int position, CombinationMessage combinationMessage) {
-        boolean ownMessage;
-        boolean friendsRequestMessage;
-        boolean isFriend;
-
-        if (combinationMessage.getNotificationType() != null) {
-            ownMessage = !combinationMessage.isIncoming(currentUser.getId());
-            friendsRequestMessage = DialogNotification.Type.FRIENDS_REQUEST.equals(
-                    combinationMessage.getNotificationType());
-
-            if (friendsRequestMessage && !ownMessage) {
-                isFriend = dataManager.getFriendDataManager().
-                        getByUserId(combinationMessage.getDialogOccupant().getUser().getId()) != null;
-                if (!isFriend) {
-                    lastRequestPosition = position;
-                }
-            }
-        }
-    }
-
-    private void setVisibilityFriendsActions(FriendsViewHolder viewHolder, int visibility) {
-        setViewVisibility(viewHolder.acceptFriendImageView, visibility);
-        setViewVisibility(viewHolder.dividerView, visibility);
-        setViewVisibility(viewHolder.rejectFriendImageView, visibility);
-    }
-
-    private void initListeners(FriendsViewHolder viewHolder, final int position, final int userId) {
-        viewHolder.acceptFriendImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                friendOperationListener.onAcceptUserClicked(position, userId);
-            }
-        });
-
-        viewHolder.rejectFriendImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                friendOperationListener.onRejectUserClicked(position, userId);
-            }
-        });
-    }
-
-    private class FindLastFriendsRequestThread extends Thread {
-
-        @Override
-        public void run() {
-            findLastFriendsRequest();
-        }
     }
 
     protected void setMessageStatus(ImageView imageView, boolean messageDelivered, boolean messageRead, boolean messageSent) {
@@ -594,35 +471,6 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
             } else {
                 holder.itemView.setBackgroundColor(baseActivity.getResources().getColor(R.color.fui_transparent));
             }
-        }
-    }
-
-    protected static class FriendsViewHolder extends MessageViewHolder {
-        @Nullable
-        @Bind(R.id.message_textview)
-        TextView messageTextView;
-
-        @Nullable
-        @Bind(R.id.time_text_message_textview)
-        TextView timeTextMessageTextView;
-
-        @Nullable
-        @Bind(R.id.accept_friend_imagebutton)
-        ImageView acceptFriendImageView;
-
-        @Nullable
-        @Bind(R.id.divider_view)
-        View dividerView;
-
-        @Nullable
-        @Bind(R.id.reject_friend_imagebutton)
-        ImageView rejectFriendImageView;
-
-
-        public FriendsViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, itemView);
-            messageTextView.setTextIsSelectable(false);
         }
     }
 }

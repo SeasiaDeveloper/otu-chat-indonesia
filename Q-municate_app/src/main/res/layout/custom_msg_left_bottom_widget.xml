@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:paddingBottom="@dimen/density_4"
     style="@style/MatchWidth">
 
     <TextView
         android:id="@+id/custom_msg_text_time_message_left_bottom"
         style="@style/TextViewTimeMsg.Right"
+        android:visibility="visible"
         tools:text="15.05" />
 
 </LinearLayout>

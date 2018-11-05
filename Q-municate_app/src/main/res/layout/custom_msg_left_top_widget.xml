@@ -10,6 +10,9 @@
         style="@style/WrapContent"
         android:layout_weight="1"
         android:paddingRight="8dp"
+        android:paddingEnd="@dimen/density_8"
+        android:paddingStart="@dimen/density_8"
+        android:paddingLeft="@dimen/density_8"
         android:textStyle="bold"
         tools:text="Oppponent Name" />
 

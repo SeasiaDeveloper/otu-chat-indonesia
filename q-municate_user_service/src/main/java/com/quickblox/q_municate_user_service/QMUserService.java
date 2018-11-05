@@ -25,6 +25,8 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.functions.Func0;
 import rx.functions.Func1;
+import rx.functions.Func2;
+import rx.schedulers.Schedulers;
 
 public class QMUserService extends QMBaseService {
 
@@ -36,6 +38,7 @@ public class QMUserService extends QMBaseService {
 
     @Inject
     protected QMUserCache userCache;
+    private ArrayList<ConnectycubeAddressBookContact> addressBookCache;
 
     public static void init(QMUserCache userCache){
         instance = new QMUserService(userCache);
@@ -47,6 +50,7 @@ public class QMUserService extends QMBaseService {
 
     public QMUserService(QMUserCache userCache){
         this.userCache = userCache != null ? userCache : new QMUserMemoryCache();
+        this.addressBookCache = addressBookCache != null ? addressBookCache : new ArrayList<ConnectycubeAddressBookContact>();
         super.init(userCache) ;
     }
 
@@ -243,11 +247,76 @@ public class QMUserService extends QMBaseService {
             List<QMUser> qmUsers = userCache.getUsersByIDs(usersIds);
             return qmUsers.size() == 0 ? getUsersByIDsSync(usersIds, requestBuilder, true) : qmUsers;
         }
-
-        result = QMUser.convertList(ConnectycubeUsers.getUsersByIDs(usersIds, requestBuilder).perform());
+        result = QMUser.convertList(syncAddressBookContactsAndUsersByIds(usersIds, requestBuilder).toBlocking().first());
         userCache.createOrUpdateAll(result);
-
         return result;
+    }
+
+    private Observable<List<ConnectycubeUser>> syncAddressBookContactsAndUsersByIds(final Collection<Integer> usersIds, final PagedRequestBuilder requestBuilder) {
+        final Observable<ArrayList<ConnectycubeAddressBookContact>> observableBook = getCurrentAddressBook();
+        Performer<ArrayList<ConnectycubeUser>> performer = ConnectycubeUsers.getUsersByIDs(usersIds, requestBuilder);
+        final Observable<ArrayList<ConnectycubeUser>> observableUsers = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+
+        return Observable.zip(
+                observableBook.subscribeOn(Schedulers.io()),
+                observableUsers.subscribeOn(Schedulers.io()),
+                new Func2<ArrayList<ConnectycubeAddressBookContact>, List<ConnectycubeUser>, List<ConnectycubeUser>>() {
+                    @Override
+                    public List<ConnectycubeUser> call(ArrayList<ConnectycubeAddressBookContact> contacts, List<ConnectycubeUser> users) {
+                        //add names
+                        for (ConnectycubeUser user : users) {
+                            for (ConnectycubeAddressBookContact contact : contacts) {
+                                if(user.getPhone().equals(contact.getPhone())) {
+                                    user.setFullName(contact.getName());
+                                }
+                            }
+                        }
+                        return users;
+                    }
+                }
+        );
+    }
+
+    private Observable<ConnectycubeUser> syncAddressBookContactsAndUserById(String column, String value) {
+        final Observable<ArrayList<ConnectycubeAddressBookContact>> observableBook = getCurrentAddressBook();
+        Performer<ConnectycubeUser> performer = getUserByColumnFromServer(column, value);
+        final Observable<ConnectycubeUser> observableUser = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+        return Observable.zip(
+                observableBook.subscribeOn(Schedulers.io()),
+                observableUser.subscribeOn(Schedulers.io()),
+                new Func2<ArrayList<ConnectycubeAddressBookContact>, ConnectycubeUser, ConnectycubeUser>() {
+                    @Override
+                    public ConnectycubeUser call(ArrayList<ConnectycubeAddressBookContact> contacts, ConnectycubeUser user) {
+                        //add names
+                        for (ConnectycubeAddressBookContact contact : contacts) {
+                            if (user.getPhone().equals(contact.getPhone())) {
+                                user.setFullName(contact.getName());
+                            }
+                        }
+                        return user;
+                    }
+                }
+        );
+    }
+
+    private Observable<ArrayList<ConnectycubeAddressBookContact>> getCurrentAddressBook() {
+        return addressBookCache.isEmpty() ? getAddressBookFromRest() : getAddressBookCache();
+    }
+
+    private Observable<ArrayList<ConnectycubeAddressBookContact>> getAddressBookCache() {
+        return Observable.just(addressBookCache);
+    }
+
+    private Observable<ArrayList<ConnectycubeAddressBookContact>> getAddressBookFromRest() {
+        Observable<ArrayList<ConnectycubeAddressBookContact>> observableBook = getAddressBook();
+        return observableBook.map(new Func1<ArrayList<ConnectycubeAddressBookContact>, ArrayList<ConnectycubeAddressBookContact>>() {
+            @Override
+            public ArrayList<ConnectycubeAddressBookContact> call(ArrayList<ConnectycubeAddressBookContact> contacts) {
+                addressBookCache.clear();
+                addressBookCache.addAll(contacts);
+                return addressBookCache;
+            }
+        });
     }
 
 //    public Performer<ArrayList<ConnectycubeUser>> getUsersByIDsPerformer(final Collection<Integer> usersIds, final QBPagedRequestBuilder requestBuilder, final boolean forceLoad){
@@ -445,7 +514,7 @@ public class QMUserService extends QMBaseService {
            return  user == null ? getUserByColumnSync(column, value, true) : user;
         }
 
-        ConnectycubeUser loadedUser = getUserByColumnFromServer(column,value).perform();
+        ConnectycubeUser loadedUser = QMUser.convert(syncAddressBookContactsAndUserById(column, value).toBlocking().first());
 
         //TODO VT temp code before implement feature "last user activity" in SDK
         ConnectycubeUser userWithActualLastActivity = getUserWithLatestLastActivity(loadedUser);

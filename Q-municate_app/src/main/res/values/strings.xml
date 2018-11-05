@@ -126,7 +126,7 @@
     <string name="dialog_attach_video">attachment video</string>
     <string name="dialog_location">location</string>
     <string name="dialog_now_typing">Typing…</string>
-    <string name="dialog_message_reject_friend">Do you really want to reject contact request from %1$s?</string>
+    <!--<string name="dialog_message_reject_friend">Do you really want to reject contact request from %1$s?</string>-->
     <string name="dialog_ctx_menu_reply">Reply</string>
     <string name="dialog_ctx_menu_prv_message">Private Message</string>
     <string name="dialog_ctx_menu_video_call">Video Call</string>
@@ -245,7 +245,7 @@
     <string name="invite_friends_choose_email_provider">Choose an email provider:</string>
     <string name="invite_friends_subject_of_invitation">OTU Chat</string>
     <string name="invite_friends_body_of_invitation">Dear friend, use OTU Chat application to reach me!\nDownload it here: http://q-municate.com/</string>
-    <string name="invite_friends_fb_request_canceled">Request cancelled</string>
+    <!--<string name="invite_friends_fb_request_canceled">Request cancelled</string>-->
 
 
     <!-- Local/Global Search -->
@@ -291,7 +291,7 @@
     <string name="dlg_choose_image_from">Select image from…</string>
     <string name="dlg_choose_media_from">Select media from…</string>
     <string name="snackbar_new_message_title">%1$s\nMessage: %2$s</string>
-    <string name="snackbar_new_contact_request_title">%1$s\nNew Contacts request</string>
+    <!--<string name="snackbar_new_contact_request_title">%1$s\nNew Contacts request</string>-->
     <string name="facebook_exception">Facebook exception: </string>
     <string name="error_playing_ringtone">Error during playing ringtone</string>
     <string name="coming_soon">Coming soon…</string>
@@ -535,6 +535,8 @@
     <string name="lipsum">With the aim of helping the community, we are providing free and useful resources, information, tips and tricks to learn Android development. We believe that education is a basic human right and hence we seek to make it possible for all people in the world to learn Android development without any hassle. This is one stop solution for both android developers and learners. Here at Android Tutorial Point we thrive to deliver the best tutorials. In this direction, we are trying to create a community that will cater to your needs, whether you are a beginner or a seasoned veteran. Learners can refer our basic tutorials and developers can refer Material Design, Networking and Intermediate tutorials. Stick with us for a while, and we promise you will become an Android Rockstar.Wanna part of this journey? Contact Us. You are most cordially invited to connect with us. Kapil Gupta: Kapil is a technology enthusiast with a wide knowledge base and experience with multiple programming languages. He is currently working with world’s second largest software company. He loves to create and automate stuff. He is fond of working on new and emerging technology. Due to his love for sharing knowledge, he is a part of android tutorial point team. Feel free to contact him on Facebook or LinkedIn. You can also mail him at kapilguptansit@gmail.com. Navneet Goel: Navneet is a Digital Marketing and Coding enthusiast with the heart of an entrepreneur. Passed out of NSIT Delhi in 2014, He is currently working in a multinational company as an RnD Engineer and used to write Android Tutorials in free time. He believes in giving back to society and hence started this blog. You are most welcome to connect with him on Facebook, Twitter or LinkedIn. You can also mail him at navneetgoel44@gmail.com. Android Logo - In 2007, the green Android logo was designed for Google by graphic designer Irina Blok. The design team was tasked with a project to create a universally identifiable icon with the specific inclusion of a robot in the final design. After numerous design developments based on science-fiction and space movies, the team eventually sought inspiration from the human symbol on restroom doors and modified the figure into a robot shape. As Android is open-sourced, it was agreed that the logo should be likewise, and since its launch the green logo has been reinterpreted into countless variations on the original design. Linux kernel - Android variant of the Linux kernel has further architectural changes that are implemented by Google outside the typical Linux kernel development cycle, such as the inclusion of components like Binder, ashmem, pmem, logger, wakelocks, and different out-of-memory handling.</string>
     <string name="navigation_drawer_open">Open Drawer</string>
     <string name="navigation_drawer_close">Close Drawer</string>
+
+    <string name="text">Pengembangan perangkat lunak Android adalah proses di mana aplikasi baru diciptakan untuk sistem operasi Android. Aplikasi tersebut biasanya dikembangkan dalam bahasa pemrograman Java dengan menggunakan Software Development Kit Android, tetapi perkakas lainnya juga tersedia.</string>
 
 
 </resources>
