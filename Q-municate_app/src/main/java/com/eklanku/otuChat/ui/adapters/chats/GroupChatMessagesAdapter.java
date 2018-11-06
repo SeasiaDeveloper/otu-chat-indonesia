@@ -362,11 +362,15 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
 
             insertPoint = (ViewGroup) ((MessageViewHolder) holder).bubbleFrame;
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+           /* LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             params.gravity = Gravity.RIGHT | Gravity.END;
-            insertPoint.getChildAt(0).setLayoutParams(params);
+            insertPoint.getChildAt(0).setLayoutParams(params);*/
 
-            if (holder instanceof ImageAttachHolder) {
+            if (holder instanceof TextMessageHolder) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                params.gravity = Gravity.RIGHT | Gravity.END;
+                insertPoint.getChildAt(0).setLayoutParams(params);
+            } else if (holder instanceof ImageAttachHolder) {
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 lp.setMargins(padLeft, 120, padRight, 5);
                 ((ImageAttachHolder) holder).attachImageView.setLayoutParams(lp);
