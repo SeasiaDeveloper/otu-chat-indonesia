@@ -60,6 +60,13 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
     }
 
     @Override
+    public void setNewData(List<DialogWrapper> newData) {
+        objectsList.clear();
+        objectsList.addAll(newData);
+        notifyDataSetChanged();
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //ViewHolder viewHolder;
 

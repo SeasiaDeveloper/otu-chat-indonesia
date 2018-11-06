@@ -531,7 +531,9 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
             updateDialogsListFromQueue();
         }
 
-        updateDialogsAdapter(dialogsList);
+        if (needUpdateDialogsAdapter(dialogsList)) {
+            updateDialogsAdapter(dialogsList);
+        }
 
         checkEmptyList(dialogsListAdapter.getCount());
 
@@ -560,6 +562,10 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
             Log.d(TAG, "onLoadFinished isLoadRestFinished updateDialogsProcess= " + updateDialogsProcess);
         }
         Log.d(TAG, "onLoadFinished dialogsListAdapter.getCount() " + dialogsListAdapter.getCount());
+    }
+
+    private boolean needUpdateDialogsAdapter(List<DialogWrapper> dialogsList) {
+        return dialogsList.size() != 0;
     }
 
     private void addChat() {

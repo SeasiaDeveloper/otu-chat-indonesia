@@ -6,7 +6,9 @@ import android.util.Log;
 
 import com.quickblox.q_municate_db.managers.DataManager;
 
-public abstract class BaseLoader<T> extends AsyncTaskLoader<T> {
+import java.util.List;
+
+public abstract class BaseLoader<T extends List<?>> extends AsyncTaskLoader<T> {
 
     private static final String TAG = BaseLoader.class.getSimpleName();
 
@@ -43,7 +45,9 @@ public abstract class BaseLoader<T> extends AsyncTaskLoader<T> {
 
         if (objectsList != null) {
             // Deliver any previously loaded data immediately.
+            // for now need just make request for proceeding load data, but not passing any current data, so clear it
             Log.i(TAG, "+++ Delivering previously loaded data to the client...");
+            objectsList.clear();
             deliverResult(objectsList);
         }
 
