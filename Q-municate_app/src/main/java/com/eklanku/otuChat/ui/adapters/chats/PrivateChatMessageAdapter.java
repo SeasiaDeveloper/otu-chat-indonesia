@@ -216,7 +216,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
                         //llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
 
-                        LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         lpReply.setMargins(padLeft, 5, padRight, 5);
                         llReplyMain.setLayoutParams(lpReply);
 
@@ -256,7 +256,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
                             }
 
                         }
-                        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                         //insertPoint.getChildAt(0).bringToFront();
                     }
 
