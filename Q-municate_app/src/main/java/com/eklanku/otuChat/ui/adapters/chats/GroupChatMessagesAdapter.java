@@ -3,6 +3,7 @@ package com.eklanku.otuChat.ui.adapters.chats;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -351,9 +352,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
                 padLeft = 10;
                 padRight = 10;
                 x = 0;
-            } /*else {
-                padLeft = 15;
-            }*/
+            }
 
             if (position < 5) {
                 Log.v("Positions", "Positions: " + position);
@@ -362,6 +361,10 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
             ViewGroup insertPoint = null;
 
             insertPoint = (ViewGroup) ((MessageViewHolder) holder).bubbleFrame;
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            params.gravity = Gravity.RIGHT | Gravity.END;
+            insertPoint.getChildAt(0).setLayoutParams(params);
 
             if (holder instanceof ImageAttachHolder) {
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);

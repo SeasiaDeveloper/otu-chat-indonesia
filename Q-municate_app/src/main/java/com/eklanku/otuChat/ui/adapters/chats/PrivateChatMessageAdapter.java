@@ -155,6 +155,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
     private void addReplyView(RecyclerView.ViewHolder holder, CombinationMessage chatMessage, int position) {
         int x = 0;
         try {
+
             int padLeft = 10;
             int padRight = 10;
 
@@ -174,6 +175,11 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
             if (holder instanceof TextMessageHolder) {
                 insertPoint = (ViewGroup) ((TextMessageHolder) holder).bubbleFrame;
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                params.gravity = Gravity.RIGHT | Gravity.END;
+                insertPoint.getChildAt(0).setLayoutParams(params);
+
             } else if (holder instanceof ImageAttachHolder) {
                 insertPoint = (ViewGroup) ((ImageAttachHolder) holder).bubbleFrame;
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
