@@ -1039,7 +1039,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         return combinationMessages;
     }
 
-    protected void loadNextPartMessagesFromDb(final boolean isLoadOld, final boolean needUpdateAdapter) {
+    protected synchronized void loadNextPartMessagesFromDb(final boolean isLoadOld, final boolean needUpdateAdapter) {
         long messageDate = getMessageDateForLoadByCurrentList(isLoadOld);
 
         final List<CombinationMessage> requestedMessages = buildLimitedCombinationMessagesListByDate(
@@ -1314,6 +1314,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
                 if (action == MessageDataManager.DELETE_BY_ID_ACTION
                         || action == MessageDataManager.DELETE_ACTION) {
+                    List<Message> deletedMessages = (ArrayList<Message>) observableData.getSerializable(MessageDataManager.EXTRA_OBJECT_ID);
                     combinationMessagesList.clear();
                     loadNextPartMessagesFromDb(false, true);
                 }
