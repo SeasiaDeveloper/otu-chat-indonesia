@@ -1,17 +1,23 @@
 package com.eklanku.otuChat.ui.adapters.chats;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.DrawableRequestBuilder;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.connectycube.chat.model.ConnectycubeAttachment;
+import com.connectycube.storage.model.ConnectycubeFile;
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.utils.DateUtils;
@@ -167,7 +173,38 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
 //>>>>>>> origin/feature/migration
         int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_buble_edgeless : R.drawable.bg_chat_left_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
-        super.onBindViewMsgRightHolder(holder, chatMessage, position);
+        super.onBindViewMsgLeftHolder(holder, chatMessage, position);
+    }
+
+    public void showPhotoAttach(ConnectycubeChatAdapter.MessageViewHolder holder, int position) {
+        Pair<String, String> imageUrl = getPairOfImageUrl(position);
+        this.showImageByURL(holder, imageUrl, position);
+    }
+
+    public Pair<String,String> getPairOfImageUrl(int position) {
+        ConnectycubeAttachment attachment = this.getAttach(position);
+        String localUrl = attachment.getUrl();
+        attachment.setUrl(null);
+        String externalUrl = ConnectycubeFile.getPrivateUrlForUID(attachment.getId());
+        return new Pair<>(localUrl, externalUrl);
+    }
+
+    private void showImageByURL(ConnectycubeChatAdapter.MessageViewHolder holder, Pair<String,String> url, int position) {
+        int preferredImageWidth = (int)this.context.getResources().getDimension(com.connectycube.ui.chatmessage.adapter.R.dimen.attach_image_width_preview);
+        int preferredImageHeight = (int)this.context.getResources().getDimension(com.connectycube.ui.chatmessage.adapter.R.dimen.attach_image_height_preview);
+//
+        DrawableRequestBuilder glideRequestBuilder = Glide.with(this.context)
+                .load(url.second)
+                .listener(this.getRequestListener(holder, position))
+                .override(preferredImageWidth, preferredImageHeight)
+                .dontTransform()
+                .dontAnimate()
+                .error(com.connectycube.ui.chatmessage.adapter.R.drawable.ic_error);
+
+        if(url.first != null && url.first.length() > 0){
+            glideRequestBuilder.placeholder( Drawable.createFromPath( url.first ));
+        }
+        glideRequestBuilder.into(((ConnectycubeChatAdapter.BaseImageAttachHolder)holder).attachImageView);
     }
 
     @Override
@@ -178,6 +215,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
 //>>>>>>> origin/feature/migration
         int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        holder.attachImageView.setAdjustViewBounds(true);
         super.onBindViewAttachRightHolder(holder, chatMessage, position);
     }
 
@@ -186,6 +224,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         updateMessageState(chatMessage, chatDialog);
         int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_buble_edgeless : R.drawable.bg_chat_left_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        holder.attachImageView.setAdjustViewBounds(true);
         super.onBindViewAttachLeftHolder(holder, chatMessage, position);
     }
 
@@ -194,7 +233,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         updateMessageState(chatMessage, chatDialog);
         int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
-        super.onBindViewAttachLeftAudioHolder(holder, chatMessage, position);
+        super.onBindViewAttachRightAudioHolder(holder, chatMessage, position);
     }
 
     @Override
@@ -210,7 +249,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         updateMessageState(chatMessage, chatDialog);
         int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
         updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
-        super.onBindViewAttachLeftVideoHolder(holder, chatMessage, position);
+        super.onBindViewAttachRightVideoHolder(holder, chatMessage, position);
     }
 
     @Override

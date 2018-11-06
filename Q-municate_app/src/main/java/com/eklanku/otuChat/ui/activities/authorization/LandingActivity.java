@@ -30,8 +30,6 @@ import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.PhoneNumber;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;*/
-import com.eklanku.otuChat.utils.helpers.FlurryAnalyticsHelper;
-import com.eklanku.otuChat.utils.helpers.GoogleAnalyticsHelper;
 import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.facebook.accountkit.AccessToken;
 import com.facebook.accountkit.Account;
@@ -274,6 +272,7 @@ public class LandingActivity extends BaseAuthActivity {
     }
 
     protected void login(String userPhone) {
+
         loginTryCount++;
         appSharedHelper.saveFirstAuth(true);
         appSharedHelper.saveSavedRememberMe(true);
@@ -312,17 +311,15 @@ public class LandingActivity extends BaseAuthActivity {
 
             @Override
             public void onNext(ConnectycubeUser connectycubeUser) {
-                performLoginSuccessAction(connectycubeUser);
+                 performLoginSuccessAction();
             }
         });
     }
 
-    private void performLoginSuccessAction(ConnectycubeUser user) {
+    private void performLoginSuccessAction() {
         hideProgress();
-        startMainActivity(user);
-        // send analytics data
-        GoogleAnalyticsHelper.pushAnalyticsData(this, user, "User Sign In");
-        FlurryAnalyticsHelper.pushAnalyticsData(this);
+
+        startMainActivity();
     }
 
     protected void signUpWithNumber(String userPhone) {

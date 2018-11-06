@@ -375,7 +375,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
 
     private ConnectycubeAttachment getAttachmentImage(ConnectycubeFile file, String localPath) {
         ConnectycubeAttachment attachment = getAttachment(file, ConnectycubeAttachment.IMAGE_TYPE, MimeTypeAttach.IMAGE_MIME);
-
+        attachment.setUrl(localPath);
         if (!TextUtils.isEmpty(localPath)) {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
