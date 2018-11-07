@@ -88,6 +88,11 @@
         android:largeHeap="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+        <!--Workaround for OS 9 (sdk = 28)-->
+        <!--from: https://issuetracker.google.com/issues/79478779-->
+        <uses-library android:name="org.apache.http.legacy"
+                      android:required="false"/>
+
         <activity
             android:name=".ui.activities.authorization.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
