@@ -342,6 +342,26 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
     }
 
     @Override
+    protected MessageViewHolder onCreateCustomViewHolder(ViewGroup parent, int viewType) {
+        return viewType == TYPE_REQUEST_MESSAGE ? new RequestsViewHolder(inflater.inflate(R.layout.item_notification_message, parent, false)) : null;
+    }
+
+    @Override
+    protected void onBindViewCustomHolder(MessageViewHolder holder, CombinationMessage chatMessage, int position)
+    {
+        RequestsViewHolder viewHolder = (RequestsViewHolder) holder;
+        boolean notificationMessage = chatMessage.getNotificationType() != null;
+
+        if (notificationMessage && chatMessage.getNotificationType().equals(DialogNotification.Type.FRIENDS_REMOVE)) {
+            viewHolder.messageTextView.setText(chatMessage.getBody());
+            viewHolder.timeTextMessageTextView.setText(getDate(chatMessage.getCreatedDate()));
+        } else
+        {
+            viewHolder.container.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     public long getHeaderId(int position) {
         CombinationMessage combinationMessage = getItem(position);
         return DateUtils.toShortDateLong(combinationMessage.getCreatedDate());
