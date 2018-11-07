@@ -102,6 +102,7 @@ public class ContactsActivity extends BaseLoggableActivity implements SearchView
             qbDialog = (ConnectycubeChatDialog) getIntent().getExtras().getSerializable(QBServiceConsts.EXTRA_DIALOG);
             qbDialog.initForChat(ConnectycubeChatService.getInstance());
             addAction(QBServiceConsts.ADD_FRIENDS_TO_GROUP_SUCCESS_ACTION, new AddFriendsToGroupSuccessCommand());
+            addAction(QBServiceConsts.ADD_FRIENDS_TO_GROUP_FAIL_ACTION, new FailAction());
         }
 
         arrayPhone = new ArrayList<>();
@@ -136,7 +137,19 @@ public class ContactsActivity extends BaseLoggableActivity implements SearchView
         mRvContacts.setAdapter(contactsAdapter);
     }
 
-    protected void setUpActionBarWithUpButton() {
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		if(hasAction(QBServiceConsts.ADD_FRIENDS_TO_GROUP_SUCCESS_ACTION)){
+			removeAction(QBServiceConsts.ADD_FRIENDS_TO_GROUP_SUCCESS_ACTION);
+		}
+		if(hasAction(QBServiceConsts.ADD_FRIENDS_TO_GROUP_FAIL_ACTION)){
+			removeAction(QBServiceConsts.ADD_FRIENDS_TO_GROUP_FAIL_ACTION);
+		}
+	}
+
+	protected void setUpActionBarWithUpButton() {
         initActionBar();
         setActionBarUpButtonEnabled(true);
         setActionBarTitle(title);
