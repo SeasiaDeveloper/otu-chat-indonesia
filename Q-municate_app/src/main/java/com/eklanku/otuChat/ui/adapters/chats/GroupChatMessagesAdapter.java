@@ -50,7 +50,6 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
         RequestsViewHolder viewHolder = (RequestsViewHolder) holder;
         boolean notificationMessage = chatMessage.getNotificationType() != null;
 
-
         if (notificationMessage) {
             viewHolder.messageTextView.setText(chatMessage.getBody());
             viewHolder.timeTextMessageTextView.setText(getDate(chatMessage.getCreatedDate()));

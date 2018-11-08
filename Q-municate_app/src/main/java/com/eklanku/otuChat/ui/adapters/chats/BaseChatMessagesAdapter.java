@@ -357,6 +357,9 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         @Bind(R.id.reject_friend_imagebutton)
         ImageView rejectFriendImageView;
 
+        @Nullable
+        @Bind(R.id.container)
+        View container;
 
         public RequestsViewHolder(View view) {
             super(view);
