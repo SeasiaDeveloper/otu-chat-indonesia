@@ -359,6 +359,10 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         {
             viewHolder.container.setVisibility(View.GONE);
         }
+
+        if (!State.READ.equals(chatMessage.getState()) && isIncoming(chatMessage) && baseActivity.isNetworkAvailable()) {
+            updateMessageState(chatMessage, chatDialog);
+        }
     }
 
     @Override
