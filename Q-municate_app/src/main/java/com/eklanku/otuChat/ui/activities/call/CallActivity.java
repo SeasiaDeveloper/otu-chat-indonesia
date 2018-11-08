@@ -122,7 +122,26 @@ public class CallActivity extends BaseLoggableActivity implements RTCClientSessi
         }
 
         actionBar = getSupportActionBar();
+        if(actionBar != null)
+        {
+            actionBar.show();
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
 
+    }
+
+    public void hideActionBar(){
+        if(getSupportActionBar() == null)
+        {
+            if (toolbar == null)
+            {
+                toolbar = (Toolbar)findViewById(R.id.toolbar_call);
+            }
+            toolbar.setVisibility(View.GONE);
+            setSupportActionBar(toolbar);
+        }else{
+            getSupportActionBar().hide();
+        }
     }
 
     public void setCallActionBarTitle(String title) {

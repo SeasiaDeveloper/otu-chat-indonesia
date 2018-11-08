@@ -75,6 +75,10 @@ public class IncomingCallFragment extends Fragment implements Serializable, View
             setDisplayedTypeCall(conferenceType);
             initButtonsListener();
         }
+        if(getActivity() != null && getActivity() instanceof  CallActivity)
+        {
+            ((CallActivity)getActivity()).hideActionBar();
+        }
 
         ringtonePlayer = new RingtonePlayer(getActivity());
 
