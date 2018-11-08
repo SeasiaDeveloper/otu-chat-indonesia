@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.payment.TestActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
@@ -111,6 +112,8 @@ public class CallFragment extends Fragment implements LoadingData {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        setActivityBannerVisibility(View.VISIBLE);
+
         View view = inflater.inflate(R.layout.fragment_call_new, container, false);
         initializeResources(view);
         frameLayoutEmpty.setVisibility(View.VISIBLE);
@@ -148,6 +151,13 @@ public class CallFragment extends Fragment implements LoadingData {
         });
 
         return view;
+    }
+
+    private void setActivityBannerVisibility(int visibility) {
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null) {
+            activity.bannerSlider.setVisibility(visibility);
+        }
     }
 
     @Override

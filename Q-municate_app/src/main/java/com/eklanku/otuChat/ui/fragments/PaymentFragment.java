@@ -144,6 +144,9 @@ public class PaymentFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         context = getActivity();
+
+        setActivityBannerVisibility(View.VISIBLE);
+
         View mView = inflater.inflate(R.layout.fragment_payment_new, container, false);
         initializeResources(mView);
         ButterKnife.bind(this, mView);
@@ -230,6 +233,13 @@ public class PaymentFragment extends Fragment {
 
         } else {
             //Toast.makeText(context, "NOT DEPOSITE " + PreferenceUtil.isLoginStatus(getActivity()), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setActivityBannerVisibility(int visibility) {
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null) {
+            activity.bannerSlider.setVisibility(visibility);
         }
     }
 
