@@ -264,33 +264,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             deleteTempMessagesAsync();
         }
 
-        messageEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                getSize();
-            }
-        });
-
         messageEditText.setUseSystemDefault(false);
-    }
-
-
-    private void getSize() {
-        if (messageEditText.getLineCount() == messageEditText.getMaxLines()) {
-            messageEditText.setMaxLines((messageEditText.getLineCount() + 1));
-        }
-        // Log.e("lenth", editText.getContentDescription().length()+"");
-
     }
 
     @OnTextChanged(R.id.message_edittext)
