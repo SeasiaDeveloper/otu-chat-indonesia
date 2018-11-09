@@ -33,6 +33,7 @@ android {
         versionName rootProject.versionName
         multiDexEnabled = true
         vectorDrawables.useSupportLibrary = true
+
     }
 
     signingConfigs {
@@ -70,6 +71,8 @@ android {
             versionNameSuffix ' (debug)'
         }
     }
+
+
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'

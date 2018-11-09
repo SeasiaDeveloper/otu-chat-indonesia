@@ -31,8 +31,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
-
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/density_2"
@@ -41,5 +39,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/snackbar_position_coordinatorlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
+
+    <include layout="@layout/content_main" />
 </LinearLayout>
