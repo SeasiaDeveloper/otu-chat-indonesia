@@ -62,6 +62,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import rx.Observable;
+import rx.Observer;
 
 public class NewMessageActivity extends BaseLoggableActivity implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
@@ -336,19 +337,43 @@ public class NewMessageActivity extends BaseLoggableActivity implements SearchVi
     }
 
     private void updateContactListAndRoster() {
-        AddressBookHelper.getInstance().updateRosterContactList(friendListHelper, mDbHelper, AppSession.getSession().getUser().getPassword()).onErrorResumeNext(e -> Observable.empty()).subscribe(success -> {
-            Log.d(TAG, "updateRosterContactList success= " + success);
-            hideProgress();
-            contactsModels.clear();
-            if (mIsNewMessage) {
-                contactsModels.addAll(mDbHelper.getContactsSelectedGroup());
-            } else if (isToGroup) {
-                contactsModels.addAll(mDbHelper.getContactsExceptGroup(qbDialog.getOccupants()));
-            } else {
-                contactsModels.addAll(mDbHelper.getContactsGroup());
-            }
-            contactsAdapter.notifyDataSetChanged();
-        });
+        AddressBookHelper.getInstance().updateRosterContactList(friendListHelper, mDbHelper, AppSession.getSession().getUser().getPassword())
+                .onErrorResumeNext(e -> Observable.empty())
+                .subscribe(new Observer<Boolean>()
+                {
+                    @Override
+                    public void onCompleted()
+                    {
+                        hideProgress();
+                    }
+
+                    @Override
+                    public void onError(Throwable e)
+                    {
+                        hideProgress();
+                    }
+
+                    @Override
+                    public void onNext(Boolean success)
+                    {
+                        Log.d(TAG, "updateRosterContactList success= " + success);
+                        hideProgress();
+                        contactsModels.clear();
+                        if (mIsNewMessage)
+                        {
+                            contactsModels.addAll(mDbHelper.getContactsSelectedGroup());
+                        }
+                        else if (isToGroup)
+                        {
+                            contactsModels.addAll(mDbHelper.getContactsExceptGroup(qbDialog.getOccupants()));
+                        }
+                        else
+                        {
+                            contactsModels.addAll(mDbHelper.getContactsGroup());
+                        }
+                        contactsAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
 //    public void readContacts() {
