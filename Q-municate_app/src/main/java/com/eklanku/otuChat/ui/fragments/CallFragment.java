@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.ui.activities.TesActivity;
 import com.eklanku.otuChat.ui.activities.payment.TestActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
@@ -144,6 +145,7 @@ public class CallFragment extends Fragment implements LoadingData {
             public void onClick(View view) {
                /* startActivity(new Intent(getActivity(), TestActivity.class));*/
                 Toast.makeText(getActivity(), "Sedang dalam pengembangan", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), TesActivity.class));
             }
         });
 

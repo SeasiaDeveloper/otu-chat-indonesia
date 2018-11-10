@@ -70,19 +70,21 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         ImageView signInView = (ImageView) holder.itemView.findViewById(R.id.message_status_image_view);
         setViewVisibility(holder.avatar, View.GONE);
 
-        //MessageTextViewRight x = holder.itemView.findViewById(R.id.msg_message_text_view_right);
-
         TextView timeView = holder.itemView.findViewById(R.id.custom_msg_text_time_message);
-        //timeView.setGravity(Gravity.END | Gravity.RIGHT);
-        //timeView.setUseSystemDefault(false);
+
         setMsgTime(timeView, chatMessage);
 
         showSendStatusView(signInView, chatMessage);
-
         handleMessageClickListener(holder, position);
+
         addReplyView(holder, chatMessage, position);
 
         super.onBindViewMsgRightHolder(holder, chatMessage, position);
+
+      /*  long timeLength = timeView.getMeasuredWidth();
+        long messageLength = holder.messageTextView.getMeasuredWidth();
+
+        Log.d("AYIK", "chat width:" + position + " " + chatMessage.getBody() + " : " + timeLength + "||" + messageLength);*/
     }
 
     private void handleMessageClickListener(final RecyclerView.ViewHolder holder, final int position) {
@@ -347,16 +349,14 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
     }
 
     @Override
-    protected void onBindViewCustomHolder(MessageViewHolder holder, CombinationMessage chatMessage, int position)
-    {
+    protected void onBindViewCustomHolder(MessageViewHolder holder, CombinationMessage chatMessage, int position) {
         RequestsViewHolder viewHolder = (RequestsViewHolder) holder;
         boolean notificationMessage = chatMessage.getNotificationType() != null;
 
         if (notificationMessage && chatMessage.getNotificationType().equals(DialogNotification.Type.FRIENDS_REMOVE)) {
             viewHolder.messageTextView.setText(chatMessage.getBody());
             viewHolder.timeTextMessageTextView.setText(getDate(chatMessage.getCreatedDate()));
-        } else
-        {
+        } else {
             viewHolder.container.setVisibility(View.GONE);
         }
 

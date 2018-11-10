@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:background="@drawable/bg_chat_right_bubble"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:layout_weight="1"
+        android:gravity="right">
+
+        <com.eklanku.otuChat.ImFlexboxLayout
+            android:id="@+id/msg_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:gravity="left|center_vertical"
+            app:viewPartMain="@+id/chat_msg"
+            app:viewPartSlave="@+id/lytStatusContainer">
+
+            <com.rockerhieu.emojicon.EmojiconTextView
+                android:id="@+id/chat_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:focusableInTouchMode="false"
+                android:gravity="left|top"
+                android:text="kkkkkkkkkxxg" />
+
+            <LinearLayout
+                android:id="@+id/lytStatusContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:gravity="right"
+                android:minWidth="60dp">
+
+                <TextView
+                    android:id="@+id/date_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginRight="5dp"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:text="20:00" />
+
+                <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/message_status_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:minWidth="40dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_status_msg_sent_receive_blue" />
+
+            </LinearLayout>
+
+        </com.eklanku.otuChat.ImFlexboxLayout>
+    </LinearLayout>
+</LinearLayout>
