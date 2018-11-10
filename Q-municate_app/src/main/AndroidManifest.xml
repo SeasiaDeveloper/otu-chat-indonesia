@@ -129,6 +129,7 @@
         <activity
             android:name=".ui.activities.main.MainActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:theme="@style/AppThemeMain" />
         <activity
             android:name=".ui.activities.settings.SettingsActivity"
