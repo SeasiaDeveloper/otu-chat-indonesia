@@ -121,7 +121,7 @@ import com.eklanku.otuChat.utils.helpers.DbHelper;
 public class MainActivity extends BaseLoggableActivity implements ObservableScrollViewCallbacks/*, NavigationView.OnNavigationItemSelectedListener*/ {
 
     @Bind(R.id.bannerLayout)
-    BannerLayout bannerSlider;
+    public BannerLayout bannerSlider;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 

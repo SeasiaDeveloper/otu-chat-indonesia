@@ -1,6 +1,8 @@
 package com.quickblox.q_municate_user_service;
 
 
+import android.util.Log;
+
 import com.connectycube.core.exception.ResponseException;
 import com.connectycube.core.request.PagedRequestBuilder;
 import com.connectycube.core.server.Performer;
@@ -17,6 +19,7 @@ import com.connectycube.users.model.ConnectycubeUser;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -38,7 +41,7 @@ public class QMUserService extends QMBaseService {
 
     @Inject
     protected QMUserCache userCache;
-    private ArrayList<ConnectycubeAddressBookContact> addressBookCache;
+    private List<ConnectycubeAddressBookContact> addressBookCache;
 
     public static void init(QMUserCache userCache){
         instance = new QMUserService(userCache);
@@ -253,16 +256,16 @@ public class QMUserService extends QMBaseService {
     }
 
     private Observable<List<ConnectycubeUser>> syncAddressBookContactsAndUsersByIds(final Collection<Integer> usersIds, final PagedRequestBuilder requestBuilder) {
-        final Observable<ArrayList<ConnectycubeAddressBookContact>> observableBook = getCurrentAddressBook();
+        final Observable<List<ConnectycubeAddressBookContact>> observableBook = getCurrentAddressBook();
         Performer<ArrayList<ConnectycubeUser>> performer = ConnectycubeUsers.getUsersByIDs(usersIds, requestBuilder);
         final Observable<ArrayList<ConnectycubeUser>> observableUsers = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
 
         return Observable.zip(
                 observableBook.subscribeOn(Schedulers.io()),
                 observableUsers.subscribeOn(Schedulers.io()),
-                new Func2<ArrayList<ConnectycubeAddressBookContact>, List<ConnectycubeUser>, List<ConnectycubeUser>>() {
+                new Func2<List<ConnectycubeAddressBookContact>, List<ConnectycubeUser>, List<ConnectycubeUser>>() {
                     @Override
-                    public List<ConnectycubeUser> call(ArrayList<ConnectycubeAddressBookContact> contacts, List<ConnectycubeUser> users) {
+                    public List<ConnectycubeUser> call(List<ConnectycubeAddressBookContact> contacts, List<ConnectycubeUser> users) {
                         //add names
                         for (ConnectycubeUser user : users) {
                             for (ConnectycubeAddressBookContact contact : contacts) {
@@ -278,15 +281,15 @@ public class QMUserService extends QMBaseService {
     }
 
     private Observable<ConnectycubeUser> syncAddressBookContactsAndUserById(String column, String value) {
-        final Observable<ArrayList<ConnectycubeAddressBookContact>> observableBook = getCurrentAddressBook();
+        final Observable<List<ConnectycubeAddressBookContact>> observableBook = getCurrentAddressBook();
         Performer<ConnectycubeUser> performer = getUserByColumnFromServer(column, value);
         final Observable<ConnectycubeUser> observableUser = performer.convertTo(RxJavaPerformProcessor.INSTANCE);
         return Observable.zip(
                 observableBook.subscribeOn(Schedulers.io()),
                 observableUser.subscribeOn(Schedulers.io()),
-                new Func2<ArrayList<ConnectycubeAddressBookContact>, ConnectycubeUser, ConnectycubeUser>() {
+                new Func2<List<ConnectycubeAddressBookContact>, ConnectycubeUser, ConnectycubeUser>() {
                     @Override
-                    public ConnectycubeUser call(ArrayList<ConnectycubeAddressBookContact> contacts, ConnectycubeUser user) {
+                    public ConnectycubeUser call(List<ConnectycubeAddressBookContact> contacts, ConnectycubeUser user) {
                         //add names
                         for (ConnectycubeAddressBookContact contact : contacts) {
                             if (user.getPhone().equals(contact.getPhone())) {
@@ -299,22 +302,28 @@ public class QMUserService extends QMBaseService {
         );
     }
 
-    private Observable<ArrayList<ConnectycubeAddressBookContact>> getCurrentAddressBook() {
+    private Observable<List<ConnectycubeAddressBookContact>> getCurrentAddressBook() {
         return addressBookCache.isEmpty() ? getAddressBookFromRest() : getAddressBookCache();
     }
 
-    private Observable<ArrayList<ConnectycubeAddressBookContact>> getAddressBookCache() {
+    private Observable<List<ConnectycubeAddressBookContact>> getAddressBookCache() {
         return Observable.just(addressBookCache);
     }
 
-    private Observable<ArrayList<ConnectycubeAddressBookContact>> getAddressBookFromRest() {
+    private Observable<List<ConnectycubeAddressBookContact>> getAddressBookFromRest() {
         Observable<ArrayList<ConnectycubeAddressBookContact>> observableBook = getAddressBook();
-        return observableBook.map(new Func1<ArrayList<ConnectycubeAddressBookContact>, ArrayList<ConnectycubeAddressBookContact>>() {
+        return observableBook.map(new Func1<List<ConnectycubeAddressBookContact>, List<ConnectycubeAddressBookContact>>() {
             @Override
-            public ArrayList<ConnectycubeAddressBookContact> call(ArrayList<ConnectycubeAddressBookContact> contacts) {
+            public List<ConnectycubeAddressBookContact> call(List<ConnectycubeAddressBookContact> contacts) {
                 addressBookCache.clear();
                 addressBookCache.addAll(contacts);
                 return addressBookCache;
+            }
+        }).onErrorResumeNext(new Func1<Throwable, Observable<List<ConnectycubeAddressBookContact>>>() {
+            @Override
+            public Observable<List<ConnectycubeAddressBookContact>> call(Throwable throwable) {
+                Log.d("QMUserService", "getAddressBookFromRest = " + throwable.getMessage());
+                return Observable.just(Collections.<ConnectycubeAddressBookContact>emptyList());
             }
         });
     }
