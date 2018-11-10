@@ -409,6 +409,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         ConnectycubeAttachment attachment = getAttachment(file, ConnectycubeAttachment.VIDEO_TYPE, MimeTypeAttach.VIDEO_MIME);
 
         if (!TextUtils.isEmpty(localPath)) {
+            attachment.setUrl(localPath);
             MediaUtils.MetaData metaData = MediaUtils.getMetaData(localPath);
             attachment.setHeight(metaData.videoHeight());
             attachment.setWidth(metaData.videoWidth());
