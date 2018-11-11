@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:padding="@dimen/density_8"
     android:orientation="vertical"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transfer.TransDeposit">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/density_8"
         android:background="@color/grey_400" />
 
     <TextView
@@ -28,9 +28,7 @@
         android:id="@+id/textView14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/density_16"
         android:layout_marginTop="@dimen/density_4"
-        android:layout_marginRight="@dimen/density_16"
         android:text="Masukkan Tujuan"
         android:textColor="@color/grey_600"
         android:textSize="16sp" />
@@ -51,8 +49,6 @@
                 android:id="@+id/txtTransDepositTujuan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/density_16"
-                android:layout_marginRight="@dimen/density_16"
                 android:background="@drawable/custom_bottom_border_grey"
                 android:ems="10"
                 android:inputType="textCapCharacters"
@@ -79,9 +75,7 @@
         android:id="@+id/textVie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/density_16"
-        android:layout_marginTop="@dimen/density_16"
-        android:layout_marginRight="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:text="Nama Tujuan Transfer"
         android:textColor="@color/grey_600"
         android:textSize="16sp" />
@@ -96,8 +90,6 @@
             android:id="@+id/txtNamaTujuan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginRight="@dimen/density_16"
             android:background="@drawable/custom_bottom_border_grey"
             android:ems="10"
             android:inputType="text"
@@ -109,7 +101,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:background="@color/grey_400" />
 
     <View
@@ -120,7 +112,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="@dimen/density_8"
         android:background="@color/grey_400" />
 
     <LinearLayout
@@ -133,9 +125,7 @@
         <com.eklanku.otuChat.ui.views.ARTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginRight="@dimen/density_16"
-            android:paddingTop="@dimen/density_16"
+            android:paddingTop="@dimen/density_8"
             android:text="Masukkan Nominal Transfer"
             android:textColor="@color/grey_600"
             android:textSize="16sp" />
@@ -150,8 +140,6 @@
                 android:id="@+id/txtTransDepositJml"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/density_16"
-                android:layout_marginRight="@dimen/density_16"
                 android:background="@drawable/custom_bottom_border_grey"
                 android:ems="10"
                 android:inputType="number"
@@ -163,9 +151,7 @@
         <com.eklanku.otuChat.ui.views.ARTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/density_16"
             android:layout_marginTop="@dimen/density_5"
-            android:layout_marginRight="@dimen/density_16"
             android:text="@string/minimal_transfer_saldo"
             android:textColor="@color/red_800"
             android:textSize="10sp" />
@@ -179,10 +165,6 @@
 
             <EditText
                 android:id="@+id/txt_pin"
-                android:layout_marginStart="@dimen/density_16"
-                android:layout_marginLeft="@dimen/density_16"
-                android:layout_marginEnd="@dimen/density_16"
-                android:layout_marginRight="@dimen/density_16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_bottom_border_grey"
@@ -191,10 +173,10 @@
                 android:ems="10"
                 android:hint="Masukkan PIN"
                 android:inputType="textPassword"
-                android:paddingBottom="@dimen/density_16"
+                android:paddingBottom="@dimen/density_8"
                 android:paddingLeft="@dimen/density_8"
                 android:paddingStart="@dimen/density_8"
-                android:paddingTop="@dimen/density_16" /> />
+                android:paddingTop="@dimen/density_8" /> />
         </android.support.design.widget.TextInputLayout>
 
         <View
@@ -211,19 +193,18 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="@dimen/density_8"
             android:background="@color/grey_400" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16sp">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/btnTransDeposit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/density_16"
+                android:layout_marginTop="@dimen/density_8"
                 android:background="@drawable/background_round_corner_green"
                 android:text="Transfer"
                 android:textColor="#FFFFFF"
@@ -232,6 +213,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 </LinearLayout>

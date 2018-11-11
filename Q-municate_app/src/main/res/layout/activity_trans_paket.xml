@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/density_8"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketData">
 
     <LinearLayout
@@ -17,7 +17,6 @@
         <com.eklanku.otuChat.ui.views.ARTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/density_16"
             android:text="Masukkan No Telepon"
             android:textColor="@color/grey_600"
             android:textSize="16sp" />
@@ -106,7 +105,7 @@
             android:id="@+id/textView36"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/density_16"
+            android:layout_marginTop="@dimen/density_8"
             android:text="Nama Paket"
             android:textColor="@color/grey_600"
             android:textSize="16sp"
@@ -218,7 +217,7 @@
         android:id="@+id/btnTransPaketBayar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:background="@drawable/rectangle_rounded_green"
         android:text="Beli Paket"
         android:textColor="#FFFFFF"

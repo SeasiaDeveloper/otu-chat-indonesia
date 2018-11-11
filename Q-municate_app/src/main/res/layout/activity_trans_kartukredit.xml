@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    android:padding="16dp"
+    android:padding="@dimen/density_8"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransKartuKredit">
 
     <com.eklanku.otuChat.ui.views.ARTextView

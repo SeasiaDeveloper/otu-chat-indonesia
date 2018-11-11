@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:padding="@dimen/density_8"
     android:orientation="vertical"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransTv">
 
@@ -22,8 +23,7 @@
                 android:id="@+id/radio_group_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp">
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/radio_tv_voucher"
@@ -51,9 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="@dimen/density_8">
 
 
                 <com.eklanku.otuChat.ui.views.ARTextView
@@ -98,7 +96,7 @@
                     android:id="@+id/layout_nominal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/density_16"
+                    android:layout_marginTop="@dimen/density_8"
                     android:orientation="vertical">
 
                     <com.eklanku.otuChat.ui.views.ARTextView
@@ -144,7 +142,7 @@
                     android:id="@+id/AtvNomorPelanggan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/density_16"
+                    android:layout_marginTop="@dimen/density_8"
                     android:text="Masukkan No Pelanggan"
                     android:textColor="@color/grey_600"
                     android:textSize="16sp" />
@@ -186,7 +184,7 @@
                     android:id="@+id/layout_transaksi_ke"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/density_16"
+                    android:layout_marginTop="@dimen/density_8"
                     android:orientation="vertical">
 
                     <com.eklanku.otuChat.ui.views.ARTextView
@@ -221,7 +219,7 @@
                         android:id="@+id/aRvNoHp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/density_16"
+                        android:layout_marginTop="@dimen/density_8"
                         android:text="No HP"
                         android:textColor="@color/grey_600"
                         android:textSize="16sp"
@@ -260,7 +258,7 @@
                     android:id="@+id/btnTransTvBayar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/density_16"
+                    android:layout_marginTop="@dimen/density_8"
                     android:background="@drawable/background_round_corner_green"
                     android:text="Cek Tagihan"
                     android:textColor="#FFFFFF"

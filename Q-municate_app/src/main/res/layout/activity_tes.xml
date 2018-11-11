@@ -1,62 +1,62 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:baselineAligned="false"
-    android:gravity="center_vertical"
+    android:gravity="end"
+    android:layout_gravity="end"
     android:orientation="horizontal">
 
     <LinearLayout
-        android:background="@drawable/bg_chat_right_bubble"
         android:layout_width="0dp"
+        android:background="@drawable/bg_chat_right_bubble"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|center_vertical"
+        android:layout_gravity="end"
         android:layout_weight="1"
-        android:gravity="right">
+        android:gravity="end">
 
         <com.eklanku.otuChat.ImFlexboxLayout
             android:id="@+id/msg_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:gravity="left|center_vertical"
-            app:viewPartMain="@+id/chat_msg"
-            app:viewPartSlave="@+id/lytStatusContainer">
+            android:layout_gravity="end"
+            app:viewPartMain="@+id/msg_text_message"
+            app:viewPartSlave="@+id/msg_timestamp">
 
             <com.rockerhieu.emojicon.EmojiconTextView
-                android:id="@+id/chat_msg"
+                android:id="@+id/msg_text_message"
+                style="@style/TextViewTextMsg.Right"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|bottom"
+                android:layout_gravity="end"
                 android:focusableInTouchMode="false"
-                android:gravity="left|top"
-                android:text="kkkkkkkkkxxg" />
+                android:paddingTop="@dimen/density_2"
+                emojicon:emojiconSize="24sp"
+                tools:text="xxxxxxxxx" />
 
             <LinearLayout
-                android:id="@+id/lytStatusContainer"
+                android:id="@+id/msg_timestamp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:gravity="right"
-                android:minWidth="60dp">
+                android:gravity="end"
+                android:minWidth="@dimen/density_40">
 
                 <TextView
-                    android:id="@+id/date_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="right|bottom"
-                    android:layout_marginRight="5dp"
-                    android:gravity="right"
+                    android:id="@+id/custom_msg_text_time_message"
+                    style="@style/TextViewTimeMsg.Right"
+                    android:layout_gravity="end|bottom"
+                    android:gravity="end"
                     android:maxLines="1"
-                    android:text="20:00" />
+                    android:visibility="visible"
+                    tools:text="15.05" />
 
                 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/message_status_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:minWidth="40dp"
+                    android:minWidth="20dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_status_msg_sent_receive_blue" />
 

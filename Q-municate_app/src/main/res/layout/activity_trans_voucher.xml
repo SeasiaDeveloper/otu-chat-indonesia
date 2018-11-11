@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/density_8"
     android:background="@color/white"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransVoucherGame">
 
@@ -50,7 +50,7 @@
         android:id="@+id/textView26"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:text="Nominal"
         android:textColor="@color/grey_600"
         android:textSize="16sp" />
@@ -85,7 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtLayoutTransPulsaNo"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:text="Masukkan No Telepon"
         android:textColor="@color/grey_600"
         android:textSize="16sp" />
@@ -113,7 +113,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtLayoutTransPulsaNo"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:text="Transaksi Ke-"
         android:textColor="@color/grey_600"
         android:textSize="16sp" />
@@ -164,7 +164,7 @@
         android:id="@+id/btnTransVoucherBayar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:background="@drawable/background_round_corner_green"
         android:text="Beli Voucher"
         android:textColor="#FFFFFF"

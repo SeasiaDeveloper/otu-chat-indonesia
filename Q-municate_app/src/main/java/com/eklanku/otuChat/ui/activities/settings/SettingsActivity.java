@@ -1,19 +1,28 @@
 package com.eklanku.otuChat.ui.activities.settings;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.feedback.FeedbackActivity;
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
+import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.profile.MyProfileActivity;
+import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
+import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.connectycube.auth.session.ConnectycubeSettings;
 import com.eklanku.otuChat.R;;
@@ -36,9 +45,17 @@ import com.quickblox.q_municate_core.utils.UserFriendUtils;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.TimeZone;
+
 import butterknife.Bind;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.Subscriber;
 
 public class SettingsActivity extends BaseLoggableActivity {
@@ -61,6 +78,11 @@ public class SettingsActivity extends BaseLoggableActivity {
     private FacebookHelper facebookHelper;
     private FirebaseAuthHelper firebaseAuthHelper;
 
+    Call<ResetPassResponse> callResetPass;
+    ApiInterfacePayment mApiInterfacePayment;
+    PreferenceManager preferenceManager;
+    String strUserID, strAccessToken;
+
     public static void startForResult(Fragment fragment) {
         Intent intent = new Intent(fragment.getActivity(), SettingsActivity.class);
         //rina
@@ -78,6 +100,11 @@ public class SettingsActivity extends BaseLoggableActivity {
         super.onCreate(savedInstanceState);
         initFields();
         setUpActionBarWithUpButton();
+        preferenceManager = new PreferenceManager(this);
+        mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
+        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
+        strUserID = user.get(preferenceManager.KEY_USERID);
+        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
         addActions();
     }
@@ -154,7 +181,8 @@ public class SettingsActivity extends BaseLoggableActivity {
                                         public void onNext(Void aVoid) {
                                             setResult(RESULT_OK);
                                             hideProgress();
-                                            finish();
+                                            logOutPayment();
+//                                            finish();
                                         }
                                     });
                                 }
@@ -202,6 +230,71 @@ public class SettingsActivity extends BaseLoggableActivity {
         removeAction(QBServiceConsts.LOGOUT_FAIL_ACTION);
 
         updateBroadcastActionList();
+    }
+
+    public void logOutPayment() {
+
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Sedang logout, mohon tunggu.");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        callResetPass = mApiInterfacePayment.postLogoutPayment(strUserID, strAccessToken, getCurrentTime());
+        callResetPass.enqueue(new Callback<ResetPassResponse>() {
+
+            @Override
+            public void onResponse(Call<ResetPassResponse> call, Response<ResetPassResponse> response) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                progressDialog.dismiss();
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String msg = response.body().getRespMessage();
+
+                    if (status.equalsIgnoreCase("SUCCESS")) {
+                        Toast.makeText(SettingsActivity.this, "SUCCESS LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
+                        PreferenceUtil.setLoginStatus(SettingsActivity.this, false);
+                        MainActivity.mainActivity.tvSaldo.setText("0.00");
+                        finish();
+                        //paymentFragment.lblSaldoMain.setText("0.00");
+                    } else {
+                        finish();
+                        Toast.makeText(SettingsActivity.this, "FAILED LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    finish();
+                    Toast.makeText(SettingsActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResetPassResponse> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                progressDialog.dismiss();
+                finish();
+                Toast.makeText(SettingsActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                //Log.d("API_TRANSBELI", t.getMessage().toString());
+            }
+        });
+    }
+
+    public static String getCurrentTime() {
+        try {
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Makassar"));
+            String currentDateTime = dateFormat.format(new Date()); // Find todays date
+            Log.d("OPPO-1", "getCurrentTime: " + currentDateTime);
+            return currentDateTime;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
     }
 
 }

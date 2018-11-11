@@ -147,8 +147,8 @@ public class CallFragment extends Fragment implements LoadingData {
             @Override
             public void onClick(View view) {
                /* startActivity(new Intent(getActivity(), TestActivity.class));*/
-                Toast.makeText(getActivity(), "Sedang dalam pengembangan", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getActivity(), TesActivity.class));
+                Toast.makeText(getActivity(), "Coming soon...", Toast.LENGTH_SHORT).show();
+                //startActivity(new Intent(getActivity(), TesActivity.class));
             }
         });
 

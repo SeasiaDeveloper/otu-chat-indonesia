@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/msg_linear_frame_right"
-    style="@style/WidgetTextMessage.Right">
+    style="@style/WidgetTextMessage.Right"
+    android:layout_width="wrap_content">
 
     <LinearLayout
         android:id="@+id/msg_bubble_background"
-        style="@style/BubbleTextFrame.Right">
+        style="@style/BubbleTextFrame.Right"
+        android:layout_width="wrap_content">
 
         <LinearLayout
             android:id="@+id/msg_linear_list_item_right"
-            style="@style/LinearWidgetTextMsg.Right">
+            style="@style/LinearWidgetTextMsg.Right"
+            android:layout_width="wrap_content">
 
             <!--LinearLayout should place its actual message widget here.-->
             <LinearLayout
@@ -23,16 +27,73 @@
                 style="@style/TextViewTimeMsg.Right"
                 tools:text="current time August" />
 
-            <com.rockerhieu.emojicon.EmojiconTextView
-                android:id="@+id/msg_text_message"
-                emojicon:emojiconSize="24sp"
-                android:paddingTop="@dimen/density_2"
-                style="@style/TextViewTextMsg.Right"
-                tools:text="message the long one message" />
+           <!-- <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="end">
+
+                <com.eklanku.otuChat.ImFlexboxLayout
+                    android:id="@+id/msg_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    app:viewPartMain="@+id/msg_text_message"
+                    app:viewPartSlave="@+id/msg_timestamp">-->
+
+                    <com.rockerhieu.emojicon.EmojiconTextView
+                        android:id="@+id/msg_text_message"
+                        style="@style/TextViewTextMsg.Right"
+                        android:layout_width="wrap_content"
+                        android:focusableInTouchMode="false"
+                        android:paddingTop="@dimen/density_2"
+                        emojicon:emojiconSize="24sp"
+                        tools:text="xxxxxxxxxxxxxxxx" />
+
+            <!--<LinearLayout
+                android:id="@+id/msg_timestamp"
+                android:layout_toRightOf="@id/msg_text_message"
+                android:layout_toEndOf="@id/msg_text_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end">
+
+                <include
+                    android:id="@+id/layout_timestamp"
+                    layout="@layout/custom_msg_right_bottom_widget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:minWidth="40dp" />
+
+                &lt;!&ndash;  <TextView
+                      android:id="@+id/custom_msg_text_time_message"
+                      style="@style/TextViewTimeMsg.Right"
+                      android:layout_gravity="end|bottom"
+                      android:gravity="end"
+                      android:maxLines="1"
+                      android:visibility="visible"
+                      tools:text="15.05" />
+
+                  <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:id="@+id/message_status_image_view"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="bottom"
+                      android:minWidth="20dp"
+                      android:scaleType="fitCenter"
+                      android:src="@drawable/ic_status_msg_sent_receive_blue" />
+&ndash;&gt;
+            </LinearLayout>
+
+        </com.eklanku.otuChat.ImFlexboxLayout>
+
+    </LinearLayout>-->
 
             <LinearLayout
                 android:id="@+id/msg_link_preview"
-                style="@style/LinkPreviewFrame.Right"/>
+                style="@style/LinkPreviewFrame.Right" />
 
             <!--LinearLayout should place its actual message widget here.-->
             <LinearLayout

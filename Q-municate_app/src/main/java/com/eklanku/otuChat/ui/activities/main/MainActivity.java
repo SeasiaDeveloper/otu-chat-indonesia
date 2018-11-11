@@ -87,6 +87,8 @@ import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.ios.IosEmojiProvider;
 import com.yyydjk.library.BannerLayout;
 
 import butterknife.Bind;
@@ -170,7 +172,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     private ObservableScrollView mScrollView;
     private int mParallaxImageHeight;
     DrawerLayout drawer;
-    TextView tvSaldo;
+    public TextView tvSaldo;
 
     Call<LoadBanner> callLoadBanner;
     Call<DataSaldoBonus> userCall;
@@ -275,6 +277,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        EmojiManager.install(new IosEmojiProvider());
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
