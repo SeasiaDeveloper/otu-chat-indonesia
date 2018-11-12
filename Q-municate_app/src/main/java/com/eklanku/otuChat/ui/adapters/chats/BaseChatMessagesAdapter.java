@@ -2,8 +2,10 @@ package com.eklanku.otuChat.ui.adapters.chats;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -15,9 +17,11 @@ import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.connectycube.chat.model.ConnectycubeAttachment;
 import com.connectycube.storage.model.ConnectycubeFile;
+import com.connectycube.ui.chatmessage.adapter.media.video.thumbnails.VideoThumbnail;
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.utils.DateUtils;
@@ -36,6 +40,7 @@ import com.connectycube.ui.chatmessage.adapter.ConnectycubeChatAdapter;
 import com.connectycube.users.model.ConnectycubeUser;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.Bind;
@@ -252,6 +257,111 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         super.onBindViewAttachRightVideoHolder(holder, chatMessage, position);
     }
 
+    protected void displayAttachmentVideo(ConnectycubeChatAdapter.MessageViewHolder holder, int position) {
+        ConnectycubeAttachment attachment = this.getAttach(position);
+        int duration = this.getDurationFromAttach(attachment, position);
+        this.setDurationVideo(duration, holder);
+        String url = this.getVideoUrl(position);
+        String localPath = null;
+        if(attachment.getUrl() != null && !TextUtils.isEmpty(attachment.getUrl())){
+            localPath = attachment.getUrl();
+        }
+        Pair<String,String> pair = new Pair<>(localPath, url);
+        this.showVideoThumbnail(holder, pair, position);
+    }
+
+    private void showVideoThumbnail(ConnectycubeChatAdapter.MessageViewHolder holder, Pair<String, String> pairOfUrls, int position)
+    {
+        int preferredImageWidth = (int)this.context.getResources().getDimension(com.connectycube.ui.chatmessage.adapter.R.dimen.attach_image_width_preview);
+        int preferredImageHeight = (int)this.context.getResources().getDimension(com.connectycube.ui.chatmessage.adapter.R.dimen.attach_image_height_preview);
+        VideoThumbnail model = new VideoThumbnail(pairOfUrls.second);
+        ImageView imageView = ((ConnectycubeChatAdapter.VideoAttachHolder)holder).attachImageView;
+        if (pairOfUrls.first != null && !TextUtils.isEmpty(pairOfUrls.first)
+                && new File(pairOfUrls.first).exists())
+        {
+            Glide.with(this.context)
+                    .load(Uri.fromFile(new File(pairOfUrls.first)))
+                    .asBitmap().override(preferredImageWidth, preferredImageHeight)
+                    .dontTransform()
+                    .error(com.connectycube.ui.chatmessage.adapter.R.drawable.ic_error)
+                    .listener(new RequestListener<Uri, Bitmap>()
+                    {
+                        @Override
+                        public boolean onException(Exception e, Uri model, Target<Bitmap> target, boolean isFirstResource)
+                        {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Uri model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource)
+                        {
+                            if (holder != null && holder instanceof ConnectycubeChatAdapter.VideoAttachHolder)
+                            {
+                                ((ConnectycubeChatAdapter.VideoAttachHolder)holder).playIcon.setVisibility(View.VISIBLE);
+                            }
+                            return false;
+                        }
+                    })
+                    .into(new BitmapImageViewTarget(imageView)
+                    {
+                        @Override
+                        protected void setResource(Bitmap bitmap)
+                        {
+                            Bitmap resized = null;
+                            int maxSideLength = preferredImageHeight > preferredImageWidth ? preferredImageHeight : preferredImageWidth;
+                            if (maxSideLength > 1000)
+                            {
+                                maxSideLength = 1000;
+                                int scaledWidth, scaledHeight;
+                                if (bitmap.getHeight() > bitmap.getWidth())
+                                {
+                                    scaledHeight = maxSideLength;
+                                    scaledWidth = (int)(((double)bitmap.getWidth() / (double)bitmap.getHeight()) * maxSideLength);
+                                }
+                                else
+                                {
+                                    scaledWidth = maxSideLength;
+                                    scaledHeight = (int)(((double)bitmap.getHeight() / (double)bitmap.getWidth()) * maxSideLength);
+                                }
+                                resized = Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, false);
+                            }
+                            if (resized != null)
+                            {
+                                bitmap = resized;
+                            }
+                            int margin = 0;
+                            Bitmap centerCrop;
+                            if (bitmap.getHeight() > bitmap.getWidth())
+                            {
+                                margin = (bitmap.getHeight() - bitmap.getWidth()) / 2;
+                                centerCrop = Bitmap.createBitmap(bitmap, 0, margin, bitmap.getWidth(), bitmap.getWidth());
+                            }
+                            else if (bitmap.getWidth() > bitmap.getHeight())
+                            {
+                                margin = (bitmap.getWidth() - bitmap.getHeight()) / 2;
+                                centerCrop = Bitmap.createBitmap(bitmap, margin, 0, bitmap.getHeight(), bitmap.getHeight());
+                            }
+                            else
+                            {
+                                centerCrop = bitmap;
+                            }
+                            imageView.setAdjustViewBounds(true);
+                            imageView.setImageBitmap(centerCrop);
+                        }
+                    });
+        }
+        else
+        {
+            Glide.with(this.context)
+                    .load(model)
+                    .listener(this.getVideoThumbnailRequestListener(holder, position))
+                    .override(preferredImageWidth, preferredImageHeight)
+                    .dontTransform()
+                    .error(com.connectycube.ui.chatmessage.adapter.R.drawable.ic_error)
+                    .into(imageView);
+        }
+    }
+
     @Override
     protected void onBindViewAttachLeftVideoHolder(VideoAttachHolder holder, CombinationMessage chatMessage, int position) {
         updateMessageState(chatMessage, chatDialog);
@@ -357,6 +467,9 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         @Bind(R.id.reject_friend_imagebutton)
         ImageView rejectFriendImageView;
 
+        @Nullable
+        @Bind(R.id.container)
+        View container;
 
         public RequestsViewHolder(View view) {
             super(view);

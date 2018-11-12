@@ -21,16 +21,16 @@
 
         <View android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="@dimen/density_8"
+            android:layout_marginBottom="@dimen/density_8"
             android:background="@color/grey_400" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Masukkan Nominal"
-            android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginRight="@dimen/density_16"
+            android:layout_marginLeft="@dimen/density_8"
+            android:layout_marginRight="@dimen/density_8"
             android:textSize="16sp"
             android:textColor="@color/dark_gray" />
 
@@ -41,15 +41,15 @@
             android:inputType="phone"
             android:background="@null"
             android:paddingBottom="@dimen/density_8"
-            android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginRight="@dimen/density_16"
+            android:layout_marginLeft="@dimen/density_8"
+            android:layout_marginRight="@dimen/density_8"
             android:paddingTop="@dimen/density_8"
             android:textSize="@dimen/text_14" />
 
         <View android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginRight="@dimen/density_16"
+            android:layout_marginLeft="@dimen/density_8"
+            android:layout_marginRight="@dimen/density_8"
             android:background="@color/dark_gray" />
 
         <com.eklanku.otuChat.ui.views.ARTextView
@@ -58,8 +58,8 @@
             android:textColor="@color/red_800"
             android:textSize="10sp"
             android:layout_marginTop="@dimen/density_5"
-            android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginRight="@dimen/density_16"
+            android:layout_marginLeft="@dimen/density_8"
+            android:layout_marginRight="@dimen/density_8"
             android:text="@string/minimal_pengisian_saldo"/>
 
         <View android:layout_width="match_parent"
@@ -79,18 +79,18 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/density_16"
+            android:layout_marginTop="@dimen/density_8"
             android:text="Pilih Data Bank"
             android:textSize="16sp"
-            android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginRight="@dimen/density_16"
+            android:layout_marginLeft="@dimen/density_8"
+            android:layout_marginRight="@dimen/density_8"
             android:textColor="@color/dark_gray" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginRight="@dimen/density_16"
+            android:layout_marginLeft="@dimen/density_8"
+            android:layout_marginRight="@dimen/density_8"
             android:orientation="horizontal">
 
             <Spinner
@@ -124,8 +124,8 @@
             android:id="@+id/cksetuju"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/density_16"
-            android:layout_marginRight="@dimen/density_16"
+            android:layout_marginLeft="@dimen/density_8"
+            android:layout_marginRight="@dimen/density_8"
             android:text="Setuju Syarat dan Ketentuan" />
 
         <ScrollView
@@ -147,8 +147,8 @@
                     android:layout_marginBottom="@dimen/density_4"
                     android:text="@string/syarat_ketentuan"
                     android:textSize="@dimen/text_16"
-                    android:layout_marginLeft="@dimen/density_16"
-                    android:layout_marginRight="@dimen/density_16"
+                    android:layout_marginLeft="@dimen/density_8"
+                    android:layout_marginRight="@dimen/density_8"
                     android:textStyle="bold" />
 
                 <com.ms.square.android.expandabletextview.ExpandableTextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -163,8 +163,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="@dimen/density_8"
+                        android:layout_marginRight="@dimen/density_8"
                         android:textColor="#666666"
                         android:textSize="16sp" />
 
@@ -186,10 +186,10 @@
             android:id="@+id/textView21"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/density_8"
             android:text="Daftar Paket Topup:"
             android:textColor="@color/amber_800"
-            android:textSize="24dp"
+            android:textSize="@dimen/text_24"
             android:visibility="gone" />
 
         <ListView
@@ -203,14 +203,14 @@
         android:id="@+id/layButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="@dimen/density_8"
         android:layout_alignParentBottom="true">
 
         <Button
             android:id="@+id/btn_topup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/density_16"
+            android:layout_marginTop="@dimen/density_8"
             android:background="@drawable/background_round_corner_green"
             android:drawableEnd="@drawable/ic_next_white"
             android:drawableLeft="@drawable/ic_balance"
@@ -219,7 +219,7 @@
             android:text="OK"
             android:layout_centerHorizontal="true"
             android:textColor="#FFFFFF"
-            android:layout_marginBottom="@dimen/density_16"
+            android:layout_marginBottom="@dimen/density_8"
             android:textStyle="bold"/>
     </LinearLayout>
 

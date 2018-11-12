@@ -212,22 +212,35 @@ public class LandingActivity extends BaseAuthActivity {
                                  final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == APP_REQUEST_CODE) { // confirm that this response matches your request
-            AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
-            String toastMessage = "";
-            if (loginResult.getError() != null) {
-                toastMessage = loginResult.getError().getErrorType().getMessage();
-                errorDialog(loginResult.getError().toString());
-                Log.d(TAG, "Error " + loginResult.getError().toString());
-            } else if (loginResult.wasCancelled()) {
-                toastMessage = "Login Cancelled";
-            } else {
-                // Success! Start your next activity...
-                getCurrentAccount();
+            if (data != null)
+            {
+                AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
+                String toastMessage = "";
+                if (loginResult.getError() != null)
+                {
+                    toastMessage = loginResult.getError().getErrorType().getMessage();
+                    errorDialog(loginResult.getError().toString());
+                    Log.d(TAG, "Error " + loginResult.getError().toString());
+                }
+                else if (loginResult.wasCancelled())
+                {
+                    toastMessage = "Login Cancelled";
+                }
+                else
+                {
+                    // Success! Start your next activity...
+                    getCurrentAccount();
+                }
+                // Surface the result to your user in an appropriate way.
+                if(!toastMessage.isEmpty())
+                    Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Error data is empty");
             }
 
-            // Surface the result to your user in an appropriate way.
-            if(!toastMessage.isEmpty())
-                Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
         } else {
             logout.setVisibility(View.GONE);
             login.setVisibility(View.VISIBLE);

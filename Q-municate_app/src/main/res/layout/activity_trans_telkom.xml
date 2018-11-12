@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/density_8"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransTelkom">
 
     <com.eklanku.otuChat.ui.views.ARTextView
@@ -48,7 +48,7 @@
     <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:text="Masukkan No Pelanggan"
         android:textColor="@color/grey_600"
         android:textSize="16sp" />
@@ -88,7 +88,7 @@
     <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:text="No HP"
         android:textColor="@color/grey_600"
         android:textSize="16sp" />
@@ -124,7 +124,7 @@
         android:id="@+id/btnTransTelkomBayar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:background="@drawable/background_round_corner_green"
         android:text="Cek Tagihan"
         android:textColor="#FFFFFF"

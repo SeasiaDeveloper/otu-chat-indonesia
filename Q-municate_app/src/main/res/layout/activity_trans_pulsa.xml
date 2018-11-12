@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="@dimen/density_16"
+    android:padding="@dimen/density_8"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa">
 
     <LinearLayout
@@ -18,7 +18,6 @@
             android:id="@+id/tv_pulsa_no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/density_8"
             android:text="Nomor Telepon"
             android:textColor="@color/colorTextOtu"
             android:textSize="12sp"
@@ -33,13 +32,11 @@
             android:background="@drawable/custom_spinner"
             android:hint="Masukkan Nomor Telepon"
             android:inputType="phone"
-            android:padding="@dimen/density_8"
             android:visibility="gone" />
 
         <com.eklanku.otuChat.ui.views.ARTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/density_16"
             android:text="Masukkan No Telepon"
             android:textColor="@color/grey_600"
             android:textSize="16sp" />
@@ -131,7 +128,7 @@
             android:id="@+id/textView24"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/density_16"
+            android:layout_marginTop="@dimen/density_8"
             android:text="Pilih Nominal"
             android:textColor="@color/grey_600"
             android:textSize="16sp"
@@ -223,7 +220,7 @@
         android:id="@+id/btnTransPulsaBayar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:background="@drawable/rectangle_rounded_green"
         android:text="Beli"
         android:textColor="#FFFFFF"

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="@dimen/density_8"
     android:background="@color/white"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransPln">
 
@@ -22,8 +23,7 @@
                 android:id="@+id/radio_group_pln"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="16dp">
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/radio_pln_token"
@@ -53,9 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:paddingBottom="@dimen/density_8">
 
                 <com.eklanku.otuChat.ui.views.ARTextView
                     android:id="@+id/textView14"
@@ -141,7 +139,7 @@
                     android:id="@+id/layout_spinner_nominal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/density_16"
+                    android:layout_marginTop="@dimen/density_8"
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -278,7 +276,7 @@
                     android:id="@+id/btnTransPlnBayar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/density_16"
+                    android:layout_marginTop="@dimen/density_8"
                     android:background="@drawable/rectangle_rounded_green"
                     android:text="Beli Token Listrik"
                     android:textColor="#FFFFFF"

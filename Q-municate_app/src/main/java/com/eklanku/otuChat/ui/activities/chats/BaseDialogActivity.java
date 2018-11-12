@@ -264,33 +264,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             deleteTempMessagesAsync();
         }
 
-        messageEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                getSize();
-            }
-        });
-
         messageEditText.setUseSystemDefault(false);
-    }
-
-
-    private void getSize() {
-        if (messageEditText.getLineCount() == messageEditText.getMaxLines()) {
-            messageEditText.setMaxLines((messageEditText.getLineCount() + 1));
-        }
-        // Log.e("lenth", editText.getContentDescription().length()+"");
-
     }
 
     @OnTextChanged(R.id.message_edittext)
@@ -1039,7 +1013,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         return combinationMessages;
     }
 
-    protected void loadNextPartMessagesFromDb(final boolean isLoadOld, final boolean needUpdateAdapter) {
+    protected synchronized void loadNextPartMessagesFromDb(final boolean isLoadOld, final boolean needUpdateAdapter) {
         long messageDate = getMessageDateForLoadByCurrentList(isLoadOld);
 
         final List<CombinationMessage> requestedMessages = buildLimitedCombinationMessagesListByDate(
@@ -1314,6 +1288,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
                 if (action == MessageDataManager.DELETE_BY_ID_ACTION
                         || action == MessageDataManager.DELETE_ACTION) {
+                    List<Message> deletedMessages = (ArrayList<Message>) observableData.getSerializable(MessageDataManager.EXTRA_OBJECT_ID);
                     combinationMessagesList.clear();
                     loadNextPartMessagesFromDb(false, true);
                 }

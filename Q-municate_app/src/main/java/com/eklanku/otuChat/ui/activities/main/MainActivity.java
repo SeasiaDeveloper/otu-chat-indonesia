@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -27,21 +26,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.Application;
 import com.eklanku.otuChat.ReferrerReceiver;
-import com.eklanku.otuChat.ui.activities.about.AboutActivity;
 import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
-import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
-import com.eklanku.otuChat.ui.activities.feedback.FeedbackActivity;
-import com.eklanku.otuChat.ui.activities.invitefriends.InviteFriendsActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
@@ -69,7 +63,6 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
 import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClient;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -94,6 +87,8 @@ import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.ios.IosEmojiProvider;
 import com.yyydjk.library.BannerLayout;
 
 import butterknife.Bind;
@@ -128,7 +123,7 @@ import com.eklanku.otuChat.utils.helpers.DbHelper;
 public class MainActivity extends BaseLoggableActivity implements ObservableScrollViewCallbacks/*, NavigationView.OnNavigationItemSelectedListener*/ {
 
     @Bind(R.id.bannerLayout)
-    BannerLayout bannerSlider;
+    public BannerLayout bannerSlider;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -177,7 +172,12 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     private ObservableScrollView mScrollView;
     private int mParallaxImageHeight;
     DrawerLayout drawer;
-    TextView tvSaldo;
+    public TextView tvSaldo;
+
+    Call<LoadBanner> callLoadBanner;
+    Call<DataSaldoBonus> userCall;
+    Call<DataProfile> isMemberCall;
+    Call<ResetPassResponse> callResetPass;
 
     private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -278,6 +278,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        EmojiManager.install(new IosEmojiProvider());
+
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //lblSaldo = (TextView) findViewById(R.id.tvSaldo);
@@ -332,7 +334,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         Activity activity = this;
         if (!activity.isFinishing()) {
             loadBanner();
-            LoadSaldoBonus(strUserID, strAccessToken);
+            loadSaldoBonus(strUserID, strAccessToken);
             //loadDeposite(strUserID,strAccessToken);
         }
 
@@ -350,7 +352,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
-
 
         //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.drawer_layout));
         //navigationView.setNavigationItemSelectedListener(this);
@@ -490,8 +491,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 .create();
         dialog.show();
         return;
-
-
     }
 
     public void logOutPayment() {
@@ -501,11 +500,15 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        Call<ResetPassResponse> callResetPass = mApiInterfacePayment.postLogoutPayment(strUserID, strAccessToken, getCurrentTime());
+        callResetPass = mApiInterfacePayment.postLogoutPayment(strUserID, strAccessToken, getCurrentTime());
         callResetPass.enqueue(new Callback<ResetPassResponse>() {
 
             @Override
             public void onResponse(Call<ResetPassResponse> call, Response<ResetPassResponse> response) {
+                if (call.isCanceled())
+                {
+                  return;
+                }
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
@@ -527,6 +530,10 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             @Override
             public void onFailure(Call<ResetPassResponse> call, Throwable t) {
+                if (call.isCanceled())
+                {
+                  return;
+                }
                 progressDialog.dismiss();
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 //Log.d("API_TRANSBELI", t.getMessage().toString());
@@ -550,6 +557,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     @Override
     protected void onDestroy() {
+        cancelCalls();
         super.onDestroy();
         removeDialogsAction();
     }
@@ -569,6 +577,29 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     protected void performLoginChatSuccessAction(Bundle bundle) {
         super.performLoginChatSuccessAction(bundle);
         actualizeCurrentTitle();
+    }
+
+    private void cancelCalls()
+    {
+      if (callLoadBanner != null && !callLoadBanner.isCanceled())
+      {
+        callLoadBanner.cancel();
+      }
+
+      if (userCall != null && !userCall.isCanceled())
+      {
+        userCall.cancel();
+      }
+
+      if (isMemberCall != null && !isMemberCall.isCanceled())
+      {
+        isMemberCall.cancel();
+      }
+
+      if (callResetPass != null && !callResetPass.isCanceled())
+      {
+        callResetPass.cancel();
+      }
     }
 
     private void addDialogsAction() {
@@ -656,48 +687,48 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     /*======================================load deposit==========================================================*/
 
-    public void load_deposit() {
-        Call<DataDeposit> userCall = mApiInterfacePayment.getSaldo(strUserID, strApIUse, strAccessToken);
-        userCall.enqueue(new Callback<DataDeposit>() {
-            @Override
-            public void onResponse(Call<DataDeposit> call, Response<DataDeposit> response) {
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String error = response.body().getRespMessage();
-                    String balance = response.body().getBalance();
-                    Log.d("OPPO-1", "onResponse: " + balance);
-
-                    if (status.equals("SUCCESS")) {
-                        Double total = 0.0d;
-                        try {
-                            if (balance != null && !balance.trim().isEmpty())
-                                total = Double.valueOf(balance);
-                        } catch (Exception e) {
-                            total = 0.0d;
-                        }
-                        Locale localeID = new Locale("in", "ID");
-                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
-                        String rupiah = format.format(total);
-
-                        Log.d("OPPO-1", "onResponse: " + rupiah);
-
-                        ((TextView) findViewById(R.id.tvSaldo)).setText(rupiah);
-                    } else {
-                        Toast.makeText(getBaseContext(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataDeposit> call, Throwable t) {
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_REGISTER", t.getMessage().toString());
-            }
-        });
-
-    }
+//    public void load_deposit() {
+//        Call<DataDeposit> userCall = mApiInterfacePayment.getSaldo(strUserID, strApIUse, strAccessToken);
+//        userCall.enqueue(new Callback<DataDeposit>() {
+//            @Override
+//            public void onResponse(Call<DataDeposit> call, Response<DataDeposit> response) {
+//                if (response.isSuccessful()) {
+//                    String status = response.body().getStatus();
+//                    String error = response.body().getRespMessage();
+//                    String balance = response.body().getBalance();
+//                    Log.d("OPPO-1", "onResponse: " + balance);
+//
+//                    if (status.equals("SUCCESS")) {
+//                        Double total = 0.0d;
+//                        try {
+//                            if (balance != null && !balance.trim().isEmpty())
+//                                total = Double.valueOf(balance);
+//                        } catch (Exception e) {
+//                            total = 0.0d;
+//                        }
+//                        Locale localeID = new Locale("in", "ID");
+//                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
+//                        String rupiah = format.format(total);
+//
+//                        Log.d("OPPO-1", "onResponse: " + rupiah);
+//
+//                        ((TextView) findViewById(R.id.tvSaldo)).setText(rupiah);
+//                    } else {
+//                        Toast.makeText(getBaseContext(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+//                    }
+//                } else {
+//                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<DataDeposit> call, Throwable t) {
+//                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+//                Log.d("API_REGISTER", t.getMessage().toString());
+//            }
+//        });
+//
+//    }
 
     private void populate() {
         if (!mayRequest()) {
@@ -784,12 +815,15 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     private void cekMember() {
 //        Log.d("OPPO-1", "cekMember:process"+AppSession.getSession().getUser().getPhone());
-        // Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this)), "OTU");
-        Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this), "OTU");
-
-        isMember.enqueue(new Callback<DataProfile>() {
+        // Call<DataProfile> isMemberCall = mApiInterfacePayment.isMemberCall(PreferenceUtil.getNumberPhone(this)), "OTU");
+        isMemberCall = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this), "OTU");
+        isMemberCall.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
+                if (call.isCanceled())
+                {
+                  return;
+                }
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
@@ -808,7 +842,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+              if (call.isCanceled())
+              {
+                return;
+              }
+              Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -925,10 +963,16 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     public void loadBanner() {
         bannerSlider.setImageLoader(new GlideImageLoader());
         List<String> urls = new ArrayList<>();
-        Call<LoadBanner> callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(MainActivity.this), strApIUse);
+
+        callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(MainActivity.this), strApIUse);
         callLoadBanner.enqueue(new Callback<LoadBanner>() {
             @Override
             public void onResponse(Call<LoadBanner> call, Response<LoadBanner> response) {
+                if (call.isCanceled())
+                {
+                    return;
+                }
+
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     if (status.equals("SUCCESS")) {
@@ -964,6 +1008,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             @Override
             public void onFailure(Call<LoadBanner> call, Throwable t) {
+                if (call.isCanceled())
+                {
+                    return;
+                }
+
                 urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
                 urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
                 urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
@@ -972,6 +1021,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 bannerSlider.setViewUrls(urls);
             }
         });
+
     }
 
     /*================================================end load deposit======================================================*/
@@ -1238,12 +1288,16 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     }
 
 
-    public void LoadSaldoBonus(String strUserID, String strAccessToken) {
+    public void loadSaldoBonus(String strUserID, String strAccessToken) {
 
-        Call<DataSaldoBonus> userCall = mApiInterfacePayment.getSaldodetail(strUserID, strApIUse, strAccessToken);
+        userCall = mApiInterfacePayment.getSaldodetail(strUserID, strApIUse, strAccessToken);
         userCall.enqueue(new Callback<DataSaldoBonus>() {
             @Override
             public void onResponse(Call<DataSaldoBonus> call, Response<DataSaldoBonus> response) {
+                if (call.isCanceled())
+                {
+                    return;
+                }
 
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
@@ -1302,6 +1356,10 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             @Override
             public void onFailure(Call<DataSaldoBonus> call, Throwable t) {
+                if (call.isCanceled())
+                {
+                    return;
+                }
                 // Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });

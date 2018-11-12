@@ -46,6 +46,7 @@ import com.eklanku.otuChat.ui.activities.main.MainActivity;
 =======*/
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 //>>>>>>> origin/feature/migration
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
@@ -184,16 +185,19 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
+        setActivityBannerVisibility(View.GONE);
+
         View view = inflater.inflate(R.layout.fragment_dialogs_list, container, false);
         activateButterKnife(view);
         registerForContextMenu(dialogsListView);
         setEmptyMessage();
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.header_banner, dialogsListView,false);
+        dialogsListView.addHeaderView(header);
         dialogsListView.setAdapter(dialogsListAdapter);
 
-        View header = getLayoutInflater().inflate(R.layout.header_banner, null);
         banner = header.findViewById(R.id.bannerLayout);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-
+        loadBanner();
        /* Activity activity = getActivity();
         if (activity != null && isAdded()) {
             loadBanner();
@@ -242,6 +246,12 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         return view;
     }
 
+    private void setActivityBannerVisibility(int visibility) {
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null) {
+            activity.bannerSlider.setVisibility(visibility);
+        }
+    }
 
     @Override
     public void initActionBar() {
@@ -321,7 +331,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         super.onCreateContextMenu(menu, view, menuInfo);
         MenuInflater menuInflater = baseActivity.getMenuInflater();
         AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        ConnectycubeChatDialog chatDialog = dialogsListAdapter.getItem(adapterContextMenuInfo.position).getChatDialog();
+        ConnectycubeChatDialog chatDialog = ((DialogWrapper)dialogsListView.getItemAtPosition(adapterContextMenuInfo.position)).getChatDialog();
         if (chatDialog.getType().equals(ConnectycubeDialogType.GROUP)) {
             menuInflater.inflate(R.menu.dialogs_list_group_ctx_menu, menu);
         } else {
@@ -335,7 +345,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         switch (item.getItemId()) {
             case R.id.action_delete:
                 if (baseActivity.checkNetworkAvailableWithError() && checkDialogsLoadFinished()) {
-                    ConnectycubeChatDialog chatDialog = dialogsListAdapter.getItem(adapterContextMenuInfo.position).getChatDialog();
+                    ConnectycubeChatDialog chatDialog = ((DialogWrapper)dialogsListView.getItemAtPosition(adapterContextMenuInfo.position)).getChatDialog();
                     deleteDialog(chatDialog);
                 }
                 break;
@@ -465,6 +475,9 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
         int start = dialogsListView.getFirstVisiblePosition();
         for (int i = start, j = dialogsListView.getLastVisiblePosition(); i <= j; i++) {
+            if (i < dialogsListView.getHeaderViewsCount()) {
+                continue;
+            }
             DialogWrapper result = (DialogWrapper) dialogsListView.getItemAtPosition(i);
             if (result.getChatDialog().getDialogId().equals(dialogId)) {
                 View view = dialogsListView.getChildAt(i - start);
@@ -476,7 +489,11 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
     @OnItemClick(R.id.chats_listview)
     void startChat(int position) {
-        ConnectycubeChatDialog chatDialog = dialogsListAdapter.getItem(position).getChatDialog();
+        if (position < dialogsListView.getHeaderViewsCount()) {
+            Log.d(TAG, "header banner was clicked");
+            return;
+        }
+        ConnectycubeChatDialog chatDialog = ((DialogWrapper)dialogsListView.getItemAtPosition(position)).getChatDialog();
 
         if (!baseActivity.checkNetworkAvailableWithError() && isFirstOpeningDialog(chatDialog.getDialogId())) {
             return;

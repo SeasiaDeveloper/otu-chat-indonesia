@@ -88,6 +88,13 @@
         android:largeHeap="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+
+        <!-- Workaround for OS 9 (sdk = 28) -->
+        <!-- from: https://issuetracker.google.com/issues/79478779 -->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <activity
             android:name=".ui.activities.authorization.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -122,6 +129,7 @@
         <activity
             android:name=".ui.activities.main.MainActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:theme="@style/AppThemeMain" />
         <activity
             android:name=".ui.activities.settings.SettingsActivity"
@@ -165,9 +173,8 @@
             android:name=".ui.activities.chats.PrivateDialogActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait" />
-
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.chats.GroupDialogActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -324,21 +331,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.settingpayment.ResetPassword"
+        <activity
+            android:name=".ui.activities.payment.settingpayment.ResetPassword"
             android:label="Ganti Password"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.settingpayment.Profile"
+        <activity
+            android:name=".ui.activities.payment.settingpayment.Profile"
             android:label="Profil"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.settingpayment.ResetPIN"
+        <activity
+            android:name=".ui.activities.payment.settingpayment.ResetPIN"
             android:label="Ganti PIN"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
@@ -350,7 +360,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.settingpayment.DeleteAccount"
+        <activity
+            android:name=".ui.activities.payment.settingpayment.DeleteAccount"
             android:label="Non Aktif Akun"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
@@ -554,7 +565,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transfer.TransDeposit"
+        <activity
+            android:name=".ui.activities.payment.transfer.TransDeposit"
             android:label="Transfer Saldo"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
@@ -582,12 +594,14 @@
         <activity android:name=".ui.activities.payment.topup.TopupBilling" />
         <activity android:name=".ui.activities.payment.topup.TopupDetail" />
         <!-- <activity android:name=".ui.activities.payment.settingpayment.Register" /> -->
-        <activity android:name=".ui.activities.settings.SettingTabPaymentActivity"
+        <activity
+            android:name=".ui.activities.settings.SettingTabPaymentActivity"
             android:label="Pengaturan"
             android:theme="@style/AppThemePaymentItems" />
-        <activity android:name=".ui.activities.about.ContactUsActivity"
+        <activity
+            android:name=".ui.activities.about.ContactUsActivity"
             android:label="Kontak Kami"
-            android:theme="@style/AppThemePaymentItems"/>
+            android:theme="@style/AppThemePaymentItems" />
         <activity android:name=".ui.activities.payment.transaksi.TransThankyou" />
         <activity android:name=".ui.activities.payment.topup.AlertSyarat" />
         <!-- new config -->
@@ -637,10 +651,11 @@
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
 
         <activity android:name=".ui.activities.payment.TestActivity" />
-        <activity android:name=".ui.activities.payment.RiwayatActivity"
+        <activity
+            android:name=".ui.activities.payment.RiwayatActivity"
             android:label="Riwayat"
-            android:theme="@style/AppThemePaymentItems">
-        </activity>
+            android:theme="@style/AppThemePaymentItems"></activity>
+        <activity android:name=".ui.activities.TesActivity"></activity>
     </application>
 
 </manifest>

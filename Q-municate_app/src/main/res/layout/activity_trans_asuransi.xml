@@ -6,26 +6,28 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/density_8"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransAsuransi">
 
     <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:text="Nomor Pelanggan"
         android:textColor="@color/grey_600"
         android:textSize="16sp" />
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/txtLayoutTransPulsaNo"
-            android:layout_width="280dp"
-            app:hintEnabled="false"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            app:hintEnabled="false">
 
             <EditText
                 android:id="@+id/txtTransAsuransiNo"
@@ -33,20 +35,19 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_bottom_border_grey"
                 android:ems="10"
-                android:textColor="@color/grey_600"
                 android:inputType="number"
+                android:paddingTop="@dimen/density_8"
                 android:paddingBottom="@dimen/density_8"
-                android:paddingTop="@dimen/density_8"/>
+                android:textColor="@color/grey_600" />
         </android.support.design.widget.TextInputLayout>
 
         <ImageView
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_otu_asuransi"
-            android:layout_alignParentRight="true"/>
+            android:layout_weight="2"
+            android:src="@drawable/ic_otu_asuransi" />
 
-    </RelativeLayout>
-
+    </LinearLayout>
 
 
     <com.eklanku.otuChat.ui.views.ARTextView
@@ -56,7 +57,7 @@
         android:text="Operator"
         android:textColor="@color/grey_600"
         android:textSize="16sp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -81,15 +82,15 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:tint="@color/default_text_icon_otu_color"
-            android:src="@drawable/ic_drop" />
+            android:src="@drawable/ic_drop"
+            android:tint="@color/default_text_icon_otu_color" />
 
     </RelativeLayout>
 
     <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:text="No HP"
         android:textColor="@color/grey_600"
         android:textSize="16sp" />
@@ -104,13 +105,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_bottom_border_grey"
-            android:drawableLeft="@drawable/ic_phone"
             android:drawableStart="@drawable/ic_phone"
+            android:drawableLeft="@drawable/ic_phone"
             android:ems="10"
-            android:paddingBottom="@dimen/density_8"
-            android:textColor="@color/grey_600"
+            android:inputType="number"
             android:paddingTop="@dimen/density_8"
-            android:inputType="number"/>
+            android:paddingBottom="@dimen/density_8"
+            android:textColor="@color/grey_600" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -119,34 +120,34 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="No HP ini digunakan untuk menerima sms konfirmasi"
-        android:textSize="10dp"/>
+        android:textSize="10dp" />
 
     <Button
         android:id="@+id/btnTransAsuransiBayar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:background="@drawable/background_round_corner_green"
         android:text="Cek Tagihan"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <com.eklanku.otuChat.ui.views.ARTextView
         android:id="@+id/tvPilihNominal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/density_4"
+        android:background="@drawable/rounded_shape_payment"
+        android:padding="@dimen/density_8"
         android:text="Pilih Asuransi"
         android:textColor="@color/white"
-        android:textSize="16sp"
-        android:background="@drawable/rounded_shape_payment"
-        android:padding="@dimen/density_8"/>
+        android:textSize="16sp" />
 
     <ListView
         android:id="@+id/listAsuransi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>

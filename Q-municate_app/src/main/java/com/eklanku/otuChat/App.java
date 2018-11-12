@@ -37,7 +37,7 @@ public class App extends MultiDexApplication {
     private SharedHelper appSharedHelper;
     private SessionListener sessionListener;
 
-    //pause
+    //Please, wait
 
     public static App getInstance() {
         return instance;

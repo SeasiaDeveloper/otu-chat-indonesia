@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="@dimen/density_8">
 
 
     <com.eklanku.otuChat.ui.views.ARTextView
@@ -50,7 +50,7 @@
         android:id="@+id/textView24"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:text="Pilih Nominal"
         android:textColor="@color/grey_600"
         android:textSize="16sp"
@@ -94,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtLayoutTransPulsaNo"
-            android:layout_marginTop="@dimen/density_16"
+            android:layout_marginTop="@dimen/density_8"
             android:inputType="number"
             android:text="Masukkan No Telepon"
             android:textColor="@color/grey_600"
@@ -191,7 +191,7 @@
         android:id="@+id/btnTransWifiBayar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:background="@drawable/background_round_corner_green"
         android:text="Beli"
         android:textColor="#FFFFFF"
