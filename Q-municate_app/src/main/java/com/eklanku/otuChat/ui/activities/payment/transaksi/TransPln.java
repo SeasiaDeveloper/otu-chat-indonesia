@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -24,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -138,6 +140,8 @@ public class TransPln extends AppCompatActivity {
         btnBayar = (Button) findViewById(R.id.btnTransPlnBayar);
         listPLN = (ListView) findViewById(R.id.listPLN);
         txtpilihpembayaran = findViewById(R.id.tvPiliPembayaran);
+
+        setListViewHeightBasedOnChildren(listPLN);
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
@@ -489,7 +493,7 @@ public class TransPln extends AppCompatActivity {
             return false;
         }*/
 
-       // layoutNo.setErrorEnabled(false);
+        // layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -717,5 +721,34 @@ public class TransPln extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) return;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0) view.setLayoutParams(new
+                    ViewGroup.LayoutParams(desiredWidth,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+
+        params.height = totalHeight + (listView.getDividerHeight() *
+                (listAdapter.getCount()-1));
+
+        Log.d("OPPO-1", "setListViewHeightBasedOnChildren: "+totalHeight + (listView.getDividerHeight() *
+                (listAdapter.getCount()-1)));
+
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 }

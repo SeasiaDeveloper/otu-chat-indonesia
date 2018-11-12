@@ -323,6 +323,7 @@ public class LandingActivity extends BaseAuthActivity {
     }
 
     protected void signUpWithNumber(String userPhone) {
+        Log.d("OPPO-1", "signUpWithNumber signUpWithNumber: "+userPhone);
         ConnectycubeUser connectycubeUser = new ConnectycubeUser(userPhone, userPhone, null);
         connectycubeUser.setPhone(userPhone);
         connectycubeUser.setFullName(userPhone);

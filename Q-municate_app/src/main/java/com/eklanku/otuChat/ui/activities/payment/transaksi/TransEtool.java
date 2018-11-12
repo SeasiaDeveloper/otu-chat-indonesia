@@ -262,6 +262,7 @@ public class TransEtool extends AppCompatActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 strOpsel = parent.getItemAtPosition(position).toString();
+                                Log.d("OPPO-1", "onItemSelected: "+strOpsel);
                                 loadProduct(strUserID, strAccessToken, strAplUse, strOpsel);
                             }
 
@@ -452,6 +453,7 @@ public class TransEtool extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 code = idNamaPaket.get(position);
+                Log.d("OPPO-1", "onItemClick: "+code);
                 if (!validateIdpel()) {
                     return;
                 }

@@ -201,6 +201,7 @@
         <item name="android:paddingLeft">@dimen/density_6</item>
         <item name="android:paddingRight">@dimen/density_6</item>
         <item name="android:textSize">@dimen/text_10</item>
+        <item name="android:layout_toRightOf">@+id/msg_text_message</item>
     </style>
 
     <style name="TextViewTimeMsg.Right">

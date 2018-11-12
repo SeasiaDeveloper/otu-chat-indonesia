@@ -23,6 +23,7 @@
                 android:id="@+id/msg_custom_widget_frame_top"
                 style="@style/CustomWidgetFrame.Left" />
 
+
             <TextView
                 android:id="@+id/msg_text_time_message"
                 style="@style/TextViewTimeMsg.Left"
