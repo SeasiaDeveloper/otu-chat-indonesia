@@ -473,16 +473,22 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
             dialogsListAdapter.moveToFirstPosition(dialogWrapper);
         }
 
-        int start = dialogsListView.getFirstVisiblePosition();
-        for (int i = start, j = dialogsListView.getLastVisiblePosition(); i <= j; i++) {
-            if (i < dialogsListView.getHeaderViewsCount()) {
-                continue;
-            }
-            DialogWrapper result = (DialogWrapper) dialogsListView.getItemAtPosition(i);
-            if (result.getChatDialog().getDialogId().equals(dialogId)) {
-                View view = dialogsListView.getChildAt(i - start);
-                dialogsListView.getAdapter().getView(i, view, dialogsListView);
-                break;
+        if(dialogsListView != null )
+        {
+            int start = dialogsListView.getFirstVisiblePosition();
+            for (int i = start, j = dialogsListView.getLastVisiblePosition(); i <= j; i++)
+            {
+                if (i < dialogsListView.getHeaderViewsCount())
+                {
+                    continue;
+                }
+                DialogWrapper result = (DialogWrapper)dialogsListView.getItemAtPosition(i);
+                if (result.getChatDialog().getDialogId().equals(dialogId))
+                {
+                    View view = dialogsListView.getChildAt(i - start);
+                    dialogsListView.getAdapter().getView(i, view, dialogsListView);
+                    break;
+                }
             }
         }
     }
