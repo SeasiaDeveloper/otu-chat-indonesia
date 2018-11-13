@@ -3,6 +3,7 @@ package com.eklanku.otuChat.utils;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
 import com.eklanku.otuChat.App;
@@ -112,9 +113,6 @@ public class StringUtils {
 
     public static boolean isNumeric(String strObject){
         String regexStr = "^[0-9]*$";
-        if(strObject.trim().matches(regexStr)) {
-            return true;
-        }
-        return false;
+        return !TextUtils.isEmpty(strObject) && strObject.trim().matches(regexStr);
     }
 }
