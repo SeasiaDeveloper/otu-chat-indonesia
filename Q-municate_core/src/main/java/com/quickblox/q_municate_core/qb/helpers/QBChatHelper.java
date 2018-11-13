@@ -419,7 +419,7 @@ public class QBChatHelper extends BaseThreadPoolHelper{
     }
 
     public void sendTypingStatusToServer(boolean startTyping) {
-        if (currentDialog != null && chatService.isLoggedIn()) {
+        if (currentDialog != null && chatService != null && chatService.isLoggedIn()) {
             try {
                 if (startTyping) {
                     currentDialog.sendIsTypingNotification();
