@@ -1138,6 +1138,10 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     }
 
     public void restartApp() {
+        if (com.eklanku.otuChat.utils.Utils.isActivityFinishedOrDestroyed(this))
+        {
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setMessage("Silahkan restart aplikasi OTU Chat");
