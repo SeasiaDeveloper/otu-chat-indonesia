@@ -491,6 +491,9 @@ public class CallActivity extends BaseLoggableActivity implements RTCClientSessi
     public QMUser getOpponentAsUserFromDB(int opponentId) {
         DataManager dataManager = DataManager.getInstance();
         Friend friend = dataManager.getFriendDataManager().getByUserId(opponentId);
+        if(friend == null){
+            return new QMUser();
+        }
         return friend.getUser();
     }
 
