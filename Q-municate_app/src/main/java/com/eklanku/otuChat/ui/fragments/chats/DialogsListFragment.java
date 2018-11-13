@@ -331,12 +331,26 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         super.onCreateContextMenu(menu, view, menuInfo);
         MenuInflater menuInflater = baseActivity.getMenuInflater();
         AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        ConnectycubeChatDialog chatDialog = ((DialogWrapper)dialogsListView.getItemAtPosition(adapterContextMenuInfo.position)).getChatDialog();
-        if (chatDialog.getType().equals(ConnectycubeDialogType.GROUP)) {
-            menuInflater.inflate(R.menu.dialogs_list_group_ctx_menu, menu);
-        } else {
-            menuInflater.inflate(R.menu.dialogs_list_private_ctx_menu, menu);
+        ConnectycubeDialogType dialogType = getChatDialogType(adapterContextMenuInfo);
+        if(dialogType!= null){
+            if (dialogType.equals(ConnectycubeDialogType.GROUP)){
+                menuInflater.inflate(R.menu.dialogs_list_group_ctx_menu, menu);
+            }
+            else{
+                menuInflater.inflate(R.menu.dialogs_list_private_ctx_menu, menu);
+            }
         }
+    }
+
+    private ConnectycubeDialogType getChatDialogType(AdapterView.AdapterContextMenuInfo adapterContextMenuInfo){
+        ConnectycubeDialogType dialogType = null;
+        if(dialogsListView != null && adapterContextMenuInfo!= null && dialogsListView.getItemAtPosition(adapterContextMenuInfo.position) != null
+                && dialogsListView.getItemAtPosition(adapterContextMenuInfo.position) instanceof DialogWrapper
+                && ((DialogWrapper)dialogsListView.getItemAtPosition(adapterContextMenuInfo.position)).getChatDialog() != null)
+        {
+            dialogType = ((DialogWrapper)dialogsListView.getItemAtPosition(adapterContextMenuInfo.position)).getChatDialog().getType();
+        }
+        return dialogType;
     }
 
     @Override
