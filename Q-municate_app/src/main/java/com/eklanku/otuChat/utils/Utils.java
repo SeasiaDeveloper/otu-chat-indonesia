@@ -28,7 +28,7 @@ public class Utils {
         this.context = context;
     }
 
-    private boolean isActivityFinishedOrDestroyed(Activity activity){
+    public static boolean isActivityFinishedOrDestroyed(Activity activity){
         if(activity != null){
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
                 return activity.isDestroyed() || activity.isFinishing();
