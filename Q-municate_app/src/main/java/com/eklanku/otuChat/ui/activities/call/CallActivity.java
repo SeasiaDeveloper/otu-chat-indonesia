@@ -543,8 +543,11 @@ public class CallActivity extends BaseLoggableActivity implements RTCClientSessi
     }
 
     private void startIncomeCallTimer(long time) {
-        showIncomingCallWindowTaskHandler
-                .postAtTime(showIncomingCallWindowTask, SystemClock.uptimeMillis() + time);
+        if(showIncomingCallWindowTaskHandler != null)
+        {
+            showIncomingCallWindowTaskHandler
+                    .postAtTime(showIncomingCallWindowTask, SystemClock.uptimeMillis() + time);
+        }
     }
 
     private void stopIncomeCallTimer() {
