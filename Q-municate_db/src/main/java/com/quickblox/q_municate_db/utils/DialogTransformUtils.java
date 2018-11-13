@@ -37,9 +37,18 @@ public class DialogTransformUtils {
 
     public static ArrayList<Integer> createOccupantsIdsFromDialogOccupantsList(
             List<DialogOccupant> dialogOccupantsList) {
-        ArrayList<Integer> occupantsIdsList = new ArrayList<>(dialogOccupantsList.size());
-        for (DialogOccupant dialogOccupant : dialogOccupantsList) {
-            occupantsIdsList.add(dialogOccupant.getUser().getId());
+        ArrayList<Integer> occupantsIdsList;
+        if (dialogOccupantsList != null)
+        {
+            occupantsIdsList = new ArrayList<>(dialogOccupantsList.size());
+            for (DialogOccupant dialogOccupant : dialogOccupantsList)
+            {
+                occupantsIdsList.add(dialogOccupant.getUser().getId());
+            }
+        }
+        else
+        {
+            occupantsIdsList = new ArrayList<>();
         }
         return occupantsIdsList;
     }
