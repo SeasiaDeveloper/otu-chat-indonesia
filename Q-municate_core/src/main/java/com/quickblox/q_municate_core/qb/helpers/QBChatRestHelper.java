@@ -11,6 +11,7 @@ import com.connectycube.chat.connections.tcp.TcpChatConnectionFabric;
 import com.connectycube.chat.connections.tcp.TcpConfigurationBuilder;
 import com.connectycube.core.EntityCallback;
 import com.connectycube.core.exception.ResponseException;
+import com.quickblox.q_municate_core.CLog;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
@@ -50,20 +51,27 @@ public class QBChatRestHelper extends BaseHelper {
     }
 
     public synchronized void login(ConnectycubeUser user) throws XMPPException, IOException, SmackException {
+			CLog.d("QBChatRestHelper login");
         if (!chatService.isLoggedIn() && user != null) {
+					CLog.d("QBChatRestHelper !chatService.isLoggedIn() && user != null");
             if (ConnectycubeProvider.FIREBASE_PHONE.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider())
                     && !ConnectycubeSessionManager.getInstance().isValidActiveSession()){
+							CLog.d("QBChatRestHelper ConnectycubeProvider.FIREBASE_PHONE.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider())\n" +
+											"&& !ConnectycubeSessionManager.getInstance().isValidActiveSession()");
                 CoreSharedHelper coreSharedHelper = new CoreSharedHelper(context);
                 String currentFirebaseAccessToken = coreSharedHelper.getFirebaseToken();
                 if (!ConnectycubeSessionManager.getInstance().getSessionParameters().getAccessToken().equals(currentFirebaseAccessToken)) {
+									CLog.d("QBChatRestHelper !ConnectycubeSessionManager.getInstance().getSessionParameters().getAccessToken().equals(currentFirebaseAccessToken)");
                     ConnectycubeAuth.createSessionUsingFirebase(coreSharedHelper.getFirebaseProjectId(), currentFirebaseAccessToken).perform();
                     user.setPassword(ConnectycubeSessionManager.getInstance().getToken());
                     AppSession.getSession().updateUser(user);
                 }
             }
+						CLog.d("QBChatRestHelper chatService.login(user)");
             chatService.login(user);
             chatService.enableCarbons();
         }
+			CLog.d("QBChatRestHelper login endFunc");
     }
     
     public synchronized void logout() throws ResponseException, SmackException.NotConnectedException {

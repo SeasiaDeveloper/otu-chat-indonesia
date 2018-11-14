@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.Application;
+import com.eklanku.otuChat.CLog;
 import com.eklanku.otuChat.ReferrerReceiver;
 import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
@@ -277,7 +278,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        CLog.e("MainActivity onCreate");
         EmojiManager.install(new IosEmojiProvider());
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -318,6 +319,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         syncAddressBook();
 
         if (!isChatInitializedAndUserLoggedIn()) {
+            CLog.e("MainActivity loginChat");
             loginChat();
         }
 
@@ -451,6 +453,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     @Override
     protected void onResume() {
+        CLog.d("MainActivity onResume");
         actualizeCurrentTitle();
         LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
         super.onResume();

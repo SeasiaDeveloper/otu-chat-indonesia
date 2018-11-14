@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.eklanku.otuChat.CLog;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;
@@ -32,33 +34,46 @@ public class ActivityLifecycleHandler implements Application.ActivityLifecycleCa
     @SuppressLint("LongLogTag")
     public void onActivityStarted(final Activity activity) {
         Log.d("ActivityLifecycleHandler", "onActivityStarted " + activity.getClass().getSimpleName());
+        CLog.d("ActivityLifecycleHandler onActivityStarted " + activity.getClass().getSimpleName());
         boolean activityLogeable = isActivityLogeable(activity);
         chatDestroyed = chatDestroyed && !isLoggedIn();
         Log.d(TAG, "onActivityStarted , chatDestroyed=" + chatDestroyed + ", numberOfActivitiesInForeground= " + numberOfActivitiesInForeground);
         if (numberOfActivitiesInForeground == 0 && activityLogeable) {
+            CLog.d("ActivityLifecycleHandler numberOfActivitiesInForeground == 0 && activityLogeable");
             AppSession.getSession().updateState(AppSession.ChatState.FOREGROUND);
             if (chatDestroyed) {
+                CLog.d("ActivityLifecycleHandler chatDestroyed");
                 boolean isLoggedIn = AppSession.getSession().isLoggedIn();
                 Log.d(TAG, "isSessionExist()" + isLoggedIn);
                 boolean canLogin = chatDestroyed && isLoggedIn;
                 boolean networkAvailable = ((BaseActivity) activity).isNetworkAvailable();
                 Log.d(TAG, "networkAvailable" + networkAvailable);
                 if (canLogin && !QBLoginChatCompositeCommand.isRunning()) {
+                    CLog.d("ActivityLifecycleHandler canLogin && !QBLoginChatCompositeCommand.isRunning()");
                     if (ConnectycubeProvider.FIREBASE_PHONE.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider())
                             && !ConnectycubeSessionManager.getInstance().isValidActiveSession()){
+                        CLog.d("ActivityLifecycleHandler start refreshInternalFirebaseToken");
                         Log.d(TAG, "start refresh Firebase token");
                         new FirebaseAuthHelper(activity).refreshInternalFirebaseToken(new FirebaseAuthHelper.RequestFirebaseIdTokenCallback() {
                             @Override
                             public void onSuccess(String accessToken) {
+                                CLog.d("ActivityLifecycleHandler refreshInternalFirebaseToken onSuccess");
                                 QBLoginChatCompositeCommand.start(activity);
                             }
 
                             @Override
                             public void onError(Exception e) {
-                                e.printStackTrace();
+                                String message = "empty error message";
+                                if(e!=null){
+                                    if(!TextUtils.isEmpty(e.getMessage())){
+                                        message = e.getMessage();
+                                    }
+                                }
+                                CLog.d("ActivityLifecycleHandler refreshInternalFirebaseToken onError " + message);
                             }
                         });
                     } else {
+                        CLog.d("ActivityLifecycleHandler else refreshInternalFirebaseToken start QBLoginChatCompositeCommand");
                         QBLoginChatCompositeCommand.start(activity);
                     }
                 }
@@ -75,6 +90,7 @@ public class ActivityLifecycleHandler implements Application.ActivityLifecycleCa
     @SuppressLint("LongLogTag")
     public void onActivityResumed(Activity activity) {
         Log.d("ActivityLifecycleHandler", "onActivityResumed " + activity.getClass().getSimpleName() + " count of activities = " + numberOfActivitiesInForeground);
+        CLog.d("ActivityLifecycleHandler onActivityResumed " + activity.getClass().getSimpleName());
     }
 
     public boolean isActivityLogeable(Activity activity) {
@@ -82,9 +98,11 @@ public class ActivityLifecycleHandler implements Application.ActivityLifecycleCa
     }
 
     public void onActivityPaused(Activity activity) {
+        CLog.d("ActivityLifecycleHandler onActivityPaused " + activity.getClass().getSimpleName());
     }
 
     public void onActivityStopped(Activity activity) {
+        CLog.d("ActivityLifecycleHandler onActivityStopped " + activity.getClass().getSimpleName());
         //Count only our app logeable activity
         if (activity instanceof Loggable) {
             Log.d("ActivityLifecycle", "--numberOfActivitiesInForeground");
