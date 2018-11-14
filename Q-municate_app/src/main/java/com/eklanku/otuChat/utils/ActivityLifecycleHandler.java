@@ -6,6 +6,8 @@ import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.eklanku.otuChat.App;
+import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;

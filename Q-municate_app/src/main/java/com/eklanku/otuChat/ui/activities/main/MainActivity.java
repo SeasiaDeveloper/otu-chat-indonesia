@@ -30,8 +30,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.connectycube.auth.model.ConnectycubeProvider;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
+import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.Application;
+import com.eklanku.otuChat.BuildConfig;
 import com.eklanku.otuChat.ReferrerReceiver;
+import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
@@ -52,11 +57,14 @@ import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
+import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.eklanku.otuChat.utils.helpers.AddressBookHelper;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.nineoldandroids.view.ViewHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -97,6 +105,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import rx.Observable;
+import rx.Subscriber;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -278,6 +287,19 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        processPushIntent();
+
+        if (checkAndStartLanding())
+        {
+            return;
+        }
+
+        if (checkAndStartLastOpenActivity())
+        {
+            return;
+        }
+
+
         EmojiManager.install(new IosEmojiProvider());
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -362,6 +384,82 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         navigationView.setItemIconTintList(null);
         txtEkl.setText(strUserID);
         mainActivity = this;
+    }
+
+    private boolean checkAndStartLastOpenActivity()
+    {
+        Class<?> lastActivityClass;
+        boolean needCleanTask = false;
+        try {
+            String lastActivityName = appSharedHelper.getLastOpenActivity();
+            if (lastActivityName != null) {
+                lastActivityClass = Class.forName(appSharedHelper.getLastOpenActivity());
+                startActivityByName(lastActivityClass, needCleanTask);
+                return true;
+            }
+        } catch (ClassNotFoundException e) {
+           return false;
+        }
+
+        return false;
+    }
+
+    private void processPushIntent() {
+        boolean openPushDialog = getIntent().getBooleanExtra(QBServiceConsts.EXTRA_SHOULD_OPEN_DIALOG, false);
+        CoreSharedHelper.getInstance().saveNeedToOpenDialog(openPushDialog);
+    }
+
+    private boolean checkAndStartLanding()
+    {
+        //TODO VT temp code for correct migration from Twitter Digits to Firebase Phone Auth
+        //should be removed in next release
+        if (ConnectycubeSessionManager.getInstance().getSessionParameters() != null
+                && ConnectycubeProvider.TWITTER_DIGITS.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider())) {
+            restartAppWithFirebaseAuth();
+            return true;
+        }
+        //TODO END
+
+        if (app.isNeedToUpdate())
+        {
+            startLandingScreen();
+            return true;
+        }
+
+        if (!appSharedHelper.isSavedRememberMe() ||
+                (ConnectycubeSessionManager.getInstance().getSessionParameters() == null && appSharedHelper.isSavedRememberMe()))
+        {
+            startLandingScreen();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void restartAppWithFirebaseAuth()
+    {
+        ServiceManager.getInstance().logout(new Subscriber<Void>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Intent intent = new Intent(App.getInstance(), LandingActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                LandingActivity.start(App.getInstance(), intent);
+                finish();
+            }
+
+            @Override
+            public void onNext(Void aVoid) {
+                Intent intent = new Intent(App.getInstance(), LandingActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                LandingActivity.start(App.getInstance(), intent);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -451,6 +549,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     @Override
     protected void onResume() {
+        app.fetchFirebaseRemoteConfigValues();
+
         actualizeCurrentTitle();
         LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
         super.onResume();
@@ -1111,6 +1211,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         referrerDataRaw = Application.getReferrerDataRaw(getApplicationContext());
         referrerDataDecoded = Application.getReferrerDataDecoded(getApplicationContext());
 
+        //TODO is that data needed to update like in splash?
        /* StringBuilder sb = new StringBuilder();
         sb.append("<b>First launch:</b>")
                 .append("<br/>")
@@ -1138,10 +1239,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     }
 
     public void restartApp() {
-        if (com.eklanku.otuChat.utils.Utils.isActivityFinishedOrDestroyed(this))
-        {
-            return;
-        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setMessage("Silahkan restart aplikasi OTU Chat");
@@ -1151,11 +1248,13 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                                         int which) {
                         dialog.dismiss();
                         PreferenceUtil.setFirstLaunch(MainActivity.this, true);
-                        SplashActivity.start(MainActivity.this);
-                        finish();
+                        startLandingScreen();
                     }
                 });
-        builder.show();
+        if (!com.eklanku.otuChat.utils.Utils.isActivityFinishedOrDestroyed(this))
+        {
+            builder.show();
+        }
     }
 
 

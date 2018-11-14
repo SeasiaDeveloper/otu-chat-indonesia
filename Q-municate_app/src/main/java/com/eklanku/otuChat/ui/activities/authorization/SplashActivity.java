@@ -94,8 +94,8 @@ public class SplashActivity extends BaseAuthActivity {
         }
         //TODO END
 
-        appInitialized = true;
-        AppSession.load();
+        //appInitialized = true;
+
         preferenceManager = new PreferenceManager(this);
 
         processPushIntent();
@@ -260,7 +260,6 @@ public class SplashActivity extends BaseAuthActivity {
         mFirebaseRemoteConfig.setConfigSettings(configSettings);
         mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_default);
         fetchWelcome();
-
     }
 
     private void fetchWelcome() {

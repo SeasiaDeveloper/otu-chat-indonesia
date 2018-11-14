@@ -85,7 +85,7 @@ import rx.Observable;
 public abstract class BaseActivity extends AppCompatActivity implements ActionBarBridge, ConnectionBridge, LoadingBridge, SnackbarBridge {
 
     private static final String TAG = BaseActivity.class.getSimpleName();
-    protected static boolean appInitialized;
+    //protected static boolean appInitialized;
 
     public DbHelper mDbHelper;
 
@@ -314,6 +314,12 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
     @Override
     protected void onResume() {
+        if (app.isNeedToUpdate()
+                && !(this instanceof LandingActivity))
+        {
+            startLandingScreen();
+        }
+
         super.onResume();
         Log.d("BaseActivity", "onResume");
         registerBroadcastReceivers();
