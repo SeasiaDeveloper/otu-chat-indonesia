@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.chats.NewMessageActivity;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
@@ -56,6 +58,7 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
         public ImageView mIvChat;
         public RelativeLayout mRlContacts;
         public CheckBox mChkSelect;
+        public ImageView IVIcon;
 
         public MyViewHolder(View view) {
             super(view);
@@ -65,6 +68,7 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
             mTvMessage = (TextView) view.findViewById(R.id.tvMessage);
             mRlContacts = (RelativeLayout) view.findViewById(R.id.rlContacts);
             mChkSelect = (CheckBox) view.findViewById(R.id.chkSelect);
+            IVIcon = (ImageView) view.findViewById(R.id.ivIcon);
 
         }
     }
@@ -90,6 +94,14 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final ContactsModelGroup contact = contactsModelsGroup.get(position);
 
+        //get first letter of each String item
+        String firstLetter = String.valueOf(contact.getFullName().charAt(0));
+        ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
+        // generate random color
+        int color = generator.getRandomColor();
+        TextDrawable drawable = TextDrawable.builder()
+                .buildRound(firstLetter, color); // radius in px
+        holder.IVIcon.setImageDrawable(drawable);
         holder.mTvUsername.setText(contact.getFullName());
         Log.v("Contacts New Meesage","number: "+contact.getLogin());
 
