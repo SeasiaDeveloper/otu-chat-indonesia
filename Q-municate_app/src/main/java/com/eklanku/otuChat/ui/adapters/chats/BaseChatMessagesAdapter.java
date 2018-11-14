@@ -41,6 +41,7 @@ import com.connectycube.users.model.ConnectycubeUser;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -52,6 +53,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
     protected ConnectycubeUser currentUser;
     protected final BaseActivity baseActivity;
     protected FileUtils fileUtils;
+    private ArrayList<String> listWithFailedUrls = new ArrayList<>();
 
     private DataManager dataManager;
     protected ConnectycubeChatDialog chatDialog;
@@ -274,8 +276,18 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
     {
         int preferredImageWidth = (int)this.context.getResources().getDimension(com.connectycube.ui.chatmessage.adapter.R.dimen.attach_image_width_preview);
         int preferredImageHeight = (int)this.context.getResources().getDimension(com.connectycube.ui.chatmessage.adapter.R.dimen.attach_image_height_preview);
-        VideoThumbnail model = new VideoThumbnail(pairOfUrls.second);
+        VideoThumbnailModelChild model = new VideoThumbnailModelChild(pairOfUrls.second);
         ImageView imageView = ((ConnectycubeChatAdapter.VideoAttachHolder)holder).attachImageView;
+        if (listWithFailedUrls.contains(model.getPath()))
+        {
+            //list contains url that was failed to load, so we displaying error icon
+            Glide.clear(imageView);
+            imageView.setAdjustViewBounds(false);
+            ((VideoAttachHolder)holder).playIcon.setVisibility(View.GONE);
+            Glide.with(this.context).load(R.drawable.ic_error).override(preferredImageWidth, preferredImageHeight)
+                    .dontTransform().dontAnimate().into(imageView);
+            return;
+        }
         if (pairOfUrls.first != null && !TextUtils.isEmpty(pairOfUrls.first)
                 && new File(pairOfUrls.first).exists())
         {
@@ -307,46 +319,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
                         @Override
                         protected void setResource(Bitmap bitmap)
                         {
-                            Bitmap resized = null;
-                            int maxSideLength = preferredImageHeight > preferredImageWidth ? preferredImageHeight : preferredImageWidth;
-                            if (maxSideLength > 1000)
-                            {
-                                maxSideLength = 1000;
-                                int scaledWidth, scaledHeight;
-                                if (bitmap.getHeight() > bitmap.getWidth())
-                                {
-                                    scaledHeight = maxSideLength;
-                                    scaledWidth = (int)(((double)bitmap.getWidth() / (double)bitmap.getHeight()) * maxSideLength);
-                                }
-                                else
-                                {
-                                    scaledWidth = maxSideLength;
-                                    scaledHeight = (int)(((double)bitmap.getHeight() / (double)bitmap.getWidth()) * maxSideLength);
-                                }
-                                resized = Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, false);
-                            }
-                            if (resized != null)
-                            {
-                                bitmap = resized;
-                            }
-                            int margin = 0;
-                            Bitmap centerCrop;
-                            if (bitmap.getHeight() > bitmap.getWidth())
-                            {
-                                margin = (bitmap.getHeight() - bitmap.getWidth()) / 2;
-                                centerCrop = Bitmap.createBitmap(bitmap, 0, margin, bitmap.getWidth(), bitmap.getWidth());
-                            }
-                            else if (bitmap.getWidth() > bitmap.getHeight())
-                            {
-                                margin = (bitmap.getWidth() - bitmap.getHeight()) / 2;
-                                centerCrop = Bitmap.createBitmap(bitmap, margin, 0, bitmap.getHeight(), bitmap.getHeight());
-                            }
-                            else
-                            {
-                                centerCrop = bitmap;
-                            }
-                            imageView.setAdjustViewBounds(true);
-                            imageView.setImageBitmap(centerCrop);
+                            resizeBitmapAndSetIntoAttachImageView(bitmap, imageView);
                         }
                     });
         }
@@ -354,11 +327,107 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         {
             Glide.with(this.context)
                     .load(model)
-                    .listener(this.getVideoThumbnailRequestListener(holder, position))
+                    .asBitmap()
+                    .placeholder(R.drawable.placeholder_attach_video_left)
+                    .listener(new VideoThumbnailLoadListener((ConnectycubeChatAdapter.VideoAttachHolder)holder))
                     .override(preferredImageWidth, preferredImageHeight)
                     .dontTransform()
                     .error(com.connectycube.ui.chatmessage.adapter.R.drawable.ic_error)
-                    .into(imageView);
+                    .into(new BitmapImageViewTarget(imageView)
+                    {
+                        @Override
+                        protected void setResource(Bitmap bitmap)
+                        {
+                            resizeBitmapAndSetIntoAttachImageView(bitmap, imageView);
+                        }
+                    });
+        }
+    }
+
+    private void resizeBitmapAndSetIntoAttachImageView(Bitmap bitmap, ImageView imageView)
+    {
+        Bitmap resized = null;
+        //resizing bitmap, if it so big
+        int maxSideLength = bitmap.getHeight() > bitmap.getHeight() ? bitmap.getHeight() : bitmap.getHeight();
+        if (maxSideLength > 1000)
+        {
+            maxSideLength = 1000;
+            int scaledWidth, scaledHeight;
+            if (bitmap.getHeight() > bitmap.getWidth())
+            {
+                scaledHeight = maxSideLength;
+                scaledWidth = (int)(((double)bitmap.getWidth() / (double)bitmap.getHeight()) * maxSideLength);
+            }
+            else
+            {
+                scaledWidth = maxSideLength;
+                scaledHeight = (int)(((double)bitmap.getHeight() / (double)bitmap.getWidth()) * maxSideLength);
+            }
+            //creating resized Bitmap with maximum side length = 1000px
+            resized = Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, false);
+        }
+        if (resized != null)
+        {
+            bitmap = resized;
+        }
+        int margin = 0;
+        Bitmap centerCrop;
+        //cropping bitmap to square, if it have horizontal orientation
+        if (bitmap.getHeight() > bitmap.getWidth())
+        {
+            margin = (bitmap.getHeight() - bitmap.getWidth()) / 2;
+            centerCrop = Bitmap.createBitmap(bitmap, 0, margin - 50, bitmap.getWidth(), bitmap.getWidth() + 50);
+        }
+        //uncomment code below if we want to crop bitmap to square, if it have vertical orientation
+//        else if (bitmap.getWidth() > bitmap.getHeight())
+//        {
+//            margin = (bitmap.getWidth() - bitmap.getHeight()) / 2;
+//            centerCrop = Bitmap.createBitmap(bitmap, margin, 0, bitmap.getHeight(), bitmap.getHeight());
+//        }
+        else
+        {
+            centerCrop = bitmap;
+        }
+        imageView.setAdjustViewBounds(true);
+        imageView.setImageBitmap(centerCrop);
+    }
+
+    //Extending VideoThumbnail class, so now we can get path field from model
+    class VideoThumbnailModelChild extends VideoThumbnail{
+        String path;
+        public VideoThumbnailModelChild(String path)
+        {
+            super(path);
+            this.path = path;
+        }
+        public String getPath(){
+            return path;
+        }
+    }
+
+    // overriding listener, with custom onException method
+    protected class VideoThumbnailLoadListener extends ConnectycubeChatAdapter.ImageLoadListener<VideoThumbnailModelChild, Bitmap> {
+        private ConnectycubeChatAdapter.VideoAttachHolder holder;
+
+        protected VideoThumbnailLoadListener(ConnectycubeChatAdapter.VideoAttachHolder holder) {
+            super(holder);
+            this.holder = holder;
+            holder.playIcon.setVisibility(View.GONE);
+        }
+
+        public boolean onResourceReady(Bitmap resource, VideoThumbnailModelChild model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            super.onResourceReady(resource, model, target, isFromMemoryCache, isFirstResource);
+            this.holder.playIcon.setVisibility(View.VISIBLE);
+            return false;
+        }
+
+        @Override
+        public boolean onException(Exception e, VideoThumbnailModelChild model, Target<Bitmap> target, boolean isFirstResource)
+        {
+            //adding this url to list, so next time we can avoid downloading this url again
+            listWithFailedUrls.add(model.getPath());
+            this.holder.attachImageView.setAdjustViewBounds(false);
+            return super.onException(e, model, target, isFirstResource);
         }
     }
 
