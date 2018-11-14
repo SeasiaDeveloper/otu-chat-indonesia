@@ -491,6 +491,9 @@ public class CallActivity extends BaseLoggableActivity implements RTCClientSessi
     public QMUser getOpponentAsUserFromDB(int opponentId) {
         DataManager dataManager = DataManager.getInstance();
         Friend friend = dataManager.getFriendDataManager().getByUserId(opponentId);
+        if(friend == null){
+            return new QMUser();
+        }
         return friend.getUser();
     }
 
@@ -540,8 +543,11 @@ public class CallActivity extends BaseLoggableActivity implements RTCClientSessi
     }
 
     private void startIncomeCallTimer(long time) {
-        showIncomingCallWindowTaskHandler
-                .postAtTime(showIncomingCallWindowTask, SystemClock.uptimeMillis() + time);
+        if(showIncomingCallWindowTaskHandler != null)
+        {
+            showIncomingCallWindowTaskHandler
+                    .postAtTime(showIncomingCallWindowTask, SystemClock.uptimeMillis() + time);
+        }
     }
 
     private void stopIncomeCallTimer() {

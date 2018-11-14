@@ -31,9 +31,11 @@ public class ChatMessageReceiver extends BroadcastReceiver {
             String message = intent.getStringExtra(QBServiceConsts.EXTRA_CHAT_MESSAGE);
             QMUser user = (QMUser) intent.getSerializableExtra(QBServiceConsts.EXTRA_USER);
             String dialogId = intent.getStringExtra(QBServiceConsts.EXTRA_DIALOG_ID);
-
-            chatNotificationHelper.saveOpeningDialogData(user.getId(), dialogId);
-            chatNotificationHelper.sendChatNotification(message, user.getId(), dialogId);
+            if(user != null)
+            {
+                chatNotificationHelper.saveOpeningDialogData(user.getId(), dialogId);
+                chatNotificationHelper.sendChatNotification(message, user.getId(), dialogId);
+            }
         }
     }
 }
