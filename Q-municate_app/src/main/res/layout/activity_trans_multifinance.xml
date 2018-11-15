@@ -20,7 +20,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_marginTop="@dimen/density_8"
         android:layout_height="wrap_content">
 
         <android.support.design.widget.TextInputLayout
@@ -45,7 +44,7 @@
         <ImageView
             android:layout_width="0dp"
             android:layout_weight="2"
-            android:layout_height="match_parent"
+            android:layout_height="35dp"
             android:src="@drawable/ic_otu_finance"/>
 
     </LinearLayout>
@@ -112,7 +111,6 @@
             android:ems="10"
             android:textColor="@color/grey_600"
             android:paddingBottom="@dimen/density_8"
-            android:paddingTop="@dimen/density_8"
             android:inputType="number"/>
 
     </android.support.design.widget.TextInputLayout>
