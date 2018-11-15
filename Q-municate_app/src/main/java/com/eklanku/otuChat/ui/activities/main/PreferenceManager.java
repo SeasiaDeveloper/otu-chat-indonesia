@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.eklanku.otuChat.Application;
+
 import java.util.HashMap;
 
 public class PreferenceManager {
@@ -63,8 +65,6 @@ public class PreferenceManager {
         return user;
     }
 
-
-
     public HashMap<String, String> getUserDetailsPayment() {
         HashMap<String, String> user = new HashMap<String, String>();
         user.put(KEY_USERID, pref.getString(KEY_USERID, null));
@@ -77,6 +77,15 @@ public class PreferenceManager {
         return user;
     }
 
+    public void updateReferrerData(Context context)
+    {
+        //boolean isReferrerDetected = Application.isReferrerDetected(context);
+        String firstLaunch = Application.getFirstLaunch(context);
+        String referrerDate = Application.getReferrerDate(context);
+        String referrerDataRaw = Application.getReferrerDataRaw(context);
+        String referrerDataDecoded = Application.getReferrerDataDecoded(context);
 
+        createReff(firstLaunch, referrerDate, referrerDataRaw, referrerDataDecoded);
+    }
 
 }

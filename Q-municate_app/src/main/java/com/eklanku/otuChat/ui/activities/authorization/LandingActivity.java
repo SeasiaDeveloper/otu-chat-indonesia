@@ -1,5 +1,6 @@
 package com.eklanku.otuChat.ui.activities.authorization;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -84,6 +85,7 @@ public class LandingActivity extends BaseAuthActivity {
     private int loginTryCount = 0;
     public ServiceManager serviceManager;
     private SignUpSuccessAction signUpSuccessAction = new SignUpSuccessAction();
+
 
     public static void start(Context context) {
         Intent intent = new Intent(context, LandingActivity.class);

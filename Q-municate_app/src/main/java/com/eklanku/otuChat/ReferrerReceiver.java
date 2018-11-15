@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+
 import java.util.Date;
 
 public class ReferrerReceiver extends BroadcastReceiver {
@@ -36,6 +38,8 @@ public class ReferrerReceiver extends BroadcastReceiver {
         Application.setReferrerDate(context.getApplicationContext(), new Date().getTime());
         Application.setReferrerData(context.getApplicationContext(), (String) extras.get(KEY_REFERRER));
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(ACTION_UPDATE_DATA));
+        PreferenceManager preferenceManager = new PreferenceManager(context.getApplicationContext());
+        preferenceManager.updateReferrerData(context.getApplicationContext());
+        //LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(ACTION_UPDATE_DATA));
     }
 }
