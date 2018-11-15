@@ -34,11 +34,8 @@ import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.Application;
-<<<<<<< HEAD
 import com.eklanku.otuChat.BuildConfig;
-=======
 import com.eklanku.otuChat.CLog;
->>>>>>> origin/feature/disconnectBug
 import com.eklanku.otuChat.ReferrerReceiver;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
@@ -290,7 +287,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
 
         processPushIntent();
 
@@ -304,10 +300,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             return;
         }
 
-
-=======
         CLog.e("MainActivity onCreate");
->>>>>>> origin/feature/disconnectBug
         EmojiManager.install(new IosEmojiProvider());
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -558,12 +551,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     @Override
     protected void onResume() {
-<<<<<<< HEAD
         app.fetchFirebaseRemoteConfigValues();
-
-=======
         CLog.d("MainActivity onResume");
->>>>>>> origin/feature/disconnectBug
         actualizeCurrentTitle();
         LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
         super.onResume();
