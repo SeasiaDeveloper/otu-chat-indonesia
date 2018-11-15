@@ -36,6 +36,7 @@ import com.quickblox.q_municate_db.utils.DialogTransformUtils;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.connectycube.users.model.ConnectycubeUser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +75,6 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
     }
 
 
-
     public ContactsAdapterGroup(List<ContactsModelGroup> contactsModels, Context context) {
         this.contactsModelsGroup = contactsModels;
         this.mainListGroup = contactsModels;
@@ -95,26 +95,41 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
         final ContactsModelGroup contact = contactsModelsGroup.get(position);
 
         //get first letter of each String item
-        String firstLetter = String.valueOf(contact.getFullName().charAt(0));
+        String fullName = contact.getFullName();
+        String firstLetter = String.valueOf(fullName.charAt(0));
+        String lastLetter = "";
+        String identityName = "";
+        try {
+            if (fullName.contains(" ")) {
+                lastLetter = String.valueOf(fullName.substring(fullName.lastIndexOf(" ") + 1).charAt(0));
+                identityName = firstLetter + lastLetter;
+            } else {
+                identityName = firstLetter;
+            }
+        } catch (Exception e) {
+            identityName = firstLetter;
+        }
+
+
         ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
         // generate random color
         int color = generator.getRandomColor();
         TextDrawable drawable = TextDrawable.builder()
-                .buildRound(firstLetter, color); // radius in px
+                .buildRound(identityName, color); // radius in px
         holder.IVIcon.setImageDrawable(drawable);
         holder.mTvUsername.setText(contact.getFullName());
-        Log.v("Contacts New Meesage","number: "+contact.getLogin());
+        Log.v("Contacts New Meesage", "number: " + contact.getLogin());
 
         //holder.mTvPhonenumber.setText(contact.getLogin());
-        if(isToGroup){
+        if (isToGroup) {
             holder.mIvChat.setVisibility(View.GONE);
             holder.mChkSelect.setVisibility(View.VISIBLE);
             holder.mChkSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     Integer userId = Integer.valueOf(contact.getId_user());
-                    if(isChecked) {
-                        if(!((ContactsActivity) context).friendIdsList.contains(userId))
+                    if (isChecked) {
+                        if (!((ContactsActivity) context).friendIdsList.contains(userId))
                             ((ContactsActivity) context).friendIdsList.add(userId);
                     } else {
                         ((ContactsActivity) context).friendIdsList.remove(userId);

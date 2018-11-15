@@ -6,7 +6,6 @@ import android.app.Application;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.CLog;

@@ -113,12 +113,26 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         final com.eklanku.otuChat.ui.activities.contacts.ContactsModel contact = contactsModels.get(position);
 
         //get first letter of each String item
-        String firstLetter = String.valueOf(contact.getFullName().charAt(0));
+        //get first letter of each String item
+        String fullName = contact.getFullName();
+        String firstLetter = String.valueOf(fullName.charAt(0));
+        String lastLetter = "";
+        String identityName = "";
+        try {
+            if (fullName.contains(" ")) {
+                lastLetter = String.valueOf(fullName.substring(fullName.lastIndexOf(" ") + 1).charAt(0));
+                identityName = firstLetter + lastLetter;
+            } else {
+                identityName = firstLetter;
+            }
+        } catch (Exception e) {
+            identityName = firstLetter;
+        }
         ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
         // generate random color
         int color = generator.getRandomColor();
         TextDrawable drawable = TextDrawable.builder()
-                .buildRound(firstLetter, color); // radius in px
+                .buildRound(identityName, color); // radius in px
         holder.IVIcon.setImageDrawable(drawable);
         holder.mTvUsername.setText(contact.getFullName());
 

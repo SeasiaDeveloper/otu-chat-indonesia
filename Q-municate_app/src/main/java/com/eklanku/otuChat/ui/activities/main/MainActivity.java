@@ -29,16 +29,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.Application;
-
 import com.eklanku.otuChat.BuildConfig;
-
 import com.eklanku.otuChat.CLog;
-
+import com.eklanku.otuChat.BuildConfig;
+import com.eklanku.otuChat.CLog;
 import com.eklanku.otuChat.ReferrerReceiver;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
@@ -305,7 +303,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
         CLog.e("MainActivity onCreate");
 
-        //EmojiManager.install(new IosEmojiProvider());
+        CLog.e("MainActivity onCreate");
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -553,7 +551,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         app.fetchFirebaseRemoteConfigValues();
 
         CLog.d("MainActivity onResume");
-
         actualizeCurrentTitle();
         LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
         super.onResume();
