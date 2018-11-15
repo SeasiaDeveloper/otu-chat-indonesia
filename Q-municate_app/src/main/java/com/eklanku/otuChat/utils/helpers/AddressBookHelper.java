@@ -20,7 +20,7 @@ public class AddressBookHelper {
     public static final String REG_TYPE_REGISTERED = "1";
     public static final String REG_TYPE_NOT_REGISTERED = "0";
 
-    private static final int COUNTRY_CODE = 62;
+    private static final int COUNTRY_CODE = 380;
 
     private static volatile AddressBookHelper instance;
     private ServiceManager serviceManager;
@@ -146,6 +146,13 @@ public class AddressBookHelper {
             phoneNumber = phoneNumber.replaceFirst("0", String.valueOf(COUNTRY_CODE));
         } else if (!phoneNumber.startsWith(String.valueOf(COUNTRY_CODE))) {
             phoneNumber = COUNTRY_CODE + phoneNumber;
+            if(phoneNumber.length() > 14){
+                phoneNumber = phoneNumber.substring(0, 14);
+            }else if(phoneNumber.length() < 10){
+                do{
+                    phoneNumber += "1";
+                }while (phoneNumber.length() < 11);
+            }
         }
         return phoneNumber;
     }
