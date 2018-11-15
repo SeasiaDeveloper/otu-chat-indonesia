@@ -34,11 +34,11 @@ import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.Application;
-<<<<<<< HEAD
+
 import com.eklanku.otuChat.BuildConfig;
-=======
+
 import com.eklanku.otuChat.CLog;
->>>>>>> origin/feature/disconnectBug
+
 import com.eklanku.otuChat.ReferrerReceiver;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
@@ -99,8 +99,8 @@ import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.ios.IosEmojiProvider;
+/*import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.ios.IosEmojiProvider;*/
 import com.yyydjk.library.BannerLayout;
 
 import butterknife.Bind;
@@ -290,25 +290,22 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
 
         processPushIntent();
 
-        if (checkAndStartLanding())
-        {
+        if (checkAndStartLanding()) {
             return;
         }
 
-        if (checkAndStartLastOpenActivity())
-        {
+        if (checkAndStartLastOpenActivity()) {
             return;
         }
 
 
-=======
+
         CLog.e("MainActivity onCreate");
->>>>>>> origin/feature/disconnectBug
-        EmojiManager.install(new IosEmojiProvider());
+
+        //EmojiManager.install(new IosEmojiProvider());
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -395,8 +392,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         mainActivity = this;
     }
 
-    private boolean checkAndStartLastOpenActivity()
-    {
+    private boolean checkAndStartLastOpenActivity() {
         Class<?> lastActivityClass;
         boolean needCleanTask = false;
         try {
@@ -407,7 +403,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 return true;
             }
         } catch (ClassNotFoundException e) {
-           return false;
+            return false;
         }
 
         return false;
@@ -418,8 +414,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         CoreSharedHelper.getInstance().saveNeedToOpenDialog(openPushDialog);
     }
 
-    private boolean checkAndStartLanding()
-    {
+    private boolean checkAndStartLanding() {
         //TODO VT temp code for correct migration from Twitter Digits to Firebase Phone Auth
         //should be removed in next release
         if (ConnectycubeSessionManager.getInstance().getSessionParameters() != null
@@ -429,15 +424,13 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         }
         //TODO END
 
-        if (app.isNeedToUpdate())
-        {
+        if (app.isNeedToUpdate()) {
             startLandingScreen();
             return true;
         }
 
         if (!appSharedHelper.isSavedRememberMe() ||
-                (ConnectycubeSessionManager.getInstance().getSessionParameters() == null && appSharedHelper.isSavedRememberMe()))
-        {
+                (ConnectycubeSessionManager.getInstance().getSessionParameters() == null && appSharedHelper.isSavedRememberMe())) {
             startLandingScreen();
             return true;
         }
@@ -445,8 +438,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         return false;
     }
 
-    private void restartAppWithFirebaseAuth()
-    {
+    private void restartAppWithFirebaseAuth() {
         ServiceManager.getInstance().logout(new Subscriber<Void>() {
             @Override
             public void onCompleted() {
@@ -558,12 +550,10 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     @Override
     protected void onResume() {
-<<<<<<< HEAD
         app.fetchFirebaseRemoteConfigValues();
 
-=======
         CLog.d("MainActivity onResume");
->>>>>>> origin/feature/disconnectBug
+
         actualizeCurrentTitle();
         LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
         super.onResume();
@@ -618,9 +608,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             @Override
             public void onResponse(Call<ResetPassResponse> call, Response<ResetPassResponse> response) {
-                if (call.isCanceled())
-                {
-                  return;
+                if (call.isCanceled()) {
+                    return;
                 }
                 progressDialog.dismiss();
                 if (response.isSuccessful()) {
@@ -643,9 +632,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             @Override
             public void onFailure(Call<ResetPassResponse> call, Throwable t) {
-                if (call.isCanceled())
-                {
-                  return;
+                if (call.isCanceled()) {
+                    return;
                 }
                 progressDialog.dismiss();
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
@@ -692,27 +680,22 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         actualizeCurrentTitle();
     }
 
-    private void cancelCalls()
-    {
-      if (callLoadBanner != null && !callLoadBanner.isCanceled())
-      {
-        callLoadBanner.cancel();
-      }
+    private void cancelCalls() {
+        if (callLoadBanner != null && !callLoadBanner.isCanceled()) {
+            callLoadBanner.cancel();
+        }
 
-      if (userCall != null && !userCall.isCanceled())
-      {
-        userCall.cancel();
-      }
+        if (userCall != null && !userCall.isCanceled()) {
+            userCall.cancel();
+        }
 
-      if (isMemberCall != null && !isMemberCall.isCanceled())
-      {
-        isMemberCall.cancel();
-      }
+        if (isMemberCall != null && !isMemberCall.isCanceled()) {
+            isMemberCall.cancel();
+        }
 
-      if (callResetPass != null && !callResetPass.isCanceled())
-      {
-        callResetPass.cancel();
-      }
+        if (callResetPass != null && !callResetPass.isCanceled()) {
+            callResetPass.cancel();
+        }
     }
 
     private void addDialogsAction() {
@@ -933,9 +916,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         isMemberCall.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
-                if (call.isCanceled())
-                {
-                  return;
+                if (call.isCanceled()) {
+                    return;
                 }
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
@@ -955,11 +937,10 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
-              if (call.isCanceled())
-              {
-                return;
-              }
-              Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                if (call.isCanceled()) {
+                    return;
+                }
+                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -1081,8 +1062,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         callLoadBanner.enqueue(new Callback<LoadBanner>() {
             @Override
             public void onResponse(Call<LoadBanner> call, Response<LoadBanner> response) {
-                if (call.isCanceled())
-                {
+                if (call.isCanceled()) {
                     return;
                 }
 
@@ -1121,8 +1101,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             @Override
             public void onFailure(Call<LoadBanner> call, Throwable t) {
-                if (call.isCanceled())
-                {
+                if (call.isCanceled()) {
                     return;
                 }
 
@@ -1264,8 +1243,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         startLandingScreen();
                     }
                 });
-        if (!com.eklanku.otuChat.utils.Utils.isActivityFinishedOrDestroyed(this))
-        {
+        if (!com.eklanku.otuChat.utils.Utils.isActivityFinishedOrDestroyed(this)) {
             builder.show();
         }
     }
@@ -1338,7 +1316,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         WebQRCodeActivity.start(MainActivity.this);
                         break;
                     case R.id.action_notification:
-                        Toast.makeText(MainActivity.this, "Coming soon", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Coming soon...", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.action_profile:
                         if (menuDialog()) {
@@ -1410,8 +1388,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         userCall.enqueue(new Callback<DataSaldoBonus>() {
             @Override
             public void onResponse(Call<DataSaldoBonus> call, Response<DataSaldoBonus> response) {
-                if (call.isCanceled())
-                {
+                if (call.isCanceled()) {
                     return;
                 }
 
@@ -1472,8 +1449,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
             @Override
             public void onFailure(Call<DataSaldoBonus> call, Throwable t) {
-                if (call.isCanceled())
-                {
+                if (call.isCanceled()) {
                     return;
                 }
                 // Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();

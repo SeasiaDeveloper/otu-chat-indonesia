@@ -28,7 +28,7 @@ import com.quickblox.q_municate_db.models.DialogNotification;
 import com.quickblox.q_municate_db.models.State;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.connectycube.ui.chatmessage.adapter.media.video.thumbnails.VideoThumbnail;
-import com.rockerhieu.emojicon.EmojiconTextView;
+//import com.rockerhieu.emojicon.EmojiconTextView;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import org.json.JSONArray;

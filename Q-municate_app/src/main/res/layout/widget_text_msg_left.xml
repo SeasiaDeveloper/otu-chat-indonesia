@@ -29,10 +29,10 @@
                 style="@style/TextViewTimeMsg.Left"
                 tools:text="August 16" />
 
-            <com.rockerhieu.emojicon.EmojiconTextView
+            <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
                 android:id="@+id/msg_text_message"
                 style="@style/TextViewTextMsg.Left"
-                emojicon:emojiconSize="24sp"
+                emojicon:emojiconSize="@dimen/text_20"
                 android:paddingTop="@dimen/density_2"
                 tools:text="message the long one message" />
 

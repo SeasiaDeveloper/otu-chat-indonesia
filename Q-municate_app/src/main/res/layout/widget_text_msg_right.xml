@@ -42,13 +42,13 @@
                     app:viewPartMain="@+id/msg_text_message"
                     app:viewPartSlave="@+id/msg_timestamp">-->
 
-                    <com.rockerhieu.emojicon.EmojiconTextView
+                    <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
                         android:id="@+id/msg_text_message"
                         style="@style/TextViewTextMsg.Right"
                         android:layout_width="wrap_content"
                         android:focusableInTouchMode="false"
                         android:paddingTop="@dimen/density_2"
-                        emojicon:emojiconSize="24sp"
+                        emojicon:emojiconSize="@dimen/text_20"
                         tools:text="xxxxxxxxxxxxxxxx" />
 
             <!--<LinearLayout

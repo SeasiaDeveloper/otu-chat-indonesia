@@ -835,7 +835,7 @@ public class PaymentFragment extends Fragment {
 
     private void cekMember() {
         Call<DataProfile> isMember = apiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(getActivity()), "OTU");
-        Toast.makeText(context, "" + PreferenceUtil.getNumberPhone(getActivity()), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "" + PreferenceUtil.getNumberPhone(getActivity()), Toast.LENGTH_SHORT).show();
         isMember.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {

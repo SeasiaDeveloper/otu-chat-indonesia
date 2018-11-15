@@ -40,12 +40,13 @@
                     android:background="@drawable/selector_button_general"
                     android:src="@drawable/ic_smile_green" />
 
-                <com.rockerhieu.emojicon.EmojiconEditText
+               <!-- <com.rockerhieu.emojicon.EmojiconEditText
                     android:id="@+id/message_edittext"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:width="0dp"
+                    android:visibility="gone"
                     android:autoLink="all"
                     android:background="@null"
                     android:clickable="true"
@@ -62,7 +63,32 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray_color_message"
                     android:textSize="17sp"
-                    emojicon:emojiconSize="@dimen/chat_emoji_item_preview_size" />
+                    emojicon:emojiconSize="@dimen/chat_emoji_item_preview_size" />-->
+
+                <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
+                    android:id="@+id/message_edittext"
+                    android:imeOptions="actionSend"
+                    android:inputType="textMultiLine"
+                    emojicon:emojiconSize="@dimen/chat_emoji_item_preview_size"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:width="0dp"
+                    android:autoLink="all"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:hint="@string/dialog_hint_message"
+                    android:isScrollContainer="true"
+                    android:maxLength="2000"
+                    android:maxLines="5"
+                    android:padding="5dp"
+                    android:singleLine="false"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_color_message"
+                    android:textSize="17sp"/>
 
             </LinearLayout>
 

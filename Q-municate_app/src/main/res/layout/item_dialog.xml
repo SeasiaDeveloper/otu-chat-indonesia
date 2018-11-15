@@ -48,7 +48,7 @@
                     android:textSize="@dimen/text_16"
                     tools:text="Nabe dsjkd sdldjscljkd dsclk" />
 
-                <com.rockerhieu.emojicon.EmojiconTextView
+                <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
                     android:id="@+id/last_message_textview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
