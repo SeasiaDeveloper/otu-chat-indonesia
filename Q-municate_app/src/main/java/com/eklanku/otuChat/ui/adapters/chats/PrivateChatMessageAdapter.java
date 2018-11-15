@@ -2,7 +2,6 @@ package com.eklanku.otuChat.ui.adapters.chats;
 
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.connectycube.ui.chatmessage.adapter.widget.MessageTextViewRight;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.R;;
@@ -28,7 +26,6 @@ import com.quickblox.q_municate_db.models.DialogNotification;
 import com.quickblox.q_municate_db.models.State;
 import com.quickblox.q_municate_user_service.model.QMUser;
 import com.connectycube.ui.chatmessage.adapter.media.video.thumbnails.VideoThumbnail;
-import com.rockerhieu.emojicon.EmojiconTextView;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import org.json.JSONArray;
@@ -36,9 +33,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
     private static final String TAG = PrivateChatMessageAdapter.class.getSimpleName();
@@ -67,7 +61,9 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     @Override
     protected void onBindViewMsgRightHolder(final TextMessageHolder holder, CombinationMessage chatMessage, final int position) {
-        ImageView signInView = (ImageView) holder.itemView.findViewById(R.id.message_status_image_view);
+        defineTimeStampPosition(holder);
+
+        ImageView signInView = holder.itemView.findViewById(R.id.message_status_image_view);
         setViewVisibility(holder.avatar, View.GONE);
 
         TextView timeView = holder.itemView.findViewById(R.id.custom_msg_text_time_message);
@@ -80,12 +76,8 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         addReplyView(holder, chatMessage, position);
 
         super.onBindViewMsgRightHolder(holder, chatMessage, position);
-
-      /*  long timeLength = timeView.getMeasuredWidth();
-        long messageLength = holder.messageTextView.getMeasuredWidth();
-
-        Log.d("AYIK", "chat width:" + position + " " + chatMessage.getBody() + " : " + timeLength + "||" + messageLength);*/
     }
+
 
     private void handleMessageClickListener(final RecyclerView.ViewHolder holder, final int position) {
 

@@ -103,6 +103,8 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
 
     @Override
     protected void onBindViewMsgRightHolder(TextMessageHolder holder, CombinationMessage chatMessage, int position) {
+        defineTimeStampPosition(holder);
+
         ImageView view = (ImageView) holder.itemView.findViewById(R.id.message_status_image_view);
         setViewVisibility(holder.avatar, View.GONE);
 

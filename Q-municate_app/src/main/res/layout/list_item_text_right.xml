@@ -3,7 +3,6 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:id="@+id/msg_message_text_view_right"
     style="@style/WidgetTextMsgFrame"
-    custom:widget_id_bottom="@layout/custom_msg_right_bottom_widget"
     android:layout_gravity="right|end">
 
 </com.connectycube.ui.chatmessage.adapter.widget.MessageTextViewRight>
