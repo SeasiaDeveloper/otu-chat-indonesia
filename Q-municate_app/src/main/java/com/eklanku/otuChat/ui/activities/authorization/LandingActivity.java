@@ -3,6 +3,7 @@ package com.eklanku.otuChat.ui.activities.authorization;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -71,18 +72,18 @@ public class LandingActivity extends BaseAuthActivity {
     @Bind(R.id.app_version_textview)
     TextView appVersionTextView;
 
-    @Bind(R.id.phone_number_connect_button)
-    Button phoneNumberConnectButton;
+//    @Bind(R.id.phone_number_connect_button)
+//    Button phoneNumberConnectButton;
 
     //FACEBOOK KIT====================================
     public static int APP_REQUEST_CODE = 99;
-    private Button login, logout;
+    private Button login; //logout;
     private String TAG = "AYIK";
     //================================================
 
     private int loginTryCount = 0;
     public ServiceManager serviceManager;
-    private SignUpSuccessAction signUpSuccessAction;
+    private SignUpSuccessAction signUpSuccessAction = new SignUpSuccessAction();
 
     public static void start(Context context) {
         Intent intent = new Intent(context, LandingActivity.class);
@@ -105,12 +106,18 @@ public class LandingActivity extends BaseAuthActivity {
         initVersionName();
 
         serviceManager = ServiceManager.getInstance();
-        signUpSuccessAction = new SignUpSuccessAction();
-        addAction(QBServiceConsts.SIGNUP_SUCCESS_ACTION, signUpSuccessAction);
+        serviceManager.initUserTable();
+
+        //getCurrentAccount();
 
         //FACEBOOK KIT==========================================
-        logout = findViewById(R.id.logout);
+        //logout = findViewById(R.id.logout);
         login = findViewById(R.id.login);
+
+        if (app.isNeedToUpdate())
+        {
+            updateApp();
+        }
 
         /*if(AccountKit.getCurrentAccessToken() != null) {
             AccountKit.logOut();
@@ -119,18 +126,72 @@ public class LandingActivity extends BaseAuthActivity {
         //======================================================
     }
 
-    @OnClick(R.id.login_button)
-    void login(View view) {
-        LoginActivity.start(LandingActivity.this);
-        finish();
+    private void updateApp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("Aplikasi anda versi lama. Silahkan update ke versi terbaru");
+        builder.setNegativeButton("Tutup",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+        builder.setPositiveButton("Update",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                        final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        }
+                        finish();
+                    }
+                });
+        builder.show();
+    }
+//    @OnClick(R.id.login_button)
+//    void login(View view) {
+//        LoginActivity.start(LandingActivity.this);
+//        finish();
+//    }
+
+//    @OnClick(R.id.phone_number_connect_button)
+//    void phoneNumberConnect(View view) {
+//        if (checkNetworkAvailableWithError()) {
+//            loginType = LoginType.FIREBASE_PHONE;
+//            startSocialLogin();
+//        }
+//    }
+
+    private void addActions()
+    {
+        addAction(QBServiceConsts.SIGNUP_SUCCESS_ACTION, signUpSuccessAction);
+        updateBroadcastActionList();
     }
 
-    @OnClick(R.id.phone_number_connect_button)
-    void phoneNumberConnect(View view) {
-        if (checkNetworkAvailableWithError()) {
-            loginType = LoginType.FIREBASE_PHONE;
-            startSocialLogin();
-        }
+    private void removeActions()
+    {
+        removeAction(QBServiceConsts.SIGNUP_SUCCESS_ACTION);
+        updateBroadcastActionList();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        addActions();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        removeActions();
     }
 
     @Override
@@ -138,10 +199,10 @@ public class LandingActivity extends BaseAuthActivity {
         // nothing. Toolbar is missing.
     }
 
-    private void startSignUpActivity() {
-        SignUpActivity.start(LandingActivity.this);
-        finish();
-    }
+//    private void startSignUpActivity() {
+//        SignUpActivity.start(LandingActivity.this);
+//        finish();
+//    }
 
     private void initVersionName() {
         appVersionTextView.setText(StringObfuscator.getAppVersionName());
@@ -242,7 +303,7 @@ public class LandingActivity extends BaseAuthActivity {
             }
 
         } else {
-            logout.setVisibility(View.GONE);
+            //logout.setVisibility(View.GONE);
             login.setVisibility(View.VISIBLE);
         }
     }
@@ -262,16 +323,16 @@ public class LandingActivity extends BaseAuthActivity {
         alertDialog.show();
     }
 
-    public void logout(@Nullable View view) {
-        AccountKit.logOut();
-        AccessToken accessToken = AccountKit.getCurrentAccessToken();
-        if (accessToken != null) {
-            Log.d(TAG, "Still Logged in...");
-        } else {
-            logout.setVisibility(View.GONE);
-            login.setVisibility(View.VISIBLE);
-        }
-    }
+//    public void logout(@Nullable View view) {
+//        AccountKit.logOut();
+//        AccessToken accessToken = AccountKit.getCurrentAccessToken();
+//        if (accessToken != null) {
+//            Log.d(TAG, "Still Logged in...");
+//        } else {
+//            logout.setVisibility(View.GONE);
+//            login.setVisibility(View.VISIBLE);
+//        }
+//    }
     //=====================================================
 
     // QBAuth with phone number

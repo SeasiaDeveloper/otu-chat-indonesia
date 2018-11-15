@@ -164,7 +164,7 @@ public class CallActivity extends BaseLoggableActivity implements RTCClientSessi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        appInitialized = true;
+        //appInitialized = true;
         super.onCreate(savedInstanceState);
         if (!canProceedInit()) {
             Log.d(TAG, "cannot proceed call initialization");

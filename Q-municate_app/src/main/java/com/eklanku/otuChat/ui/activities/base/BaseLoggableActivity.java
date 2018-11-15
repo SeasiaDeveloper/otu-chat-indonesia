@@ -33,10 +33,11 @@ public abstract class BaseLoggableActivity extends BaseActivity implements Logga
         super.onCreate(savedInstanceState);
         Log.d("BaseLoggableActivity", "onCreate");
 
-        if (!appInitialized) {
-            Log.d("BaseLoggableActivity", "!appInitialized()");
-            startSplashActivity();
-        }
+
+//        if (!appInitialized) {
+//            Log.d("BaseLoggableActivity", "!appInitialized()");
+//            startSplashActivity();
+//        }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(CAN_PERFORM_LOGOUT)) {
             canPerformLogout = new AtomicBoolean(savedInstanceState.getBoolean(CAN_PERFORM_LOGOUT));
@@ -56,10 +57,10 @@ public abstract class BaseLoggableActivity extends BaseActivity implements Logga
         return canPerformLogout.get();
     }
 
-    protected void startSplashActivity(){
-        SplashActivity.start(this);
-        finish();
-    }
+//    protected void startSplashActivity(){
+//        SplashActivity.start(this);
+//        finish();
+//    }
 
     protected boolean isCurrentSessionValid() {
         return AppSession.isSessionExistOrNotExpired(TimeUnit.MINUTES.toMillis(
