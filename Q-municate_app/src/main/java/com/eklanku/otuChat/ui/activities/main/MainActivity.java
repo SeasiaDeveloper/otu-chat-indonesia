@@ -166,15 +166,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     CircleImageView img;
     TextView txt, txtEkl, tvStarMember;
 
-   /* boolean isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
-    String firstLaunch = Application.getFirstLaunch(getApplicationContext());
-    String referrerDate = Application.getReferrerDate(getApplicationContext());
-    String referrerDataRaw = Application.getReferrerDataRaw(getApplicationContext());
-    String referrerDataDecoded = Application.getReferrerDataDecoded(getApplicationContext());*/
-
-    public boolean isReferrerDetected;
-    public String firstLaunch, referrerDate, referrerDataRaw, referrerDataDecoded;
-
     private static final int REQUEST_READ_PHONE_STATE = 0;
     boolean doubleBackToExitPressedOnce = false;
 
@@ -189,13 +180,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     Call<DataSaldoBonus> userCall;
     Call<DataProfile> isMemberCall;
     Call<ResetPassResponse> callResetPass;
-
-    private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateData();
-        }
-    };
 
     public static void start(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -299,10 +283,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             return;
         }
 
-
-
-        CLog.e("MainActivity onCreate");
-
         CLog.e("MainActivity onCreate");
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -318,7 +298,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_right);
@@ -351,8 +330,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         openPushDialogIfPossible();
 
         mToolbarView = findViewById(R.id.toolbar_view);
-        //cvMain = findViewById(R.id.cv_main);
-
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
         mScrollView.setScrollViewCallbacks(this);
         mParallaxImageHeight = getResources().getDimensionPixelSize(R.dimen.density_200);
@@ -361,10 +338,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         if (!activity.isFinishing()) {
             loadBanner();
             loadSaldoBonus(strUserID, strAccessToken);
-            //loadDeposite(strUserID,strAccessToken);
         }
-
-        preferenceManager = new PreferenceManager(this);
 
         if (!PreferenceUtil.isFirstLaunch(this)) {
             restartApp();
@@ -378,9 +352,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
-
-        //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.drawer_layout));
-        //navigationView.setNavigationItemSelectedListener(this);
 
         //display the right navigation drawer
         displayRightNavigation();
@@ -552,7 +523,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
         CLog.d("MainActivity onResume");
         actualizeCurrentTitle();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
         super.onResume();
         addActions();
     }
@@ -648,7 +618,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateReceiver);
         super.onPause();
         removeActions();
     }
@@ -1193,40 +1162,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     }
     /*=====================================end ayik=============================================*/
 
-    private void updateData() {
-        isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
-        firstLaunch = Application.getFirstLaunch(getApplicationContext());
-        referrerDate = Application.getReferrerDate(getApplicationContext());
-        referrerDataRaw = Application.getReferrerDataRaw(getApplicationContext());
-        referrerDataDecoded = Application.getReferrerDataDecoded(getApplicationContext());
-
-        //TODO is that data needed to update like in splash?
-       /* StringBuilder sb = new StringBuilder();
-        sb.append("<b>First launch:</b>")
-                .append("<br/>")
-                .append(firstLaunch)
-                .append("<br/><br/>")
-                .append("<b>Referrer detection:</b>")
-                .append("<br/>")
-                .append(referrerDate);
-        if (isReferrerDetected) {
-            sb.append("<br/><br/>")
-                    .append("<b>Raw referrer:</b>")
-                    .append("<br/>")
-                    .append(referrerDataRaw);
-
-            if (referrerDataDecoded != null) {
-                sb.append("<br/><br/>")
-                        .append("<b>Decoded referrer:</b>")
-                        .append("<br/>")
-                        .append(referrerDataDecoded);
-            }
-        }*/
-
-       /* content.setText(Html.fromHtml(sb.toString()));
-        content.setMovementMethod(new LinkMovementMethod());*/
-    }
-
     public void restartApp() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -1454,15 +1389,4 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         });
     }
 
-  /*  @Override
-    protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateReceiver);
-        super.onPause();
-    }*/
-
-   /* @Override
-    protected void onResume() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
-        super.onResume();
-    }*/
 }
