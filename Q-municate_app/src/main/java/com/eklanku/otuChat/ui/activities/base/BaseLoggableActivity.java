@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
 import com.eklanku.otuChat.utils.Loggable;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.utils.ConstsCore;
@@ -33,12 +32,6 @@ public abstract class BaseLoggableActivity extends BaseActivity implements Logga
         super.onCreate(savedInstanceState);
         Log.d("BaseLoggableActivity", "onCreate");
 
-
-//        if (!appInitialized) {
-//            Log.d("BaseLoggableActivity", "!appInitialized()");
-//            startSplashActivity();
-//        }
-
         if (savedInstanceState != null && savedInstanceState.containsKey(CAN_PERFORM_LOGOUT)) {
             canPerformLogout = new AtomicBoolean(savedInstanceState.getBoolean(CAN_PERFORM_LOGOUT));
         }
@@ -57,10 +50,6 @@ public abstract class BaseLoggableActivity extends BaseActivity implements Logga
         return canPerformLogout.get();
     }
 
-//    protected void startSplashActivity(){
-//        SplashActivity.start(this);
-//        finish();
-//    }
 
     protected boolean isCurrentSessionValid() {
         return AppSession.isSessionExistOrNotExpired(TimeUnit.MINUTES.toMillis(

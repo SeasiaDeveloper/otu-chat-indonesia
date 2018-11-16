@@ -39,11 +39,9 @@ import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
-import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.DeleteAccount;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
@@ -266,7 +264,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        processPushIntent();
+        processPushIntent(getIntent());
 
         if (checkAndStartLanding()) {
             return;
@@ -320,7 +318,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         }
 
         addDialogsAction();
-        openPushDialogIfPossible();
 
         mToolbarView = findViewById(R.id.toolbar_view);
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
@@ -361,13 +358,13 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         bannerSlider.setImageLoader(new GlideImageLoader());
         mBannerDataObserver = (observable, arg) -> {
             if (observable instanceof BannerDataManager) {
-                bannerSlider.setViewUrls(((BannerDataManager)observable).getUrls());
+                bannerSlider.setViewUrls(((BannerDataManager)observable).getUrls(false));
             }
         };
         BannerDataManager.getInstance().addObserver(mBannerDataObserver);
-        if (BannerDataManager.getInstance().getUrls().size() > 0)
+        if (BannerDataManager.getInstance().getUrls(false).size() > 0)
         {
-            bannerSlider.setViewUrls(BannerDataManager.getInstance().getUrls());
+            bannerSlider.setViewUrls(BannerDataManager.getInstance().getUrls(true));
         }
     }
 
@@ -388,8 +385,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         return false;
     }
 
-    private void processPushIntent() {
-        boolean openPushDialog = getIntent().getBooleanExtra(QBServiceConsts.EXTRA_SHOULD_OPEN_DIALOG, false);
+    private void processPushIntent(Intent intent) {
+        boolean openPushDialog = intent.getBooleanExtra(QBServiceConsts.EXTRA_SHOULD_OPEN_DIALOG, false);
         CoreSharedHelper.getInstance().saveNeedToOpenDialog(openPushDialog);
     }
 
@@ -535,6 +532,15 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         actualizeCurrentTitle();
         super.onResume();
         addActions();
+
+        openPushDialogIfPossible();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        processPushIntent(intent);
+        super.onNewIntent(intent);
     }
 
     public static String getCurrentTime() {

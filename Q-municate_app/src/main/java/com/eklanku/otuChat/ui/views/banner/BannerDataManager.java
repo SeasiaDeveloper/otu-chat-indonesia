@@ -20,6 +20,11 @@ import retrofit2.Response;
 public class BannerDataManager extends Observable
 {
   private static final String TAG = BannerDataManager.class.getSimpleName();
+  private static final String DEFAULT_URL_1 = "https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png";
+  private static final String DEFAULT_URL_2 = "https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg";
+  private static final String DEFAULT_URL_3 = "https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg";
+  private static final String DEFAULT_URL_4 = "https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg";
+
   private static BannerDataManager instance;
   String strApIUse = "OTU";
   private final ApiInterfacePayment mApiInterfacePayment;
@@ -36,7 +41,6 @@ public class BannerDataManager extends Observable
   {
     mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
     fillByDefault();
-    updateUrls();
   }
 
   private void updateUrls()
@@ -45,13 +49,12 @@ public class BannerDataManager extends Observable
     callLoadBanner.enqueue(new Callback<LoadBanner>() {
       @Override
       public void onResponse(Call<LoadBanner> call, Response<LoadBanner> response) {
-        Log.e(TAG, Thread.currentThread().getName());
+
         if (response.isSuccessful()) {
           String status = response.body().getStatus();
           urls.clear();
           if (status.equals("SUCCESS")) {
             final List<DataBanner> result = response.body().getRespMessage();
-            //banner_promo = new String[result.size()];
             if (result.size() > 0) {
               try {
                 for (int i = 0; i < result.size(); i++) {
@@ -86,14 +89,19 @@ public class BannerDataManager extends Observable
   private void fillByDefault()
   {
     urls.clear();
-    urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-    urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-    urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-    urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
+    urls.add(DEFAULT_URL_1);
+    urls.add(DEFAULT_URL_2);
+    urls.add(DEFAULT_URL_3);
+    urls.add(DEFAULT_URL_4);
   }
 
-  public List<String> getUrls()
+  public List<String> getUrls(boolean fetchUpdates)
   {
+    if (fetchUpdates && urls.size() > 0 && urls.get(0).equals(DEFAULT_URL_1))
+    {
+      updateUrls();
+    }
     return urls;
+
   }
 }

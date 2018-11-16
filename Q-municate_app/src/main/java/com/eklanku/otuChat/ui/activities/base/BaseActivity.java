@@ -41,7 +41,6 @@ import com.connectycube.chat.ConnectycubeChatService;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
-import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
 import com.eklanku.otuChat.ui.activities.call.CallActivity;
 import com.eklanku.otuChat.ui.activities.chats.GroupDialogActivity;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
@@ -579,9 +578,9 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
     }
 
     private boolean needShowReceivedNotification() {
-        boolean isSplashActivity = this instanceof SplashActivity;
+        boolean isLandingActivity = this instanceof LandingActivity;
         boolean isCallActivity = this instanceof CallActivity;
-        return !isSplashActivity && !isCallActivity;
+        return !isLandingActivity && !isCallActivity;
     }
 
     protected void onSuccessAction(String action) {

@@ -12,10 +12,9 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.quickblox.q_municate_core.models.NotificationEvent;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_db.managers.DataManager;
@@ -38,7 +37,7 @@ public class NotificationManagerHelper {
 
         Log.d(TAG, "chatDialog for opening by push: " + chatDialog + " user: " + user);
 
-        Intent intent = new Intent(context, SplashActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(QBServiceConsts.EXTRA_SHOULD_OPEN_DIALOG, true);
         sendChatNotificationEvent(context, intent, notificationEvent);
         sendNotifyIncomingMessage(context, dialogId);
@@ -53,7 +52,7 @@ public class NotificationManagerHelper {
     public static void sendCommonNotificationEvent(Context context,
                                              NotificationEvent notificationEvent) {
 
-        Intent intent = new Intent(context, SplashActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
         sendChatNotificationEvent(context, intent, notificationEvent);
 
     }

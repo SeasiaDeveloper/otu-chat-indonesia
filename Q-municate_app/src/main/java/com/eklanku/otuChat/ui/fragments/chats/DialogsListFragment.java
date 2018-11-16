@@ -41,18 +41,10 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
-/*<<<<<<< HEAD
-import com.eklanku.otuChat.ui.activities.main.MainActivity;
-=======*/
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
-//>>>>>>> origin/feature/migration
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
-import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
+
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.base.BaseLoaderFragment;
@@ -914,15 +906,16 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     private void initBanner()
     {
         banner.setImageLoader(new GlideImageLoader());
+
         mBannerDataObserver = (observable, arg) -> {
             if (observable instanceof BannerDataManager) {
-                banner.setViewUrls(((BannerDataManager)observable).getUrls());
+                banner.setViewUrls(((BannerDataManager)observable).getUrls(false));
             }
         };
         BannerDataManager.getInstance().addObserver(mBannerDataObserver);
-        if (BannerDataManager.getInstance().getUrls().size() > 0)
+        if (BannerDataManager.getInstance().getUrls(false).size() > 0)
         {
-            banner.setViewUrls(BannerDataManager.getInstance().getUrls());
+            banner.setViewUrls(BannerDataManager.getInstance().getUrls(true));
         }
     }
 
