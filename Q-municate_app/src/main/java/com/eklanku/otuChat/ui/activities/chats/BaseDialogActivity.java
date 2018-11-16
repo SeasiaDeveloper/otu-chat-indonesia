@@ -317,7 +317,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     @OnTouch(R.id.message_edittext)
     boolean touchMessageEdit() {
         //hideSmileLayout();
-        scrollMessagesWithDelay();
+        //scrollMessagesWithDelay();
         return false;
     }
 
@@ -946,6 +946,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             } else {
                 chatHelper.sendChatMessage(messageEditText.getText().toString());
             }
+            scrollMessagesWithDelay();
         } catch (ResponseException e) {
             ErrorUtils.showError(this, e);
             error = true;
