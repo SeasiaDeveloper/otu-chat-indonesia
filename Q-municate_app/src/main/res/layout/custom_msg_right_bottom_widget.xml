@@ -7,6 +7,7 @@
     <TextView
         android:id="@+id/custom_msg_text_time_message"
         style="@style/TextViewTimeMsg.Right"
+        android:paddingLeft="0dp"
         android:visibility="visible"
         tools:text="15.05" />
 

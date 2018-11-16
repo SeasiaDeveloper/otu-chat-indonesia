@@ -5,12 +5,16 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.DrawableRequestBuilder;
@@ -87,6 +91,97 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         TextView headerTextView = (TextView) view.findViewById(R.id.header_date_textview);
         CombinationMessage combinationMessage = getItem(position);
         headerTextView.setText(DateUtils.toTodayYesterdayFullMonthDate(combinationMessage.getCreatedDate()));
+    }
+
+    protected void defineTimeStampPosition(TextMessageHolder holder) {
+        holder.itemView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                if (holder.itemView.getViewTreeObserver().isAlive())
+                    holder.itemView.getViewTreeObserver().removeOnPreDrawListener(this);
+                setDynamicTimeStampPosition(holder);
+                return true;
+            }
+        });
+    }
+
+    protected void setDynamicTimeStampPosition(TextMessageHolder holder) {
+        int dimenPaddingPixCommon = context.getResources().getDimensionPixelSize(R.dimen.padding_common);
+        int paddingCount = 7;
+        int dimenPaddingPixSmall = context.getResources().getDimensionPixelSize(R.dimen.density_4);
+
+        TextView msgTextView = holder.messageTextView;
+        int countLine = msgTextView.getLineCount();
+
+        Layout textLayout = msgTextView.getLayout();
+        int msgLastLineWidth = getLastLineWidth(textLayout);
+
+        holder.timeTextMessageTextView.measure(0, 0);
+        int timeStampWidth = holder.timeTextMessageTextView.getMeasuredWidth();
+
+        View signView = holder.itemView.findViewById(R.id.message_status_image_view);
+        signView.measure(0, 0);
+        int signWidth = signView.getMeasuredWidth();
+
+        int itemTextViewWidth = holder.itemView.getWidth();
+
+
+        int timeStampWidthWithSign = timeStampWidth + signWidth;
+        int timeStampWidthWithSignWithPadding = timeStampWidthWithSign + dimenPaddingPixCommon * paddingCount + dimenPaddingPixSmall;
+
+        int limit = itemTextViewWidth - timeStampWidthWithSignWithPadding;
+
+        RelativeLayout layout = holder.itemView.findViewById(R.id.msg_relative_list_item_right);
+        layout.setPadding(dimenPaddingPixSmall, 0, 0, 0);
+
+        View timeSignView = holder.itemView.findViewById(R.id.msg_timestamp_sign_widget_bottom);
+
+        RelativeLayout.LayoutParams relativeLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        relativeLayoutParams.addRule(RelativeLayout.ALIGN_RIGHT, R.id.msg_linear_list_item_right);
+        relativeLayoutParams.setMargins(dimenPaddingPixSmall, 0, dimenPaddingPixCommon, 0);
+
+        RelativeLayout.LayoutParams relativeLayoutParamsForTextLinear = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        relativeLayoutParamsForTextLinear.setMargins(0, 0, 0, 0);
+
+        LinearLayout linearTextView = holder.itemView.findViewById(R.id.msg_linear_list_item_right);
+        linearTextView.setMinimumWidth(timeStampWidthWithSign + dimenPaddingPixCommon);
+
+        if (msgLastLineWidth >= limit) {
+            // timestamp below
+            relativeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+            relativeLayoutParams.addRule(RelativeLayout.BELOW, R.id.msg_linear_list_item_right);
+
+        } else {
+            //timestamp in row
+            if (countLine == 1) {
+                relativeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+                relativeLayoutParams.addRule(RelativeLayout.BELOW, R.id.msg_linear_list_item_right);
+            } else {
+                boolean isTextViewNotFullWidth = msgTextView.getWidth() < limit - dimenPaddingPixCommon;
+
+                if (isTextViewNotFullWidth) {
+                    relativeLayoutParams.addRule(RelativeLayout.ALIGN_RIGHT, 0);
+                    relativeLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.msg_linear_list_item_right);
+
+                    relativeLayoutParamsForTextLinear.setMargins(0, 0, -dimenPaddingPixCommon * 2, 0);
+                }
+                relativeLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1);
+            }
+        }
+        if (timeSignView.getParent() != null) {
+            ((ViewGroup) timeSignView.getParent()).removeView(timeSignView);
+        }
+        linearTextView.setLayoutParams(relativeLayoutParamsForTextLinear);
+        layout.addView(timeSignView, relativeLayoutParams);
+    }
+
+    private int getLastLineWidth(Layout layout) {
+        int lastLineWidth = 0;
+        if (layout != null) {
+            int maxLineCount = layout.getLineCount();
+            lastLineWidth = (int) layout.getLineWidth(maxLineCount - 1);
+        }
+        return lastLineWidth;
     }
 
     private static void updateBubbleChatRetainedPadding(View view, int resourceID) {
