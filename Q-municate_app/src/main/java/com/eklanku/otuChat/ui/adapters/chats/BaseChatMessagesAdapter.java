@@ -376,7 +376,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         if (bitmap.getHeight() > bitmap.getWidth())
         {
             margin = (bitmap.getHeight() - bitmap.getWidth()) / 2;
-            centerCrop = Bitmap.createBitmap(bitmap, 0, margin - 50, bitmap.getWidth(), bitmap.getWidth() + 50);
+            centerCrop = Bitmap.createBitmap(bitmap, 0, margin, bitmap.getWidth(), bitmap.getWidth());
         }
         //uncomment code below if we want to crop bitmap to square, if it have vertical orientation
 //        else if (bitmap.getWidth() > bitmap.getHeight())
