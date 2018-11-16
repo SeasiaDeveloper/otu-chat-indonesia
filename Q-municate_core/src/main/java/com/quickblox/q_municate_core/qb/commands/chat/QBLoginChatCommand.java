@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.connectycube.core.exception.ResponseException;
-import com.quickblox.q_municate_core.CLog;
 import com.quickblox.q_municate_core.core.command.ServiceCommand;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.qb.helpers.QBChatRestHelper;
@@ -41,7 +40,6 @@ public class QBLoginChatCommand extends ServiceCommand {
     @Override
     public Bundle perform(Bundle extras) throws Exception {
         final ConnectycubeUser currentUser = AppSession.getSession().getUser();
-        CLog.d("QBLoginChatCommand perform");
 
         Log.i(TAG, "login with user login:" + currentUser.getLogin()
                 + ", user id:" + currentUser.getId()
@@ -56,11 +54,9 @@ public class QBLoginChatCommand extends ServiceCommand {
         // We don't make login if QB session was deleted by one of expiration cases :
         // for ex when social provider token is no more valid
         if (ConnectycubeSessionManager.getInstance().getSessionParameters() == null) {
-            CLog.d("QBLoginChatCommand throw new ResponseException(\"invalid session\");");
             throw new ResponseException("invalid session");
         }
 
-        CLog.d("QBLoginChatCommand start login(currentUser)");
         try
         {
             login(currentUser);
@@ -69,7 +65,6 @@ public class QBLoginChatCommand extends ServiceCommand {
             if(!TextUtils.isEmpty(e.getMessage())){
                 message = e.getMessage();
             }
-            CLog.d("QBLoginChatCommand login(currentUser) catch: " + message);
         }
 
         return extras;
