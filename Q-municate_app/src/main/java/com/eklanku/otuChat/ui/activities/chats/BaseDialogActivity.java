@@ -876,7 +876,10 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     private void sendTypingStatus() {
-        chatHelper.sendTypingStatusToServer(isTypingNow);
+        if(chatHelper != null)
+        {
+            chatHelper.sendTypingStatusToServer(isTypingNow);
+        }
     }
 
     private void setSmilePanelIcon(int resourceId) {
