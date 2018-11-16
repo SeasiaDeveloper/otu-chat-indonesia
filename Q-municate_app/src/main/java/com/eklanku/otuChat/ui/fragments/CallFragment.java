@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.TesActivity;
+import com.eklanku.otuChat.ui.activities.call.ContactListCallActivity;
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.payment.TestActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
@@ -146,9 +147,12 @@ public class CallFragment extends Fragment implements LoadingData {
         call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* startActivity(new Intent(getActivity(), TestActivity.class));*/
-                Toast.makeText(getActivity(), "Coming soon...", Toast.LENGTH_SHORT).show();
+                Intent listContactCall = new Intent(getActivity(), ContactListCallActivity.class);
+                listContactCall.putExtra("isNewMessage", true);
+                startActivity(listContactCall);
                 //startActivity(new Intent(getActivity(), TesActivity.class));
+                //Toast.makeText(getActivity(), "Coming soon...", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -195,7 +199,7 @@ public class CallFragment extends Fragment implements LoadingData {
     }
 
     private void initializeResources(View view) {
-        call= view.findViewById(R.id.fab_dialogs_new_call);
+        call = view.findViewById(R.id.fab_dialogs_new_call);
         frameLayoutEmpty = view.findViewById(R.id.frameEmptyList);
         emptyListTextView = view.findViewById(R.id.empty_list_textview);
         banner = view.findViewById(R.id.bannerLayout);

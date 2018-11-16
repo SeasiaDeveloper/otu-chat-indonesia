@@ -225,6 +225,9 @@
             android:name=".ui.activities.location.MapsActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activities.call.ContactListCallActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.connectycube.ui.chatmessage.adapter.media.video.ui.VideoPlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:launchMode="singleTop"
