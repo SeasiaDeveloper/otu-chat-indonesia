@@ -33,13 +33,9 @@ import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.Application;
-import com.eklanku.otuChat.BuildConfig;
-import com.eklanku.otuChat.CLog;
-import com.eklanku.otuChat.BuildConfig;
 import com.eklanku.otuChat.CLog;
 import com.eklanku.otuChat.ReferrerReceiver;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
-import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
@@ -55,9 +51,9 @@ import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
-import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
+import com.eklanku.otuChat.ui.views.banner.BannerDataManager;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
 import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
@@ -65,8 +61,6 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.eklanku.otuChat.utils.helpers.AddressBookHelper;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.nineoldandroids.view.ViewHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -116,6 +110,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Observer;
 import java.util.TimeZone;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -146,12 +141,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     Intent intent;
     public static final int REQUEST_CODE_LOGOUT = 300;
     protected BaseActivity baseActivity;
-    private DialogsListAdapter dialogsListAdapter;
+
     ApiInterface mApiInterface;
     ApiInterfaceProfile apiInterfaceProfile;
     ApiInterfacePayment mApiInterfacePayment;
 
-    private String idEklanku;
     private PreferenceManager preferenceManager;
     public static MainActivity mainActivity;
 
@@ -160,8 +154,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     String strApIUse = "OTU";
     PaymentFragment paymentFragment;
 
-    private static String[] banner_promo;
-    BannerLayout bannerLayout;
     LinearLayout layoutCollaps, layoutSaldo;
     CircleImageView img;
     TextView txt, txtEkl, tvStarMember;
@@ -169,17 +161,18 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     private static final int REQUEST_READ_PHONE_STATE = 0;
     boolean doubleBackToExitPressedOnce = false;
 
-    private View mImageView;
+    //private View mImageView;
     private View mToolbarView;
     private ObservableScrollView mScrollView;
     private int mParallaxImageHeight;
     DrawerLayout drawer;
     public TextView tvSaldo;
 
-    Call<LoadBanner> callLoadBanner;
     Call<DataSaldoBonus> userCall;
     Call<DataProfile> isMemberCall;
     Call<ResetPassResponse> callResetPass;
+
+    private Observer mBannerDataObserver;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -336,9 +329,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
         Activity activity = this;
         if (!activity.isFinishing()) {
-            loadBanner();
             loadSaldoBonus(strUserID, strAccessToken);
         }
+
+        initBanner();
+
 
         if (!PreferenceUtil.isFirstLaunch(this)) {
             restartApp();
@@ -359,6 +354,21 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         navigationView.setItemIconTintList(null);
         txtEkl.setText(strUserID);
         mainActivity = this;
+    }
+
+    private void initBanner()
+    {
+        bannerSlider.setImageLoader(new GlideImageLoader());
+        mBannerDataObserver = (observable, arg) -> {
+            if (observable instanceof BannerDataManager) {
+                bannerSlider.setViewUrls(((BannerDataManager)observable).getUrls());
+            }
+        };
+        BannerDataManager.getInstance().addObserver(mBannerDataObserver);
+        if (BannerDataManager.getInstance().getUrls().size() > 0)
+        {
+            bannerSlider.setViewUrls(BannerDataManager.getInstance().getUrls());
+        }
     }
 
     private boolean checkAndStartLastOpenActivity() {
@@ -625,6 +635,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     @Override
     protected void onDestroy() {
         cancelCalls();
+        BannerDataManager.getInstance().deleteObserver(mBannerDataObserver);
+
         super.onDestroy();
         removeDialogsAction();
     }
@@ -647,10 +659,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     }
 
     private void cancelCalls() {
-        if (callLoadBanner != null && !callLoadBanner.isCanceled()) {
-            callLoadBanner.cancel();
-        }
-
         if (userCall != null && !userCall.isCanceled()) {
             userCall.cancel();
         }
@@ -1019,68 +1027,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 //            }
 //        });
 //    }
-
-    public void loadBanner() {
-        bannerSlider.setImageLoader(new GlideImageLoader());
-        List<String> urls = new ArrayList<>();
-
-        callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(MainActivity.this), strApIUse);
-        callLoadBanner.enqueue(new Callback<LoadBanner>() {
-            @Override
-            public void onResponse(Call<LoadBanner> call, Response<LoadBanner> response) {
-                if (call.isCanceled()) {
-                    return;
-                }
-
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    if (status.equals("SUCCESS")) {
-                        final List<DataBanner> result = response.body().getRespMessage();
-                        banner_promo = new String[result.size()];
-                        if (result.size() > 0) {
-                            try {
-                                for (int i = 0; i < result.size(); i++) {
-                                    banner_promo[i] = result.get(i).getBaner_promo();
-                                    urls.add(banner_promo[i]);
-                                }
-                            } catch (Exception e) {
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-                            }
-                        } else {
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-                        }
-                    } else {
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-                    }
-                    bannerSlider.setViewUrls(urls);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadBanner> call, Throwable t) {
-                if (call.isCanceled()) {
-                    return;
-                }
-
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-
-                bannerSlider.setViewUrls(urls);
-            }
-        });
-
-    }
 
     /*================================================end load deposit======================================================*/
 
