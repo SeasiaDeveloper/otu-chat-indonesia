@@ -1,8 +1,10 @@
 package com.eklanku.otuChat.ui.activities.authorization;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,8 +32,6 @@ import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.PhoneNumber;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;*/
-import com.eklanku.otuChat.utils.helpers.FlurryAnalyticsHelper;
-import com.eklanku.otuChat.utils.helpers.GoogleAnalyticsHelper;
 import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.facebook.accountkit.AccessToken;
 import com.facebook.accountkit.Account;
@@ -73,17 +73,19 @@ public class LandingActivity extends BaseAuthActivity {
     @Bind(R.id.app_version_textview)
     TextView appVersionTextView;
 
-    @Bind(R.id.phone_number_connect_button)
-    Button phoneNumberConnectButton;
+//    @Bind(R.id.phone_number_connect_button)
+//    Button phoneNumberConnectButton;
 
     //FACEBOOK KIT====================================
     public static int APP_REQUEST_CODE = 99;
-    private Button login, logout;
+    private Button login; //logout;
     private String TAG = "AYIK";
     //================================================
 
+    private int loginTryCount = 0;
     public ServiceManager serviceManager;
-    private SignUpSuccessAction signUpSuccessAction;
+    private SignUpSuccessAction signUpSuccessAction = new SignUpSuccessAction();
+
 
     public static void start(Context context) {
         Intent intent = new Intent(context, LandingActivity.class);
@@ -106,12 +108,18 @@ public class LandingActivity extends BaseAuthActivity {
         initVersionName();
 
         serviceManager = ServiceManager.getInstance();
-        signUpSuccessAction = new SignUpSuccessAction();
-        addAction(QBServiceConsts.SIGNUP_SUCCESS_ACTION, signUpSuccessAction);
+        serviceManager.initUserTable();
+
+        //getCurrentAccount();
 
         //FACEBOOK KIT==========================================
-        logout = findViewById(R.id.logout);
+        //logout = findViewById(R.id.logout);
         login = findViewById(R.id.login);
+
+        if (app.isNeedToUpdate())
+        {
+            updateApp();
+        }
 
         /*if(AccountKit.getCurrentAccessToken() != null) {
             AccountKit.logOut();
@@ -120,18 +128,72 @@ public class LandingActivity extends BaseAuthActivity {
         //======================================================
     }
 
-    @OnClick(R.id.login_button)
-    void login(View view) {
-        LoginActivity.start(LandingActivity.this);
-        finish();
+    private void updateApp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("Aplikasi anda versi lama. Silahkan update ke versi terbaru");
+        builder.setNegativeButton("Tutup",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                });
+        builder.setPositiveButton("Update",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                        final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        }
+                        finish();
+                    }
+                });
+        builder.show();
+    }
+//    @OnClick(R.id.login_button)
+//    void login(View view) {
+//        LoginActivity.start(LandingActivity.this);
+//        finish();
+//    }
+
+//    @OnClick(R.id.phone_number_connect_button)
+//    void phoneNumberConnect(View view) {
+//        if (checkNetworkAvailableWithError()) {
+//            loginType = LoginType.FIREBASE_PHONE;
+//            startSocialLogin();
+//        }
+//    }
+
+    private void addActions()
+    {
+        addAction(QBServiceConsts.SIGNUP_SUCCESS_ACTION, signUpSuccessAction);
+        updateBroadcastActionList();
     }
 
-    @OnClick(R.id.phone_number_connect_button)
-    void phoneNumberConnect(View view) {
-        if (checkNetworkAvailableWithError()) {
-            loginType = LoginType.FIREBASE_PHONE;
-            startSocialLogin();
-        }
+    private void removeActions()
+    {
+        removeAction(QBServiceConsts.SIGNUP_SUCCESS_ACTION);
+        updateBroadcastActionList();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        addActions();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        removeActions();
     }
 
     @Override
@@ -139,10 +201,10 @@ public class LandingActivity extends BaseAuthActivity {
         // nothing. Toolbar is missing.
     }
 
-    private void startSignUpActivity() {
-        SignUpActivity.start(LandingActivity.this);
-        finish();
-    }
+//    private void startSignUpActivity() {
+//        SignUpActivity.start(LandingActivity.this);
+//        finish();
+//    }
 
     private void initVersionName() {
         appVersionTextView.setText(StringObfuscator.getAppVersionName());
@@ -213,24 +275,37 @@ public class LandingActivity extends BaseAuthActivity {
                                  final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == APP_REQUEST_CODE) { // confirm that this response matches your request
-            AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
-            String toastMessage = "";
-            if (loginResult.getError() != null) {
-                toastMessage = loginResult.getError().getErrorType().getMessage();
-                errorDialog(loginResult.getError().toString());
-                Log.d(TAG, "Error " + loginResult.getError().toString());
-            } else if (loginResult.wasCancelled()) {
-                toastMessage = "Login Cancelled";
-            } else {
-                // Success! Start your next activity...
-                getCurrentAccount();
+            if (data != null)
+            {
+                AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
+                String toastMessage = "";
+                if (loginResult.getError() != null)
+                {
+                    toastMessage = loginResult.getError().getErrorType().getMessage();
+                    errorDialog(loginResult.getError().toString());
+                    Log.d(TAG, "Error " + loginResult.getError().toString());
+                }
+                else if (loginResult.wasCancelled())
+                {
+                    toastMessage = "Login Cancelled";
+                }
+                else
+                {
+                    // Success! Start your next activity...
+                    getCurrentAccount();
+                }
+                // Surface the result to your user in an appropriate way.
+                if(!toastMessage.isEmpty())
+                    Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Error data is empty");
             }
 
-            // Surface the result to your user in an appropriate way.
-            if(!toastMessage.isEmpty())
-                Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
         } else {
-            logout.setVisibility(View.GONE);
+            //logout.setVisibility(View.GONE);
             login.setVisibility(View.VISIBLE);
         }
     }
@@ -250,16 +325,16 @@ public class LandingActivity extends BaseAuthActivity {
         alertDialog.show();
     }
 
-    public void logout(@Nullable View view) {
-        AccountKit.logOut();
-        AccessToken accessToken = AccountKit.getCurrentAccessToken();
-        if (accessToken != null) {
-            Log.d(TAG, "Still Logged in...");
-        } else {
-            logout.setVisibility(View.GONE);
-            login.setVisibility(View.VISIBLE);
-        }
-    }
+//    public void logout(@Nullable View view) {
+//        AccountKit.logOut();
+//        AccessToken accessToken = AccountKit.getCurrentAccessToken();
+//        if (accessToken != null) {
+//            Log.d(TAG, "Still Logged in...");
+//        } else {
+//            logout.setVisibility(View.GONE);
+//            login.setVisibility(View.VISIBLE);
+//        }
+//    }
     //=====================================================
 
     // QBAuth with phone number
@@ -269,32 +344,12 @@ public class LandingActivity extends BaseAuthActivity {
 
         Log.d(TAG, "authenticateWithNumber: "+strPhoneNumber);
         loginType = LoginType.FIREBASE_PHONE;
-        ArrayList<String> arrayPhone = new ArrayList<>();
-        arrayPhone.add(strPhoneNumber);
-        PagedRequestBuilder pagedRequestBuilder = new PagedRequestBuilder();
-        pagedRequestBuilder.setPage(1);
-        pagedRequestBuilder.setPerPage(1);
-
-        ConnectycubeUsers.getUsersByPhoneNumbers(arrayPhone, pagedRequestBuilder).performAsync(new EntityCallback<ArrayList<ConnectycubeUser>>() {
-            @Override
-            public void onSuccess(ArrayList<ConnectycubeUser> users, Bundle params) {
-
-                Log.d(TAG, "onSuccess: users "+users);
-                if (users.size() > 0) {
-                    login(strPhoneNumber);
-                } else {
-                    signUpWithNumber(strPhoneNumber);
-                }
-            }
-
-            @Override
-            public void onError(ResponseException errors) {
-                Log.e("Error", errors.getErrors().toString());
-            }
-        });
+        login(strPhoneNumber);
     }
 
     protected void login(String userPhone) {
+
+        loginTryCount++;
         appSharedHelper.saveFirstAuth(true);
         appSharedHelper.saveSavedRememberMe(true);
         appSharedHelper.saveUsersImportInitialized(true);
@@ -309,36 +364,42 @@ public class LandingActivity extends BaseAuthActivity {
             @Override
             public void onError(Throwable e) {
                 Log.d("LOGIN ERROR", "onError" + e.getMessage());
-                hideProgress();
+                if (loginTryCount <= 2)
+                {
+                    signUpWithNumber(userPhone);
+                }
+                else
+                {
+                    hideProgress();
 
-                OneButtonDialogFragment.show(getSupportFragmentManager(), R.string.dlg_auth_error_message, false, new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        loginType = LoginType.FIREBASE_PHONE;
-                        startSocialLogin();
-                    }
-                });
+                    OneButtonDialogFragment.show(getSupportFragmentManager(), R.string.dlg_auth_error_message, false, new MaterialDialog.ButtonCallback() {
+                        @Override
+                        public void onPositive(MaterialDialog dialog) {
+                            super.onPositive(dialog);
+                            loginType = LoginType.FIREBASE_PHONE;
+                            startSocialLogin();
+                        }
+                    });
+                }
                 //AuthUtils.parseExceptionMessage(LandingActivity.this, e.getMessage());
 
             }
 
             @Override
             public void onNext(ConnectycubeUser connectycubeUser) {
-                performLoginSuccessAction(connectycubeUser);
+                 performLoginSuccessAction();
             }
         });
     }
 
-    private void performLoginSuccessAction(ConnectycubeUser user) {
+    private void performLoginSuccessAction() {
         hideProgress();
-        startMainActivity(user);
-        // send analytics data
-        GoogleAnalyticsHelper.pushAnalyticsData(this, user, "User Sign In");
-        FlurryAnalyticsHelper.pushAnalyticsData(this);
+
+        startMainActivity();
     }
 
     protected void signUpWithNumber(String userPhone) {
+        Log.d("OPPO-1", "signUpWithNumber signUpWithNumber: "+userPhone);
         ConnectycubeUser connectycubeUser = new ConnectycubeUser(userPhone, userPhone, null);
         connectycubeUser.setPhone(userPhone);
         connectycubeUser.setFullName(userPhone);

@@ -4,7 +4,6 @@ import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.connectycube.users.model.ConnectycubeAddressBookContact;
 import com.connectycube.users.model.ConnectycubeAddressBookResponse;

@@ -66,7 +66,6 @@ public class TransKonfirmasi extends AppCompatActivity {
         setContentView(R.layout.activity_trans_konfirmasi);
         ButterKnife.bind(this);
 
-
         extras = getIntent().getExtras();
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         lblContent = (TextView) findViewById(R.id.lblKonfirmasiContent);

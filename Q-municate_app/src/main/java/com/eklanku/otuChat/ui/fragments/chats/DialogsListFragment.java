@@ -2,13 +2,18 @@ package com.eklanku.otuChat.ui.fragments.chats;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.MotionEventCompat;
+import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -16,22 +21,36 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
+/*<<<<<<< HEAD
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
+=======*/
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
+//>>>>>>> origin/feature/migration
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
+import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
@@ -40,9 +59,17 @@ import com.eklanku.otuChat.ui.fragments.base.BaseLoaderFragment;
 import com.eklanku.otuChat.ui.fragments.search.ContactsFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
 import com.eklanku.otuChat.utils.PreferenceUtil;
+/*<<<<<<< HEAD
+import com.github.ksoichiro.android.observablescrollview.ObservableListView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
+import com.quickblox.chat.model.QBChatDialog;
+import com.quickblox.chat.model.QBDialogType;
+import com.quickblox.core.helper.CollectionsUtil;
+=======*/
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.connectycube.core.helper.CollectionsUtil;
+//>>>>>>> origin/feature/migration
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.about.AboutActivity;
 import com.eklanku.otuChat.ui.activities.chats.GroupDialogActivity;
@@ -154,27 +181,76 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         addObservers();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
+        setActivityBannerVisibility(View.GONE);
+
         View view = inflater.inflate(R.layout.fragment_dialogs_list, container, false);
         activateButterKnife(view);
         registerForContextMenu(dialogsListView);
         setEmptyMessage();
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.header_banner, dialogsListView,false);
+        dialogsListView.addHeaderView(header);
         dialogsListView.setAdapter(dialogsListAdapter);
 
-        View header = getLayoutInflater().inflate(R.layout.header_banner, null);
-        banner = view.findViewById(R.id.bannerLayout);
+        banner = header.findViewById(R.id.bannerLayout);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-
-        Activity activity = getActivity();
-
-        if (activity != null && isAdded())
         loadBanner();
+       /* Activity activity = getActivity();
+        if (activity != null && isAdded()) {
+            loadBanner();
+            if (!PreferenceUtil.isMemberStatus(getActivity())) {
+                cekMember();
+            }
 
-        //dialogsListView.addHeaderView(header);
+        }*/
+
+        //dialogsListView.addHeaderView(header, null, false);
+
+       /* Animation slide_down = AnimationUtils.loadAnimation(getActivity(),
+                R.anim.slide_down);
+
+        Animation slide_up = AnimationUtils.loadAnimation(getActivity(),
+                R.anim.slide_up);
+
+
+        dialogsListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int mLastFirstVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                if (mLastFirstVisibleItem < firstVisibleItem) {
+                    Log.i("AYIK SCROLLING DOWN", "TRUE");
+                    banner.setVisibility(View.VISIBLE);
+                    //banner.startAnimation(slide_down);
+                }
+                if (mLastFirstVisibleItem > firstVisibleItem) {
+                    Log.i("AYIK SCROLLING UP", "TRUE");
+                    banner.setVisibility(View.GONE);
+                    //banner.startAnimation(slide_up);
+                }
+                mLastFirstVisibleItem = firstVisibleItem;
+
+            }
+        });*/
 
         return view;
+    }
+
+    private void setActivityBannerVisibility(int visibility) {
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null) {
+            activity.bannerSlider.setVisibility(visibility);
+        }
     }
 
     @Override
@@ -220,6 +296,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.action_search:
                 launchContactsActivity();
@@ -233,10 +310,14 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
             case R.id.action_start_settings:
                 SettingsActivity.startForResult(this);
                 break;
+            case R.id.action_notification:
+                Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
+                //SettingsActivity.startForResult(this);
+                break;
             case R.id.action_start_about:
                 AboutActivity.start(getActivity());
                 break;
-                case R.id.action_web_qr_code:
+            case R.id.action_web_qr_code:
                 WebQRCodeActivity.start(getActivity());
                 break;
             default:
@@ -250,12 +331,26 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         super.onCreateContextMenu(menu, view, menuInfo);
         MenuInflater menuInflater = baseActivity.getMenuInflater();
         AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        ConnectycubeChatDialog chatDialog = dialogsListAdapter.getItem(adapterContextMenuInfo.position).getChatDialog();
-        if (chatDialog.getType().equals(ConnectycubeDialogType.GROUP)) {
-            menuInflater.inflate(R.menu.dialogs_list_group_ctx_menu, menu);
-        } else {
-            menuInflater.inflate(R.menu.dialogs_list_private_ctx_menu, menu);
+        ConnectycubeDialogType dialogType = getChatDialogType(adapterContextMenuInfo);
+        if(dialogType!= null){
+            if (dialogType.equals(ConnectycubeDialogType.GROUP)){
+                menuInflater.inflate(R.menu.dialogs_list_group_ctx_menu, menu);
+            }
+            else{
+                menuInflater.inflate(R.menu.dialogs_list_private_ctx_menu, menu);
+            }
         }
+    }
+
+    private ConnectycubeDialogType getChatDialogType(AdapterView.AdapterContextMenuInfo adapterContextMenuInfo){
+        ConnectycubeDialogType dialogType = null;
+        if(dialogsListView != null && adapterContextMenuInfo!= null && dialogsListView.getItemAtPosition(adapterContextMenuInfo.position) != null
+                && dialogsListView.getItemAtPosition(adapterContextMenuInfo.position) instanceof DialogWrapper
+                && ((DialogWrapper)dialogsListView.getItemAtPosition(adapterContextMenuInfo.position)).getChatDialog() != null)
+        {
+            dialogType = ((DialogWrapper)dialogsListView.getItemAtPosition(adapterContextMenuInfo.position)).getChatDialog().getType();
+        }
+        return dialogType;
     }
 
     @Override
@@ -264,7 +359,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         switch (item.getItemId()) {
             case R.id.action_delete:
                 if (baseActivity.checkNetworkAvailableWithError() && checkDialogsLoadFinished()) {
-                    ConnectycubeChatDialog chatDialog = dialogsListAdapter.getItem(adapterContextMenuInfo.position).getChatDialog();
+                    ConnectycubeChatDialog chatDialog = ((DialogWrapper)dialogsListView.getItemAtPosition(adapterContextMenuInfo.position)).getChatDialog();
                     deleteDialog(chatDialog);
                 }
                 break;
@@ -376,8 +471,14 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     }
 
     private void updateOrAddDialog(String dialogId, boolean updatePosition) {
+/*<<<<<<< HEAD
+
+        QBChatDialog qbChatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
+        DialogWrapper dialogWrapper = new DialogWrapper(getContext(), dataManager, qbChatDialog);
+=======*/
         ConnectycubeChatDialog connectycubeChatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
         DialogWrapper dialogWrapper = new DialogWrapper(getContext(), dataManager, connectycubeChatDialog);
+//>>>>>>> origin/feature/migration
         if (updateDialogsProcess == State.finished || dialogsListAdapter.getCount() != 0) {
             dialogsListAdapter.updateItem(dialogWrapper);
         }
@@ -386,20 +487,33 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
             dialogsListAdapter.moveToFirstPosition(dialogWrapper);
         }
 
-        int start = dialogsListView.getFirstVisiblePosition();
-        for (int i = start, j = dialogsListView.getLastVisiblePosition(); i <= j; i++) {
-            DialogWrapper result = (DialogWrapper) dialogsListView.getItemAtPosition(i);
-            if (result.getChatDialog().getDialogId().equals(dialogId)) {
-                View view = dialogsListView.getChildAt(i - start);
-                dialogsListView.getAdapter().getView(i, view, dialogsListView);
-                break;
+        if(dialogsListView != null )
+        {
+            int start = dialogsListView.getFirstVisiblePosition();
+            for (int i = start, j = dialogsListView.getLastVisiblePosition(); i <= j; i++)
+            {
+                if (i < dialogsListView.getHeaderViewsCount())
+                {
+                    continue;
+                }
+                DialogWrapper result = (DialogWrapper)dialogsListView.getItemAtPosition(i);
+                if (result.getChatDialog().getDialogId().equals(dialogId))
+                {
+                    View view = dialogsListView.getChildAt(i - start);
+                    dialogsListView.getAdapter().getView(i, view, dialogsListView);
+                    break;
+                }
             }
         }
     }
 
     @OnItemClick(R.id.chats_listview)
     void startChat(int position) {
-        ConnectycubeChatDialog chatDialog = dialogsListAdapter.getItem(position).getChatDialog();
+        if (position < dialogsListView.getHeaderViewsCount()) {
+            Log.d(TAG, "header banner was clicked");
+            return;
+        }
+        ConnectycubeChatDialog chatDialog = ((DialogWrapper)dialogsListView.getItemAtPosition(position)).getChatDialog();
 
         if (!baseActivity.checkNetworkAvailableWithError() && isFirstOpeningDialog(chatDialog.getDialogId())) {
             return;
@@ -454,7 +568,9 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
             updateDialogsListFromQueue();
         }
 
-        updateDialogsAdapter(dialogsList);
+        if (needUpdateDialogsAdapter(dialogsList)) {
+            updateDialogsAdapter(dialogsList);
+        }
 
         checkEmptyList(dialogsListAdapter.getCount());
 
@@ -483,6 +599,10 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
             Log.d(TAG, "onLoadFinished isLoadRestFinished updateDialogsProcess= " + updateDialogsProcess);
         }
         Log.d(TAG, "onLoadFinished dialogsListAdapter.getCount() " + dialogsListAdapter.getCount());
+    }
+
+    private boolean needUpdateDialogsAdapter(List<DialogWrapper> dialogsList) {
+        return dialogsList.size() != 0;
     }
 
     private void addChat() {
@@ -811,6 +931,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
                 }
             }
         }
+
     }
 
     private <T> T getObjFromBundle(Bundle data) {
@@ -873,6 +994,41 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
                 banner.setViewUrls(urls);
             }
         });
+    }
+
+    private void cekMember() {
+        Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(getActivity()), "OTU");
+
+        isMember.enqueue(new Callback<DataProfile>() {
+            @Override
+            public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String msg = response.body().getRespMessage();
+                    String errNumber = response.body().getErrNumber();
+                    if (errNumber.equalsIgnoreCase("0")) {
+                        PreferenceUtil.setMemberStatus(getActivity(), true);
+                    } else if (errNumber.equalsIgnoreCase("5")) {
+                        lauchRegister();
+                    } else {
+                        Toast.makeText(getActivity(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataProfile> call, Throwable t) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void lauchRegister() {
+        Intent register = new Intent(getActivity(), Register.class);
+        startActivity(register);
+        //finish();
     }
 
 }

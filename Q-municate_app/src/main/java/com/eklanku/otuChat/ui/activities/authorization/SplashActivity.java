@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -50,7 +51,7 @@ public class SplashActivity extends BaseAuthActivity {
 
     private static final String TAG = SplashActivity.class.getSimpleName();
     private static final int DELAY_FOR_OPENING_LANDING_ACTIVITY = 3000;
-    ApiInterfacePayment mApiInterfacePayment;
+    //ApiInterfacePayment mApiInterfacePayment;
     private PreferenceManager preferenceManager;
     public boolean isReferrerDetected;
     public String firstLaunch, referrerDate, referrerDataRaw, referrerDataDecoded;
@@ -80,9 +81,9 @@ public class SplashActivity extends BaseAuthActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
 
-        mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
+
+        //mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
         //TODO VT temp code for correct migration from Twitter Digits to Firebase Phone Auth
         //should be removed in next release
@@ -93,8 +94,8 @@ public class SplashActivity extends BaseAuthActivity {
         }
         //TODO END
 
-        appInitialized = true;
-        AppSession.load();
+        //appInitialized = true;
+
         preferenceManager = new PreferenceManager(this);
 
         processPushIntent();
@@ -106,6 +107,7 @@ public class SplashActivity extends BaseAuthActivity {
             startLandingActivity();
         }*/
         fBaseConf();
+
     }
 
     private void processPushIntent() {
@@ -114,6 +116,8 @@ public class SplashActivity extends BaseAuthActivity {
     }
 
     private void startLandingActivity() {
+        ServiceManager.getInstance().initUserTable();
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -167,38 +171,38 @@ public class SplashActivity extends BaseAuthActivity {
         });
     }
 
-    private void cekMember() {
-        Log.d("AYIK", "cekMember:process");
-        Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this), "OTU");
-
-        //Call<DataProfile> isMember = mApiInterfacePayment.isMember(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), "OTU");
-        isMember.enqueue(new Callback<DataProfile>() {
-            @Override
-            public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String msg = response.body().getRespMessage();
-                    String errNumber = response.body().getErrNumber();
-                    if (errNumber.equalsIgnoreCase("0")) {
-                        startLastOpenActivityOrMain();
-                        Log.d("AYIK", "cekMember:process success");
-                    } else {
-                        Log.d("AYIK", "cekMember:process failed token");
-                        Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Log.d("AYIK", "cekMember:process error api");
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataProfile> call, Throwable t) {
-                Log.d("AYIK", "cekMember:process failure");
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//    private void cekMember() {
+//        Log.d("AYIK", "cekMember:process");
+//        Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this), "OTU");
+//
+//        //Call<DataProfile> isMember = mApiInterfacePayment.isMember(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), "OTU");
+//        isMember.enqueue(new Callback<DataProfile>() {
+//            @Override
+//            public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
+//                if (response.isSuccessful()) {
+//                    String status = response.body().getStatus();
+//                    String msg = response.body().getRespMessage();
+//                    String errNumber = response.body().getErrNumber();
+//                    if (errNumber.equalsIgnoreCase("0")) {
+//                        startLastOpenActivityOrMain();
+//                        Log.d("AYIK", "cekMember:process success");
+//                    } else {
+//                        Log.d("AYIK", "cekMember:process failed token");
+//                        Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
+//                    }
+//                } else {
+//                    Log.d("AYIK", "cekMember:process error api");
+//                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<DataProfile> call, Throwable t) {
+//                Log.d("AYIK", "cekMember:process failure");
+//                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     private void updateData() {
         isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
@@ -256,7 +260,6 @@ public class SplashActivity extends BaseAuthActivity {
         mFirebaseRemoteConfig.setConfigSettings(configSettings);
         mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_default);
         fetchWelcome();
-
     }
 
     private void fetchWelcome() {

@@ -104,6 +104,7 @@
         <item name="android:gravity">center</item>
         <item name="android:typeface">serif</item>
         <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:layout_gravity">bottom</item>
     </style>
 
 
@@ -112,6 +113,7 @@
         <item name="android:layout_height">@dimen/chat_input_message_smile_button_height</item>
         <item name="android:background">@drawable/selector_button_general</item>
         <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">bottom</item>
     </style>
 
     <!--<style name="BubbleTextFrame.Left">
@@ -124,6 +126,7 @@
         <item name="android:background">@drawable/selector_button_general</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">7dp</item>
+        <item name="android:layout_gravity">bottom</item>
     </style>
 
     <style name="SettingsButtonStyle">
@@ -154,9 +157,10 @@
     </style>
 
     <style name="MatchParent">
+        <item name="android:gravity">center_vertical</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:typeface">serif</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="MatchWidth">
@@ -183,9 +187,10 @@
 
     <style name="TextViewTextMsg.Left">
         <item name="android:typeface">serif</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:paddingLeft">@dimen/chat_text_more_margin_left_right</item>
-        <item name="android:paddingRight">@dimen/chat_text_less_margin_left_right</item>
+        <item name="android:paddingLeft">@dimen/density_6</item>
+        <item name="android:paddingRight">@dimen/density_6</item>
         <item name="android:autoLink">web|phone|email</item>
     </style>
 
@@ -193,26 +198,28 @@
         <item name="android:typeface">serif</item>
         <item name="android:textColor">@color/gray</item>
         <item name="android:layout_gravity">right</item>
-        <item name="android:paddingLeft">@dimen/chat_text_more_margin_left_right</item>
-        <item name="android:paddingRight">@dimen/chat_text_less_margin_left_right</item>
-        <item name="android:textSize">@dimen/text_size_very_small</item>
+        <item name="android:paddingLeft">@dimen/density_6</item>
+        <item name="android:paddingRight">@dimen/density_6</item>
+        <item name="android:textSize">@dimen/text_10</item>
+        <item name="android:layout_toRightOf">@+id/msg_text_message</item>
     </style>
 
     <style name="TextViewTimeMsg.Right">
         <item name="android:typeface">serif</item>
         <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">@dimen/text_10</item>
         <item name="android:layout_gravity">right</item>
-        <item name="android:paddingRight">@dimen/chat_text_more_margin_left_right</item>
-        <item name="android:paddingLeft">@dimen/chat_text_less_margin_left_right</item>
-        <item name="android:textSize">@dimen/text_size_very_small</item>
+        <item name="android:paddingRight">@dimen/density_6</item>
+        <item name="android:paddingLeft">@dimen/density_6</item>
         <item name="android:visibility">gone</item>
     </style>
 
     <style name="TextViewTextMsg.Right">
         <item name="android:typeface">serif</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:paddingRight">@dimen/chat_text_more_margin_left_right</item>
-        <item name="android:paddingLeft">@dimen/chat_text_less_margin_left_right</item>
+        <item name="android:paddingRight">@dimen/density_6</item>
+        <item name="android:paddingLeft">@dimen/density_6</item>
         <item name="android:autoLink">web|phone|email</item>
     </style>
 
@@ -290,29 +297,40 @@
     </style>
 
     <style name="OverFlowPayment" parent="@android:style/Widget.Holo.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_chat_overflow</item>
+        <item name="android:src">@drawable/ic_setting</item>
     </style>
 
     <style name="BubbleTextFrame.Left">
-        <item name="android:background">@drawable/left_chat_bubble</item>
+        <item name="android:background">@drawable/bg_chat_left_bubble</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">40dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
     </style>
 
     <style name="BubbleTextFrame.Right">
-        <item name="android:background">@drawable/bg_chat_right_bubble</item>
+        <item name="android:background">@drawable/bg_chat_left_bubble</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">0dp</item>
     </style>
 
     <!--style for right and left text message frame-->
     <style name="WidgetTextMsgFrame">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">@dimen/padding_small</item>
+        <item name="android:paddingRight">1dp</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:paddingEnd">1dp</item>
+        <item name="android:paddingLeft">1dp</item>
+        <item name="android:paddingStart">1dp</item>
     </style>
 
     <!--style for right and left Attach message frame-->
     <style name="ListItemAttachMessage">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">@dimen/padding_small</item>
+        <item name="android:padding">1dp</item>
     </style>
 
     <!--style for right and left Audio message frame-->
@@ -333,19 +351,33 @@
     <style name="BubbleAttachFrame.Left">
         <item name="android:background">@drawable/left_chat_bubble</item>
         <item name="android:paddingLeft">@dimen/chat_imageview_margin_right</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">40dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
+
     </style>
 
     <style name="BubbleAttachFrame.Right">
         <item name="android:background">@drawable/bg_chat_right_bubble</item>
-        <item name="android:paddingRight">@dimen/chat_imageview_margin_right</item>
+        <!--<item name="android:layout_marginRight">@dimen/chat_imageview_margin_right</item>-->
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">0dp</item>
     </style>
 
     <style name="BubbleAttachAudioFrame.Right">
         <item name="android:background">@drawable/bg_chat_right_bubble</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">0dp</item>
+
     </style>
 
     <style name="BubbleAttachAudioFrame.Left">
         <item name="android:background">@drawable/left_chat_bubble</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">40dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
     </style>
 
     <style name="CustomWidgetFrame.Left">
@@ -403,4 +435,13 @@
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Toolbar.SubTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">13sp</item>
+    </style>
+
 </resources>

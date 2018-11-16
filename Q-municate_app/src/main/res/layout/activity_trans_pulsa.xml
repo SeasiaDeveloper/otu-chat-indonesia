@@ -4,59 +4,56 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/density_16"
     android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/density_8"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa">
-
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_pulsa_no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginTop="@dimen/density_8"
             android:text="Nomor Telepon"
-            android:id="@+id/tv_pulsa_no"
             android:textColor="@color/colorTextOtu"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/txtTransPulsaNo_x"
-            android:layout_below="@+id/tv_pulsa_no"
             android:layout_width="match_parent"
-            android:visibility="gone"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_pulsa_no"
             android:background="@drawable/custom_spinner"
             android:hint="Masukkan Nomor Telepon"
             android:inputType="phone"
-            android:padding="@dimen/density_8" />
+            android:visibility="gone" />
 
         <com.eklanku.otuChat.ui.views.ARTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/density_16"
             android:text="Masukkan No Telepon"
             android:textColor="@color/grey_600"
             android:textSize="16sp" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/txtLayoutTransPulsaNo"
-                android:layout_width="260dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
                 android:textColorHint="@color/grey_600"
-                app:hintEnabled="false"
-                android:layout_height="wrap_content">
+                app:hintEnabled="true">
 
                 <EditText
                     android:id="@+id/txtTransPulsaNo"
@@ -65,27 +62,29 @@
                     android:background="@drawable/custom_bottom_border_grey"
                     android:ems="7"
                     android:inputType="number"
+
                     android:paddingBottom="@dimen/density_8"
-                    android:paddingTop="@dimen/density_8"
                     android:textColor="@color/grey_600"
-                    android:textSize="16sp"
-                    android:textColorHint="@color/grey_600" />
+                    android:textColorHint="@color/grey_600"
+                    android:textSize="16sp" />
             </android.support.design.widget.TextInputLayout>
+
 
             <ImageView
                 android:id="@+id/imgOpr"
-                android:layout_width="65dp"
-                android:layout_height="40dp"
-                android:layout_alignParentRight="true"/>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
             <TextView
                 android:id="@+id/txOpr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/imgOpr"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:visibility="gone" />
 
-        </RelativeLayout>
+
+        </LinearLayout>
 
         <com.eklanku.otuChat.ui.views.ARTextView
             android:id="@+id/txLayOpr"
@@ -94,7 +93,7 @@
             android:text="Pilih Operator"
             android:textColor="@color/grey_600"
             android:textSize="16sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/layNominal"
@@ -120,8 +119,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                android:tint="@color/default_text_icon_otu_color"
-                android:src="@drawable/ic_drop" />
+                android:src="@drawable/ic_drop"
+                android:tint="@color/default_text_icon_otu_color" />
 
         </RelativeLayout>
 
@@ -129,11 +128,11 @@
             android:id="@+id/textView24"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/density_16"
+            android:layout_marginTop="@dimen/density_8"
             android:text="Pilih Nominal"
             android:textColor="@color/grey_600"
             android:textSize="16sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -158,19 +157,19 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                android:tint="@color/default_text_icon_otu_color"
-                android:src="@drawable/ic_drop" />
+                android:src="@drawable/ic_drop"
+                android:tint="@color/default_text_icon_otu_color" />
 
         </RelativeLayout>
 
 
         <com.eklanku.otuChat.ui.views.ARTextView
+            android:id="@+id/tv_trans_ke"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/txtLayoutTransPulsaNo"
             android:layout_marginTop="@dimen/density_8"
             android:text="Transaksi Ke-"
-            android:id="@+id/tv_trans_ke"
-            android:layout_below="@+id/txtLayoutTransPulsaNo"
             android:textColor="@color/grey_600"
             android:textSize="16sp" />
 
@@ -181,10 +180,10 @@
             android:layout_below="@+id/tv_trans_ke"
             android:background="@drawable/custom_bottom_border_grey"
             android:hint="Masukkan Transaksi ke-"
-            android:textColor="@color/grey_600"
             android:inputType="number"
             android:paddingTop="@dimen/density_8"
-            android:paddingBottom="@dimen/density_8" />
+            android:paddingBottom="@dimen/density_8"
+            android:textColor="@color/grey_600" />
 
 
         <LinearLayout
@@ -209,61 +208,40 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!--<android.support.design.widget.TextInputLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_marginTop="@dimen/density_16"-->
-    <!--android:layout_height="wrap_content">-->
+    <!--<android.support.design.widget.TextInputLayout--><!--android:layout_width="match_parent"--><!--android:layout_marginTop="@dimen/density_16"--><!--android:layout_height="wrap_content">-->
 
-    <!--<EditText-->
-    <!--android:id="@+id/txt_no_hp"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@drawable/custom_bg_text"-->
-    <!--android:drawableLeft="@drawable/ic_phone"-->
-    <!--android:drawableStart="@drawable/ic_phone"-->
-    <!--android:ems="10"-->
-    <!--android:hint="No HP"-->
-    <!--android:inputType="textPassword"-->
-    <!--android:paddingBottom="@dimen/density_16"-->
-    <!--android:paddingLeft="@dimen/density_8"-->
-    <!--android:paddingEnd="@dimen/density_8"-->
-    <!--android:paddingRight="@dimen/density_8"-->
-    <!--android:paddingStart="@dimen/density_8"-->
-    <!--android:paddingTop="@dimen/density_16" />-->
+    <!--<EditText--><!--android:id="@+id/txt_no_hp"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:background="@drawable/custom_bg_text"--><!--android:drawableLeft="@drawable/ic_phone"--><!--android:drawableStart="@drawable/ic_phone"--><!--android:ems="10"--><!--android:hint="No HP"--><!--android:inputType="textPassword"--><!--android:paddingBottom="@dimen/density_16"--><!--android:paddingLeft="@dimen/density_8"--><!--android:paddingEnd="@dimen/density_8"--><!--android:paddingRight="@dimen/density_8"--><!--android:paddingStart="@dimen/density_8"--><!--android:paddingTop="@dimen/density_16" />-->
 
     <!--</android.support.design.widget.TextInputLayout>-->
 
-    <!--<TextView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:text="No HP ini digunakan untuk menerima sms konfirmasi"-->
-    <!--android:layout_height="wrap_content" />-->
+    <!--<TextView--><!--android:layout_width="match_parent"--><!--android:text="No HP ini digunakan untuk menerima sms konfirmasi"--><!--android:layout_height="wrap_content" />-->
 
     <Button
         android:id="@+id/btnTransPulsaBayar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
+        android:layout_marginTop="@dimen/density_8"
         android:background="@drawable/rectangle_rounded_green"
         android:text="Beli"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <com.eklanku.otuChat.ui.views.ARTextView
         android:id="@+id/tvPilihNominal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/density_4"
+        android:background="@drawable/rounded_shape_payment"
+        android:padding="@dimen/density_8"
         android:text="Pilih Nominal"
         android:textColor="@color/white"
-        android:textSize="16sp"
-        android:background="@drawable/rounded_shape_payment"
-        android:padding="4dp"/>
+        android:textSize="16sp" />
 
     <ListView
         android:id="@+id/listPulsa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>

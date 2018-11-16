@@ -10,7 +10,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,9 +47,13 @@ import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryPenarikanActivit
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryTrxActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
+import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
+import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
 import com.eklanku.otuChat.ui.activities.payment.topup.AlertSyarat;
@@ -89,14 +95,14 @@ import java.util.Locale;
 
 public class PaymentFragment extends Fragment {
     Context context;
-    TextView //lblUsername,
-            lblSaldo;
-    Button btnDeposit;
+    public TextView //lblUsername,
+            lblSaldo, lblSaldoMain, txtEklmain;
+    TextView btnDeposit, tvBonus;
     ImageButton btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
-            btnTv, btnPaket, btnSMS, btnEtool, btnWi;
-    ImageButton btnRiwayat, btnTransfer, btnPengaturan;
-    Button btnCallme;
+            btnTv, btnPaket, btnSMS, btnEtool, btnWi, btnhotel, btnpesawat, btnkeretapai;
+    ImageButton btnRiwayat, btnTransfer /*btnPengaturan*/;
+    ImageButton btnCallme;
     /* Button btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
              btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
              btnTv, btnPaket, btnCallme, btnSMS, btnEtool, btnWi;*/
@@ -107,6 +113,7 @@ public class PaymentFragment extends Fragment {
     HashMap<String, String> user;
     private BannerLayout banner;
     private static String[] banner_promo;
+    DrawerLayout drawer;
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -137,9 +144,52 @@ public class PaymentFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         context = getActivity();
+
+        setActivityBannerVisibility(View.VISIBLE);
+
         View mView = inflater.inflate(R.layout.fragment_payment_new, container, false);
         initializeResources(mView);
         ButterKnife.bind(this, mView);
+
+        lblSaldoMain = getActivity().findViewById(R.id.tvSaldo);
+        btnDeposit = getActivity().findViewById(R.id.btDeposit);
+        btnCallme = getActivity().findViewById(R.id.btnCallMe);
+        btnRiwayat = getActivity().findViewById(R.id.btnRiwayat);
+        btnTransfer = getActivity().findViewById(R.id.btnTransfer);
+        tvBonus = getActivity().findViewById(R.id.tvBonus);
+
+        btnDeposit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (menuDialog()) {
+                    startActivity(new Intent(context, TopupOrder.class));
+                }
+            }
+        });
+
+        btnCallme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://eklanku.com/max")));
+            }
+        });
+        btnRiwayat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (menuDialog()) {
+                    startActivity(new Intent(getActivity(), RiwayatActivity.class));
+                }
+            }
+        });
+        btnTransfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (menuDialog()) {
+                    startActivity(new Intent(context, TransDeposit.class));
+                }
+            }
+        });
+        //textview.setText("text");
 
         TextView txt1 = mView.findViewById(R.id.txt1);
         txt1.setOnClickListener(new View.OnClickListener() {
@@ -154,9 +204,15 @@ public class PaymentFragment extends Fragment {
 
         Activity activity = getActivity();
 
-        if (activity != null && isAdded())
-            loadBanner();
+        if (activity != null && isAdded()) {
+            //loadBanner();
+            if (!PreferenceUtil.isMemberStatus(getActivity())) {
+                cekMember();
+            }
 
+        }
+
+        drawer = getActivity().findViewById(R.id.drawer_layout);
         return mView;
     }
 
@@ -172,17 +228,25 @@ public class PaymentFragment extends Fragment {
 
             Activity activity = getActivity();
             if (activity != null && isAdded())
-                loadDeposite(strUserID, strAccessToken);
+                //loadDeposite(strUserID, strAccessToken);
+                LoadSaldoBonus(strUserID, strAccessToken);
 
         } else {
             //Toast.makeText(context, "NOT DEPOSITE " + PreferenceUtil.isLoginStatus(getActivity()), Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void setActivityBannerVisibility(int visibility) {
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null) {
+            activity.bannerSlider.setVisibility(visibility);
+        }
+    }
+
     private void initializeResources(View view) {
         // lblUsername = (TextView) view.findViewById(R.id.lblPaymentUser);
         lblSaldo = (TextView) view.findViewById(R.id.tvSaldo);
-        btnDeposit = view.findViewById(R.id.btDeposit);
+
         btnMultiFinance = view.findViewById(R.id.btnMultiFinance);
         btnKartuKredit = view.findViewById(R.id.btnKartuKredit);
         btnAsuransi = view.findViewById(R.id.btnAsuransi);
@@ -196,17 +260,17 @@ public class PaymentFragment extends Fragment {
         btnTv = view.findViewById(R.id.btnTv);
         btnTelkom = view.findViewById(R.id.btnTelkom);
         btnPaket = view.findViewById(R.id.btnPaket);
-        btnCallme = view.findViewById(R.id.btCallMe);
-        btnRiwayat = view.findViewById(R.id.btnRiwayat);
-        btnTransfer = view.findViewById(R.id.btnTransfer);
-        btnPengaturan = view.findViewById(R.id.btnPengaturan);
+        //btnPengaturan = view.findViewById(R.id.btnPengaturan);
 
         btnWi = view.findViewById(R.id.btn_wifi_id);
         btnSMS = view.findViewById(R.id.btn_sms);
         btnEtool = view.findViewById(R.id.btn_etool);
         btnPajak = view.findViewById(R.id.btnPajak);
+        btnhotel = view.findViewById(R.id.btnhotel);
+        btnpesawat = view.findViewById(R.id.btnPesawat);
+        btnkeretapai = view.findViewById(R.id.btnKAI);
 
-        btnDeposit.setOnClickListener(new buttonListener());
+        //btnDeposit.setOnClickListener(new buttonListener());
         btnMultiFinance.setOnClickListener(new buttonListener());
         btnKartuKredit.setOnClickListener(new buttonListener());
         btnAsuransi.setOnClickListener(new buttonListener());
@@ -220,10 +284,13 @@ public class PaymentFragment extends Fragment {
         btnTv.setOnClickListener(new buttonListener());
         btnTelkom.setOnClickListener(new buttonListener());
         btnPaket.setOnClickListener(new buttonListener());
-        btnRiwayat.setOnClickListener(new buttonListener());
-        btnPengaturan.setOnClickListener(new buttonListener());
-        btnTransfer.setOnClickListener(new buttonListener());
-        btnCallme.setOnClickListener(new buttonListener());
+        btnhotel.setOnClickListener(new buttonListener());
+        btnpesawat.setOnClickListener(new buttonListener());
+        btnkeretapai.setOnClickListener(new buttonListener());
+        //btnRiwayat.setOnClickListener(new buttonListener());
+        //btnPengaturan.setOnClickListener(new buttonListener());
+        //btnTransfer.setOnClickListener(new buttonListener());
+        //btnCallme.setOnClickListener(new buttonListener());
 
         btnEtool.setOnClickListener(new buttonListener());
         btnSMS.setOnClickListener(new buttonListener());
@@ -259,9 +326,9 @@ public class PaymentFragment extends Fragment {
             }
 
             switch (v.getId()) {
-                case R.id.btDeposit:
+                /*case R.id.btDeposit:
                     startActivity(new Intent(context, TopupOrder.class));
-                    break;
+                    break;*/
 
                 case R.id.btnPln:
                     startActivity(new Intent(context, TransPln.class));
@@ -302,17 +369,20 @@ public class PaymentFragment extends Fragment {
                     startActivity(new Intent(context, TransMultiFinance.class));
                     break;
                 case R.id.btnKartuKredit:
-                    startActivity(new Intent(context, TransKartuKredit.class));
+                    // startActivity(new Intent(context, TransKartuKredit.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.btnAsuransi:
-                    startActivity(new Intent(context, TransAsuransi.class));
+                    //startActivity(new Intent(context, TransAsuransi.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.btnPGN:
-                    startActivity(new Intent(context, TransPGN.class));
+                    //startActivity(new Intent(context, TransPGN.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
-                case R.id.btCallMe:
+               /* case R.id.btnCallMe:
                     startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://eklanku.com/max")));
-                    break;
+                    break;*/
                 case R.id.btn_wifi_id:
                     startActivity(new Intent(context, TransWi.class));
                     break;
@@ -323,23 +393,36 @@ public class PaymentFragment extends Fragment {
                     startActivity(new Intent(context, TransSMS.class));
                     break;
                 case R.id.btnPajak:
-                    startActivity(new Intent(context, TransPajak.class));
+//                    startActivity(new Intent(context, TransPajak.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
-                case R.id.btnRiwayat:
+                case R.id.btnhotel:
+//                    startActivity(new Intent(context, TransPajak.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.btnPesawat:
+//                    startActivity(new Intent(context, TransPajak.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.btnKAI:
+//                    startActivity(new Intent(context, TransPajak.class));
+                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                    break;
+               /* case R.id.btnRiwayat:
                     if (menuDialog()) {
                         startActivity(new Intent(context, RiwayatActivity.class));
                     }
-                    break;
-                case R.id.btnTransfer:
+                    break;*/
+               /* case R.id.btnTransfer:
                     if (menuDialog()) {
                         startActivity(new Intent(context, TransDeposit.class));
                     }
-                    break;
-                case R.id.btnPengaturan:
+                    break;*/
+               /* case R.id.btnPengaturan:
                     if (menuDialog()) {
                         startActivity(new Intent(context, SettingTabPaymentActivity.class));
                     }
-                    break;
+                    break;*/
                 default:
                     Toast.makeText(context, getResources().getString(R.string.error_fungsi), Toast.LENGTH_SHORT).show();
 
@@ -360,7 +443,7 @@ public class PaymentFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.payment_menu, menu);
+        inflater.inflate(R.menu.main_menu, menu);
 
     }
 
@@ -387,7 +470,7 @@ public class PaymentFragment extends Fragment {
         } else return true;
     }
 
-    @Override
+  /*  @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -459,11 +542,11 @@ public class PaymentFragment extends Fragment {
                 Activity activity = getActivity();
                 if (activity != null && isAdded())
                     logOutPayment();
-                /*loadingDialog = ProgressDialog.show(getActivity(), "Harap Tunggu", "Melakukan proses logout");
+                *//*loadingDialog = ProgressDialog.show(getActivity(), "Harap Tunggu", "Melakukan proses logout");
                 loadingDialog.setCanceledOnTouchOutside(true);
                 preferenceManager.createUserPayment("", "", false);
                 PreferenceUtil.setLoginStatus(getActivity(), false);
-                //logout(strUserID, strAccessToken);*/
+                //logout(strUserID, strAccessToken);*//*
                 break;
 
             case R.id.referal:
@@ -473,6 +556,21 @@ public class PaymentFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
 
+    }*/
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            drawer.openDrawer(GravityCompat.END);
+        }
+
+        if (id == R.id.action_notification) {
+            Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /*  private void dialog() {
@@ -522,16 +620,16 @@ public class PaymentFragment extends Fragment {
 
 
     public void loadDeposite(String strUserID, String strAccessToken) {
-        //Log.d("AYIK", "OnLoad userID " + strUserID + " accessToken " + strAccessToken);
+        Log.d("AYIK", "OnLoad userID " + strUserID + " accessToken " + strAccessToken);
         Call<DataDeposit> userCall = apiInterfacePayment.getSaldo(strUserID, strApIUse, strAccessToken);
         userCall.enqueue(new Callback<DataDeposit>() {
             @Override
             public void onResponse(Call<DataDeposit> call, Response<DataDeposit> response) {
+                Log.d("AYIK", "OnLoad userID " + strUserID + " response.isSuccessful()) " + response.isSuccessful());
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String error = response.body().getRespMessage();
                     String balance = response.body().getBalance();
-                    Log.d("OPPO-1", "onResponse: " + balance);
 
                     if (status.equals("SUCCESS")) {
                         Double total = 0.0d;
@@ -545,9 +643,26 @@ public class PaymentFragment extends Fragment {
                         NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
                         String rupiah = format.format(total);
 
-                        Log.d("OPPO-1", "onResponse: " + rupiah);
+                        /*Double nomBonus = 0.0d;
+                        try{
+                            if(nomBonus != null && !bonus.trim().isEmpty()){
+                                nomBonus = Double.valueOf(bonus);
+                            }else{
+                                nomBonus = 0.0d;
+                            }
 
-                        lblSaldo.setText(rupiah);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        String rupiahBonus = format.format(nomBonus);
+
+                        Log.d("OPPO-1", "onResponse: " + rupiahBonus);
+                        tvBonus.setText(rupiahBonus);
+                        */
+
+                        lblSaldoMain.setText(rupiah);
+
                     } else {
                         Toast.makeText(getActivity(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
                     }
@@ -558,6 +673,74 @@ public class PaymentFragment extends Fragment {
 
             @Override
             public void onFailure(Call<DataDeposit> call, Throwable t) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    public void LoadSaldoBonus(String strUserID, String strAccessToken){
+
+        Call<DataSaldoBonus> userCall = apiInterfacePayment.getSaldodetail(strUserID, strApIUse, strAccessToken);
+        userCall.enqueue(new Callback<DataSaldoBonus>() {
+            @Override
+            public void onResponse(Call<DataSaldoBonus> call, Response<DataSaldoBonus> response) {
+
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String error = response.body().getRespMessage();
+                    String id_member = "", sisa_uang = "", carier_member = "",bonus_member = "";
+                    Log.d("OPPO-1", "OnLoad userID " + strUserID + " response.isSuccessful()) " + response.isSuccessful());
+                    if (status.equals("SUCCESS")) {
+
+                        final List<DataDetailSaldoBonus> products = response.body().getBalance();
+                        for (int i = 0; i < products.size(); i++) {
+                            id_member = products.get(i).getId_member();
+                            sisa_uang = products.get(i).getSisa_uang();
+                            carier_member = products.get(i).getCarier_member();
+                            bonus_member = products.get(i).getBonus_member();
+                        }
+
+                        Double total = 0.0d;
+                        try {
+                            if (sisa_uang != null && !sisa_uang.trim().isEmpty())
+                                total = Double.valueOf(sisa_uang);
+                        } catch (Exception e) {
+                            total = 0.0d;
+                        }
+                        Locale localeID = new Locale("in", "ID");
+                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
+                        String rupiah = format.format(total);
+
+                        Double nomBonus = 0.0d;
+                        try{
+                            if(nomBonus != null && !bonus_member.trim().isEmpty()){
+                                nomBonus = Double.valueOf(bonus_member);
+                            }else{
+                                nomBonus = 0.0d;
+                            }
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        String rupiahBonus = format.format(nomBonus);
+
+                        Log.d("OPPO-1", "onResponse: " + rupiahBonus);
+                        tvBonus.setText("Rp"+nomBonus);
+
+                        lblSaldoMain.setText(rupiah);
+
+                    } else {
+                        Toast.makeText(getActivity(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataSaldoBonus> call, Throwable t) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
@@ -648,6 +831,41 @@ public class PaymentFragment extends Fragment {
                 banner.setViewUrls(urls);
             }
         });
+    }
+
+    private void cekMember() {
+        Call<DataProfile> isMember = apiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(getActivity()), "OTU");
+        //Toast.makeText(context, "" + PreferenceUtil.getNumberPhone(getActivity()), Toast.LENGTH_SHORT).show();
+        isMember.enqueue(new Callback<DataProfile>() {
+            @Override
+            public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String msg = response.body().getRespMessage();
+                    String errNumber = response.body().getErrNumber();
+                    if (errNumber.equalsIgnoreCase("0")) {
+                        PreferenceUtil.setMemberStatus(getActivity(), true);
+                    } else if (errNumber.equalsIgnoreCase("5")) {
+                        lauchRegister();
+                    } else {
+                        Toast.makeText(getActivity(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataProfile> call, Throwable t) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void lauchRegister() {
+        Intent register = new Intent(getActivity(), Register.class);
+        startActivity(register);
+        //finish();
     }
 
 }

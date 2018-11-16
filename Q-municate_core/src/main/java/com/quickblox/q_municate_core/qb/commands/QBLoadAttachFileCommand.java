@@ -42,6 +42,8 @@ public class QBLoadAttachFileCommand extends ServiceCommand {
         ConnectycubeFile connectycubeFile = chatHelper.loadAttachFile(file);
 
         Bundle result = new Bundle();
+//        result.putString("LocalFilePath", file.getPath());
+
         result.putSerializable(QBServiceConsts.EXTRA_ATTACH_FILE, connectycubeFile);
         result.putString(QBServiceConsts.EXTRA_DIALOG_ID, dialogId);
         result.putString(QBServiceConsts.EXTRA_FILE_PATH, file.getAbsolutePath());

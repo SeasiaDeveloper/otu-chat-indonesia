@@ -9,7 +9,7 @@
     <dimen name="button_text_size">18sp</dimen>
     <dimen name="button_icon_margin">10dp</dimen>
 
-    <dimen name="padding_small">5dp</dimen>
+    <dimen name="padding_small">2dp</dimen>
     <dimen name="padding_minimal_material">8dp</dimen>
     <dimen name="padding_medium">10dp</dimen>
     <dimen name="padding_large">15dp</dimen>
@@ -114,6 +114,7 @@
     <dimen name="density_2">2dp</dimen>
     <dimen name="density_4">4dp</dimen>
     <dimen name="density_5">5dp</dimen>
+    <dimen name="density_6">6dp</dimen>
     <dimen name="density_8">8dp</dimen>
     <dimen name="density_10">10dp</dimen>
     <dimen name="density_12">12dp</dimen>

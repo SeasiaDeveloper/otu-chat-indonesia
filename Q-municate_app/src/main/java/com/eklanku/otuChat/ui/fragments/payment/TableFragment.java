@@ -162,6 +162,7 @@ public class TableFragment extends Fragment {
             list.add(new ColumnHeaderModel("Keterangan"));
             list.add(new ColumnHeaderModel("Jenis Bonus"));
             list.add(new ColumnHeaderModel("Status Bonus"));
+            list.add(new ColumnHeaderModel("Bonus"));
         }
 
         return list;

@@ -1,63 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
-    android:background="#F7F5ED"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:ignore="RtlHardcoded,RtlSymmetry">
 
-    <LinearLayout
+    <include layout="@layout/shadow_view" />
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_main"
-        android:orientation="vertical">
-
-        <include layout="@layout/shadow_view" />
-
-        <com.yyydjk.library.BannerLayout
-            android:id="@+id/bannerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="125dp"
-            app:autoPlayDuration="4000"
-            app:scrollDuration="1000" />
+        android:layout_height="match_parent">
 
         <ListView
             android:id="@+id/chats_listview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            tools:listitem="@layout/item_dialog" />
-
-        <FrameLayout android:id="@+id/frameEmptyList"
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
+            android:background="@color/white"
+            android:dividerHeight="0.5dp"
+            android:divider="@drawable/list_divider"
+            android:headerDividersEnabled="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/item_dialog"/>
 
-            <com.eklanku.otuChat.ui.views.ARTextView
-                android:id="@+id/empty_list_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="10dp"
-                android:drawablePadding="10dp"
-                android:drawableTop="@drawable/ic_big_chat_otu"
-                android:text="@string/dialog_no_chats"
-                android:layout_gravity="center"
-                android:textColor="@color/color_no_msg"
-                android:visibility="gone"
-                android:textSize="@dimen/text_size" />
+    </FrameLayout>
 
-        </FrameLayout>
+    <FrameLayout
+        android:id="@+id/frameEmptyList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F7F5ED"
+        android:visibility="gone">
 
-    </LinearLayout>
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:id="@+id/empty_list_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_tabs_chat_otu"
+            android:drawablePadding="@dimen/density_8"
+            android:gravity="center"
+            android:padding="@dimen/density_8"
+            android:text="@string/dialog_no_chats"
+            android:textColor="@color/color_no_msg"
+            android:textSize="@dimen/text_size"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_dialogs_new_chat"
         style="@style/FabStyle"
+        android:src="@drawable/ic_tabs_chat_otu"
         android:theme="@style/FabStyle"
         app:backgroundTint="@color/white"
-        app:borderWidth="2dp"
-        android:src="@drawable/ic_tabs_chat_otu" />
-</android.support.design.widget.CoordinatorLayout>
+        app:borderWidth="2dp" />
+
+</RelativeLayout>

@@ -5,13 +5,17 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,6 +67,8 @@ public class TransVouchergame_product extends AppCompatActivity{
 
     ArrayList<String> id_paket;
 
+    TextInputLayout layoutNo;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +83,7 @@ public class TransVouchergame_product extends AppCompatActivity{
         noPel = findViewById(R.id.txtTransVoucherNo);
         transKe = findViewById(R.id.txtTransKe);
         transKe.setText("1");
+        layoutNo = findViewById(R.id.txtLayoutTransPulsaNo);
 
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -89,11 +96,36 @@ public class TransVouchergame_product extends AppCompatActivity{
         String jnsGame = extras.getString("jnsGame");
 
         Log.d("OPPO-1", "onCreate: "+jnsGame);
+        noPel.addTextChangedListener(new txtWatcher(noPel));
 
         loadProduct(strUserID, strAccessToken, strAplUse, jnsGame);
 
         initializeResources();
 
+    }
+
+    private class txtWatcher implements TextWatcher {
+
+        private View view;
+
+        private txtWatcher(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            validateIdpel();
+        }
     }
 
 
@@ -158,7 +190,7 @@ public class TransVouchergame_product extends AppCompatActivity{
         loadingDialog = ProgressDialog.show(TransVouchergame_product.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, noPel.getText().toString(), noPel.getText().toString(), "", "", code);
+        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, noPel.getText().toString(), transKe.getText().toString(), "", "", code);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -224,6 +256,10 @@ public class TransVouchergame_product extends AppCompatActivity{
         lvProductGame.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!validateIdpel()) {
+                    return;
+                }
+
                 final Dialog dialog = new Dialog(TransVouchergame_product.this);
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -281,6 +317,33 @@ public class TransVouchergame_product extends AppCompatActivity{
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private boolean validateIdpel() {
+        String id_pel = noPel.getText().toString().trim();
+
+        if (id_pel.isEmpty()) {
+            //Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            noPel.setError("Kolom nomor tidak boleh kosong");
+            requestFocus(noPel);
+            return false;
+        }
+
+      /*  if (id_pel.length() < 8) {
+            //Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
+            noPel.setError("Masukkan minimal 8 digit nomor");
+            requestFocus(noPel);
+            return false;
+        }*/
+
+        //layoutNo.setErrorEnabled(false);
+        return true;
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 }

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="@dimen/density_8"
     android:background="@color/white"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransPln">
 
@@ -22,8 +23,7 @@
                 android:id="@+id/radio_group_pln"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="16dp">
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/radio_pln_token"
@@ -53,9 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:paddingBottom="@dimen/density_8">
 
                 <com.eklanku.otuChat.ui.views.ARTextView
                     android:id="@+id/textView14"
@@ -104,13 +102,15 @@
                     android:textColor="@color/grey_600"
                     android:textSize="16sp" />
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/txtLayoutTransPulsaNo"
-                        android:layout_width="280dp"
+                        android:layout_width="0dp"
+                        android:layout_weight="7"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/density_4"
                         app:hintEnabled="false">
@@ -128,18 +128,18 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        app:srcCompat="@drawable/ic_otu_pln"
-                        android:layout_alignParentRight="true"/>
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_otu_pln"/>
 
-                </RelativeLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/layout_spinner_nominal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/density_16"
+                    android:layout_marginTop="@dimen/density_8"
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -187,7 +187,6 @@
                     android:id="@+id/layout_transaksi_ke"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/density_4"
                     android:orientation="vertical">
 
                     <com.eklanku.otuChat.ui.views.ARTextView
@@ -222,7 +221,7 @@
                     <com.eklanku.otuChat.ui.views.ARTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/density_16"
+                        android:layout_marginTop="@dimen/density_8"
                         android:text="No HP"
                         android:textColor="@color/grey_600"
                         android:textSize="16sp"
@@ -265,7 +264,7 @@
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:background="@drawable/rounded_shape_payment"
-                    android:padding="4dp"/>
+                    android:padding="@dimen/density_8"/>
 
                 <ListView
                     android:id="@+id/listPLN"
@@ -277,7 +276,7 @@
                     android:id="@+id/btnTransPlnBayar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/density_16"
+                    android:layout_marginTop="@dimen/density_8"
                     android:background="@drawable/rectangle_rounded_green"
                     android:text="Beli Token Listrik"
                     android:textColor="#FFFFFF"

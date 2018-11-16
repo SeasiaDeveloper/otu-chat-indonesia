@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPaymentAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
+import com.eklanku.otuChat.ui.views.ARTextView;
 import com.eklanku.otuChat.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
@@ -87,9 +89,12 @@ public class TransTv extends AppCompatActivity {
     private static String load_type = "tvbyr_jenis";
 
     SharedPreferences prefs;
+    RelativeLayout layJenisPembayaran;
     Spinner spnJenis, spnLayanan;
     EditText txtNo, txtno_hp, txtTransaksi_ke;
     TextInputLayout layoutNo;
+    TextView tvJenisPembayaran, tvKet;
+    ARTextView arvNoPel, arvNohp;
     Button btnBayar;
     String //id_member,
             load_id = "TV", selected_nominal;
@@ -138,7 +143,11 @@ public class TransTv extends AppCompatActivity {
         txtNo = (EditText) findViewById(R.id.txtTransTvNo);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransTvBayar);
-        EditText txtNoHP = findViewById(R.id.txt_no_hp);
+        tvJenisPembayaran = findViewById(R.id.textView30);
+        arvNoPel = findViewById(R.id.AtvNomorPelanggan);
+        tvKet = findViewById(R.id.tvKet);
+        arvNohp = findViewById(R.id.aRvNoHp);
+        layJenisPembayaran = findViewById(R.id.layJenisPembayaran);
 
         //id_member     = prefs.getString("auth_id", "");
 
@@ -195,21 +204,37 @@ public class TransTv extends AppCompatActivity {
                 RadioButton rb = (RadioButton) group.findViewById(checkedId);
                 //Toast.makeText(TransPln.this, rb.getText(), Toast.LENGTH_SHORT).show();
                 if (rb.getText().toString().equalsIgnoreCase("VOUCHER TV")) {
-                    loadProvider(strUserID, strAccessToken, strAplUse, "VOUCHER TV");
+                    layoutNominal.setVisibility(View.GONE);
+                    layJenisPembayaran.setVisibility(View.GONE);
+                    tvJenisPembayaran.setVisibility(View.GONE);
+                    arvNohp.setVisibility(View.GONE);
+                    layoutNo.setVisibility(View.GONE);
+                    layoutNoKonfirmasi.setVisibility(View.GONE);
+                    layoutTransaksiKe.setVisibility(View.GONE);
+                    btnBayar.setVisibility(View.GONE);
+                    arvNoPel.setVisibility(View.GONE);
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                    /*loadProvider(strUserID, strAccessToken, strAplUse, "VOUCHER TV");
                     layoutNominal.setVisibility(View.VISIBLE);
                     StrTV = "VOUCHER TV";
                     btnBayar.setText("BELI");
                     txtno_hp.setVisibility(View.VISIBLE);
                     layoutTransaksiKe.setVisibility(View.VISIBLE);
-                    layoutNoKonfirmasi.setVisibility(View.VISIBLE);
+                    layoutNoKonfirmasi.setVisibility(View.VISIBLE);*/
                 } else {
                     loadProviderPPOB(strUserID, strAccessToken, "OTU", "TV KABEL");
                     layoutNominal.setVisibility(View.GONE);
-                    StrTV = "TV KABEL";
-                    btnBayar.setText("CEK TAGIHAN");
-                    txtno_hp.setVisibility(View.VISIBLE);
                     layoutTransaksiKe.setVisibility(View.GONE);
+                    layJenisPembayaran.setVisibility(View.VISIBLE);
+                    arvNoPel.setVisibility(View.VISIBLE);
+                    StrTV = "TV KABEL";
+                    btnBayar.setVisibility(View.VISIBLE);
+                    btnBayar.setText("CEK TAGIHAN");
                     layoutNoKonfirmasi.setVisibility(View.VISIBLE);
+                    tvJenisPembayaran.setVisibility(View.VISIBLE);
+                    layoutNoKonfirmasi.setVisibility(View.VISIBLE);
+                    layoutNo.setVisibility(View.VISIBLE);
+                    arvNohp.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -309,13 +334,20 @@ public class TransTv extends AppCompatActivity {
     }
 
     private void load() {
-        loadProvider(strUserID, strAccessToken, strAplUse, "VOUCHER TV");
+        loadProviderPPOB(strUserID, strAccessToken, "OTU", "TV KABEL");
+        layoutNominal.setVisibility(View.GONE);
+        StrTV = "TV KABEL";
+        btnBayar.setText("CEK TAGIHAN");
+        txtno_hp.setVisibility(View.VISIBLE);
+        layoutTransaksiKe.setVisibility(View.GONE);
+        layoutNoKonfirmasi.setVisibility(View.VISIBLE);
+        /*loadProvider(strUserID, strAccessToken, strAplUse, "VOUCHER TV");
         layoutNominal.setVisibility(View.VISIBLE);
         StrTV = "VOUCHER TV";
         btnBayar.setText("BELI");
         txtno_hp.setVisibility(View.VISIBLE);
         layoutTransaksiKe.setVisibility(View.VISIBLE);
-        layoutNoKonfirmasi.setVisibility(View.VISIBLE);
+        layoutNoKonfirmasi.setVisibility(View.VISIBLE);*/
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
@@ -513,12 +545,12 @@ public class TransTv extends AppCompatActivity {
             return false;
         }
 
-        if (id_pel.length() < 8) {
+    /*    if (id_pel.length() < 8) {
             //Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
             layoutNo.setError("Masukkan minimal 8 digit nomor");
             requestFocus(txtNo);
             return false;
-        }
+        }*/
 
         layoutNo.setErrorEnabled(false);
         return true;

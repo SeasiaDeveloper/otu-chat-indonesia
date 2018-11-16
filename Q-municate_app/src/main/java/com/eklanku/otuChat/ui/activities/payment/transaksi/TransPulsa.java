@@ -109,7 +109,7 @@ public class TransPulsa extends AppCompatActivity {
     String[] prefix_indosat = {"0814", "0815", "0816", "0855", "0856", "0857", "0858"};
     String[] prefix_telkomsel = {"0811", "0812", "0813", "0821", "0822", "0823", "0851", "0852", "0853"};
     String[] prefix_tri = {"0896", "0897", "0898", "0899", "0895"};
-    String[] prefix_xl = {"0817", "0818", "0819", "0877", "0879", "0878", "0859", "0831", "0838"};
+    String[] prefix_xl = {"0817", "0818", "0819", "0877", "0879", "0878", "0859"};//, "0831", "0838"
     String[] prefix_bolt = {"0999", "0998"};
     String[] prefix_smartfren = {"0881", "0882", "0883", "0884", "0885", "0885", "0887", "0888", "0889"};
     String[] prefix_axis = {"0838", "0831", "0832", "0833"};
@@ -245,22 +245,23 @@ public class TransPulsa extends AppCompatActivity {
 
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
+        txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
             //Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Kolom nomor tidak boleh kosong");
+            txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-        if (id_pel.length() < 8) {
+        /*if (id_pel.length() < 8) {
             //Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 8 digit nomor");
+            txtNo.setError("Masukkan minimal 8 digit nomor");
             requestFocus(txtNo);
             return false;
-        }
+        }*/
 
-        layoutNo.setErrorEnabled(false);
+        //txtNo.setError(null);
         return true;
     }
 
@@ -496,67 +497,95 @@ public class TransPulsa extends AppCompatActivity {
     String oprPulsa = "";
     String tempOprPulsa = "";
     boolean statOprPulsa = false;
+    boolean otherOpr = true;
 
     public void cekPrefix(CharSequence s) {
         try {
-            if (s.length() >= 4) {
-                String nomorHp = s.toString().substring(0, 4);
+            if (s.length() >= 6) {
+                String nomorHP1 = s.toString().substring(0,2);
+                String nomorHp = "";
+                String valNomorHp = "", valNomorHP2 = "";
+                if(nomorHP1.startsWith("+6")){
+                    valNomorHp = nomorHP1.replace("+6","0");
+                    nomorHp = valNomorHp + s.toString().substring(3,6);
+                }else if(nomorHP1.startsWith("62")){
+                    valNomorHp = nomorHP1.replace("62","0");
+                    nomorHp = valNomorHp + s.toString().substring(2,5);
+                }else{
+                    nomorHp = s.toString().substring(0, 4);
+                }
+
+                Log.d("OPPO-1", "cekPrefix: "+nomorHp);
+
                 if (Arrays.asList(prefix_indosat).contains(nomorHp)) {
                     oprPulsa = "Indosat";
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.indosat);
                     statOprPulsa = true;
-
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_telkomsel).contains(nomorHp)) {
                     oprPulsa = "Telkomsel";
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.telkomsel);
                     statOprPulsa = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_xl).contains(nomorHp)) {
                     oprPulsa = "XL";
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.xl);
                     statOprPulsa = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_tri).contains(nomorHp)) {
                     oprPulsa = "Three";
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.three);
                     statOprPulsa = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_smartfren).contains(nomorHp)) {
                     oprPulsa = "Smart";
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.smart);
                     statOprPulsa = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_axis).contains(nomorHp)) {
                     oprPulsa = "Axis";
                     txOpr.setText(oprPulsa);
                     imgOpr.setImageResource(R.mipmap.axis);
                     statOprPulsa = true;
+                    otherOpr = false;
                 } else {
                     layOpr.setVisibility(View.VISIBLE);
                     txLayOpr.setVisibility(View.VISIBLE);
-                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
                     statOprPulsa = false;
                     tempOprPulsa = "";
                     btnBayar.setEnabled(true);
+                    oprPulsa = "";
                 }
 
                 Log.d("OPPO-1", "opr baru: " + oprPulsa + " tempOprPulsa: " + tempOprPulsa);
                 Log.d("OPPO-1", "statOprPulsa: " + statOprPulsa);
+                Log.d("OPPO-1", "other opr: " + otherOpr);
 
                 if (!oprPulsa.equalsIgnoreCase(tempOprPulsa) && statOprPulsa) {
-                    Log.d("OPPO-1", "cekPrefix: 2");
                     loadProduct(strUserID, strAccessToken, strAplUse, oprPulsa);
                     tempOprPulsa = oprPulsa;
                     statOprPulsa = false;
                     btnBayar.setEnabled(true);
                     layOpr.setVisibility(View.GONE);
                     txLayOpr.setVisibility(View.GONE);
+                    otherOpr = true;
+                }
+
+                if (otherOpr && oprPulsa.equalsIgnoreCase("")) {
+                    Log.d("OPPO-1", "cekPrefix: ");
+                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+                    otherOpr = false;
                 }
 
             } else if (s.length() < 4) {
                 listPulsa.setAdapter(adapter);
                 statOprPulsa = false;
+                otherOpr = true;
                 tempOprPulsa = "";
                 txOpr.setText("");
                 imgOpr.setImageResource(0);
@@ -586,6 +615,7 @@ public class TransPulsa extends AppCompatActivity {
                 if (!validateIdpel()) {
                     return;
                 }
+
                 code = id_paket.get(position);
                 dialogWarning(code);
             }
@@ -626,5 +656,10 @@ public class TransPulsa extends AppCompatActivity {
 
         dialog.show();
         return;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

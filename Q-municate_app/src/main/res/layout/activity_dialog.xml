@@ -1,8 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layrootchat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/background_chat"
-    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar_light_shadow_white" />
@@ -20,7 +19,6 @@
             android:scrollbars="vertical" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
 
     <LinearLayout
         android:id="@+id/linMainReplyLayout"
@@ -46,15 +44,14 @@
     <include layout="@layout/view_input_message_layout" />
 
 
-    <fragment
+   <!-- <fragment
         android:id="@+id/emojicon_fragment"
-        class="com.rockerhieu.emojicon.EmojiconsFragment"
         android:layout_width="match_parent"
-        android:layout_height="250dp" />
+        android:layout_height="250dp" />-->
 
     <include
         android:id="@+id/view_attach_stub"
         layout="@layout/view_attachment_layout"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </LinearLayout>

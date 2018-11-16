@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,6 +97,9 @@ public class TransSMS extends AppCompatActivity {
     Utils utilsAlert;
     String titleAlert = "SMS";
 
+    ListView listSMS;
+    ArrayList<String> id_sms;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +116,7 @@ public class TransSMS extends AppCompatActivity {
         txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
         btnBayar = (Button) findViewById(R.id.btnTransSMSBayar);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
+        listSMS = findViewById(R.id.listSMS);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -175,51 +180,10 @@ public class TransSMS extends AppCompatActivity {
                 dialog.show();
                 return;
 
-                /*AlertDialog dialog = new AlertDialog.Builder(TransSMS.this)
-                        .setTitle("Transaksi")
-                        .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: "+txtNo.getText().toString()+"\nVoucher: "+code)
-                        .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                cek_transaksi();
-                            }
-                        })
-                        .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create();
-                dialog.show();
-                return;*/
-
-                /*dialog = new AlertDialog.Builder(TransSMS.this);
-                inflater = getLayoutInflater();
-                dialogView = inflater.inflate(R.layout.activity_alert_dialog, null);
-                dialog.setView(dialogView);
-                dialog.setCancelable(true);
-                dialog.setIcon(R.mipmap.ic_launcher);
-                dialog.setTitle("Peringatan Transaksi!!!");*/
-
-                /*dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        cek_transaksi();
-                    }
-                });
-
-                dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });*/
-
-                // ((Button)dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.button_border);
-
             }
         });
+
+        initializeResources();
     }
 
     private class txtWatcher implements TextWatcher {
@@ -245,22 +209,23 @@ public class TransSMS extends AppCompatActivity {
 
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
+        txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
 //            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Kolom nomor tidak boleh kosong");
+            txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-        if (id_pel.length() < 8) {
+ /*       if (id_pel.length() < 8) {
 //            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 8 digit nomor");
+            txtNo.setError("Masukkan minimal 8 digit nomor");
             requestFocus(txtNo);
             return false;
-        }
+        }*/
 
-        layoutNo.setErrorEnabled(false);
+        //layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -351,6 +316,7 @@ public class TransSMS extends AppCompatActivity {
                         List<String> listPrice = new ArrayList<String>();
                         List<String> listNama = new ArrayList<String>();
                         List<String> listEp = new ArrayList<String>();
+                        id_sms = new ArrayList<>();
                         listPrice.clear();
                         listNama.clear();
                         listEp.clear();
@@ -359,15 +325,15 @@ public class TransSMS extends AppCompatActivity {
                             String name = products.get(i).getName();
                             String price = products.get(i).getPrice();
                             String ep = products.get(i).getEp();
-
+                            id_sms.add(products.get(i).getCode());
                             listNama.add(name);
                             listEp.add(ep);
                             listPrice.add(price);
                         }
 
                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
-                        spnNominal.setAdapter(adapter);
-                        spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        listSMS.setAdapter(adapter);
+                        /*spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 code = products.get(position).getCode();
@@ -377,7 +343,7 @@ public class TransSMS extends AppCompatActivity {
                             public void onNothingSelected(AdapterView<?> parent) {
 
                             }
-                        });
+                        });*/
 
                     } else {
                         utilsAlert.globalDialog(TransSMS.this, titleAlert, respMessage);
@@ -484,6 +450,55 @@ public class TransSMS extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    private void initializeResources() {
+        listSMS = (ListView) findViewById(R.id.listSMS);
+
+        listSMS.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!validateIdpel()) {
+                    return;
+                }
+
+                code = id_sms.get(position);
+                final Dialog dialog = new Dialog(TransSMS.this);
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.activity_alert_dialog);
+                dialog.setCancelable(false);
+                dialog.setTitle("Peringatan Transaksi!!!");
+
+                btnYes = (Button) dialog.findViewById(R.id.btn_yes);
+                btnNo = (Button) dialog.findViewById(R.id.btn_no);
+                txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
+                txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+                txtnomor.setText(txtNo.getText().toString());
+                txtvoucher.setText(code);
+
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cek_transaksi();
+                        dialog.dismiss();
+                    }
+                });
+
+                btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+                return;
+
+            }
+        });
+
     }
 
 }

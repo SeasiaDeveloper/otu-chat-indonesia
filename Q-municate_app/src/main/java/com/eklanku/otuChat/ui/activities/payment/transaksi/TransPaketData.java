@@ -130,7 +130,7 @@ public class TransPaketData extends AppCompatActivity {
     String[] prefix_indosat = {"0814", "0815", "0816", "0855", "0856", "0857", "0858"};
     String[] prefix_telkomsel = {"0811", "0812", "0813", "0821", "0822", "0823", "0851", "0852", "0853"};
     String[] prefix_tri = {"0896", "0897", "0898", "0899", "0895"};
-    String[] prefix_xl = {"0817", "0818", "0819", "0877", "0879", "0878", "0859", "0831", "0838"};
+    String[] prefix_xl = {"0817", "0818", "0819", "0877", "0879", "0878", "0859"};//, "0831", "0838"
     String[] prefix_bolt = {"0999", "0998"};
     String[] prefix_smartfren = {"0881", "0882", "0883", "0884", "0885", "0885", "0887", "0888", "0889"};
     String[] prefix_axis = {"0838", "0831", "0832", "0833"};
@@ -259,22 +259,23 @@ public class TransPaketData extends AppCompatActivity {
 
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
+        txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
 //            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Kolom nomor tidak boleh kosong");
+            txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-        if (id_pel.length() < 8) {
+       /* if (id_pel.length() < 8) {
 //            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 8 digit nomor");
+            txtNo.setError("Masukkan minimal 8 digit nomor");
             requestFocus(txtNo);
             return false;
-        }
+        }*/
 
-        layoutNo.setErrorEnabled(false);
+       // layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -509,52 +510,72 @@ public class TransPaketData extends AppCompatActivity {
     String tempPaket = "";
     boolean statPaket = false;
 
+    boolean otherOpr = true;
+
     public void cekPrefix(CharSequence s) {
         try {
-            if (s.length() >= 4) {
-                String nomorHp = s.toString().substring(0, 4);
+            if (s.length() >= 6) {
+                String nomorHP1 = s.toString().substring(0,2);
+                String nomorHp = "";
+                String valNomorHp = "", valNomorHP2 = "";
+                if(nomorHP1.startsWith("+6")){
+                    valNomorHp = nomorHP1.replace("+6","0");
+                    nomorHp = valNomorHp + s.toString().substring(3,6);
+                }else if(nomorHP1.startsWith("62")){
+                    valNomorHp = nomorHP1.replace("62","0");
+                    nomorHp = valNomorHp + s.toString().substring(2,5);
+                }else{
+                    nomorHp = s.toString().substring(0, 4);
+                }
                 if (Arrays.asList(prefix_xl).contains(nomorHp)) {
                     oprPaket = "XL DATA";
                     imgOpr.setImageResource(R.mipmap.xl);
                     txOpr.setText("XL DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_axis).contains(nomorHp)) {
                     oprPaket = "AXIS DATA";
                     imgOpr.setImageResource(R.mipmap.axis);
                     txOpr.setText("AXIS DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_smartfren).contains(nomorHp)) {
                     oprPaket = "SMARTFREN DATA";
                     imgOpr.setImageResource(R.mipmap.smart);
                     txOpr.setText("SMARTFREN DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_tri).contains(nomorHp)) {
                     oprPaket = "TRI DATA";
                     imgOpr.setImageResource(R.mipmap.three);
                     txOpr.setText("TRI DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_indosat).contains(nomorHp)) {
                     oprPaket = "ISAT DATA";
                     imgOpr.setImageResource(R.mipmap.indosat);
                     txOpr.setText("ISAT DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_bolt).contains(nomorHp)) {
                     oprPaket = "BOLT";
                     imgOpr.setImageResource(R.mipmap.bolt);
                     txOpr.setText("BOLT");
                     statPaket = true;
+                    otherOpr = false;
                 } else if (Arrays.asList(prefix_telkomsel).contains(nomorHp)) {
                     oprPaket = "TSEL DATA";
                     imgOpr.setImageResource(R.mipmap.telkomsel);
                     txOpr.setText("TSEL DATA");
                     statPaket = true;
+                    otherOpr = false;
                 } else {
                     statPaket = false;
                     tempPaket = "";
                     layOprPaket.setVisibility(View.VISIBLE);
                     laytxOprPaket.setVisibility(View.VISIBLE);
-                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
                     btnBayar.setEnabled(true);
+                    oprPaket = "";
                 }
 
                 if (!oprPaket.equalsIgnoreCase(tempPaket) && statPaket) {
@@ -564,13 +585,21 @@ public class TransPaketData extends AppCompatActivity {
                     layOprPaket.setVisibility(View.GONE);
                     laytxOprPaket.setVisibility(View.GONE);
                     btnBayar.setEnabled(true);
+                    otherOpr = true;
                 }
-                Log.d("OPPO-1", "cekPrefix: " + oprPaket);
+
+                if(otherOpr && oprPaket.equalsIgnoreCase("")){
+                    Log.d("OPPO-1", "cekPrefix: ");
+                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+                    otherOpr = false;
+                }
+
             } else if (s.length() < 4) {
                 spnNama.setAdapter(adapter);
                 tempPaket = "";
                 btnBayar.setEnabled(false);
                 statPaket = false;
+                otherOpr = true;
                 imgOpr.setImageResource(0);
                 txOpr.setText("");
                 layOprPaket.setVisibility(View.GONE);

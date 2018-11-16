@@ -3,6 +3,7 @@ package com.eklanku.otuChat.ui.adapters.chats;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,6 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
     protected void onBindViewCustomHolder(MessageViewHolder holder, CombinationMessage chatMessage, int position) {
         RequestsViewHolder viewHolder = (RequestsViewHolder) holder;
         boolean notificationMessage = chatMessage.getNotificationType() != null;
-
 
         if (notificationMessage) {
             viewHolder.messageTextView.setText(chatMessage.getBody());
@@ -103,6 +103,8 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
 
     @Override
     protected void onBindViewMsgRightHolder(TextMessageHolder holder, CombinationMessage chatMessage, int position) {
+        defineTimeStampPosition(holder);
+
         ImageView view = (ImageView) holder.itemView.findViewById(R.id.message_status_image_view);
         setViewVisibility(holder.avatar, View.GONE);
 
@@ -342,14 +344,15 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
     }
 
     private void addReplyView(RecyclerView.ViewHolder holder, CombinationMessage chatMessage, int position) {
+        int x = 1;
         try {
-            int padLeft = 5;
-            int padRight = 5;
-            Log.v("User IDs", "User IDs: "+AppSession.getSession().getUser().getId() +" == "+ chatMessage.getDialogOccupant().getUser().getId());
+            int padLeft = 20;
+            int padRight = 0;
+            Log.v("User IDs", "User IDs: " + AppSession.getSession().getUser().getId() + " == " + chatMessage.getDialogOccupant().getUser().getId());
             if (AppSession.getSession().getUser().getId().equals(chatMessage.getDialogOccupant().getUser().getId())) {
-                padRight = 15;
-            } else {
-                padLeft = 15;
+                padLeft = 10;
+                padRight = 10;
+                x = 0;
             }
 
             if (position < 5) {
@@ -360,7 +363,15 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
 
             insertPoint = (ViewGroup) ((MessageViewHolder) holder).bubbleFrame;
 
-            if (holder instanceof ImageAttachHolder) {
+           /* LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            params.gravity = Gravity.RIGHT | Gravity.END;
+            insertPoint.getChildAt(0).setLayoutParams(params);*/
+
+            if (holder instanceof TextMessageHolder) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                params.gravity = Gravity.RIGHT | Gravity.END;
+                insertPoint.getChildAt(0).setLayoutParams(params);
+            } else if (holder instanceof ImageAttachHolder) {
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 lp.setMargins(padLeft, 120, padRight, 5);
                 ((ImageAttachHolder) holder).attachImageView.setLayoutParams(lp);
@@ -379,18 +390,30 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
                             insertPoint.removeViewAt(0);
                         }
                         LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View v = vi.inflate(R.layout.layout_chat_reply_message, null);
 
-                        LinearLayout llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
+                        View v;
+                        LinearLayout llReplyMain;
+
+                        if (x == 0) {
+                            v = vi.inflate(R.layout.layout_chat_reply_message, null);
+                            llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);
+                        } else {
+                            v = vi.inflate(R.layout.layout_chat_reply_message_left, null);
+                            llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMainleft);
+                        }
+
+                       /* v = vi.inflate(R.layout.layout_chat_reply_message, null);
+                        llReplyMain = (LinearLayout) v.findViewById(R.id.llReplyMain);*/
 
                         LinearLayout.LayoutParams lpReply = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         lpReply.setMargins(padLeft, 5, padRight, 5);
                         llReplyMain.setLayoutParams(lpReply);
 
                         TextView tvMessage = (TextView) v.findViewById(R.id.tvName);
+                        tvMessage.setPadding(8, 0, 8, 0);
 
 
-                        if ( AppSession.getSession().getUser().getId() == obj.getInt("senderID")) {
+                        if (AppSession.getSession().getUser().getId() == obj.getInt("senderID")) {
                             tvMessage.setText("You");
                         } else {
                             tvMessage.setText(chatMessage.getDialogOccupant().getUser().getFullName());
@@ -423,7 +446,7 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
                             }
 
                         }
-                        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                     }
 
                 } else {

@@ -229,7 +229,14 @@ public class ConversationCallFragment extends Fragment implements Serializable, 
     @Override
     public void onStart() {
         super.onStart();
-        RTCSession session = ((CallActivity) getActivity()).getCurrentSession();
+        RTCSession session = null;
+        if(getActivity() != null && getActivity() instanceof CallActivity)
+        {
+            session = ((CallActivity)getActivity()).getCurrentSession();
+        }
+        if(session == null) {
+            return;
+        }
         if (!isMessageProcessed) {
             if (startConversationReason == StartConversationReason.INCOME_CALL_FOR_ACCEPTION) {
                 session.acceptCall(session.getUserInfo());

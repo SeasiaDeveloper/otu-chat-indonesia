@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:baselineAligned="false"
+    android:gravity="end"
+    android:layout_gravity="end"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:background="@drawable/bg_chat_right_bubble"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_weight="1"
+        android:gravity="end">
+
+        <com.eklanku.otuChat.ImFlexboxLayout
+            android:id="@+id/msg_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            app:viewPartMain="@+id/msg_text_message"
+            app:viewPartSlave="@+id/msg_timestamp">
+
+            <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
+                android:id="@+id/msg_text_message"
+                style="@style/TextViewTextMsg.Right"
+                android:layout_width="wrap_content"
+                android:layout_gravity="end"
+                android:focusableInTouchMode="false"
+                android:paddingTop="@dimen/density_2"
+                emojicon:emojiconSize="24sp"
+                tools:text="xxxxxxxxx" />
+
+            <LinearLayout
+                android:id="@+id/msg_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:minWidth="@dimen/density_40">
+
+                <TextView
+                    android:id="@+id/custom_msg_text_time_message"
+                    style="@style/TextViewTimeMsg.Right"
+                    android:layout_gravity="end|bottom"
+                    android:gravity="end"
+                    android:maxLines="1"
+                    android:visibility="visible"
+                    tools:text="15.05" />
+
+                <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/message_status_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:minWidth="20dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_status_msg_sent_receive_blue" />
+
+            </LinearLayout>
+
+        </com.eklanku.otuChat.ImFlexboxLayout>
+    </LinearLayout>
+</LinearLayout>

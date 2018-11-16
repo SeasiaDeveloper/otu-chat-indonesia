@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F5ED"
+    tools:ignore="RtlHardcoded,RtlSymmetry">
+<!--
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_main"
+            android:orientation="vertical">-->
+
+            <include layout="@layout/shadow_view" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/density_4"
+                android:layout_marginLeft="@dimen/density_4"
+                android:layout_marginTop="@dimen/density_4"
+                android:layout_marginEnd="@dimen/density_4"
+                android:layout_marginRight="@dimen/density_4"
+                android:layout_marginBottom="@dimen/density_4"
+                android:visibility="gone"
+                app:cardCornerRadius="@dimen/density_4">
+
+                <com.yyydjk.library.BannerLayout
+                    android:id="@+id/bannerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="125dp"
+                    app:autoPlayDuration="4000"
+                    app:scrollDuration="1000" />
+
+            </android.support.v7.widget.CardView>
+
+            <!-- <ListView
+                 android:id="@+id/chats_listview"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:background="@color/white" />-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/density_200" />
+
+            <FrameLayout
+                android:id="@+id/frameEmptyList"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.eklanku.otuChat.ui.views.ARTextView
+                    android:id="@+id/empty_list_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableTop="@drawable/ic_tabs_call_otu"
+                    android:drawablePadding="@dimen/density_8"
+                    android:gravity="center"
+                    android:padding="@dimen/density_8"
+                    android:visibility="visible"
+                    android:text="@string/dialog_no_call"
+                    android:textColor="@color/color_no_msg"
+                    android:textSize="@dimen/text_size" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/density_300" />
+    <!--</LinearLayout>
+
+        </ScrollView>-->
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_dialogs_new_call"
+        style="@style/FabStyle"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_tabs_call_otu"
+        android:theme="@style/FabStyle"
+        app:backgroundTint="@color/white"
+        app:borderWidth="2dp" />
+
+</RelativeLayout>

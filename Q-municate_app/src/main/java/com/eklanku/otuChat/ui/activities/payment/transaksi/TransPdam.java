@@ -1,8 +1,20 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.content.Context;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,15 +23,11 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -36,22 +44,10 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.Utils;
-import com.google.firebase.auth.FirebaseAuth;
-import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
-import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
-import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
+import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -150,6 +146,11 @@ public class TransPdam extends AppCompatActivity {
     String titleAlert = "PDAM";
     ListView listwilayah;
     ArrayList<String> id_wilayah;
+    private EditText etWilayah;
+    //ArrayAdapter<String> adapter;
+
+    private ArrayList<ItemPdam> cartList;
+    private CustomAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -165,11 +166,12 @@ public class TransPdam extends AppCompatActivity {
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransPdamBayar);
         listwilayah = findViewById(R.id.listWilayah);
+        etWilayah = findViewById(R.id.autoComplete);
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
-
+        cartList = new ArrayList<>();
         //get userid and token from preference
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
@@ -215,43 +217,49 @@ public class TransPdam extends AppCompatActivity {
         });
 
         initializeResources();
+        listwilayah.setVisibility(View.GONE);
+        addTextListener();
 
     }
 
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
-
+        txtNo.setError(null);
         if (id_pel.isEmpty()) {
 //            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Kolom nomor tidak boleh kosong");
+            txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-        if (id_pel.length() < 6) {
+  /*      if (id_pel.length() < 6) {
 //            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 6 digit nomor");
+            txtNo.setError("Masukkan minimal 6 digit nomor");
             requestFocus(txtNo);
             return false;
-        }
+        }*/
 
-        layoutNo.setErrorEnabled(false);
+        //layoutNo.setErrorEnabled(false);
         return true;
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
-        loadingDialog = ProgressDialog.show(TransPdam.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
+        //loadingDialog = ProgressDialog.show(TransPdam.this, "Harap Tunggu", "Mengambil Data...");
+        //loadingDialog.setCanceledOnTouchOutside(true);
 
         Call<LoadDataResponse> dataCall = mApiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
+                //loadingDialog.dismiss();
                 nama_wilayah = new String[0];
                 id_wilayah = new ArrayList<>();
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_wilayah);
-                spnWilayah.setAdapter(adapter);
+
+                cartList.clear();
+                cartList = new ArrayList<>();
+
+               /* adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_wilayah);
+                spnWilayah.setAdapter(adapter);*/
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String error = response.body().getError();
@@ -261,13 +269,24 @@ public class TransPdam extends AppCompatActivity {
                         nama_wilayah = new String[result.size()];
                         load_id = result.get(0).getCode();
 
+
                         for (int i = 0; i < result.size(); i++) {
                             nama_wilayah[i] = result.get(i).getName();
                             id_wilayah.add(result.get(i).getCode());
+
+                            ItemPdam item = new ItemPdam();
+                            item.setId(result.get(i).getCode());
+                            item.setName(result.get(i).getName());
+
+                            cartList.add(item);
+
                         }
 
-                        adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_wilayah);
-                        listwilayah.setAdapter(adapter);
+                        //adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_wilayah);
+                        //listwilayah.setAdapter(adapter);
+
+                        mAdapter = new CustomAdapter(cartList, TransPdam.this);
+                        listwilayah.setAdapter(mAdapter);
 
                         /*spnWilayah.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
@@ -292,7 +311,7 @@ public class TransPdam extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
+                //loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransPdam.this, titleAlert, getResources().getString(R.string.error_api));
                 //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
@@ -330,7 +349,7 @@ public class TransPdam extends AppCompatActivity {
     }
 
     private void cek_transaksi() {
-        Log.d("OPPO-1", "cek_transaksi: "+load_id);
+        Log.d("OPPO-1", "cek_transaksi: " + load_id);
         loadingDialog = ProgressDialog.show(TransPdam.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
         Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, load_id, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
@@ -472,16 +491,156 @@ public class TransPdam extends AppCompatActivity {
 
     private void initializeResources() {
         listwilayah = (ListView) findViewById(R.id.listWilayah);
-        listwilayah.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        /*listwilayah.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!validateIdpel()) {
+                *//*if (!validateIdpel()) {
                     return;
                 }
                 load_id =  id_wilayah.get(position);
-                cek_transaksi();
+                cek_transaksi();*//*
+                load_id = id_wilayah.get(position);
+                Toast.makeText(TransPdam.this, "" + load_id, Toast.LENGTH_SHORT).show();
+            }
+        });*/
+
+    }
+
+    public void addTextListener() {
+
+        etWilayah.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence query, int start, int before, int count) {
+
+                query = query.toString().toLowerCase();
+                if (query.length() == 0) {
+                    listwilayah.setVisibility(View.GONE);
+                } else {
+                    listwilayah.setVisibility(View.VISIBLE);
+                }
+
+                final ArrayList<ItemPdam> filteredList = new ArrayList<>();
+
+                for (ItemPdam model : cartList) {
+                    final String text1 = model.getName().toLowerCase();
+
+                    if (text1.contains(query)) {
+                        filteredList.add(model);
+                    }
+                }
+
+                mAdapter = new CustomAdapter(filteredList, TransPdam.this);
+                listwilayah.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
             }
         });
+
+    }
+
+    public class ItemPdam {
+        String id;
+        String name;
+
+        public ItemPdam() {
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+    }
+
+    public class CustomAdapter extends ArrayAdapter<ItemPdam> implements View.OnClickListener {
+
+        private ArrayList<ItemPdam> dataSet;
+        Context mContext;
+        public View layout;
+
+        // View lookup cache
+        private class ViewHolder {
+            TextView txtName;
+            TextView txtId;
+        }
+
+        public CustomAdapter(ArrayList<ItemPdam> data, Context context) {
+            super(context, R.layout.item_pdam, data);
+            this.dataSet = data;
+            this.mContext = context;
+
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            int position = (Integer) v.getTag();
+            Object object = getItem(position);
+            ItemPdam dataModel = (ItemPdam) object;
+
+            Toast.makeText(mContext, "" + dataModel.getId(), Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ItemPdam dataModel = getItem(position);
+            ViewHolder viewHolder;
+
+            final View result;
+
+            if (convertView == null) {
+
+                viewHolder = new ViewHolder();
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                convertView = inflater.inflate(R.layout.item_pdam, parent, false);
+                layout = convertView;
+                viewHolder.txtName = (TextView) convertView.findViewById(R.id.tvName);
+                viewHolder.txtId = (TextView) convertView.findViewById(R.id.tvId);
+
+
+                result = convertView;
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+                result = convertView;
+            }
+
+            viewHolder.txtName.setText(dataModel.getName());
+            viewHolder.txtId.setText(dataModel.getId());
+
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!validateIdpel()) {
+                        return;
+                    }
+                    load_id = viewHolder.txtId.getText().toString();
+                    cek_transaksi();
+                    //Toast.makeText(mContext, "" + load_id, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return convertView;
+        }
 
     }
 }

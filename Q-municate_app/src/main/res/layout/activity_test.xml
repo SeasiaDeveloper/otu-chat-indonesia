@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.activities.payment.TestActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rel_layout_left"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_chat_right_bubble"
+    android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/lblMsgFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Person Name or Id"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/lblMessage_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:text="xxxxxxxxxxxxxxxxxxxxxxx"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/lblMessage_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/lblMessage_text"
+        android:layout_alignRight="@+id/lblMessage_text"
+        android:layout_below="@+id/lblMessage_text"
+        android:text="04:50 Am"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="10dp"
+        android:textStyle="italic" />
+
+</RelativeLayout>

@@ -306,6 +306,17 @@ public class DataDetailHistosryOTU {
     @SerializedName("status_bonus")
     private String status_bonus;
 
+    public Double getJml_bonus() {
+        return jml_bonus;
+    }
+
+    public void setJml_bonus(Double jml_bonus) {
+        this.jml_bonus = jml_bonus;
+    }
+
+    @SerializedName("jml_bonus")
+    private Double jml_bonus;
+
     public String getTgl_perolehan() {
         return tgl_perolehan;
     }

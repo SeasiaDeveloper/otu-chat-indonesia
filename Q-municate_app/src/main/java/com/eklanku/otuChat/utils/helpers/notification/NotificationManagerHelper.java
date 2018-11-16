@@ -98,7 +98,7 @@ public class NotificationManagerHelper {
     private static int getNotificationIcon() {
         boolean whiteIcon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
         // TODO need to add other icon
-        return whiteIcon ? R.drawable.ic_launcher_transp : R.drawable.ic_launcher;
+        return whiteIcon ? R.drawable.ic_chat_overflow : R.drawable.ic_chat_overflow;
     }
 
     public static void clearNotificationEvent(Context context) {

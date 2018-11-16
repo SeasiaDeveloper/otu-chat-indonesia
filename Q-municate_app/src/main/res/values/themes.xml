@@ -7,7 +7,7 @@
         <item name="android:windowBackground">@color/bg_main</item>
 
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimaryDark">@color/primary_dark_</item>
         <item name="colorAccent">@color/accent</item>
         <item name="colorControlNormal">@color/dark_gray</item>
         <item name="android:colorControlNormal" tools:ignore="NewApi">@color/dark_gray</item>
@@ -36,11 +36,12 @@
 
     <style name="AppThemeMain" parent="Base.AppTheme">
         <item name="android:typeface">serif</item>
+        <item name="listPreferredItemHeightSmall">42dp</item>
         <item name="actionOverflowButtonStyle">@style/OverFlow</item>
     </style>
 
     <style name="OverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_chat_overflow</item>
+        <item name="android:src">@drawable/ic_setting</item>
     </style>
 
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light.DarkActionBar">

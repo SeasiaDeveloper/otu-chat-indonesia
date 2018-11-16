@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.R;;
@@ -64,6 +66,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         public ImageView mIvChat;
         public RelativeLayout mRlContacts;
         public CheckBox mChkSelect;
+        public ImageView IVIcon;
 //        public ImageView mCreateGroup;
 //        public ImageView mInvitePeople;
 
@@ -76,6 +79,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             mRlContacts = (RelativeLayout) view.findViewById(R.id.rlContacts);
             mChkSelect = (CheckBox) view.findViewById(R.id.chkSelect);
             contactStatus = view.findViewById(R.id.contact_status);
+            IVIcon = (ImageView) view.findViewById(R.id.ivIcon);
 //            mCreateGroup = (ImageView) view.findViewById(R.id.btn_create_group);
 //            mInvitePeople = (ImageView) view.findViewById(R.id.btn_invite_people);
 
@@ -100,6 +104,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_contacts, parent, false);
         preferenceManager = new PreferenceManager(context);
+
         return new MyViewHolder(itemView);
     }
 
@@ -107,8 +112,29 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final com.eklanku.otuChat.ui.activities.contacts.ContactsModel contact = contactsModels.get(position);
 
+        //get first letter of each String item
+        //get first letter of each String item
+        String fullName = contact.getFullName();
+        String firstLetter = String.valueOf(fullName.charAt(0));
+        String lastLetter = "";
+        String identityName = "";
+        try {
+            if (fullName.contains(" ")) {
+                lastLetter = String.valueOf(fullName.substring(fullName.lastIndexOf(" ") + 1).charAt(0));
+                identityName = firstLetter + lastLetter;
+            } else {
+                identityName = firstLetter;
+            }
+        } catch (Exception e) {
+            identityName = firstLetter;
+        }
+        ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
+        // generate random color
+        int color = generator.getRandomColor();
+        TextDrawable drawable = TextDrawable.builder()
+                .buildRound(identityName, color); // radius in px
+        holder.IVIcon.setImageDrawable(drawable);
         holder.mTvUsername.setText(contact.getFullName());
-        Log.v("Contacts New Meesage","number: "+contact.getLogin());
 
         //holder.mTvPhonenumber.setText(contact.getLogin());
         if(isToGroup){

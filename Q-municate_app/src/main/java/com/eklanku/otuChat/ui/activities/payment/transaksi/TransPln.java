@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -24,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -138,6 +140,8 @@ public class TransPln extends AppCompatActivity {
         btnBayar = (Button) findViewById(R.id.btnTransPlnBayar);
         listPLN = (ListView) findViewById(R.id.listPLN);
         txtpilihpembayaran = findViewById(R.id.tvPiliPembayaran);
+
+        setListViewHeightBasedOnChildren(listPLN);
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
@@ -390,14 +394,14 @@ public class TransPln extends AppCompatActivity {
     }
 
     private void loadProviderPPOB(String userID, String accessToken, String aplUse, String productGroup) {
-        loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
+//        loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
+//        loadingDialog.setCanceledOnTouchOutside(true);
 
         Call<LoadDataResponse> dataCall = apiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
+//                loadingDialog.dismiss();
                 nama_operator = new String[0];
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
                 spinnerProvider.setAdapter(adapter);
@@ -439,7 +443,7 @@ public class TransPln extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
+//                loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
                 //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
@@ -472,23 +476,24 @@ public class TransPln extends AppCompatActivity {
 
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
+        txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
 //            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Kolom nomor tidak boleh kosong");
+            txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
 
-        if (id_pel.length() < 8) {
+     /*   if (id_pel.length() < 8) {
 //            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 8 digit nomor");
+            txtNo.setError("Masukkan minimal 8 digit nomor");
             requestFocus(txtNo);
             return false;
-        }
+        }*/
 
-        layoutNo.setErrorEnabled(false);
+        // layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -716,5 +721,34 @@ public class TransPln extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) return;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0) view.setLayoutParams(new
+                    ViewGroup.LayoutParams(desiredWidth,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+
+        params.height = totalHeight + (listView.getDividerHeight() *
+                (listAdapter.getCount()-1));
+
+        Log.d("OPPO-1", "setListViewHeightBasedOnChildren: "+totalHeight + (listView.getDividerHeight() *
+                (listAdapter.getCount()-1)));
+
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 }

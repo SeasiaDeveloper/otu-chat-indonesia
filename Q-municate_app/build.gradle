@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
+
         mavenCentral()
     }
 
@@ -18,11 +19,12 @@ repositories {
     maven { url 'https://dl.bintray.com/drummer-aidan/maven' }
     maven { url "https://jitpack.io" }
     maven { url 'https://maven.fabric.io/public' }
+    maven { url 'http://dl.bintray.com/amulyakhare/maven'}
 }
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
+    buildToolsVersion '28.0.3'
     flavorDimensions rootProject.dimensionDefault
 
     defaultConfig {
@@ -33,6 +35,7 @@ android {
         versionName rootProject.versionName
         multiDexEnabled = true
         vectorDrawables.useSupportLibrary = true
+
     }
 
     signingConfigs {
@@ -70,6 +73,8 @@ android {
             versionNameSuffix ' (debug)'
         }
     }
+
+
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -145,17 +150,17 @@ dependencies {
 
     implementation "com.nostra13.universalimageloader:universal-image-loader:${rootProject.universalImageLoaderVersion}"
     implementation 'com.flurry.android:analytics:6.2.0'
-    implementation 'com.android.support:support-v13:27.1.1'
+    implementation 'com.android.support:support-v13:28.+'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.support:support-vector-drawable:26.1.0'
+    implementation 'com.android.support:support-v4:28.+'
+    implementation 'com.android.support:support-vector-drawable:28.+'
     annotationProcessor "com.jakewharton:butterknife:${rootProject.butterknifeVersion}"
     implementation "com.jakewharton:butterknife:${rootProject.butterknifeVersion}"
     implementation "com.afollestad.material-dialogs:core:${rootProject.materialDialogsVersion}"
 
     implementation "com.github.orangegangsters:swipy:${rootProject.swipyRecyclerviewVersion}@aar"
     implementation "com.timehop.stickyheadersrecyclerview:library:${rootProject.stickylistheadersRecyclerViewVersion}@aar"
-    implementation "com.rockerhieu.emojicon:library:${rootProject.emojiconVersion}"
+    //implementation "com.rockerhieu.emojicon:library:${rootProject.emojiconVersion}"
     implementation "com.soundcloud.android:android-crop:${rootProject.cropVersion}@aar"
     implementation('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
@@ -177,7 +182,7 @@ dependencies {
     // implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
-    implementation 'com.android.volley:volley:1.0.0'
+    implementation 'com.android.volley:volley:1.1.0'
 
     //table
     implementation 'com.evrencoskun.library:tableview:0.8.5.1'
@@ -187,6 +192,12 @@ dependencies {
     //textview improve
     implementation 'com.codesgood:justifiedtextview:1.0.2'
     implementation 'com.ms-square:expandableTextView:0.1.4'
+    implementation "com.github.ksoichiro:android-observablescrollview:1.5.0"
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    //implementation 'com.vanniktech:emoji-ios:0.5.1'
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    implementation 'com.github.hani-momanii:SuperNova-Emoji:1.1'
     //vcard
     implementation 'com.googlecode.ez-vcard:ez-vcard:0.10.4'
 }

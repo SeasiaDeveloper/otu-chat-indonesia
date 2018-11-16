@@ -4,90 +4,97 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/selector_list_item"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="@dimen/density_4">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:padding="@dimen/density_4"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView
-            android:id="@+id/avatar_imageview"
-            style="@style/AvatarImageViewStyle.Common"
-            android:layout_width="@dimen/density_48"
-            android:layout_height="@dimen/density_48"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/density_4"
-            app:border_color="@color/dark_gray"
-            app:border_width="@dimen/avatar_border_width"
-            app:oval="true" />
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@+id/avatar_imageview"
-            android:orientation="vertical">
+            android:padding="@dimen/density_4">
 
-            <com.eklanku.otuChat.ui.views.ARTextView
-                android:id="@+id/name_textview"
-                android:layout_width="match_parent"
+            <com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView
+                android:id="@+id/avatar_imageview"
+                style="@style/AvatarImageViewStyle.Common"
+                android:layout_width="@dimen/density_48"
+                android:layout_height="@dimen/density_48"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/density_4"
+                app:border_color="@android:color/transparent"
+                app:border_width="@dimen/avatar_border_width"
+                app:oval="true" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="fill"
-                android:maxLines="2"
-                android:textSize="@dimen/text_16"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/gray_color_name"
-                tools:text="Nabe dsjkd sdldjscljkd dsclk" />
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/avatar_imageview"
+                android:orientation="vertical">
 
-            <com.rockerhieu.emojicon.EmojiconTextView
-                android:id="@+id/last_message_textview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/name_textview"
-                android:layout_gravity="center_vertical"
-                android:singleLine="true"
-                android:textColor="@color/gray_color_message"
-                android:textSize="@dimen/text_14"
-                tools:text="1111111 sclk" />
+                <com.eklanku.otuChat.ui.views.ARTextView
+                    android:id="@+id/name_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:layout_marginRight="20dp"
+                    android:maxLines="2"
+                    android:textColor="@color/gray_color_name"
+                    android:textSize="@dimen/text_16"
+                    tools:text="Nabe dsjkd sdldjscljkd dsclk" />
 
-        </LinearLayout>
+                <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
+                    android:id="@+id/last_message_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/name_textview"
+                    android:layout_gravity="center_vertical"
+                    android:singleLine="true"
+                    android:textColor="@color/gray_color_message"
+                    android:textSize="@dimen/text_14"
+                    tools:text="1111111 sclk" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingBottom="1dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="1dp">
+            </LinearLayout>
 
-            <com.eklanku.otuChat.ui.views.ARTextView
-                android:id="@+id/last_message_time"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:gravity="end"
-                android:textColor="@color/dailog_list_time_text_color"
-                android:textSize="@dimen/text_size_very_small" />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp">
 
-            <TextView
-                android:id="@+id/unread_messages_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/badge_unread_messages_counter"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/text_size"
-                tools:text="@string/dialog_count_unread"
-                android:layout_gravity ="center"/>
-        </LinearLayout>
+                <com.eklanku.otuChat.ui.views.ARTextView
+                    android:id="@+id/last_message_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:gravity="end"
+                    android:textColor="@color/dailog_list_time_text_color"
+                    android:textSize="@dimen/text_size_very_small" />
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/unread_messages_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/badge_unread_messages_counter"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size"
+                    tools:text="@string/dialog_count_unread" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

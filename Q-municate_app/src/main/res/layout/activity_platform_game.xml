@@ -4,386 +4,399 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/white">
+    android:padding="@dimen/density_8">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:text="Pilih Platform Game"
         android:textColor="@color/default_text_icon_otu_color"
-        android:textSize="14dp"
-        android:layout_marginBottom="10dp"/>
+        android:textSize="14dp" />
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/com_facebook_button_background_color_disabled"
-        android:orientation="horizontal">
+        app:cardCornerRadius="@dimen/density_8"
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_margin="@dimen/density_8"
+            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/btnVGMegasus"
-                android:layout_width="62dp"
-                android:layout_height="62dp"
-                android:src="@drawable/ic_voucher_game_megasus"
-                android:scaleType="centerInside"
-                android:background="@drawable/bg_otu_payment"
-                android:layout_centerHorizontal="true"
-                android:padding="6dp"/>
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivMegasus"
-                android:layout_width="40dp"
-                android:visibility="gone"
-                android:layout_height="40dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:elevation="2dp"
-                app:srcCompat="@drawable/ic_voucher_game_megasus"/>
-
-            <TextView
-                android:id="@+id/textView18"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/btnVGMegasus"
-                android:layout_centerHorizontal="true"
-                android:text="Megaxus"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/color_payment_list_icon_text"
-                android:textSize="10dp"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"/>
-        </RelativeLayout>
+                android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:gravity="center">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/btnVGGarena"
-                android:layout_width="62dp"
-                android:layout_height="62dp"
-                android:src="@drawable/ic_voucher_game_garena"
-                android:scaleType="centerInside"
-                android:background="@drawable/bg_otu_payment"
-                android:layout_centerHorizontal="true"
-                android:padding="6dp"/>
+                    <ImageButton
+                        android:id="@+id/btnVGMegasus"
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/bg_otu_payment"
+                        android:padding="6dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_voucher_game_megasus" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivGarena"
-                android:layout_width="40dp"
-                android:visibility="gone"
-                android:layout_height="40dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:elevation="2dp"
-                app:srcCompat="@drawable/ic_voucher_game_garena"/>
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivMegasus"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="2dp"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_voucher_game_megasus" />
 
-            <TextView
-                android:id="@+id/tvGarena"
+                    <TextView
+                        android:id="@+id/textView18"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btnVGMegasus"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:text="Megaxus"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_payment_list_icon_text"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/btnVGGarena"
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/bg_otu_payment"
+                        android:padding="6dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_voucher_game_garena" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivGarena"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="2dp"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_voucher_game_garena" />
+
+                    <TextView
+                        android:id="@+id/tvGarena"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btnVGGarena"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:text="garena"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_payment_list_icon_text"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/btnVGGamescool"
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/bg_otu_payment"
+                        android:padding="6dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_voucher_game_gemscool" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivGamescool"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="2dp"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_voucher_game_gemscool" />
+
+                    <TextView
+                        android:id="@+id/tvGamescool"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btnVGGamescool"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:text="gemscool"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_payment_list_icon_text"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/btnVGMobilelegend"
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/bg_otu_payment"
+                        android:padding="6dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_voucher_game_mobilelegend" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivMobilelegend"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="2dp"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_voucher_game_megasus" />
+
+                    <TextView
+                        android:id="@+id/tvMobilelegend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btnVGMobilelegend"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:text="Mobile Legend"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_payment_list_icon_text"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/btnVGGarena"
-                android:layout_centerHorizontal="true"
-                android:text="garena"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/color_payment_list_icon_text"
-                android:textSize="10dp"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"/>
-        </RelativeLayout>
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/btnVGGoogleplay"
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/bg_otu_payment"
+                        android:padding="6dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_voucher_game_googleplay" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivGoogleplay"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="2dp"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_voucher_game_googleplay" />
+
+                    <TextView
+                        android:id="@+id/tvGoogleplay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btnVGGoogleplay"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:text="Google Play"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_payment_list_icon_text"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/btnVGLyto"
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/bg_otu_payment"
+                        android:padding="6dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_voucher_game_lyto" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivLyto"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="2dp"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_voucher_game_lyto" />
+
+                    <TextView
+                        android:id="@+id/tvLyto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btnVGLyto"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:text="lyto"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_payment_list_icon_text"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:gravity="center">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/btnVGGamescool"
-                android:layout_width="62dp"
-                android:layout_height="62dp"
-                android:src="@drawable/ic_voucher_game_gemscool"
-                android:scaleType="centerInside"
-                android:background="@drawable/bg_otu_payment"
-                android:layout_centerHorizontal="true"
-                android:padding="6dp"/>
+                    <ImageButton
+                        android:id="@+id/btnVGMol"
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/bg_otu_payment"
+                        android:padding="6dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_voucher_game_molpoint" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivGamescool"
-                android:layout_width="40dp"
-                android:visibility="gone"
-                android:layout_height="40dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:elevation="2dp"
-                app:srcCompat="@drawable/ic_voucher_game_gemscool"/>
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivMol"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="2dp"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_voucher_game_molpoint" />
 
-            <TextView
-                android:id="@+id/tvGamescool"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnVGGamescool"
-                android:layout_centerHorizontal="true"
-                android:text="gemscool"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/color_payment_list_icon_text"
-                android:textSize="10dp"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"/>
-        </RelativeLayout>
+                    <TextView
+                        android:id="@+id/tvMol"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btnVGMol"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:text="mol"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_payment_list_icon_text"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:gravity="center">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
 
-            <ImageButton
-                android:id="@+id/btnVGMobilelegend"
-                android:layout_width="62dp"
-                android:layout_height="62dp"
-                android:src="@drawable/ic_voucher_game_mobilelegend"
-                android:scaleType="centerInside"
-                android:background="@drawable/bg_otu_payment"
-                android:layout_centerHorizontal="true"
-                android:padding="6dp"/>
+                    <ImageButton
+                        android:id="@+id/btnVGCherry"
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/bg_otu_payment"
+                        android:padding="6dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_voucher_game_cherry" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivMobilelegend"
-                android:layout_width="40dp"
-                android:visibility="gone"
-                android:layout_height="40dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:elevation="2dp"
-                app:srcCompat="@drawable/ic_voucher_game_megasus"/>
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivCherry"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="2dp"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_voucher_game_cherry" />
 
-            <TextView
-                android:id="@+id/tvMobilelegend"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnVGMobilelegend"
-                android:layout_centerHorizontal="true"
-                android:text="Mobile Legend"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/color_payment_list_icon_text"
-                android:textSize="10dp"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"/>
-        </RelativeLayout>
+                    <TextView
+                        android:id="@+id/tvCherry"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btnVGCherry"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="6dp"
+                        android:text="Cherry"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_payment_list_icon_text"
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
 
-    </LinearLayout>
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/com_facebook_button_background_color_disabled"
-        android:orientation="horizontal">
+        </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageButton
-                android:id="@+id/btnVGGoogleplay"
-                android:layout_width="62dp"
-                android:layout_height="62dp"
-                android:src="@drawable/ic_voucher_game_googleplay"
-                android:scaleType="centerInside"
-                android:background="@drawable/bg_otu_payment"
-                android:layout_centerHorizontal="true"
-                android:padding="6dp"/>
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivGoogleplay"
-                android:layout_width="40dp"
-                android:visibility="gone"
-                android:layout_height="40dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:elevation="2dp"
-                app:srcCompat="@drawable/ic_voucher_game_googleplay"/>
-
-            <TextView
-                android:id="@+id/tvGoogleplay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnVGGoogleplay"
-                android:layout_centerHorizontal="true"
-                android:text="Google Play"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/color_payment_list_icon_text"
-                android:textSize="10dp"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageButton
-                android:id="@+id/btnVGLyto"
-                android:layout_width="62dp"
-                android:layout_height="62dp"
-                android:src="@drawable/ic_voucher_game_lyto"
-                android:scaleType="centerInside"
-                android:background="@drawable/bg_otu_payment"
-                android:layout_centerHorizontal="true"
-                android:padding="6dp"/>
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivLyto"
-                android:layout_width="40dp"
-                android:visibility="gone"
-                android:layout_height="40dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:elevation="2dp"
-                app:srcCompat="@drawable/ic_voucher_game_lyto"/>
-
-            <TextView
-                android:id="@+id/tvLyto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnVGLyto"
-                android:layout_centerHorizontal="true"
-                android:text="lyto"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/color_payment_list_icon_text"
-                android:textSize="10dp"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"/>
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageButton
-                android:id="@+id/btnVGMol"
-                android:layout_width="62dp"
-                android:layout_height="62dp"
-                android:src="@drawable/ic_voucher_game_molpoint"
-                android:scaleType="centerInside"
-                android:background="@drawable/bg_otu_payment"
-                android:layout_centerHorizontal="true"
-                android:padding="6dp"/>
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivMol"
-                android:layout_width="40dp"
-                android:visibility="gone"
-                android:layout_height="40dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:elevation="2dp"
-                app:srcCompat="@drawable/ic_voucher_game_molpoint"/>
-
-            <TextView
-                android:id="@+id/tvMol"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnVGMol"
-                android:layout_centerHorizontal="true"
-                android:text="mol"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/color_payment_list_icon_text"
-                android:textSize="10dp"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageButton
-                android:id="@+id/btnVGCherry"
-                android:layout_width="62dp"
-                android:layout_height="62dp"
-                android:src="@drawable/ic_voucher_game_cherry"
-                android:scaleType="centerInside"
-                android:background="@drawable/bg_otu_payment"
-                android:layout_centerHorizontal="true"
-                android:padding="6dp"/>
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivCherry"
-                android:layout_width="40dp"
-                android:visibility="gone"
-                android:layout_height="40dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:elevation="2dp"
-                app:srcCompat="@drawable/ic_voucher_game_cherry"/>
-
-            <TextView
-                android:id="@+id/tvCherry"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnVGCherry"
-                android:layout_centerHorizontal="true"
-                android:text="Cherry"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/color_payment_list_icon_text"
-                android:textSize="10dp"
-                android:textStyle="bold"
-                android:layout_marginTop="6dp"/>
-        </RelativeLayout>
-
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

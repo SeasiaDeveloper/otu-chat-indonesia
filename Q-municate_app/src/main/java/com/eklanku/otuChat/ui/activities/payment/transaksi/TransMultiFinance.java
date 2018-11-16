@@ -167,8 +167,9 @@ public class TransMultiFinance extends AppCompatActivity {
                             idFinance.add(result.get(i).getCode());
                         }
 
-                        adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
-                        listFinance.setAdapter(adapter);
+                        //adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
+                        spinnerPpobAdapter = new SpinnerPpobAdapter(getBaseContext(), nama_operator);
+                        listFinance.setAdapter(spinnerPpobAdapter);
                         /*spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -201,22 +202,22 @@ public class TransMultiFinance extends AppCompatActivity {
 
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
-
+        txtNo.setError(null);
         if (id_pel.isEmpty()) {
 //            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Kolom nomor tidak boleh kosong");
+            txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-        if (id_pel.length() < 8) {
+   /*     if (id_pel.length() < 8) {
 //            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 8 digit nomor");
+            txtNo.setError("Masukkan minimal 8 digit nomor");
             requestFocus(txtNo);
             return false;
-        }
+        }*/
 
-        layoutNo.setErrorEnabled(false);
+       // layoutNo.setErrorEnabled(false);
         return true;
     }
 

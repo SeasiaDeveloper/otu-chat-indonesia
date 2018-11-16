@@ -122,7 +122,26 @@ public class CallActivity extends BaseLoggableActivity implements RTCClientSessi
         }
 
         actionBar = getSupportActionBar();
+        if(actionBar != null)
+        {
+            actionBar.show();
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
 
+    }
+
+    public void hideActionBar(){
+        if(getSupportActionBar() == null)
+        {
+            if (toolbar == null)
+            {
+                toolbar = (Toolbar)findViewById(R.id.toolbar_call);
+            }
+            toolbar.setVisibility(View.GONE);
+            setSupportActionBar(toolbar);
+        }else{
+            getSupportActionBar().hide();
+        }
     }
 
     public void setCallActionBarTitle(String title) {
@@ -145,7 +164,7 @@ public class CallActivity extends BaseLoggableActivity implements RTCClientSessi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        appInitialized = true;
+        //appInitialized = true;
         super.onCreate(savedInstanceState);
         if (!canProceedInit()) {
             Log.d(TAG, "cannot proceed call initialization");
@@ -472,6 +491,9 @@ public class CallActivity extends BaseLoggableActivity implements RTCClientSessi
     public QMUser getOpponentAsUserFromDB(int opponentId) {
         DataManager dataManager = DataManager.getInstance();
         Friend friend = dataManager.getFriendDataManager().getByUserId(opponentId);
+        if(friend == null){
+            return new QMUser();
+        }
         return friend.getUser();
     }
 
@@ -521,8 +543,11 @@ public class CallActivity extends BaseLoggableActivity implements RTCClientSessi
     }
 
     private void startIncomeCallTimer(long time) {
-        showIncomingCallWindowTaskHandler
-                .postAtTime(showIncomingCallWindowTask, SystemClock.uptimeMillis() + time);
+        if(showIncomingCallWindowTaskHandler != null)
+        {
+            showIncomingCallWindowTaskHandler
+                    .postAtTime(showIncomingCallWindowTask, SystemClock.uptimeMillis() + time);
+        }
     }
 
     private void stopIncomeCallTimer() {

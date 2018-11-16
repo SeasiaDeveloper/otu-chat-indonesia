@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,11 +21,15 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -97,9 +102,10 @@ import com.connectycube.ui.chatmessage.adapter.media.recorder.exceptions.MediaRe
 import com.connectycube.ui.chatmessage.adapter.media.recorder.listeners.MediaRecordListener;
 import com.connectycube.ui.chatmessage.adapter.media.recorder.view.RecordAudioButton;
 import com.connectycube.ui.chatmessage.adapter.media.video.ui.VideoPlayerActivity;
+/*import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
 import com.rockerhieu.emojicon.EmojiconsFragment;
-import com.rockerhieu.emojicon.emoji.Emojicon;
+import com.rockerhieu.emojicon.emoji.Emojicon;*/
 
 import java.io.File;
 import java.util.ArrayList;
@@ -118,9 +124,12 @@ import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
 import butterknife.OnTouch;
+import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
+import hani.momanii.supernova_emoji_library.emoji.Emojicon;
 
 public abstract class BaseDialogActivity extends BaseLoggableActivity implements
-        EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener,
+        /* EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener,*/
         ChatUIHelperListener, OnMediaPickedListener {
 
     private static final String TAG = BaseDialogActivity.class.getSimpleName();
@@ -143,7 +152,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     RecyclerView messagesRecyclerView;
 
     @Bind(R.id.message_edittext)
-    EditText messageEditText;
+    EmojiconEditText messageEditText;
 
     @Bind(R.id.attach_button)
     ImageButton attachButton;
@@ -181,6 +190,9 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     @Bind(R.id.view_attach_stub)
     View attachViewPanel;
 
+    @Bind(R.id.layrootchat)
+    LinearLayout layrootChat;
+
     private String replyMessage = null;
 
     private boolean isReplyMessage = false;
@@ -203,7 +215,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     private ChatAttachClickListener contactAttachClickListener;
     private MediaRecordListenerImpl recordListener;
     private Handler mainThreadHandler;
-    private View emojiconsFragment;
+    //private View emojiconsFragment;
     private LoadAttachFileSuccessAction loadAttachFileSuccessAction;
     private LoadDialogMessagesSuccessAction loadDialogMessagesSuccessAction;
     private LoadDialogMessagesFailAction loadDialogMessagesFailAction;
@@ -223,7 +235,11 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     private int lastVisiblePosition;
     private MessagesScrollListener messagesScrollListener;
     protected FileUtils fileUtils;
+    int key = 0;
 
+    //supernova emoji
+    EmojIconActions emojIcon;
+    //hani.momanii.supernova_emoji_library.Helper.EmojiconEditText emojiconEditText;
 
     @Override
     protected int getContentResId() {
@@ -236,14 +252,14 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         initFields();
 
         checkMessageSendingPossibility(true);
-
+        getWindow().setBackgroundDrawableResource(R.drawable.chat_bg);
         if (currentChatDialog == null) {
             finish();
         }
 
         setUpActionBarWithUpButton();
 
-        initCustomUI();
+        //initCustomUI();
         initCustomListeners();
         initThreads();
         initAudioRecorder();
@@ -257,11 +273,30 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         initMessagesRecyclerView();
         initMediaManager();
 
-        hideSmileLayout();
+        //hideSmileLayout();
 
         if (isNetworkAvailable()) {
             deleteTempMessagesAsync();
         }
+
+        messageEditText.setUseSystemDefault(false);
+
+        //supernova emoji
+        emojIcon = new EmojIconActions(this, layrootChat, messageEditText, smilePanelImageButton);
+        emojIcon.ShowEmojIcon();
+        setSmilePanelIcon(R.drawable.ic_smile_green);
+        emojIcon.setIconsIds(R.drawable.ic_keyboard, R.drawable.ic_smile_green);
+        emojIcon.setKeyboardListener(new EmojIconActions.KeyboardListener() {
+            @Override
+            public void onKeyboardOpen() {
+                Log.e("Keyboard", "open");
+            }
+
+            @Override
+            public void onKeyboardClose() {
+                Log.e("Keyboard", "close");
+            }
+        });
 
     }
 
@@ -290,7 +325,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     @OnTouch(R.id.message_edittext)
     boolean touchMessageEdit() {
-        hideSmileLayout();
+        //hideSmileLayout();
         scrollMessagesWithDelay();
         return false;
     }
@@ -298,13 +333,13 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     @OnClick(R.id.smile_panel_imagebutton)
     void smilePanelImageButtonClicked() {
         hideAttachPanelIfNeed();
-        visibleOrHideSmilePanel();
+        //visibleOrHideSmilePanel();
         scrollMessagesWithDelay();
     }
 
     @OnClick(R.id.attach_button)
     void attachFile() {
-        hideSmilePanelIfNeed();
+        //hideSmilePanelIfNeed();
         showOrHideAttachPanel();
     }
 
@@ -345,9 +380,10 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     @Override
     public void onBackPressed() {
-        if (isSmilesLayoutShowing()) {
+       /* if (isSmilesLayoutShowing()) {
             hideSmileLayout();
-        } else if (isAttachLayoutShowing()) {
+        } else */
+        if (isAttachLayoutShowing()) {
             slideDownAttachViewPanel();
         } else {
             returnResult();
@@ -373,11 +409,21 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
         checkMessageSendingPossibility();
         resumeMediaPlayer();
+
+        /*switch (key) {
+            case 0:
+                Toast.makeText(this, "NOT ACTIVE", Toast.LENGTH_SHORT).show();
+                break;
+            case 1:
+                Toast.makeText(this, "ACTIVE", Toast.LENGTH_SHORT).show();
+                break;
+        }*/
+
     }
 
     private void checkLoginToChatOrShowError() {
         Log.d("OPPO-1", "authenticated: 7");
-        if (!ConnectycubeChatService.getInstance().isLoggedIn()){
+        if (!ConnectycubeChatService.getInstance().isLoggedIn()) {
             showSnackbar(R.string.error_disconnected, Snackbar.LENGTH_INDEFINITE);
         }
     }
@@ -385,7 +431,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        hideSmileLayout();
+        //hideSmileLayout();
         checkStartTyping();
         suspendMediaPlayer();
     }
@@ -424,7 +470,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    private void returnResult(){
+    private void returnResult() {
         if (getCallingActivity() != null) {
             Log.i(TAG, "return result to " + getCallingActivity().getShortClassName());
             Intent intent = new Intent();
@@ -441,20 +487,20 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         initCurrentDialog();
     }
 
-    @Override
+   /* @Override
     public void onEmojiconClicked(Emojicon emojicon) {
         EmojiconsFragment.input(messageEditText, emojicon);
-    }
+    }*/
 
-    @Override
+   /* @Override
     public void onEmojiconBackspaceClicked(View v) {
         EmojiconsFragment.backspace(messageEditText);
-    }
+    }*/
 
     @Override
     public void onMediaPicked(int requestCode, Attachment.Type type, Object attachment) {
         canPerformLogout.set(true);
-        if(ValidationUtils.validateAttachment(getSupportFragmentManager(), getResources().getStringArray(R.array.supported_attachment_types), type, attachment)){
+        if (ValidationUtils.validateAttachment(getSupportFragmentManager(), getResources().getStringArray(R.array.supported_attachment_types), type, attachment)) {
             startLoadAttachFile(type, attachment, currentChatDialog.getDialogId());
         }
     }
@@ -487,18 +533,18 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     private void resumeMediaPlayer() {
-        if(mediaManager.isMediaPlayerReady()) {
+        if (mediaManager.isMediaPlayerReady()) {
             mediaManager.resumePlay();
         }
     }
 
     private void suspendMediaPlayer() {
-        if(mediaManager.isMediaPlayerReady()) {
+        if (mediaManager.isMediaPlayerReady()) {
             mediaManager.suspendPlay();
         }
     }
 
-    private void deleteTempMessagesAsync(){
+    private void deleteTempMessagesAsync() {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
@@ -507,7 +553,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         });
     }
 
-    private void loadNextPartMessagesAsync(){
+    private void loadNextPartMessagesAsync() {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
@@ -516,7 +562,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         });
     }
 
-    private void cancelTasks(){
+    private void cancelTasks() {
         threadPool.shutdownNow();
     }
 
@@ -567,7 +613,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     private void clearAudioRecorder() {
-        if(audioRecorder != null) {
+        if (audioRecorder != null) {
             audioRecorder.removeMediaRecordListener();
             stopRecordIfNeed();
         }
@@ -587,7 +633,6 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         checkMessageSendingPossibility();
         startLoadDialogMessages(false);
     }
-
 
 
     protected void setLayoutForReply(View viewReply) {
@@ -645,9 +690,9 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         fileUtils = new FileUtils();
     }
 
-    private void initCustomUI() {
+    /*private void initCustomUI() {
         emojiconsFragment = _findViewById(R.id.emojicon_fragment);
-    }
+    }*/
 
     private void initCustomListeners() {
         messageSwipeRefreshLayout.setOnRefreshListener(new RefreshLayoutListener());
@@ -733,16 +778,16 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         dataManager.getMessageDataManager().deleteTempMessages(dialogOccupantsIdsList);
     }
 
-    private void hideSmileLayout() {
+   /* private void hideSmileLayout() {
         emojiconsFragment.setVisibility(View.GONE);
         setSmilePanelIcon(R.drawable.ic_smile_green);
-    }
+    }*/
 
     private void showSmileLayout() {
         mainThreadHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                emojiconsFragment.setVisibility(View.VISIBLE);
+                //emojiconsFragment.setVisibility(View.VISIBLE);
                 setSmilePanelIcon(R.drawable.ic_keyboard_dark);
             }
         }, DELAY_SHOWING_SMILE_PANEL);
@@ -781,7 +826,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                 .getRoundIconDrawable(this, BitmapFactory.decodeResource(getResources(), drawableResId)));
     }
 
-    protected void setCustomParameter(String replyMessage, boolean isReplyMessage){
+    protected void setCustomParameter(String replyMessage, boolean isReplyMessage) {
         this.replyMessage = replyMessage;
         this.isReplyMessage = isReplyMessage;
     }
@@ -827,12 +872,12 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         if (TextUtils.isEmpty(charSequence) || TextUtils.isEmpty(charSequence.toString().trim())) {
             sendButton.setVisibility(View.GONE);
             //attachButton.setVisibility(View.VISIBLE);
-            //attachCamera.setVisibility(View.VISIBLE);
+            attachCamera.setVisibility(View.VISIBLE);
             recordAudioButton.setVisibility(View.VISIBLE);
         } else {
             sendButton.setVisibility(View.VISIBLE);
             //attachButton.setVisibility(View.GONE);
-            //attachCamera.setVisibility(View.GONE);
+            attachCamera.setVisibility(View.GONE);
             recordAudioButton.setVisibility(View.GONE);
         }
     }
@@ -860,16 +905,16 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         smilePanelImageButton.setImageResource(resourceId);
     }
 
-    private boolean isSmilesLayoutShowing() {
+    /*private boolean isSmilesLayoutShowing() {
         return emojiconsFragment.getVisibility() == View.VISIBLE;
-    }
+    }*/
 
     private boolean isAttachLayoutShowing() {
         return attachViewPanel.getVisibility() == View.VISIBLE;
     }
 
     protected boolean needScrollBottom(int countAddedMessages) {
-        if (lastVisiblePosition + countAddedMessages < messagesAdapter.getItemCount() - 1){
+        if (lastVisiblePosition + countAddedMessages < messagesAdapter.getItemCount() - 1) {
             return false;
         }
 
@@ -890,6 +935,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             }
         }, DELAY_SCROLLING_LIST);
     }
+
     protected void sendMessage() {
         boolean error = false;
         try {
@@ -910,10 +956,11 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             messageEditText.setText(ConstsCore.EMPTY_STRING);
         }
     }
+
     protected void sendMessage(boolean isReply) {
         boolean error = false;
         try {
-            if(isReply) {
+            if (isReply) {
                 chatHelper.sendChatReplyMessage(messageEditText.getText().toString(), replyMessage);
             } else {
                 chatHelper.sendChatMessage(messageEditText.getText().toString());
@@ -945,7 +992,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     }
 
-    protected long getMessageDateForLoad(boolean isLoadOldMessages){
+    protected long getMessageDateForLoad(boolean isLoadOldMessages) {
         long messageDateSent;
         List<DialogOccupant> dialogOccupantsList = dataManager.getDialogOccupantDataManager().getDialogOccupantsListByDialogId(currentChatDialog.getDialogId());
         List<Long> dialogOccupantsIdsList = ChatUtils.getIdsFromDialogOccupantsList(dialogOccupantsList);
@@ -955,13 +1002,13 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
         message = dataManager.getMessageDataManager().getMessageByDialogId(isLoadOldMessages, dialogOccupantsIdsList);
         dialogNotification = dataManager.getDialogNotificationDataManager().getDialogNotificationByDialogId(isLoadOldMessages, dialogOccupantsIdsList);
-        messageDateSent =  ChatUtils.getDialogMessageCreatedDate(!isLoadOldMessages, message, dialogNotification);
+        messageDateSent = ChatUtils.getDialogMessageCreatedDate(!isLoadOldMessages, message, dialogNotification);
 
         return messageDateSent;
     }
 
-    protected long getMessageDateForLoadByCurrentList(boolean isLoadOld){
-        if (combinationMessagesList.size() == 0){
+    protected long getMessageDateForLoadByCurrentList(boolean isLoadOld) {
+        if (combinationMessagesList.size() == 0) {
             return 0;
         }
 
@@ -994,7 +1041,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     protected List<CombinationMessage>
-    buildLimitedCombinationMessagesListByDate(long createDate, boolean moreDate, long limit){
+    buildLimitedCombinationMessagesListByDate(long createDate, boolean moreDate, long limit) {
         if (currentChatDialog == null || currentChatDialog.getDialogId() == null) {
             return new ArrayList<>();
         }
@@ -1013,7 +1060,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         return combinationMessages;
     }
 
-    protected void loadNextPartMessagesFromDb(final boolean isLoadOld, final boolean needUpdateAdapter) {
+    protected synchronized void loadNextPartMessagesFromDb(final boolean isLoadOld, final boolean needUpdateAdapter) {
         long messageDate = getMessageDateForLoadByCurrentList(isLoadOld);
 
         final List<CombinationMessage> requestedMessages = buildLimitedCombinationMessagesListByDate(
@@ -1046,14 +1093,14 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         }
     }
 
-    private void hideSmilePanelIfNeed() {
+    /*private void hideSmilePanelIfNeed() {
         if (isSmilesLayoutShowing()) {
             hideSmileLayout();
             KeyboardUtils.hideKeyboard(BaseDialogActivity.this);
         }
-    }
+    }*/
 
-    private void visibleOrHideSmilePanel() {
+    /*private void visibleOrHideSmilePanel() {
         if (isSmilesLayoutShowing()) {
             hideSmileLayout();
             KeyboardUtils.showKeyboard(BaseDialogActivity.this);
@@ -1061,7 +1108,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             KeyboardUtils.hideKeyboard(BaseDialogActivity.this);
             showSmileLayout();
         }
-    }
+    }*/
 
     private void showOrHideAttachPanel() {
         if (isAttachLayoutShowing()) {
@@ -1079,7 +1126,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     protected void hideAttachPanelIfNeed() {
-        if(isAttachLayoutShowing()) {
+        if (isAttachLayoutShowing()) {
             attachViewPanel.setVisibility(View.GONE);
         }
     }
@@ -1124,14 +1171,14 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         recordAudioButton.setEnabled(enable);
     }
 
-    private void replaceMessageInCurrentList(CombinationMessage combinationMessage){
-        if (combinationMessagesList.contains(combinationMessage)){
+    private void replaceMessageInCurrentList(CombinationMessage combinationMessage) {
+        if (combinationMessagesList.contains(combinationMessage)) {
             int positionOldMessage = combinationMessagesList.indexOf(combinationMessage);
             combinationMessagesList.set(positionOldMessage, combinationMessage);
         }
     }
 
-    private void updateMessageItemInAdapter(CombinationMessage combinationMessage){
+    private void updateMessageItemInAdapter(CombinationMessage combinationMessage) {
         replaceMessageInCurrentList(combinationMessage);
         if (combinationMessagesList.contains(combinationMessage)) {
             messagesAdapter.notifyItemChanged(combinationMessagesList.indexOf(combinationMessage));
@@ -1140,20 +1187,20 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         }
     }
 
-    private void addMessageItemToAdapter(CombinationMessage combinationMessage){
+    private void addMessageItemToAdapter(CombinationMessage combinationMessage) {
         combinationMessagesList.add(combinationMessage);
         messagesAdapter.setList(combinationMessagesList, true);
         scrollMessagesToBottom(1);
     }
 
-    private void afterLoadingMessagesActions(){
+    private void afterLoadingMessagesActions() {
         messageSwipeRefreshLayout.setRefreshing(false);
         hideActionBarProgress();
         isLoadingMessages = false;
     }
 
     private boolean checkRecordPermission() {
-        if(systemPermissionHelper.isAllAudioRecordPermissionGranted()) {
+        if (systemPermissionHelper.isAllAudioRecordPermissionGranted()) {
             return true;
         } else {
             systemPermissionHelper.requestAllPermissionForAudioRecord();
@@ -1177,7 +1224,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     }
 
     private void stopRecord() {
-        audioViewVisibility(View.INVISIBLE);
+        audioViewVisibility(View.GONE);
         stopChronometer();
         audioRecorder.stopRecord();
     }
@@ -1185,10 +1232,10 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
     public void cancelRecord() {
         stopChronometer();
         setMessageAttachViewsEnable(true);
-        setRecorderViewsVisibility(View.INVISIBLE);
+        setRecorderViewsVisibility(View.GONE);
         animateCanceling();
         vibrate(DURATION_VIBRATE);
-        audioViewPostDelayVisibility(View.INVISIBLE);
+        audioViewPostDelayVisibility(View.GONE);
         audioRecorder.cancelRecord();
     }
 
@@ -1244,12 +1291,12 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     protected abstract void updateMessagesList();
 
-    protected void sendMessageWithAttachment(String dialogId, Attachment.Type attachmentType, Object attachmentObject, String localPath){
+    protected void sendMessageWithAttachment(String dialogId, Attachment.Type attachmentType, Object attachmentObject, String localPath) {
         if (!dialogId.equals(currentChatDialog.getDialogId())) {
             return;
         }
         try {
-            if(isReplyMessage && replyMessage!=null) {
+            if (isReplyMessage && replyMessage != null) {
                 chatHelper.sendMessageReplyWithAttachment(attachmentType, attachmentObject, localPath, replyMessage);
                 clearReply();
                 clearLayout();
@@ -1306,7 +1353,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                 DialogNotification dialogNotification = (DialogNotification) observableData.getSerializable(DialogNotificationDataManager.EXTRA_OBJECT);
 
                 Log.i(TAG, "==== DialogNotificationObserver  'update' ====observableData= " + observableData);
-                if(dialogNotification != null && dialogNotification.getDialogOccupant().getDialog().getDialogId().equals(currentChatDialog.getDialogId())) {
+                if (dialogNotification != null && dialogNotification.getDialogOccupant().getDialog().getDialogId().equals(currentChatDialog.getDialogId())) {
                     needUpdatePosition = true;
                     CombinationMessage combinationMessage = new CombinationMessage(dialogNotification);
                     if (action == DialogNotificationDataManager.UPDATE_ACTION) {
@@ -1323,7 +1370,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                     }
 
                     if (action == DialogNotificationDataManager.DELETE_BY_ID_ACTION
-                            ||action == DialogNotificationDataManager.DELETE_ACTION) {
+                            || action == DialogNotificationDataManager.DELETE_ACTION) {
                         combinationMessagesList.clear();
                         loadNextPartMessagesFromDb(false, true);
                     }
@@ -1340,9 +1387,9 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             if (data != null) {
                 String observerKey = ((Bundle) data).getString(DialogDataManager.EXTRA_OBSERVE_KEY);
                 if (observerKey.equals(dataManager.getConnectycubeChatDialogDataManager().getObserverKey())) {
-                    Dialog dialog = (Dialog)((Bundle)data).getSerializable(BaseManager.EXTRA_OBJECT);
+                    Dialog dialog = (Dialog) ((Bundle) data).getSerializable(BaseManager.EXTRA_OBJECT);
                     currentChatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(currentChatDialog.getDialogId());
-                    if(currentChatDialog != null) {
+                    if (currentChatDialog != null) {
                         if (dialog != null && dialog.getDialogId().equals(currentChatDialog.getDialogId())) {
                             // need init current dialog after getting from DB
                             initCurrentDialog();
@@ -1400,7 +1447,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                     && totalEntries != ConstsCore.ZERO_INT_VALUE
                     && dialogId.equals(currentChatDialog.getDialogId())) {
 
-                threadPool.execute(new Runnable(){
+                threadPool.execute(new Runnable() {
                     @Override
                     public void run() {
                         loadNextPartMessagesFromDb(isLoadedOldMessages, false);
@@ -1452,7 +1499,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
             }
 
             if (!isLoadingMessages) {
-                if (combinationMessagesList.size() == 0){
+                if (combinationMessagesList.size() == 0) {
                     startLoadDialogMessages(true);
                     return;
                 }
@@ -1460,7 +1507,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                 long oldestMessageInDb = getMessageDateForLoad(true);
                 long oldestMessageInCurrentList = combinationMessagesList.get(0).getCreatedDate();
 
-                if ((oldestMessageInCurrentList - oldestMessageInDb) > 0 && oldestMessageInDb != 0){
+                if ((oldestMessageInCurrentList - oldestMessageInDb) > 0 && oldestMessageInDb != 0) {
                     loadNextPartMessagesFromDb(true, true);
                     messageSwipeRefreshLayout.setRefreshing(false);
                 } else {
@@ -1487,7 +1534,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
     }
 
-    protected class LocationAttachClickListener implements ChatAttachClickListener{
+    protected class LocationAttachClickListener implements ChatAttachClickListener {
 
         @Override
         public void onItemClicked(ConnectycubeAttachment attachment, int position) {
@@ -1540,7 +1587,7 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
         @Override
         public void onStartClick(View v) {
-            if(checkRecordPermission()) {
+            if (checkRecordPermission()) {
                 startRecord();
             }
         }
@@ -1595,8 +1642,8 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
         @Override
         public void onMediaRecorded(File file) {
-            audioViewVisibility(View.INVISIBLE);
-            if(ValidationUtils.validateAttachment(getSupportFragmentManager(), getResources().getStringArray(R.array.supported_attachment_types), Attachment.Type.VOICE, file)){
+            audioViewVisibility(View.GONE);
+            if(ValidationUtils.validateAttachment(getSupportFragmentManager(), getResources().getStringArray(R.array.supported_attachment_types), Attachment.Type.VOICE, file)) {
                 startLoadAttachFile(Attachment.Type.VOICE, file, currentChatDialog.getDialogId());
             } else {
                 audioRecordErrorAnimate();
@@ -1643,12 +1690,10 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            WrapContentLinearLayoutManager layoutManager1  = (WrapContentLinearLayoutManager) recyclerView.getLayoutManager();
+            WrapContentLinearLayoutManager layoutManager1 = (WrapContentLinearLayoutManager) recyclerView.getLayoutManager();
             lastVisiblePosition = layoutManager1.findLastVisibleItemPosition();
         }
     }
-
-
 
 
 }

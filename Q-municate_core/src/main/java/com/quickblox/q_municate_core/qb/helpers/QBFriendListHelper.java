@@ -17,13 +17,11 @@ import com.connectycube.chat.model.ConnectycubeRosterEntry;
 import com.connectycube.core.exception.ResponseException;
 import com.connectycube.core.request.PagedRequestBuilder;
 import com.connectycube.users.model.ConnectycubeUser;
-import com.quickblox.q_municate_core.R;
 import com.quickblox.q_municate_core.models.NotificationType;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_core.utils.ChatNotificationUtils;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_core.utils.DateUtilsCore;
-import com.quickblox.q_municate_core.utils.UserFriendUtils;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.models.Friend;
 import com.quickblox.q_municate_db.models.UserRequest;
@@ -182,54 +180,45 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
     }
 
     public Collection<Integer> updateFriendList() throws ResponseException {
-        Collection<Integer> userIdsList = new ArrayList<>();
-
+        Collection<Integer> friendIdsList = new ArrayList<>();
         if (roster != null) {
-            if (!roster.getEntries().isEmpty()) {
-                userIdsList = createFriendList(roster.getEntries());
-                updateFriends(userIdsList);
-            }
+            friendIdsList = updateLocalFriendsIfNeed();
         } else {
             ErrorUtils.logError(TAG, ROSTER_INIT_ERROR);
         }
-
-        return userIdsList;
+        updateFriends(friendIdsList);
+        return friendIdsList;
     }
 
-    private Collection<Integer> createFriendList(
-            Collection<ConnectycubeRosterEntry> rosterEntryCollection) throws ResponseException {
+    private Collection<Integer> updateLocalFriendsIfNeed() throws ResponseException {
+        Collection<Integer> userIdsList = new ArrayList<>();
         Collection<Integer> friendList = new ArrayList<>();
-        Collection<Integer> userList = new ArrayList<>();
-
-        for (ConnectycubeRosterEntry rosterEntry : rosterEntryCollection) {
-            if (!UserFriendUtils.isOutgoingFriend(rosterEntry) && !UserFriendUtils.isNoneFriend(rosterEntry)) {
-                friendList.add(rosterEntry.getUserId());
-            } else if (UserFriendUtils.isNoneFriend(rosterEntry)){
-                //need remove friend from DB which deleted me when I was offline
-                removeFriendLocal(rosterEntry.getUserId());
+        if (!roster.getEntries().isEmpty()) {
+            for (ConnectycubeRosterEntry rosterEntry : roster.getEntries()) {
+                userIdsList.add(rosterEntry.getUserId());
+                if (dataManager.getFriendDataManager().getByUserId(rosterEntry.getUserId()) == null) {
+                    friendList.add(rosterEntry.getUserId());
+                }
             }
-
-            if (UserFriendUtils.isOutgoingFriend(rosterEntry)) {
-                userList.add(rosterEntry.getUserId());
-            }
+            loadAndSaveUsers(userIdsList);
         }
-
-        loadAndSaveUsers(userList, UserRequest.RequestStatus.OUTGOING);
-
         return friendList;
+    }
+
+    private void updateFriends(Collection<Integer> friendIdsList) throws ResponseException {
+        if(!friendIdsList.isEmpty()) {
+            PagedRequestBuilder requestBuilder = new PagedRequestBuilder();
+            requestBuilder.setPage(ConstsCore.USERS_PAGE_NUM);
+            requestBuilder.setPerPage(ConstsCore.USERS_PER_PAGE);
+            List<QMUser> qmUsers = QMUserService.getInstance().getUsersByIDsSync(friendIdsList, requestBuilder);
+            saveFriends(qmUsers);
+        }
     }
 
     private void removeFriendLocal(Integer userId) {
         dataManager.getFriendDataManager().deleteByUserId(userId);
     }
 
-    private void updateFriends(Collection<Integer> friendIdsList) throws ResponseException {
-        PagedRequestBuilder requestBuilder = new PagedRequestBuilder();
-        requestBuilder.setPage(ConstsCore.USERS_PAGE_NUM);
-        requestBuilder.setPerPage(ConstsCore.USERS_PER_PAGE);
-        List<QMUser> qmUsers = QMUserService.getInstance().getUsersByIDsSync(friendIdsList, requestBuilder);
-        saveUsersAndFriends(qmUsers);
-    }
 
     private void updateUsersAndFriends(Collection<Integer> idsList) throws ResponseException {
         for (Integer userId : idsList) {
@@ -238,25 +227,11 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
     }
 
     private void updateFriend(int userId) throws ResponseException {
-        ConnectycubeRosterEntry rosterEntry = roster.getEntry(userId);
-
         QMUser newUser = loadAndSaveUser(userId);
-
         if (newUser == null) {
             return;
         }
-
-        boolean outgoingUserRequest = UserFriendUtils.isOutgoingFriend(rosterEntry);
-        boolean deletedUser = UserFriendUtils.isEmptyFriendsStatus(rosterEntry) && UserFriendUtils.isNoneFriend(rosterEntry);
-
-        if (deletedUser) {
-            deleteFriendOrUserRequest(userId);
-        } else if (outgoingUserRequest) {
-            createUserRequest(newUser, UserRequest.RequestStatus.OUTGOING);
-        } else {
-            saveFriend(newUser);
-            deleteUserRequestByUser(newUser.getId());
-        }
+        saveFriend(newUser);
     }
 
     private void createUserRequest(QMUser user, UserRequest.RequestStatus requestStatus) {
@@ -285,7 +260,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         dataManager.getUserRequestDataManager().deleteByUserId(userId);
     }
 
-    private void saveUsersAndFriends(Collection<QMUser> usersCollection) {
+    private void saveFriends(Collection<QMUser> usersCollection) {
         for (QMUser user : usersCollection) {
             saveFriend(user);
         }
@@ -318,8 +293,7 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
 
     @Nullable
     private QMUser loadAndSaveUser(int userId) throws ResponseException {
-        QMUser user = QMUserService.getInstance().getUserSync(userId, true);
-        return user;
+        return QMUserService.getInstance().getUserSync(userId, true);
     }
 
     private boolean isUserOnline(ConnectycubePresence presence) {
@@ -330,24 +304,6 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
         return roster != null
                 && roster.getPresence(userId) != null
                 && isUserOnline(roster.getPresence(userId));
-    }
-
-    private void notifyContactRequest() {
-        if (userLoadingIdsList != null) {
-            for (Integer id : userLoadingIdsList) {
-                notifyContactRequest(id);
-            }
-            userLoadingIdsList = null;
-        }
-    }
-
-    private void notifyContactRequest(int userId) {
-        Intent intent = new Intent(QBServiceConsts.GOT_CONTACT_REQUEST);
-
-        intent.putExtra(QBServiceConsts.EXTRA_MESSAGE, context.getResources().getString(R.string.cht_notification_message));
-        intent.putExtra(QBServiceConsts.EXTRA_USER_ID, userId);
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     private void notifyUserStatusChanged(int userId) {
@@ -364,6 +320,14 @@ public class QBFriendListHelper extends BaseThreadPoolHelper implements Serializ
                 createUserRequest(user, status);
             }
         }
+    }
+
+    private List<QMUser> loadAndSaveUsers(Collection<Integer> userList) throws ResponseException {
+        List<QMUser> loadedUserList = new ArrayList<>();
+        if (!userList.isEmpty()) {
+            loadedUserList = QMUserService.getInstance().getUsersByIDsSync(userList, null);
+        }
+        return loadedUserList;
     }
 
     private class UserLoadingTimerTask extends TimerTask {

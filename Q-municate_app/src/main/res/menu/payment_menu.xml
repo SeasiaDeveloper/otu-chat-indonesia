@@ -43,6 +43,7 @@
 
     <item
         android:id="@+id/mntopup"
+        android:visible="false"
         android:orderInCategory="100"
         android:title="@string/mntopup"
         app:showAsAction="never" />
@@ -50,6 +51,7 @@
     <item
         android:id="@+id/mntransfer"
         android:orderInCategory="100"
+        android:visible="false"
         android:title="@string/mntransfer"
         app:showAsAction="never" />
 
@@ -76,7 +78,7 @@
 
     <item
         android:id="@+id/settings"
-        android:visible="false"
+        android:visible="true"
         android:orderInCategory="100"
         android:title="@string/settings"
         app:showAsAction="never" />

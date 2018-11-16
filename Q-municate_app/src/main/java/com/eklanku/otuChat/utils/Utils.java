@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.Window;
@@ -27,8 +28,23 @@ public class Utils {
         this.context = context;
     }
 
+    public static boolean isActivityFinishedOrDestroyed(Activity activity){
+        if(activity != null){
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+                return activity.isDestroyed() || activity.isFinishing();
+            } else{
+                return activity.isFinishing();
+            }
+        }else{
+            return true;
+        }
+    }
+
     public void globalDialog(Activity activity, String title, String message) {
-        final Dialog dialog = new Dialog(context);
+        if(activity==null){
+            return;
+        }
+        final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.activity_global_dialog);
         dialog.setCancelable(false);
@@ -40,20 +56,21 @@ public class Utils {
         txjdlError.setText(title);
         txpesanError.setText(message);
 
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                if (message.equalsIgnoreCase("SERVER BUSY, PLEASE TRY AGAIN LATER")) {
-                    activity.startActivity(new Intent(context, PaymentLogin.class));
-                    PreferenceUtil.setLoginStatus(context, false);
-                    activity.finish();
-                }
+        btn_ok.setOnClickListener(v -> {
+            dialog.dismiss();
+            if (message.equalsIgnoreCase("SERVER BUSY, PLEASE TRY AGAIN LATER")) {
+                activity.startActivity(new Intent(activity, PaymentLogin.class));
+                PreferenceUtil.setLoginStatus(activity, false);
             }
-        });
 
+            activity.finish();
+        });
+        if(isActivityFinishedOrDestroyed(activity)){
+            return;
+        }
         dialog.show();
         Window window = dialog.getWindow();
+        assert window != null;
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
         /*AlertDialog.Builder builder = new AlertDialog.Builder(context);

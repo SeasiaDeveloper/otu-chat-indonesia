@@ -10,11 +10,16 @@
         style="@style/WrapContent"
         android:layout_weight="1"
         android:paddingRight="8dp"
+        android:paddingEnd="@dimen/density_8"
+        android:paddingStart="@dimen/density_8"
+        android:paddingLeft="@dimen/density_8"
         android:textStyle="bold"
         tools:text="Oppponent Name" />
 
     <TextView
         android:id="@+id/custom_msg_text_time_message_top_left"
         style="@style/WrapContent"
+        android:paddingRight="@dimen/density_8"
+        android:paddingEnd="@dimen/density_8"
         tools:text="12:42" />
 </LinearLayout>

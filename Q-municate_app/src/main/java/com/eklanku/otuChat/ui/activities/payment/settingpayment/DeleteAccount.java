@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -95,8 +98,8 @@ public class DeleteAccount extends AppCompatActivity {
                     String msg = response.body().getRespMessage();
 
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                        utilsAlert.globalDialog(DeleteAccount.this, titleAlert, msg);
-                        //Toast.makeText(DeleteAccount.this, msg, Toast.LENGTH_SHORT).show();
+                       // utilsAlert.globalDialog(DeleteAccount.this, titleAlert, msg);
+                        Toast.makeText(DeleteAccount.this, msg, Toast.LENGTH_SHORT).show();
                         /*PreferenceUtil.setMemberStatus(DeleteAccount.this, false);
                         Intent register = new Intent(getBaseContext(), Register.class);
                         register.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -186,6 +189,31 @@ public class DeleteAccount extends AppCompatActivity {
             e.printStackTrace();
 
             return null;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.payment_transaction_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_transaction_confirmation:
+                Toast.makeText(this, "Konfirmasi pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_transaction_evidence:
+                Toast.makeText(this, "Kirim bukti pembayaran", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

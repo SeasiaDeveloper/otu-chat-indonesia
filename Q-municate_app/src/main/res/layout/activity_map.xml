@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_large"
-            android:src="@drawable/logo_qb" />
+            android:src="@drawable/ic_launcher" />
 
         <TextView
             android:id="@+id/map_textview"

@@ -291,6 +291,8 @@ public class MessageDataManager extends BaseManager<Message> {
     }
 
     public void deleteTempMessages(List<Long> dialogOccupantsIdsList) {
+        List<Message> deletedMsg = getTempMessagesByOccupants(dialogOccupantsIdsList);
+
         try {
             DeleteBuilder<Message, Long> deleteBuilder = dao.deleteBuilder();
 
@@ -304,13 +306,34 @@ public class MessageDataManager extends BaseManager<Message> {
             );
 
             if (deleteBuilder.delete() > 0) {
-                //TODO VT need to think how to send IDs to observers
-                notifyObserversDeletedById(dialogOccupantsIdsList);
+                notifyObserversDeletedById(deletedMsg);
             }
         } catch (SQLException e) {
             ErrorUtils.logError(e);
         }
 
+    }
+
+    public List<Message> getTempMessagesByOccupants(List<Long> dialogOccupantsIdsList) {
+        List<Message> messagesList = null;
+
+        try {
+            QueryBuilder<Message, Long> queryBuilder = dao.queryBuilder();
+            Where<Message, Long> where = queryBuilder.where();
+            where.and(
+                    where.in(DialogOccupant.Column.ID, dialogOccupantsIdsList),
+                    where.or(
+                            where.eq(Message.Column.STATE, State.TEMP_LOCAL),
+                            where.eq(Message.Column.STATE, State.TEMP_LOCAL_UNREAD)
+                    )
+            );
+
+            PreparedQuery<Message> preparedQuery = queryBuilder.prepare();
+            messagesList = dao.query(preparedQuery);
+        } catch (SQLException e) {
+            ErrorUtils.logError(e);
+        }
+        return messagesList;
     }
 
     public List<Message> getTempMessagesByDialogId(String dialogId){

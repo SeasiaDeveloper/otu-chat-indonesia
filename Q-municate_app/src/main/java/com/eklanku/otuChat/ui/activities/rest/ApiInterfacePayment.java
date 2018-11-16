@@ -1,9 +1,11 @@
 package com.eklanku.otuChat.ui.activities.rest;
 
+import com.eklanku.otuChat.ui.activities.payment.models.DataCekMemberTransfer;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.DataHistoryOTU;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.DetailTransferResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.JsonResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.LaporanSaldoResponse;
@@ -223,7 +225,7 @@ public interface ApiInterfacePayment {
     @GET("topup/detail")
     Call<TopupDetailResponse> getTopupDetail(@Query("id") String id);
 
-//rina
+    //rina
     @FormUrlEncoded
     @POST("ppob/product")
     Call<LoginResponse> postLoginEkl(
@@ -294,7 +296,8 @@ public interface ApiInterfacePayment {
             @Field("accessToken") String accessToken,
             @Field("aplUse") String aplUse,
             @Field("tujuan") String tujuan,
-            @Field("nominal") String nominal
+            @Field("nominal") String nominal,
+            @Field("pin") String pin
     );
 
     //konfirm transfer
@@ -312,6 +315,15 @@ public interface ApiInterfacePayment {
     @FormUrlEncoded
     @POST("saldo")
     Call<DataDeposit> getSaldo(
+            @Field("userID") String userID,
+            @Field("aplUse") String aplUse,
+            @Field("accessToken") String accessToken
+    );
+
+    //get deposit
+    @FormUrlEncoded
+    @POST("saldo/detail")
+    Call<DataSaldoBonus> getSaldodetail(
             @Field("userID") String userID,
             @Field("aplUse") String aplUse,
             @Field("accessToken") String accessToken
@@ -462,5 +474,15 @@ public interface ApiInterfacePayment {
     Call<LoadBanner> getBanner(
             @Field("userID") String userID,
             @Field("aplUse") String accessToken
+    );
+
+    //banner
+    @FormUrlEncoded
+    @POST("transfer/cekMember")
+    Call<DataCekMemberTransfer> getCekMemberTransfer(
+            @Field("userID") String userID,
+            @Field("aplUse") String aplUse,
+            @Field("destination") String destination,
+            @Field("accessToken") String accessToken
     );
 }

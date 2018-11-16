@@ -1,6 +1,7 @@
 package com.eklanku.otuChat.ui.activities.main;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,45 +15,64 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabItem;
-import android.support.design.widget.TabLayout;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.connectycube.auth.model.ConnectycubeProvider;
+import com.connectycube.auth.session.ConnectycubeSessionManager;
+import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.Application;
+import com.eklanku.otuChat.BuildConfig;
+import com.eklanku.otuChat.CLog;
+import com.eklanku.otuChat.BuildConfig;
+import com.eklanku.otuChat.CLog;
 import com.eklanku.otuChat.ReferrerReceiver;
+import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.authorization.SplashActivity;
+import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
+import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.DeleteAccount;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
+import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
+import com.eklanku.otuChat.utils.helpers.ServiceManager;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.eklanku.otuChat.utils.helpers.AddressBookHelper;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.nineoldandroids.view.ViewHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.base.BaseActivity;
-import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
-import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
-import com.eklanku.otuChat.ui.activities.payment.models.RegisterResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClient;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -61,7 +81,6 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfaceProfile;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivityOtu;
-import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.chats.DialogsListFragment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.helpers.FacebookHelper;
@@ -71,7 +90,6 @@ import com.eklanku.otuChat.utils.MediaUtils;
 
 import com.quickblox.q_municate_core.core.command.Command;
 import com.quickblox.q_municate_core.models.AppSession;
-import com.quickblox.q_municate_core.models.DialogWrapper;
 import com.quickblox.q_municate_core.models.UserCustomData;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_core.utils.Utils;
@@ -79,14 +97,17 @@ import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
+/*import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.ios.IosEmojiProvider;*/
 import com.yyydjk.library.BannerLayout;
 
 import butterknife.Bind;
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import rx.Observable;
-import rx.functions.Action1;
+import rx.Subscriber;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -97,8 +118,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
-
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
@@ -108,28 +127,14 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.RECEIVE_SMS;
 import static android.Manifest.permission.RECORD_AUDIO;
-import static android.Manifest.permission.VIBRATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.provider.BaseColumns;
-import android.provider.ContactsContract;
-
-import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
-import com.connectycube.core.EntityCallback;
-import com.connectycube.core.exception.ResponseException;
-import com.connectycube.core.request.PagedRequestBuilder;
-import com.connectycube.users.ConnectycubeUsers;
-import com.connectycube.users.model.ConnectycubeUser;
 
-public class MainActivity extends BaseLoggableActivity {
+public class MainActivity extends BaseLoggableActivity implements ObservableScrollViewCallbacks/*, NavigationView.OnNavigationItemSelectedListener*/ {
 
     @Bind(R.id.bannerLayout)
-    BannerLayout bannerSlider;
+    public BannerLayout bannerSlider;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -137,15 +142,6 @@ public class MainActivity extends BaseLoggableActivity {
 
     private ImportFriendsSuccessAction importFriendsSuccessAction;
     private ImportFriendsFailAction importFriendsFailAction;
-
-    //ayik
-    /*Toolbar toolbar;
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    PageAdapter pageAdapter;
-    TabItem tabChats;
-    TabItem tabStatus;
-    TabItem tabCalls;*/
 
     Intent intent;
     public static final int REQUEST_CODE_LOGOUT = 300;
@@ -162,27 +158,28 @@ public class MainActivity extends BaseLoggableActivity {
     String strUserID;
     String strAccessToken;
     String strApIUse = "OTU";
+    PaymentFragment paymentFragment;
 
     private static String[] banner_promo;
-
-   /* boolean isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
-    String firstLaunch = Application.getFirstLaunch(getApplicationContext());
-    String referrerDate = Application.getReferrerDate(getApplicationContext());
-    String referrerDataRaw = Application.getReferrerDataRaw(getApplicationContext());
-    String referrerDataDecoded = Application.getReferrerDataDecoded(getApplicationContext());*/
-
-    public boolean isReferrerDetected;
-    public String firstLaunch, referrerDate, referrerDataRaw, referrerDataDecoded;
+    BannerLayout bannerLayout;
+    LinearLayout layoutCollaps, layoutSaldo;
+    CircleImageView img;
+    TextView txt, txtEkl, tvStarMember;
 
     private static final int REQUEST_READ_PHONE_STATE = 0;
     boolean doubleBackToExitPressedOnce = false;
 
-    private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateData();
-        }
-    };
+    private View mImageView;
+    private View mToolbarView;
+    private ObservableScrollView mScrollView;
+    private int mParallaxImageHeight;
+    DrawerLayout drawer;
+    public TextView tvSaldo;
+
+    Call<LoadBanner> callLoadBanner;
+    Call<DataSaldoBonus> userCall;
+    Call<DataProfile> isMemberCall;
+    Call<ResetPassResponse> callResetPass;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -211,6 +208,15 @@ public class MainActivity extends BaseLoggableActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (drawer.isDrawerOpen(GravityCompat.END)) {
+            drawer.closeDrawer(GravityCompat.END);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -229,20 +235,17 @@ public class MainActivity extends BaseLoggableActivity {
                         strUserID = user.get(preferenceManager.KEY_USERID);
                         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
                     }
-                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-                        logOutPayment();
-                    }
+
+                    layoutSaldo.setVisibility(View.GONE);
                     break;
                 case R.id.navigation_call:
                     fragment = new CallFragment();
 
+                    layoutSaldo.setVisibility(View.GONE);
                     if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
                         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
                         strUserID = user.get(preferenceManager.KEY_USERID);
                         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
-                    }
-                    if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-                        logOutPayment();
                     }
 
                     break;
@@ -257,7 +260,10 @@ public class MainActivity extends BaseLoggableActivity {
                         cekMember();
                     }
 
+                    layoutSaldo.setVisibility(View.VISIBLE);
+
                     break;
+
             }
             return loadFragment(fragment);
         }
@@ -266,18 +272,48 @@ public class MainActivity extends BaseLoggableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        processPushIntent();
+
+        if (checkAndStartLanding()) {
+            return;
+        }
+
+        if (checkAndStartLastOpenActivity()) {
+            return;
+        }
+
+        CLog.e("MainActivity onCreate");
+
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
+        //lblSaldo = (TextView) findViewById(R.id.tvSaldo);
+        layoutCollaps = findViewById(R.id.layout_);
+        layoutSaldo = findViewById(R.id.laySaldo);
+        tvSaldo = findViewById(R.id.tvSaldo);
+        layoutSaldo.setVisibility(View.GONE);
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_right);
+        View header = navigationView.inflateHeaderView(R.layout.nav_header);
+        img = header.findViewById(R.id.profile_image);
+        txt = header.findViewById(R.id.profile_name);
+        txtEkl = header.findViewById(R.id.tvEkl);
+        tvStarMember = header.findViewById(R.id.tvStarMember);
 
         preferenceManager = new PreferenceManager(this);
 
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
+
+        paymentFragment = new PaymentFragment();
 
         populate();
         initFields();
@@ -286,73 +322,23 @@ public class MainActivity extends BaseLoggableActivity {
         syncAddressBook();
 
         if (!isChatInitializedAndUserLoggedIn()) {
+            CLog.e("MainActivity loginChat");
             loginChat();
         }
-
-        Activity activity = this;
-
-       /* if (!activity.isFinishing()) {
-            loadBanner();
-        }*/
-
 
         addDialogsAction();
         openPushDialogIfPossible();
 
-        /*tabLayout = findViewById(R.id.tablayout);
-        viewPager = findViewById(R.id.viewPager);
+        mToolbarView = findViewById(R.id.toolbar_view);
+        mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
+        mScrollView.setScrollViewCallbacks(this);
+        mParallaxImageHeight = getResources().getDimensionPixelSize(R.dimen.density_200);
 
-        pageAdapter = new PageAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pageAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));*/
-
-        /*viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
-            public void onPageScrollStateChanged(int state) {
-            }
-
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            public void onPageSelected(int position) {
-                if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-                    HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
-                    strUserID = user.get(preferenceManager.KEY_USERID);
-                    strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
-                }
-                switch (position) {
-                    case 0:
-//                        if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-//                            logOutPayment();
-//                        }
-//                        break;
-                    case 1:
-//                        if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
-//                            logOutPayment();
-//                        }
-//                        break;
-                    case 2:
-
-                        if (!PreferenceUtil.isMemberStatus(MainActivity.this)) {
-
-                            cekMember();
-                        }
-                        // DO NOTHING
-                        break;
-                    default:
-                        //DO NOTHING
-                }
-            }
-        });
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        viewPager.setCurrentItem(0);
-        tabLayout.getTabAt(2).setCustomView(R.layout.custom_tabs_payment);
-        tabLayout.getTabAt(1).setCustomView(R.layout.custom_tabs_calls);
-        tabLayout.getTabAt(0).setCustomView(R.layout.custom_tab_chats);*/
-
-        preferenceManager = new PreferenceManager(this);
+        Activity activity = this;
+        if (!activity.isFinishing()) {
+            loadBanner();
+            loadSaldoBonus(strUserID, strAccessToken);
+        }
 
         if (!PreferenceUtil.isFirstLaunch(this)) {
             restartApp();
@@ -360,7 +346,112 @@ public class MainActivity extends BaseLoggableActivity {
 
         loadFragment(new DialogsListFragment());
 
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
+
+        //display the right navigation drawer
+        displayRightNavigation();
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        navigationView.setItemIconTintList(null);
+        txtEkl.setText(strUserID);
         mainActivity = this;
+    }
+
+    private boolean checkAndStartLastOpenActivity() {
+        Class<?> lastActivityClass;
+        boolean needCleanTask = false;
+        try {
+            String lastActivityName = appSharedHelper.getLastOpenActivity();
+            if (lastActivityName != null) {
+                lastActivityClass = Class.forName(appSharedHelper.getLastOpenActivity());
+                startActivityByName(lastActivityClass, needCleanTask);
+                return true;
+            }
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+
+        return false;
+    }
+
+    private void processPushIntent() {
+        boolean openPushDialog = getIntent().getBooleanExtra(QBServiceConsts.EXTRA_SHOULD_OPEN_DIALOG, false);
+        CoreSharedHelper.getInstance().saveNeedToOpenDialog(openPushDialog);
+    }
+
+    private boolean checkAndStartLanding() {
+        //TODO VT temp code for correct migration from Twitter Digits to Firebase Phone Auth
+        //should be removed in next release
+        if (ConnectycubeSessionManager.getInstance().getSessionParameters() != null
+                && ConnectycubeProvider.TWITTER_DIGITS.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider())) {
+            restartAppWithFirebaseAuth();
+            return true;
+        }
+        //TODO END
+
+        if (app.isNeedToUpdate()) {
+            startLandingScreen();
+            return true;
+        }
+
+        if (!appSharedHelper.isSavedRememberMe() ||
+                (ConnectycubeSessionManager.getInstance().getSessionParameters() == null && appSharedHelper.isSavedRememberMe())) {
+            startLandingScreen();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void restartAppWithFirebaseAuth() {
+        ServiceManager.getInstance().logout(new Subscriber<Void>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Intent intent = new Intent(App.getInstance(), LandingActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                LandingActivity.start(App.getInstance(), intent);
+                finish();
+            }
+
+            @Override
+            public void onNext(Void aVoid) {
+                Intent intent = new Intent(App.getInstance(), LandingActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                LandingActivity.start(App.getInstance(), intent);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        onScrollChanged(mScrollView.getCurrentScrollY(), false, false);
+    }
+
+    @Override
+    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+        int baseColor = getResources().getColor(R.color.primary);
+        float alpha = Math.min(1, (float) scrollY / mParallaxImageHeight);
+        mToolbarView.setBackgroundColor(ScrollUtils.getColorWithAlpha(alpha, baseColor));
+        ViewHelper.setTranslationY(layoutCollaps, scrollY / 2);
+    }
+
+    @Override
+    public void onDownMotionEvent() {
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
     }
 
     private boolean loadFragment(Fragment fragment) {
@@ -398,6 +489,7 @@ public class MainActivity extends BaseLoggableActivity {
         Log.d(TAG, "initFields()");
         mDbHelper = new DbHelper(this);
         title = " " + AppSession.getSession().getUser().getFullName();
+        txt.setText(AppSession.getSession().getUser().getFullName());
         importFriendsSuccessAction = new ImportFriendsSuccessAction();
         importFriendsFailAction = new ImportFriendsFailAction();
         facebookHelper = new FacebookHelper(MainActivity.this);
@@ -427,11 +519,12 @@ public class MainActivity extends BaseLoggableActivity {
 
     @Override
     protected void onResume() {
+        app.fetchFirebaseRemoteConfigValues();
+
+        CLog.d("MainActivity onResume");
         actualizeCurrentTitle();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
         super.onResume();
         addActions();
-
     }
 
     public static String getCurrentTime() {
@@ -449,13 +542,43 @@ public class MainActivity extends BaseLoggableActivity {
         }
     }
 
+    public void warningLogoutpay() {
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(MainActivity.this)
+                /*.setTitle("PERINGATAN!!!")*/
+                .setMessage("Yakin logout?")
+                .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        logOutPayment();
+                    }
+                })
+                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+        dialog.show();
+        return;
+    }
+
     public void logOutPayment() {
-        Log.d("OPPO-1", strUserID + ", " + strAccessToken + ", " + getCurrentTime());
-        Call<ResetPassResponse> callResetPass = mApiInterfacePayment.postLogoutPayment(strUserID, strAccessToken, getCurrentTime());
+
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Sedang logout, mohon tunggu.");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        callResetPass = mApiInterfacePayment.postLogoutPayment(strUserID, strAccessToken, getCurrentTime());
         callResetPass.enqueue(new Callback<ResetPassResponse>() {
 
             @Override
             public void onResponse(Call<ResetPassResponse> call, Response<ResetPassResponse> response) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                progressDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
@@ -463,6 +586,8 @@ public class MainActivity extends BaseLoggableActivity {
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         Toast.makeText(MainActivity.this, "SUCCESS LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
                         PreferenceUtil.setLoginStatus(MainActivity.this, false);
+                        tvSaldo.setText("0.00");
+                        //paymentFragment.lblSaldoMain.setText("0.00");
                     } else {
                         Toast.makeText(MainActivity.this, "FAILED LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
                     }
@@ -474,6 +599,10 @@ public class MainActivity extends BaseLoggableActivity {
 
             @Override
             public void onFailure(Call<ResetPassResponse> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                progressDialog.dismiss();
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 //Log.d("API_TRANSBELI", t.getMessage().toString());
             }
@@ -483,18 +612,19 @@ public class MainActivity extends BaseLoggableActivity {
     private void actualizeCurrentTitle() {
         if (AppSession.getSession().getUser().getFullName() != null) {
             title = " " + AppSession.getSession().getUser().getFullName();
+            txt.setText(AppSession.getSession().getUser().getFullName());
         }
     }
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateReceiver);
         super.onPause();
         removeActions();
     }
 
     @Override
     protected void onDestroy() {
+        cancelCalls();
         super.onDestroy();
         removeDialogsAction();
     }
@@ -514,6 +644,24 @@ public class MainActivity extends BaseLoggableActivity {
     protected void performLoginChatSuccessAction(Bundle bundle) {
         super.performLoginChatSuccessAction(bundle);
         actualizeCurrentTitle();
+    }
+
+    private void cancelCalls() {
+        if (callLoadBanner != null && !callLoadBanner.isCanceled()) {
+            callLoadBanner.cancel();
+        }
+
+        if (userCall != null && !userCall.isCanceled()) {
+            userCall.cancel();
+        }
+
+        if (isMemberCall != null && !isMemberCall.isCanceled()) {
+            isMemberCall.cancel();
+        }
+
+        if (callResetPass != null && !callResetPass.isCanceled()) {
+            callResetPass.cancel();
+        }
     }
 
     private void addDialogsAction() {
@@ -545,6 +693,7 @@ public class MainActivity extends BaseLoggableActivity {
         } else {
             setActionBarIcon(MediaUtils.getRoundIconDrawable(this,
                     BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_user)));
+            img.setImageResource(R.drawable.placeholder_user);
         }
     }
 
@@ -555,6 +704,7 @@ public class MainActivity extends BaseLoggableActivity {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedBitmap) {
                         setActionBarIcon(MediaUtils.getRoundIconDrawable(MainActivity.this, loadedBitmap));
+                        img.setImageBitmap(loadedBitmap);
                     }
                 });
     }
@@ -599,48 +749,48 @@ public class MainActivity extends BaseLoggableActivity {
 
     /*======================================load deposit==========================================================*/
 
-    public void load_deposit() {
-        Call<DataDeposit> userCall = mApiInterfacePayment.getSaldo(strUserID, strApIUse, strAccessToken);
-        userCall.enqueue(new Callback<DataDeposit>() {
-            @Override
-            public void onResponse(Call<DataDeposit> call, Response<DataDeposit> response) {
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String error = response.body().getRespMessage();
-                    String balance = response.body().getBalance();
-                    Log.d("OPPO-1", "onResponse: " + balance);
-
-                    if (status.equals("SUCCESS")) {
-                        Double total = 0.0d;
-                        try {
-                            if (balance != null && !balance.trim().isEmpty())
-                                total = Double.valueOf(balance);
-                        } catch (Exception e) {
-                            total = 0.0d;
-                        }
-                        Locale localeID = new Locale("in", "ID");
-                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
-                        String rupiah = format.format(total);
-
-                        Log.d("OPPO-1", "onResponse: " + rupiah);
-
-                        ((TextView) findViewById(R.id.tvSaldo)).setText(rupiah);
-                    } else {
-                        Toast.makeText(getBaseContext(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataDeposit> call, Throwable t) {
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_REGISTER", t.getMessage().toString());
-            }
-        });
-
-    }
+//    public void load_deposit() {
+//        Call<DataDeposit> userCall = mApiInterfacePayment.getSaldo(strUserID, strApIUse, strAccessToken);
+//        userCall.enqueue(new Callback<DataDeposit>() {
+//            @Override
+//            public void onResponse(Call<DataDeposit> call, Response<DataDeposit> response) {
+//                if (response.isSuccessful()) {
+//                    String status = response.body().getStatus();
+//                    String error = response.body().getRespMessage();
+//                    String balance = response.body().getBalance();
+//                    Log.d("OPPO-1", "onResponse: " + balance);
+//
+//                    if (status.equals("SUCCESS")) {
+//                        Double total = 0.0d;
+//                        try {
+//                            if (balance != null && !balance.trim().isEmpty())
+//                                total = Double.valueOf(balance);
+//                        } catch (Exception e) {
+//                            total = 0.0d;
+//                        }
+//                        Locale localeID = new Locale("in", "ID");
+//                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
+//                        String rupiah = format.format(total);
+//
+//                        Log.d("OPPO-1", "onResponse: " + rupiah);
+//
+//                        ((TextView) findViewById(R.id.tvSaldo)).setText(rupiah);
+//                    } else {
+//                        Toast.makeText(getBaseContext(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+//                    }
+//                } else {
+//                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<DataDeposit> call, Throwable t) {
+//                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+//                Log.d("API_REGISTER", t.getMessage().toString());
+//            }
+//        });
+//
+//    }
 
     private void populate() {
         if (!mayRequest()) {
@@ -727,12 +877,14 @@ public class MainActivity extends BaseLoggableActivity {
 
     private void cekMember() {
 //        Log.d("OPPO-1", "cekMember:process"+AppSession.getSession().getUser().getPhone());
-        // Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this)), "OTU");
-        Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this), "OTU");
-
-        isMember.enqueue(new Callback<DataProfile>() {
+        // Call<DataProfile> isMemberCall = mApiInterfacePayment.isMemberCall(PreferenceUtil.getNumberPhone(this)), "OTU");
+        isMemberCall = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this), "OTU");
+        isMemberCall.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
+                if (call.isCanceled()) {
+                    return;
+                }
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
@@ -751,6 +903,9 @@ public class MainActivity extends BaseLoggableActivity {
 
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
@@ -868,10 +1023,15 @@ public class MainActivity extends BaseLoggableActivity {
     public void loadBanner() {
         bannerSlider.setImageLoader(new GlideImageLoader());
         List<String> urls = new ArrayList<>();
-        Call<LoadBanner> callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(MainActivity.this), strApIUse);
+
+        callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(MainActivity.this), strApIUse);
         callLoadBanner.enqueue(new Callback<LoadBanner>() {
             @Override
             public void onResponse(Call<LoadBanner> call, Response<LoadBanner> response) {
+                if (call.isCanceled()) {
+                    return;
+                }
+
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     if (status.equals("SUCCESS")) {
@@ -907,6 +1067,10 @@ public class MainActivity extends BaseLoggableActivity {
 
             @Override
             public void onFailure(Call<LoadBanner> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+
                 urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
                 urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
                 urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
@@ -915,6 +1079,7 @@ public class MainActivity extends BaseLoggableActivity {
                 bannerSlider.setViewUrls(urls);
             }
         });
+
     }
 
     /*================================================end load deposit======================================================*/
@@ -997,39 +1162,6 @@ public class MainActivity extends BaseLoggableActivity {
     }
     /*=====================================end ayik=============================================*/
 
-    private void updateData() {
-        isReferrerDetected = Application.isReferrerDetected(getApplicationContext());
-        firstLaunch = Application.getFirstLaunch(getApplicationContext());
-        referrerDate = Application.getReferrerDate(getApplicationContext());
-        referrerDataRaw = Application.getReferrerDataRaw(getApplicationContext());
-        referrerDataDecoded = Application.getReferrerDataDecoded(getApplicationContext());
-
-       /* StringBuilder sb = new StringBuilder();
-        sb.append("<b>First launch:</b>")
-                .append("<br/>")
-                .append(firstLaunch)
-                .append("<br/><br/>")
-                .append("<b>Referrer detection:</b>")
-                .append("<br/>")
-                .append(referrerDate);
-        if (isReferrerDetected) {
-            sb.append("<br/><br/>")
-                    .append("<b>Raw referrer:</b>")
-                    .append("<br/>")
-                    .append(referrerDataRaw);
-
-            if (referrerDataDecoded != null) {
-                sb.append("<br/><br/>")
-                        .append("<b>Decoded referrer:</b>")
-                        .append("<br/>")
-                        .append(referrerDataDecoded);
-            }
-        }*/
-
-       /* content.setText(Html.fromHtml(sb.toString()));
-        content.setMovementMethod(new LinkMovementMethod());*/
-    }
-
     public void restartApp() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -1040,22 +1172,221 @@ public class MainActivity extends BaseLoggableActivity {
                                         int which) {
                         dialog.dismiss();
                         PreferenceUtil.setFirstLaunch(MainActivity.this, true);
-                        SplashActivity.start(MainActivity.this);
-                        finish();
+                        startLandingScreen();
                     }
                 });
-        builder.show();
+        if (!com.eklanku.otuChat.utils.Utils.isActivityFinishedOrDestroyed(this)) {
+            builder.show();
+        }
     }
 
-  /*  @Override
-    protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateReceiver);
-        super.onPause();
+
+    /*@SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+       *//* if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }*//*
+
+        switch (item.getItemId()) {
+            case R.id.account_settings:
+                drawer.openDrawer(GravityCompat.END);
+                break;
+            case R.id.action_search:
+                launchContactsActivity();
+                break;
+            case R.id.action_start_invite_friends:
+                InviteFriendsActivity.start(this);
+                break;
+            case R.id.action_start_feedback:
+                FeedbackActivity.start(this);
+                break;
+            case R.id.action_start_settings:
+                //SettingsActivity.startForResult(DialogsListFragment.class);
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_start_about:
+                AboutActivity.start(this);
+                break;
+            case R.id.action_web_qr_code:
+                WebQRCodeActivity.start(this);
+                break;
+            case R.id.action_notification:
+                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        //Toast.makeText(MainActivity.this, "Handle from navigation right", Toast.LENGTH_SHORT).show();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }*/
 
-   /* @Override
-    protected void onResume() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, new IntentFilter(ReferrerReceiver.ACTION_UPDATE_DATA));
-        super.onResume();
-    }*/
+    private void displayRightNavigation() {
+        final NavigationView navigationViewRight = (NavigationView) findViewById(R.id.nav_view_right);
+        navigationViewRight.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Handle navigation view item clicks here
+                switch (item.getItemId()) {
+                    case R.id.action_web_qr_code:
+                        WebQRCodeActivity.start(MainActivity.this);
+                        break;
+                    case R.id.action_notification:
+                        Toast.makeText(MainActivity.this, "Coming soon...", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.action_profile:
+                        if (menuDialog()) {
+                            Intent profile = new Intent(MainActivity.this, Profile.class);
+                            startActivity(profile);
+                        }
+
+                        break;
+                    case R.id.action_resetpass:
+                        if (menuDialog()) {
+                            Intent resetPass = new Intent(MainActivity.this, ResetPassword.class);
+                            startActivity(resetPass);
+                        }
+
+                        break;
+                    case R.id.action_resetpin:
+                        if (menuDialog()) {
+                            Intent resetPin = new Intent(MainActivity.this, ResetPIN.class);
+                            startActivity(resetPin);
+                        }
+
+                        break;
+                    case R.id.nav_logout:
+                        warningLogoutpay();
+                        break;
+
+                    case R.id.action_hapusakun:
+                        Intent nonAktif = new Intent(MainActivity.this, DeleteAccount.class);
+                        startActivity(nonAktif);
+                        break;
+                }
+
+                //Toast.makeText(MainActivity.this, "Handle from navigation right", Toast.LENGTH_SHORT).show();
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.END);
+                return true;
+
+            }
+        });
+    }
+
+    private boolean menuDialog() {
+        if (!PreferenceUtil.isLoginStatus(MainActivity.this)) {
+            android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(MainActivity.this)
+                    .setTitle("PERINGATAN!!!")
+                    .setMessage("Untuk meningkatkan Kemanan Silahkan Login terlebih dahulu")
+                    .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(MainActivity.this, PaymentLogin.class));
+                        }
+                    })
+                    .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create();
+            dialog.show();
+            return false;
+        } else return true;
+    }
+
+
+    public void loadSaldoBonus(String strUserID, String strAccessToken) {
+
+        userCall = mApiInterfacePayment.getSaldodetail(strUserID, strApIUse, strAccessToken);
+        userCall.enqueue(new Callback<DataSaldoBonus>() {
+            @Override
+            public void onResponse(Call<DataSaldoBonus> call, Response<DataSaldoBonus> response) {
+                if (call.isCanceled()) {
+                    return;
+                }
+
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String error = response.body().getRespMessage();
+                    String id_member = "", sisa_uang = "", carier_member = "", bonus_member = "";
+                    Log.d("OPPO-1", "OnLoad userID " + strUserID + " response.isSuccessful()) " + response.isSuccessful());
+                    if (status.equals("SUCCESS")) {
+
+                        final List<DataDetailSaldoBonus> products = response.body().getBalance();
+                        for (int i = 0; i < products.size(); i++) {
+                            id_member = products.get(i).getId_member();
+                            sisa_uang = products.get(i).getSisa_uang();
+                            carier_member = products.get(i).getCarier_member();
+                            bonus_member = products.get(i).getBonus_member();
+                        }
+
+                        Double total = 0.0d;
+                        try {
+                            if (sisa_uang != null && !sisa_uang.trim().isEmpty())
+                                total = Double.valueOf(sisa_uang);
+                        } catch (Exception e) {
+                            total = 0.0d;
+                        }
+                        Locale localeID = new Locale("in", "ID");
+                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
+                        String rupiah = format.format(total);
+
+                        Double nomBonus = 0.0d;
+                        try {
+                            if (nomBonus != null && !bonus_member.trim().isEmpty()) {
+                                nomBonus = Double.valueOf(bonus_member);
+                            } else {
+                                nomBonus = 0.0d;
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        String rupiahBonus = format.format(nomBonus);
+
+                        Log.d("OPPO-1", "onResponse: " + rupiahBonus);
+                        if (carier_member.equals("FREE")) {
+                            tvStarMember.setText("REGULER");
+                        } else {
+                            tvStarMember.setText(carier_member);
+                        }
+
+                    } else {
+                        // Toast.makeText(MainActivity.this, "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    //Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataSaldoBonus> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                // Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

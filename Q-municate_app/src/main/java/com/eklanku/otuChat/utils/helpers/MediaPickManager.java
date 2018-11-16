@@ -18,7 +18,11 @@ import com.eklanku.otuChat.utils.StringUtils;
 import com.eklanku.otuChat.utils.listeners.OnMediaPickedListener;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_db.models.Attachment;
+/*<<<<<<< HEAD
+import com.quickblox.ui.kit.chatmessage.adapter.utils.LocationUtils;
+=======*/
 import com.connectycube.ui.chatmessage.adapter.utils.LocationUtils;
+//>>>>>>> origin/feature/migration
 
 import java.util.ArrayList;
 

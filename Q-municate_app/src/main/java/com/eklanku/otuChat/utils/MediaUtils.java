@@ -203,6 +203,10 @@ public class MediaUtils {
         return pathWithoutExtension + extensionInLowerCase;
     }
 
+    public static String getPathWithoutExtensionInLowerCase(String path) {
+        return path.substring(0, path.lastIndexOf("."));
+    }
+
     public static void startMapForResult(Activity activity) {
         Intent intent = new Intent(activity, MapsActivity.class);
         activity.startActivityForResult(intent, IMAGE_VIDEO_LOCATION_REQUEST_CODE);
@@ -597,7 +601,7 @@ public class MediaUtils {
         }
     }
 
-    private static void closeSilently(@Nullable Closeable c) {
+    public static void closeSilently(@Nullable Closeable c) {
         if (c == null) return;
         try {
             c.close();

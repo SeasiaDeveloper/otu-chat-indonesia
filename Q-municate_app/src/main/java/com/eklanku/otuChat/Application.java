@@ -14,6 +14,7 @@ import java.util.Date;
 
 public class Application extends App{
 
+    // play
     private static final String FIRST_LAUNCH = "FIRST_LAUNCH";
     private static final String REFERRER_DATE = "REFERRER_DATE";
     private static final String REFERRER_DATA = "REFERRER_DATA";
@@ -22,7 +23,8 @@ public class Application extends App{
     public void onCreate() {
         super.onCreate();
         setFirstLaunch(this);
-        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/CenturyGothic.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
+        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/HelveticaNeueMedium.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
+
     }
 
     private static void setFirstLaunch(Context context) {

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+   <!-- <group
+        android:id="@+id/one"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_produk"
+            android:icon="@drawable/logo_qb"
+            android:title="UTAMA" />
+    </group>-->
+
+     <group
+        android:id="@+id/one"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_profile"
+            android:icon="@drawable/ic_nav_profil"
+            android:title="Profil" />
+    </group>
+
+    <!--<item android:title="PROFILE">
+        <menu>
+            <item
+                android:id="@+id/action_profile"
+                android:icon="@drawable/ic_nav_profil"
+                android:title="Profil" />
+
+        </menu>
+    </item>-->
+
+    <item android:title="AKUN">
+
+        <menu>
+            <item
+                android:id="@+id/action_resetpass"
+                android:icon="@drawable/ic_nav_password"
+                android:title="Ganti Password" />
+
+            <item
+                android:id="@+id/action_resetpin"
+                android:icon="@drawable/ic_nav_pin"
+                android:title="Ganti PIN" />
+
+            <item
+                android:id="@+id/action_hapusakun"
+                android:icon="@drawable/ic_nonaktif"
+                android:title="Non Aktif Akun Payment" />
+        </menu>
+
+    </item>
+
+    <item android:title="LAIN_LAIN">
+        <menu>
+            <item
+                android:id="@+id/action_web_qr_code"
+                android:icon="@drawable/ic_nav_otuweb"
+                android:title="OTU Web" />
+            <item
+                android:id="@+id/action_notification"
+                android:icon="@drawable/ic_notifikasi"
+                android:title="Notifikasi" />
+
+        </menu>
+    </item>
+
+    <group
+        android:id="@+id/action_logout">
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_keluar"
+            android:title="Keluar" />
+    </group>
+
+</menu>

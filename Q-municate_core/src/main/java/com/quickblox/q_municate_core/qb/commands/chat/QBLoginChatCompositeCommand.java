@@ -2,9 +2,11 @@ package com.quickblox.q_municate_core.qb.commands.chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.quickblox.q_municate_core.CLog;
 import com.quickblox.q_municate_core.core.command.CompositeServiceCommand;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.network.NetworkGCMTaskService;
@@ -26,24 +28,33 @@ public class QBLoginChatCompositeCommand extends CompositeServiceCommand {
     }
 
     public static void start(Context context) {
+        CLog.d("QBLoginChatCompositeCommand start");
         Log.i(TAG, "start");
         setIsRunning(true);
         Intent intent = new Intent(QBServiceConsts.LOGIN_CHAT_COMPOSITE_ACTION, null, context, QBService.class);
-        context.startService(intent);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
     }
 
     @Override
     protected Bundle perform(Bundle extras) throws Exception {
+        CLog.d("QBLoginChatCompositeCommand perform");
         setIsRunning(false);
         if (AppSession.ChatState.FOREGROUND == AppSession.getSession().getChatState()) {
             try {
+                CLog.d("QBLoginChatCompositeCommand perform try");
                 super.perform(extras);
             } catch (XMPPException | IOException | SmackException e) {
+                CLog.d("QBLoginChatCompositeCommand perform catch " + e.getMessage());
                 scheduleLogin();
                 throw e;
             }
         }
-
+        CLog.d("QBLoginChatCompositeCommand perform end perform");
         return extras;
     }
 
