@@ -33,7 +33,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.eklanku.otuChat.App;
-import com.eklanku.otuChat.CLog;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.ProgressDialogFragment;
 import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;
@@ -323,7 +322,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
         super.onResume();
         Log.d("BaseActivity", "onResume");
-        CLog.d("BaseActivity onResume");
         registerBroadcastReceivers();
         registerConnectionListener();
         addActions();
@@ -594,7 +592,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
     }
 
     protected void onChatDisconnected(Exception e) {
-        CLog.d("BaseActivity onChatDisconnected " + e.getMessage());
     }
 
     protected void onReceivedChatMessageNotification(Bundle extras) {
@@ -663,18 +660,14 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
 
     protected void loginChat() {
-        CLog.d("BaseActivity loginChat");
         isDialogLoading = true;
         showSnackbar(R.string.dialog_loading_dialogs, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
-        CLog.d("BaseActivity loginChat showSnackBar update dialog list...");
         if (ConnectycubeSessionManager.getInstance().getSessionParameters() != null
                 && ConnectycubeProvider.FIREBASE_PHONE.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider())
                 && !ConnectycubeSessionManager.getInstance().isValidActiveSession()) {
-            CLog.d("BaseActivity loginChat refreshInternalFirebaseToken");
             new FirebaseAuthHelper(BaseActivity.this).refreshInternalFirebaseToken(new FirebaseAuthHelper.RequestFirebaseIdTokenCallback() {
                 @Override
                 public void onSuccess(String accessToken) {
-                    CLog.d("BaseActivity loginChat refreshInternalFirebaseToken onSuccess");
                     QBLoginChatCompositeCommand.start(BaseActivity.this);
                 }
 
@@ -686,13 +679,11 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
                             message = e.getMessage();
                         }
                     }
-                    CLog.d("BaseActivity loginChat refreshInternalFirebaseToken onError " + message);
                     performLoginChatFailAction(null);
                     performRetryLoginAttepmt();
                 }
             });
         } else {
-            CLog.d("BaseActivity loginChat else refreshInternalFirebaseToken start QBLoginChatCompositeCommand");
             QBLoginChatCompositeCommand.start(this);
         }
     }
@@ -700,14 +691,11 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
     int currentLoginRetryAttempts = 0;
 
     private void performRetryLoginAttepmt(){
-        CLog.d("BaseActivity performRetryLoginAttepmt");
         if(!QBLoginChatCompositeCommand.isRunning() && currentLoginRetryAttempts <= 5){
             showSnackbar(R.string.dialog_loading_dialogs, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
-            CLog.d("BaseActivity performRetryLoginAttepmt !QBLoginChatCompositeCommand.isRunning() && currentLoginRetryAttempts <= 5");
             currentLoginRetryAttempts++;
             QBLoginChatCompositeCommand.start(this);
         }
-        CLog.d("BaseActivity performRetryLoginAttepmt");
     }
 
     protected boolean isAppInitialized() {
@@ -744,7 +732,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
     protected void performLoginChatFailAction(Bundle bundle) {
         Log.d("OPPO-1", "authenticated: 5");
-        CLog.d("BaseActivity performLoginChatFailAction");
         blockUI(true);
         hideSnackBar(R.string.dialog_loading_dialogs);
         showSnackbar(R.string.error_disconnected, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
@@ -767,12 +754,10 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
         chatConnectionListener = new ConnectionListener() {
             @Override
             public void connected(XMPPConnection xmppConnection) {
-                CLog.d("BaseActivity ConnectionListener connected");
             }
 
             @Override
             public void authenticated(XMPPConnection xmppConnection, boolean b) {
-                CLog.d("BaseActivity ConnectionListener authenticated");
                 Log.d(TAG, "chatConnectionListener authenticated");
                 Log.d("OPPO-1", "authenticated: 1");
                 hideSnackBar(R.string.error_disconnected);
@@ -782,7 +767,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
             @Override
             public void connectionClosed() {
-                CLog.d("BaseActivity ConnectionListener connectionClosed");
             }
 
             @Override
@@ -790,14 +774,12 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
                 onChatDisconnected(e);
                 blockUI(true);
                 Log.d("OPPO-1", "authenticated: 2");
-                CLog.d("BaseActivity ConnectionListener connectionClosedOnError");
                 showSnackbar(R.string.error_disconnected, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
                 performRetryLoginAttepmt();
             }
 
             @Override
             public void reconnectionSuccessful() {
-                CLog.d("BaseActivity ConnectionListener reconnectionSuccessful");
                 onChatReconnected();
                 Log.d(TAG, "chatConnectionListener reconnectionSuccessful");
                 Log.d("OPPO-1", "authenticated: 3");
@@ -808,12 +790,10 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
             @Override
             public void reconnectingIn(int i) {
-                CLog.d("BaseActivity ConnectionListener reconnectingIn");
             }
 
             @Override
             public void reconnectionFailed(Exception e) {
-                CLog.d("BaseActivity ConnectionListener reconnectionFailed");
             }
         };
     }
@@ -928,7 +908,6 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
         @Override
         public void execute(Bundle bundle) {
-            CLog.d("BaseActivity LoginChatCompositeFailAction execute");
             QBLoginChatCompositeCommand.setIsRunning(false);
             performLoginChatFailAction(bundle);
             performRetryLoginAttepmt();
