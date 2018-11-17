@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,8 +61,7 @@ public class CallsAdapter extends RecyclerView.Adapter<CallsAdapter.MyViewHolder
         public RelativeLayout mRlContacts;
         public CheckBox mChkSelect;
         public ImageView IVIcon;
-        ImageView imgCall;
-        ImageView imgVCall;
+        ImageButton imgCall, imgVCall;
 
         public MyViewHolder(View view) {
             super(view);
@@ -72,9 +72,8 @@ public class CallsAdapter extends RecyclerView.Adapter<CallsAdapter.MyViewHolder
             mRlContacts = (RelativeLayout) view.findViewById(R.id.rlContacts);
             mChkSelect = (CheckBox) view.findViewById(R.id.chkSelect);
             IVIcon = (ImageView) view.findViewById(R.id.ivIcon);
-            imgCall = (ImageView) view.findViewById(R.id.ivCall);
-            imgVCall = (ImageView) view.findViewById(R.id.ivVideoCall);
-
+            imgCall =  view.findViewById(R.id.ivCall);
+            imgVCall =  view.findViewById(R.id.ivVideoCall);
 
         }
     }

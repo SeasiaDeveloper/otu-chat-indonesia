@@ -6,35 +6,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/contact_status"
         style="@style/MatchParent"
-        android:layout_marginBottom="14dp"
         android:layout_marginEnd="@dimen/padding_common"
         android:layout_marginRight="@dimen/padding_common"
+        android:layout_marginBottom="14dp"
+        android:gravity="end"
         android:typeface="sans"
         android:visibility="gone"
-        android:gravity="end"
         tools:text="online" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:orientation="vertical"
         android:paddingLeft="10dp"
-        android:orientation="vertical">
+        android:paddingTop="10dp"
+        android:paddingRight="10dp">
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView android:id="@+id/ivIcon"
+            <ImageView
+                android:id="@+id/ivIcon"
                 android:layout_width="47dp"
                 android:layout_height="47dp"
                 android:layout_marginRight="10dp"
@@ -43,9 +44,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/ivChat"
-                android:layout_toRightOf="@id/ivIcon"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -64,7 +62,7 @@
                     android:text="PhoneNumber"
                     android:textColor="@color/black"
                     android:textSize="20sp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tvMessage"
@@ -79,23 +77,23 @@
 
             </LinearLayout>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/ivCall"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/ic_call_vector"
-                android:layout_marginRight="16dp"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/density_16"
+                android:layout_marginEnd="@dimen/density_16"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_voice_call" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/ivVideoCall"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/ic_videocam_vector"
-                />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/density_8"
+                android:layout_marginRight="@dimen/density_8"
+                app:srcCompat="@drawable/ic_video_call"
+                android:background="@android:color/transparent" />
 
 
         </LinearLayout>
