@@ -30,6 +30,9 @@ public class TwoButtonsDialogFragment extends DialogFragment {
     private MaterialDialog.ButtonCallback buttonsCallback;
 
     public static void show(FragmentManager fm, String title, String message, boolean dismiss, String positiveText, String negativeText, MaterialDialog.ButtonCallback callback) {
+        if(fm == null || fm.isDestroyed()){
+            return;
+        }
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, title);
         args.putString(ARG_CONTENT, message);

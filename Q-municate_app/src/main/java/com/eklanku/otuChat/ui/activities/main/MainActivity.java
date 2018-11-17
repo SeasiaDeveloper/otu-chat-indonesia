@@ -2,11 +2,9 @@ package com.eklanku.otuChat.ui.activities.main;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -32,9 +29,6 @@ import android.widget.Toast;
 import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.eklanku.otuChat.App;
-import com.eklanku.otuChat.Application;
-import com.eklanku.otuChat.CLog;
-import com.eklanku.otuChat.ReferrerReceiver;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
@@ -274,7 +268,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             return;
         }
 
-        CLog.e("MainActivity onCreate");
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -313,7 +306,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         syncAddressBook();
 
         if (!isChatInitializedAndUserLoggedIn()) {
-            CLog.e("MainActivity loginChat");
             loginChat();
         }
 
@@ -527,8 +519,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     @Override
     protected void onResume() {
         app.fetchFirebaseRemoteConfigValues();
-
-        CLog.d("MainActivity onResume");
         actualizeCurrentTitle();
         super.onResume();
         addActions();
