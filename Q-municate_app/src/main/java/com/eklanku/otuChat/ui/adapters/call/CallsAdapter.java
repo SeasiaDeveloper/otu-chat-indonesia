@@ -1,5 +1,6 @@
 package com.eklanku.otuChat.ui.adapters.call;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -14,13 +15,16 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.connectycube.chat.ConnectycubeChatService;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.users.model.ConnectycubeUser;
+import com.connectycube.videochat.RTCTypes;
 import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.ui.activities.call.CallActivity;
 import com.eklanku.otuChat.ui.activities.call.ContactListCallActivity;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
@@ -28,16 +32,17 @@ import com.eklanku.otuChat.ui.activities.contacts.ContactsModelGroup;
 import com.eklanku.otuChat.utils.ToastUtils;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.qb.commands.chat.QBCreatePrivateChatCommand;
+import com.quickblox.q_municate_core.utils.UserFriendUtils;
 import com.quickblox.q_municate_db.managers.DataManager;
 import com.quickblox.q_municate_db.models.DialogOccupant;
 import com.quickblox.q_municate_db.utils.DialogTransformUtils;
+import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CallsAdapter extends RecyclerView.Adapter<CallsAdapter.MyViewHolder> implements Filterable {
-
 
 
     private List<ContactsModelGroup> contactsModelsGroup;
@@ -137,17 +142,21 @@ public class CallsAdapter extends RecyclerView.Adapter<CallsAdapter.MyViewHolder
             });
         }
 
+        long cId = contact.getId_user();
+        QMUser user = QMUserService.getInstance().getUserCache().get(cId);
+
         holder.imgCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.longToast(R.string.coming_soon);
+                callToUser(user, RTCTypes.ConferenceType.CONFERENCE_TYPE_AUDIO);
             }
         });
 
         holder.imgVCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.longToast(R.string.coming_soon);
+                callToUser(user, RTCTypes.ConferenceType.CONFERENCE_TYPE_VIDEO);
+
             }
         });
 
@@ -185,6 +194,17 @@ public class CallsAdapter extends RecyclerView.Adapter<CallsAdapter.MyViewHolder
             }
 
         });*/
+    }
+
+    private void callToUser(QMUser user, RTCTypes.ConferenceType ConferenceType) {
+        Log.d("AYIK", "status calltouser " + isChatInitializedAndUserLoggedIn());
+        if (!isChatInitializedAndUserLoggedIn()) {
+            ToastUtils.longToast(R.string.call_chat_service_is_initializing);
+            return;
+        }
+        List<ConnectycubeUser> connectycubeUserList = new ArrayList<>(1);
+        connectycubeUserList.add(UserFriendUtils.createConnectycubeUser(user));
+        CallActivity.start((Activity) context, connectycubeUserList, ConferenceType, null);
     }
 
 
@@ -257,8 +277,6 @@ public class CallsAdapter extends RecyclerView.Adapter<CallsAdapter.MyViewHolder
     protected boolean isAppInitialized() {
         return AppSession.getSession().isSessionExist();
     }
-
-
 
 
 }
