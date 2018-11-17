@@ -18,22 +18,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!--<android.support.v7.widget.CardView
-                android:id="@+id/cv_main"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/density_4"
-                app:cardCornerRadius="@dimen/density_4">
-
-                <com.yyydjk.library.BannerLayout
-                    android:id="@+id/bannerLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="125dp"
-                    app:autoPlayDuration="4000"
-                    app:scrollDuration="1000" />
-
-            </android.support.v7.widget.CardView>-->
-
             <LinearLayout
                 android:id="@+id/layout_"
                 android:layout_width="match_parent"
@@ -314,7 +298,8 @@
                         app:unSelectedIndicatorColor="#99ffffff"
                         app:unSelectedIndicatorHeight="6dp"
                         app:unSelectedIndicatorWidth="6dp"
-                        app:scrollDuration="1000" />
+                        app:scrollDuration="1000"
+                        android:visibility="gone"/>
 
                 </android.support.v7.widget.CardView>
             </LinearLayout>

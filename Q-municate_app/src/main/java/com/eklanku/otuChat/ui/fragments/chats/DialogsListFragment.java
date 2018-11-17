@@ -41,22 +41,15 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
-/*<<<<<<< HEAD
-import com.eklanku.otuChat.ui.activities.main.MainActivity;
-=======*/
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
-//>>>>>>> origin/feature/migration
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
-import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
+
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.base.BaseLoaderFragment;
 import com.eklanku.otuChat.ui.fragments.search.ContactsFragment;
+import com.eklanku.otuChat.ui.views.banner.BannerDataManager;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 /*<<<<<<< HEAD
@@ -160,10 +153,8 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     private LoadChatsFailedAction loadChatsFailedAction;
     private UpdateDialogSuccessAction updateDialogSuccessAction;
 
-    private static String[] banner_promo;
     BannerLayout banner;
-    ApiInterfacePayment mApiInterfacePayment;
-    String strApIUse = "OTU";
+    private Observer mBannerDataObserver;
 
     enum State {started, stopped, finished}
 
@@ -196,16 +187,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         dialogsListView.setAdapter(dialogsListAdapter);
 
         banner = header.findViewById(R.id.bannerLayout);
-        mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-        loadBanner();
-       /* Activity activity = getActivity();
-        if (activity != null && isAdded()) {
-            loadBanner();
-            if (!PreferenceUtil.isMemberStatus(getActivity())) {
-                cekMember();
-            }
-
-        }*/
+        initBanner();
 
         //dialogsListView.addHeaderView(header, null, false);
 
@@ -422,6 +404,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
     @Override
     public void onDestroyView() {
+        BannerDataManager.getInstance().deleteObserver(mBannerDataObserver);
         super.onDestroyView();
     }
 
@@ -471,14 +454,9 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     }
 
     private void updateOrAddDialog(String dialogId, boolean updatePosition) {
-/*<<<<<<< HEAD
-
-        QBChatDialog qbChatDialog = dataManager.getQBChatDialogDataManager().getByDialogId(dialogId);
-        DialogWrapper dialogWrapper = new DialogWrapper(getContext(), dataManager, qbChatDialog);
-=======*/
         ConnectycubeChatDialog connectycubeChatDialog = dataManager.getConnectycubeChatDialogDataManager().getByDialogId(dialogId);
         DialogWrapper dialogWrapper = new DialogWrapper(getContext(), dataManager, connectycubeChatDialog);
-//>>>>>>> origin/feature/migration
+
         if (updateDialogsProcess == State.finished || dialogsListAdapter.getCount() != 0) {
             dialogsListAdapter.updateItem(dialogWrapper);
         }
@@ -609,24 +587,6 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         Intent intent = new Intent(getActivity(), NewMessageActivity.class);
         intent.putExtra("isNewMessage", true);
         startActivity(intent);
-
-       /* Intent intent = new Intent(getActivity(), ContactsActivity.class);
-        intent.putExtra("isNewMessage", true);
-        startActivity(intent);*/
-
-        /*boolean hasFriends = !dataManager.getFriendDataManager().getAll().isEmpty();
-        Log.d("OPPO-1", "addChat - hasFriends: "+hasFriends);
-        if (isFriendsLoading()) {
-            ToastUtils.longToast(R.string.chat_service_is_initializing);
-        } else if (!hasFriends) {
-            ToastUtils.longToast(R.string.new_message_no_friends_for_new_message);
-        } else {
-
-            Intent intent = new Intent(getActivity(), NewMessageActivity.class);
-            intent.putExtra("isNewMessage", true);
-            startActivity(intent);
-           // NewMessageActivity.startForResult(this, CREATE_DIALOG);
-        }*/
     }
 
     private boolean isFriendsLoading() {
@@ -943,86 +903,20 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         startActivity(intent);
     }
 
-    public void loadBanner() {
-
+    private void initBanner()
+    {
         banner.setImageLoader(new GlideImageLoader());
-        List<String> urls = new ArrayList<>();
-        Call<LoadBanner> callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(getActivity()), strApIUse);
-        callLoadBanner.enqueue(new Callback<LoadBanner>() {
-            @Override
-            public void onResponse(Call<LoadBanner> call, Response<LoadBanner> response) {
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    if (status.equals("SUCCESS")) {
-                        final List<DataBanner> result = response.body().getRespMessage();
-                        banner_promo = new String[result.size()];
-                        if (result.size() > 0) {
-                            try {
-                                for (int i = 0; i < result.size(); i++) {
-                                    banner_promo[i] = result.get(i).getBaner_promo();
-                                    urls.add(banner_promo[i]);
-                                }
-                            } catch (Exception e) {
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-                            }
-                        } else {
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-                        }
-                    } else {
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-                    }
-                    banner.setViewUrls(urls);
-                }
+
+        mBannerDataObserver = (observable, arg) -> {
+            if (observable instanceof BannerDataManager) {
+                banner.setViewUrls(((BannerDataManager)observable).getUrls(false));
             }
-
-            @Override
-            public void onFailure(Call<LoadBanner> call, Throwable t) {
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-
-                banner.setViewUrls(urls);
-            }
-        });
-    }
-
-    private void cekMember() {
-        Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(getActivity()), "OTU");
-
-        isMember.enqueue(new Callback<DataProfile>() {
-            @Override
-            public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String msg = response.body().getRespMessage();
-                    String errNumber = response.body().getErrNumber();
-                    if (errNumber.equalsIgnoreCase("0")) {
-                        PreferenceUtil.setMemberStatus(getActivity(), true);
-                    } else if (errNumber.equalsIgnoreCase("5")) {
-                        lauchRegister();
-                    } else {
-                        Toast.makeText(getActivity(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataProfile> call, Throwable t) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-            }
-        });
+        };
+        BannerDataManager.getInstance().addObserver(mBannerDataObserver);
+        if (BannerDataManager.getInstance().getUrls(false).size() > 0)
+        {
+            banner.setViewUrls(BannerDataManager.getInstance().getUrls(true));
+        }
     }
 
     public void lauchRegister() {

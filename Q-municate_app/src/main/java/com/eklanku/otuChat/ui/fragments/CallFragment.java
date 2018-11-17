@@ -28,21 +28,12 @@ import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.TesActivity;
 import com.eklanku.otuChat.ui.activities.call.ContactListCallActivity;
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
-import com.eklanku.otuChat.ui.activities.payment.TestActivity;
-import com.eklanku.otuChat.ui.activities.payment.models.DataBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.listeners.LoadingData;
-import com.yyydjk.library.BannerLayout;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.Bind;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,11 +61,8 @@ public class CallFragment extends Fragment implements LoadingData {
     FrameLayout frameLayoutEmpty;
     TextView emptyListTextView;
 
-    BannerLayout banner;
     ApiInterfacePayment mApiInterfacePayment;
     String strApIUse = "OTU";
-    private static String[] banner_promo;
-
 
     public CallFragment() {
         // Required empty public constructor
@@ -121,7 +109,7 @@ public class CallFragment extends Fragment implements LoadingData {
         frameLayoutEmpty.setVisibility(View.VISIBLE);
         emptyListTextView.setVisibility(View.VISIBLE);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-        //loadBanner();
+
         setEmptyMessage();
         // Inflate the layout for this fragment
         //setHasOptionsMenu(true);
@@ -132,17 +120,6 @@ public class CallFragment extends Fragment implements LoadingData {
                 startActivity(new Intent(getActivity(), TestActivity.class));
             }
         });*/
-
-        /*Activity activity = getActivity();
-        if (activity != null && isAdded()) {
-
-            // isi fungsi loadbanner, cek member
-            loadBanner();
-            if (!PreferenceUtil.isMemberStatus(getActivity())) {
-                cekMember();
-            }
-
-        }*/
 
         call.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,8 +179,6 @@ public class CallFragment extends Fragment implements LoadingData {
         call = view.findViewById(R.id.fab_dialogs_new_call);
         frameLayoutEmpty = view.findViewById(R.id.frameEmptyList);
         emptyListTextView = view.findViewById(R.id.empty_list_textview);
-        banner = view.findViewById(R.id.bannerLayout);
-
     }
 
     private void setEmptyMessage() {
@@ -222,58 +197,6 @@ public class CallFragment extends Fragment implements LoadingData {
         emptyListTextView.setText(builder);
     }
 
-    public void loadBanner() {
-
-        banner.setImageLoader(new GlideImageLoader());
-        List<String> urls = new ArrayList<>();
-        Call<LoadBanner> callLoadBanner = mApiInterfacePayment.getBanner(PreferenceUtil.getNumberPhone(getActivity()), strApIUse);
-        callLoadBanner.enqueue(new Callback<LoadBanner>() {
-            @Override
-            public void onResponse(Call<LoadBanner> call, Response<LoadBanner> response) {
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    if (status.equals("SUCCESS")) {
-                        final List<DataBanner> result = response.body().getRespMessage();
-                        banner_promo = new String[result.size()];
-                        if (result.size() > 0) {
-                            try {
-                                for (int i = 0; i < result.size(); i++) {
-                                    banner_promo[i] = result.get(i).getBaner_promo();
-                                    urls.add(banner_promo[i]);
-                                }
-                            } catch (Exception e) {
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-                            }
-                        } else {
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                            urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-                        }
-                    } else {
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                        urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-                    }
-                    banner.setViewUrls(urls);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadBanner> call, Throwable t) {
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_scale,h_200,w_550/v1516817488/Asset_1_okgwng.png");
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287475/tagihan_audevp.jpg");
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287476/XL_Combo_egiyva.jpg");
-                urls.add("https://res.cloudinary.com/dzmpn8egn/image/upload/c_mfit,h_170/v1516287866/listrik_g5gtxa.jpg");
-
-                banner.setViewUrls(urls);
-            }
-        });
-    }
 
     //fungsi cek member
     private void cekMember() {
