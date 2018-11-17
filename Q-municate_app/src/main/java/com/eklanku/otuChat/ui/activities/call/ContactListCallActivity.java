@@ -13,13 +13,16 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.connectycube.chat.ConnectycubeChatService;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.users.model.ConnectycubeUser;
 import com.connectycube.videochat.RTCTypes;
 import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.ui.activities.RecyclerTouchListener;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.chats.NewMessageActivity;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
@@ -27,15 +30,22 @@ import com.eklanku.otuChat.ui.activities.contacts.ContactsModelGroup;
 import com.eklanku.otuChat.ui.adapters.call.CallsAdapter;
 import com.eklanku.otuChat.ui.adapters.friends.FriendsAdapter;
 import com.eklanku.otuChat.ui.adapters.search.ContactsAdapterGroup;
+import com.eklanku.otuChat.utils.DateUtils;
 import com.eklanku.otuChat.utils.KeyboardUtils;
 import com.eklanku.otuChat.utils.ToastUtils;
 import com.eklanku.otuChat.utils.helpers.DbHelper;
 import com.quickblox.q_municate_core.core.command.Command;
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.service.QBServiceConsts;
+import com.quickblox.q_municate_core.utils.OnlineStatusUtils;
 import com.quickblox.q_municate_core.utils.UserFriendUtils;
 import com.quickblox.q_municate_db.managers.DataManager;
+import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -117,6 +127,40 @@ public class ContactListCallActivity extends BaseLoggableActivity implements Sea
         friendsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         friendsRecyclerView.setAdapter(callsAdapter);
 
+        /*friendsRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, friendsRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+                Toast.makeText(ContactListCallActivity.this, "selected user : " + selectedUser, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));*/
+
+    }
+
+    @Override
+    public void notifyChangedUserStatus(int userId, boolean online) {
+        super.notifyChangedUserStatus(userId, online);
+
+        if (selectedUser != null && selectedUser.getId() == userId) {
+            if (online) {
+                //gets opponentUser from DB with updated field 'last_request_at'
+                actualizeOpponentUserFromDb();
+            }
+        }
+    }
+
+    private void actualizeOpponentUserFromDb() {
+        QMUser opponentUserFromDb = QMUserService.getInstance().getUserCache().get((long) selectedUser.getId());
+
+        if (opponentUserFromDb != null) {
+            selectedUser = opponentUserFromDb;
+        }
     }
 
     @Override
@@ -147,7 +191,7 @@ public class ContactListCallActivity extends BaseLoggableActivity implements Sea
 
 
     private void showProgressDialog(boolean show) {
-        if(show) {
+        if (show) {
             showProgress();
         }
     }
