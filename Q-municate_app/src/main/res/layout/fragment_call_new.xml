@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="#F7F5ED"
     tools:ignore="RtlHardcoded,RtlSymmetry">
+
 <!--
     <ScrollView
         android:layout_width="match_parent"
@@ -18,7 +19,7 @@
             android:background="@color/bg_main"
             android:orientation="vertical">-->
 
-            <include layout="@layout/shadow_view" />
+            <!--<include layout="@layout/shadow_view" />-->
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
