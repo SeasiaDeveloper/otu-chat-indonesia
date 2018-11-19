@@ -33,7 +33,7 @@
                 android:id="@+id/msg_text_message"
                 style="@style/TextViewTextMsg.Left"
                 emojicon:emojiconSize="@dimen/text_20"
-                android:paddingTop="@dimen/density_2"
+                android:paddingTop="@dimen/density_8"
                 tools:text="message the long one message" />
 
             <LinearLayout

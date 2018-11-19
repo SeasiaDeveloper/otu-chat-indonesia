@@ -190,8 +190,8 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         int right = view.getPaddingRight();
         int left = view.getPaddingLeft();
         view.setBackgroundResource(resourceID);
-        //view.setPadding(left, top, right, bottom);
         view.setPadding(left, top, right, bottom);
+        //view.setPadding(left, top, right, bottom);
     }
 
     @Override

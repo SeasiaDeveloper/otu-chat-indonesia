@@ -187,6 +187,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         dialogsListView.setAdapter(dialogsListAdapter);
 
         banner = header.findViewById(R.id.bannerLayout);
+        banner.setVisibility(View.GONE);
         initBanner();
 
         //dialogsListView.addHeaderView(header, null, false);
@@ -293,7 +294,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
                 SettingsActivity.startForResult(this);
                 break;
             case R.id.action_notification:
-                Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Coming soon...", Toast.LENGTH_SHORT).show();
                 //SettingsActivity.startForResult(this);
                 break;
             case R.id.action_start_about:

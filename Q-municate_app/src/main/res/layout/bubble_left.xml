@@ -19,6 +19,6 @@
             android:padding="5dp"
             android:textColor="@android:color/holo_red_dark" />
 
-    </LinearLayout>>
+    </LinearLayout>
 
 </RelativeLayout>

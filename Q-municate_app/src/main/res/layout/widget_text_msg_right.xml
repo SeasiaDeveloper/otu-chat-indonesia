@@ -53,9 +53,9 @@
                     android:id="@+id/msg_text_message"
                     style="@style/TextViewTextMsg.Right"
                     android:layout_width="wrap_content"
-                    android:paddingTop="@dimen/padding_small"
+                    android:paddingTop="@dimen/density_2"
                     android:focusableInTouchMode="false"
-                    emojicon:emojiconSize="24sp"
+                    emojicon:emojiconSize="@dimen/text_20"
                     tools:text="xxxxxxxxxxxxxxxx xxx xxx" />
 
                 <!--<LinearLayout

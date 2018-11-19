@@ -17,6 +17,7 @@ import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -26,12 +27,18 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.TesActivity;
+import com.eklanku.otuChat.ui.activities.about.AboutActivity;
+import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.call.ContactListCallActivity;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
+import com.eklanku.otuChat.ui.activities.feedback.FeedbackActivity;
+import com.eklanku.otuChat.ui.activities.invitefriends.InviteFriendsActivity;
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.listeners.LoadingData;
 import butterknife.Bind;
@@ -102,7 +109,7 @@ public class CallFragment extends Fragment implements LoadingData {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        setActivityBannerVisibility(View.VISIBLE);
+        setActivityBannerVisibility(View.GONE);
 
         View view = inflater.inflate(R.layout.fragment_call_new, container, false);
         initializeResources(view);
@@ -148,6 +155,25 @@ public class CallFragment extends Fragment implements LoadingData {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.call_info_menu, menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.search_calls:
+                launchContactsActivity();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    private void launchContactsActivity() {
+        Intent intent = new Intent(getActivity(), ContactsActivity.class);
+        startActivity(intent);
+    }
+
 
 
     @Override

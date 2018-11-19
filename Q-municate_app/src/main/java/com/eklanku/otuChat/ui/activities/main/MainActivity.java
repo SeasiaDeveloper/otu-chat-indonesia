@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.eklanku.otuChat.App;
@@ -146,7 +147,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     String strApIUse = "OTU";
     PaymentFragment paymentFragment;
 
-    LinearLayout layoutCollaps, layoutSaldo;
+    LinearLayout layoutCollaps, layoutSaldo, layoutDivider;
     CircleImageView img;
     TextView txt, txtEkl, tvStarMember;
 
@@ -222,16 +223,20 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                     }
 
                     layoutSaldo.setVisibility(View.GONE);
+                    layoutDivider.setVisibility(View.GONE);
+                    //bannerSlider.setVisibility(View.GONE);
                     break;
                 case R.id.navigation_call:
                     fragment = new CallFragment();
 
                     layoutSaldo.setVisibility(View.GONE);
+                    layoutDivider.setVisibility(View.GONE);
                     if (PreferenceUtil.isLoginStatus(MainActivity.this)) {
                         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
                         strUserID = user.get(preferenceManager.KEY_USERID);
                         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
                     }
+                    //bannerSlider.setVisibility(View.GONE);
 
                     break;
                 case R.id.navigation_payment:
@@ -246,7 +251,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                     }
 
                     layoutSaldo.setVisibility(View.VISIBLE);
-
+                    layoutDivider.setVisibility(View.VISIBLE);
+                    //bannerSlider.setVisibility(View.VISIBLE);
                     break;
 
             }
@@ -274,8 +280,10 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         //lblSaldo = (TextView) findViewById(R.id.tvSaldo);
         layoutCollaps = findViewById(R.id.layout_);
         layoutSaldo = findViewById(R.id.laySaldo);
+        layoutDivider = findViewById(R.id.divider_banner);
         tvSaldo = findViewById(R.id.tvSaldo);
         layoutSaldo.setVisibility(View.GONE);
+        layoutDivider.setVisibility(View.GONE);
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -345,17 +353,15 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         mainActivity = this;
     }
 
-    private void initBanner()
-    {
+    private void initBanner() {
         bannerSlider.setImageLoader(new GlideImageLoader());
         mBannerDataObserver = (observable, arg) -> {
             if (observable instanceof BannerDataManager) {
-                bannerSlider.setViewUrls(((BannerDataManager)observable).getUrls(false));
+                bannerSlider.setViewUrls(((BannerDataManager) observable).getUrls(false));
             }
         };
         BannerDataManager.getInstance().addObserver(mBannerDataObserver);
-        if (BannerDataManager.getInstance().getUrls(false).size() > 0)
-        {
+        if (BannerDataManager.getInstance().getUrls(false).size() > 0) {
             bannerSlider.setViewUrls(BannerDataManager.getInstance().getUrls(true));
         }
     }
@@ -527,8 +533,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     }
 
     @Override
-    protected void onNewIntent(Intent intent)
-    {
+    protected void onNewIntent(Intent intent) {
         processPushIntent(intent);
         super.onNewIntent(intent);
     }

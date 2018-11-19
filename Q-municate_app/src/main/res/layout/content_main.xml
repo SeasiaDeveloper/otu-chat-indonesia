@@ -26,13 +26,13 @@
 
                 <LinearLayout
                     android:id="@+id/laySaldo"
-                    android:layout_marginTop="@dimen/density_4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="vertical"
                     android:paddingStart="@dimen/density_4"
                     android:paddingLeft="@dimen/density_4"
+                    android:paddingTop="@dimen/density_4"
                     android:paddingEnd="@dimen/density_4"
                     android:paddingRight="@dimen/density_4">
 
@@ -270,36 +270,42 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/divider_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/density_4" />
+
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/density_4"
                     android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginTop="0dp"
                     android:layout_marginEnd="@dimen/density_4"
                     android:layout_marginRight="@dimen/density_4"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/density_4"
-                    android:layout_marginBottom="@dimen/density_4"
                     app:cardCornerRadius="@dimen/density_4">
 
                     <com.yyydjk.library.BannerLayout
                         android:id="@+id/bannerLayout"
                         android:layout_width="match_parent"
                         android:layout_height="125dp"
+                        android:visibility="gone"
                         app:autoPlayDuration="4000"
                         app:indicatorMargin="10dp"
                         app:indicatorPosition="rightBottom"
                         app:indicatorShape="rect"
                         app:indicatorSpace="@dimen/density_4"
                         app:isAutoPlay="true"
+                        app:scrollDuration="1000"
                         app:selectedIndicatorColor="@color/colorPrimary"
                         app:selectedIndicatorHeight="6dp"
                         app:selectedIndicatorWidth="6dp"
                         app:unSelectedIndicatorColor="#99ffffff"
                         app:unSelectedIndicatorHeight="6dp"
-                        app:unSelectedIndicatorWidth="6dp"
-                        app:scrollDuration="1000"
-                        android:visibility="gone"/>
+                        app:unSelectedIndicatorWidth="6dp" />
 
                 </android.support.v7.widget.CardView>
             </LinearLayout>
