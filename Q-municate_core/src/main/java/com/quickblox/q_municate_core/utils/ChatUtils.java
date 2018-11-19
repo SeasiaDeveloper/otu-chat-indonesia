@@ -184,7 +184,7 @@ public class ChatUtils {
             DialogOccupant dialogOccupant = getDialogOccupant(dataManager, qbDialog);
 
             long tempMessageId = qbDialog.getDialogId().hashCode();
-            Message message = createTempLocalMessage(tempMessageId, dialogOccupant, qbDialog.getLastMessage(), qbDialog.getLastMessageDateSent(), State.TEMP_LOCAL);
+            Message message = createTempLocalMessage(tempMessageId, dialogOccupant, qbDialog.getLastMessage(), qbDialog.getLastMessageDateSent(), State.TEMP_LOCAL, qbDialog.getDialogId());
             messagesList.add(message);
         }
         return messagesList;
@@ -209,7 +209,7 @@ public class ChatUtils {
             long createdData = qbDialog.getLastMessageDateSent();
 
             for (int i = 0; i < unreadCount; i++) {
-                Message message = createTempLocalMessage(tempMessageId++, dialogOccupant, qbDialog.getLastMessage(), createdData++, State.TEMP_LOCAL_UNREAD);
+                Message message = createTempLocalMessage(tempMessageId++, dialogOccupant, qbDialog.getLastMessage(), createdData++, State.TEMP_LOCAL_UNREAD, qbDialog.getDialogId());
                 messagesList.add(message);
             }
         }
@@ -252,9 +252,10 @@ public class ChatUtils {
         return message;
     }
 
-    private static Message createTempLocalMessage(long messageId, DialogOccupant dialogOccupant, String body, long createdDate, State state) {
+    private static Message createTempLocalMessage(long messageId, DialogOccupant dialogOccupant, String body, long createdDate, State state, String dialogId) {
         Message message = createTempLocalMessage(messageId, dialogOccupant, body, state);
         message.setCreatedDate(createdDate);
+        message.setDialogId(dialogId);
         return message;
     }
 

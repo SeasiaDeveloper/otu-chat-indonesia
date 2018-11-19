@@ -30,10 +30,23 @@ public class DialogWrapper implements Serializable {
 
     public DialogWrapper(Context context, DataManager dataManager, ConnectycubeChatDialog chatDialog) {
         this.chatDialog = chatDialog;
-        transform(context, dataManager);
+        makeTransformation(context, dataManager);
     }
 
-    private void transform(Context context, DataManager dataManager){
+    private void makeTransformation(Context context, DataManager dataManager) {
+        if(ConnectycubeDialogType.PUBLIC_GROUP.equals(chatDialog.getType())) {
+            transformBroadcastDialog(context, dataManager);
+        } else {
+            transform(context, dataManager);
+        }
+    }
+
+    private void transformBroadcastDialog(Context context, DataManager dataManager) {
+        fillTotalCountBroadcast(dataManager);
+        fillLastMessageBroadcast(context, dataManager);
+    }
+
+    private void transform(Context context, DataManager dataManager) {
         ConnectycubeUser currentUser = AppSession.getSession().getUser();
         List<DialogOccupant> dialogOccupantsList = dataManager.getDialogOccupantDataManager().getDialogOccupantsListByDialogId(chatDialog.getDialogId());
         List<Long> dialogOccupantsIdsList = ChatUtils.getIdsFromDialogOccupantsList(dialogOccupantsList);
@@ -67,7 +80,23 @@ public class DialogWrapper implements Serializable {
         totalCount = unreadMessages + unreadDialogNotifications;
     }
 
-    private void fillLastMessage(Context context, DataManager dataManager, List<Long> dialogOccupantsIdsList){
+    private void fillTotalCountBroadcast(DataManager dataManager) {
+        long unreadMessages = dataManager.getMessageDataManager().getCountUnreadMessagesByDialogId(chatDialog.getDialogId());
+        if (unreadMessages > 0) {
+            Log.i(TAG, "chat Dlg:" + chatDialog.getName() + ", unreadMessages = " + unreadMessages);
+        }
+        totalCount = unreadMessages;
+    }
+
+    private void fillLastMessageBroadcast(Context context, DataManager dataManager) {
+        Message message = dataManager.getMessageDataManager().getLastMessageByDialogId(chatDialog.getDialogId());
+        if (message != null) {
+            lastMessageDate = message.getCreatedDate();
+        }
+        lastMessage = ChatUtils.getDialogLastMessage(context.getResources().getString(R.string.cht_notification_message), message, null);
+    }
+
+    private void fillLastMessage(Context context, DataManager dataManager, List<Long> dialogOccupantsIdsList) {
         Message message = dataManager.getMessageDataManager().getLastMessageWithTempByDialogId(dialogOccupantsIdsList);
         DialogNotification dialogNotification = dataManager.getDialogNotificationDataManager().getLastDialogNotificationByDialogId(dialogOccupantsIdsList);
         if(message != null)
