@@ -13,12 +13,15 @@ import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.ui.activities.chats.NewGroupDialogActivity;
 import com.eklanku.otuChat.ui.activities.chats.NewMessageActivity;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
@@ -58,6 +61,7 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
         public TextView mTvUsername, mTvMessage, mTvPhonenumber;
         public ImageView mIvChat;
         public RelativeLayout mRlContacts;
+        public LinearLayout layoutCreateGroup;
         public CheckBox mChkSelect;
         public ImageView IVIcon;
 
@@ -70,6 +74,8 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
             mRlContacts = (RelativeLayout) view.findViewById(R.id.rlContacts);
             mChkSelect = (CheckBox) view.findViewById(R.id.chkSelect);
             IVIcon = (ImageView) view.findViewById(R.id.ivIcon);
+
+            layoutCreateGroup = view.findViewById(R.id.layout_create_group);
 
         }
     }
@@ -85,7 +91,7 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_contacts, parent, false);
+                .inflate(R.layout.row_contacts_new, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -118,7 +124,6 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
                 .buildRound(identityName, color); // radius in px
         holder.IVIcon.setImageDrawable(drawable);
         holder.mTvUsername.setText(contact.getFullName());
-        Log.v("Contacts New Meesage", "number: " + contact.getLogin());
 
         //holder.mTvPhonenumber.setText(contact.getLogin());
         if (isToGroup) {
@@ -147,6 +152,20 @@ public class ContactsAdapterGroup extends RecyclerView.Adapter<ContactsAdapterGr
                 //holder.mTvMessage.setText("Invite");
             }
         }
+
+        if (position == 0) {
+            holder.layoutCreateGroup.setVisibility(View.VISIBLE);
+        } else {
+            holder.layoutCreateGroup.setVisibility(View.GONE);
+        }
+
+        holder.layoutCreateGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(context, "Create group", Toast.LENGTH_SHORT).show();
+                NewGroupDialogActivity.start(context);
+            }
+        });
 
         holder.mRlContacts.setOnClickListener(new View.OnClickListener() {
             @Override

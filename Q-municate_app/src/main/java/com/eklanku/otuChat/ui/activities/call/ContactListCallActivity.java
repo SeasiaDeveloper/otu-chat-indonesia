@@ -127,20 +127,6 @@ public class ContactListCallActivity extends BaseLoggableActivity implements Sea
         friendsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         friendsRecyclerView.setAdapter(callsAdapter);
 
-        /*friendsRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, friendsRecyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-
-                Toast.makeText(ContactListCallActivity.this, "selected user : " + selectedUser, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));*/
-
     }
 
     @Override

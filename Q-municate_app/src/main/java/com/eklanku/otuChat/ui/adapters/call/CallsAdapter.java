@@ -45,7 +45,6 @@ import java.util.List;
 
 public class CallsAdapter extends RecyclerView.Adapter<CallsAdapter.MyViewHolder> implements Filterable {
 
-
     private List<ContactsModelGroup> contactsModelsGroup;
     private List<ContactsModelGroup> mainListGroup;
 
@@ -54,6 +53,8 @@ public class CallsAdapter extends RecyclerView.Adapter<CallsAdapter.MyViewHolder
     private ConnectycubeUser connectycubeUser = AppSession.getSession().getUser();
     private boolean isToGroup = false;
 
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ITEM = 1;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView mTvUsername, mTvMessage, mTvPhonenumber;
@@ -89,10 +90,12 @@ public class CallsAdapter extends RecyclerView.Adapter<CallsAdapter.MyViewHolder
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.row_contact_tab_call, viewGroup, false);
 
-        return new CallsAdapter.MyViewHolder(itemView);
+            View itemView = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.row_contact_tab_call, viewGroup, false);
+
+            return new CallsAdapter.MyViewHolder(itemView);
+
     }
 
     @Override
