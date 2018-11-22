@@ -15,8 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClientPayment {
 
-    //public static final String BASE_URL = "https://api.eklanku.com/";
-    public static final String BASE_URL = "http://103.77.78.240/devapi/api/";
+    public static final String BASE_URL = "https://api.eklanku.com/";
+    //public static final String BASE_URL = "http://103.77.78.240/devapi/api/";
 
     private static Retrofit retrofit = null;
 
@@ -27,10 +27,10 @@ public class ApiClientPayment {
                 public okhttp3.Response intercept(Chain chain) throws IOException {
                     Request originalRequest = chain.request();
 
-                   /* Request.Builder builder = originalRequest.newBuilder().header(
-                            "x-api-key", "owck0844c84c48wwo08o8goww8k0oc4gg8gcgssw");*/
                     Request.Builder builder = originalRequest.newBuilder().header(
-                            "x-api-key", "222");
+                            "x-api-key", "owck0844c84c48wwo08o8goww8k0oc4gg8gcgssw");
+                   /* Request.Builder builder = originalRequest.newBuilder().header(
+                            "x-api-key", "222");*/
                     Request newRequest = builder.build();
                     return chain.proceed(newRequest);
                 }
