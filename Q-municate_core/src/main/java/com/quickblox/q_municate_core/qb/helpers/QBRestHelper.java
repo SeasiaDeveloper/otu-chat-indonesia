@@ -22,7 +22,7 @@ public class QBRestHelper extends BaseHelper {
         try {
             QMUser user = QMUserService.getInstance().getUserSync(userId, true);
             resultUser = user;
-        } catch (ResponseException e) {
+        } catch (Exception e) {
             // user not found
             resultUser = createDeletedUser(userId);
         }

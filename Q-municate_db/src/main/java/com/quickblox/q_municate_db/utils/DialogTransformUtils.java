@@ -29,7 +29,7 @@ public class DialogTransformUtils {
         qbDialog.setName(dialog.getTitle());
         qbDialog.setOccupantsIds(createOccupantsIdsFromDialogOccupantsList(dialogOccupantsList));
         qbDialog.setType(
-                Dialog.Type.PRIVATE.equals(dialog.getType()) ? ConnectycubeDialogType.PRIVATE : ConnectycubeDialogType.GROUP);
+                Dialog.Type.PRIVATE.equals(dialog.getType()) ? ConnectycubeDialogType.PRIVATE : Dialog.Type.GROUP.equals(dialog.getType()) ? ConnectycubeDialogType.GROUP : ConnectycubeDialogType.PUBLIC_GROUP);
 
         qbDialog.setUpdatedAt(new Date(dialog.getModifiedDateLocal()));
         return qbDialog;
@@ -68,8 +68,9 @@ public class DialogTransformUtils {
             dialog.setType(Dialog.Type.PRIVATE);
         } else if (ConnectycubeDialogType.GROUP.equals(qbDialog.getType())) {
             dialog.setType(Dialog.Type.GROUP);
+        } else if (ConnectycubeDialogType.PUBLIC_GROUP.equals(qbDialog.getType())) {
+            dialog.setType(Dialog.Type.BROADCAST);
         }
-
         return dialog;
     }
 

@@ -218,7 +218,7 @@ public class DbUtils {
         List<Long> dialogOccupantsIdsList = ChatUtils.getIdsFromDialogOccupantsList(dialogOccupantsList);
 
         Message message = dataManager.getMessageDataManager()
-                .getLastMessageByDialogId(dialogOccupantsIdsList);
+                .getLastMessageByOccupantsId(dialogOccupantsIdsList);
         DialogNotification dialogNotification = dataManager.getDialogNotificationDataManager()
                 .getLastDialogNotificationByDialogId(dialogOccupantsIdsList);
 

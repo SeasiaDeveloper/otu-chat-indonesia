@@ -485,8 +485,10 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     private void startDialogActivity(ConnectycubeChatDialog chatDialog, QMUser user) {
         if (ConnectycubeDialogType.PRIVATE.equals(chatDialog.getType())) {
             startPrivateChatActivity(user, chatDialog);
-        } else {
+        } else if (ConnectycubeDialogType.GROUP.equals(chatDialog.getType())) {
             startGroupChatActivity(chatDialog);
+        } else {
+            startBroadcastChatActivity(chatDialog);
         }
     }
 
