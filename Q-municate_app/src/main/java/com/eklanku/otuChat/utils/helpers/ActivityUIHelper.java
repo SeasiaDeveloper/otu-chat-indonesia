@@ -68,8 +68,10 @@ public class ActivityUIHelper {
 
         if (ConnectycubeDialogType.PRIVATE.equals(chatDialog.getType())) {
             baseActivity.startPrivateChatActivity(senderUser, chatDialog);
-        } else {
+        } else if(ConnectycubeDialogType.GROUP.equals(chatDialog.getType())) {
             baseActivity.startGroupChatActivity(chatDialog);
+        } else {
+            baseActivity.startBroadcastChatActivity(chatDialog);
         }
     }
 }

@@ -41,6 +41,7 @@ import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.call.CallActivity;
+import com.eklanku.otuChat.ui.activities.chats.BroadcastDialogActivity;
 import com.eklanku.otuChat.ui.activities.chats.GroupDialogActivity;
 import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.eklanku.otuChat.utils.ToastUtils;
@@ -712,6 +713,10 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
     public void startGroupChatActivity(ConnectycubeChatDialog chatDialog) {
         GroupDialogActivity.start(this, chatDialog);
+    }
+
+    public void startBroadcastChatActivity(ConnectycubeChatDialog chatDialog) {
+        BroadcastDialogActivity.start(this, chatDialog);
     }
 
     protected void startLandingScreen() {

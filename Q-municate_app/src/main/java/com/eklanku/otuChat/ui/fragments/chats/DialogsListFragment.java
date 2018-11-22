@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
+import com.eklanku.otuChat.ui.activities.chats.BroadcastDialogActivity;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
@@ -318,8 +319,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         if(dialogType!= null){
             if (dialogType.equals(ConnectycubeDialogType.GROUP)){
                 menuInflater.inflate(R.menu.dialogs_list_group_ctx_menu, menu);
-            }
-            else{
+            } else if(dialogType.equals(ConnectycubeDialogType.PRIVATE)) {
                 menuInflater.inflate(R.menu.dialogs_list_private_ctx_menu, menu);
             }
         }
@@ -492,13 +492,14 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
             Log.d(TAG, "header banner was clicked");
             return;
         }
-        ConnectycubeChatDialog chatDialog = ((DialogWrapper)dialogsListView.getItemAtPosition(position)).getChatDialog();
-
+        ConnectycubeChatDialog chatDialog = ((DialogWrapper) dialogsListView.getItemAtPosition(position)).getChatDialog();
         if (!baseActivity.checkNetworkAvailableWithError() && isFirstOpeningDialog(chatDialog.getDialogId())) {
             return;
         }
 
-        if (ConnectycubeDialogType.PRIVATE.equals(chatDialog.getType())) {
+        if (ConnectycubeDialogType.PUBLIC_GROUP.equals(chatDialog.getType())) {
+            startBroadcastChatActivity(chatDialog);
+        } else if (ConnectycubeDialogType.PRIVATE.equals(chatDialog.getType())) {
             startPrivateChatActivity(chatDialog);
         } else {
             startGroupChatActivity(chatDialog);
@@ -665,6 +666,10 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
     private void startGroupChatActivity(ConnectycubeChatDialog chatDialog) {
         GroupDialogActivity.startForResult(this, chatDialog, PICK_DIALOG);
+    }
+
+    private void startBroadcastChatActivity(ConnectycubeChatDialog chatDialog) {
+        BroadcastDialogActivity.startForResult(this, chatDialog, PICK_DIALOG);
     }
 
     private void updateDialogsList(int startRow, int perPage) {

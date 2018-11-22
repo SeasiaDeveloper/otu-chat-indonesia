@@ -133,6 +133,30 @@ public class MessageDataManager extends BaseManager<Message> {
         return count;
     }
 
+    public long getCountUnreadMessagesByDialogId(String dialogId) {
+        long count = 0;
+
+        try {
+            QueryBuilder<Message, Long> messageQueryBuilder = dao.queryBuilder();
+            messageQueryBuilder.setCountOf(true);
+            Where<Message, Long> where = messageQueryBuilder.where();
+            where.and(
+                    where.in(Message.Column.DIALOG_ID, dialogId),
+                    where.or(
+                            where.eq(Message.Column.STATE, State.DELIVERED),
+                            where.eq(Message.Column.STATE, State.TEMP_LOCAL_UNREAD)
+                    )
+            );
+
+            PreparedQuery<Message> preparedQuery = messageQueryBuilder.prepare();
+            count = dao.countOf(preparedQuery);
+        } catch (SQLException e) {
+            ErrorUtils.logError(e);
+        }
+
+        return count;
+    }
+
     public List<Message> getUnreadMessages(List<Long> dialogOccupantsIdsList, int currentUserId) {
 
         try {
@@ -161,7 +185,7 @@ public class MessageDataManager extends BaseManager<Message> {
         return null;
     }
 
-    public Message getLastMessageByDialogId(List<Long> dialogOccupantsList) {
+    public Message getLastMessageByOccupantsId(List<Long> dialogOccupantsList) {
         Message message = null;
 
         try {
@@ -170,6 +194,24 @@ public class MessageDataManager extends BaseManager<Message> {
             where.in(DialogOccupant.Column.ID, dialogOccupantsList);
             queryBuilder.orderBy(Message.Column.CREATED_DATE, false);
             PreparedQuery<Message> preparedQuery = queryBuilder.prepare();
+            message = dao.queryForFirst(preparedQuery);
+        } catch (SQLException e) {
+            ErrorUtils.logError(e);
+        }
+
+        return message;
+    }
+
+    public Message getLastMessageByDialogId(String dialogId) {
+        Message message = null;
+
+        try {
+            QueryBuilder<Message, Long> messageQueryBuilder = dao.queryBuilder();
+            Where<Message, Long> where = messageQueryBuilder.where();
+            where.in(Message.Column.DIALOG_ID, dialogId);
+            messageQueryBuilder.orderBy(Message.Column.CREATED_DATE, false);
+
+            PreparedQuery<Message> preparedQuery = messageQueryBuilder.prepare();
             message = dao.queryForFirst(preparedQuery);
         } catch (SQLException e) {
             ErrorUtils.logError(e);

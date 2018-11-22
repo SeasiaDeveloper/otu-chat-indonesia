@@ -153,6 +153,7 @@
 
     <!-- Group Dialog Details -->
     <string name="dialog_details_title">Group Details</string>
+    <string name="dialog_broadcast_details_title">Broadcast Details</string>
     <string name="dialog_details_leave_group">Leave group</string>
     <string name="dialog_details_participants">%1$d participants</string>
     <string name="dialog_details_online_participants">%1$d/%2$d online</string>
