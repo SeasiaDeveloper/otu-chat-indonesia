@@ -113,7 +113,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         final com.eklanku.otuChat.ui.activities.contacts.ContactsModel contact = contactsModels.get(position);
 
         //get first letter of each String item
-        //get first letter of each String item
         String fullName = contact.getFullName();
         String firstLetter = String.valueOf(fullName.charAt(0));
         String lastLetter = "";
