@@ -85,6 +85,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
+import butterknife.Bind;
 import butterknife.OnClick;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
@@ -102,6 +103,20 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     private boolean isReply = false;
 
     public DbHelper mDbHelper;
+
+    @Bind(R.id.include_view_input_message_layout)
+    View inputViewPanel;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        String oppUsername = opponentUser.getFullName();
+
+        if (oppUsername.equals("AYIK IM3"))
+            inputViewPanel.setVisibility(View.GONE);
+
+    }
 
     public static void start(Context context, QMUser opponent, ConnectycubeChatDialog chatDialog) {
         Intent intent = getIntentWithExtra(context, opponent, chatDialog);
@@ -155,7 +170,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
 
             @Override
             public void onItemClick(int position) {
-                Log.d("RINA", "initChatAdapter: "+position);
+                Log.d("RINA", "initChatAdapter: " + position);
                 if (isMultipleMessageSelect)
                     select(position);
 
@@ -163,7 +178,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
                     String fileId = "";
                     String fileType = "";
                     ConnectycubeAttachment connectycubeAttachment = null;
-                    Log.d("RINA", "initChatAdapter: "+position);
+                    Log.d("RINA", "initChatAdapter: " + position);
                     for (ConnectycubeAttachment attachment : combinationMessagesList.get(position).getAttachments()) {
                         fileId = attachment.getId();
                         fileType = attachment.getType();
@@ -258,7 +273,6 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         inflater.inflate(R.menu.private_dialog_menu, menu);
         return true;
     }
-
 
 
     private ActionMode.Callback mMenuActionModeCallback = new ActionMode.Callback() {
@@ -475,7 +489,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean isFriend = DataManager.getInstance().getFriendDataManager().getByUserId(
                 opponentUser.getId()) != null;
-        Log.d("OPPO-1", "onOptionsItemSelected = isFriend: "+opponentUser);
+        Log.d("OPPO-1", "onOptionsItemSelected = isFriend: " + opponentUser);
         if (!isFriend && item.getItemId() != android.R.id.home) {
             DataManager.getInstance().getFriendDataManager().createOrUpdate(new Friend(opponentUser));
             //QBAddFriendCommand.start(PrivateDialogActivity.this, opponentUser.getId());
@@ -523,8 +537,8 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         title = opponentUser.getFullName();
 
         mDbHelper = new DbHelper(this);
-        if(StringUtils.isNumeric(opponentUser.getFullName())) {
-            String name = mDbHelper.getNamebyNumber(opponentUser.getFullName()) ;
+        if (StringUtils.isNumeric(opponentUser.getFullName())) {
+            String name = mDbHelper.getNamebyNumber(opponentUser.getFullName());
             if (!name.isEmpty())
                 title = name;
         }
@@ -560,7 +574,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
             if (friendListHelper != null) {
                 String offlineStatus = getString(R.string.last_seen, DateUtils.toTodayYesterdayShortDateWithoutYear2(user.getLastRequestAt() != null ?
                                 user.getLastRequestAt().getTime() : 0),
-                        DateUtils.formatDateSimpleTime(user.getLastRequestAt() != null? user.getLastRequestAt().getTime() : 0));
+                        DateUtils.formatDateSimpleTime(user.getLastRequestAt() != null ? user.getLastRequestAt().getTime() : 0));
                 setActionBarSubtitle(
                         OnlineStatusUtils.getOnlineStatus(this, friendListHelper.isUserOnline(user.getId()), offlineStatus));
             }
@@ -579,7 +593,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     }
 
     private void callToUser(QMUser user, RTCTypes.ConferenceType ConferenceType) {
-        Log.d("AYIK", "status calltouser "+isChatInitializedAndUserLoggedIn());
+        Log.d("AYIK", "status calltouser " + isChatInitializedAndUserLoggedIn());
         if (!isChatInitializedAndUserLoggedIn()) {
             ToastUtils.longToast(R.string.call_chat_service_is_initializing);
             return;
