@@ -113,7 +113,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
 
         String oppUsername = opponentUser.getFullName();
 
-        if (oppUsername.equals("AYIK IM3"))
+        if (oppUsername.equals("Otu Payment"))
             inputViewPanel.setVisibility(View.GONE);
 
     }
