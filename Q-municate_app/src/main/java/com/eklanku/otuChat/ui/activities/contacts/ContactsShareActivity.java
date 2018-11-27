@@ -19,24 +19,23 @@ import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.adapters.contacts.ContactsShareAdapter;
 import com.eklanku.otuChat.utils.helpers.AddressBookHelper;
-import com.eklanku.otuChat.utils.helpers.ContactJsonHelper;
+import com.eklanku.otuChat.utils.helpers.vcard.ContactVCardConvertHelper;
 import com.quickblox.q_municate_core.models.AppSession;
-import com.quickblox.q_municate_core.service.QBService;
 import com.quickblox.q_municate_core.utils.ConstsCore;
+import com.quickblox.q_municate_db.utils.ErrorUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import ezvcard.VCard;
-import ezvcard.parameter.VCardParameters;
-import rx.Observable;
 import rx.Observer;
 
 public class ContactsShareActivity extends BaseLoggableActivity implements SearchView.OnQueryTextListener {
     private static final String TAG = ContactsShareActivity.class.getSimpleName();
     public static final int REQUEST_CONTACTS_LIST = 701;
 
-    private ArrayList<ContactsModel> contactsModels;
+    private ArrayList<VCard> contactsModels;
     private LinearLayoutManager linearLayoutManager;
 
     private ContactsShareAdapter contactsAdapter;
@@ -49,78 +48,54 @@ public class ContactsShareActivity extends BaseLoggableActivity implements Searc
         return R.layout.activity_contacts_share;
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title = " " + AppSession.getSession().getUser().getFullName();
         setUpActionBarWithUpButton();
-
-        contactsModels = mDbHelper.getContactsSortedByRegType();
+        contactsModels = new ArrayList<>();
         contactsAdapter = new ContactsShareAdapter(contactsModels, this);
-        Log.d(TAG, "AMBRA onCreate - contactsModels: " + contactsModels);
 
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerViewContacts.setLayoutManager(linearLayoutManager);
         recyclerViewContacts.setItemAnimator(new DefaultItemAnimator());
         recyclerViewContacts.setAdapter(contactsAdapter);
-        AddressBookHelper.getInstance().getContactVCardList().subscribe(new Observer<ArrayList<VCard>>() {
+        initAdapter();
+    }
+
+    private void initAdapter() {
+        showProgress();
+        AddressBookHelper.getInstance().getContactVCardListSilentUpdate().subscribe(new Observer<List<VCard>>() {
             @Override
             public void onCompleted() {
-
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e(TAG, "AMBRA onError contactVCardListObservable= " + e);
+                hideProgressImmediately();
+                ErrorUtils.logError(TAG, e);
             }
 
             @Override
-            public void onNext(ArrayList<VCard> vCards) {
-                Log.d(TAG, "AMBRA onNext contactVCardListObservable= " + vCards.size());
-                int i = 0;
-                for (VCard vCard : vCards) {
-                    String fullName = vCard.getFormattedName().getValue();
-                    String lastName = vCard.getStructuredName().getFamily();
-                    String number = vCard.getTelephoneNumbers().get(0).getText();
-                    Log.d(TAG, "AMBRA onNext fullName= " + fullName + ", lastName= " + lastName + ", number= " + number);
-                    if(i++ == 5) {
-                        break;
-                    }
-                }
+            public void onNext(List<VCard> vCards) {
+                hideProgressImmediately();
+                contactsModels.clear();
+                contactsModels.addAll(vCards);
+                ContactVCardConvertHelper.sortVCards(contactsModels);
+                contactsAdapter.notifyDataSetChanged();
             }
-        });
-
-    }
-
-    @Override
-    public void onConnectedToService(QBService service) {
-        super.onConnectedToService(service);
-        if (friendListHelper != null) {
-            contactsAdapter.setFriendListHelper(friendListHelper);
-            contactsAdapter.notifyDataSetChanged();
-        }
-        updateContactListAndRoster();
-    }
-
-    private void updateContactListAndRoster() {
-        AddressBookHelper.getInstance().updateRosterContactList(friendListHelper, mDbHelper, AppSession.getSession().getUser().getPassword()).onErrorResumeNext(e -> Observable.empty()).subscribe(success -> {
-            Log.d(TAG, "updateRosterContactList success= " + success);
-            contactsModels.clear();
-            contactsModels.addAll(mDbHelper.getContactsSortedByRegType());
-            contactsAdapter.notifyDataSetChanged();
         });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "AMBRA onActivityResult requestCode= " + requestCode);
+        Log.d(TAG, "onActivityResult requestCode= " + requestCode + ", resultCode= " + resultCode);
         if (resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Bundle bundle = data.getExtras();
-                ArrayList<ContactsModel> contactsModels = (ArrayList<ContactsModel>) bundle.getSerializable(ContactDetails.EXTRA_CONTACTS_MODEL_LIST);
-                sendContacts(contactsModels);
+                ArrayList<String> rawContactsModels = bundle.getStringArrayList(ContactDetails.EXTRA_VC_CONTACTS_MODEL_LIST);
+                sendContacts(rawContactsModels);
             }
         }
     }
@@ -157,23 +132,18 @@ public class ContactsShareActivity extends BaseLoggableActivity implements Searc
     }
 
     public void onDetailsContacts(View view) {
-        Log.d(TAG, "AMBRA onDetailsContacts");
-        Log.d(TAG, "AMBRA onDetailsContacts contactsAdapter.getSelectedContacts()= " + contactsAdapter.getSelectedContacts());
-        ArrayList<ContactsModel> contacts = new ArrayList<>(contactsAdapter.getSelectedContacts());
-        Log.d(TAG, "AMBRA onDetailsContacts contacts= " + contacts);
-
-        ContactDetails.startForResult(this, REQUEST_CONTACTS_LIST, contacts);
+        ArrayList<VCard> contactsVCard = new ArrayList<>(contactsAdapter.getSelectedContacts());
+        ArrayList<String> contactsRaw = ContactVCardConvertHelper.convertVCardListToStringList(contactsVCard);
+        ContactDetails.startForResult(this, REQUEST_CONTACTS_LIST, contactsRaw);
     }
 
-    private void sendContacts(ArrayList<ContactsModel> contacts) {
-        String jsonContacts = ContactJsonHelper.createContactsJsonFromList(contacts);
-        Log.d(TAG, "AMBRA sendContacts jsonContacts= " + jsonContacts);
-//        Bundle extras = new Bundle();
-//        extras.putString(ConstsCore.EXTRA_CONTACTS, jsonContacts);
-//
-//        Intent result = new Intent();
-//        result.putExtras(extras);
-//        setResult(RESULT_OK, result);
-//        finish();
+    private void sendContacts(ArrayList<String> rawContacts) {
+        Bundle extras = new Bundle();
+        extras.putString(ConstsCore.EXTRA_CONTACTS, ContactVCardConvertHelper.createContactsJsonFromList(rawContacts));
+
+        Intent result = new Intent();
+        result.putExtras(extras);
+        setResult(RESULT_OK, result);
+        finish();
     }
 }

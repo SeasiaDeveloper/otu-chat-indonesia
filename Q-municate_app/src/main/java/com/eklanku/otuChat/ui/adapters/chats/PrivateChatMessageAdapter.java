@@ -345,6 +345,24 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         super.onBindViewAttachLeftDocHolder(holder, chatMessage, position);
     }
 
+    @Override
+    protected void onBindViewAttachRightContactHolder(ContactViewHolder holder, CombinationMessage chatMessage, int position) {
+        showSendStatusView(holder.signAttachView, chatMessage);
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachRightContactHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewAttachLeftContactHolder(ContactViewHolder holder, CombinationMessage chatMessage, int position) {
+        setViewVisibility(holder.avatar, View.GONE);
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachLeftContactHolder(holder, chatMessage, position);
+    }
+
     private void showSendStatusView(ImageView signView, CombinationMessage chatMessage) {
         if (chatMessage.getState() != null) {
             setMessageStatus(signView, State.DELIVERED.equals(

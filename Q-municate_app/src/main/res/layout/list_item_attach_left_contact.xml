@@ -20,35 +20,40 @@
         <LinearLayout
             android:id="@+id/msg_bubble_background"
             style="@style/BubbleTextFrame.Left"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/msg_image_attach"
-                style="@style/ImageViewAttachDoc.Left"
-                android:layout_marginLeft="@dimen/density_8"
-                android:paddingLeft="@dimen/padding_small"
-                android:paddingRight="0dp" />
+                style="@style/ImageViewAttachContact.Left"
+                android:layout_marginLeft="@dimen/density_16"/>
 
             <LinearLayout
                 android:id="@+id/msg_linear_list_item_right"
                 style="@style/LinearWidgetTextMsg.Right"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/density_8"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/padding_common"
                 android:paddingRight="0dp"
-                android:orientation="vertical">
+                android:layout_marginLeft="@dimen/density_8">
 
                 <TextView
                     android:id="@+id/msg_text_message"
                     style="@style/TextViewTextMsg.Right"
                     android:fontFamily="sans-serif-condensed"
-                    android:layout_marginTop="@dimen/density_4"
                     android:paddingLeft="0dp"
                     android:typeface="serif"
-                    tools:text="message the long one message" />
+                    android:clickable="false"
+                    android:textIsSelectable="false"
+                    tools:text="Huckleberry Finn" />
 
                 <LinearLayout
                     style="@style/LinearWidgetTextMsg.Right"
                     android:layout_height="match_parent"
-                    android:layout_gravity="end"
+                    android:layout_gravity="end|bottom"
+                    android:gravity="bottom"
                     android:paddingBottom="@dimen/padding_small"
                     android:orientation="horizontal">
 

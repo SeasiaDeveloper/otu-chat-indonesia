@@ -19,7 +19,7 @@
             android:layout_margin="@dimen/padding_common"
             android:layout_marginLeft="@dimen/padding_common"
             android:layout_marginRight="@dimen/padding_common"
-            android:background="@drawable/drawable_circle_background" />
+            android:background="@drawable/placeholder_user" />
 
         <com.eklanku.otuChat.ui.views.ARTextView
             android:id="@+id/tvUsername"

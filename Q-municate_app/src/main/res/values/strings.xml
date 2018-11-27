@@ -147,6 +147,10 @@
     <string name="dialog_attach_btn_location">Location</string>
     <string name="dialog_attach_btn_contact">Contact</string>
 
+    <string name="dialog_attach_contact_name_one">\u0020and 1 other contact</string>
+    <string name="dialog_attach_contact_name_more">\u0020and %1d other contacts</string>
+    <string name="dialog_attach_contact_add_button">\add</string>
+
     <string-array name="dialog_attach_types_array">
         <item>Take Photo</item>
         <item>From Library</item>

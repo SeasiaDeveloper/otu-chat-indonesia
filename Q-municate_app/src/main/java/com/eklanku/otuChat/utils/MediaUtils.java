@@ -23,7 +23,6 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.util.TypedValue;
 import android.webkit.MimeTypeMap;
 
@@ -218,7 +217,6 @@ public class MediaUtils {
     }
 
     public static void startContactForResult(Fragment fragment) {
-        Log.d(TAG, "AMBRA startContactForResult");
         Intent intent = new Intent(fragment.getContext(), ContactsShareActivity.class);
         fragment.startActivityForResult(intent, CONTACT_REQUEST_CODE);
     }

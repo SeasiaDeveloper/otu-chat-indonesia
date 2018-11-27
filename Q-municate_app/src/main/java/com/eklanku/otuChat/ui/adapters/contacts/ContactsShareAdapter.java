@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.eklanku.otuChat.R;
-import com.eklanku.otuChat.ui.activities.contacts.ContactsModel;
 import com.quickblox.q_municate_core.qb.helpers.QBFriendListHelper;
 import com.quickblox.q_municate_core.utils.OnlineStatusUtils;
 
@@ -24,19 +23,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ezvcard.VCard;
+
 public class ContactsShareAdapter extends RecyclerView.Adapter<ContactsShareAdapter.ViewHolder> implements Filterable {
     private static final String TAG = ContactsShareAdapter.class.getSimpleName();
 
     private QBFriendListHelper qbFriendListHelper;
 
-    private List<ContactsModel> contactsModels;
-    private Set<ContactsModel> selectedContacts;
-    private List<ContactsModel> mainList;
+    private List<VCard> contactsModels;
+    private Set<VCard> selectedContacts;
+    private List<VCard> mainList;
     private SparseBooleanArray itemStateArray = new SparseBooleanArray();
 
     private final Context context;
 
-    public ContactsShareAdapter(List<ContactsModel> contactsModels, Context context) {
+    public ContactsShareAdapter(List<VCard> contactsModels, Context context) {
         this.contactsModels = contactsModels;
         selectedContacts = new HashSet<>();
         this.mainList = contactsModels;
@@ -58,30 +59,21 @@ public class ContactsShareAdapter extends RecyclerView.Adapter<ContactsShareAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final ContactsModel contact = contactsModels.get(position);
+        final VCard contact = contactsModels.get(position);
         holder.bind(position);
 
-        holder.mTvUsername.setText(contact.getFullName());
-        Log.v(TAG, "AMBRA onBindViewHolder number: " + contact.getLogin());
+        String contactName = contact.getFormattedName() != null ? contact.getFormattedName().getValue() : contact.getTelephoneNumbers().get(0).getText();
+        holder.mTvUsername.setText(contactName);
 
-        if (contact.getIsReg_type().equals("1")) {
-            holder.contactStatus.setVisibility(View.VISIBLE);
-            setStatus(holder.contactStatus, contact.getId_user());
-        } else {
-            holder.contactStatus.setVisibility(View.GONE);
-        }
 
         holder.mRlContacts.setOnClickListener(view -> {
-            Log.d(TAG, "AMBRA setOnClickListener contact= " + contact);
             holder.mChkSelect.setChecked(!holder.mChkSelect.isChecked());
 
             if (!itemStateArray.get(position, false)) {
-                Log.d(TAG, "AMBRA setOnClickListener selectedContacts.add");
                 holder.mChkSelect.setVisibility(View.VISIBLE);
                 selectedContacts.add(contact);
                 itemStateArray.put(position, true);
             } else {
-                Log.d(TAG, "AMBRA setOnClickListener remove.add");
                 holder.mChkSelect.setVisibility(View.INVISIBLE);
                 selectedContacts.remove(contact);
                 itemStateArray.put(position, false);
@@ -109,9 +101,9 @@ public class ContactsShareAdapter extends RecyclerView.Adapter<ContactsShareAdap
                 if (charString.isEmpty()) {
                     contactsModels = mainList;
                 } else {
-                    List<ContactsModel> filteredList = new ArrayList<>();
-                    for (ContactsModel model : mainList) {
-                        if (model.getFullName().toLowerCase().contains(charString.toLowerCase())) {
+                    List<VCard> filteredList = new ArrayList<>();
+                    for (VCard model : mainList) {
+                        if (model.getFormattedName().getValue().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(model);
                         }
                     }
@@ -124,7 +116,7 @@ public class ContactsShareAdapter extends RecyclerView.Adapter<ContactsShareAdap
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                contactsModels = (ArrayList<ContactsModel>) filterResults.values;
+                contactsModels = (ArrayList<VCard>) filterResults.values;
                 notifyDataSetChanged();
             }
         };
@@ -135,7 +127,7 @@ public class ContactsShareAdapter extends RecyclerView.Adapter<ContactsShareAdap
         return contactsModels == null ? 0 : contactsModels.size();
     }
 
-    public Set<ContactsModel> getSelectedContacts() {
+    public Set<VCard> getSelectedContacts() {
         return selectedContacts;
     }
 

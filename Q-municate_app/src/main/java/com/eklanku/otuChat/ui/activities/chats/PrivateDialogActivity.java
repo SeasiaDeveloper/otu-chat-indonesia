@@ -194,6 +194,8 @@ public class PrivateDialogActivity extends BaseDialogActivity {
                                 startShowDoc(file);
                             }
                         });
+                    } else if (fileType.equals("contact")) {
+                        startShowContact(connectycubeAttachment);
                     }
                 }
             }

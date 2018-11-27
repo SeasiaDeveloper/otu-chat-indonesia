@@ -415,10 +415,10 @@ public class QBChatHelper extends BaseThreadPoolHelper{
         return attachment;
     }
 
-    private ConnectycubeAttachment getAttachmentContact(String contact) {
+    private ConnectycubeAttachment getAttachmentContact(String contacts) {
         ConnectycubeAttachment attachment = new ConnectycubeAttachment(Attachment.Type.CONTACT.toString().toLowerCase());
-        attachment.setData(contact);
-        attachment.setId(String.valueOf(contact.hashCode()));
+        attachment.setData(contacts);
+        attachment.setId(String.valueOf(contacts.hashCode()));
 
         return attachment;
     }

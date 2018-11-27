@@ -173,6 +173,41 @@ public class GroupChatMessagesAdapter extends BaseChatMessagesAdapter {
         super.onBindViewAttachRightAudioHolder(holder, chatMessage, position);
     }
 
+    @Override
+    protected void onBindViewAttachRightDocHolder(DocViewHolder holder, CombinationMessage chatMessage, int position) {
+        showSendStatusView(holder, chatMessage);
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachRightDocHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewAttachLeftDocHolder(DocViewHolder holder, CombinationMessage chatMessage, int position) {
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachLeftDocHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewAttachRightContactHolder(ContactViewHolder holder, CombinationMessage chatMessage, int position) {
+        showSendStatusView(holder, chatMessage);
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachRightContactHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewAttachLeftContactHolder(ContactViewHolder holder, CombinationMessage chatMessage, int position) {
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachLeftContactHolder(holder, chatMessage, position);
+    }
+
+
     private void showSendStatusView(BaseAttachHolder holder, CombinationMessage chatMessage) {
         ImageView signAttachView = holder.signAttachView;
         if (chatMessage.getState() != null) {

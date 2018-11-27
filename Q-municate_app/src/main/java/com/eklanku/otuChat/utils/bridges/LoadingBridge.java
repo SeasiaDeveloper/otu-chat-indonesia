@@ -6,6 +6,8 @@ public interface LoadingBridge {
 
     void hideProgress();
 
+    void hideProgressImmediately();
+
     void showActionBarProgress();
 
     void hideActionBarProgress();

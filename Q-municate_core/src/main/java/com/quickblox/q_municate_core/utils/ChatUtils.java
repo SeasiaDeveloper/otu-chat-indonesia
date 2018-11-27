@@ -396,9 +396,12 @@ public class ChatUtils {
             attachment.setType(Attachment.Type.LOCATION);
             attachment.setAdditionalInfo(connectycubeAttachment.getData());
             remoteUrl = LocationUtils.getRemoteUri(connectycubeAttachment.getData(), LocationUtils.defaultUrlLocationParams(context));
-        } else if(connectycubeAttachment.getType().equalsIgnoreCase(connectycubeAttachment.IMAGE_TYPE)){
+        } else if (connectycubeAttachment.getType().equalsIgnoreCase(Attachment.Type.CONTACT.toString())) {
+            attachment.setType(Attachment.Type.CONTACT);
+            attachment.setAdditionalInfo(connectycubeAttachment.getData());
+        } else if (connectycubeAttachment.getType().equalsIgnoreCase(connectycubeAttachment.IMAGE_TYPE)) {
             attachment.setType(Attachment.Type.IMAGE);
-        }else {
+        } else {
             attachment.setType(Attachment.Type.valueOf(connectycubeAttachment.getType().toUpperCase()));
         }
 

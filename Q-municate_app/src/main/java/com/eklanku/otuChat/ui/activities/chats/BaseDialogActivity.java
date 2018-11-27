@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,25 +15,19 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.Chronometer;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,12 +39,12 @@ import com.connectycube.ui.chatmessage.adapter.listeners.LinkPreviewClickListene
 import com.connectycube.ui.chatmessage.adapter.models.LinkPreview;
 import com.connectycube.ui.chatmessage.adapter.utils.MessageTextClickMovement;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
+import com.eklanku.otuChat.ui.activities.contacts.ContactDetails;
 import com.eklanku.otuChat.ui.adapters.chats.BaseChatMessagesAdapter;
 import com.eklanku.otuChat.ui.fragments.dialogs.base.TwoButtonsDialogFragment;
 import com.eklanku.otuChat.ui.views.recyclerview.WrapContentLinearLayoutManager;
 import com.eklanku.otuChat.utils.FileUtils;
-import com.eklanku.otuChat.utils.MimeType;
-import com.eklanku.otuChat.utils.helpers.MediaPickManager;
+import com.eklanku.otuChat.utils.helpers.vcard.ContactVCardConvertHelper;
 import com.eklanku.otuChat.utils.helpers.files.FileOpenHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -126,7 +119,6 @@ import butterknife.OnTextChanged;
 import butterknife.OnTouch;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
-import hani.momanii.supernova_emoji_library.emoji.Emojicon;
 
 public abstract class BaseDialogActivity extends BaseLoggableActivity implements
         /* EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener,*/
@@ -843,7 +835,6 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
                                 sendMessageWithAttachment(dialogId, Attachment.Type.LOCATION, attachment, null);
                                 break;
                             case CONTACT:
-                                Log.d(TAG, "AMBRA sendMessageWithAttachment Contact!!!");
                                 sendMessageWithAttachment(dialogId, Attachment.Type.CONTACT, attachment, null);
                                 break;
                             case IMAGE:
@@ -1563,7 +1554,6 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
         @Override
         public void onItemClicked(ConnectycubeAttachment attachment, int position) {
-            Log.d(TAG, "AMBRA DocAttachClickListener onItemClicked");
         }
     }
 
@@ -1579,8 +1569,14 @@ public abstract class BaseDialogActivity extends BaseLoggableActivity implements
 
         @Override
         public void onItemClicked(ConnectycubeAttachment attachment, int position) {
-            Log.d(TAG, "AMBRA ContactAttachClickListener onItemClicked");
+            startShowContact(attachment);
         }
+    }
+
+    protected void startShowContact(ConnectycubeAttachment attachment) {
+        String contactsJson = attachment.getData();
+        ArrayList<String> contacts = ContactVCardConvertHelper.convertJsonContactToList(contactsJson);
+        ContactDetails.start(BaseDialogActivity.this, contacts, true);
     }
 
     protected class RecordTouchListener implements RecordAudioButton.RecordTouchEventListener {

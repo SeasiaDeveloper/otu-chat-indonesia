@@ -225,6 +225,11 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
     }
 
     @Override
+    public synchronized void hideProgressImmediately() {
+        ProgressDialogFragment.hideImmediately(getSupportFragmentManager());
+    }
+
+    @Override
     public void showActionBarProgress() {
         toolbarProgressBar.setVisibility(View.VISIBLE);
     }

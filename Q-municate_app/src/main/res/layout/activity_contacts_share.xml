@@ -15,12 +15,14 @@
         android:layout_marginTop="?android:attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/density_64"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_dialogs_new_chat"
+        android:id="@+id/fab_show_contacts_details"
         style="@style/FabStyle"
         android:onClick="onDetailsContacts"
         app:srcCompat="@drawable/ic_arrow_forward_white_24dp" />
