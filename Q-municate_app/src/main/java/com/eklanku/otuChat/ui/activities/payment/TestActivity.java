@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.eklanku.otuChat.R;
 
 public class TestActivity extends AppCompatActivity {
-
+    //inputViewPanel
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
