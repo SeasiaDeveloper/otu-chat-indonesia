@@ -199,6 +199,11 @@ dependencies {
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.github.hani-momanii:SuperNova-Emoji:1.1'
     //implementation 'com.mikhaellopez:hfrecyclerview:1.1.1'
+
+    //user agent detailed parser
+//    implementation 'com.github.ua-parser:uap-java:1.4.0'
+    //user agent simple and fast parser
+    implementation group: 'eu.bitwalker', name: 'UserAgentUtils', version: '1.21'
 }
 
 def changeApkFileName(variant) {

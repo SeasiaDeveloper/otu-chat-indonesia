@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.loaders.DialogsListLoader;
+import com.eklanku.otuChat.ui.activities.barcode.UserSessionsActivity;
 import com.eklanku.otuChat.ui.activities.chats.BroadcastDialogActivity;
 import com.eklanku.otuChat.ui.activities.contacts.ContactsActivity;
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
@@ -302,7 +303,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
                 AboutActivity.start(getActivity());
                 break;
             case R.id.action_web_qr_code:
-                WebQRCodeActivity.start(getActivity());
+                UserSessionsActivity.start(getActivity());
                 break;
             default:
                 return super.onOptionsItemSelected(item);

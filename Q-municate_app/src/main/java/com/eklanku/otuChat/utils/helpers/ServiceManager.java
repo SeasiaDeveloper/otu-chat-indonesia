@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.connectycube.auth.session.ConnectycubeUserSessionDetails;
 import com.connectycube.users.model.ConnectycubeAddressBookContact;
 import com.connectycube.users.model.ConnectycubeAddressBookResponse;
 import com.eklanku.otuChat.App;
@@ -198,6 +199,24 @@ public class ServiceManager {
 
     public Observable<Void> upgradeWebSessionToken(String webToken) {
         return QMAuthService.getInstance().upgradeWebSessionToken(webToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ArrayList<ConnectycubeUserSessionDetails>> getUserSessions() {
+        return QMAuthService.getInstance().getUserSessions()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<Void> deleteUserSessionsExceptCurrent() {
+        return QMAuthService.getInstance().deleteUserSessionsExceptCurrent()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<Void> deleteUserSessionById(int sessionId) {
+        return QMAuthService.getInstance().deleteUserSessionById(sessionId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

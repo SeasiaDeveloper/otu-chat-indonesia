@@ -31,6 +31,7 @@ import com.connectycube.auth.model.ConnectycubeProvider;
 import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
+import com.eklanku.otuChat.ui.activities.barcode.UserSessionsActivity;
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
@@ -1194,7 +1195,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 // Handle navigation view item clicks here
                 switch (item.getItemId()) {
                     case R.id.action_web_qr_code:
-                        WebQRCodeActivity.start(MainActivity.this);
+                        UserSessionsActivity.start(MainActivity.this);
                         break;
                     case R.id.action_notification:
                         Toast.makeText(MainActivity.this, "Coming soon...", Toast.LENGTH_SHORT).show();

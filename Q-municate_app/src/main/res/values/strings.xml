@@ -145,6 +145,13 @@
     <string name="dialog_attach_btn_location">Location</string>
     <string name="dialog_attach_btn_contact">Contact</string>
 
+    <string name="open_web_qr">Open WEB QR</string>
+    <string name="web_qr_title">OtuChat Web</string>
+    <string name="web_qr_invitation">Visit otuchat.com on your computer</string>
+    <string name="dlg_logout_all_devices">Log out from all devices</string>
+    <string name="dlg_logout_device_confirmation">Log out from this device?</string>
+    <string name="dlg_logout_all_devices_confirmation">Are you sure you want to log out from all devices?</string>
+
     <string-array name="dialog_attach_types_array">
         <item>Take Photo</item>
         <item>From Library</item>
@@ -305,6 +312,7 @@
     <string name="minutes_short">%1$dm</string>
     <string name="date_ago">ago</string>
     <string name="last_seen">Last seen %1$s at %2$s</string>
+    <string name="last_active">Last active %1$s at %2$s</string>
     <string name="dlg_signal_error">Disconnected… Please check your Internet connection!</string>
     <string name="also_on_call">Also on call:</string>
     <string name="connect">Connect…</string>
