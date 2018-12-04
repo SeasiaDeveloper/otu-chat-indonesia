@@ -636,7 +636,7 @@
         <activity android:name=".ui.activities.payment.topup.AlertSyarat" />
 
         <!-- DOKU -->
-        <activity android:name=".ui.activities.payment.doku.CreditCard_Payment" />
+        <activity android:name=".ui.activities.payment.doku.CCPaymentActivity" />
         <activity android:name=".ui.activities.payment.doku.HomeGatewayDoku" />
 
         <!-- new config -->

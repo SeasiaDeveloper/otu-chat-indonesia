@@ -21,7 +21,7 @@ public class HomeGatewayDoku extends AppCompatActivity {
         btnPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeGatewayDoku.this, CreditCard_Payment.class);
+                Intent intent = new Intent(HomeGatewayDoku.this, CCPaymentActivity.class);
                 startActivity(intent);
             }
         });
