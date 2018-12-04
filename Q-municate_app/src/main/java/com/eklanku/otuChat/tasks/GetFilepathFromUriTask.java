@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.eklanku.otuChat.utils.StringUtils;
 import com.eklanku.otuChat.utils.MediaUtils;
 import com.eklanku.otuChat.utils.listeners.OnMediaPickedListener;
 import com.quickblox.q_municate_core.core.concurrency.BaseAsyncTask;
+import com.quickblox.q_municate_db.models.Attachment;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -32,11 +34,13 @@ public class GetFilepathFromUriTask extends BaseAsyncTask<Intent, Void, File> {
     private WeakReference<FragmentManager> fmWeakReference;
     private OnMediaPickedListener listener;
     private int requestCode;
+    private Attachment.Type type;
 
-    public GetFilepathFromUriTask(FragmentManager fragmentManager, OnMediaPickedListener listener, int requestCode) {
+    public GetFilepathFromUriTask(FragmentManager fragmentManager, OnMediaPickedListener listener, Attachment.Type type, int requestCode) {
         this.fmWeakReference = new WeakReference<>(fragmentManager);
         this.listener = listener;
         this.requestCode = requestCode;
+        this.type = type;
     }
 
     @Override
@@ -78,6 +82,9 @@ public class GetFilepathFromUriTask extends BaseAsyncTask<Intent, Void, File> {
         }
         if (SchemeType.SCHEME_FILE.equalsIgnoreCase(uriScheme)) {
             filePath = uri.getPath();
+        } else if (type.equals(Attachment.Type.DOC)) {
+            String fileName = getFileName(uri);
+            filePath = MediaUtils.saveUriToFile(uri, fileName);
         } else {
             filePath = MediaUtils.saveUriToFile(uri);
         }
@@ -178,7 +185,10 @@ public class GetFilepathFromUriTask extends BaseAsyncTask<Intent, Void, File> {
         hideProgress();
         Log.w(GetFilepathFromUriTask.class.getSimpleName(), "onResult listener = " + listener);
         if (listener != null) {
-            listener.onMediaPicked(requestCode, StringUtils.getAttachmentTypeByFile(file), file);
+            if (type.equals(Attachment.Type.OTHER)) {
+                type = StringUtils.getAttachmentTypeByFile(file);
+            }
+            listener.onMediaPicked(requestCode, type, file);
         }
     }
 
@@ -209,5 +219,29 @@ public class GetFilepathFromUriTask extends BaseAsyncTask<Intent, Void, File> {
         if (StringUtils.isImageFile(file)) {
             MediaUtils.normalizeRotationImageIfNeed(file);
         }
+    }
+
+    private String getFileName(Uri uri) {
+        String fileName = null;
+        String scheme = uri.getScheme();
+        if (scheme.equals("file")) {
+            fileName = uri.getLastPathSegment();
+        } else {
+            if (uri.getScheme().equals("content")) {
+                try (Cursor cursor = App.getInstance().getContentResolver().query(uri, null, null, null, null)) {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                    }
+                }
+            }
+            if (fileName == null) {
+                fileName = uri.getPath();
+                int cut = fileName.lastIndexOf('/');
+                if (cut != -1) {
+                    fileName = fileName.substring(cut + 1);
+                }
+            }
+        }
+        return fileName;
     }
 }

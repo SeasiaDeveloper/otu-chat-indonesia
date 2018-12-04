@@ -198,7 +198,12 @@ dependencies {
     //implementation 'com.vanniktech:emoji-ios:0.5.1'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.github.hani-momanii:SuperNova-Emoji:1.1'
+/*<<<<<<< HEAD*/
     //implementation 'com.mikhaellopez:hfrecyclerview:1.1.1'
+/*=======*/
+    //vcard
+    implementation 'com.googlecode.ez-vcard:ez-vcard:0.10.4'
+/*>>>>>>> origin/attachments*/
 }
 
 def changeApkFileName(variant) {

@@ -13,6 +13,7 @@ import android.util.Log;
 import com.eklanku.otuChat.tasks.GetFilepathFromUriTask;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.utils.MediaUtils;
+import com.eklanku.otuChat.utils.StringUtils;
 import com.eklanku.otuChat.utils.listeners.OnMediaPickedListener;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_db.models.Attachment;
@@ -21,6 +22,8 @@ import com.quickblox.ui.kit.chatmessage.adapter.utils.LocationUtils;
 =======*/
 import com.connectycube.ui.chatmessage.adapter.utils.LocationUtils;
 //>>>>>>> origin/feature/migration
+
+import java.util.ArrayList;
 
 public class MediaPickManager extends Fragment {
     private static final String ARG_REQUEST_CODE = "requestCode";
@@ -72,6 +75,18 @@ public class MediaPickManager extends Fragment {
                 MediaUtils.startMapForResult(this);
                 setupActivityToBeNonLoggable(getActivity());
                 break;
+            case MediaUtils.AUDIO_REQUEST_CODE:
+                MediaUtils.startAudioPicker(this);
+                setupActivityToBeNonLoggable(getActivity());
+                break;
+            case MediaUtils.DOCUMENT_REQUEST_CODE:
+                MediaUtils.startDocumentPicker(this);
+                setupActivityToBeNonLoggable(getActivity());
+                break;
+            case MediaUtils.CONTACT_REQUEST_CODE:
+                MediaUtils.startContactForResult(this);
+                setupActivityToBeNonLoggable(getActivity());
+                break;
         }
     }
 
@@ -88,6 +103,13 @@ public class MediaPickManager extends Fragment {
                             new Pair<>(ConstsCore.LONGITUDE_PARAM, longitude));
                     listener.onMediaPicked(requestCode, Attachment.Type.LOCATION, location);
                 }
+            } else if (requestCode == MediaUtils.CONTACT_REQUEST_CODE) {
+                if (data != null) {
+                    Bundle bundle = data.getExtras();
+                    String contacts = bundle.getString(ConstsCore.EXTRA_CONTACTS);
+                    listener.onMediaPicked(requestCode, Attachment.Type.CONTACT, contacts);
+                }
+
             } else {
                 if ((requestCode == MediaUtils.CAMERA_PHOTO_REQUEST_CODE || requestCode == MediaUtils.CAMERA_VIDEO_REQUEST_CODE) && (data == null || data.getData() == null)) {
                     // Hacky way to get EXTRA_OUTPUT param to work.
@@ -97,7 +119,8 @@ public class MediaPickManager extends Fragment {
                     data.setData(MediaUtils.getValidUri(MediaUtils.getLastUsedCameraFile(), this.getContext()));
                 }
 
-                new GetFilepathFromUriTask(getChildFragmentManager(), listener,
+                Attachment.Type type = StringUtils.getAttachmentTypeByRequestCode(requestCode);
+                new GetFilepathFromUriTask(getChildFragmentManager(), listener, type,
                         getArguments().getInt(ARG_REQUEST_CODE)).execute(data);
             }
         } else {
@@ -110,7 +133,7 @@ public class MediaPickManager extends Fragment {
 
     private boolean isResultFromMediaPick(int requestCode, int resultCode, Intent data) {
         return resultCode == Activity.RESULT_OK && ((requestCode == MediaUtils.CAMERA_PHOTO_REQUEST_CODE || requestCode == MediaUtils.CAMERA_VIDEO_REQUEST_CODE) || (requestCode == MediaUtils.GALLERY_REQUEST_CODE && data != null)
-                || (requestCode == MediaUtils.IMAGE_VIDEO_LOCATION_REQUEST_CODE && data != null));
+                || (requestCode == MediaUtils.IMAGE_VIDEO_LOCATION_REQUEST_CODE && data != null) || (requestCode == MediaUtils.AUDIO_REQUEST_CODE || requestCode == MediaUtils.DOCUMENT_REQUEST_CODE || requestCode == MediaUtils.CONTACT_REQUEST_CODE));
     }
 
     public void stop(FragmentManager fm) {
