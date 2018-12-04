@@ -391,7 +391,9 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     protected int getMessageStatusIconId(boolean isDelivered, boolean isRead, boolean isSent) {
         int iconResourceId = 0;
-
+        Log.d("OPPO-1", "getMessageStatusIconId-isDelivered: "+isDelivered);
+        Log.d("OPPO-1", "getMessageStatusIconId-isRead: "+isRead);
+        Log.d("OPPO-1", "getMessageStatusIconId-isSent: "+isSent);
         if (isRead) {
             iconResourceId = R.drawable.ic_status_msg_sent_receive_blue;
         } else if (isDelivered) {

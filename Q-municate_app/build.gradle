@@ -199,6 +199,9 @@ dependencies {
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.github.hani-momanii:SuperNova-Emoji:1.1'
     //implementation 'com.mikhaellopez:hfrecyclerview:1.1.1'
+
+    //doku
+    implementation 'com.doku.sdkocov2:sdkocov2-release:1.0@aar'
 }
 
 def changeApkFileName(variant) {

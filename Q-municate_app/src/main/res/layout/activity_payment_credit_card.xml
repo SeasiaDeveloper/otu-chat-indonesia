@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/density_16">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/density_16">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/density_8">
+
+            <EditText
+                android:id="@+id/txt_ccn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:ems="12"
+                android:hint="Credit Card Number"
+                android:inputType="text"
+                android:paddingBottom="@dimen/density_16"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingStart="@dimen/density_8"
+                android:paddingTop="@dimen/density_16" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/txt_cvv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:ems="6"
+                android:hint="CVV"
+                android:inputType="text"
+                android:paddingBottom="@dimen/density_16"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingStart="@dimen/density_8"
+                android:paddingTop="@dimen/density_16" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/density_16">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/density_8">
+
+            <EditText
+                android:id="@+id/txt_noc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:ems="12"
+                android:hint="Name On Card"
+                android:inputType="text"
+                android:paddingBottom="@dimen/density_16"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingStart="@dimen/density_8"
+                android:paddingTop="@dimen/density_16" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/txt_ed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:ems="6"
+                android:hint="Expired Date"
+                android:inputType="text"
+                android:paddingBottom="@dimen/density_16"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingStart="@dimen/density_8"
+                android:paddingTop="@dimen/density_16" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/density_8">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/density_8">
+
+            <EditText
+                android:id="@+id/txt_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:ems="12"
+                android:hint="Email"
+                android:inputType="text"
+                android:paddingBottom="@dimen/density_16"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingStart="@dimen/density_8"
+                android:paddingTop="@dimen/density_16" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/txt_mp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:ems="6"
+                android:hint="Mobile Phone"
+                android:inputType="text"
+                android:paddingBottom="@dimen/density_16"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingStart="@dimen/density_8"
+                android:paddingTop="@dimen/density_16" />
+
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save credit card data"
+        android:layout_marginBottom="@dimen/density_16"/>
+
+    <Button
+        android:id="@+id/btnpp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PROCESS PAYMENT"
+        android:background="@drawable/rectangle_rounded_green"
+        android:textColor="@color/white"/>
+
+
+</LinearLayout>

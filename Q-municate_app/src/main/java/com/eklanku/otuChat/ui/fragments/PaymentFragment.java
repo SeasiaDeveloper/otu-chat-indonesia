@@ -40,6 +40,7 @@ import com.eklanku.otuChat.ui.activities.about.ContactUsActivity;
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.RiwayatActivity;
+import com.eklanku.otuChat.ui.activities.payment.doku.HomeGatewayDoku;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBalanceActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBonusActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryDespositActivity;
@@ -157,7 +158,8 @@ public class PaymentFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (menuDialog()) {
-                    startActivity(new Intent(context, TopupOrder.class));
+                    //startActivity(new Intent(context, TopupOrder.class));
+                    startActivity(new Intent(context, HomeGatewayDoku.class));
                 }
             }
         });

@@ -42,7 +42,7 @@ public interface ApiInterfacePayment {
     );
 
     @FormUrlEncoded
-    @POST("Member/login")
+    @POST("login")
     Call<LoginResponse> postLogin(
            /* @Field("password") String password,
             @Field("phone") String phone*/
