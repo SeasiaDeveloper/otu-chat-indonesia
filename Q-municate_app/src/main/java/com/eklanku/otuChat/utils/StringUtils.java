@@ -46,6 +46,37 @@ public class StringUtils {
         return stringBuilder.toString();
     }
 
+    public static Attachment.Type getAttachmentTypeByRequestCode(int requestCode) {
+        Attachment.Type type;
+        switch (requestCode) {
+            case MediaUtils.IMAGE_REQUEST_CODE:
+                type = Attachment.Type.IMAGE;
+                break;
+            case MediaUtils.CAMERA_PHOTO_REQUEST_CODE:
+                type = Attachment.Type.IMAGE;
+                break;
+            case MediaUtils.CAMERA_VIDEO_REQUEST_CODE:
+                type = Attachment.Type.VIDEO;
+                break;
+            case MediaUtils.AUDIO_REQUEST_CODE:
+                type = Attachment.Type.AUDIO;
+                break;
+            case MediaUtils.LOCATION_REQUEST_CODE:
+                type = Attachment.Type.LOCATION;
+                break;
+            case MediaUtils.DOCUMENT_REQUEST_CODE:
+                type = Attachment.Type.DOC;
+                break;
+            case MediaUtils.CONTACT_REQUEST_CODE:
+                type = Attachment.Type.CONTACT;
+                break;
+            default:
+                type = Attachment.Type.OTHER;
+                break;
+        }
+        return type;
+    }
+
     public static String getAttachmentNameByType(Context context, Attachment.Type type) {
         String attachmentName = "";
 
@@ -54,6 +85,7 @@ public class StringUtils {
                 attachmentName = context.getString(R.string.dialog_attach_image);
                 break;
             case AUDIO:
+            case VOICE:
                 attachmentName = context.getString(R.string.dialog_attach_audio);
                 break;
             case VIDEO:
@@ -61,6 +93,12 @@ public class StringUtils {
                 break;
             case LOCATION:
                 attachmentName = context.getString(R.string.dialog_location);
+                break;
+            case DOC:
+                attachmentName = context.getString(R.string.dialog_document);
+                break;
+            case CONTACT:
+                attachmentName = context.getString(R.string.dialog_contact);
                 break;
             //will be extend for new attachment types
         }

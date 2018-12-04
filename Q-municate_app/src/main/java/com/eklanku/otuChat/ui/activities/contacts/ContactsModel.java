@@ -1,10 +1,12 @@
 package com.eklanku.otuChat.ui.activities.contacts;
 
+import java.io.Serializable;
+
 /**
  * Created by ad220915 on 23/01/17.
  */
 
-public class ContactsModel {
+public class ContactsModel implements Serializable {
 
     private String id;
     private int id_user;

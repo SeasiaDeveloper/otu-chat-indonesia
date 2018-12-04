@@ -77,4 +77,6 @@ public class ConstsCore {
     public static final int VIDEO_QUALITY_HIGH = 1;
     public static final int CHRONOMETER_ALARM_SECOND = 27;
 
+    public static final String EXTRA_CONTACTS = "contacts";
+
 }

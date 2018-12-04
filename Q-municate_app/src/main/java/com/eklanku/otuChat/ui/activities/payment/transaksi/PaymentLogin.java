@@ -121,11 +121,6 @@ public class PaymentLogin extends AppCompatActivity {
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     loadingDialog.dismiss();
                     lblInfo.setVisibility(View.GONE);
-                    Log.d("AYIK", "login:payment->" + response+ response.body());
-
-                    Log.d("AYIK", "login:payment0->" + response.body().getStatus() + response.body().getRespMessage());
-
-                    Log.d("AYIK", "login:payment1->" + "user:" + PreferenceUtil.getNumberPhone(PaymentLogin.this) + ", sec:" + strSecurityCode + ", token:" + strToken + "," + "pass:" + pass);
 
                     if (response.isSuccessful()) {
                         String status = response.body().getStatus();

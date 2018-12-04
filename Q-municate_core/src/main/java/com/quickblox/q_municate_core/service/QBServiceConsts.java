@@ -195,6 +195,7 @@ public class QBServiceConsts {
     public static final String EXTRA_SHOULD_OPEN_DIALOG = "open_push_dialog";
     public static final String EXTRA_DIALOG = "dialog";
     public static final String EXTRA_DIALOG_ID = "dialog_id";
+    public static final String EXTRA_ATTACHMENT_TYPE = "attachment_type";
     public static final String EXTRA_DIALOG_UPDATE_POSITION = "dialog_update_position";
     public static final String EXTRA_DIALOG_TYPE = "dialog_type";
     public static final String EXTRA_IS_OWN_MESSAGE = "is_own_message";

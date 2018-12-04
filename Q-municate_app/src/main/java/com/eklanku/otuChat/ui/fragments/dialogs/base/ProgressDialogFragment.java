@@ -30,6 +30,11 @@ public class ProgressDialogFragment extends DialogFragment {
         }
     }
 
+    public static void hideImmediately(FragmentManager fm) {
+        fm.executePendingTransactions();
+        hide(fm);
+    }
+
     public static ProgressDialogFragment newInstance() {
         return newInstance(R.string.dlg_wait_please);
     }

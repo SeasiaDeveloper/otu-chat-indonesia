@@ -24,6 +24,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.connectycube.chat.model.ConnectycubeAttachment;
+import com.connectycube.ui.chatmessage.adapter.listeners.ChatAttachClickListener;
 import com.connectycube.storage.model.ConnectycubeFile;
 import com.connectycube.ui.chatmessage.adapter.media.video.thumbnails.VideoThumbnail;
 import com.eklanku.otuChat.R;
@@ -34,26 +35,33 @@ import com.eklanku.otuChat.utils.FileUtils;
 import com.quickblox.chat.model.QBChatDialog;
 =======*/
 import com.connectycube.chat.model.ConnectycubeChatDialog;
+import com.eklanku.otuChat.utils.helpers.vcard.ContactVCardConvertHelper;
 //>>>>>>> origin/feature/migration
 import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.CombinationMessage;
 import com.quickblox.q_municate_core.qb.commands.chat.QBUpdateStatusMessageCommand;
 import com.quickblox.q_municate_db.managers.DataManager;
+import com.quickblox.q_municate_db.models.Attachment;
 import com.quickblox.q_municate_db.models.State;
 import com.connectycube.ui.chatmessage.adapter.ConnectycubeChatAdapter;
 import com.connectycube.users.model.ConnectycubeUser;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.io.File;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import ezvcard.VCard;
 
 public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<CombinationMessage> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
     private static final String TAG = BaseChatMessagesAdapter.class.getSimpleName();
     protected static final int TYPE_REQUEST_MESSAGE = 100;
+    protected static final int TYPE_ATTACH_RIGHT_DOC  = 102;
+    protected static final int TYPE_ATTACH_LEFT_DOC = 101;
+    protected static final int TYPE_ATTACH_RIGHT_CONTACT = 104;
+    protected static final int TYPE_ATTACH_LEFT_CONTACT = 103;
     protected ConnectycubeUser currentUser;
     protected final BaseActivity baseActivity;
     protected FileUtils fileUtils;
@@ -61,6 +69,8 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
 
     private DataManager dataManager;
     protected ConnectycubeChatDialog chatDialog;
+    private ChatAttachClickListener attachDocClickListener;
+    private ChatAttachClickListener attachContactClickListener;
 
     BaseChatMessagesAdapter(BaseActivity baseActivity, ConnectycubeChatDialog dialog, List<CombinationMessage> chatMessages) {
         super(baseActivity, chatMessages);
@@ -69,6 +79,61 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         currentUser = AppSession.getSession().getUser();
         fileUtils = new FileUtils();
         dataManager = DataManager.getInstance();
+    }
+
+    @Override
+    protected MessageViewHolder onCreateCustomViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case TYPE_ATTACH_RIGHT_DOC:
+                return new DocViewHolder(inflater.inflate(R.layout.list_item_attach_right_doc, parent, false));
+            case TYPE_ATTACH_LEFT_DOC:
+                return new DocViewHolder(inflater.inflate(R.layout.list_item_attach_left_doc, parent, false));
+            case TYPE_ATTACH_RIGHT_CONTACT:
+                return new ContactViewHolder(inflater.inflate(R.layout.list_item_attach_right_contact, parent, false));
+            case TYPE_ATTACH_LEFT_CONTACT:
+                return new ContactViewHolder(inflater.inflate(R.layout.list_item_attach_left_contact, parent, false));
+            default:
+                return super.onCreateCustomViewHolder(parent, viewType);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(MessageViewHolder holder, int position) {
+        CombinationMessage chatMessage = getItem(position);
+        int valueType = getItemViewType(position);
+        switch (valueType) {
+            case TYPE_ATTACH_RIGHT_DOC:
+                onBindViewAttachRightDocHolder((DocViewHolder) holder, chatMessage, position);
+                break;
+            case TYPE_ATTACH_LEFT_DOC:
+                onBindViewAttachLeftDocHolder((DocViewHolder) holder, chatMessage, position);
+                break;
+            case TYPE_ATTACH_RIGHT_CONTACT:
+                onBindViewAttachRightContactHolder((ContactViewHolder) holder, chatMessage, position);
+                break;
+            case TYPE_ATTACH_LEFT_CONTACT:
+                onBindViewAttachLeftContactHolder((ContactViewHolder) holder, chatMessage, position);
+                break;
+            default:
+                super.onBindViewHolder(holder, position);
+                break;
+        }
+    }
+
+    public void setAttachDocClickListener(ChatAttachClickListener clickListener) {
+        this.attachDocClickListener = clickListener;
+    }
+
+    public void setAttachContactClickListener(ChatAttachClickListener clickListener) {
+        this.attachContactClickListener = clickListener;
+    }
+
+    public void removeAttachDocClickListener() {
+        this.attachDocClickListener = null;
+    }
+
+    public void removeAttachContactClickListener() {
+        this.attachContactClickListener = null;
     }
 
     @Override
@@ -197,8 +262,12 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
     @Override
     public int getItemViewType(int position) {
         CombinationMessage combinationMessage = getItem(position);
-        if (combinationMessage.getNotificationType() != null) {
-            return TYPE_REQUEST_MESSAGE;
+        if (hasAttachments(combinationMessage)) {
+            if (Attachment.Type.DOC.equals(combinationMessage.getAttachment().getType())) {
+                return isIncoming(combinationMessage) ? TYPE_ATTACH_LEFT_DOC : TYPE_ATTACH_RIGHT_DOC;
+            } else if(Attachment.Type.CONTACT.equals(combinationMessage.getAttachment().getType())) {
+                return isIncoming(combinationMessage) ? TYPE_ATTACH_LEFT_CONTACT : TYPE_ATTACH_RIGHT_CONTACT;
+            }
         }
         return super.getItemViewType(position);
     }
@@ -534,13 +603,77 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         super.onBindViewAttachLeftVideoHolder(holder, chatMessage, position);
     }
 
+    protected void onBindViewAttachRightDocHolder(DocViewHolder holder, CombinationMessage chatMessage, int position) {
+        int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+
+        setDateSentAttach(holder, chatMessage);
+        showDocAttachment(holder, position);
+        setItemAttachClickListener(attachDocClickListener, holder, getAttach(position), position);
+    }
+
+    protected void onBindViewAttachLeftDocHolder(DocViewHolder holder, CombinationMessage chatMessage, int position) {
+        setViewVisibility(holder.signAttachView, View.GONE);
+        updateMessageState(chatMessage, chatDialog);
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_buble_edgeless : R.drawable.bg_chat_left_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+
+        setDateSentAttach(holder, chatMessage);
+        showDocAttachment(holder, position);
+        setItemAttachClickListener(attachDocClickListener, holder, getAttach(position), position);
+    }
+
+    protected void onBindViewAttachRightContactHolder(ContactViewHolder holder, CombinationMessage chatMessage, int position) {
+        int bubbleResource = isPreviousMsgOut(position) ? R.drawable.bg_chat_right_bubble_edgeless : R.drawable.bg_chat_right_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+        setDateSentAttach(holder, chatMessage);
+        showContactAttachment(holder, position);
+        setItemAttachClickListener(attachContactClickListener, holder, getAttach(position), position);
+    }
+
+    protected void onBindViewAttachLeftContactHolder(ContactViewHolder holder, CombinationMessage chatMessage, int position) {
+        setViewVisibility(holder.signAttachView, View.GONE);
+        updateMessageState(chatMessage, chatDialog);
+        int bubbleResource = isPreviousMsgIn(position) ? R.drawable.bg_chat_left_buble_edgeless : R.drawable.bg_chat_left_bubble;
+        updateBubbleChatRetainedPadding(holder.bubbleFrame, bubbleResource);
+
+        setDateSentAttach(holder, chatMessage);
+        showContactAttachment(holder, position);
+        setItemAttachClickListener(attachContactClickListener, holder, getAttach(position), position);
+    }
+
+    protected void showDocAttachment(DocViewHolder holder, int position) {
+        Attachment attachment = getCombinationMsgAttachment(position);
+        holder.messageTextView.setText(attachment.getName());
+    }
+
+    protected void showContactAttachment(ContactViewHolder holder, int position) {
+        ConnectycubeAttachment attachment = getAttach(position);
+        String contactsJson = attachment.getData();
+        ArrayList<String> contacts = ContactVCardConvertHelper.convertJsonContactToList(contactsJson);
+        ArrayList<VCard> vCards = ContactVCardConvertHelper.convertStringListToVCardList(contacts);
+        String firstContactName = vCards.get(0).getFormattedName().getValue();
+        firstContactName = (firstContactName != null) ? firstContactName : vCards.get(0).getTelephoneNumbers().get(0).getText();
+        if(vCards.size() == 2) {
+            firstContactName += context.getString(R.string.dialog_attach_contact_name_one);
+        } else if(vCards.size() > 2) {
+            firstContactName += context.getString(R.string.dialog_attach_contact_name_more, vCards.size() - 1);
+        }
+        holder.nameTextView.setText(firstContactName);
+    }
+
+    protected Attachment getCombinationMsgAttachment(int position) {
+        CombinationMessage message = getItem(position);
+        return message.getAttachment();
+    }
+
     private boolean isPreviousMsgIn(int position) {
         if (position == 0) {
             return false;
         }
         int viewType = getItemViewType(position - 1);
         return viewType == TYPE_TEXT_LEFT || viewType == TYPE_ATTACH_LEFT || viewType == TYPE_ATTACH_LEFT_AUDIO
-                || viewType == TYPE_ATTACH_LEFT_VIDEO;
+                || viewType == TYPE_ATTACH_LEFT_VIDEO || viewType == TYPE_ATTACH_LEFT_DOC || viewType == TYPE_ATTACH_LEFT_CONTACT;
     }
 
     private boolean isPreviousMsgOut(int position) {
@@ -549,7 +682,7 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
         }
         int viewType = getItemViewType(position - 1);
         return viewType == TYPE_TEXT_RIGHT || viewType == TYPE_ATTACH_RIGHT || viewType == TYPE_ATTACH_RIGHT_AUDIO
-                || viewType == TYPE_ATTACH_RIGHT_VIDEO;
+                || viewType == TYPE_ATTACH_RIGHT_VIDEO || viewType == TYPE_ATTACH_RIGHT_DOC || viewType == TYPE_ATTACH_RIGHT_CONTACT;
     }
 
     public void addAllInBegin(List<CombinationMessage> collection) {
@@ -637,6 +770,44 @@ public class BaseChatMessagesAdapter extends ConnectycubeChatAdapter<Combination
 
         public RequestsViewHolder(View view) {
             super(view);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    protected static class ContactViewHolder extends BaseAttachHolder {
+        @Bind(R.id.msg_text_message)
+        TextView nameTextView;
+
+        @Bind(R.id.msg_text_time_message)
+        TextView attachTextTime;
+
+        @Bind(R.id.message_status_image_view)
+        ImageView statusView;
+
+        @Bind(R.id.msg_image_attach)
+        ImageView imageView;
+
+        public ContactViewHolder(View view) {
+            super(view, R.id.msg_text_time_message, R.id.message_status_image_view);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    protected static class DocViewHolder extends BaseAttachHolder {
+        @Bind(R.id.msg_text_message)
+        TextView messageTextView;
+
+        @Bind(R.id.msg_text_time_message)
+        TextView attachTextTime;
+
+        @Bind(R.id.message_status_image_view)
+        ImageView statusView;
+
+        @Bind(R.id.msg_image_attach)
+        ImageView imageView;
+
+        public DocViewHolder(View view) {
+            super(view, R.id.msg_text_time_message, R.id.message_status_image_view);
             ButterKnife.bind(this, itemView);
         }
     }

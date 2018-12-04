@@ -92,4 +92,12 @@ public class FileUtils {
             return null;
         }
     }
+
+    public File checkIfFileExistByName(String fileName) {
+        return new File(filesFolder, fileName);
+    }
+
+    public String getFilesFolderPath() {
+        return filesFolder.getPath();
+    }
 }

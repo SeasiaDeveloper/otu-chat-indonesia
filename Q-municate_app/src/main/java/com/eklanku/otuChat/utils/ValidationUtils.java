@@ -255,7 +255,8 @@ public class ValidationUtils {
     }
 
     private static boolean isValidMimeType(String mimeType) {
-        return !TextUtils.isEmpty(mimeType) && (mimeType.startsWith(MimeType.IMAGE_MIME_PREFIX) || mimeType.equals(MimeType.AUDIO_MIME_MP3));
+        return !TextUtils.isEmpty(mimeType) && (mimeType.startsWith(MimeType.IMAGE_MIME_PREFIX) || mimeType.equals(MimeType.AUDIO_MIME_MP3) || mimeType.equals(MimeType.DOCUMENT_MIME_MSWORD)
+                || mimeType.equals(MimeType.DOCUMENT_MIME_EXCEL) || mimeType.equals(MimeType.DOCUMENT_MIME_PDF) || mimeType.equals(MimeType.DOCUMENT_MIME_POWER_POINT));
     }
 
     private static boolean isValidExtension(String extension) {

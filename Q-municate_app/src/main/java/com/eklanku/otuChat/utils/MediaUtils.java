@@ -29,10 +29,9 @@ import android.util.TypedValue;
 import android.webkit.MimeTypeMap;
 
 import com.eklanku.otuChat.App;
+import com.eklanku.otuChat.ui.activities.contacts.ContactsShareActivity;
 import com.eklanku.otuChat.ui.activities.location.MapsActivity;
-import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.location.MapsActivity;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_core.utils.DateUtilsCore;
 import com.quickblox.q_municate_db.utils.ErrorUtils;
@@ -59,6 +58,10 @@ public class MediaUtils {
     public static final int IMAGE_REQUEST_CODE = 333;
     public static final int IMAGE_VIDEO_LOCATION_REQUEST_CODE = 444;
     public static final int LOCATION_REQUEST_CODE = 555;
+    public static final int AUDIO_REQUEST_CODE = 560;
+    public static final int VOICE_REQUEST_CODE = 570;
+    public static final int DOCUMENT_REQUEST_CODE = 580;
+    public static final int CONTACT_REQUEST_CODE = 590;
 
     private static final String TAG = MediaUtils.class.getSimpleName();
     private static final String CAMERA_FILE_NAME_PREFIX = "CAMERA_";
@@ -153,6 +156,38 @@ public class MediaUtils {
         fragment.startActivityForResult(intent, CAMERA_VIDEO_REQUEST_CODE);
     }
 
+    public static void startAudioPicker(Activity activity) {
+        Intent intent = new Intent();
+        setIntentAudioPicker(intent);
+        activity.startActivityForResult(
+                Intent.createChooser(intent, activity.getString(R.string.dlg_choose_media_from)),
+                AUDIO_REQUEST_CODE);
+    }
+
+    public static void startAudioPicker(Fragment fragment) {
+        Intent intent = new Intent();
+        setIntentAudioPicker(intent);
+        fragment.startActivityForResult(
+                Intent.createChooser(intent, fragment.getString(R.string.dlg_choose_media_from)),
+                AUDIO_REQUEST_CODE);
+    }
+
+    public static void startDocumentPicker(Activity activity) {
+        Intent intent = new Intent();
+        setIntentDocumentPicker(intent);
+        activity.startActivityForResult(
+                Intent.createChooser(intent, activity.getString(R.string.dlg_choose_media_from)),
+                DOCUMENT_REQUEST_CODE);
+    }
+
+    public static void startDocumentPicker(Fragment fragment) {
+        Intent intent = new Intent();
+        setIntentDocumentPicker(intent);
+        fragment.startActivityForResult(
+                Intent.createChooser(intent, fragment.getString(R.string.dlg_choose_media_from)),
+                DOCUMENT_REQUEST_CODE);
+    }
+
     public static Uri getValidUri(File file, Context context) {
         Uri outputUri = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -183,6 +218,33 @@ public class MediaUtils {
         fragment.startActivityForResult(intent, IMAGE_VIDEO_LOCATION_REQUEST_CODE);
     }
 
+    public static void startContactForResult(Fragment fragment) {
+        Intent intent = new Intent(fragment.getContext(), ContactsShareActivity.class);
+        fragment.startActivityForResult(intent, CONTACT_REQUEST_CODE);
+    }
+
+    private static void setIntentAudioPicker(Intent intent) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent.setType(MimeType.AUDIO_MIME_MP3);
+        } else {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType(MimeType.AUDIO_MIME_MP3);
+        }
+    }
+
+    private static void setIntentDocumentPicker(Intent intent) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent.setType(MimeType.DOCUMENT_MIME_MSWORD + MimeType.DOCUMENT_MIME_PDF + MimeType.DOCUMENT_MIME_EXCEL + MimeType.DOCUMENT_MIME_POWER_POINT);
+        } else {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, MimeType.docsMimeTypes);
+        }
+    }
 
     private static void setIntentMediaPicker(Intent intent) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
@@ -252,7 +314,7 @@ public class MediaUtils {
         return mimeTypeMap.getExtensionFromMimeType(mimeType);
     }
 
-    public static String saveUriToFile(Uri uri) throws Exception {
+    public static String saveUriToFile(Uri uri, String fileName) throws Exception {
         ParcelFileDescriptor parcelFileDescriptor = App.getInstance().getContentResolver()
                 .openFileDescriptor(uri, "r");
         FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
@@ -261,14 +323,6 @@ public class MediaUtils {
         BufferedInputStream bis = new BufferedInputStream(inputStream);
 
         File parentDir = StorageUtil.getAppExternalDataDirectoryFile();
-        String path = uri.getPath();
-        String extension = "";
-        if (path.lastIndexOf(".") != -1) {
-            extension = path.substring(path.lastIndexOf("."), path.length());
-        } else {
-            extension = "." + getExtensionFromUri(uri);
-        }
-        String fileName = String.valueOf(System.currentTimeMillis()) + extension;
         File resultFile = new File(parentDir, fileName);
 
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(resultFile));
@@ -289,6 +343,18 @@ public class MediaUtils {
         }
 
         return resultFile.getAbsolutePath();
+    }
+
+    public static String saveUriToFile(Uri uri) throws Exception {
+        String path = uri.getPath();
+        String extension = "";
+        if (path.lastIndexOf(".") != -1) {
+            extension = path.substring(path.lastIndexOf("."), path.length());
+        } else {
+            extension = "." + getExtensionFromUri(uri);
+        }
+        String fileName = String.valueOf(System.currentTimeMillis()) + extension;
+        return saveUriToFile(uri, fileName);
     }
 
     public static File getCreatedFileFromUri(Uri uri) {

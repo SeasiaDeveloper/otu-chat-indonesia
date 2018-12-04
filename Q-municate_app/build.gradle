@@ -202,6 +202,9 @@ dependencies {
 
     //doku
     implementation 'com.doku.sdkocov2:sdkocov2-release:1.0@aar'
+
+    //vcard
+    implementation 'com.googlecode.ez-vcard:ez-vcard:0.10.4'
 }
 
 def changeApkFileName(variant) {

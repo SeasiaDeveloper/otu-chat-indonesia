@@ -52,6 +52,9 @@
     <dimen name="call_avatar_top_margin_plus_height_actionbar">112dp</dimen>
     <dimen name="income_call_buttons_margin">80dp</dimen>
 
+    <dimen name="contact_placeholder_size">35dp</dimen>
+    <dimen name="contact_button_add_width">60dp</dimen>
+    <dimen name="contact_button_add_height">30dp</dimen>
 
     <dimen name="inf_list_avatar_height">48dp</dimen>
 
@@ -72,6 +75,8 @@
     <dimen name="chat_input_message_round_button_height">41dp</dimen>
     <dimen name="chat_input_attach_button_height">24dp</dimen>
     <dimen name="chat_input_message_smile_button_height">37dp</dimen>
+    <dimen name="chat_attach_document_width">130dp</dimen>
+    <dimen name="chat_attach_document_height">130dp</dimen>
 
     <dimen name="avatar_border_width">1dp</dimen>
 
@@ -124,6 +129,8 @@
     <dimen name="density_48">48dp</dimen>
     <dimen name="density_56">56dp</dimen>
     <dimen name="density_64">64dp</dimen>
+    <dimen name="density_72">72dp</dimen>
+    <dimen name="density_80">80dp</dimen>
 
     <dimen name="density_100">100dp</dimen>
     <dimen name="density_200">200dp</dimen>

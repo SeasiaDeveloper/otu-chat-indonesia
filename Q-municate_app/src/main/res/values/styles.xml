@@ -384,6 +384,40 @@
         <item name="android:layout_gravity">right</item>
     </style>
 
+    <style name="ImageViewAttachDoc.Right">
+        <item name="android:paddingRight">@dimen/chat_imageview_margin_right</item>
+    </style>
+
+    <style name="ImageViewAttachDoc.Left">
+        <item name="android:paddingRight">@dimen/chat_imageview_margin_right</item>
+    </style>
+
+    <style name="ImageViewAttachDoc">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/bg_ic_document</item>
+    </style>
+
+    <style name="ImageViewAttachContact.Right">
+        <item name="android:paddingRight">@dimen/chat_imageview_margin_right</item>
+        <item name="android:paddingLeft">@dimen/padding_common</item>
+    </style>
+
+    <style name="ImageViewAttachContact.Left">
+        <item name="android:paddingRight">@dimen/chat_imageview_margin_right</item>
+        <item name="android:paddingLeft">@dimen/padding_common</item>
+    </style>
+
+    <style name="ImageViewAttachContact">
+        <item name="android:layout_width">@dimen/contact_placeholder_size</item>
+        <item name="android:layout_height">@dimen/contact_placeholder_size</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/placeholder_user</item>
+    </style>
+
 
     <style name="AppThemeToolbarWhite" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->

@@ -327,6 +327,42 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         super.onBindViewAttachRightAudioHolder(holder, chatMessage, position);
     }
 
+    @Override
+    protected void onBindViewAttachRightDocHolder(DocViewHolder holder, CombinationMessage chatMessage, int position) {
+        showSendStatusView(holder.signAttachView, chatMessage);
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachRightDocHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewAttachLeftDocHolder(DocViewHolder holder, CombinationMessage chatMessage, int position) {
+        setViewVisibility(holder.avatar, View.GONE);
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachLeftDocHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewAttachRightContactHolder(ContactViewHolder holder, CombinationMessage chatMessage, int position) {
+        showSendStatusView(holder.signAttachView, chatMessage);
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachRightContactHolder(holder, chatMessage, position);
+    }
+
+    @Override
+    protected void onBindViewAttachLeftContactHolder(ContactViewHolder holder, CombinationMessage chatMessage, int position) {
+        setViewVisibility(holder.avatar, View.GONE);
+        handleMessageClickListener(holder, position);
+        addReplyView(holder, chatMessage, position);
+        attachmentClick(holder.imageView, holder.itemView, chatMessage, position);
+        super.onBindViewAttachLeftContactHolder(holder, chatMessage, position);
+    }
+
     private void showSendStatusView(ImageView signView, CombinationMessage chatMessage) {
         if (chatMessage.getState() != null) {
             setMessageStatus(signView, State.DELIVERED.equals(
@@ -338,7 +374,7 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
 
     @Override
     protected MessageViewHolder onCreateCustomViewHolder(ViewGroup parent, int viewType) {
-        return viewType == TYPE_REQUEST_MESSAGE ? new RequestsViewHolder(inflater.inflate(R.layout.item_notification_message, parent, false)) : null;
+        return viewType == TYPE_REQUEST_MESSAGE ? new RequestsViewHolder(inflater.inflate(R.layout.item_notification_message, parent, false)) : super.onCreateCustomViewHolder(parent, viewType);
     }
 
     @Override
@@ -378,6 +414,17 @@ public class PrivateChatMessageAdapter extends BaseChatMessagesAdapter implement
         TextView headerTextView = (TextView) view.findViewById(R.id.header_date_textview);
         CombinationMessage combinationMessage = getItem(position);
         headerTextView.setText(DateUtils.toTodayYesterdayFullMonthDate(combinationMessage.getCreatedDate()));
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        CombinationMessage combinationMessage = getItem(position);
+
+        if (combinationMessage.getNotificationType() != null) {
+            Log.d(TAG, "combinationMessage.getNotificationType()" + combinationMessage.getNotificationType());
+            return TYPE_REQUEST_MESSAGE;
+        }
+        return super.getItemViewType(position);
     }
 
     @Override
