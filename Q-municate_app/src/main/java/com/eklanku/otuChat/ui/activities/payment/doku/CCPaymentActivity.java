@@ -124,8 +124,9 @@ public class CCPaymentActivity extends AppCompatActivity {
         directSDK.setPaymentChannel(1);
 
         LayoutItems layoutItems = new LayoutItems();
-        layoutItems.setToolbarColor("#FFFFFF");
-        layoutItems.setToolbarTextColor("#3ab54a");
+        layoutItems.setToolbarColor("#3ab54a");
+        layoutItems.setToolbarTextColor("#FFFFFF");
+        directSDK.setLayout(layoutItems);
         //handle response
 
         directSDK.getResponse(new iPaymentCallback() {
