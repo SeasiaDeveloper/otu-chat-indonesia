@@ -76,7 +76,6 @@ public class CCPaymentActivity extends AppCompatActivity {
         }
 
 
-
         DirectSDK directSDK = new DirectSDK();
         PaymentItems paymentItems = new PaymentItems();
         paymentItems.setDataAmount(amount(15000));
@@ -85,11 +84,15 @@ public class CCPaymentActivity extends AppCompatActivity {
         try {
             paymentItems.setDataWords(SHA1(amount(15000) + mallId +
                     sharedKey + transactionID() + 360 + getImei()));
+            Log.d("OPPO-1", "SHA1->" + SHA1(amount(15000) + mallId + sharedKey + transactionID() + 360 + getImei()));
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        Log.d("OPPO-1", "SHA1:data->"+amount(15000) + "\n" + mallId + "\n" + sharedKey + "\n" + transactionID() + "\n" + 360 + "\n" + getImei());
+
         paymentItems.setDataMerchantChain("NA");
         paymentItems.setDataSessionID(String.valueOf(sessionID()));
         paymentItems.setDataTransactionID(transactionID());
