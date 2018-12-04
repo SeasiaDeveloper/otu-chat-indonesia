@@ -637,7 +637,8 @@
 
         <!-- DOKU -->
         <activity android:name=".ui.activities.payment.doku.CCPaymentActivity" />
-        <activity android:name=".ui.activities.payment.doku.HomeGatewayDoku" />
+        <activity android:name=".ui.activities.payment.doku.HomeGatewayDoku"
+            android:theme="@style/activityDialog"/>
 
         <!-- new config -->
         <!--
@@ -689,8 +690,8 @@
         <activity
             android:name=".ui.activities.payment.RiwayatActivity"
             android:label="Riwayat"
-            android:theme="@style/AppThemePaymentItems"></activity>
-        <activity android:name=".ui.activities.TesActivity"></activity>
+            android:theme="@style/AppThemePaymentItems" />
+        <activity android:name=".ui.activities.TesActivity" />
     </application>
 
 </manifest>

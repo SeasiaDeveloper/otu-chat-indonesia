@@ -466,4 +466,12 @@
         <item name="android:textSize">13sp</item>
     </style>
 
+    <style name="activityDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowNoTitle">true</item>
+        <item name="android:gravity">top</item>
+        <item name="android:layout_gravity">top</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>

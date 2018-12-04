@@ -215,25 +215,25 @@ public class LandingActivity extends BaseAuthActivity {
         AccessToken accessToken = AccountKit.getCurrentAccessToken();
 
         if (accessToken != null) {
-            Log.e(TAG, accessToken.toString());
+            //Log.e(TAG, accessToken.toString());
             //Handle Returning User
             AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
                 @Override
                 public void onSuccess(final Account account) {
                     // Get Account Kit ID
                     String accountKitId = account.getId();
-                    Log.e(TAG, accountKitId);
+                    //Log.e(TAG, accountKitId);
 
                     if (account.getPhoneNumber() != null) {
-                        Log.e(TAG, "" + account.getPhoneNumber().getCountryCode());
-                        Log.e(TAG, "" + account.getPhoneNumber().getPhoneNumber());
+                       /* Log.e(TAG, "" + account.getPhoneNumber().getCountryCode());
+                        Log.e(TAG, "" + account.getPhoneNumber().getPhoneNumber());*/
 
                         // Get phone number
                         PhoneNumber phoneNumber = account.getPhoneNumber();
                         String phoneNumberString = phoneNumber.toString();
                         //logout.setVisibility(View.VISIBLE);
                         login.setVisibility(View.GONE);
-                        Log.e(TAG, phoneNumberString);
+                        //Log.e(TAG, phoneNumberString);
                         PreferenceUtil.setNumberPhone(LandingActivity.this, phoneNumberString);
                         authenticateWithNumber(phoneNumber.getRawPhoneNumber());
                         //authenticateWithNumber("919898989898");
@@ -243,7 +243,7 @@ public class LandingActivity extends BaseAuthActivity {
                 @Override
                 public void onError(final AccountKitError error) {
                     // Handle Error
-                    Log.e(TAG, error.toString());
+                    //Log.e(TAG, error.toString());
                     Toast.makeText(LandingActivity.this, "ERROR, " + error.toString(), Toast.LENGTH_SHORT).show();
                 }
             });
@@ -283,7 +283,7 @@ public class LandingActivity extends BaseAuthActivity {
                 {
                     toastMessage = loginResult.getError().getErrorType().getMessage();
                     errorDialog(loginResult.getError().toString());
-                    Log.d(TAG, "Error " + loginResult.getError().toString());
+                    //Log.d(TAG, "Error " + loginResult.getError().toString());
                 }
                 else if (loginResult.wasCancelled())
                 {
@@ -301,7 +301,7 @@ public class LandingActivity extends BaseAuthActivity {
             else
             {
                 Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
-                Log.d(TAG, "Error data is empty");
+                //Log.d(TAG, "Error data is empty");
             }
 
         } else {
@@ -399,7 +399,7 @@ public class LandingActivity extends BaseAuthActivity {
     }
 
     protected void signUpWithNumber(String userPhone) {
-        Log.d("OPPO-1", "signUpWithNumber signUpWithNumber: "+userPhone);
+        //Log.d("OPPO-1", "signUpWithNumber signUpWithNumber: "+userPhone);
         ConnectycubeUser connectycubeUser = new ConnectycubeUser(userPhone, userPhone, null);
         connectycubeUser.setPhone(userPhone);
         connectycubeUser.setFullName(userPhone);

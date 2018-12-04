@@ -201,7 +201,7 @@ dependencies {
     //implementation 'com.mikhaellopez:hfrecyclerview:1.1.1'
 
     //doku
-    implementation 'com.doku.sdkocov2:sdkocov2-release:1.0@aar'
+    implementation 'com.doku.sdkocov2:sdkoco-2.0.1:2.0.1@aar'
 
     //vcard
     implementation 'com.googlecode.ez-vcard:ez-vcard:0.10.4'

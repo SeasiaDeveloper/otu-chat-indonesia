@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/transparent"
+    android:layout_margin="@dimen/density_8"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="PILIH METODE TOPUP"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/density_8"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:id="@+id/btn_tk"
+        android:text="TICKETING"
+        android:textColor="@color/white"
+        android:background="@drawable/custom_round_new"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_cc"
+        android:background="@drawable/custom_round_new"
+     android:layout_marginTop="@dimen/density_8"
+        android:layout_width="match_parent"
+       android:textColor="@color/white"
+        android:text="CREDIT CARD"
+        android:layout_height="wrap_content" />
+
+    <ImageButton
+        android:id="@+id/btn_cancel"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_cancel_dark"
+        android:layout_marginTop="@dimen/density_24"
+        android:layout_width="match_parent"
+        android:textColor="@color/white"
+        android:text="CLOSE"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="CLOSE"
+        android:gravity="center"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
