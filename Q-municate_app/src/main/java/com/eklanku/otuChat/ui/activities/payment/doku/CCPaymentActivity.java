@@ -65,34 +65,24 @@ public class CCPaymentActivity extends AppCompatActivity {
 
 
     public void retrieveToken() {
-        Log.d("OPPO-1", "retrieveToken: " + amount(15000));
-        try {
-            Log.d("OPPO-1", "retrieveToken: " + SHA1(amount(15000) + mallId +
-                    sharedKey + transactionID() + 360 + getImei()));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-
-
+        String transactionID = transactionID();
+        String sessionID = sessionID();
         DirectSDK directSDK = new DirectSDK();
         PaymentItems paymentItems = new PaymentItems();
-        paymentItems.setDataAmount(amount(15000));
-        paymentItems.setDataBasket("[{\"name\":\"donasi\",\"amount\":\"10000.00\",\"quantity\":\"1\"}]");
+        paymentItems.setDataAmount("15000.00");
+        paymentItems.setDataBasket("[{\"name\":\"donasi\",\"amount\":\"15000.00\",\"quantity\":\"1\"}]");
         paymentItems.setDataCurrency("360");
         try {
-            paymentItems.setDataWords(SHA1(amount(15000) + mallId +
-                    sharedKey + transactionID() + 360 + getImei()));
+            paymentItems.setDataWords(SHA1("15000.00" + mallId +
+                    sharedKey + transactionID + 360 + getImei()));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         paymentItems.setDataMerchantChain("NA");
-        paymentItems.setDataSessionID(String.valueOf(sessionID()));
-        paymentItems.setDataTransactionID(transactionID());
+        paymentItems.setDataSessionID(String.valueOf(sessionID));
+        paymentItems.setDataTransactionID(transactionID);
         paymentItems.setDataMerchantCode(mallId);
         paymentItems.setDataImei(getImei());
         paymentItems.setMobilePhone("089695489743");
@@ -107,7 +97,6 @@ public class CCPaymentActivity extends AppCompatActivity {
             public void onSuccess(final String text) {
                 try {
                     respongetTokenSDK = new JSONObject(text);
-                    Log.d("OPPO-1", "onSuccess: " + respongetTokenSDK.toString());
                     Log.d("OPPO-1", "onSuccess: " + respongetTokenSDK.getString("res_response_code"));
 
                     if (respongetTokenSDK.getString("res_response_code").equalsIgnoreCase("0000")) {
@@ -163,17 +152,20 @@ public class CCPaymentActivity extends AppCompatActivity {
         return "not_found";
     }
 
+    public static final String DATA = "0123456789";
+
     public String transactionID() {
         String vTransactionID = "";
         Random generator = new Random();
         StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = generator.nextInt(6);
+        int randomLength = generator.nextInt(DATA.length());
         char tempChar;
         for (int i = 0; i < randomLength; i++) {
             tempChar = (char) (generator.nextInt(96) + 32);
             randomStringBuilder.append(tempChar);
         }
         vTransactionID = "dp_ccn_" + sdf.format(new Date()) + "_" + randomStringBuilder.toString();
+        Log.d("OPPO-1", "vTransactionID: " + vTransactionID);
         return vTransactionID;
     }
 
@@ -204,6 +196,7 @@ public class CCPaymentActivity extends AppCompatActivity {
         String vSessionId = "";
         Long tsLong = System.currentTimeMillis() / 1000;
         vSessionId = tsLong.toString();
+        Log.d("OPPO-1", "sessionID: "+vSessionId);
         return vSessionId;
     }
 
