@@ -27,6 +27,7 @@ import com.doku.sdkocov2.interfaces.iPaymentCallback;
 import com.doku.sdkocov2.model.LayoutItems;
 import com.doku.sdkocov2.model.PaymentItems;
 import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
 import org.json.JSONException;
@@ -38,6 +39,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Random;
 
 public class CCPaymentActivity extends AppCompatActivity {
@@ -55,6 +57,8 @@ public class CCPaymentActivity extends AppCompatActivity {
     Button btnOk;
     ImageView imgStatus;
     TextView tvStatus;
+    String strUserID, strAccessToken, aplUse = "OTU";
+    PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,6 +78,11 @@ public class CCPaymentActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        preferenceManager = new PreferenceManager(this);
+        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
+        strUserID = user.get(preferenceManager.KEY_USERID);
+        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
        /* et_ccn = findViewById(R.id.txt_ccn);
         et_cvv = findViewById(R.id.txt_cvv);
@@ -101,11 +110,11 @@ public class CCPaymentActivity extends AppCompatActivity {
         String sessionID = sessionID();
         DirectSDK directSDK = new DirectSDK();
         PaymentItems paymentItems = new PaymentItems();
-        paymentItems.setDataAmount(amount+".00");
-        paymentItems.setDataBasket("[{\"name\":\"donasi\",\"amount\":\"" + amount+".00" + "+\",\"quantity\":\"1\"}]");
+        paymentItems.setDataAmount(amount + ".00");
+        paymentItems.setDataBasket("[{\"name\":\"donasi\",\"amount\":\"" + amount + ".00" + "+\",\"quantity\":\"1\"}]");
         paymentItems.setDataCurrency("360");
         try {
-            paymentItems.setDataWords(SHA1(amount+".00" + mallId +
+            paymentItems.setDataWords(SHA1(amount + ".00" + mallId +
                     sharedKey + invoiceID + 360 + getImei()));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -162,7 +171,7 @@ public class CCPaymentActivity extends AppCompatActivity {
                         imgStatus.setImageResource(R.drawable.ic_doku_success);
                         tvStatus.setText(responseMessage);
 
-                        Log.d("OPPO-1", "onSuccess->" + respongetTokenSDK.toString());
+                        next(strUserID, strAccessToken,aplUse,"kartu kredit",amount, tokenId, deviceId, pairingCode, transactionId, paymentChannel);
 
                     }
                 } catch (JSONException e) {
@@ -201,6 +210,13 @@ public class CCPaymentActivity extends AppCompatActivity {
                 Log.d("OPPO-1", "onExcetion->" + eSDK.getMessage());
             }
         }, getApplicationContext());
+    }
+
+    private void next(String userID, String accessToken, String aplUse, String bank, String nominal, String dokuToken,
+                      String dokuDeviceId, String dokuPairingCode, String dokuInvoiceNo, String paymentChannel) {
+
+        //CALL API DOKU HERE USE RETROFIT=======================================================================
+
     }
 
     private void dialogNominal() {
