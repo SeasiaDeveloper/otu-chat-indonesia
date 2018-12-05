@@ -21,9 +21,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -40,6 +42,7 @@ import com.eklanku.otuChat.ui.activities.about.ContactUsActivity;
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.RiwayatActivity;
+import com.eklanku.otuChat.ui.activities.payment.doku.CCPaymentActivity;
 import com.eklanku.otuChat.ui.activities.payment.doku.HomeGatewayDoku;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBalanceActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBonusActivity;
@@ -82,6 +85,7 @@ import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.settings.SettingTabPaymentActivity;
 import com.eklanku.otuChat.utils.PreferenceUtil;
+import com.j256.ormlite.stmt.query.In;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -159,7 +163,8 @@ public class PaymentFragment extends Fragment {
             public void onClick(View view) {
                 if (menuDialog()) {
                     //startActivity(new Intent(context, TopupOrder.class));
-                    startActivity(new Intent(context, HomeGatewayDoku.class));
+                    //startActivity(new Intent(context, HomeGatewayDoku.class));
+                    dialogTopup();
                 }
             }
         });
@@ -209,6 +214,50 @@ public class PaymentFragment extends Fragment {
 
         drawer = getActivity().findViewById(R.id.drawer_layout);
         return mView;
+    }
+
+    private void dialogTopup() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog_topup);
+        dialog.setCancelable(false);
+
+        final Button btnTk = dialog.findViewById(R.id.btn_tk);
+        final Button btnCC = dialog.findViewById(R.id.btn_cc);
+
+        final ImageButton btnClose = dialog.findViewById(R.id.btn_cancel);
+
+        btnTk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                startActivity(new Intent(getActivity(), TopupOrder.class));
+
+            }
+        });
+
+        btnCC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent i = new Intent(getActivity(), CCPaymentActivity.class);
+                //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            }
+        });
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        Window window = dialog.getWindow();
+        assert window != null;
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
     }
 
     @Override
