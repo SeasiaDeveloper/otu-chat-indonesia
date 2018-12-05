@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:padding="@dimen/density_8">
+
+    <ProgressBar
+        android:id="@+id/progress_sms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/density_8" />
+
+    <LinearLayout
+        android:id="@+id/linear_sms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <com.eklanku.otuChat.ui.views.ARTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pilih Operator"
+        android:textColor="@color/grey_600"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_bottom_border_grey"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Spinner
+            android:id="@+id/spnTransSMS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:tint="@color/default_text_icon_otu_color"
+            android:src="@drawable/ic_drop" />
+
+    </RelativeLayout>
+
+    <com.eklanku.otuChat.ui.views.ARTextView
+        android:id="@+id/textView24"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/density_8"
+        android:text="Pilih Nominal"
+        android:textColor="@color/grey_600"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_bottom_border_grey"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Spinner
+            android:id="@+id/spnTransSMSNominal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:tint="@color/default_text_icon_otu_color"
+            android:src="@drawable/ic_drop" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtLayoutTransPulsaNo"
+            android:layout_marginTop="@dimen/density_8"
+            android:text="Masukkan No Telepon"
+            android:inputType="number"
+            android:textColor="@color/grey_600"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/txtLayoutTransPulsaNo"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="wrap_content"
+            app:hintEnabled="false" >
+
+            <EditText
+                android:id="@+id/txtTransSMSNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:ems="10"
+                android:textColor="@color/grey_600"
+                android:inputType="number"
+                android:paddingBottom="@dimen/density_8"
+                android:paddingTop="@dimen/density_8" />
+        </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/imgOpr"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_otu_sms"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_trans_ke"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtLayoutTransPulsaNo"
+            android:layout_marginTop="@dimen/density_8"
+            android:text="Transaksi Ke-"
+            android:textColor="@color/grey_600"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/txt_transaksi_ke"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_trans_ke"
+            android:background="@drawable/custom_bottom_border_grey"
+            android:hint="Masukkan Transaksi ke-"
+            android:inputType="number"
+            android:textColor="@color/grey_600"
+            android:paddingBottom="@dimen/density_8" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnTransSMSBayar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/density_8"
+        android:background="@drawable/background_round_corner_green"
+        android:text="Beli"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+    <com.eklanku.otuChat.ui.views.ARTextView
+        android:id="@+id/tvPilihNominal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/density_4"
+        android:text="Pilih Nominal"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:background="@drawable/rounded_shape_payment"
+        android:padding="@dimen/density_8"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_margin="@dimen/density_8"
+        android:id="@+id/tv_empty"
+        android:gravity="center"
+        android:text="Tidak ada produk"
+        android:layout_height="wrap_content" />
+
+    <ListView
+        android:id="@+id/listSMS"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</LinearLayout>

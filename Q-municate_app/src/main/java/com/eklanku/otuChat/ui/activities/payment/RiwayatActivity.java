@@ -15,7 +15,7 @@ import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBonusActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryDespositActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryPenarikanActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryTrxActivity;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
+import com.eklanku.otuChat.ui.activities.payment.transaksi2.PaymentLogin;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
 

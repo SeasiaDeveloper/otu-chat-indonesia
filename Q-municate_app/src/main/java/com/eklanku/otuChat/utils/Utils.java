@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.eklanku.otuChat.R;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
+import com.eklanku.otuChat.ui.activities.payment.transaksi2.PaymentLogin;
 
 public class Utils {
 

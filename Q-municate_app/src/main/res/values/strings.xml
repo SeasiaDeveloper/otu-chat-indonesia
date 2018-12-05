@@ -544,6 +544,7 @@
     <string name="navigation_drawer_close">Close Drawer</string>
 
     <string name="text">Pengembangan perangkat lunak Android adalah proses di mana aplikasi baru diciptakan untuk sistem operasi Android. Aplikasi tersebut biasanya dikembangkan dalam bahasa pemrograman Java dengan menggunakan Software Development Kit Android, tetapi perkakas lainnya juga tersedia.</string>
-
+    <string name="lanjutkan">YA, Lanjutkan</string>
+    <string name="beli">BELI</string>
 
 </resources>

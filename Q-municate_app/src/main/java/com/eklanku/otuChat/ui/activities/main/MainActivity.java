@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,20 +35,20 @@ import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
-import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
-import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataDetailSaldoBonus;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.DeleteAccount;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
+import com.eklanku.otuChat.ui.activities.payment.transaksi2.PaymentLogin;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
-import com.eklanku.otuChat.ui.views.banner.BannerDataManager;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
+import com.eklanku.otuChat.ui.views.banner2.BannerDataManager;
 import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -60,12 +61,12 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
+import com.eklanku.otuChat.ui.activities.payment.models2.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientProfile;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfaceProfile;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivityOtu;
 import com.eklanku.otuChat.ui.fragments.chats.DialogsListFragment;
@@ -103,6 +104,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Observer;
 import java.util.TimeZone;
 
@@ -364,6 +366,27 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         if (BannerDataManager.getInstance().getUrls(false).size() > 0) {
             bannerSlider.setViewUrls(BannerDataManager.getInstance().getUrls(true));
         }
+
+        //banner data manager new
+        Map<String, List<String>> map = BannerDataManager.getInstance().getList(true);
+
+        bannerSlider.setOnBannerItemClickListener(new BannerLayout.OnBannerItemClickListener() {
+            @Override
+            public void onItemClick(int i) {
+                for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+                    String url = entry.getValue().get(i);
+                    if (url != null && !TextUtils.isEmpty(url)) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Link belum tersedia", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+            }
+        });
     }
 
     private boolean checkAndStartLastOpenActivity() {
@@ -617,7 +640,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 }
                 progressDialog.dismiss();
                 Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                //Log.d("API_TRANSBELI", t.getMessage().toString());
+                Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
     }
@@ -885,8 +908,9 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         finish();
     }
 
+    //===========================API LAMA===============================================
 
-    private void cekMember() {
+/*    private void cekMember() {
 //        Log.d("OPPO-1", "cekMember:process"+AppSession.getSession().getUser().getPhone());
         // Call<DataProfile> isMemberCall = mApiInterfacePayment.isMemberCall(PreferenceUtil.getNumberPhone(this)), "OTU");
         isMemberCall = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this), "OTU");
@@ -920,7 +944,43 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
+    }*/
+
+//===========================================API BARU============================================
+    private void cekMember() {
+        isMemberCall = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this), "OTU");
+        isMemberCall.enqueue(new Callback<DataProfile>() {
+            @Override
+            public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String msg = response.body().getRespMessage();
+                    String errNumber = response.body().getErrNumber();
+                    if (errNumber.equalsIgnoreCase("0")) {
+                        PreferenceUtil.setMemberStatus(MainActivity.this, true);
+                    } else if (errNumber.equalsIgnoreCase("4")) {//awalnya 5
+                        lauchRegister();
+                    } else {
+                        Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataProfile> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
     public ArrayList<String> arrayPhone = new ArrayList<>();
     public ArrayList<String> arrayName = new ArrayList<>();
@@ -1262,8 +1322,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         } else return true;
     }
 
-
-    public void loadSaldoBonus(String strUserID, String strAccessToken) {
+//==========================================API LAMA
+    /*public void loadSaldoBonus(String strUserID, String strAccessToken) {
 
         userCall = mApiInterfacePayment.getSaldodetail(strUserID, strApIUse, strAccessToken);
         userCall.enqueue(new Callback<DataSaldoBonus>() {
@@ -1336,6 +1396,78 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 // Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    }*/
 
+    public void loadSaldoBonus(String strUserID, String strAccessToken) {
+        Log.d("OPPO-1", "loadSaldoBonus: " + strUserID + ", " + strAccessToken);
+        userCall = mApiInterfacePayment.getSaldodetail(strUserID, strApIUse, strAccessToken);
+        userCall.enqueue(new Callback<DataSaldoBonus>() {
+            @Override
+            public void onResponse(Call<DataSaldoBonus> call, Response<DataSaldoBonus> response) {
+                if (call.isCanceled()) {
+                    return;
+                }
+
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String error = response.body().getRespMessage();
+                    String id_member = "", sisa_uang = "", carier_member = "", bonus_member = "";
+                    if (status.equals("SUCCESS")) {
+
+                        final List<DataDetailSaldoBonus> products = response.body().getBalance();
+                        for (int i = 0; i < products.size(); i++) {
+                            id_member = products.get(i).getId_member();
+                            sisa_uang = products.get(i).getSisa_uang();
+                            carier_member = products.get(i).getCarier_member();
+                            bonus_member = products.get(i).getBonus_member();
+                        }
+
+                        Double total = 0.0d;
+                        try {
+                            if (sisa_uang != null && !sisa_uang.trim().isEmpty())
+                                total = Double.valueOf(sisa_uang);
+                        } catch (Exception e) {
+                            total = 0.0d;
+                        }
+                        Locale localeID = new Locale("in", "ID");
+                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
+                        String rupiah = format.format(total);
+
+                        Double nomBonus = 0.0d;
+                        try {
+                            if (nomBonus != null && !bonus_member.trim().isEmpty()) {
+                                nomBonus = Double.valueOf(bonus_member);
+                            } else {
+                                nomBonus = 0.0d;
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        String rupiahBonus = format.format(nomBonus);
+
+                        if (carier_member.equals("FREE")) {
+                            tvStarMember.setText("REGULER");
+                        } else {
+                            tvStarMember.setText(carier_member);
+                        }
+
+                    } else {
+                        // Toast.makeText(MainActivity.this, "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    //Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataSaldoBonus> call, Throwable t) {
+                if (call.isCanceled()) {
+                    return;
+                }
+                // Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

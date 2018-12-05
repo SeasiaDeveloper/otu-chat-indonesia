@@ -50,24 +50,24 @@ import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryDespositActivity
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryPenarikanActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryTrxActivity;
 
-import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
-import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
-import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
-import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataDeposit;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataDetailSaldoBonus;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataSaldoBonus;
+import com.eklanku.otuChat.ui.activities.payment.models2.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
 import com.eklanku.otuChat.ui.activities.payment.topup.AlertSyarat;
 import com.eklanku.otuChat.ui.activities.payment.topup.TopupOrder;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.TransEtool;
+import com.eklanku.otuChat.ui.activities.payment.transaksi2.PaymentLogin;
+import com.eklanku.otuChat.ui.activities.payment.transaksi2.TransEtool;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPajak;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketData;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPln;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.TransSMS;
+import com.eklanku.otuChat.ui.activities.payment.transaksi2.TransPulsa;
+import com.eklanku.otuChat.ui.activities.payment.transaksi2.TransPaketData;
+import com.eklanku.otuChat.ui.activities.payment.transaksi2.TransPln;
+import com.eklanku.otuChat.ui.activities.payment.transaksi2.TransSMS;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransVoucherGame;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransBpjs;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransTv;
@@ -78,11 +78,11 @@ import com.eklanku.otuChat.ui.activities.payment.transaksi.TransMultiFinance;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKartuKredit;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransAsuransi;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPGN;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.TransVouchergame_opsi;
+import com.eklanku.otuChat.ui.activities.payment.transaksi2.TransVouchergame_opsi;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransWi;
 import com.eklanku.otuChat.ui.activities.payment.transfer.TransDeposit;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.settings.SettingTabPaymentActivity;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.j256.ormlite.stmt.query.In;
@@ -723,6 +723,75 @@ public class PaymentFragment extends Fragment {
 
     }
 
+    //===========================================API LAMA
+    /*public void LoadSaldoBonus(String strUserID, String strAccessToken){
+
+        Call<DataSaldoBonus> userCall = apiInterfacePayment.getSaldodetail(strUserID, strApIUse, strAccessToken);
+        userCall.enqueue(new Callback<DataSaldoBonus>() {
+            @Override
+            public void onResponse(Call<DataSaldoBonus> call, Response<DataSaldoBonus> response) {
+
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String error = response.body().getRespMessage();
+                    String id_member = "", sisa_uang = "", carier_member = "",bonus_member = "";
+                    Log.d("OPPO-1", "OnLoad userID " + strUserID + " response.isSuccessful()) " + response.isSuccessful());
+                    if (status.equals("SUCCESS")) {
+
+                        final List<DataDetailSaldoBonus> products = response.body().getBalance();
+                        for (int i = 0; i < products.size(); i++) {
+                            id_member = products.get(i).getId_member();
+                            sisa_uang = products.get(i).getSisa_uang();
+                            carier_member = products.get(i).getCarier_member();
+                            bonus_member = products.get(i).getBonus_member();
+                        }
+
+                        Double total = 0.0d;
+                        try {
+                            if (sisa_uang != null && !sisa_uang.trim().isEmpty())
+                                total = Double.valueOf(sisa_uang);
+                        } catch (Exception e) {
+                            total = 0.0d;
+                        }
+                        Locale localeID = new Locale("in", "ID");
+                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
+                        String rupiah = format.format(total);
+
+                        Double nomBonus = 0.0d;
+                        try{
+                            if(nomBonus != null && !bonus_member.trim().isEmpty()){
+                                nomBonus = Double.valueOf(bonus_member);
+                            }else{
+                                nomBonus = 0.0d;
+                            }
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        String rupiahBonus = format.format(nomBonus);
+
+                        Log.d("OPPO-1", "onResponse: " + rupiahBonus);
+                        tvBonus.setText("Rp"+nomBonus);
+
+                        lblSaldoMain.setText(rupiah);
+
+                    } else {
+                        Toast.makeText(getActivity(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataSaldoBonus> call, Throwable t) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }*/
+
     public void LoadSaldoBonus(String strUserID, String strAccessToken){
 
         Call<DataSaldoBonus> userCall = apiInterfacePayment.getSaldodetail(strUserID, strApIUse, strAccessToken);
@@ -823,8 +892,38 @@ public class PaymentFragment extends Fragment {
         });
     }
 
-
     private void cekMember() {
+
+        Call<DataProfile> isMember = apiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(getActivity()), "OTU");
+
+        //Toast.makeText(context, "" + PreferenceUtil.getNumberPhone(getActivity()), Toast.LENGTH_SHORT).show();
+        isMember.enqueue(new Callback<DataProfile>() {
+            @Override
+            public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String msg = response.body().getRespMessage();
+                    String errNumber = response.body().getErrNumber();
+                    if (errNumber.equalsIgnoreCase("0")) {
+                        PreferenceUtil.setMemberStatus(getActivity(), true);
+                    } else if (errNumber.equalsIgnoreCase("4")) {//awalnya 5
+                        lauchRegister();
+                    } else {
+                        //Toast.makeText(getActivity(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataProfile> call, Throwable t) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+//==================================API LAMA
+    /*private void cekMember() {
         Call<DataProfile> isMember = apiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(getActivity()), "OTU");
         //Toast.makeText(context, "" + PreferenceUtil.getNumberPhone(getActivity()), Toast.LENGTH_SHORT).show();
         isMember.enqueue(new Callback<DataProfile>() {
@@ -851,7 +950,7 @@ public class PaymentFragment extends Fragment {
                 Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    }*/
 
     public void lauchRegister() {
         Intent register = new Intent(getActivity(), Register.class);

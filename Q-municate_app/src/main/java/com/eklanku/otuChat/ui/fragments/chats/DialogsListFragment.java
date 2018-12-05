@@ -50,7 +50,7 @@ import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.adapters.chats.DialogsListAdapter;
 import com.eklanku.otuChat.ui.fragments.base.BaseLoaderFragment;
 import com.eklanku.otuChat.ui.fragments.search.ContactsFragment;
-import com.eklanku.otuChat.ui.views.banner.BannerDataManager;
+import com.eklanku.otuChat.ui.views.banner2.BannerDataManager;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 /*<<<<<<< HEAD
