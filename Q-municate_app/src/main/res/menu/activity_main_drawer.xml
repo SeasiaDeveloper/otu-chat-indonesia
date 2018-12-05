@@ -50,7 +50,7 @@
 
     </item>
 
-    <item android:title="LAIN_LAIN">
+    <item android:title="LAIN-LAIN">
         <menu>
             <item
                 android:id="@+id/action_web_qr_code"

@@ -327,8 +327,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         mParallaxImageHeight = getResources().getDimensionPixelSize(R.dimen.density_200);
 
         Activity activity = this;
-        if (!activity.isFinishing()) {
-            loadSaldoBonus(strUserID, strAccessToken);
+
+        if (PreferenceUtil.isLoginStatus(this)) {
+            if (!activity.isFinishing()) {
+                loadSaldoBonus(strUserID, strAccessToken);
+            }
         }
 
         initBanner();
@@ -946,7 +949,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         });
     }*/
 
-//===========================================API BARU============================================
+    //===========================================API BARU============================================
     private void cekMember() {
         isMemberCall = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this), "OTU");
         isMemberCall.enqueue(new Callback<DataProfile>() {
@@ -1407,6 +1410,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 if (call.isCanceled()) {
                     return;
                 }
+
+                Log.d("AYIK", "response-saldo->"+ response.body()+"\n"+ response.toString());
 
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();

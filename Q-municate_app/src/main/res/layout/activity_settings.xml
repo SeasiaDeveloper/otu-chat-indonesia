@@ -56,7 +56,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
                     android:background="@drawable/selector_button_general"
-                    android:src="@drawable/ic_edit_new" />
+                    android:src="@drawable/ic_setting_edit" />
 
             </RelativeLayout>
 
@@ -72,9 +72,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/divider0"
-                android:drawableLeft="@drawable/ic_notification"
+                android:drawableLeft="@drawable/ic_setting_notif"
                 android:drawablePadding="16dp"
-                android:drawableStart="@drawable/ic_notification"
+                android:drawableStart="@drawable/ic_setting_notif"
                 android:padding="@dimen/padding_large"
                 android:text="@string/settings_push_notifications"
                 android:textColor="@color/text_dark"
@@ -91,9 +91,9 @@
                 android:id="@+id/invite_friends_button"
                 style="@style/SettingsButtonStyle"
                 android:layout_below="@id/divider1"
-                android:drawableLeft="@drawable/ic_add_friend"
+                android:drawableLeft="@drawable/ic_setting_add"
                 android:drawablePadding="16dp"
-                android:drawableStart="@drawable/ic_add_friend"
+                android:drawableStart="@drawable/ic_setting_add"
                 android:gravity="center_vertical"
                 android:text="@string/settings_invite_friends" />
 
@@ -108,9 +108,9 @@
                 android:id="@+id/give_feedback_button"
                 style="@style/SettingsButtonStyle"
                 android:layout_below="@id/divider2"
-                android:drawableLeft="@drawable/ic_feedback"
+                android:drawableLeft="@drawable/ic_setting_feedback"
                 android:drawablePadding="16dp"
-                android:drawableStart="@drawable/ic_feedback"
+                android:drawableStart="@drawable/ic_setting_feedback"
                 android:text="@string/settings_give_feedback" />
 
             <include
@@ -129,9 +129,9 @@
                 <Button
                     android:id="@+id/change_password_button"
                     style="@style/SettingsButtonStyle"
-                    android:drawableLeft="@drawable/ic_change_password"
+                    android:drawableLeft="@drawable/ic_setting_password"
                     android:drawablePadding="16dp"
-                    android:drawableStart="@drawable/ic_change_password"
+                    android:drawableStart="@drawable/ic_setting_password"
                     android:gravity="center_vertical"
                     android:text="@string/settings_change_password" />
 

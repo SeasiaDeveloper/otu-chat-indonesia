@@ -697,7 +697,7 @@ public class TransPulsa extends AppCompatActivity {
 
         try {
             String nomorHp;
-            if (s.length() >= 4) {
+            if (s.length() >= 6) {
 
                 a.clear();
                 b.clear();
