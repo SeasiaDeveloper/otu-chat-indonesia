@@ -81,7 +81,7 @@ public class CCPaymentActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         paymentItems.setDataMerchantChain("NA");
-        paymentItems.setDataSessionID(String.valueOf(sessionID));
+        paymentItems.setDataSessionID(String.valueOf(sessionID()));
         paymentItems.setDataTransactionID(transactionID);
         paymentItems.setDataMerchantCode(mallId);
         paymentItems.setDataImei(getImei());
@@ -97,6 +97,7 @@ public class CCPaymentActivity extends AppCompatActivity {
             public void onSuccess(final String text) {
                 try {
                     respongetTokenSDK = new JSONObject(text);
+                    Log.d("OPPO-1", "onSuccess: " + respongetTokenSDK.toString());
                     Log.d("OPPO-1", "onSuccess: " + respongetTokenSDK.getString("res_response_code"));
 
                     if (respongetTokenSDK.getString("res_response_code").equalsIgnoreCase("0000")) {
