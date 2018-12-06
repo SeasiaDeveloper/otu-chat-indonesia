@@ -9,6 +9,7 @@ import com.eklanku.otuChat.ui.activities.payment.models2.DataHistoryOTU;
 import com.eklanku.otuChat.ui.activities.payment.models2.DataPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models2.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models2.DataProviderByType;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataRequestDokuCC;
 import com.eklanku.otuChat.ui.activities.payment.models2.DataSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models2.DetailTransferResponse;
 import com.eklanku.otuChat.ui.activities.payment.models2.JsonResponse;
@@ -611,4 +612,22 @@ public interface ApiInterfacePayment {
             @Field("aplUse") String aplUse,
             @Field("profileToken") String profileToken
     );
+
+    //API request doku
+    @FormUrlEncoded
+    @POST("Deposit/request")
+    Call<DataRequestDokuCC> requestDoku(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("bank") String bank,
+            @Field("nominal") String nominal,
+            @Field("doku-token") String doku_token,
+            @Field("deviceid") String deviceid,
+            @Field("doku-pairing-code") String doku_pairing_code,
+            @Field("doku-invoice-no") String doku_invoice_no,
+            @Field("payment_chanel") String payment_chanel,
+            @Field("words") String words
+    );
+
 }

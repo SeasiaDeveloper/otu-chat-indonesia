@@ -28,6 +28,9 @@ import com.doku.sdkocov2.model.LayoutItems;
 import com.doku.sdkocov2.model.PaymentItems;
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataRequestDokuCC;
+import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
 import org.json.JSONException;
@@ -41,6 +44,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CCPaymentActivity extends AppCompatActivity {
 
@@ -59,6 +66,11 @@ public class CCPaymentActivity extends AppCompatActivity {
     TextView tvStatus;
     String strUserID, strAccessToken, aplUse = "OTU";
     PreferenceManager preferenceManager;
+
+    ApiInterfacePayment apiInterfacePayment;
+    ApiClientPayment apiClientPayment;
+
+    String words = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,6 +96,8 @@ public class CCPaymentActivity extends AppCompatActivity {
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
+        apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
+
        /* et_ccn = findViewById(R.id.txt_ccn);
         et_cvv = findViewById(R.id.txt_cvv);
         et_noc = findViewById(R.id.txt_noc);
@@ -108,19 +122,23 @@ public class CCPaymentActivity extends AppCompatActivity {
 
         String invoiceID = transactionID();
         String sessionID = sessionID();
-        DirectSDK directSDK = new DirectSDK();
-        PaymentItems paymentItems = new PaymentItems();
-        paymentItems.setDataAmount(amount + ".00");
-        paymentItems.setDataBasket("[{\"name\":\"donasi\",\"amount\":\"" + amount + ".00" + "+\",\"quantity\":\"1\"}]");
-        paymentItems.setDataCurrency("360");
         try {
-            paymentItems.setDataWords(SHA1(amount + ".00" + mallId +
-                    sharedKey + invoiceID + 360 + getImei()));
+            words = SHA1(amount + ".00" + mallId +
+                    sharedKey + invoiceID + 360 + getImei());
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+        DirectSDK directSDK = new DirectSDK();
+        PaymentItems paymentItems = new PaymentItems();
+        paymentItems.setDataAmount(amount + ".00");
+        paymentItems.setDataBasket("[{\"name\":\"donasi\",\"amount\":\"" + amount + ".00" + "+\",\"quantity\":\"1\"}]");
+        paymentItems.setDataCurrency("360");
+        paymentItems.setDataWords(words);
+        Log.d("OPPO-1", "retrieveToken: " + words);
         paymentItems.setDataMerchantChain("NA");
         paymentItems.setDataSessionID(String.valueOf(sessionID));
         paymentItems.setDataTransactionID(invoiceID);
@@ -171,7 +189,8 @@ public class CCPaymentActivity extends AppCompatActivity {
                         imgStatus.setImageResource(R.drawable.ic_doku_success);
                         tvStatus.setText(responseMessage);
 
-                        next(strUserID, strAccessToken,aplUse,"kartu kredit",amount, tokenId, deviceId, pairingCode, transactionId, paymentChannel);
+
+                        next(strUserID, strAccessToken, aplUse, "kartu kredit", amount, tokenId, deviceId, pairingCode, transactionId, paymentChannel, words);
 
                     }
                 } catch (JSONException e) {
@@ -213,9 +232,38 @@ public class CCPaymentActivity extends AppCompatActivity {
     }
 
     private void next(String userID, String accessToken, String aplUse, String bank, String nominal, String dokuToken,
-                      String dokuDeviceId, String dokuPairingCode, String dokuInvoiceNo, String paymentChannel) {
+                      String dokuDeviceId, String dokuPairingCode, String dokuInvoiceNo, String paymentChannel, String word) {
+
+        Log.d("OPPO-1", "next-userID : " + userID);
+        Log.d("OPPO-1", "next-accessToken: " + accessToken);
+        Log.d("OPPO-1", "next-aplUse: " + aplUse);
+        Log.d("OPPO-1", "next-bank: " + bank);
+        Log.d("OPPO-1", "next-nominal: " + nominal);
+        Log.d("OPPO-1", "next-dokuToken: " + dokuToken);
+        Log.d("OPPO-1", "next-dokuDeviceId : " + dokuDeviceId);
+        Log.d("OPPO-1", "next-dokuPairingCode: " + dokuPairingCode);
+        Log.d("OPPO-1", "next-dokuInvoiceNo : " + dokuInvoiceNo);
+        Log.d("OPPO-1", "next-paymentChannel: " + paymentChannel);
+        Log.d("OPPO-1", "next-word: " + word);
 
         //CALL API DOKU HERE USE RETROFIT=======================================================================
+        Call<DataRequestDokuCC> request_doku = apiInterfacePayment.requestDoku(strUserID, strAccessToken, aplUse, bank, nominal,
+                dokuToken, dokuDeviceId, dokuPairingCode, dokuInvoiceNo, paymentChannel, word);
+        request_doku.enqueue(new Callback<DataRequestDokuCC>() {
+            @Override
+            public void onResponse(Call<DataRequestDokuCC> call, Response<DataRequestDokuCC> response) {
+                if (response.isSuccessful()) {
+                    Log.d("OPPO-1", "onResponse: "+response.body().getRes_response_code());
+                    Log.d("OPPO-1", "onResponse: "+response.body().getRes_response_msg());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataRequestDokuCC> call, Throwable t) {
+                Log.d("OPPO-1", "onFailure: "+t.getMessage());
+                Log.d("OPPO-1", "onFailure: "+call.toString());
+            }
+        });
 
     }
 
