@@ -478,7 +478,7 @@ public interface ApiInterfacePayment {
 
     //banner
     @FormUrlEncoded
-    @POST("transfer/cekMember")
+    @POST("Transfer/cekMember")
     Call<DataCekMemberTransfer> getCekMemberTransfer(
             @Field("userID") String userID,
             @Field("aplUse") String aplUse,

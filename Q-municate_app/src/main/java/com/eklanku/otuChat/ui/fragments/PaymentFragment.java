@@ -792,17 +792,16 @@ public class PaymentFragment extends Fragment {
 
     }*/
 
-    public void LoadSaldoBonus(String strUserID, String strAccessToken){
-
+    public void LoadSaldoBonus(String strUserID, String strAccessToken) {
+        Log.d("OPPO-1", "OnLoad userID " + strUserID + ", " + strAccessToken);
         Call<DataSaldoBonus> userCall = apiInterfacePayment.getSaldodetail(strUserID, strApIUse, strAccessToken);
         userCall.enqueue(new Callback<DataSaldoBonus>() {
             @Override
             public void onResponse(Call<DataSaldoBonus> call, Response<DataSaldoBonus> response) {
-
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String error = response.body().getRespMessage();
-                    String id_member = "", sisa_uang = "", carier_member = "",bonus_member = "";
+                    String id_member = "", sisa_uang = "", carier_member = "", bonus_member = "";
                     Log.d("OPPO-1", "OnLoad userID " + strUserID + " response.isSuccessful()) " + response.isSuccessful());
                     if (status.equals("SUCCESS")) {
 
@@ -826,21 +825,21 @@ public class PaymentFragment extends Fragment {
                         String rupiah = format.format(total);
 
                         Double nomBonus = 0.0d;
-                        try{
-                            if(nomBonus != null && !bonus_member.trim().isEmpty()){
+                        try {
+                            if (nomBonus != null && !bonus_member.trim().isEmpty()) {
                                 nomBonus = Double.valueOf(bonus_member);
-                            }else{
+                            } else {
                                 nomBonus = 0.0d;
                             }
 
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
                         String rupiahBonus = format.format(nomBonus);
 
                         Log.d("OPPO-1", "onResponse: " + rupiahBonus);
-                        tvBonus.setText("Rp"+nomBonus);
+                        tvBonus.setText("Rp" + nomBonus);
 
                         lblSaldoMain.setText(rupiah);
 
@@ -854,6 +853,7 @@ public class PaymentFragment extends Fragment {
 
             @Override
             public void onFailure(Call<DataSaldoBonus> call, Throwable t) {
+                Log.d("OPPO-1", "onFailure: "+t.getMessage());
                 Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });

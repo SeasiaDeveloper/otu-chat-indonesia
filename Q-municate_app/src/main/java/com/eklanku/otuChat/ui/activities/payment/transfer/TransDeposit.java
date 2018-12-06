@@ -27,19 +27,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.DataCekMemberTransfer;
-import com.eklanku.otuChat.ui.activities.payment.models.DataDetailCekMemberTransfer;
-import com.eklanku.otuChat.ui.activities.payment.models.DetailTransferResponse;
-import com.eklanku.otuChat.ui.activities.payment.models.ResetPINResponse;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataCekMemberTransfer;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataDetailCekMemberTransfer;
+import com.eklanku.otuChat.ui.activities.payment.models2.DetailTransferResponse;
+import com.eklanku.otuChat.ui.activities.payment.models2.ResetPINResponse;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.DetailTransferResponse;
-import com.eklanku.otuChat.ui.activities.payment.models.TopupKonfirmResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.Utils;
 
@@ -82,6 +77,8 @@ public class TransDeposit extends AppCompatActivity {
         utilsAlert = new Utils(TransDeposit.this);
 
         txtNo = (EditText) findViewById(R.id.txtTransDepositTujuan);
+        //=============sementara saja, karena layout inputan di hp ku ilang
+        //txtNo.setText("EKL0035808");
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransDepositTujuan);
         txtJml = (EditText) findViewById(R.id.txtTransDepositJml);
         layoutJml = (TextInputLayout) findViewById(R.id.txtLayoutTransDepositJml);
@@ -396,6 +393,10 @@ public class TransDeposit extends AppCompatActivity {
     public void loadNamaTujuanTransfer() {
         loadingDialog = ProgressDialog.show(TransDeposit.this, "Harap Tunggu", "Cek Member...");
         loadingDialog.setCanceledOnTouchOutside(true);
+        Log.d("OPPO-1", "loadNamaTujuanTransfer: "+strUserID);
+        Log.d("OPPO-1", "loadNamaTujuanTransfer: "+strApIUse);
+        Log.d("OPPO-1", "loadNamaTujuanTransfer: "+txtNo.getText().toString());
+        Log.d("OPPO-1", "loadNamaTujuanTransfer: "+strAccessToken);
         Call<DataCekMemberTransfer> transDepositCall = mApiInterfacePayment.getCekMemberTransfer(strUserID, strApIUse, txtNo.getText().toString(), strAccessToken);
         transDepositCall.enqueue(new Callback<DataCekMemberTransfer>() {
             @Override

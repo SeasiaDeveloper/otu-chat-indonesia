@@ -1,6 +1,6 @@
 package com.eklanku.otuChat.ui.activities.payment.models2;
 
-import com.eklanku.otuChat.ui.activities.payment.models.TopupDetailM;
+import com.eklanku.otuChat.ui.activities.payment.models2.TopupDetailM;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

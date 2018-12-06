@@ -76,7 +76,6 @@
 
     </LinearLayout>
 
-
     <com.eklanku.otuChat.ui.views.ARTextView
         android:id="@+id/textVie"
         android:layout_width="match_parent"
@@ -105,17 +104,17 @@
             android:textColor="@color/grey_600" />
     </android.support.design.widget.TextInputLayout>
 
-    <!--<View
+    <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/density_8"
-        android:background="@color/grey_400" />-->
+        android:background="@color/grey_400" />
 
-   <!-- <View
+
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:visibility="gone"
-        android:background="@color/grey_300" />-->
+        android:background="@color/grey_300" />
 
     <View
         android:layout_width="match_parent"

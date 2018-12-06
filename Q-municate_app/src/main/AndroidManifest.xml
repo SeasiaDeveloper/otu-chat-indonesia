@@ -553,7 +553,7 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.payment.transaksi.TransVouchergame_product"
+            android:name=".ui.activities.payment.transaksi2.TransVouchergame_product"
             android:label="Voucher Game"
             android:theme="@style/AppThemePaymentItems">
             <meta-data

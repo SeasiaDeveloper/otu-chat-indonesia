@@ -1,6 +1,6 @@
 package com.eklanku.otuChat.ui.activities.payment.models2;
 
-import com.eklanku.otuChat.ui.activities.payment.models.DataDetailCekMemberTransfer;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataDetailCekMemberTransfer;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

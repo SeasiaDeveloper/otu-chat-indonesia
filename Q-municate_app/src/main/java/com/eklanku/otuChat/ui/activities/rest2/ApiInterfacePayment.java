@@ -246,17 +246,7 @@ public interface ApiInterfacePayment {
 
 
 
-    //request transfer
-    @FormUrlEncoded
-    @POST("transfer")
-    Call<DetailTransferResponse> postRequestTransfer(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("aplUse") String aplUse,
-            @Field("tujuan") String tujuan,
-            @Field("nominal") String nominal,
-            @Field("pin") String pin
-    );
+
 
     //konfirm transfer
     @FormUrlEncoded
@@ -388,14 +378,7 @@ public interface ApiInterfacePayment {
     );
 
     //banner
-    @FormUrlEncoded
-    @POST("transfer/cekMember")
-    Call<DataCekMemberTransfer> getCekMemberTransfer(
-            @Field("userID") String userID,
-            @Field("aplUse") String aplUse,
-            @Field("destination") String destination,
-            @Field("accessToken") String accessToken
-    );
+
 
     @FormUrlEncoded
     @POST("Prabayar/provider_name")
@@ -628,6 +611,27 @@ public interface ApiInterfacePayment {
             @Field("doku-invoice-no") String doku_invoice_no,
             @Field("payment_chanel") String payment_chanel,
             @Field("words") String words
+    );
+
+    @FormUrlEncoded
+    @POST("Transfer/cek_member")
+    Call<DataCekMemberTransfer> getCekMemberTransfer(
+            @Field("userID") String userID,
+            @Field("aplUse") String aplUse,
+            @Field("destination") String destination,
+            @Field("accessToken") String accessToken
+    );
+
+    //request transfer
+    @FormUrlEncoded
+    @POST("Transfer/transfer_saldo")
+    Call<DetailTransferResponse> postRequestTransfer(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("tujuan") String tujuan,
+            @Field("nominal") String nominal,
+            @Field("pin") String pin
     );
 
 }
