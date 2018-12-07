@@ -560,7 +560,7 @@ public interface ApiInterfacePayment {
     Call<DataDetailProfile> getProfile(
             @Field("userID") String userID,//nomor hp
             @Field("aplUse") String aplUse,
-            @Field("profileToken") String profileToken
+            @Field("accessToken") String accessToken
     );
 
     //API request doku
@@ -627,13 +627,13 @@ public interface ApiInterfacePayment {
 
     //reset pass
     @FormUrlEncoded
-    @POST("Member/reset_pas")
-    Call<ResetPassResponse> postResetpass(
+    @POST("member/reset_pass")
+    Call<ResetPassResponse> Resetpass(
             @Field("userID") String userID,
             @Field("aplUse") String aplUse,
-            @Field("resetToken") String securityCode,
+            @Field("accessToken") String accessToken,
             @Field("newpass") String newpass,
-            @Field("otp") String otp
+            @Field("pin") String pin
     );
 
     @FormUrlEncoded

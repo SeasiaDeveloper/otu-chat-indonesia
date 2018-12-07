@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models2.DataDetailProfile;
 import com.eklanku.otuChat.ui.activities.payment.models2.DataProfile;
 import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
@@ -21,6 +22,7 @@ import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.Utils;
 import com.eklanku.otuChat.R;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -40,6 +42,9 @@ public class Profile extends AppCompatActivity {
 
     Utils utilsAlert;
     String titleAlert = "Profil";
+
+    String strUserID, strAccessToken;
+    PreferenceManager preferenceManager;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,11 +66,17 @@ public class Profile extends AppCompatActivity {
         txtBonus= findViewById(R.id.txt_profile_bonus);
         btnUpdate = findViewById(R.id.btnupdate);
 
+        preferenceManager = new PreferenceManager(this);
+        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
+        strUserID = user.get(preferenceManager.KEY_USERID);
+        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-        getProfile();
+//        getProfile();
+        exProfile();
 
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +91,7 @@ public class Profile extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getProfileonResume();
+//        getProfileonResume();
     }
 
     public void getProfile() {
@@ -99,7 +110,7 @@ public class Profile extends AppCompatActivity {
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         String tokenProfile = response.body().getProfileToken();
                         //send token to get data profile
-                        exProfile(tokenProfile);
+                        //exProfile(tokenProfile);
                     } else {
                         utilsAlert.globalDialog(Profile.this, titleAlert, msg);
                         //Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
@@ -122,6 +133,7 @@ public class Profile extends AppCompatActivity {
     }
 
     public void getProfileonResume() {
+
         Call<DataProfile> callProfil = mApiInterfacePayment.getTokenProfile(PreferenceUtil.getNumberPhone(this), strApIUse);
         callProfil.enqueue(new Callback<DataProfile>() {
             @Override
@@ -133,7 +145,7 @@ public class Profile extends AppCompatActivity {
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         String tokenProfile = response.body().getProfileToken();
                         //send token to get data profile
-                        exProfile(tokenProfile);
+                        //exProfile(tokenProfile);
                     } else {
                         utilsAlert.globalDialog(Profile.this, titleAlert, msg);
                         //Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
@@ -154,29 +166,31 @@ public class Profile extends AppCompatActivity {
         });
     }
 
-    public void exProfile(String tokenProfile) {
+    public void exProfile() {
+        loadingDialog = ProgressDialog.show(Profile.this, "Harap Tunggu", "Load data profil...");
+        loadingDialog.setCanceledOnTouchOutside(true);
         Log.d("OPPO-1", "getProfile: running exProfil");
-        Call<DataDetailProfile> callProfil = mApiInterfacePayment.getProfile(PreferenceUtil.getNumberPhone(this), strApIUse, tokenProfile);
+        Call<DataDetailProfile> callProfil = mApiInterfacePayment.getProfile(strUserID, strApIUse, strAccessToken);
         callProfil.enqueue(new Callback<DataDetailProfile>() {
             @Override
             public void onResponse(Call<DataDetailProfile> call, Response<DataDetailProfile> response) {
                 loadingDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
+                    String userID = response.body().getUserID();
                     final List<DataDetailProfile> result = response.body().getData();
                     Log.d("OPPO-1", "onResponse: " + status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                        mbr_id = result.get(0).getMbr_id();
-                        name_member = result.get(0).getName_member();
-                        upline = result.get(0).getUpline();
-                        mbr_carier = result.get(0).getMbr_carier();
-                        email = result.get(0).getEmail();
+                        mbr_id = userID;
+                        name_member = result.get(0).getO_nama_member();
+                        upline = result.get(0).getO_id_sponsor();
+                        mbr_carier = result.get(0).getO_jabatanmember();
+                        email = result.get(0).getO_mail();
                         no_ktp = result.get(0).getNo_ktp();
-                        alamat = result.get(0).getAlamat();
-                        kota = result.get(0).getKota();
-                        sponsor_name = result.get(0).getSponsor_name();
-                        hp_sponsor = result.get(0).getHp_sponsor();
-                        jml_bonus = result.get(0).getJml_bonus();
+                        alamat = result.get(0).getO_alamat();
+                        kota = result.get(0).getO_kota();
+                        sponsor_name = result.get(0).getO_nama_sponsor();
+                        hp_sponsor = result.get(0).getO_hp_sponsor();
 
                         Log.d("OPPO-1", "mbr_id: "+mbr_id);
                         Log.d("OPPO-1", "name_member: "+name_member);
@@ -200,7 +214,6 @@ public class Profile extends AppCompatActivity {
                         txtCity.setText(kota);
                         txtSponsorName.setText(sponsor_name);
                         txtSponsorHp.setText(hp_sponsor);
-                        txtBonus.setText(jml_bonus);
 
                     } else {
                         utilsAlert.globalDialog(Profile.this, titleAlert, response.body().getErrNumber());
