@@ -78,7 +78,7 @@ public class TransDeposit extends AppCompatActivity {
 
         txtNo = (EditText) findViewById(R.id.txtTransDepositTujuan);
         //=============sementara saja, karena layout inputan di hp ku ilang
-        //txtNo.setText("EKL0035808");
+        txtNo.setText("EKL0035808");
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransDepositTujuan);
         txtJml = (EditText) findViewById(R.id.txtTransDepositJml);
         layoutJml = (TextInputLayout) findViewById(R.id.txtLayoutTransDepositJml);
@@ -293,6 +293,8 @@ public class TransDeposit extends AppCompatActivity {
 
         String secCode = txtPin.getText().toString() + "x@2016ekl";
         String strSecurityCode = com.eklanku.otuChat.ui.activities.main.Utils.md5(secCode);
+
+        Log.d("OPPO-1", "cek_transaksi: "+strSecurityCode);
 
         Call<DetailTransferResponse> transDepositCall = mApiInterfacePayment.postRequestTransfer(strUserID, strAccessToken, strApIUse, txtNo.getText().toString(), txtJml.getText().toString(), strSecurityCode);
         transDepositCall.enqueue(new Callback<DetailTransferResponse>() {

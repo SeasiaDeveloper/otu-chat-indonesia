@@ -271,15 +271,7 @@ public interface ApiInterfacePayment {
 
 
 
-    //reset pass
-    @FormUrlEncoded
-    @POST("resetpass")
-    Call<ResetPassResponse> postResetpass(
-            @Field("userID") String userID,
-            @Field("aplUse") String aplUse,
-            @Field("resetToken") String securityCode,
-            @Field("newpass") String newpass
-    );
+
 
     @FormUrlEncoded
     @POST("resetpass/getToken")
@@ -297,15 +289,6 @@ public interface ApiInterfacePayment {
             @Field("accessToken") String accessToken
     );
 
-    @FormUrlEncoded
-    @POST("resetpin/process")
-    Call<ResetPINResponse> apprResetPin(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("aplUse") String aplUse,
-            @Field("keySMS") String keySMS,
-            @Field("newpin") String newpin
-    );
 
 
 
@@ -313,15 +296,8 @@ public interface ApiInterfacePayment {
 
 
 
-    @FormUrlEncoded
-    @POST("register")
-    Call<DataProfile> postRegisterUpline(
-            @Field("userID") String userID,//nomor hp
-            @Field("uplineID") String uplineID,
-            @Field("aplUse") String aplUse,
-            @Field("registerToken") String registerToken,
-            @Field("nama") String nama
-    );
+
+
 
 
 
@@ -344,16 +320,7 @@ public interface ApiInterfacePayment {
             @Field("aplUse") String aplUse
     );
 
-    //delete account
-    @FormUrlEncoded
-    @POST("removeAccount")
-    Call<DataProfile> deleteAccount(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("aplUse") String aplUse,
-            @Field("pin") String pin
 
-    );
 
     //edit profile
     @FormUrlEncoded
@@ -589,7 +556,7 @@ public interface ApiInterfacePayment {
     );
 
     @FormUrlEncoded
-    @POST("profile")
+    @POST("Member/profile")
     Call<DataDetailProfile> getProfile(
             @Field("userID") String userID,//nomor hp
             @Field("aplUse") String aplUse,
@@ -632,6 +599,59 @@ public interface ApiInterfacePayment {
             @Field("tujuan") String tujuan,
             @Field("nominal") String nominal,
             @Field("pin") String pin
+    );
+
+    //delete account
+    @FormUrlEncoded
+    @POST("Member/send_desible_account")
+    Call<DataProfile> deleteAccount(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("pin") String pin
+
+    );
+
+    //register
+    @FormUrlEncoded
+    @POST("Member/go_register")
+    Call<DataProfile> postRegisterUpline(
+            @Field("userID") String userID,//nomor hp
+            @Field("uplineID") String uplineID,
+            @Field("aplUse") String aplUse,
+            @Field("nama") String nama,
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("pin") String pin
+    );
+
+    //reset pass
+    @FormUrlEncoded
+    @POST("Member/reset_pas")
+    Call<ResetPassResponse> postResetpass(
+            @Field("userID") String userID,
+            @Field("aplUse") String aplUse,
+            @Field("resetToken") String securityCode,
+            @Field("newpass") String newpass,
+            @Field("otp") String otp
+    );
+
+    @FormUrlEncoded
+    @POST("Member/reset_pin")
+    Call<ResetPINResponse> apprResetPin(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("otp") String keySMS,
+            @Field("newpin") String newpin
+    );
+
+    @FormUrlEncoded
+    @POST("Member/kirim_key")
+    Call<ResetPINResponse> getKeySMS(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
     );
 
 }

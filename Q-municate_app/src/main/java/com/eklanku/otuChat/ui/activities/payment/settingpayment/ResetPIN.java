@@ -13,16 +13,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.ResetPINResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.payment.models2.ResetPINResponse;
+import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.Utils;
-import com.google.firebase.auth.FirebaseAuth;
-import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.ResetPINResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.R;
 
 import java.util.HashMap;
 
@@ -71,7 +66,7 @@ public class ResetPIN extends AppCompatActivity {
         btnGetKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getKey();
+                GetKeyOTP();
             }
         });
 
@@ -118,7 +113,7 @@ public class ResetPIN extends AppCompatActivity {
     }
 
     public void apprResetPIN(){
-        loadingDialog = ProgressDialog.show(ResetPIN.this, "Harap Tunggu", "Mengambil Data...");
+        loadingDialog = ProgressDialog.show(ResetPIN.this, "Harap Tunggu", "Reset PIN...");
         loadingDialog.setCanceledOnTouchOutside(true);
         String pin = txtNewPin.getText().toString().trim();
         String key = txtkeySMS.getText().toString().trim();
@@ -162,6 +157,35 @@ public class ResetPIN extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void GetKeyOTP(){
+        loadingDialog = ProgressDialog.show(ResetPIN.this, "Harap Tunggu", "Mendapatkan Kode OTP...");
+        loadingDialog.setCanceledOnTouchOutside(true);
+        Call<ResetPINResponse> reset_pin = mApiInterfacePayment.getKeySMS(strUserID, strAccessToken, strApIUse);
+        reset_pin.enqueue(new Callback<ResetPINResponse>() {
+            @Override
+            public void onResponse(Call<ResetPINResponse> call, Response<ResetPINResponse> response) {
+                loadingDialog.dismiss();
+                if(response.isSuccessful()){
+                    String status = response.body().getStatus();
+                    String respMessage = response.body().getRespMessage();
+                    if(status.equalsIgnoreCase("SUCCESS")){
+
+                    }else{
+                        utilsAlert.globalDialog(ResetPIN.this, titleAlert, respMessage);
+                    }
+                }else{
+                    utilsAlert.globalDialog(ResetPIN.this, titleAlert, "1. "+getResources().getString(R.string.error_api));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResetPINResponse> call, Throwable t) {
+                loadingDialog.dismiss();
+                utilsAlert.globalDialog(ResetPIN.this, titleAlert, "2. "+getResources().getString(R.string.error_api));
+            }
+        });
     }
 
 }

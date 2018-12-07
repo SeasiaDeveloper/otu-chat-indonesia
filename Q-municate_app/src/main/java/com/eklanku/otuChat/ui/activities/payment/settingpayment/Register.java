@@ -14,26 +14,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
-import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models2.ResetPassResponse;
+import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.Utils;
-
 import com.eklanku.otuChat.R;;
-
-import com.quickblox.q_municate_core.models.AppSession;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.TimeZone;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,7 +38,7 @@ public class Register extends AppCompatActivity {
     PreferenceManager preferenceManager;
 
     String mbr_id, name_member, upline, mbr_carier, email, no_ktp, alamat, kota, sponsor_name, hp_sponsor, jml_bonus;
-    TextView txtNama, txtReferal;
+    TextView txtNama, txtReferal, txPass, txPin, txEmail;
     Button btnNext;
 
     //rina
@@ -67,6 +57,9 @@ public class Register extends AppCompatActivity {
 
         txtNama = findViewById(R.id.txt_nama);
         txtReferal = findViewById(R.id.txt_referal);
+        txPass = findViewById(R.id.txt_password);
+        txPin = findViewById(R.id.txt_pin);
+        txEmail = findViewById(R.id.txt_email);
         btnNext = findViewById(R.id.btn_next);
 
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -94,7 +87,7 @@ public class Register extends AppCompatActivity {
                 if (txt.equals("") || TextUtils.isEmpty(txt)) {
                     dialogReferalEmpty("Notice", "Your have not fill Referal ID, want continue");
                 } else {
-                    Resgister();
+                    Register();
                 }
             }
         });
@@ -118,7 +111,7 @@ public class Register extends AppCompatActivity {
                     public void onClick(DialogInterface dialog,
                                         int which) {
                         dialog.dismiss();
-                        Resgister();
+                        Register();
 
                     }
                 });
@@ -126,51 +119,11 @@ public class Register extends AppCompatActivity {
     }
 
 
-    public void Resgister() {
-        progressDialog.setMessage("Proses Register...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+    public void Register() {
+        Log.d("OPPO-1", "strSecurityCode: "+PreferenceUtil.getNumberPhone(this));
+        Call<DataProfile> callProfil = mApiInterfacePayment.postRegisterUpline(PreferenceUtil.getNumberPhone(this), txtReferal.getText().toString(), strApIUse,
+                txtNama.getText().toString(), txEmail.getText().toString(), txPass.getText().toString(), txPin.getText().toString());
 
-        //okHttpClient
-
-        Call<DataProfile> callProfil = mApiInterfacePayment.getTokenRegister(PreferenceUtil.getNumberPhone(this), strApIUse);
-        callProfil.enqueue(new Callback<DataProfile>() {
-            @Override
-            public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
-                //loadingDialog.dismiss();
-                //progressDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String msg = response.body().getRespMessage();
-
-                    if (status.equalsIgnoreCase("SUCCESS")) {
-                        String tokenRegister = response.body().getRegisterToken();
-                        //send token to get data profile
-                        exRegister(tokenRegister);
-
-                    } else {
-                        progressDialog.dismiss();
-                        utilsAlert.globalDialog(Register.this, titleAlert, msg);
-                    }
-                } else {
-                    progressDialog.dismiss();
-                    utilsAlert.globalDialog(Register.this, titleAlert, getResources().getString(R.string.error_api));
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<DataProfile> call, Throwable t) {
-                //loadingDialog.dismiss();
-                progressDialog.dismiss();
-                utilsAlert.globalDialog(Register.this, titleAlert, getResources().getString(R.string.error_api));
-
-            }
-        });
-    }
-
-    public void exRegister(String tokenRegister) {
-        Call<DataProfile> callProfil = mApiInterfacePayment.postRegisterUpline(PreferenceUtil.getNumberPhone(this), txtReferal.getText().toString(), strApIUse, tokenRegister, txtNama.getText().toString());
         callProfil.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
@@ -181,7 +134,6 @@ public class Register extends AppCompatActivity {
                     String msg = response.body().getRespMessage();
 
                     if (status.equalsIgnoreCase("SUCCESS")) {
-
                         Toast.makeText(Register.this, "Register berhasil", Toast.LENGTH_SHORT).show();
                         PreferenceUtil.setMemberStatus(Register.this, true);
                         startActivity(new Intent(Register.this, MainActivity.class));
@@ -191,114 +143,25 @@ public class Register extends AppCompatActivity {
 
                     }
                 } else {
-                    utilsAlert.globalDialog(Register.this, titleAlert, getResources().getString(R.string.error_api));
+                    utilsAlert.globalDialog(Register.this, titleAlert, "1. "+getResources().getString(R.string.error_api));
                 }
             }
 
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
+                Log.d("OPPO-1", "onFailure: "+t.getMessage());
                 progressDialog.dismiss();
-                utilsAlert.globalDialog(Register.this, titleAlert, getResources().getString(R.string.error_api));
+                utilsAlert.globalDialog(Register.this, titleAlert, "3. "+getResources().getString(R.string.error_api));
 
             }
         });
-
-    }
-
-    //cek apakah member sudah terdaftar atau belum
-    private void isMember() {
-        Call<DataProfile> isMember = mApiInterfacePayment.isMember(AppSession.getSession().getUser().getLogin(), "OTU");
-
-//        Call<DataProfile> isMember = mApiInterfacePayment.isMember(PreferenceUtil.getNumberPhone(this)), strApIUse);
-        isMember.enqueue(new Callback<DataProfile>() {
-            @Override
-            public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String msg = response.body().getRespMessage();
-                    String errNumber = response.body().getErrNumber();
-                    if (errNumber.equalsIgnoreCase("0")) {
-                        //Log.d("OPPO-1", "onResponse: " + status + " , " + msg);
-                        MainActivity.start(Register.this);
-                        Log.d("AYIK", "isMember:success");
-                    } else {
-                        Log.d("AYIK", "isMember:failed token");
-                        Toast.makeText(getBaseContext(), "FAILED GET TOKEN [" + msg + "]", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Log.d("AYIK", "isMember:failed api error");
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataProfile> call, Throwable t) {
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_TRANSBELI", t.getMessage().toString());
-                Log.d("AYIK", "isMember:failed failure");
-            }
-        });
-    }
-
-    public void logOutPayment() {
-
-        Call<ResetPassResponse> callResetPass = mApiInterfacePayment.postLogoutPayment(strUserID, strAccessToken, getCurrentTime());
-        callResetPass.enqueue(new Callback<ResetPassResponse>() {
-
-            @Override
-            public void onResponse(Call<ResetPassResponse> call, Response<ResetPassResponse> response) {
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String msg = response.body().getRespMessage();
-
-                    if (status.equalsIgnoreCase("SUCCESS")) {
-                        Toast.makeText(Register.this, "SUCCESS LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
-                        PreferenceUtil.setLoginStatus(Register.this, false);
-                    } else {
-                        Toast.makeText(Register.this, "FAILED LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
-                    }
-
-                } else {
-                    Toast.makeText(Register.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResetPassResponse> call, Throwable t) {
-                Toast.makeText(Register.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                //Log.d("API_TRANSBELI", t.getMessage().toString());
-            }
-        });
-    }
-
-    public static String getCurrentTime() {
-        try {
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Makassar"));
-            String currentDateTime = dateFormat.format(new Date()); // Find todays date
-
-            return currentDateTime;
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return null;
-        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        // PreferenceUtil.setMemberStatus(Register.this,true);
-//        MainActivity.start(Register.this);
         startActivity(new Intent(Register.this, MainActivity.class));
         finish();
     }
 
-    /* @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("AYIK", "register:onResume");
-        isMember();
-    }*/
 }

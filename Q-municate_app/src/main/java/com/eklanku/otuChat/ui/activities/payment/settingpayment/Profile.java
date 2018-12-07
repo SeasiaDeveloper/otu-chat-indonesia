@@ -13,20 +13,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataDetailProfile;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataProfile;
+import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.Utils;
-import com.google.firebase.auth.FirebaseAuth;
-import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientProfile;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfaceProfile;
+import com.eklanku.otuChat.R;
 
 import java.util.List;
 
@@ -170,7 +163,7 @@ public class Profile extends AppCompatActivity {
                 loadingDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
-                    final List<DataDetailProfile> result = response.body().getRespMessage();
+                    final List<DataDetailProfile> result = response.body().getData();
                     Log.d("OPPO-1", "onResponse: " + status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         mbr_id = result.get(0).getMbr_id();

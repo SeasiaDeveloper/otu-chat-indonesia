@@ -19,19 +19,15 @@ import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.main.Utils;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
-import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.payment.models2.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models2.ResetPassResponse;
+import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
-import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
-
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -98,14 +94,7 @@ public class DeleteAccount extends AppCompatActivity {
                     String msg = response.body().getRespMessage();
 
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                       // utilsAlert.globalDialog(DeleteAccount.this, titleAlert, msg);
                         Toast.makeText(DeleteAccount.this, msg, Toast.LENGTH_SHORT).show();
-                        /*PreferenceUtil.setMemberStatus(DeleteAccount.this, false);
-                        Intent register = new Intent(getBaseContext(), Register.class);
-                        register.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        register.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(register);
-                        finish();*/
                         PreferenceUtil.setMemberStatus(DeleteAccount.this, false);
                         logOutPayment();
                     } else {
@@ -113,7 +102,7 @@ public class DeleteAccount extends AppCompatActivity {
                         //Toast.makeText(DeleteAccount.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    utilsAlert.globalDialog(DeleteAccount.this, titleAlert, getResources().getString(R.string.error_api));
+                    utilsAlert.globalDialog(DeleteAccount.this, titleAlert, "1. "+getResources().getString(R.string.error_api));
                     //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -121,7 +110,7 @@ public class DeleteAccount extends AppCompatActivity {
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
                 loadingDialog.dismiss();
-                utilsAlert.globalDialog(DeleteAccount.this, titleAlert, getResources().getString(R.string.error_api));
+                utilsAlert.globalDialog(DeleteAccount.this, titleAlert, "2. "+getResources().getString(R.string.error_api));
                 //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }

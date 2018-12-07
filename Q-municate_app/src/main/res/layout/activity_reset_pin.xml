@@ -115,7 +115,7 @@
             <com.eklanku.otuChat.ui.views.ARTextView android:id="@+id/lblKeySms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="key SMS"
+                android:text="Dapatkan kode OTP untuk verifikasi."
                 android:textColor="@color/grey_600"
                 android:gravity="center"
                 android:layout_below="@+id/lbketerangan"
@@ -123,7 +123,9 @@
                 android:layout_alignStart="@+id/txtLayoutLoginPassword"
                 android:layout_alignEnd="@+id/txtLayoutLoginPassword"
                 android:layout_alignRight="@+id/txtLayoutLoginPassword"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:textSize="@dimen/density_12"
+                android:layout_marginBottom="@dimen/density_8"/>
 
             <RelativeLayout
                 android:id="@+id/layKeySMS"
@@ -159,7 +161,7 @@
                             android:background="@drawable/custom_bottom_border_green"
                             android:ems="10"
                             android:gravity="center"
-                            android:hint=""
+                            android:hint="Kode OTP"
                             android:inputType="text"
                             android:paddingBottom="@dimen/density_8"
                             android:paddingLeft="@dimen/density_8"
@@ -171,17 +173,16 @@
                     <Button
                         android:id="@+id/btnGetKey"
                         android:layout_width="wrap_content"
-                        android:layout_height="35dp"
+                        android:layout_height="25dp"
                         android:layout_marginLeft="@dimen/density_4"
                         android:layout_marginStart="@dimen/density_4"
-                        android:layout_marginTop="@dimen/density_4"
                         android:background="@color/default_text_icon_otu_color"
-                        android:text="Depatkan key"
+                        android:text="Kirim"
                         android:textAllCaps="false"
-                        android:layout_gravity="top"
+                        android:layout_gravity="center"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/density_10"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
 
                 </LinearLayout>
             </RelativeLayout>

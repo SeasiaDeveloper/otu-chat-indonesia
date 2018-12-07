@@ -13,16 +13,16 @@ public class DataDetailProfile {
     @SerializedName("userID")
     private String userID;
 
-    public List<com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile> getData() {
+    public List<DataDetailProfile> getData() {
         return data;
     }
 
-    public void setData(List<com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile> data) {
+    public void setData(List<DataDetailProfile> data) {
         this.data = data;
     }
 
     @SerializedName("data")
-    private List<com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile> data;
+    private List<DataDetailProfile> data;
 
     @SerializedName("respTime")
     private String respTime;

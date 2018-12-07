@@ -2,6 +2,8 @@ package com.eklanku.otuChat.ui.activities.payment.models2;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class DataProfile {
 
     //get token
@@ -20,7 +22,7 @@ public class DataProfile {
     @SerializedName("respMessage")
     private String respMessage;
 
-    public String getRegisterToken() {
+    /*public String getRegisterToken() {
         return registerToken;
     }
 
@@ -29,7 +31,7 @@ public class DataProfile {
     }
 
     @SerializedName("registerToken")
-    private String registerToken;
+    private String registerToken;*/
 
 
     public String getUserID() {
