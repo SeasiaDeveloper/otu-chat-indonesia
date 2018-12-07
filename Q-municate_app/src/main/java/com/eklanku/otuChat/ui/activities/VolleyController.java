@@ -1,16 +1,11 @@
-package com.eklanku.otuChat.ui.activities.main;
+package com.eklanku.otuChat.ui.activities;
 
-/**
- * Created by AHMAD AYIK RIFAI on 10/3/2017.
- */
-
-import android.app.Application;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.eklanku.otuChat.App;
+import com.eklanku.otuChat.Application;
 
 public class VolleyController extends Application {
 

@@ -21,17 +21,19 @@ public class DataRequestDokuCC {
         this.res_response_msg = res_response_msg;
     }
 
-    public String getRes_response_code() {
+
+
+    /*public String getRes_response_code() {
         return res_response_code;
     }
 
     public void setRes_response_code(String res_response_code) {
         this.res_response_code = res_response_code;
-    }
+    }*/
 
 
 
-    /*@SerializedName("errNumber")
+    @SerializedName("errNumber")
     String errNumber;
 
     public String getErrNumber() {
@@ -40,11 +42,11 @@ public class DataRequestDokuCC {
 
     public void setErrNumber(String errNumber) {
         this.errNumber = errNumber;
-    }*/
+    }
 
 
 
-    /*@SerializedName("res_tid")
+    @SerializedName("res_tid")
     String res_tid;
 
     @SerializedName("res_trx_code")
@@ -266,12 +268,12 @@ public class DataRequestDokuCC {
     @SerializedName("res_invoice_number")
     String res_invoice_number;
 
-    @SerializedName("res_response_code")
-    String res_response_code;
+  /*  @SerializedName("res_response_code")
+    String res_response_code;*/
 
     @SerializedName("res_session_id")
     String res_session_id;
 
     @SerializedName("res_payment_channel")
-    String res_payment_channel;*/
+    String res_payment_channel;
 }

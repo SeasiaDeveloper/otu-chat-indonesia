@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -21,13 +22,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.doku.sdkocov2.DirectSDK;
 import com.doku.sdkocov2.interfaces.iPaymentCallback;
 import com.doku.sdkocov2.model.LayoutItems;
 import com.doku.sdkocov2.model.PaymentItems;
 import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.ui.activities.VolleyController;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.main.Utils;
 import com.eklanku.otuChat.ui.activities.payment.models2.DataRequestDokuCC;
 import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
@@ -36,6 +46,7 @@ import com.eklanku.otuChat.utils.PreferenceUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -43,11 +54,12 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
+//import retrofit2.Response;
 
 public class CCPaymentActivity extends AppCompatActivity {
 
@@ -98,28 +110,12 @@ public class CCPaymentActivity extends AppCompatActivity {
 
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
-       /* et_ccn = findViewById(R.id.txt_ccn);
-        et_cvv = findViewById(R.id.txt_cvv);
-        et_noc = findViewById(R.id.txt_noc);
-        et_ed = findViewById(R.id.txt_ed);
-        et_email = findViewById(R.id.txt_email);
-        et_mp = findViewById(R.id.txt_mp);
-        btnPayment = findViewById(R.id.btnpp);
-
-        btnPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                retrieveToken();
-            }
-        });*/
-
-        //retrieveToken();
         dialogNominal();
     }
 
 
     public void retrieveToken(String amount) {
-
+        Log.d("OPPO-1", "GET TOKEN");
         String invoiceID = transactionID();
         String sessionID = sessionID();
         try {
@@ -132,15 +128,17 @@ public class CCPaymentActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Log.d("OPPO-1", "word->1 " + words);
+
         DirectSDK directSDK = new DirectSDK();
         PaymentItems paymentItems = new PaymentItems();
         paymentItems.setDataAmount(amount + ".00");
         paymentItems.setDataBasket("[{\"name\":\"donasi\",\"amount\":\"" + amount + ".00" + "+\",\"quantity\":\"1\"}]");
         paymentItems.setDataCurrency("360");
         paymentItems.setDataWords(words);
-        Log.d("OPPO-1", "retrieveToken: " + words);
+        Log.d("OPPO-1", "word->2 " + words);
         paymentItems.setDataMerchantChain("NA");
-        paymentItems.setDataSessionID(String.valueOf(sessionID));
+        paymentItems.setDataSessionID(sessionID);
         paymentItems.setDataTransactionID(invoiceID);
         paymentItems.setDataMerchantCode(mallId);
         paymentItems.setDataImei(getImei());
@@ -161,8 +159,6 @@ public class CCPaymentActivity extends AppCompatActivity {
             public void onSuccess(final String text) {
                 try {
                     respongetTokenSDK = new JSONObject(text);
-                    Log.d("OPPO-1", "onSuccess: " + respongetTokenSDK.toString());
-                    Log.d("OPPO-1", "onSuccess: " + respongetTokenSDK.getString("res_response_code"));
 
                     String tokenId = "", pairingCode = "", responseMessage = "", responseCode = "", deviceId = "", amount = "",
                             tokenCode = "", transactionId = "", dataEmail = "", name = "", paymentChannel = "", dataMobilePhone = "";
@@ -182,15 +178,13 @@ public class CCPaymentActivity extends AppCompatActivity {
                         paymentChannel = object.getString("res_payment_channel");
                         dataMobilePhone = object.getString("res_data_mobile_phone");
 
-                        /*dialogSuccess(tokenId, pairingCode, responseMessage, responseCode, deviceId, amount, tokenCode, transactionId,
-                                dataEmail, name, paymentChannel, dataMobilePhone);*/
                         layoutStatus.setVisibility(View.VISIBLE);
                         btnOk.setVisibility(View.VISIBLE);
                         imgStatus.setImageResource(R.drawable.ic_doku_success);
                         tvStatus.setText(responseMessage);
 
-
-                        next(strUserID, strAccessToken, aplUse, "kartu kredit", amount, tokenId, deviceId, pairingCode, transactionId, paymentChannel, words);
+                        Log.d("OPPO-1", "word->3 " + words);
+                        next(strUserID, strAccessToken, aplUse, "kartu kredit", amount.replace(".00", ""), tokenId, deviceId, pairingCode, transactionId, paymentChannel, words);
 
                     }
                 } catch (JSONException e) {
@@ -226,7 +220,7 @@ public class CCPaymentActivity extends AppCompatActivity {
                 btnOk.setVisibility(View.VISIBLE);
                 imgStatus.setImageResource(R.drawable.ic_doku_failed);
                 tvStatus.setText(eSDK.getMessage());
-                Log.d("OPPO-1", "onExcetion->" + eSDK.getMessage());
+                //Log.d("OPPO-1", "onExcetion->" + eSDK.getMessage());
             }
         }, getApplicationContext());
     }
@@ -245,27 +239,106 @@ public class CCPaymentActivity extends AppCompatActivity {
         Log.d("OPPO-1", "next-dokuInvoiceNo : " + dokuInvoiceNo);
         Log.d("OPPO-1", "next-paymentChannel: " + paymentChannel);
         Log.d("OPPO-1", "next-word: " + word);
-
-        //CALL API DOKU HERE USE RETROFIT=======================================================================
+        Log.d("OPPO-1", "word->4 " + words);
+        /*
+        //CALL API DOKU HERE USE RETROFIT===========================================================
         Call<DataRequestDokuCC> request_doku = apiInterfacePayment.requestDoku(strUserID, strAccessToken, aplUse, bank, nominal,
                 dokuToken, dokuDeviceId, dokuPairingCode, dokuInvoiceNo, paymentChannel, word);
         request_doku.enqueue(new Callback<DataRequestDokuCC>() {
             @Override
             public void onResponse(Call<DataRequestDokuCC> call, Response<DataRequestDokuCC> response) {
+                Log.d("OPPO-1", "onResponse: " + response.body().getRes_response_code());
+                Log.d("OPPO-1", "onResponse: " + response.body().getRes_response_msg());
                 if (response.isSuccessful()) {
-                    Log.d("OPPO-1", "onResponse: "+response.body().getRes_response_code());
-                    Log.d("OPPO-1", "onResponse: "+response.body().getRes_response_msg());
+                    Log.d("OPPO-1", "onResponse: SUCESS" + response.body());
+
+                } else {
+                    String errorBody = response.errorBody().toString();
+                    Log.d("OPPO-1", "onResponse: FAIL" + errorBody);
+
                 }
+
             }
 
             @Override
             public void onFailure(Call<DataRequestDokuCC> call, Throwable t) {
                 Log.d("OPPO-1", "onFailure: "+t.getMessage());
-                Log.d("OPPO-1", "onFailure: "+call.toString());
             }
-        });
+        });*/
+        //VOLLEY====================================================================================
+        StringRequest request = null;
+        String url = getResources().getString(R.string.url_volley);
+        try {
+            request = new StringRequest(Request.Method.POST, url + "Deposit/request",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                        //showProgress(false);
+                            Log.d("OPPO-1", "response->"+response);
+                            try {
+                                JSONObject dataObj = new JSONObject(response);
+                                Log.d("OPPO-1", "response->"+dataObj.toString());
 
+                            } catch (JSONException e) {
+                                Toast.makeText(CCPaymentActivity.this, "Kesalahan parse, silahkan coba lagi", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //showProgress(false);
+                    String msgError;
+                    if (error.networkResponse != null) {
+                        int statusCode = error.networkResponse.statusCode;
+                        msgError = new String(error.networkResponse.data);
+                        String message = Utils.responseMessage(statusCode, msgError );
+                        Toast.makeText(CCPaymentActivity.this, "" + statusCode + ", " + message, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(CCPaymentActivity.this, "Tidak ada koneksi", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("userID", userID);
+                    params.put("accessToken", accessToken);
+                    params.put("aplUse", aplUse);
+                    params.put("bank", bank);
+                    params.put("nominal", nominal);
+                    params.put("doku-token", dokuToken);
+                    params.put("deviceid", dokuDeviceId);
+                    params.put("doku-pairing-code", dokuPairingCode);
+                    params.put("doku-invoice-no", dokuInvoiceNo);
+                    params.put("payment_chanel", paymentChannel);
+                    params.put("words", word);
+                    params.put("parseBasket", nominal);
+
+                    return params;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> header = new HashMap<>();
+                    header.put("X-API-KEY", "222");
+                    return header;
+                }
+
+            };
+
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
+        }
+        // avoid retry
+        request.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        VolleyController.getInstance().addToRequestQueue(request);
     }
+
 
     private void dialogNominal() {
         final Dialog dialog = new Dialog(this);

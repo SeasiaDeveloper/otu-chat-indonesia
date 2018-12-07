@@ -80,7 +80,7 @@
          android:xlargeScreens="true" />
     -->
     <application
-        android:name=".Application"
+        android:name=".ui.activities.VolleyController"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
