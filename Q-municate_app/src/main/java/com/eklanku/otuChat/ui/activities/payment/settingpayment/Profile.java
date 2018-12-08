@@ -37,7 +37,8 @@ public class Profile extends AppCompatActivity {
     String strApIUse = "OTU";
 
     String mbr_id, name_member, upline, mbr_carier, email, no_ktp, alamat, kota, sponsor_name, hp_sponsor, jml_bonus;
-    TextView txtId, txtName,txtUpline, txtCarrier, txtEmail, txtKtp, txtAddress, txtCity, txtSponsorName, txtSponsorHp, txtBonus;
+    TextView txtId, txtName, txtidUpline, txtCarrier, txtEmail, txtKtp, txtAddress, txtCity, txtSponsorName, txtSponsorHp,
+            txtjabatanupline, txtanggallahir, txnomorhpmember, txtanggaldaftar, txbank, txnorek, txpemilikrek;
     Button btnUpdate;
 
     Utils utilsAlert;
@@ -45,6 +46,7 @@ public class Profile extends AppCompatActivity {
 
     String strUserID, strAccessToken;
     PreferenceManager preferenceManager;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,17 +55,29 @@ public class Profile extends AppCompatActivity {
 
         utilsAlert = new Utils(Profile.this);
 
-        txtId= findViewById(R.id.txt_profile_id);
-        txtName= findViewById(R.id.txt_profile_name);
-        txtUpline= findViewById(R.id.txt_profile_upline);
-        txtCarrier= findViewById(R.id.txt_profile_carrier);
-        txtEmail= findViewById(R.id.txt_profile_email);
-        txtKtp= findViewById(R.id.txt_profile_ktp);
-        txtAddress= findViewById(R.id.txt_profile_address);
-        txtCity= findViewById(R.id.txt_profile_city);
-        txtSponsorName= findViewById(R.id.txt_profile_sponsor_name);
-        txtSponsorHp= findViewById(R.id.txt_profile_sponsor_hp);
-        txtBonus= findViewById(R.id.txt_profile_bonus);
+        //==========data member==============
+        txtId = findViewById(R.id.txt_profile_id);
+        txtName = findViewById(R.id.txt_profile_name);
+        txtKtp = findViewById(R.id.txt_profile_ktp);
+        txtanggallahir = findViewById(R.id.txt_tgl_lahir);
+        txtAddress = findViewById(R.id.txt_profile_address);
+        txtCity = findViewById(R.id.txt_profile_city);
+        txnomorhpmember = findViewById(R.id.txt_nomor_hp);
+        txtEmail = findViewById(R.id.txt_profile_email);
+        txtCarrier = findViewById(R.id.txt_profile_carrier);
+        txtanggaldaftar = findViewById(R.id.txt_tanggal_daftar);
+
+
+        //===========data bank member
+        txbank = findViewById(R.id.txt_bank);
+        txnorek = findViewById(R.id.txt_nomor_rekening);
+        txpemilikrek = findViewById(R.id.txt_pemilik_rekening);
+
+        //==========data sponsor
+        txtidUpline = findViewById(R.id.txt_id_upline);
+        txtSponsorName = findViewById(R.id.txt_profile_sponsor_name);
+        txtSponsorHp = findViewById(R.id.txt_profile_sponsor_hp);
+        txtjabatanupline = findViewById(R.id.txt_jabatan_upline);
         btnUpdate = findViewById(R.id.btnupdate);
 
         preferenceManager = new PreferenceManager(this);
@@ -181,39 +195,30 @@ public class Profile extends AppCompatActivity {
                     final List<DataDetailProfile> result = response.body().getData();
                     Log.d("OPPO-1", "onResponse: " + status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                        mbr_id = userID;
-                        name_member = result.get(0).getO_nama_member();
-                        upline = result.get(0).getO_id_sponsor();
-                        mbr_carier = result.get(0).getO_jabatanmember();
-                        email = result.get(0).getO_mail();
-                        no_ktp = result.get(0).getNo_ktp();
-                        alamat = result.get(0).getO_alamat();
-                        kota = result.get(0).getO_kota();
-                        sponsor_name = result.get(0).getO_nama_sponsor();
-                        hp_sponsor = result.get(0).getO_hp_sponsor();
 
-                        Log.d("OPPO-1", "mbr_id: "+mbr_id);
-                        Log.d("OPPO-1", "name_member: "+name_member);
-                        Log.d("OPPO-1", "upline: "+upline);
-                        Log.d("OPPO-1", "mbr_carier: "+mbr_carier);
-                        Log.d("OPPO-1", "email: "+email);
-                        Log.d("OPPO-1", "no_ktp: "+no_ktp);
-                        Log.d("OPPO-1", "alamat: "+alamat);
-                        Log.d("OPPO-1", "kota: "+kota);
-                        Log.d("OPPO-1", "sponsor_name: "+sponsor_name);
-                        Log.d("OPPO-1", "hp_sponsor: "+hp_sponsor);
-                        Log.d("OPPO-1", "jml_bonus: "+jml_bonus);
+                        //==========data member==============
+                        txtId.setText(userID);
+                        txtName.setText(result.get(0).getO_nama_member());
+                        txtKtp.setText(result.get(0).getNo_ktp());
+                        txtanggallahir.setText(result.get(0).getO_tgl_lahir());
+                        txtAddress.setText(result.get(0).getO_alamat());
+                        txtCity.setText(result.get(0).getO_kota());
+                        txnomorhpmember.setText(result.get(0).getO_hp());
+                        txtEmail.setText(result.get(0).getO_mail());
+                        txtCarrier.setText(result.get(0).getO_jabatanmember());
+                        txtanggaldaftar.setText(result.get(0).getO_tgl_daftar());
 
-                        txtId.setText(mbr_id);
-                        txtName.setText(name_member);
-                        txtUpline.setText(upline);
-                        txtCarrier.setText(mbr_carier);
-                        txtEmail.setText(email);
-                        txtKtp.setText(no_ktp);
-                        txtAddress.setText(alamat);
-                        txtCity.setText(kota);
-                        txtSponsorName.setText(sponsor_name);
-                        txtSponsorHp.setText(hp_sponsor);
+                        //===============data bank==============
+                        txbank.setText(result.get(0).getO_bank());
+                        txnorek.setText(result.get(0).getO_norec());
+                        txpemilikrek.setText(result.get(0).getO_pemilikrekening());
+
+                        //==========data sponsor
+                        txtidUpline.setText(result.get(0).getO_id_sponsor());
+                        txtSponsorName.setText(result.get(0).getO_nama_sponsor());
+                        txtSponsorHp.setText(result.get(0).getO_hp_sponsor());
+                        txtjabatanupline.setText(result.get(0).getO_jabatan_sponsor());
+
 
                     } else {
                         utilsAlert.globalDialog(Profile.this, titleAlert, response.body().getErrNumber());
@@ -229,7 +234,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onFailure(Call<DataDetailProfile> call, Throwable t) {
                 loadingDialog.dismiss();
-                utilsAlert.globalDialog(Profile.this, titleAlert, getResources().getString(R.string.error_api));
+                //utilsAlert.globalDialog(Profile.this, titleAlert, getResources().getString(R.string.error_api));
                 //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
@@ -249,22 +254,22 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-    public void EXupdateProfil(){
-        if(txtEmail.getText().toString().equals("")&&
-                txtKtp.getText().toString().equals("")&&
-                txtAddress.getText().toString().equals("")&&
-                txtCity.getText().toString().equals("")){
+    public void EXupdateProfil() {
+        if (txtEmail.getText().toString().equals("") &&
+                txtKtp.getText().toString().equals("") &&
+                txtAddress.getText().toString().equals("") &&
+                txtCity.getText().toString().equals("")) {
 
             Intent intent = new Intent(getBaseContext(), updateProfile.class);
             intent.putExtra("idmember", txtId.getText().toString());
             intent.putExtra("name", txtName.getText().toString());
-            intent.putExtra("upline", txtUpline.getText().toString());
+            intent.putExtra("upline", txtidUpline.getText().toString());
             intent.putExtra("carrier", txtCarrier.getText().toString());
             intent.putExtra("sponsorname", txtSponsorName.getText().toString());
             intent.putExtra("sponsorhp", txtSponsorHp.getText().toString());
-            intent.putExtra("bonus", txtBonus.getText().toString());
+            intent.putExtra("bonus", txtidUpline.getText().toString());
             startActivity(intent);
-        }else{
+        } else {
             Toast.makeText(getBaseContext(), "Data Sudah di Lengkapi", Toast.LENGTH_SHORT).show();
         }
     }
