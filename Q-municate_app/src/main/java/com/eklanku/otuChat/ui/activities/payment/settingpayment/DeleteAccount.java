@@ -83,6 +83,8 @@ public class DeleteAccount extends AppCompatActivity {
         String secCode = txtPinDelete.getText().toString() + "x@2016ekl";
         strSecurityCode = Utils.md5(secCode);
 
+        Log.d("OPPO-1", "deleteAccount: "+strSecurityCode);
+
         Call<DataProfile> dataCall = mApiInterfacePayment.deleteAccount(strUserID, strAccessToken, strApIUse, strSecurityCode);
         dataCall.enqueue(new Callback<DataProfile>() {
 
@@ -92,7 +94,7 @@ public class DeleteAccount extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
-
+                    Log.d("OPPO-1", "onResponse: "+status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         Toast.makeText(DeleteAccount.this, msg, Toast.LENGTH_SHORT).show();
                         PreferenceUtil.setMemberStatus(DeleteAccount.this, false);
