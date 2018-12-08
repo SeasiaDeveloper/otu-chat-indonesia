@@ -23,6 +23,18 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_logo_otu" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DATA MEMBER"/>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorTextOtu" />
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,7 +79,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
-                    android:text="Name"/>
+                    android:text="Nama"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -80,108 +92,6 @@
 
                 <TextView
                     android:id="@+id/txt_profile_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2.5" />
-            </LinearLayout>
-
-            <View android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/grey_400" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
-                    android:text="Upline"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/density_4"
-                    android:layout_marginLeft="@dimen/density_4"
-                    android:layout_marginRight="@dimen/density_4"
-                    android:layout_marginStart="@dimen/density_4"
-                    android:text=":" />
-
-                <TextView
-                    android:id="@+id/txt_profile_upline"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2.5" />
-            </LinearLayout>
-
-            <View android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/grey_400" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
-                    android:text="Carrier"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/density_4"
-                    android:layout_marginLeft="@dimen/density_4"
-                    android:layout_marginRight="@dimen/density_4"
-                    android:layout_marginStart="@dimen/density_4"
-                    android:text=":" />
-
-                <TextView
-                    android:id="@+id/txt_profile_carrier"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2.5" />
-            </LinearLayout>
-
-            <View android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/grey_400" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
-                    android:text="Email"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/density_4"
-                    android:layout_marginLeft="@dimen/density_4"
-                    android:layout_marginRight="@dimen/density_4"
-                    android:layout_marginStart="@dimen/density_4"
-                    android:text=":" />
-
-                <TextView
-                    android:id="@+id/txt_profile_email"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2.5" />
@@ -237,7 +147,41 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
-                    android:text="Address"/>
+                    android:text="Tanggal lahir"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_tgl_lahir"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Alamat"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -271,7 +215,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
-                    android:text="City"/>
+                    android:text="Kota"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -288,6 +232,302 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2.5" />
             </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Nomor HP"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_nomor_hp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Email"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_profile_email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Karir"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_profile_carrier"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Tanggal Daftar"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_tanggal_daftar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DATA BANK"/>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorTextOtu" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Bank"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_bank"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Nomor Rekening"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_nomor_rekening"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Pemilik Rekening"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_pemilik_rekening"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DATA UPLINE"/>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorTextOtu" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="ID Upline"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:text=":" />
+
+                <TextView
+                    android:id="@+id/txt_id_upline"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+
 
             <View android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -373,7 +613,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
-                    android:text="Bonus"/>
+                    android:text="Karir"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -385,7 +625,7 @@
                     android:text=":" />
 
                 <TextView
-                    android:id="@+id/txt_profile_bonus"
+                    android:id="@+id/txt_jabatan_upline"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2.5" />

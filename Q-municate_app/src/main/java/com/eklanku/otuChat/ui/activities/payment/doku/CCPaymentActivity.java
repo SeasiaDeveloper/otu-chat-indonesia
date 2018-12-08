@@ -115,9 +115,9 @@ public class CCPaymentActivity extends AppCompatActivity {
 
 
     public void retrieveToken(String amount) {
-        Log.d("OPPO-1", "GET TOKEN");
         String invoiceID = transactionID();
         String sessionID = sessionID();
+        Log.d("OPPO-1", "GET TOKEN "+sessionID);
         try {
             words = SHA1(amount + ".00" + mallId +
                     sharedKey + invoiceID + 360 + getImei());
@@ -133,7 +133,7 @@ public class CCPaymentActivity extends AppCompatActivity {
         DirectSDK directSDK = new DirectSDK();
         PaymentItems paymentItems = new PaymentItems();
         paymentItems.setDataAmount(amount + ".00");
-        paymentItems.setDataBasket("[{\"name\":\"donasi\",\"amount\":\"" + amount + ".00" + "+\",\"quantity\":\"1\"}]");
+        paymentItems.setDataBasket("[{\"name\":\"deposit\",\"amount\":\"" + amount + ".00" + "+\",\"quantity\":\"1\"}]");
         paymentItems.setDataCurrency("360");
         paymentItems.setDataWords(words);
         Log.d("OPPO-1", "word->2 " + words);
@@ -162,6 +162,7 @@ public class CCPaymentActivity extends AppCompatActivity {
 
                     String tokenId = "", pairingCode = "", responseMessage = "", responseCode = "", deviceId = "", amount = "",
                             tokenCode = "", transactionId = "", dataEmail = "", name = "", paymentChannel = "", dataMobilePhone = "";
+                    Log.d("OPPO-1", "onSuccess: "+respongetTokenSDK.toString());
 
                     if (respongetTokenSDK.getString("res_response_code").equalsIgnoreCase("0000")) {
                         JSONObject object = new JSONObject(respongetTokenSDK.toString());
@@ -266,7 +267,7 @@ public class CCPaymentActivity extends AppCompatActivity {
             }
         });*/
         //VOLLEY====================================================================================
-        StringRequest request = null;
+        /*StringRequest request = null;
         String url = getResources().getString(R.string.url_volley);
         try {
             request = new StringRequest(Request.Method.POST, url + "Deposit/request",
@@ -287,11 +288,13 @@ public class CCPaymentActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     //showProgress(false);
+                    Log.d("OPPO-1", "onErrorResponse: "+error.toString());
                     String msgError;
                     if (error.networkResponse != null) {
                         int statusCode = error.networkResponse.statusCode;
                         msgError = new String(error.networkResponse.data);
                         String message = Utils.responseMessage(statusCode, msgError );
+                        Log.d("OPPO-1", "onErrorResponse: "+msgError+"/"+message);
                         Toast.makeText(CCPaymentActivity.this, "" + statusCode + ", " + message, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(CCPaymentActivity.this, "Tidak ada koneksi", Toast.LENGTH_SHORT).show();
@@ -336,7 +339,7 @@ public class CCPaymentActivity extends AppCompatActivity {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        VolleyController.getInstance().addToRequestQueue(request);
+        VolleyController.getInstance().addToRequestQueue(request);*/
     }
 
 
