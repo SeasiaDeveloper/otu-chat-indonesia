@@ -1,6 +1,10 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi2;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
@@ -39,8 +46,9 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
 
     Utils utilsAlert;
     String titleAlert = "VOUCHER GAME";
-
-
+    LinearLayout layoutView;
+    ProgressBar progressBar;
+    TextView tvEmpty;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +64,10 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         ibLyto = findViewById(R.id.btnVGLyto);
         ibMol = findViewById(R.id.btnVGMol);
         ibCherry = findViewById(R.id.btnVGCherry);
+
+        layoutView = findViewById(R.id.linear_layout);
+        progressBar = findViewById(R.id.progress);
+//        tvEmpty = findViewById(R.id.tv_empty);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -149,11 +161,13 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
     ArrayList<String> listProviderProduct;
 
     public void getProduct_Game(){
+        showProgress(true);
         Log.d("OPPO-1", "getProduct_Game: "+strUserID+", "+strAccessToken);
         Call<DataAllProduct> product_game = apiInterfacePayment.getproduct_game(strUserID, strAccessToken, "OTU");
         product_game.enqueue(new Callback<DataAllProduct>() {
             @Override
             public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
+                showProgress(false);
                 if(response.isSuccessful()){
                     listCode = new ArrayList<>();
                     listPrice = new ArrayList<>();
@@ -194,6 +208,7 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
 
             @Override
             public void onFailure(Call<DataAllProduct> call, Throwable t) {
+                showProgress(false);
                 Log.d("OPPO-1", "onFailure: "+t.getMessage());
             }
         });
@@ -232,5 +247,36 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         product.putExtra("jnsGame", provider);
         startActivity(product);
 
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
+        }
     }
 }

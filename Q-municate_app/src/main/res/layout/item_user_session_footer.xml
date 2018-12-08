@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/icon_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/density_8"
+        android:background="@drawable/ic_logout_grey_40dp" />
+
+
+    <TextView
+        android:id="@+id/last_activity_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/density_8"
+        android:layout_marginStart="@dimen/density_8"
+        android:text="@string/dlg_logout_all_devices"
+        android:textColor="@color/blue"
+        android:textSize="18sp" />
+
+</LinearLayout>
