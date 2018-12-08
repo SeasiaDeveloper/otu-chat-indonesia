@@ -43,7 +43,6 @@ public class App extends MultiDexApplication {
     private SharedHelper appSharedHelper;
     private SessionListener sessionListener;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
-    //GIT PUSH
 
     public static App getInstance() {
         return instance;
