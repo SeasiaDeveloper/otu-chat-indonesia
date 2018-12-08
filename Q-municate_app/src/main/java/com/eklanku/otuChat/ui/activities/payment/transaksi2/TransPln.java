@@ -1,8 +1,12 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi2;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -24,6 +28,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -104,6 +109,10 @@ public class TransPln extends AppCompatActivity {
     ListView listPLN;
     ArrayList<String> id_paket;
 
+    LinearLayout layoutView;
+    ProgressBar progressBar;
+    TextView tvEmpty;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +149,9 @@ public class TransPln extends AppCompatActivity {
         txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
         txtTransaksi_ke.setText("1");
 
+        layoutView = findViewById(R.id.linear_layout);
+        progressBar = findViewById(R.id.progress);
+        tvEmpty = findViewById(R.id.tv_empty);
 
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
 
@@ -743,10 +755,12 @@ public class TransPln extends AppCompatActivity {
     ArrayList<String> listProviderProduct;
 
     public void getProductPLNToken(){
+        showProgress(false);
         Call<DataAllProduct> getproduk_plntoken = apiInterfacePayment.getproduct_plntoken(strUserID, strAccessToken, strAplUse);
         getproduk_plntoken.enqueue(new Callback<DataAllProduct>() {
             @Override
             public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
+                showProgress(false);
                 if(response.isSuccessful()){
                     listCode = new ArrayList<>();
                     listPrice = new ArrayList<>();
@@ -788,8 +802,40 @@ public class TransPln extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<DataAllProduct> call, Throwable t) {
+                showProgress(false);
                 utilsAlert.globalDialog(TransPln.this, titleAlert, "2. "+getResources().getString(R.string.error_api));
             }
         });
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
+        }
     }
 }

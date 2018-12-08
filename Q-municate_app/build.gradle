@@ -200,11 +200,18 @@ dependencies {
     implementation 'com.github.hani-momanii:SuperNova-Emoji:1.1'
     //implementation 'com.mikhaellopez:hfrecyclerview:1.1.1'
 
+/*<<<<<<< HEAD*/
     //doku
     implementation 'com.doku.sdkocov2:sdkoco-2.0.1:2.0.1@aar'
 
     //vcard
     implementation 'com.googlecode.ez-vcard:ez-vcard:0.10.4'
+//=======
+    //user agent detailed parser
+//    implementation 'com.github.ua-parser:uap-java:1.4.0'
+    //user agent simple and fast parser
+    implementation group: 'eu.bitwalker', name: 'UserAgentUtils', version: '1.21'
+//>>>>>>> origin/feature/logging_destroy_session
 }
 
 def changeApkFileName(variant) {

@@ -1,10 +1,14 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi2;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -23,7 +27,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -91,6 +97,9 @@ public class TransEtool extends AppCompatActivity {
     ListView listNamaPaket;
     ArrayList<String> idNamaPaket;
 
+    LinearLayout layoutView;
+    ProgressBar progressBar;
+    TextView tvEmpty;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,6 +119,10 @@ public class TransEtool extends AppCompatActivity {
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("BELI");
         listNamaPaket = findViewById(R.id.listNamaPaket);
+
+        layoutView = findViewById(R.id.linear_layout);
+        progressBar = findViewById(R.id.progress);
+        tvEmpty = findViewById(R.id.tv_empty);
 
         txtTrasaksi_ke.setText("1");
         txtopr = (TextView) findViewById(R.id.textopr);
@@ -177,10 +190,6 @@ public class TransEtool extends AppCompatActivity {
         initializeResources();
         //=====NEW API====
         getproduct_etool();
-        LoadProviderByTipe();
-
-
-        //initProduct(true, "");
 
     }
 
@@ -507,6 +516,7 @@ public class TransEtool extends AppCompatActivity {
     ArrayList<String> listProviderProduct;
 
     public void getproduct_etool() {
+        showProgress(true);
         ArrayList<String> a, b, c, d;
         a = new ArrayList<>();
         b = new ArrayList<>();
@@ -550,29 +560,20 @@ public class TransEtool extends AppCompatActivity {
                             listType.add(data.get(i).getType());
                             listProviderProduct.add(data.get(i).getProvider());
                         }
-
-                        /*for(int j = 0; j < listCode.size(); j++){
-                            if(product_type.equalsIgnoreCase(listProviderProduct.get(j))){
-                                a.add(listName.get(j));
-                                b.add(listPrice.get(j));
-                                c.add(listEP.get(j));
-                                d.add(listProviderProduct.get(j));
-                            }
-                        }
-
-                        SpinnerAdapterNew adapterNew = new SpinnerAdapterNew(getApplicationContext(), a, b, c, d, product_type);
-                        listNamaPaket.setAdapter(adapterNew);*/
-
+                        LoadProviderByTipe();
                     } else {
+                        showProgress(false);
                         utilsAlert.globalDialog(TransEtool.this, titleAlert, respMessage);
                     }
                 } else {
+                    showProgress(false);
                     utilsAlert.globalDialog(TransEtool.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
                 }
             }
 
             @Override
             public void onFailure(Call<DataAllProduct> call, Throwable t) {
+                showProgress(false);
                 utilsAlert.globalDialog(TransEtool.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
             }
         });
@@ -581,14 +582,15 @@ public class TransEtool extends AppCompatActivity {
     ArrayList<String> list;
 
     public void LoadProviderByTipe() {
-        Log.d("OPPO-1", "onResponse: running"+strUserID+", "+strAccessToken+", "+strAplUse+", "+strProductType);
+        Log.d("OPPO-1", "onResponse: running" + strUserID + ", " + strAccessToken + ", " + strAplUse + ", " + strProductType);
         Call<DataProviderByType> provider_by_type = apiInterfacePayment.getProviderByType(strUserID, strAccessToken, strAplUse, strProductType);
         provider_by_type.enqueue(new Callback<DataProviderByType>() {
             @Override
             public void onResponse(Call<DataProviderByType> call, Response<DataProviderByType> response) {
+                showProgress(false);
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
-                    Log.d("OPPO-1", "onResponse >> status: "+status);
+                    Log.d("OPPO-1", "onResponse >> status: " + status);
                     String respMessage = response.body().getRespMessage();
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         list = new ArrayList<String>();
@@ -622,15 +624,16 @@ public class TransEtool extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<DataProviderByType> call, Throwable t) {
-                Log.d("OPPO-1", "onFailure: "+t.getMessage());
+                showProgress(false);
                 utilsAlert.globalDialog(TransEtool.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
             }
         });
     }
 
     ArrayList<String> code_product;
+
     public void initProduct(String provider) {
-        Log.d("OPPO-1", "initProduct: "+provider);
+        Log.d("OPPO-1", "initProduct: " + provider);
         ArrayList<String> a, b, c, d;
         a = new ArrayList<>();
         b = new ArrayList<>();
@@ -643,19 +646,49 @@ public class TransEtool extends AppCompatActivity {
         d.clear();
         code_product.clear();
         String product_type = "";
-            for (int i = 0; i < listCode.size(); i++) {
-               // Log.d("OPPO-1", "initProduct: "+listProviderProduct.get(i)+", "+provider);
-                if (listProviderProduct.get(i).equalsIgnoreCase(provider)) {
-                    a.add(listName.get(i));
-                    b.add(listPrice.get(i));
-                    c.add(listEP.get(i));
-                    d.add(listProviderProduct.get(i));
-                    code_product.add(listCode.get(i));
-                }
+        for (int i = 0; i < listCode.size(); i++) {
+            // Log.d("OPPO-1", "initProduct: "+listProviderProduct.get(i)+", "+provider);
+            if (listProviderProduct.get(i).equalsIgnoreCase(provider)) {
+                a.add(listName.get(i));
+                b.add(listPrice.get(i));
+                c.add(listEP.get(i));
+                d.add(listProviderProduct.get(i));
+                code_product.add(listCode.get(i));
             }
+        }
         SpinnerAdapterNew adapterNew = new SpinnerAdapterNew(getApplicationContext(), a, b, c, d, product_type);
         listNamaPaket.setAdapter(adapterNew);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
+        }
+    }
 
 }

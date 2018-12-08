@@ -105,7 +105,7 @@ public class TransPulsa extends AppCompatActivity {
 
     ListView listPulsa;
     ArrayList<String> id_paket;
-    LinearLayout layoutPulsa;
+    LinearLayout layoutView;
     ProgressBar progressBar;
     TextView tvEmpty;
     //boolean availableNominal = true;
@@ -132,7 +132,7 @@ public class TransPulsa extends AppCompatActivity {
         txLayOpr = findViewById(R.id.txLayOpr);
         listPulsa = findViewById(R.id.listPulsa);
 
-        layoutPulsa = findViewById(R.id.linear_pulsa);
+        layoutView = findViewById(R.id.linear_pulsa);
         progressBar = findViewById(R.id.progress_pulsa);
         tvEmpty = findViewById(R.id.tv_empty);
 
@@ -883,12 +883,12 @@ public class TransPulsa extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            layoutPulsa.setVisibility(show ? View.GONE : View.VISIBLE);
-            layoutPulsa.animate().setDuration(shortAnimTime).alpha(
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    layoutPulsa.setVisibility(show ? View.GONE : View.VISIBLE);
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -903,7 +903,7 @@ public class TransPulsa extends AppCompatActivity {
             });
         } else {
             progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-            layoutPulsa.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
 
         }
     }

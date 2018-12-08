@@ -4,20 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="@dimen/density_8"
-    android:background="@color/white"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransPln">
 
     <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:scrollbars="none">-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:scrollbars="none">-->
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/density_8" />
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <RadioGroup
                 android:id="@+id/radio_group_pln"
@@ -63,7 +76,7 @@
                     android:text="Pilih Pembayaran"
                     android:textColor="@color/grey_600"
                     android:textSize="16sp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:id="@+id/layPilihPembayaran"
@@ -103,16 +116,16 @@
                     android:textSize="16sp" />
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/txtLayoutTransPulsaNo"
                         android:layout_width="0dp"
-                        android:layout_weight="7"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/density_4"
+                        android:layout_weight="7"
                         app:hintEnabled="false">
 
                         <EditText
@@ -121,17 +134,17 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/custom_bottom_border_grey"
                             android:ems="10"
-                            android:textColor="@color/grey_600"
                             android:inputType="number"
-                            android:paddingBottom="@dimen/density_8" />
+                            android:paddingBottom="@dimen/density_8"
+                            android:textColor="@color/grey_600" />
 
                     </android.support.design.widget.TextInputLayout>
 
                     <ImageView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
                         android:layout_height="match_parent"
-                        app:srcCompat="@drawable/ic_otu_pln"/>
+                        android:layout_weight="2"
+                        app:srcCompat="@drawable/ic_otu_pln" />
 
                 </LinearLayout>
 
@@ -150,7 +163,7 @@
                         android:text="Pilih Nominal"
                         android:textColor="@color/grey_600"
                         android:textSize="16sp"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -182,7 +195,6 @@
                 </LinearLayout>
 
 
-
                 <LinearLayout
                     android:id="@+id/layout_transaksi_ke"
                     android:layout_width="match_parent"
@@ -206,10 +218,10 @@
                         android:layout_below="@+id/tv_trans_ke"
                         android:background="@drawable/custom_bottom_border_grey"
                         android:hint="Masukkan Transaksi ke-"
-                        android:textColor="@color/grey_600"
                         android:inputType="number"
+                        android:paddingTop="@dimen/density_8"
                         android:paddingBottom="@dimen/density_8"
-                        android:paddingTop="@dimen/density_8" />
+                        android:textColor="@color/grey_600" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -230,19 +242,19 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:hintEnabled="false" >
+                        app:hintEnabled="false">
 
                         <EditText
                             android:id="@+id/txt_no_hp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/custom_bottom_border_grey"
-                            android:drawableLeft="@drawable/ic_phone"
                             android:drawableStart="@drawable/ic_phone"
+                            android:drawableLeft="@drawable/ic_phone"
                             android:ems="10"
-                            android:textColor="@color/grey_600"
                             android:inputType="number"
-                            android:paddingBottom="@dimen/density_8" />
+                            android:paddingBottom="@dimen/density_8"
+                            android:textColor="@color/grey_600" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -251,7 +263,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:text="No HP ini digunakan untuk menerima sms konfirmasi"
-                        android:textSize="10dp"/>
+                        android:textSize="10dp" />
 
                 </LinearLayout>
 
@@ -260,17 +272,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/density_4"
+                    android:background="@drawable/rounded_shape_payment"
+                    android:padding="@dimen/density_8"
                     android:text="Pilih Nominal"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:background="@drawable/rounded_shape_payment"
-                    android:padding="@dimen/density_8"/>
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/density_8"
+                    android:gravity="center"
+                    android:text="Tidak ada produk"
+                    android:visibility="gone" />
 
                 <ListView
                     android:id="@+id/listPLN"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="8dp" />
 
                 <Button
                     android:id="@+id/btnTransPlnBayar"
@@ -281,11 +302,10 @@
                     android:text="Beli Token Listrik"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </LinearLayout>
-
         </LinearLayout>
-    <!--</ScrollView>-->
-
+        <!--</ScrollView>-->
+    </LinearLayout>
 </LinearLayout>

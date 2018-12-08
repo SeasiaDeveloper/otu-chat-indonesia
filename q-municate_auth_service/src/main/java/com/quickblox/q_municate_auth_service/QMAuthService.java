@@ -3,12 +3,15 @@ package com.quickblox.q_municate_auth_service;
 
 import com.connectycube.auth.ConnectycubeAuth;
 import com.connectycube.auth.model.ConnectycubeProvider;
+import com.connectycube.auth.session.ConnectycubeUserSessionDetails;
 import com.connectycube.core.exception.ResponseException;
 import com.connectycube.core.server.Performer;
 import com.connectycube.extensions.RxJavaPerformProcessor;
 import com.quickblox.q_municate_base_service.QMBaseService;
 import com.connectycube.users.ConnectycubeUsers;
 import com.connectycube.users.model.ConnectycubeUser;
+
+import java.util.ArrayList;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -146,6 +149,21 @@ public class QMAuthService extends QMBaseService {
 
     public Observable<Void> upgradeWebSessionToken(String webToken) {
         Performer<Void> performer = ConnectycubeAuth.upgradeWebSessionTokenToCurrentUser(webToken);
+        return performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+    }
+
+    public Observable<ArrayList<ConnectycubeUserSessionDetails>> getUserSessions() {
+        Performer<ArrayList<ConnectycubeUserSessionDetails>> performer = ConnectycubeAuth.getUserSessions();
+        return performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+    }
+
+    public Observable<Void> deleteUserSessionsExceptCurrent() {
+        Performer<Void> performer = ConnectycubeAuth.deleteUserSessionsExceptCurrent();
+        return performer.convertTo(RxJavaPerformProcessor.INSTANCE);
+    }
+
+    public Observable<Void> deleteUserSessionById(int sessionId) {
+        Performer<Void> performer = ConnectycubeAuth.deleteUserSessionById(sessionId);
         return performer.convertTo(RxJavaPerformProcessor.INSTANCE);
     }
 

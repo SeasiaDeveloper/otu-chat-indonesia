@@ -1,8 +1,12 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi2;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -19,7 +23,9 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +84,9 @@ public class TransVouchergame_product extends AppCompatActivity {
     ArrayList<String> _listCode;
     String _namaProvider;
 
+    LinearLayout layoutView;
+    ProgressBar progressBar;
+    TextView tvEmpty;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +111,9 @@ public class TransVouchergame_product extends AppCompatActivity {
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
-
+        layoutView = findViewById(R.id.linear_layout);
+        progressBar = findViewById(R.id.progress);
+        tvEmpty = findViewById(R.id.tv_empty);
 
         initializeResources();
         noPel.addTextChangedListener(new txtWatcher(noPel));
@@ -131,7 +142,6 @@ public class TransVouchergame_product extends AppCompatActivity {
     }
 
     public void addList(){
-        Log.d("OPPO-1", "addList: "+ _listnama);
         SpinnerAdapterNew adapter = new SpinnerAdapterNew(getApplicationContext(), _listnama, _listprice, _listep, _listProvide, _namaProvider);
         lvProductGame.setAdapter(adapter);
     }
@@ -376,6 +386,37 @@ public class TransVouchergame_product extends AppCompatActivity {
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
         }
     }
 }
