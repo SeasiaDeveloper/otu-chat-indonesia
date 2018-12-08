@@ -35,6 +35,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.connectycube.core.helper.ToStringHelper;
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models2.DataAllProduct;
@@ -400,12 +401,14 @@ public class TransPln extends AppCompatActivity {
                 spinnerProvider.setAdapter(adapter);
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
-                    String error = response.body().getError();
+                    String error = response.body().getRespMessage();
 
                     if (status.equals("SUCCESS")) {
                         final List<DataListPPOB> result = response.body().getProductList();
                         nama_operator = new String[result.size()];
                         selected_operator = result.get(0).getCode();
+
+                        Toast.makeText(TransPln.this, "SUCCESS " + nama_operator + " " + selected_operator, Toast.LENGTH_SHORT).show();
 
                         for (int i = 0; i < result.size(); i++) {
                             nama_operator[i] = result.get(i).getName();
@@ -425,20 +428,19 @@ public class TransPln extends AppCompatActivity {
                             }
                         });
                     } else {
+                        Toast.makeText(TransPln.this, "onFailed 1 " + titleAlert + " " + error, Toast.LENGTH_SHORT).show();
                         utilsAlert.globalDialog(TransPln.this, titleAlert, error);
-                        // Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    Toast.makeText(TransPln.this, "onFailed 2", Toast.LENGTH_SHORT).show();
                     utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-//                loadingDialog.dismiss();
+                Toast.makeText(TransPln.this, "onFailure " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -736,10 +738,10 @@ public class TransPln extends AppCompatActivity {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
 
         params.height = totalHeight + (listView.getDividerHeight() *
-                (listAdapter.getCount()-1));
+                (listAdapter.getCount() - 1));
 
-        Log.d("OPPO-1", "setListViewHeightBasedOnChildren: "+totalHeight + (listView.getDividerHeight() *
-                (listAdapter.getCount()-1)));
+        Log.d("OPPO-1", "setListViewHeightBasedOnChildren: " + totalHeight + (listView.getDividerHeight() *
+                (listAdapter.getCount() - 1)));
 
         listView.setLayoutParams(params);
         listView.requestLayout();
@@ -754,14 +756,14 @@ public class TransPln extends AppCompatActivity {
     ArrayList<String> listType;
     ArrayList<String> listProviderProduct;
 
-    public void getProductPLNToken(){
+    public void getProductPLNToken() {
         showProgress(false);
         Call<DataAllProduct> getproduk_plntoken = apiInterfacePayment.getproduct_plntoken(strUserID, strAccessToken, strAplUse);
         getproduk_plntoken.enqueue(new Callback<DataAllProduct>() {
             @Override
             public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
                 showProgress(false);
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     listCode = new ArrayList<>();
                     listPrice = new ArrayList<>();
                     listName = new ArrayList<>();
@@ -778,9 +780,9 @@ public class TransPln extends AppCompatActivity {
                     listProviderProduct.clear();
                     String status = response.body().getStatus();
                     String respMessage = response.body().getRespMessage();
-                    if(status.equalsIgnoreCase("SUCCESS")){
+                    if (status.equalsIgnoreCase("SUCCESS")) {
                         List<DataProduct> data = response.body().getData();
-                        for(int i = 0; i < data.size(); i++){
+                        for (int i = 0; i < data.size(); i++) {
                             listCode.add(data.get(i).getCode());
                             listPrice.add(data.get(i).getPrice());
                             listName.add(data.get(i).getName());
@@ -789,21 +791,21 @@ public class TransPln extends AppCompatActivity {
                             listType.add(data.get(i).getType());
                             listProviderProduct.add(data.get(i).getProvider());
                         }
-                        Log.d("OPPO-1", "onResponse: "+listCode);
+                        Log.d("OPPO-1", "onResponse: " + listCode);
                         SpinnerAdapterNew adapter = new SpinnerAdapterNew(getApplicationContext(), listName, listPrice, listEP, listProviderProduct, "PLN TOKEN");
                         listPLN.setAdapter(adapter);
-                    }else{
+                    } else {
                         utilsAlert.globalDialog(TransPln.this, titleAlert, respMessage);
                     }
-                }else{
-                    utilsAlert.globalDialog(TransPln.this, titleAlert, "1. "+getResources().getString(R.string.error_api));
+                } else {
+                    utilsAlert.globalDialog(TransPln.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
                 }
             }
 
             @Override
             public void onFailure(Call<DataAllProduct> call, Throwable t) {
                 showProgress(false);
-                utilsAlert.globalDialog(TransPln.this, titleAlert, "2. "+getResources().getString(R.string.error_api));
+                utilsAlert.globalDialog(TransPln.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
             }
         });
     }
