@@ -187,7 +187,7 @@ public class TransPaketData extends AppCompatActivity {
                 btnNo = (Button) dialog.findViewById(R.id.btn_no);
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
                 txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
-                txtnomor.setText(txtNo.getText().toString());
+                txtnomor.setText(txtNo.getText().toString().trim());
                 txtvoucher.setText(code);
 
                 btnYes.setOnClickListener(new View.OnClickListener() {
@@ -548,7 +548,7 @@ public class TransPaketData extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransPaketData.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtTransaksi_ke.getText().toString(), "", "", code);
+        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString().trim(), txtTransaksi_ke.getText().toString(), "", "", code);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -630,7 +630,7 @@ public class TransPaketData extends AppCompatActivity {
                 btnNo = (Button) dialog.findViewById(R.id.btn_no);
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
                 txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
-                txtnomor.setText(txtNo.getText().toString());
+                txtnomor.setText(txtNo.getText().toString().trim());
                 txtvoucher.setText(code);
                 btnYes.setText("YA, Lanjutkan");
                 btnYes.setOnClickListener(new View.OnClickListener() {

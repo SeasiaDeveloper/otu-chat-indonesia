@@ -1,5 +1,6 @@
 package com.eklanku.otuChat.ui.activities.payment.settingpayment;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -9,7 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -18,6 +21,10 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import retrofit2.Call;
@@ -25,7 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class updateProfile extends AppCompatActivity {
+public class updateProfile extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     EditText txtId, txtName, txtidUpline, txtCarrier, txtEmail, txtKtp, txtAddress, txtCity, txtSponsorName, txtSponsorHp,
             txtjabatanupline, txtanggallahir, txnomorhpmember, txtanggaldaftar, txbank, txnorek, txpemilikrek, ed_pin;
@@ -44,6 +51,7 @@ public class updateProfile extends AppCompatActivity {
     String titleAlert = "Profile";
 
     Bundle extras;
+    int statusdate = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +117,24 @@ public class updateProfile extends AppCompatActivity {
         txtName.setText(name);
         txtKtp.setText(ktp);
         txtanggallahir.setText(tgllahir);
+
+        txtanggallahir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //statusdate = 1;
+                getDate(v);
+
+            }
+        });
+
+       /* txtanggaldaftar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statusdate = 2;
+                getDate(v);
+            }
+        });*/
+
         txtAddress.setText(alamat);
         txtCity.setText(kota);
         txnomorhpmember.setText(nohp_member);
@@ -145,6 +171,19 @@ public class updateProfile extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        Calendar cal = new GregorianCalendar(year, month, day);
+        final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        txtanggallahir.setText(dateFormat.format(cal.getTime()));
+
+    }
+
+    public void getDate(View v) {
+        DatePickerFragment fragment = new DatePickerFragment();
+        fragment.show(getSupportFragmentManager(), "Date");
     }
 
     public void updateProfil() {

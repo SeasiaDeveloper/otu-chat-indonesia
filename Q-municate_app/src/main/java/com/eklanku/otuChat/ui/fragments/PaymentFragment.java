@@ -201,6 +201,13 @@ public class PaymentFragment extends Fragment {
         final Button btnTk = dialog.findViewById(R.id.btn_tk);
         final Button btnCC = dialog.findViewById(R.id.btn_cc);
 
+        final Button btnFirstPay = dialog.findViewById(R.id.btn_first);
+        final Button btnSecondPay = dialog.findViewById(R.id.btn_second);
+        final Button btnDoku = dialog.findViewById(R.id.btn_doku);
+        final Button btnMandiri = dialog.findViewById(R.id.btn_mandiri);
+        final Button btnVA = dialog.findViewById(R.id.btn_va);
+        final Button btnVAM = dialog.findViewById(R.id.btn_vam);
+
         final ImageButton btnClose = dialog.findViewById(R.id.btn_cancel);
 
         btnTk.setOnClickListener(new View.OnClickListener() {
@@ -219,6 +226,48 @@ public class PaymentFragment extends Fragment {
                 Intent i = new Intent(getActivity(), CCPaymentActivity.class);
                 //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
+            }
+        });
+
+        btnFirstPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnSecondPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnDoku.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnMandiri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnVA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnVAM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 

@@ -40,6 +40,7 @@
             android:ems="10"
             android:hint="Password"
             android:inputType="text"
+            android:maxLength="16"
             android:paddingBottom="@dimen/density_16"
             android:paddingLeft="@dimen/density_8"
             android:paddingStart="@dimen/density_8"
@@ -80,8 +81,9 @@
             android:background="@drawable/custom_bg_text"
             android:ems="10"
             android:hint="Pin"
-            android:inputType="text"
+            android:inputType="number"
             android:paddingBottom="@dimen/density_16"
+            android:maxLength="10"
             android:paddingLeft="@dimen/density_8"
             android:paddingStart="@dimen/density_8"
             android:paddingTop="@dimen/density_16" />

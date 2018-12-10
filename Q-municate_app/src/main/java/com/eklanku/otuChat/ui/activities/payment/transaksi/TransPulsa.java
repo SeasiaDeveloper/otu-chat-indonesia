@@ -176,7 +176,7 @@ public class TransPulsa extends AppCompatActivity {
             btnNo = dialog.findViewById(R.id.btn_no);
             tvNomor = dialog.findViewById(R.id.txt_nomor);
             tvVoucher = dialog.findViewById(R.id.txt_voucher);
-            tvNomor.setText(txtNo.getText().toString());
+            tvNomor.setText(txtNo.getText().toString().trim());
             tvVoucher.setText(code);
             btnYes.setText(getString(R.string.lanjutkan));
             btnYes.setOnClickListener(new View.OnClickListener() {
@@ -392,7 +392,7 @@ public class TransPulsa extends AppCompatActivity {
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransPulsa.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), etTransaksiKe.getText().toString(), "", "", code);
+        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString().trim(), etTransaksiKe.getText().toString(), "", "", code);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -616,7 +616,7 @@ public class TransPulsa extends AppCompatActivity {
         btnNo = dialog.findViewById(R.id.btn_no);
         tvNomor = dialog.findViewById(R.id.txt_nomor);
         tvVoucher = dialog.findViewById(R.id.txt_voucher);
-        tvNomor.setText(txtNo.getText().toString());
+        tvNomor.setText(txtNo.getText().toString().trim());
         tvVoucher.setText(kodepaket);
         btnYes.setText(getString(R.string.lanjutkan));
         btnYes.setOnClickListener(view -> {

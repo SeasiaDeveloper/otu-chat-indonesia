@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
@@ -23,6 +24,7 @@ import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.Utils;
 import com.eklanku.otuChat.R;;
 import java.util.HashMap;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -82,14 +84,79 @@ public class Register extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String txt = txtReferal.getText().toString().trim();
-                if (txt.equals("") || TextUtils.isEmpty(txt)) {
-                    dialogReferalEmpty("Notice", "Your have not fill Referal ID, want continue");
-                } else {
-                    Register();
-                }
+                attemptNext();
             }
         });
+    }
+
+    private void attemptNext() {
+
+        // Reset errors.
+        txEmail.setError(null);
+        txPass.setError(null);
+        txPin.setError(null);
+
+        // Store values at the time of the login attempt.
+        String email = txEmail.getText().toString();
+        String password = txPass.getText().toString();
+        String pin = txPin.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            txPass.setError(getString(R.string.error_invalid_password));
+            focusView = txPass;
+            cancel = true;
+        }
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            txEmail.setError(getString(R.string.error_field_required));
+            focusView = txEmail;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            txEmail.setError(getString(R.string.error_invalid_email));
+            focusView = txEmail;
+            cancel = true;
+        }
+
+        if (!TextUtils.isEmpty(pin) && !isPinValid(pin)) {
+            txPin.setError(getString(R.string.error_invalid_password));
+            focusView = txPin;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+
+            String txt = txtReferal.getText().toString().trim();
+            if (txt.equals("") || TextUtils.isEmpty(txt)) {
+                dialogReferalEmpty("Notice", "Your have not fill Referal ID, want continue");
+            } else {
+                Register();
+            }
+
+        }
+    }
+
+    private boolean isEmailValid(String email) {
+        //TODO: Replace this with your own logic
+        return email.contains("@");
+    }
+
+    private boolean isPasswordValid(String password) {
+        //TODO: Replace this with your own logic
+        return password.length() >= 8;
+    }
+
+    private boolean isPinValid(String pin) {
+        //TODO: Replace this with your own logic
+        return pin.length() >= 6;
     }
 
     public void dialogReferalEmpty(String title, String message) {
@@ -119,7 +186,7 @@ public class Register extends AppCompatActivity {
 
 
     public void Register() {
-        Log.d("OPPO-1", "strSecurityCode: "+PreferenceUtil.getNumberPhone(this));
+        Log.d("OPPO-1", "strSecurityCode: " + PreferenceUtil.getNumberPhone(this));
         Call<DataProfile> callProfil = mApiInterfacePayment.postRegisterUpline(PreferenceUtil.getNumberPhone(this), txtReferal.getText().toString(), strApIUse,
                 txtNama.getText().toString(), txEmail.getText().toString(), txPass.getText().toString(), txPin.getText().toString());
 
@@ -142,15 +209,15 @@ public class Register extends AppCompatActivity {
 
                     }
                 } else {
-                    utilsAlert.globalDialog(Register.this, titleAlert, "1. "+getResources().getString(R.string.error_api));
+                    utilsAlert.globalDialog(Register.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
                 }
             }
 
             @Override
             public void onFailure(Call<DataProfile> call, Throwable t) {
-                Log.d("OPPO-1", "onFailure: "+t.getMessage());
+                Log.d("OPPO-1", "onFailure: " + t.getMessage());
                 progressDialog.dismiss();
-                utilsAlert.globalDialog(Register.this, titleAlert, "3. "+getResources().getString(R.string.error_api));
+                utilsAlert.globalDialog(Register.this, titleAlert, "3. " + getResources().getString(R.string.error_api));
 
             }
         });

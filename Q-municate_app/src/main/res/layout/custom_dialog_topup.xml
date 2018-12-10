@@ -1,49 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:background="@android:color/transparent"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/density_8"
-    android:layout_height="wrap_content">
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
-        android:text="PILIH METODE TOPUP"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/density_8"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:id="@+id/btn_tk"
-        android:text="TICKETING"
-        android:textColor="@color/white"
-        android:background="@drawable/custom_round_new"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btn_cc"
-        android:background="@drawable/custom_round_new"
-     android:layout_marginTop="@dimen/density_8"
-        android:layout_width="match_parent"
-       android:textColor="@color/white"
-        android:text="CREDIT CARD"
-        android:layout_height="wrap_content" />
-
-    <ImageButton
-        android:id="@+id/btn_cancel"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_cancel_dark"
-        android:layout_marginTop="@dimen/density_24"
-        android:layout_width="match_parent"
-        android:textColor="@color/white"
-        android:text="CLOSE"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:text="CLOSE"
         android:gravity="center"
-        android:layout_height="match_parent" />
+        android:text="PILIH METODE" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <Button
+                android:id="@+id/btn_tk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_spinner"
+                android:drawableStart="@drawable/ic_manual"
+                android:drawableLeft="@drawable/ic_manual"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawableRight="@drawable/ic_next"
+                android:paddingStart="@dimen/density_8"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingEnd="@dimen/density_8"
+                android:paddingRight="@dimen/density_8"
+                android:text="Manual"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_cc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:background="@drawable/custom_spinner"
+                android:drawableStart="@drawable/ic_credit_card"
+                android:drawableLeft="@drawable/ic_credit_card"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawableRight="@drawable/ic_next"
+                android:paddingStart="@dimen/density_8"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingEnd="@dimen/density_8"
+                android:paddingRight="@dimen/density_8"
+                android:text="Credit Card"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_first"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:background="@drawable/custom_spinner"
+                android:drawableStart="@drawable/ic_first_payment_tokenization"
+                android:drawableLeft="@drawable/ic_first_payment_tokenization"
+
+                android:drawableEnd="@drawable/ic_next"
+                android:drawableRight="@drawable/ic_next"
+                android:paddingStart="@dimen/density_8"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingEnd="@dimen/density_8"
+                android:paddingRight="@dimen/density_8"
+                android:text="First Payment Tokenization"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_second"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:background="@drawable/custom_spinner"
+                android:drawableStart="@drawable/ic_second_payment_tokenization"
+                android:drawableLeft="@drawable/ic_second_payment_tokenization"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawableRight="@drawable/ic_next"
+                android:paddingStart="@dimen/density_8"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingEnd="@dimen/density_8"
+                android:paddingRight="@dimen/density_8"
+                android:text="Second Payment Tokenization"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_doku"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:background="@drawable/custom_spinner"
+                android:drawableStart="@drawable/ic_doku"
+                android:drawableLeft="@drawable/ic_doku"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawableRight="@drawable/ic_next"
+                android:paddingStart="@dimen/density_8"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingEnd="@dimen/density_8"
+                android:paddingRight="@dimen/density_8"
+                android:text="Doku"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_mandiri"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:background="@drawable/custom_spinner"
+                android:drawableStart="@drawable/ic_mandiri_clickpay"
+                android:drawableLeft="@drawable/ic_mandiri_clickpay"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawableRight="@drawable/ic_next"
+                android:paddingStart="@dimen/density_8"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingEnd="@dimen/density_8"
+                android:paddingRight="@dimen/density_8"
+                android:text="Mandiri Click Pay"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_va"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:background="@drawable/custom_spinner"
+                android:drawableStart="@drawable/ic_virtual_account"
+                android:drawableLeft="@drawable/ic_virtual_account"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawableRight="@drawable/ic_next"
+                android:paddingStart="@dimen/density_8"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingEnd="@dimen/density_8"
+                android:paddingRight="@dimen/density_8"
+                android:text="Virtual Account"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_vam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:background="@drawable/custom_spinner"
+                android:drawableStart="@drawable/ic_virtual_account_market"
+                android:drawableLeft="@drawable/ic_virtual_account_market"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawableRight="@drawable/ic_next"
+                android:paddingStart="@dimen/density_8"
+                android:paddingLeft="@dimen/density_8"
+                android:paddingEnd="@dimen/density_8"
+                android:paddingRight="@dimen/density_8"
+                android:text="Virtual Account Minimarket"
+                android:textAllCaps="false" />
+
+            <ImageButton
+                android:id="@+id/btn_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_24"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_cancel_dark"
+                android:text="CLOSE"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="CLOSE" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
