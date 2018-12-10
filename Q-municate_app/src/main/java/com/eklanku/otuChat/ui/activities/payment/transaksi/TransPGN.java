@@ -26,28 +26,13 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
-import com.eklanku.otuChat.ui.activities.payment.models.DataNominal;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.Utils;
-import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
-import com.eklanku.otuChat.ui.activities.payment.models.DataNominal;
-import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
-import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
 import java.util.HashMap;
@@ -72,7 +57,6 @@ public class TransPGN extends AppCompatActivity {
     Button btnBayar;
     String //id_member,
             load_id = "PGN", selected_operator;
-    ApiInterface mApiInterface;
     Dialog loadingDialog;
     ArrayAdapter<String> adapter;
 
@@ -113,7 +97,6 @@ public class TransPGN extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
 

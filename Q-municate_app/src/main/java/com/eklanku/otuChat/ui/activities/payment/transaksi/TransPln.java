@@ -1,10 +1,12 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
-import android.app.AlertDialog;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -12,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,13 +28,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProvider;
@@ -41,47 +45,26 @@ import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKonfirmasi;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
+import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapter;
+import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapterNew;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPaymentAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.Utils;
-import com.google.firebase.auth.FirebaseAuth;
-import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
-import com.eklanku.otuChat.ui.activities.payment.models.DataNominal;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProvider;
-import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
-import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerPaymentAdapter;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+;
 
 public class TransPln extends AppCompatActivity {
 
@@ -96,7 +79,6 @@ public class TransPln extends AppCompatActivity {
     TextInputLayout layoutNo;
     Button btnBayar;
     String load_id = "PLN", selected_nominal;
-    ApiInterface mApiInterface;
     ApiInterfacePayment apiInterfacePayment;
     Dialog loadingDialog;
     String[] nominal;
@@ -123,6 +105,10 @@ public class TransPln extends AppCompatActivity {
 
     ListView listPLN;
     ArrayList<String> id_paket;
+
+    LinearLayout layoutView;
+    ProgressBar progressBar;
+    TextView tvEmpty;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -160,8 +146,10 @@ public class TransPln extends AppCompatActivity {
         txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
         txtTransaksi_ke.setText("1");
 
+        layoutView = findViewById(R.id.linear_layout);
+        progressBar = findViewById(R.id.progress);
+        tvEmpty = findViewById(R.id.tv_empty);
 
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
 
        /* //loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
         spinnerProviderAdapter = new SpinnerPpobAdapter(getApplicationContext(), arrayProvider);
@@ -251,7 +239,8 @@ public class TransPln extends AppCompatActivity {
 
     private void load() {
         // loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
-        loadProduct(strUserID, strAccessToken, strAplUse, strProductType);
+        //loadProduct(strUserID, strAccessToken, strAplUse, strProductType);
+        getProductPLNToken();
         layoutNominal.setVisibility(View.VISIBLE);
         rbPln = "Token Listrik";
         btnBayar.setText("BELI");
@@ -407,12 +396,14 @@ public class TransPln extends AppCompatActivity {
                 spinnerProvider.setAdapter(adapter);
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
-                    String error = response.body().getError();
+                    String error = response.body().getRespMessage();
 
                     if (status.equals("SUCCESS")) {
                         final List<DataListPPOB> result = response.body().getProductList();
                         nama_operator = new String[result.size()];
                         selected_operator = result.get(0).getCode();
+
+                        Toast.makeText(TransPln.this, "SUCCESS " + nama_operator + " " + selected_operator, Toast.LENGTH_SHORT).show();
 
                         for (int i = 0; i < result.size(); i++) {
                             nama_operator[i] = result.get(i).getName();
@@ -432,20 +423,19 @@ public class TransPln extends AppCompatActivity {
                             }
                         });
                     } else {
+                        Toast.makeText(TransPln.this, "onFailed 1 " + titleAlert + " " + error, Toast.LENGTH_SHORT).show();
                         utilsAlert.globalDialog(TransPln.this, titleAlert, error);
-                        // Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    Toast.makeText(TransPln.this, "onFailed 2", Toast.LENGTH_SHORT).show();
                     utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-//                loadingDialog.dismiss();
+                Toast.makeText(TransPln.this, "onFailure " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -690,7 +680,7 @@ public class TransPln extends AppCompatActivity {
                     dialog.setCancelable(false);
                     dialog.setTitle("Peringatan Transaksi!!!");
 
-                    code = id_paket.get(position);
+                    code = listCode.get(position);
 
                     btnYes = (Button) dialog.findViewById(R.id.btn_yes);
                     btnNo = (Button) dialog.findViewById(R.id.btn_no);
@@ -743,12 +733,106 @@ public class TransPln extends AppCompatActivity {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
 
         params.height = totalHeight + (listView.getDividerHeight() *
-                (listAdapter.getCount()-1));
+                (listAdapter.getCount() - 1));
 
-        Log.d("OPPO-1", "setListViewHeightBasedOnChildren: "+totalHeight + (listView.getDividerHeight() *
-                (listAdapter.getCount()-1)));
+        Log.d("OPPO-1", "setListViewHeightBasedOnChildren: " + totalHeight + (listView.getDividerHeight() *
+                (listAdapter.getCount() - 1)));
 
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    //==============================================NEW API================================================
+    ArrayList<String> listCode;
+    ArrayList<String> listPrice;
+    ArrayList<String> listName;
+    ArrayList<String> listEP;
+    ArrayList<String> listisActive;
+    ArrayList<String> listType;
+    ArrayList<String> listProviderProduct;
+
+    public void getProductPLNToken() {
+        showProgress(false);
+        Call<DataAllProduct> getproduk_plntoken = apiInterfacePayment.getproduct_plntoken(strUserID, strAccessToken, strAplUse);
+        getproduk_plntoken.enqueue(new Callback<DataAllProduct>() {
+            @Override
+            public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
+                showProgress(false);
+                if (response.isSuccessful()) {
+                    listCode = new ArrayList<>();
+                    listPrice = new ArrayList<>();
+                    listName = new ArrayList<>();
+                    listEP = new ArrayList<>();
+                    listisActive = new ArrayList<>();
+                    listType = new ArrayList<>();
+                    listProviderProduct = new ArrayList<>();
+                    listCode.clear();
+                    listPrice.clear();
+                    listName.clear();
+                    listEP.clear();
+                    listisActive.clear();
+                    listType.clear();
+                    listProviderProduct.clear();
+                    String status = response.body().getStatus();
+                    String respMessage = response.body().getRespMessage();
+                    if (status.equalsIgnoreCase("SUCCESS")) {
+                        List<DataProduct> data = response.body().getData();
+                        for (int i = 0; i < data.size(); i++) {
+                            listCode.add(data.get(i).getCode());
+                            listPrice.add(data.get(i).getPrice());
+                            listName.add(data.get(i).getName());
+                            listEP.add(data.get(i).getEp());
+                            listisActive.add(data.get(i).getIsActive());
+                            listType.add(data.get(i).getType());
+                            listProviderProduct.add(data.get(i).getProvider());
+                        }
+                        Log.d("OPPO-1", "onResponse: " + listCode);
+                        SpinnerAdapterNew adapter = new SpinnerAdapterNew(getApplicationContext(), listName, listPrice, listEP, listProviderProduct, "PLN TOKEN");
+                        listPLN.setAdapter(adapter);
+                    } else {
+                        utilsAlert.globalDialog(TransPln.this, titleAlert, respMessage);
+                    }
+                } else {
+                    utilsAlert.globalDialog(TransPln.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataAllProduct> call, Throwable t) {
+                showProgress(false);
+                utilsAlert.globalDialog(TransPln.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
+            }
+        });
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
+        }
     }
 }

@@ -1,8 +1,12 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -19,7 +23,9 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +35,11 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKonfirmasi;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
+import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapter;
+import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapterNew;
 import com.eklanku.otuChat.utils.Utils;
 
 import java.util.ArrayList;
@@ -44,13 +50,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TransVouchergame_product extends AppCompatActivity{
+public class TransVouchergame_product extends AppCompatActivity {
 
     ListView lvProductGame;
 
     ApiInterfacePayment apiInterfacePayment;
     PreferenceManager preferenceManager;
-    ApiInterface mApiInterface;
 
     Dialog loadingDialog;
     String strUserID, strAccessToken, strAplUse = "OTU";
@@ -69,6 +74,16 @@ public class TransVouchergame_product extends AppCompatActivity{
 
     TextInputLayout layoutNo;
 
+    ArrayList<String> _listnama;
+    ArrayList<String> _listprice;
+    ArrayList<String> _listep;
+    ArrayList<String> _listProvide;
+    ArrayList<String> _listCode;
+    String _namaProvider;
+
+    LinearLayout layoutView;
+    ProgressBar progressBar;
+    TextView tvEmpty;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,7 +100,6 @@ public class TransVouchergame_product extends AppCompatActivity{
         transKe.setText("1");
         layoutNo = findViewById(R.id.txtLayoutTransPulsaNo);
 
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
 
@@ -93,15 +107,39 @@ public class TransVouchergame_product extends AppCompatActivity{
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
-        String jnsGame = extras.getString("jnsGame");
-
-        Log.d("OPPO-1", "onCreate: "+jnsGame);
-        noPel.addTextChangedListener(new txtWatcher(noPel));
-
-        loadProduct(strUserID, strAccessToken, strAplUse, jnsGame);
+        layoutView = findViewById(R.id.linear_layout);
+        progressBar = findViewById(R.id.progress);
+        tvEmpty = findViewById(R.id.tv_empty);
 
         initializeResources();
+        noPel.addTextChangedListener(new txtWatcher(noPel));
 
+        _listnama = new ArrayList<>();
+        _listprice = new ArrayList<>();
+        _listep = new ArrayList<>();
+        _listProvide = new ArrayList<>();
+        _listCode= new ArrayList<>();
+
+        _listnama.clear();
+        _listprice.clear();
+        _listep.clear();
+        _listProvide.clear();
+        _listCode.clear();
+
+        _listnama = extras.getStringArrayList("listName");
+        _listprice = extras.getStringArrayList("listPrice");
+        _listep =  extras.getStringArrayList("listEP");
+        _listProvide =  extras.getStringArrayList("listProvider");
+        _listCode =  extras.getStringArrayList("listCode");
+        _namaProvider = extras.getString("jnsGame");
+        Log.d("OPPO-1", "onCreate>>>>>>>>>>>>>>>>: " + _listnama);
+
+        addList();
+    }
+
+    public void addList(){
+        SpinnerAdapterNew adapter = new SpinnerAdapterNew(getApplicationContext(), _listnama, _listprice, _listep, _listProvide, _namaProvider);
+        lvProductGame.setAdapter(adapter);
     }
 
     private class txtWatcher implements TextWatcher {
@@ -129,8 +167,8 @@ public class TransVouchergame_product extends AppCompatActivity{
     }
 
 
-    public void loadProduct(String userID, String accessToken, String aplUse, String voucherGame){
-        try{
+    public void loadProduct(String userID, String accessToken, String aplUse, String voucherGame) {
+        try {
             loadingDialog = ProgressDialog.show(TransVouchergame_product.this, "Harap Tunggu", "Mengambil Data...");
             loadingDialog.setCanceledOnTouchOutside(true);
 
@@ -139,10 +177,10 @@ public class TransVouchergame_product extends AppCompatActivity{
                 @Override
                 public void onResponse(Call<LoadDataResponseProduct> call, Response<LoadDataResponseProduct> response) {
                     loadingDialog.dismiss();
-                    if(response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         String status = response.body().getStatus();
                         String respMessage = response.body().getRespMessage();
-                        if(status.equalsIgnoreCase("SUCCESS")){
+                        if (status.equalsIgnoreCase("SUCCESS")) {
 
                             List<String> listPrice = new ArrayList<String>();
                             List<String> listNama = new ArrayList<String>();
@@ -181,7 +219,7 @@ public class TransVouchergame_product extends AppCompatActivity{
                 }
             });
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -267,7 +305,7 @@ public class TransVouchergame_product extends AppCompatActivity{
                 dialog.setCancelable(false);
                 dialog.setTitle("Peringatan Transaksi!!!");
 
-                code = id_paket.get(position);
+                code = _listCode.get(position);
                 btnYes = (Button) dialog.findViewById(R.id.btn_yes);
                 btnNo = (Button) dialog.findViewById(R.id.btn_no);
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
@@ -344,6 +382,37 @@ public class TransVouchergame_product extends AppCompatActivity{
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
         }
     }
 }

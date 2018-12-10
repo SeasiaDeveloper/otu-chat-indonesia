@@ -13,9 +13,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models2.ResetPINResponse;
-import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.payment.models.ResetPINResponse;
+import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.Utils;
 import com.eklanku.otuChat.R;
 

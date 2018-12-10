@@ -11,13 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models2.DataDetailProfile;
-import com.eklanku.otuChat.ui.activities.payment.models2.DataProfile;
-import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile;
+import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
+import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.Utils;
 import com.eklanku.otuChat.R;
@@ -255,22 +254,29 @@ public class Profile extends AppCompatActivity {
     }
 
     public void EXupdateProfil() {
-        if (txtEmail.getText().toString().equals("") &&
-                txtKtp.getText().toString().equals("") &&
-                txtAddress.getText().toString().equals("") &&
-                txtCity.getText().toString().equals("")) {
 
-            Intent intent = new Intent(getBaseContext(), updateProfile.class);
-            intent.putExtra("idmember", txtId.getText().toString());
-            intent.putExtra("name", txtName.getText().toString());
-            intent.putExtra("upline", txtidUpline.getText().toString());
-            intent.putExtra("carrier", txtCarrier.getText().toString());
-            intent.putExtra("sponsorname", txtSponsorName.getText().toString());
-            intent.putExtra("sponsorhp", txtSponsorHp.getText().toString());
-            intent.putExtra("bonus", txtidUpline.getText().toString());
-            startActivity(intent);
-        } else {
-            Toast.makeText(getBaseContext(), "Data Sudah di Lengkapi", Toast.LENGTH_SHORT).show();
-        }
+
+        Intent intent = new Intent(getBaseContext(), updateProfile.class);
+        intent.putExtra("idmember", txtId.getText().toString());
+        intent.putExtra("name", txtName.getText().toString());
+        intent.putExtra("ktp", txtKtp.getText().toString());
+        intent.putExtra("tgllahir", txtanggallahir.getText().toString());
+        intent.putExtra("alamat", txtAddress.getText().toString());
+        intent.putExtra("kota", txtCity.getText().toString());
+        intent.putExtra("nohp_member", txnomorhpmember.getText().toString());
+        intent.putExtra("email", txtEmail.getText().toString());
+        intent.putExtra("karirmember", txtCarrier.getText().toString());
+        intent.putExtra("tgldaftar", txtanggaldaftar.getText().toString());
+
+        intent.putExtra("bank", txbank.getText().toString());
+        intent.putExtra("norec", txnorek.getText().toString());
+        intent.putExtra("pemilikrec", txpemilikrek.getText().toString());
+
+        intent.putExtra("idupline", txtidUpline.getText().toString());
+        intent.putExtra("namaupline", txtSponsorName.getText().toString());
+        intent.putExtra("hpsponsor", txtSponsorHp.getText().toString());
+        intent.putExtra("karirsponsor", txtjabatanupline.getText().toString());
+        startActivity(intent);
+
     }
 }

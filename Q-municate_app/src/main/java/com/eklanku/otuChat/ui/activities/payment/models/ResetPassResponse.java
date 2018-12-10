@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class ResetPassResponse {
 
+    @SerializedName("errNumber")
+    private String errNumber;
+
     @SerializedName("userID")
     private String userID;
 
@@ -13,11 +16,16 @@ public class ResetPassResponse {
     @SerializedName("status")
     private String status;
 
-    @SerializedName("resetToken")
-    private String resetToken;
-
     @SerializedName("respMessage")
     private String respMessage;
+
+    public String getErrNumber() {
+        return errNumber;
+    }
+
+    public void setErrNumber(String errNumber) {
+        this.errNumber = errNumber;
+    }
 
     public String getUserID() {
         return userID;
@@ -41,14 +49,6 @@ public class ResetPassResponse {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getResetToken() {
-        return resetToken;
-    }
-
-    public void setResetToken(String resetToken) {
-        this.resetToken = resetToken;
     }
 
     public String getRespMessage() {

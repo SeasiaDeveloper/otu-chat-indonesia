@@ -15,30 +15,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.main.Utils;
 import com.eklanku.otuChat.ui.activities.payment.models.LoginResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.google.firebase.auth.FirebaseAuth;
-import com.eklanku.otuChat.ui.activities.main.MainActivity;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.main.Utils;
-import com.eklanku.otuChat.ui.activities.payment.models.LoginResponse;
-import com.eklanku.otuChat.ui.activities.payment.models.RegisterResponse;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import butterknife.ButterKnife;
@@ -46,19 +33,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+;
+
 
 public class PaymentLogin extends AppCompatActivity {
 
-    TextInputLayout //layoutEmail,
+    TextInputLayout
             layoutPass;
-    EditText //txtEmail,
-            txtPass;
+    EditText txtPass;
     TextView lblDaftar,
             lblInfo;
     Button btnLogin;
     Dialog loadingDialog;
 
-    private ApiInterface mApiInterface;
     private PreferenceManager preferenceManager;
     private ApiInterfacePayment apiInterfacePayment;
     private String strUserID, strToken, strSecurityCode;
@@ -73,14 +60,8 @@ public class PaymentLogin extends AppCompatActivity {
 
         initializeResources();
 
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
-
-        //get userid from preference
-        //UNUSED BECAUSE request use hp number
-        /*HashMap<String, String> user = preferenceManager.getUserDetails();
-        strUserID = user.get(preferenceManager.KEY_USERID);*/
     }
 
     private void initializeResources() {
@@ -106,14 +87,12 @@ public class PaymentLogin extends AppCompatActivity {
             loadingDialog.setCanceledOnTouchOutside(true);
 
             String pass = txtPass.getText().toString().trim();
+            String encryptPass = Utils.md5(pass + "x@2564D");
             strToken = getCurrentTime();
 
-            strSecurityCode = Utils.md5(strToken + Utils.md5(pass));
-            //VOLLEY==========================
-            //login(PreferenceUtil.getNumberPhone(this)), strToken, strSecurityCode, pass);
-            //================================
+            strSecurityCode = Utils.md5(strToken + Utils.md5(encryptPass));
 
-            Log.d("OPPO-1", "userid:" + PreferenceUtil.getNumberPhone(PaymentLogin.this) + ", token:" + strSecurityCode + ", " + strToken);
+            Log.d("OPPO-1", "userid:" + PreferenceUtil.getNumberPhone(PaymentLogin.this) + ", security:" + strSecurityCode + ", token:" + strToken);
             // RETROFIT=============================================
             Call<LoginResponse> userCall = apiInterfacePayment.postLogin(PreferenceUtil.getNumberPhone(PaymentLogin.this), strToken, strSecurityCode, pass);
             userCall.enqueue(new Callback<LoginResponse>() {
@@ -127,20 +106,18 @@ public class PaymentLogin extends AppCompatActivity {
                         String userID = response.body().getUserID();
                         String accessToken = response.body().getAccessToken();
                         String respMessage = response.body().getRespMessage();
-                        String respTime = response.body().getRespTime();
-                        Log.d("AYIK", "login:payment2->" + response.body().getStatus() + response.body().getRespMessage());
                         if (status.equals("SUCCESS")) {
-
-                            //Toast.makeText(PaymentLogin.this, "userID" + userID + ", accessToken:" + accessToken, Toast.LENGTH_SHORT).show();
+                            Log.d("OPPO-1", "onResponse: " + userID + " , " + accessToken);
                             preferenceManager.createUserPayment(userID, accessToken, true);
                             PreferenceUtil.setLoginStatus(getApplicationContext(), true);
                             finish();
-                            //Log.d("AYIK", "userid:" + userID + ", token:" + accessToken);
                         } else {
+                            Log.d("OPPO-1", "onResponse: " + userID + " , " + accessToken);
                             lblInfo.setText("Error:\n" + respMessage);
                             lblInfo.setVisibility(View.VISIBLE);
                         }
                     } else {
+                        Log.d("OPPO-1", "onResponse: " + response.body());
                         Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -148,6 +125,7 @@ public class PaymentLogin extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
                     loadingDialog.dismiss();
+                    Log.d("OPPO-1", "onResponse: ========== " + t.getMessage());
                     Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                     lblInfo.setText(getResources().getString(R.string.error_api));
                     lblInfo.setVisibility(View.VISIBLE);

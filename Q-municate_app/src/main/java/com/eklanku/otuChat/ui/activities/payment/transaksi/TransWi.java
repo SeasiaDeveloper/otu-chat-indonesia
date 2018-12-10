@@ -1,10 +1,8 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,24 +35,10 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProvider;
-import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
-import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
 import com.eklanku.otuChat.utils.Utils;
 
 import java.util.ArrayList;
@@ -75,7 +58,6 @@ public class TransWi extends AppCompatActivity {
     TextInputLayout layoutNo;
     Button btnBayar;
     String load_id = "X", selected_nominal;
-    ApiInterface mApiInterface;
     Dialog loadingDialog;
     ArrayAdapter<String> adapter;
     ImageView imgopr;
@@ -131,7 +113,6 @@ public class TransWi extends AppCompatActivity {
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         //loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
         loadProduct(strUserID, strAccessToken, strAplUse, strProductType);

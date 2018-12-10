@@ -9,23 +9,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
+import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.Utils;
-import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupDetailM;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupDetailResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupKonfirmResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
 import java.text.NumberFormat;
@@ -44,7 +37,6 @@ public class TopupDetail extends AppCompatActivity {
     Dialog loadingDialog;
 
     Button btnKonfirm;
-    ApiInterface mApiInterface;
     ApiInterfacePayment mApiInterfacePayment;
 
     PreferenceManager preferenceManager;
@@ -65,8 +57,7 @@ public class TopupDetail extends AppCompatActivity {
         utilsAlert = new Utils(TopupDetail.this);
 
         id = getIntent().getExtras().getString("id", "");
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
-        mApiInterfacePayment = ApiClient.getClient().create(ApiInterfacePayment.class);
+        mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
         preferenceManager = new PreferenceManager(this);
 
@@ -83,7 +74,7 @@ public class TopupDetail extends AppCompatActivity {
     private void loadData() {
         loadingDialog = ProgressDialog.show(TopupDetail.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Call<TopupDetailResponse> dataCall = mApiInterface.getTopupDetail(id);
+        Call<TopupDetailResponse> dataCall = mApiInterfacePayment.getTopupDetail(id);
         dataCall.enqueue(new Callback<TopupDetailResponse>() {
             @Override
             public void onResponse(Call<TopupDetailResponse> call, Response<TopupDetailResponse> response) {
@@ -169,7 +160,7 @@ public class TopupDetail extends AppCompatActivity {
             Log.d("OPPO-1", "View.OnClickListener: "+PreferenceUtil.getNumberPhone(TopupDetail.this));
             loadingDialog = ProgressDialog.show(TopupDetail.this, "Harap Tunggu", "Memproses Pengisian Topup");
             loadingDialog.setCanceledOnTouchOutside(true);
-            Call<TopupKonfirmResponse> dataCall = mApiInterface.postTopupKonfirm(id, PreferenceUtil.getNumberPhone(TopupDetail.this));
+            Call<TopupKonfirmResponse> dataCall = mApiInterfacePayment.postTopupKonfirm(id, PreferenceUtil.getNumberPhone(TopupDetail.this));
             dataCall.enqueue(new Callback<TopupKonfirmResponse>() {
                 @Override
                 public void onResponse(Call<TopupKonfirmResponse> call, Response<TopupKonfirmResponse> response) {

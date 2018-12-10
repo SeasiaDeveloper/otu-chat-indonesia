@@ -2,10 +2,10 @@ package com.eklanku.otuChat.ui.views.banner2;
 
 import android.util.Log;
 
-import com.eklanku.otuChat.ui.activities.payment.models2.DataBannerPayment;
-import com.eklanku.otuChat.ui.activities.payment.models2.DataDetailBannerPayment;
-import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.payment.models.DataBannerPayment;
+import com.eklanku.otuChat.ui.activities.payment.models.DataDetailBannerPayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 
 import java.util.ArrayList;
 import java.util.HashMap;

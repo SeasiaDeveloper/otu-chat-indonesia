@@ -1,12 +1,14 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
-import android.app.AlertDialog;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -14,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,37 +27,30 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
+import com.eklanku.otuChat.ui.activities.payment.models.DataDetailPrefix;
+import com.eklanku.otuChat.ui.activities.payment.models.DataPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKonfirmasi;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
-import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProvider;
-import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
-import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerGameAdapter;
+import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapter;
+import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapterNew;
+import com.eklanku.otuChat.ui.adapters.payment2.SpinnerGameAdapter;
 import com.eklanku.otuChat.utils.Utils;
 
 import java.util.ArrayList;
@@ -68,6 +62,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+;
+
+
 public class TransSMS extends AppCompatActivity {
 
     SharedPreferences prefs;
@@ -76,12 +73,12 @@ public class TransSMS extends AppCompatActivity {
     TextInputLayout layoutNo;
     Button btnBayar;
     String load_id = "X", selected_nominal;
-    ApiInterface mApiInterface;
     Dialog loadingDialog;
     ArrayAdapter<String> adapter;
     ImageView imgopr;
     TextView txtopr;
-
+    LinearLayout layoutPulsa;
+    ProgressBar progressBar;
     ApiInterfacePayment apiInterfacePayment;
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strAplUse = "OTU", strProductType = "SMS";
@@ -100,11 +97,13 @@ public class TransSMS extends AppCompatActivity {
     ListView listSMS;
     ArrayList<String> id_sms;
 
+    TextView tvEmpty;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trans_sms);
+        setContentView(R.layout.activity_trans_sms2);
         ButterKnife.bind(this);
 
         utilsAlert = new Utils(TransSMS.this);
@@ -117,6 +116,7 @@ public class TransSMS extends AppCompatActivity {
         btnBayar = (Button) findViewById(R.id.btnTransSMSBayar);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         listSMS = findViewById(R.id.listSMS);
+        tvEmpty = findViewById(R.id.tv_empty);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -124,8 +124,11 @@ public class TransSMS extends AppCompatActivity {
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("BELI");
 
+        layoutPulsa = findViewById(R.id.linear_sms);
+        progressBar = findViewById(R.id.progress_sms);
+
         txtopr = (TextView) findViewById(R.id.textopr);
-        imgopr = (ImageView) findViewById(R.id.imgopr);
+        imgopr = (ImageView) findViewById(R.id.imgOpr);
 
         txtTransaksi_ke.setText("1");
 
@@ -137,9 +140,8 @@ public class TransSMS extends AppCompatActivity {
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+        // loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
 
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +186,8 @@ public class TransSMS extends AppCompatActivity {
         });
 
         initializeResources();
+        loadPrefix();
+       // getProductSMS();
     }
 
     private class txtWatcher implements TextWatcher {
@@ -199,6 +203,8 @@ public class TransSMS extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            cekPrefix(s);
         }
 
         @Override
@@ -364,7 +370,7 @@ public class TransSMS extends AppCompatActivity {
     }
 
     private void cek_transaksi() {
-        Log.d("OPPO-1", "cek_transaksi: "+code);
+        Log.d("OPPO-1", "cek_transaksi: " + code);
         loadingDialog = ProgressDialog.show(TransSMS.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
         Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtTransaksi_ke.getText().toString(), "", "", code);
@@ -463,7 +469,7 @@ public class TransSMS extends AppCompatActivity {
                     return;
                 }
 
-                code = id_sms.get(position);
+                code = code_product.get(position);
                 final Dialog dialog = new Dialog(TransSMS.this);
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -498,7 +504,256 @@ public class TransSMS extends AppCompatActivity {
 
             }
         });
+    }
 
+    //=========================================================NEW API=================================================================
+
+    ArrayList<String> listProvider;
+    ArrayList<String> listPrefix;
+
+    public void loadPrefix() {
+        showProgress(true);
+        Call<DataPrefix> prefix_sms = apiInterfacePayment.getPrefixSMS(strUserID, strAccessToken, strAplUse);
+        prefix_sms.enqueue(new Callback<DataPrefix>() {
+            @Override
+            public void onResponse(Call<DataPrefix> call, Response<DataPrefix> response) {
+                if (response.isSuccessful()) {
+                    listProvider = new ArrayList<>();
+                    listPrefix = new ArrayList<>();
+                    listProvider.clear();
+                    listPrefix.clear();
+                    String status = response.body().getStatus();
+                    String respMessage = response.body().getRespMessage();
+                    if (status.equalsIgnoreCase("SUCCESS")) {
+                        List<DataDetailPrefix> data = response.body().getData();
+                        for (int i = 0; i < data.size(); i++) {
+                            listProvider.add(data.get(i).getProvider());
+                            listPrefix.add(data.get(i).getPrefix());
+                        }
+                        getProductSMS();
+                    } else {
+                        showProgress(false);
+                        utilsAlert.globalDialog(TransSMS.this, titleAlert, respMessage);
+                    }
+                } else {
+                    showProgress(false);
+                    utilsAlert.globalDialog(TransSMS.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataPrefix> call, Throwable t) {
+                Log.d("OPPO-1", "onFailure: " + t.getMessage());
+                showProgress(false);
+                utilsAlert.globalDialog(TransSMS.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
+            }
+        });
+    }
+
+    String oprSMS = "";
+    String tempOprPulsa = "";
+    boolean statOprPulsa = false;
+    boolean otherOpr = true;
+    ArrayList<String> code_product;
+    public void cekPrefix(CharSequence s) {
+
+        ArrayList<String> a = new ArrayList<>();
+        ArrayList<String> b = new ArrayList<>();
+        ArrayList<String> c = new ArrayList<>();
+        ArrayList<String> d = new ArrayList<>();
+        code_product = new ArrayList<>();
+        SpinnerAdapterNew adapter = null;
+        listSMS.setAdapter(null);
+
+
+        try {
+            String nomorHp = "";
+            if (s.length() >= 6) {
+                String nomorHP1 = s.toString().substring(0, 2);
+                String valNomorHp = "", valNomorHP2 = "";
+                if (nomorHP1.startsWith("+6")) {
+                    valNomorHp = nomorHP1.replace("+6", "0");
+                    nomorHp = valNomorHp + s.toString().substring(3, 6);
+                } else if (nomorHP1.startsWith("62")) {
+                    valNomorHp = nomorHP1.replace("62", "0");
+                    nomorHp = valNomorHp + s.toString().substring(2, 5);
+                } else {
+                    nomorHp = s.toString().substring(0, 4);
+                }
+
+                for (int i = 0; i < listPrefix.size(); i++) {
+                    if (nomorHp.equals(listPrefix.get(i))) {
+                        oprSMS = listProvider.get(i);
+                        statOprPulsa = true;
+                        otherOpr = false;
+                        String setImgOpr = "";
+                        if (oprSMS.equalsIgnoreCase("ISAT SMS")) {
+                            setImgOpr = "indosat";
+                        } else if (oprSMS.equalsIgnoreCase("TSEL SMS")) {
+                            setImgOpr = "telkomsel";
+                        }
+                        int id = TransSMS.this.getResources().getIdentifier("mipmap/" + setImgOpr.toLowerCase(), null, TransSMS.this.getPackageName());
+                        imgopr.setImageResource(id);
+                        break;
+                    } else {
+                        a.clear();
+                        b.clear();
+                        c.clear();
+                        d.clear();
+                        code_product.clear();
+                        statOprPulsa = false;
+                        tempOprPulsa = "";
+                        btnBayar.setEnabled(true);
+                        oprSMS = "";
+                        imgopr.setImageResource(0);
+                        listSMS.setAdapter(null);
+                    }
+                }
+
+
+                for (int j = 0; j < listProviderProduct.size(); j++) {
+                    if (listProviderProduct.get(j).equalsIgnoreCase(oprSMS)) {
+                        a.add(listName.get(j));
+                        b.add(listPrice.get(j));
+                        c.add(listEP.get(j));
+                        d.add(listProviderProduct.get(j));
+                        code_product.add(listCode.get(j));
+                    }
+                }
+
+                if (a.size() >= 1 /*&& nomorHp.equals(oprPulsa)*/) {
+                    tvEmpty.setVisibility(View.GONE);
+//                    listPulsa.setVisibility(View.VISIBLE);
+                } else {
+                    tvEmpty.setVisibility(View.VISIBLE);
+//                    listPulsa.setVisibility(View.GONE);
+                }
+
+                adapter = new SpinnerAdapterNew(getApplicationContext(), a, b, c, d, oprSMS);
+                listSMS.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+                if (!oprSMS.equalsIgnoreCase(tempOprPulsa) && statOprPulsa) {
+                    tempOprPulsa = oprSMS;
+                    statOprPulsa = false;
+                    btnBayar.setEnabled(true);
+                    otherOpr = true;
+                }
+
+                if (otherOpr && oprSMS.equalsIgnoreCase("")) {
+                    otherOpr = false;
+                }
+
+            } else /*if (s.length() < 4) */{
+                listSMS.setAdapter(null);
+                a.clear();
+                b.clear();
+                c.clear();
+                d.clear();
+                listSMS.setAdapter(adapter);
+                statOprPulsa = false;
+                otherOpr = true;
+                tempOprPulsa = "";
+                imgopr.setImageResource(0);
+                btnBayar.setEnabled(false);
+            } /*else if (s.length() >= 8 && s.length() <= 13) {
+                listSMS.setAdapter(adapter);
+                btnBayar.setEnabled(false);
+                imgopr.setImageResource(0);
+            }*/
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    ArrayList<String> listCode;
+    ArrayList<String> listPrice;
+    ArrayList<String> listName;
+    ArrayList<String> listEP;
+    ArrayList<String> listIsActive;
+    ArrayList<String> listType;
+    ArrayList<String> listProviderProduct;
+
+    public void getProductSMS() {
+        Call<DataAllProduct> product_sms = apiInterfacePayment.getProduct_sms(strUserID, strAccessToken, strAplUse);
+        product_sms.enqueue(new Callback<DataAllProduct>() {
+            @Override
+            public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
+                showProgress(false);
+                if (response.isSuccessful()) {
+                    listCode = new ArrayList<>();
+                    listName = new ArrayList<>();
+                    listPrice = new ArrayList<>();
+                    listEP = new ArrayList<>();
+                    listIsActive = new ArrayList<>();
+                    listProviderProduct = new ArrayList<>();
+                    listType = new ArrayList<>();
+                    listCode.clear();
+                    listName.clear();
+                    listPrice.clear();
+                    listEP.clear();
+                    listIsActive.clear();
+                    listType.clear();
+                    String status = response.body().getStatus();
+                    String respMessage = response.body().getRespMessage();
+                    if (status.equalsIgnoreCase("SUCCESS")) {
+                        List<DataProduct> data = response.body().getData();
+                        for (int i = 0; i < data.size(); i++) {
+                            listCode.add(data.get(i).getCode());
+                            listName.add(data.get(i).getName());
+                            listPrice.add(data.get(i).getPrice());
+                            listEP.add(data.get(i).getEp());
+                            listIsActive.add(data.get(i).getIsActive());
+                            listType.add(data.get(i).getType());
+                            listProviderProduct.add(data.get(i).getProvider());
+                        }
+                    } else {
+                        utilsAlert.globalDialog(TransSMS.this, titleAlert, respMessage);
+                    }
+                } else {
+                    utilsAlert.globalDialog(TransSMS.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataAllProduct> call, Throwable t) {
+                showProgress(false);
+                utilsAlert.globalDialog(TransSMS.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
+            }
+        });
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutPulsa.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutPulsa.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutPulsa.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutPulsa.setVisibility(show ? View.GONE : View.VISIBLE);
+
+        }
     }
 
 }

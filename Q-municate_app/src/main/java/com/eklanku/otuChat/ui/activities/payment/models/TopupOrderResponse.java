@@ -8,11 +8,11 @@ public class TopupOrderResponse {
     @SerializedName("status")
     private String status;
 
-    @SerializedName("error")
+    @SerializedName("errNumber")
     private String error;
 
-    @SerializedName("data")
-    private List<PaketTopup> paketTopups;
+    /*@SerializedName("data")
+    private List<PaketTopup> paketTopups;*/
 
     public String getStatus() {
         return status;
@@ -30,13 +30,13 @@ public class TopupOrderResponse {
         this.error = error;
     }
 
-    public List<PaketTopup> getPaketTopups() {
+    /*public List<PaketTopup> getPaketTopups() {
         return paketTopups;
     }
 
     public void setPaketTopups(List<PaketTopup> paketTopups) {
         this.paketTopups = paketTopups;
-    }
+    }*/
 
     @SerializedName("userID")
     private String userID;

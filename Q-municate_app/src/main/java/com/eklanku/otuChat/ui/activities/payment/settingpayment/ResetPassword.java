@@ -2,7 +2,6 @@ package com.eklanku.otuChat.ui.activities.payment.settingpayment;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,30 +12,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.eklanku.otuChat.ui.activities.VolleyController;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.main.Utils;
-import com.eklanku.otuChat.ui.activities.payment.doku.CCPaymentActivity;
-import com.eklanku.otuChat.ui.activities.payment.models2.ResetPINResponse;
-import com.eklanku.otuChat.ui.activities.payment.models2.ResetPassResponse;
-import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.payment.models.ResetPINResponse;
+import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
+import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.utils.PreferenceUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 
 import retrofit2.Call;

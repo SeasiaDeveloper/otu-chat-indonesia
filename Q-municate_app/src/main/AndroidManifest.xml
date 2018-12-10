@@ -359,7 +359,7 @@
             android:screenOrientation="portrait" />
 
         <!-- payment -->
-        <activity android:name=".ui.activities.payment.transaksi2.PaymentLogin">
+        <activity android:name=".ui.activities.payment.transaksi.PaymentLogin">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
@@ -412,7 +412,7 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.payment.transaksi2.TransPulsa"
+            android:name=".ui.activities.payment.transaksi.TransPulsa"
             android:label="Pulsa"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
@@ -420,7 +420,7 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.payment.transaksi2.TransPaketData"
+            android:name=".ui.activities.payment.transaksi.TransPaketData"
             android:label="Paket Data"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
@@ -428,7 +428,7 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.payment.transaksi2.TransPln"
+            android:name=".ui.activities.payment.transaksi.TransPln"
             android:label="Listrik PLN"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
@@ -444,7 +444,7 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.payment.transaksi2.TransEtool"
+            android:name=".ui.activities.payment.transaksi.TransEtool"
             android:label="E-TOOL"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
@@ -460,7 +460,7 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.payment.transaksi2.TransSMS"
+            android:name=".ui.activities.payment.transaksi.TransSMS"
             android:label="SMS"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
@@ -548,7 +548,7 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.payment.transaksi2.TransVouchergame_opsi"
+            android:name=".ui.activities.payment.transaksi.TransVouchergame_opsi"
             android:label="Voucher Game"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
@@ -556,7 +556,7 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.payment.transaksi2.TransVouchergame_product"
+            android:name=".ui.activities.payment.transaksi.TransVouchergame_product"
             android:label="Voucher Game"
             android:theme="@style/AppThemePaymentItems">
             <meta-data

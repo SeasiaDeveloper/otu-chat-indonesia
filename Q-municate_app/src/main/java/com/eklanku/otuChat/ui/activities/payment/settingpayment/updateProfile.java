@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
@@ -28,10 +27,10 @@ import retrofit2.Response;
 
 public class updateProfile extends AppCompatActivity {
 
-    EditText ed_idmember, ed_name, ed_upline, ed_carrier, ed_email, ed_ktp, ed_addr, ed_city, ed_sponsor_name,
-            ed_sponsor_hp, ed_bonus, ed_pin;
+    EditText txtId, txtName, txtidUpline, txtCarrier, txtEmail, txtKtp, txtAddress, txtCity, txtSponsorName, txtSponsorHp,
+            txtjabatanupline, txtanggallahir, txnomorhpmember, txtanggaldaftar, txbank, txnorek, txpemilikrek, ed_pin;
 
-    String idmember, name, upline, carrier, sponsor_name, sponsor_hp, bonus;
+    String idmember, name, ktp, tgllahir, alamat, kota, nohp_member, email, karirmember, tgldaftar, bank, norec, pemilikrec, idupline, namaupline, hpsponsor, karirsponsor;
 
     Dialog loadingDialog;
 
@@ -44,53 +43,101 @@ public class updateProfile extends AppCompatActivity {
     com.eklanku.otuChat.utils.Utils utilsAlert;
     String titleAlert = "Profile";
 
+    Bundle extras;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_edit_profile_payment);
 
         utilsAlert = new com.eklanku.otuChat.utils.Utils(updateProfile.this);
+        extras = getIntent().getExtras();
 
-        ed_idmember = findViewById(R.id.edt_idmember);
-        ed_name = findViewById(R.id.edt_name);
-        ed_upline = findViewById(R.id.edt_upline);
-        ed_carrier = findViewById(R.id.edt_carreer);
-        ed_email = findViewById(R.id.edt_email);
-        ed_ktp = findViewById(R.id.edt_ktp);
-        ed_addr = findViewById(R.id.edt_addres);
-        ed_city = findViewById(R.id.edt_city);
-        ed_sponsor_name = findViewById(R.id.edt_sponsor);
-        ed_sponsor_hp = findViewById(R.id.edt_sponsor_hp);
-        ed_bonus = findViewById(R.id.edt_bonus);
-        ed_pin = findViewById(R.id.txt_pin_update);
+        //==========data member==============
+        txtId = findViewById(R.id.txt_profile_id);
+        txtName = findViewById(R.id.txt_profile_name);
+        txtKtp = findViewById(R.id.txt_profile_ktp);
+        txtanggallahir = findViewById(R.id.txt_tgl_lahir);
+        txtAddress = findViewById(R.id.txt_profile_address);
+        txtCity = findViewById(R.id.txt_profile_city);
+        txnomorhpmember = findViewById(R.id.txt_nomor_hp);
+        txtEmail = findViewById(R.id.txt_profile_email);
+        txtCarrier = findViewById(R.id.txt_profile_carrier);
+        txtanggaldaftar = findViewById(R.id.txt_tanggal_daftar);
 
+        //===========data bank member
+        txbank = findViewById(R.id.txt_bank);
+        txnorek = findViewById(R.id.txt_nomor_rekening);
+        txpemilikrek = findViewById(R.id.txt_pemilik_rekening);
+
+        //==========data sponsor
+        txtidUpline = findViewById(R.id.txt_id_upline);
+        txtSponsorName = findViewById(R.id.txt_profile_sponsor_name);
+        txtSponsorHp = findViewById(R.id.txt_profile_sponsor_hp);
+        txtjabatanupline = findViewById(R.id.txt_jabatan_upline);
+
+        ed_pin = findViewById(R.id.txtPinUpdateProfil);
         btnUpdate = findViewById(R.id.btnupdate);
+
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
+        //set data profil
+        idmember = extras.getString("idmember");
+        name = extras.getString("name");
+        ktp = extras.getString("ktp");
+        tgllahir = extras.getString("tgllahir");
+        alamat = extras.getString("alamat");
+        kota = extras.getString("kota");
+        nohp_member = extras.getString("nohp_member");
+        email = extras.getString("email");
+        karirmember = extras.getString("karirmember");
+        tgldaftar = extras.getString("tgldaftar");
+        bank = extras.getString("bank");
+        norec = extras.getString("norec");
+        pemilikrec = extras.getString("pemilikrec");
+        idupline = extras.getString("idupline");
+        namaupline = extras.getString("namaupline");
+        hpsponsor = extras.getString("hpsponsor");
+        karirsponsor = extras.getString("karirsponsor");
 
-        idmember = getIntent().getExtras().getString("idmember", "");
-        name = getIntent().getExtras().getString("name", "");
-        upline = getIntent().getExtras().getString("upline", "");
-        carrier = getIntent().getExtras().getString("carrier", "");
-        sponsor_name = getIntent().getExtras().getString("sponsorname", "");
-        sponsor_hp = getIntent().getExtras().getString("sponsorhp", "");
-        bonus = getIntent().getExtras().getString("bonus", "");
+        //==========data member==============
+        txtId.setText(idmember);
+        txtName.setText(name);
+        txtKtp.setText(ktp);
+        txtanggallahir.setText(tgllahir);
+        txtAddress.setText(alamat);
+        txtCity.setText(kota);
+        txnomorhpmember.setText(nohp_member);
+        txtEmail.setText(email);
+        txtCarrier.setText(karirmember);
+        txtanggaldaftar.setText(tgldaftar);
 
-        ed_idmember.setText(idmember);
-        ed_name.setText(name);
-        ed_upline.setText(upline);
-        ed_carrier.setText(carrier);
-        ed_sponsor_name.setText(sponsor_name);
-        ed_sponsor_hp.setText(sponsor_hp);
-        ed_bonus.setText(bonus);
+        //===============data bank==============
+        txbank.setText(bank);
+        txnorek.setText(norec);
+        txpemilikrek.setText(pemilikrec);
 
-        requestFocus(ed_email);
+        //==========data sponsor
+        txtidUpline.setText(idupline);
+        txtSponsorName.setText(namaupline);
+        txtSponsorHp.setText(hpsponsor);
+        txtjabatanupline.setText(karirsponsor);
+
+        txtId.setEnabled(false);
+        txtCarrier.setEnabled(false);
+        txtanggaldaftar.setEnabled(false);
+        txtidUpline.setEnabled(false);
+        txtSponsorName.setEnabled(false);
+        txtSponsorHp.setEnabled(false);
+        txtjabatanupline.setEnabled(false);
+        txbank.setEnabled(false);
+        txnorek.setEnabled(false);
+        txpemilikrek.setEnabled(false);
+
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,24 +148,15 @@ public class updateProfile extends AppCompatActivity {
     }
 
     public void updateProfil() {
-        Log.d("OPPO-1", "getProfile: running get profil "+ed_pin.getText().toString());
+        Log.d("OPPO-1", "getProfile: running get profil " + ed_pin.getText().toString());
         loadingDialog = ProgressDialog.show(updateProfile.this, "Harap Tunggu", "Update data profil...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
         String secCode = ed_pin.getText().toString() + "x@2016ekl";
         strSecurityCode = Utils.md5(secCode);
 
-        Log.d("OPPO-1", "strUserID: "+strUserID);
-        Log.d("OPPO-1", "strApIUse: "+strApIUse);
-        Log.d("OPPO-1", "strAccessToken: "+strAccessToken);
-        Log.d("OPPO-1", "strSecurityCode: "+strSecurityCode);
-        Log.d("OPPO-1", "ed_email.getText().toString(): "+ed_email.getText().toString());
-        Log.d("OPPO-1", "ed_city.getText().toString(): "+ed_city.getText().toString());
-        Log.d("OPPO-1", "ed_addr.getText().toString(): "+ed_addr.getText().toString());
-        Log.d("OPPO-1", "ed_ktp.getText().toString(): "+ed_ktp.getText().toString());
-
-        Call<DataProfile> callProfil = mApiInterfacePayment.updateProfile(strUserID, strApIUse, strAccessToken, strSecurityCode,
-                ed_email.getText().toString(), ed_city.getText().toString(), ed_addr.getText().toString(), ed_ktp.getText().toString());
+        Call<DataProfile> callProfil = mApiInterfacePayment.updateProfil(strUserID, strApIUse, strAccessToken, txtEmail.getText().toString(), txtCity.getText().toString(),
+                txtAddress.getText().toString(), txtKtp.getText().toString(), txtanggallahir.getText().toString(), strSecurityCode);
         callProfil.enqueue(new Callback<DataProfile>() {
             @Override
             public void onResponse(Call<DataProfile> call, Response<DataProfile> response) {

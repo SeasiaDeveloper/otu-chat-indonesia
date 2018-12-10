@@ -9,289 +9,680 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ID Member"
-                android:textColor="@color/colorTextOtu"
-                android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/edt_idmember"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/custom_spinner"
-                    android:enabled="false"
-                    android:hint="ID Member"
-                    android:textSize="@dimen/text_14"
-                    android:padding="@dimen/density_16"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
-                    android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16"/>
-
+                android:src="@drawable/ic_logo_otu" />
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DATA MEMBER" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorTextOtu" />
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Name"
-                android:textColor="@color/colorTextOtu"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="ID Member" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
 
                 <EditText
-                    android:id="@+id/edt_name"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txt_profile_id"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_spinner"
-                    android:enabled="false"
-                    android:hint="Name"
-                    android:textSize="@dimen/text_14"
-                    android:padding="@dimen/density_16"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
-                    android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16"/>
+                    android:layout_weight="2.5"
+                    android:textColor="@color/grey" />
+            </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Nama" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
+
+                <EditText
+                    android:id="@+id/txt_profile_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="KTP" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
+
+                <EditText
+                    android:id="@+id/txt_profile_ktp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Tanggal lahir" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
+
+                <EditText
+                    android:id="@+id/txt_tgl_lahir"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Alamat" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
+
+                <EditText
+                    android:id="@+id/txt_profile_address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Kota" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
+
+                <EditText
+                    android:id="@+id/txt_profile_city"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Nomor HP" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
+
+                <EditText
+                    android:id="@+id/txt_nomor_hp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Email" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
+
+                <EditText
+                    android:id="@+id/txt_profile_email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Karir" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
+
+                <EditText
+                    android:id="@+id/txt_profile_carrier"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:textColor="@color/grey" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Tanggal Daftar" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
+
+                <EditText
+                    android:id="@+id/txt_tanggal_daftar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:textColor="@color/grey" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DATA BANK" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorTextOtu" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Upline"
-                android:textColor="@color/colorTextOtu"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Bank" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
 
                 <EditText
-                    android:id="@+id/edt_upline"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txt_bank"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_spinner"
-                    android:enabled="false"
-                    android:hint="Upline"
-                    android:textSize="@dimen/text_14"
-                    android:padding="@dimen/density_16"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
-                    android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16"/>
+                    android:layout_weight="2.5"
+                    android:textColor="@color/grey"/>
+            </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Nomor Rekening" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
+
+                <EditText
+                    android:id="@+id/txt_nomor_rekening"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:textColor="@color/grey"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Pemilik Rekening" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
+
+                <EditText
+                    android:id="@+id/txt_pemilik_rekening"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:textColor="@color/grey"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DATA UPLINE" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorTextOtu" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Carrier"
-                android:textColor="@color/colorTextOtu"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="ID Upline" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
 
                 <EditText
-                    android:id="@+id/edt_carreer"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txt_id_upline"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_spinner"
-                    android:enabled="false"
-                    android:hint="Carrier"
-                    android:textSize="@dimen/text_14"
-                    android:padding="@dimen/density_16"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
-                    android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16"/>
+                    android:layout_weight="2.5"
+                    android:textColor="@color/grey" />
+            </LinearLayout>
 
 
-            <TextView
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Email"
-                android:textColor="@color/colorTextOtu"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Sponsor Name" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
 
                 <EditText
-                    android:id="@+id/edt_email"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txt_profile_sponsor_name"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_spinner"
-                    android:hint="Masukkan Email"
-                    android:textSize="@dimen/text_14"
-                    android:padding="@dimen/density_16"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
-                    android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16"/>
+                    android:layout_weight="2.5"
+                    android:textColor="@color/grey" />
+            </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Identitas KTP"
-                android:textColor="@color/colorTextOtu"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Sponsor HP" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
 
                 <EditText
-                    android:id="@+id/edt_ktp"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txt_profile_sponsor_hp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_spinner"
-                    android:hint="Masukkan identitas KTP"
-                    android:textSize="@dimen/text_14"
-                    android:padding="@dimen/density_16"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
-                    android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16"/>
+                    android:layout_weight="2.5"
+                    android:textColor="@color/grey" />
+            </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Address"
-                android:textColor="@color/colorTextOtu"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="Karir" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":" />
 
                 <EditText
-                    android:id="@+id/edt_addres"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txt_jabatan_upline"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_spinner"
-                    android:hint="Masukkan Alamat"
-                    android:textSize="@dimen/text_14"
-                    android:padding="@dimen/density_16"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
-                    android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16"/>
+                    android:layout_weight="2.5"
+                    android:textColor="@color/grey" />
 
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="City"
-                android:textColor="@color/colorTextOtu"
-                android:textStyle="bold"/>
-
-
-
-                <EditText
-                    android:id="@+id/edt_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/custom_spinner"
-                    android:hint="Masukkan Kota"
-                    android:textSize="@dimen/text_14"
-                    android:padding="@dimen/density_16"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
-                    android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16"/>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sponsor Name"
-                android:textColor="@color/colorTextOtu"
-                android:textStyle="bold" />
-
-
-
-                <EditText
-                    android:id="@+id/edt_sponsor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/custom_spinner"
-                    android:enabled="false"
-                    android:hint="Sponsor Name"
-                    android:inputType="phone"
-                    android:textSize="@dimen/text_14"
-                    android:padding="@dimen/density_16"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
-                    android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16"/>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sponsor HP"
-                android:textColor="@color/colorTextOtu"
-                android:textStyle="bold" />
-
-
-                <EditText
-                    android:id="@+id/edt_sponsor_hp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/custom_spinner"
-                    android:enabled="false"
-                    android:hint="Sponsor HP"
-                    android:textSize="@dimen/text_14"
-                    android:padding="@dimen/density_16"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
-                    android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16"/>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Bonus"
-                android:textColor="@color/colorTextOtu"
-                android:textStyle="bold" />
-
-
-                <EditText
-                    android:id="@+id/edt_bonus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/custom_spinner"
-                    android:enabled="false"
-                    android:hint="Bonus"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
-                    android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16"/>
-
+            </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/txtLayoutLoginPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txtLayoutLoginEmail"
+                android:layout_below="@id/lbketerangan"
                 app:passwordToggleContentDescription="Password"
                 app:passwordToggleEnabled="true">
 
                 <EditText
-                    android:id="@+id/txt_pin_update"
+                    android:id="@+id/txtPinUpdateProfil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/custom_bg_text"
                     android:drawableLeft="@drawable/ic_key"
                     android:drawableStart="@drawable/ic_key"
+                    android:ems="10"
                     android:hint="Masukkan PIN"
                     android:inputType="textPassword"
-                    android:ems="10"
                     android:paddingBottom="@dimen/density_16"
                     android:paddingLeft="@dimen/density_8"
                     android:paddingStart="@dimen/density_8"
-                    android:paddingTop="@dimen/density_16" />
+                    android:paddingTop="@dimen/density_16"
+                    android:layout_marginTop="@dimen/density_8"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -313,8 +704,308 @@
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />
             </LinearLayout>
-        </LinearLayout>
 
+        </LinearLayout>
     </ScrollView>
+
+    <!--<ScrollView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="ID Member"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/edt_idmember"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_bottom_border_green"-->
+    <!--android:enabled="false"-->
+    <!--android:hint="ID Member"-->
+    <!--android:textSize="@dimen/text_14"-->
+    <!--android:padding="@dimen/density_16"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16"/>-->
+
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Nama"-->
+    <!--android:textStyle="bold" />-->
+
+
+    <!--<EditText-->
+    <!--android:id="@+id/edt_name"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_bottom_border_green"-->
+    <!--android:enabled="false"-->
+    <!--android:hint="Nama"-->
+    <!--android:textSize="@dimen/text_14"-->
+    <!--android:padding="@dimen/density_16"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16"/>-->
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Identitas KTP"-->
+    <!--android:textColor="@color/colorTextOtu"-->
+    <!--android:textStyle="bold" />-->
+
+
+    <!--<EditText-->
+    <!--android:id="@+id/edt_ktp"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_bottom_border_green"-->
+    <!--android:hint="Masukkan identitas KTP"-->
+    <!--android:textSize="@dimen/text_14"-->
+    <!--android:padding="@dimen/density_16"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16"/>-->
+
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Upline"-->
+    <!--android:textColor="@color/colorTextOtu"-->
+    <!--android:textStyle="bold" />-->
+
+
+    <!--<EditText-->
+    <!--android:id="@+id/edt_upline"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_spinner"-->
+    <!--android:enabled="false"-->
+    <!--android:hint="Upline"-->
+    <!--android:textSize="@dimen/text_14"-->
+    <!--android:padding="@dimen/density_16"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16"/>-->
+
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Carrier"-->
+    <!--android:textColor="@color/colorTextOtu"-->
+    <!--android:textStyle="bold" />-->
+
+
+    <!--<EditText-->
+    <!--android:id="@+id/edt_carreer"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_spinner"-->
+    <!--android:enabled="false"-->
+    <!--android:hint="Carrier"-->
+    <!--android:textSize="@dimen/text_14"-->
+    <!--android:padding="@dimen/density_16"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16"/>-->
+
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Email"-->
+    <!--android:textColor="@color/colorTextOtu"-->
+    <!--android:textStyle="bold" />-->
+
+
+    <!--<EditText-->
+    <!--android:id="@+id/edt_email"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_spinner"-->
+    <!--android:hint="Masukkan Email"-->
+    <!--android:textSize="@dimen/text_14"-->
+    <!--android:padding="@dimen/density_16"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16"/>-->
+
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Address"-->
+    <!--android:textColor="@color/colorTextOtu"-->
+    <!--android:textStyle="bold" />-->
+
+
+    <!--<EditText-->
+    <!--android:id="@+id/edt_addres"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_spinner"-->
+    <!--android:hint="Masukkan Alamat"-->
+    <!--android:textSize="@dimen/text_14"-->
+    <!--android:padding="@dimen/density_16"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16"/>-->
+
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="City"-->
+    <!--android:textColor="@color/colorTextOtu"-->
+    <!--android:textStyle="bold"/>-->
+
+
+    <!--<EditText-->
+    <!--android:id="@+id/edt_city"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_spinner"-->
+    <!--android:hint="Masukkan Kota"-->
+    <!--android:textSize="@dimen/text_14"-->
+    <!--android:padding="@dimen/density_16"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16"/>-->
+
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Sponsor Name"-->
+    <!--android:textColor="@color/colorTextOtu"-->
+    <!--android:textStyle="bold" />-->
+
+
+    <!--<EditText-->
+    <!--android:id="@+id/edt_sponsor"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_spinner"-->
+    <!--android:enabled="false"-->
+    <!--android:hint="Sponsor Name"-->
+    <!--android:inputType="phone"-->
+    <!--android:textSize="@dimen/text_14"-->
+    <!--android:padding="@dimen/density_16"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16"/>-->
+
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Sponsor HP"-->
+    <!--android:textColor="@color/colorTextOtu"-->
+    <!--android:textStyle="bold" />-->
+
+
+    <!--<EditText-->
+    <!--android:id="@+id/edt_sponsor_hp"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_spinner"-->
+    <!--android:enabled="false"-->
+    <!--android:hint="Sponsor HP"-->
+    <!--android:textSize="@dimen/text_14"-->
+    <!--android:padding="@dimen/density_16"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16"/>-->
+
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Bonus"-->
+    <!--android:textColor="@color/colorTextOtu"-->
+    <!--android:textStyle="bold" />-->
+
+
+    <!--<EditText-->
+    <!--android:id="@+id/edt_bonus"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_spinner"-->
+    <!--android:enabled="false"-->
+    <!--android:hint="Bonus"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16"/>-->
+
+
+    <!--<android.support.design.widget.TextInputLayout-->
+    <!--android:id="@+id/txtLayoutLoginPassword"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@id/txtLayoutLoginEmail"-->
+    <!--app:passwordToggleContentDescription="Password"-->
+    <!--app:passwordToggleEnabled="true">-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/txt_pin_update"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/custom_bg_text"-->
+    <!--android:drawableLeft="@drawable/ic_key"-->
+    <!--android:drawableStart="@drawable/ic_key"-->
+    <!--android:hint="Masukkan PIN"-->
+    <!--android:inputType="textPassword"-->
+    <!--android:ems="10"-->
+    <!--android:paddingBottom="@dimen/density_16"-->
+    <!--android:paddingLeft="@dimen/density_8"-->
+    <!--android:paddingStart="@dimen/density_8"-->
+    <!--android:paddingTop="@dimen/density_16" />-->
+
+    <!--</android.support.design.widget.TextInputLayout>-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="10dp">-->
+
+    <!--<Button-->
+    <!--android:id="@+id/btnupdate"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_marginTop="@dimen/density_16"-->
+    <!--android:background="@drawable/custom_round_green_dark"-->
+    <!--android:drawableEnd="@drawable/ic_next_white"-->
+    <!--android:drawableRight="@drawable/ic_next_white"-->
+    <!--android:text="Simpan"-->
+    <!--android:textColor="#FFFFFF"-->
+    <!--android:textStyle="bold" />-->
+    <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+
+    <!--</ScrollView>-->
 
 </RelativeLayout>

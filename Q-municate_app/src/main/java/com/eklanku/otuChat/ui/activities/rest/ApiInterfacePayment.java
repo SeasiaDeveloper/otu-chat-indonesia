@@ -1,10 +1,15 @@
 package com.eklanku.otuChat.ui.activities.rest;
 
+import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
+import com.eklanku.otuChat.ui.activities.payment.models.DataBannerPayment;
 import com.eklanku.otuChat.ui.activities.payment.models.DataCekMemberTransfer;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.DataHistoryOTU;
+import com.eklanku.otuChat.ui.activities.payment.models.DataPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models.DataProviderByType;
+import com.eklanku.otuChat.ui.activities.payment.models.DataRequestDokuCC;
 import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.DetailTransferResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.JsonResponse;
@@ -12,8 +17,8 @@ import com.eklanku.otuChat.ui.activities.payment.models.LaporanSaldoResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.LaporanTrxResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadBanner;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
+import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.LoginResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.RegisterResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.ResetPINResponse;
@@ -29,6 +34,7 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -41,17 +47,6 @@ public interface ApiInterfacePayment {
             @Field("reff") String reff
     );
 
-    @FormUrlEncoded
-    @POST("login")
-    Call<LoginResponse> postLogin(
-           /* @Field("password") String password,
-            @Field("phone") String phone*/
-
-            @Field("userID") String password,
-            @Field("token") String token,
-            @Field("securityCode") String securityCode,
-            @Field("passwd") String passwd
-    );
 
     @FormUrlEncoded
     @POST("login")
@@ -131,14 +126,6 @@ public interface ApiInterfacePayment {
             @Field("productGroup") String productGroup
     );
 
-    @FormUrlEncoded
-    @POST("topup/provaider")
-    Call<LoadDataResponseProvider> getLoadProvider(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("aplUse") String aplUse,
-            @Field("productType") String productType
-    );
 
     @FormUrlEncoded
     @POST("topup/product")
@@ -235,14 +222,6 @@ public interface ApiInterfacePayment {
             @Field("aplUse") String apiuse
     );
 
-    @FormUrlEncoded
-    @POST("ppob/product")
-    Call<LoadDataResponse> postPpobProduct(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("productGroup") String productGroup,
-            @Field("aplUse") String aplUse
-    );
 
     @FormUrlEncoded
     @POST("ppob/inquiry")
@@ -255,50 +234,19 @@ public interface ApiInterfacePayment {
             @Field("aplUse") String aplUse
     );
 
-    @FormUrlEncoded
-    @POST("topup")
-    Call<TransBeliResponse> postTopup(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("aplUse") String aplUse,
-            @Field("MSISDN") String MSISDN,
-            @Field("sequence") String sequence,
-            @Field("buyerPhone") String buyerPhone,
-            @Field("refIDCustomer") String refIDCustomer,
-            @Field("productCode") String productCode
-    );
 
     //deposit
     @FormUrlEncoded
-    @POST("deposit")
+    @POST("Deposit/bank")
     Call<TopupOrderResponse> postInquiryBankList(
             @Field("userID") String userID,
             @Field("accessToken") String accessToken,
             @Field("aplUse") String aplUse
     );
 
-    //deposit billing
-    @FormUrlEncoded
-    @POST("deposit/order")
-    Call<TopupPayResponse> postDepositOrder(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("aplUse") String aplUse,
-            @Field("bank") String bank,
-            @Field("nominal") String nominal
-    );
 
-    //request transfer
-    @FormUrlEncoded
-    @POST("transfer")
-    Call<DetailTransferResponse> postRequestTransfer(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("aplUse") String aplUse,
-            @Field("tujuan") String tujuan,
-            @Field("nominal") String nominal,
-            @Field("pin") String pin
-    );
+
+
 
     //konfirm transfer
     @FormUrlEncoded
@@ -320,34 +268,10 @@ public interface ApiInterfacePayment {
             @Field("accessToken") String accessToken
     );
 
-    //get deposit
-    @FormUrlEncoded
-    @POST("saldo/detail")
-    Call<DataSaldoBonus> getSaldodetail(
-            @Field("userID") String userID,
-            @Field("aplUse") String aplUse,
-            @Field("accessToken") String accessToken
-    );
 
-    //history
-    @FormUrlEncoded
-    @POST("history")
-    Call<DataHistoryOTU> getHistoryTrx(
-            @Field("userID") String userID,
-            @Field("aplUse") String aplUse,
-            @Field("accessToken") String accessToken,
-            @Field("requestID") String requestID
-    );
 
-    //reset pass
-    @FormUrlEncoded
-    @POST("resetpass")
-    Call<ResetPassResponse> postResetpass(
-            @Field("userID") String userID,
-            @Field("aplUse") String aplUse,
-            @Field("resetToken") String securityCode,
-            @Field("newpass") String newpass
-    );
+
+
 
     @FormUrlEncoded
     @POST("resetpass/getToken")
@@ -356,13 +280,6 @@ public interface ApiInterfacePayment {
             @Field("aplUse") String aplUse
     );
 
-    @FormUrlEncoded
-    @POST("logout")
-    Call<ResetPassResponse> postLogoutPayment(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("token") String token
-    );
 
     @FormUrlEncoded
     @POST("resetpin")
@@ -372,57 +289,17 @@ public interface ApiInterfacePayment {
             @Field("accessToken") String accessToken
     );
 
-    @FormUrlEncoded
-    @POST("resetpin/process")
-    Call<ResetPINResponse> apprResetPin(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("aplUse") String aplUse,
-            @Field("keySMS") String keySMS,
-            @Field("newpin") String newpin
-    );
 
-    //get token profile
-    @FormUrlEncoded
-    @POST("profile/getToken")
-    Call<DataProfile> getTokenProfile(
-            @Field("userID") String userID,//nomor hp
-            @Field("aplUse") String aplUse
-    );
 
-    @FormUrlEncoded
-    @POST("profile")
-    Call<DataDetailProfile> getProfile(
-            @Field("userID") String userID,//nomor hp
-            @Field("aplUse") String aplUse,
-            @Field("profileToken") String profileToken
-    );
 
-    //get token register
-    @FormUrlEncoded
-    @POST("register/getToken")
-    Call<DataProfile> getTokenRegister(
-            @Field("userID") String userID,//nomor hp
-            @Field("aplUse") String aplUse
-    );
 
-    @FormUrlEncoded
-    @POST("register")
-    Call<DataProfile> postRegisterUpline(
-            @Field("userID") String userID,//nomor hp
-            @Field("uplineID") String uplineID,
-            @Field("aplUse") String aplUse,
-            @Field("registerToken") String registerToken,
-            @Field("nama") String nama
-    );
 
-    //is member
-    @FormUrlEncoded
-    @POST("getMember")
-    Call<DataProfile> isMember(
-            @Field("userID") String userID,
-            @Field("aplUse") String aplUse
-    );
+
+
+
+
+
+
 
     //cancel transfer
     @FormUrlEncoded
@@ -443,16 +320,7 @@ public interface ApiInterfacePayment {
             @Field("aplUse") String aplUse
     );
 
-    //delete account
-    @FormUrlEncoded
-    @POST("removeAccount")
-    Call<DataProfile> deleteAccount(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("aplUse") String aplUse,
-            @Field("pin") String pin
 
-    );
 
     //edit profile
     @FormUrlEncoded
@@ -477,12 +345,329 @@ public interface ApiInterfacePayment {
     );
 
     //banner
+
+
     @FormUrlEncoded
-    @POST("Transfer/cekMember")
+    @POST("Prabayar/provider_name")
+    Call<LoadDataResponse> postPpobProduct(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("productGroup") String productGroup,
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Prabayar/provider_name")
+    Call<LoadDataResponseProvider> getLoadProvider(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("productType") String productType
+    );
+
+
+    //===================================================new api=====================================
+
+    @FormUrlEncoded
+    @POST("Member/logout")
+    Call<ResetPassResponse> postLogoutPayment(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("token") String token
+    );
+
+
+    @FormUrlEncoded
+    @Headers({"X-API-KEY: 222"})
+    @POST("Member/login")
+    Call<LoginResponse> postLogin(
+
+            @Field("userID") String password,
+            @Field("token") String token,
+            @Field("securityCode") String securityCode,
+            @Field("passwd") String passwd
+    );
+
+    @FormUrlEncoded
+    @Headers({"X-API-KEY: 222"})
+    @POST("Prabayar/prefix_pulsa")
+    Call<DataPrefix> getPrefixPulsa(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Prabayar/prefix_sms")
+    Call<DataPrefix> getPrefixSMS(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Prabayar/prefix_data")
+    Call<DataPrefix> getPrefixData(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Prabayar/product_pulsa")
+    Call<DataAllProduct> getProduct_pulsa(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Prabayar/product_data")
+    Call<DataAllProduct> geetProduct_paketdata(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Prabayar/product_sms")
+    Call<DataAllProduct> getProduct_sms(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Prabayar/order")
+    Call<TransBeliResponse> postTopup(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("MSISDN") String MSISDN,
+            @Field("sequence") String sequence,
+            @Field("buyerPhone") String buyerPhone,
+            @Field("refIDCustomer") String refIDCustomer,
+            @Field("productCode") String productCode
+    );
+
+    //get deposit
+    @FormUrlEncoded
+    @POST("Member/get_saldo_bonus")
+    Call<DataSaldoBonus> getSaldodetail(
+            @Field("userID") String userID,
+            @Field("aplUse") String aplUse,
+            @Field("accessToken") String accessToken
+    );
+
+
+    @FormUrlEncoded
+    @POST("Prabayar/product_pln_token")
+    Call<DataAllProduct> getproduct_plntoken(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Prabayar/product_etoll")
+    Call<DataAllProduct> getproduct_etoll(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+
+    @FormUrlEncoded
+    @POST("Prabayar/provider_name")
+    Call<DataProviderByType> getProviderByType(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("productType") String productType
+    );
+
+    @FormUrlEncoded
+    @POST("Prabayar/product_game")
+    Call<DataAllProduct> getproduct_game(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    @GET("Konten/banner")
+    Call<DataBannerPayment> getBanner(
+    );
+
+    //deposit billing
+    @FormUrlEncoded
+    @POST("Deposit/request")
+    Call<TopupPayResponse> postDepositOrder(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("bank") String bank,
+            @Field("nominal") String nominal
+    );
+
+    //history
+    @FormUrlEncoded
+    @POST("Riwayat/riwayat_by_id")
+    Call<DataHistoryOTU> getHistoryTrx(
+            @Field("userID") String userID,
+            @Field("aplUse") String aplUse,
+            @Field("accessToken") String accessToken,
+            @Field("requestID") String requestID
+    );
+
+    //get token register
+    @FormUrlEncoded
+    @POST("Member/register_token")
+    Call<DataProfile> getTokenRegister(
+            @Field("userID") String userID,//nomor hp
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Member/go_register")
+    Call<DataProfile> register(
+            @Field("userID") String userID,
+            @Field("uplineID") String uplineID,
+            @Field("aplUse") String aplUse,
+            @Field("registerToken") String registerToken,
+            @Field("nama") String nama,
+            @Field("mbr_email") String mbr_email,
+            @Field("mbr_pswd") String mbr_pswd
+    );
+
+    //is member
+    @FormUrlEncoded
+    @POST("Member/get_member")
+    Call<DataProfile> isMember(
+            @Field("userID") String userID,
+            @Field("aplUse") String aplUse
+    );
+
+    //get token profile
+    @FormUrlEncoded
+    @POST("Member/profile_token")
+    Call<DataProfile> getTokenProfile(
+            @Field("userID") String userID,//nomor hp
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Member/profile")
+    Call<DataDetailProfile> getProfile(
+            @Field("userID") String userID,//nomor hp
+            @Field("aplUse") String aplUse,
+            @Field("accessToken") String accessToken
+    );
+
+    //API request doku
+    @FormUrlEncoded
+    @POST("Deposit/request")
+    Call<DataRequestDokuCC> requestDoku(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("bank") String bank,
+            @Field("nominal") String nominal,
+            @Field("doku-token") String doku_token,
+            @Field("deviceid") String deviceid,
+            @Field("doku-pairing-code") String doku_pairing_code,
+            @Field("doku-invoice-no") String doku_invoice_no,
+            @Field("payment_chanel") String payment_chanel,
+            @Field("words") String words
+    );
+
+    @FormUrlEncoded
+    @POST("Transfer/cek_member")
     Call<DataCekMemberTransfer> getCekMemberTransfer(
             @Field("userID") String userID,
             @Field("aplUse") String aplUse,
             @Field("destination") String destination,
             @Field("accessToken") String accessToken
     );
+
+    //request transfer
+    @FormUrlEncoded
+    @POST("Transfer/transfer_saldo")
+    Call<DetailTransferResponse> postRequestTransfer(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("tujuan") String tujuan,
+            @Field("nominal") String nominal,
+            @Field("pin") String pin
+    );
+
+    //delete account
+    @FormUrlEncoded
+    @POST("Member/send_desible_account")
+    Call<DataProfile> deleteAccount(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("pin") String pin
+
+    );
+
+    //register
+    @FormUrlEncoded
+    @POST("Member/go_register")
+    Call<DataProfile> postRegisterUpline(
+            @Field("userID") String userID,//nomor hp
+            @Field("uplineID") String uplineID,
+            @Field("aplUse") String aplUse,
+            @Field("nama") String nama,
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("pin") String pin
+    );
+
+    //reset pass
+    @FormUrlEncoded
+    @POST("member/reset_pass")
+    Call<ResetPassResponse> Resetpass(
+            @Field("userID") String userID,
+            @Field("aplUse") String aplUse,
+            @Field("accessToken") String accessToken,
+            @Field("newpass") String newpass,
+            @Field("pin") String pin
+    );
+
+    @FormUrlEncoded
+    @POST("Member/reset_pin")
+    Call<ResetPINResponse> apprResetPin(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("otp") String keySMS,
+            @Field("newpin") String newpin
+    );
+
+    @FormUrlEncoded
+    @POST("Member/kirim_key")
+    Call<ResetPINResponse> getKeySMS(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    //update profil
+    @FormUrlEncoded
+    @POST("Member/update_profile")
+    Call<DataProfile> updateProfil(
+            @Field("userID") String userID,
+            @Field("aplUse") String aplUse,
+            @Field("accessToken") String accessToken,
+            @Field("email") String email,
+            @Field("city") String city,
+            @Field("address") String address,
+            @Field("identitas") String identitas,
+            @Field("tgl_lahir") String tgl_lahir,
+            @Field("pin") String pin
+    );
+
+
 }

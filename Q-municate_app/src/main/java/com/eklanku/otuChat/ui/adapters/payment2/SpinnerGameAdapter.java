@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eklanku.otuChat.R;
-import com.eklanku.otuChat.ui.activities.payment.models2.DataProvider;
+import com.eklanku.otuChat.ui.activities.payment.models.DataProvider;
 
 import java.util.List;
 

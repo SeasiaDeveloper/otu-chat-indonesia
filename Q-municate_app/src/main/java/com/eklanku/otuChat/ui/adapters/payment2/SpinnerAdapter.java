@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.Utils;
-import com.eklanku.otuChat.ui.activities.payment.models2.DataProduct;
+import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,13 +2,13 @@ package com.eklanku.otuChat.ui.activities.payment.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import org.json.JSONObject;
 
 public class LoginResponse {
     @SerializedName("userID")
     private String userID;
 
-    @SerializedName("accessToken")
+    @SerializedName("mbr_token")
     private String accessToken;
 
     @SerializedName("status")
@@ -20,43 +20,16 @@ public class LoginResponse {
     @SerializedName("respTime")
     private String respTime;
 
-
-    @SerializedName("user")
-    private List<DataMember> member;
-
-  /*  public String getStatus() {
-        return status;
+    public JSONObject getData() {
+        return data;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setData(JSONObject data) {
+        this.data = data;
     }
 
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public List<DataMember> getMember() {
-        return member;
-    }
-
-    public void setMember(List<DataMember> member) {
-        this.member = member;
-    }*/
-
-    //UNUSED===========================
-    public List<DataMember> getMember() {
-        return member;
-    }
-
-    public void setMember(List<DataMember> member) {
-        this.member = member;
-    }
-    //===========================================
+    @SerializedName("data")
+    private JSONObject data;
 
     public String getUserID() {
         return userID;
@@ -97,4 +70,5 @@ public class LoginResponse {
     public void setRespTime(String respTime) {
         this.respTime = respTime;
     }
+
 }

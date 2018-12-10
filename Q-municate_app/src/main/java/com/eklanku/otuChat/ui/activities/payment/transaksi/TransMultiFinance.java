@@ -31,22 +31,10 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataNominal;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.Utils;
-import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
-import com.eklanku.otuChat.ui.activities.payment.models.DataNominal;
-import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
-import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
 import java.util.ArrayList;
@@ -70,7 +58,6 @@ public class TransMultiFinance extends AppCompatActivity {
     TextInputLayout layoutNo;
     Button btnBayar;
     String load_id = "FIN", selected_operator;
-    ApiInterface mApiInterface;
     Dialog loadingDialog;
     ArrayAdapter<String> adapter;
 
@@ -268,81 +255,6 @@ public class TransMultiFinance extends AppCompatActivity {
         if ( view.requestFocus() ) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
-    }
-
-    private void load_data() {
-        loadingDialog = ProgressDialog.show(TransMultiFinance.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Log.d("OPPO-1", "cek_transaksi - transmultifinance: "+PreferenceUtil.getNumberPhone(this));
-        Log.d("OPPO-1", "cek_transaksi - load_type: "+load_type);
-        Log.d("OPPO-1", "cek_transaksi - load_id: "+load_id);
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, PreferenceUtil.getNumberPhone(this));
-
-
-        //        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, "085334059170");
-        dataCall.enqueue(new Callback<LoadDataResponse>() {
-            @Override
-            public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
-                nama_operator=new String[0];
-                spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(),nama_operator);
-//                adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, nama_operator);
-                spnOperator.setAdapter(spinnerPpobAdapter);
-                if (response.isSuccessful()) {
-                    String status   = response.body().getStatus();
-                    String error    = response.body().getError();
-
-                    if ( status.equals("OK") ) {
-                        final List<DataNominal> result = response.body().getResult();
-                        nama_operator                        = new String[result.size()];
-                        selected_operator               = result.get(0).getProductKode();
-
-                       /* Locale localeID = new Locale("in", "ID");
-                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
-
-                        DecimalFormat decimal = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-                        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-                        dfs.setCurrencySymbol("");
-                        dfs.setMonetaryDecimalSeparator(',');
-                        dfs.setGroupingSeparator('.');
-                        decimal.setDecimalFormatSymbols(dfs);*/
-
-                        for ( int i=0; i<result.size(); i++ ) {
-                            nama_operator[i] = result.get(i).getProductName();//+" | "+ format.format(result.get(i).getHargaJual())+" ("+ decimal.format(result.get(i).getEpoint())+")";
-                        }
-
-//                        adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, nama_operator);
-                        spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(),nama_operator);
-                        spnOperator.setAdapter(spinnerPpobAdapter);
-                        spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                selected_operator = result.get(position).getProductKode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-                    } else {
-                        utilsAlert.globalDialog(TransMultiFinance.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    utilsAlert.globalDialog(TransMultiFinance.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransMultiFinance.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_LOADDATA", t.getMessage().toString());
-            }
-        });
     }
 
     private void cek_transaksi() {

@@ -1,7 +1,5 @@
 package com.eklanku.otuChat.ui.activities.payment.models;
 
-import com.google.gson.annotations.SerializedName;
-
 public class DataPLN {
     private String providers;
 

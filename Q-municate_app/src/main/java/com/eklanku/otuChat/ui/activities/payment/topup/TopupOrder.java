@@ -2,12 +2,10 @@ package com.eklanku.otuChat.ui.activities.payment.topup;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,19 +18,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models2.TopupPayResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.payment.models.TopupPayResponse;
+import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment2.SpinnerBankAdapter;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.payment.models2.TopupDetailM;
-import com.eklanku.otuChat.ui.activities.payment.models2.TopupOrderResponse;
+import com.eklanku.otuChat.ui.activities.payment.models.TopupDetailM;
+import com.eklanku.otuChat.ui.activities.payment.models.TopupOrderResponse;
 import com.eklanku.otuChat.utils.Utils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
@@ -51,7 +46,6 @@ public class TopupOrder extends AppCompatActivity {
     ArrayList<String> nama_paket, id_paket;
     Dialog loadingDialog;
 
-    ApiInterface mApiInterface;
     ArrayList<String> nominal;
 
     ApiInterfacePayment mApiInterfacePayment;
@@ -81,7 +75,6 @@ public class TopupOrder extends AppCompatActivity {
 
         utilsAlert = new Utils(TopupOrder.this);
 
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         preferenceManager = new PreferenceManager(this);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 

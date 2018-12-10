@@ -1,41 +1,21 @@
 package com.eklanku.otuChat.ui.activities.payment.json;
 
-import android.app.ProgressDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.AlertDialog;
-import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.fragments.payment.TableFragment;
-import com.eklanku.otuChat.utils.Utils;
-import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBalanceActivity;
-import com.eklanku.otuChat.ui.activities.payment.models2.DataDetailHistosryOTU;
-import com.eklanku.otuChat.ui.activities.payment.models2.DataHistoryOTU;
-import com.eklanku.otuChat.ui.activities.payment.models.DataLapHistorySaldo;
-import com.eklanku.otuChat.ui.activities.payment.models.DataLapHistoryTrx;
-import com.eklanku.otuChat.ui.activities.payment.models.DataMutasiSaldo;
-import com.eklanku.otuChat.ui.activities.payment.models.LaporanSaldoResponse;
-import com.eklanku.otuChat.ui.activities.payment.models.LaporanTrxResponse;
+import com.eklanku.otuChat.ui.activities.payment.models.DataDetailHistosryOTU;
+import com.eklanku.otuChat.ui.activities.payment.models.DataHistoryOTU;
 import com.eklanku.otuChat.ui.activities.payment.tableview.model.CellModel;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.fragments.payment.TableFragment;
-import com.eklanku.otuChat.utils.PreferenceUtil;
 
 import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,7 +26,6 @@ import retrofit2.Response;
 public class WebServiceHandler {
 
     private TableFragment mainFragment;
-    ApiInterface mApiInterface;
 
     ApiInterfacePayment mApiInterfacePayment;
     PreferenceManager preferenceManager;

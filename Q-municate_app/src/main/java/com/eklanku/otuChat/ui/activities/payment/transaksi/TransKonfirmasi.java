@@ -17,19 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.google.firebase.auth.FirebaseAuth;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.fragments.PaymentFragment;
-import com.eklanku.otuChat.utils.PreferenceUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,7 +34,6 @@ public class TransKonfirmasi extends AppCompatActivity {
     SharedPreferences prefs;
     TextView lblContent;
     Button btnSave;
-    ApiInterface mApiInterface;
     Dialog loadingDialog;
     String //id_member,
             transaksi, //harga,
@@ -143,7 +132,6 @@ public class TransKonfirmasi extends AppCompatActivity {
         }
 
 
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,21 +6,194 @@ import java.util.List;
 
 public class DataDetailProfile {
 
-    //get data profile
+    @SerializedName("o_id_sponsor")
+    String o_id_sponsor;
+
+    @SerializedName("o_nama_sponsor")
+    String o_nama_sponsor;
+
+    @SerializedName("o_nama_member")
+    String o_nama_member;
+
+    @SerializedName("o_hp")
+    String o_hp;
+
+    @SerializedName("o_mail")
+    String o_mail;
+
+    @SerializedName("o_alamat")
+    String o_alamat;
+
+    @SerializedName("o_kota")
+    String o_kota;
+
+    @SerializedName("o_tgl_lahir")
+    String o_tgl_lahir;
+
+    @SerializedName("o_tgl_daftar")
+    String o_tgl_daftar;
+
+    @SerializedName("o_bank")
+    String o_bank;
+
+    @SerializedName("o_norec")
+    String o_norec;
+
+    @SerializedName("o_pemilikrekening")
+    String o_pemilikrekening;
+
+    @SerializedName("o_jabatan_sponsor")
+    String o_jabatan_sponsor;
+
+    @SerializedName("o_jabatanmember")
+    String o_jabatanmember;
+
+    public String getO_id_sponsor() {
+        return o_id_sponsor;
+    }
+
+    public void setO_id_sponsor(String o_id_sponsor) {
+        this.o_id_sponsor = o_id_sponsor;
+    }
+
+    public String getO_nama_sponsor() {
+        return o_nama_sponsor;
+    }
+
+    public void setO_nama_sponsor(String o_nama_sponsor) {
+        this.o_nama_sponsor = o_nama_sponsor;
+    }
+
+    public String getO_nama_member() {
+        return o_nama_member;
+    }
+
+    public void setO_nama_member(String o_nama_member) {
+        this.o_nama_member = o_nama_member;
+    }
+
+    public String getO_hp() {
+        return o_hp;
+    }
+
+    public void setO_hp(String o_hp) {
+        this.o_hp = o_hp;
+    }
+
+    public String getO_mail() {
+        return o_mail;
+    }
+
+    public void setO_mail(String o_mail) {
+        this.o_mail = o_mail;
+    }
+
+    public String getO_alamat() {
+        return o_alamat;
+    }
+
+    public void setO_alamat(String o_alamat) {
+        this.o_alamat = o_alamat;
+    }
+
+    public String getO_kota() {
+        return o_kota;
+    }
+
+    public void setO_kota(String o_kota) {
+        this.o_kota = o_kota;
+    }
+
+    public String getO_tgl_lahir() {
+        return o_tgl_lahir;
+    }
+
+    public void setO_tgl_lahir(String o_tgl_lahir) {
+        this.o_tgl_lahir = o_tgl_lahir;
+    }
+
+    public String getO_tgl_daftar() {
+        return o_tgl_daftar;
+    }
+
+    public void setO_tgl_daftar(String o_tgl_daftar) {
+        this.o_tgl_daftar = o_tgl_daftar;
+    }
+
+    public String getO_bank() {
+        return o_bank;
+    }
+
+    public void setO_bank(String o_bank) {
+        this.o_bank = o_bank;
+    }
+
+    public String getO_norec() {
+        return o_norec;
+    }
+
+    public void setO_norec(String o_norec) {
+        this.o_norec = o_norec;
+    }
+
+    public String getO_pemilikrekening() {
+        return o_pemilikrekening;
+    }
+
+    public void setO_pemilikrekening(String o_pemilikrekening) {
+        this.o_pemilikrekening = o_pemilikrekening;
+    }
+
+    public String getO_jabatan_sponsor() {
+        return o_jabatan_sponsor;
+    }
+
+    public void setO_jabatan_sponsor(String o_jabatan_sponsor) {
+        this.o_jabatan_sponsor = o_jabatan_sponsor;
+    }
+
+    public String getO_jabatanmember() {
+        return o_jabatanmember;
+    }
+
+    public void setO_jabatanmember(String o_jabatanmember) {
+        this.o_jabatanmember = o_jabatanmember;
+    }
+
+    public String getO_hp_sponsor() {
+        return o_hp_sponsor;
+    }
+
+    public void setO_hp_sponsor(String o_hp_sponsor) {
+        this.o_hp_sponsor = o_hp_sponsor;
+    }
+
+    public String getNo_ktp() {
+        return no_ktp;
+    }
+
+    public void setNo_ktp(String no_ktp) {
+        this.no_ktp = no_ktp;
+    }
+
+    @SerializedName("o_hp_sponsor")
+    String o_hp_sponsor;
+
+    @SerializedName("no_ktp")
+    String no_ktp;
+
+
     @SerializedName("errNumber")
-    private String errNumber;
+    String errNumber;
 
     @SerializedName("userID")
-    private String userID;
+    String userID;
 
-    @SerializedName("profileToken")
-    private String profileToken;
+    @SerializedName("data")
+    List<DataDetailProfile> data;
 
     @SerializedName("respTime")
-    private String respTime;
-
-    @SerializedName("status")
-    private String status;
+    String respTime;
 
     public String getErrNumber() {
         return errNumber;
@@ -30,18 +203,6 @@ public class DataDetailProfile {
         this.errNumber = errNumber;
     }
 
-    public List<DataDetailProfile> getRespMessage() {
-        return respMessage;
-    }
-
-    public void setRespMessage(List<DataDetailProfile> respMessage) {
-        this.respMessage = respMessage;
-    }
-
-    @SerializedName("respMessage")
-    private List<DataDetailProfile> respMessage;
-
-
     public String getUserID() {
         return userID;
     }
@@ -50,12 +211,12 @@ public class DataDetailProfile {
         this.userID = userID;
     }
 
-    public String getProfileToken() {
-        return profileToken;
+    public List<DataDetailProfile> getData() {
+        return data;
     }
 
-    public void setProfileToken(String profileToken) {
-        this.profileToken = profileToken;
+    public void setData(List<DataDetailProfile> data) {
+        this.data = data;
     }
 
     public String getRespTime() {
@@ -74,131 +235,18 @@ public class DataDetailProfile {
         this.status = status;
     }
 
-
-    @SerializedName("mbr_id")
-    private String mbr_id;
-
-    @SerializedName("name_member")
-    private String name_member;
-
-    @SerializedName("upline")
-    private String upline;
-
-    @SerializedName("mbr_carier")
-    private String mbr_carier;
-
-    @SerializedName("email")
-    private String email;
-
-    @SerializedName("no_ktp")
-    private String no_ktp;
-
-    @SerializedName("alamat")
-    private String alamat;
-
-    @SerializedName("kota")
-    private String kota;
-
-    @SerializedName("sponsor_name")
-    private String sponsor_name;
-
-    @SerializedName("hp_sponsor")
-    private String hp_sponsor;
-
-    public String getMbr_id() {
-        return mbr_id;
+    public String getRespMessage() {
+        return respMessage;
     }
 
-    public void setMbr_id(String mbr_id) {
-        this.mbr_id = mbr_id;
+    public void setRespMessage(String respMessage) {
+        this.respMessage = respMessage;
     }
 
-    public String getName_member() {
-        return name_member;
-    }
+    @SerializedName("status")
+    String status;
 
-    public void setName_member(String name_member) {
-        this.name_member = name_member;
-    }
-
-    public String getUpline() {
-        return upline;
-    }
-
-    public void setUpline(String upline) {
-        this.upline = upline;
-    }
-
-    public String getMbr_carier() {
-        return mbr_carier;
-    }
-
-    public void setMbr_carier(String mbr_carier) {
-        this.mbr_carier = mbr_carier;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getNo_ktp() {
-        return no_ktp;
-    }
-
-    public void setNo_ktp(String no_ktp) {
-        this.no_ktp = no_ktp;
-    }
-
-    public String getAlamat() {
-        return alamat;
-    }
-
-    public void setAlamat(String alamat) {
-        this.alamat = alamat;
-    }
-
-    public String getKota() {
-        return kota;
-    }
-
-    public void setKota(String kota) {
-        this.kota = kota;
-    }
-
-    public String getSponsor_name() {
-        return sponsor_name;
-    }
-
-    public void setSponsor_name(String sponsor_name) {
-        this.sponsor_name = sponsor_name;
-    }
-
-    public String getHp_sponsor() {
-        return hp_sponsor;
-    }
-
-    public void setHp_sponsor(String hp_sponsor) {
-        this.hp_sponsor = hp_sponsor;
-    }
-
-    public String getJml_bonus() {
-        return jml_bonus;
-    }
-
-    public void setJml_bonus(String jml_bonus) {
-        this.jml_bonus = jml_bonus;
-    }
-
-    @SerializedName("jml_bonus")
-    private String jml_bonus;
-
-
-
-
-
+    @SerializedName("respMessage")
+    String respMessage;
 
 }

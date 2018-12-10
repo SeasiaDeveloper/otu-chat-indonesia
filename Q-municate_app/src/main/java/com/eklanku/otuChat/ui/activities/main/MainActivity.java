@@ -33,18 +33,17 @@ import com.connectycube.auth.session.ConnectycubeSessionManager;
 import com.eklanku.otuChat.App;
 import com.eklanku.otuChat.ui.activities.authorization.LandingActivity;
 import com.eklanku.otuChat.ui.activities.barcode.UserSessionsActivity;
-import com.eklanku.otuChat.ui.activities.barcode.WebQRCodeActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
-import com.eklanku.otuChat.ui.activities.payment.models2.DataDetailSaldoBonus;
-import com.eklanku.otuChat.ui.activities.payment.models2.DataProfile;
-import com.eklanku.otuChat.ui.activities.payment.models2.DataSaldoBonus;
+import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
+import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
+import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.DeleteAccount;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
-import com.eklanku.otuChat.ui.activities.payment.transaksi2.PaymentLogin;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
@@ -62,13 +61,9 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
 import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.payment.models2.ResetPassResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest2.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientProfile;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
-import com.eklanku.otuChat.ui.activities.rest2.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfaceProfile;
+import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
+import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
+import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivityOtu;
 import com.eklanku.otuChat.ui.fragments.chats.DialogsListFragment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
@@ -138,8 +133,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
     public static final int REQUEST_CODE_LOGOUT = 300;
     protected BaseActivity baseActivity;
 
-    ApiInterface mApiInterface;
-    ApiInterfaceProfile apiInterfaceProfile;
     ApiInterfacePayment mApiInterfacePayment;
 
     private PreferenceManager preferenceManager;
@@ -287,8 +280,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         tvSaldo = findViewById(R.id.tvSaldo);
         layoutSaldo.setVisibility(View.GONE);
         layoutDivider.setVisibility(View.GONE);
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
-        apiInterfaceProfile = ApiClientProfile.getClient().create(ApiInterfaceProfile.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

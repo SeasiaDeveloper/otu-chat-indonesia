@@ -13,23 +13,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupKonfirmResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.google.firebase.auth.FirebaseAuth;
-import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.main.Utils;
-import com.eklanku.otuChat.ui.activities.payment.models.TopupKonfirmResponse;
-import com.eklanku.otuChat.ui.activities.rest.ApiClient;
-import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterface;
 import com.eklanku.otuChat.R;;
-import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -46,7 +36,6 @@ public class TransConfirm extends AppCompatActivity {
     Button btnConfirm, btnCancel;
     Dialog loadingDialog;
 
-    ApiInterface mApiInterface;
 
     String tujuan;
     TextView lblNominal, lblTujuan;
@@ -97,7 +86,6 @@ public class TransConfirm extends AppCompatActivity {
         lblNominal = (TextView) findViewById(R.id.lblTransferNominal);
         lblTujuan = (TextView) findViewById(R.id.lblTransferTujuan);
 
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
 
