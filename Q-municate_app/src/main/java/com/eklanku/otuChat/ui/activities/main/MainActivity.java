@@ -717,6 +717,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     private void checkVisibilityUserIcon() {
         UserCustomData userCustomData = Utils.customDataToObject(AppSession.getSession().getUser().getCustomData());
+        Log.d("AYIK", "" + userCustomData.getAvatarUrl());
         if (!TextUtils.isEmpty(userCustomData.getAvatarUrl())) {
             loadLogoActionBar(userCustomData.getAvatarUrl());
         } else {
@@ -1403,7 +1404,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                     return;
                 }
 
-                Log.d("AYIK", "response-saldo->"+ response.body()+"\n"+ response.toString());
+                Log.d("AYIK", "response-saldo->" + response.body() + "\n" + response.toString());
 
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();

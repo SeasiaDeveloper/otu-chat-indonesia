@@ -628,6 +628,11 @@ public class TransPln extends AppCompatActivity {
                     txtnomor.setText(txtNo.getText().toString());
                     txtvoucher.setText(code);
 
+                    TextView tvProduct = dialog.findViewById(R.id.txt_product);
+                    TextView tvTranske = dialog.findViewById(R.id.txt_transke);
+                    tvProduct.setText(listName.get(position));
+                    tvTranske.setText(txtTransaksi_ke.getText().toString());
+
                     btnYes.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -644,6 +649,9 @@ public class TransPln extends AppCompatActivity {
                     });
 
                     dialog.show();
+                    Window window = dialog.getWindow();
+                    assert window != null;
+                    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     return;
                 } else {
                     cek_transaksi();

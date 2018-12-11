@@ -41,7 +41,6 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataDetailPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models.DataPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKonfirmasi;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapterNew;
@@ -77,7 +76,7 @@ public class TransPulsa extends AppCompatActivity {
 
     Context context;
 
-    TextView tvNomor, tvVoucher;
+    TextView tvNomor, tvVoucher, tvProduct, tvTranske;
     Button btnYes, btnNo;
 
     Utils utilsAlert;
@@ -166,7 +165,7 @@ public class TransPulsa extends AppCompatActivity {
             btnYes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    cek_transaksi();
+                    cekTransaksi();
                     dialog.dismiss();
                 }
             });
@@ -230,7 +229,7 @@ public class TransPulsa extends AppCompatActivity {
         }
     }
 
-    private void cek_transaksi() {
+    private void cekTransaksi() {
         loadingDialog = ProgressDialog.show(TransPulsa.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
         Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString().trim(), etTransaksiKe.getText().toString(), "", "", code);
@@ -329,12 +328,13 @@ public class TransPulsa extends AppCompatActivity {
             }
 
             code = code_product.get(position);
-            dialogWarning(code);
+            String name = code_name.get(position);
+            dialogWarning(code, name);
         });
 
     }
 
-    public void dialogWarning(String kodepaket) {
+    public void dialogWarning(String kodepaket, String name) {
         final Dialog dialog = new Dialog(TransPulsa.this);
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -347,17 +347,27 @@ public class TransPulsa extends AppCompatActivity {
         btnNo = dialog.findViewById(R.id.btn_no);
         tvNomor = dialog.findViewById(R.id.txt_nomor);
         tvVoucher = dialog.findViewById(R.id.txt_voucher);
+
+        tvProduct = dialog.findViewById(R.id.txt_product);
+        tvTranske = dialog.findViewById(R.id.txt_transke);
+        tvProduct.setText(name);
+        tvTranske.setText(etTransaksiKe.getText().toString());
+
         tvNomor.setText(txtNo.getText().toString().trim());
         tvVoucher.setText(kodepaket);
+
         btnYes.setText(getString(R.string.lanjutkan));
         btnYes.setOnClickListener(view -> {
-            cek_transaksi();
+            cekTransaksi();
             dialog.dismiss();
         });
 
         btnNo.setOnClickListener(view -> dialog.dismiss());
 
         dialog.show();
+        Window window = dialog.getWindow();
+        assert window != null;
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         return;
     }
 
@@ -412,6 +422,8 @@ public class TransPulsa extends AppCompatActivity {
     }
 
     ArrayList<String> code_product;
+    ArrayList<String> code_name;
+
     public void cekPrefixNumber(CharSequence s) {
         SpinnerAdapterNew adapter = null;
         ArrayList<String> a, b, c, d;
@@ -420,6 +432,7 @@ public class TransPulsa extends AppCompatActivity {
         c = new ArrayList<>();
         d = new ArrayList<>();
         code_product = new ArrayList<>();
+        code_name= new ArrayList<>();
         listPulsa.setAdapter(null);
 
         try {
@@ -460,6 +473,7 @@ public class TransPulsa extends AppCompatActivity {
                         c.clear();
                         d.clear();
                         code_product.clear();
+                        code_name.clear();
                         layOpr.setVisibility(View.GONE);
                         txLayOpr.setVisibility(View.GONE);
                         statOprPulsa = false;
@@ -479,7 +493,7 @@ public class TransPulsa extends AppCompatActivity {
                         c.add(listEP.get(j));
                         d.add(listProviderProduct.get(j));
                         code_product.add(listCode.get(j));
-                        Log.d("AYIK", "list->" + listName.get(j));
+                        code_name.add(listName.get(j));
                     }
                 }
 

@@ -13,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,8 +49,12 @@ public class TransKonfirmasi extends AppCompatActivity {
     TextView txtJenis, txtReffID, txtCustomerID, txtCustomerName, txtCustomerMSISDN, txtTanggal, txtPayment, txtAdminBank, txtBilling, txtStatus;
 
     TextView lbIdCustomer, lbNama, titik2idcust, titik2nama;
+    ImageView imgStatus;
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+
+    LinearLayout layoutNama, layoutCust;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +69,10 @@ public class TransKonfirmasi extends AppCompatActivity {
         lbNama = (TextView) findViewById(R.id.lbNama);
         titik2nama = (TextView) findViewById(R.id.titik2nama);
         btnSave = (Button) findViewById(R.id.btnKonfirmasiSave);
+
+        imgStatus = findViewById(R.id.img_status);
+        layoutNama = findViewById(R.id.layout_name);
+        layoutCust = findViewById(R.id.layout_cust);
 
         txtJenis = findViewById(R.id.txt_jenis);
         txtReffID = findViewById(R.id.txt_billing_reff_id);
@@ -93,13 +103,13 @@ public class TransKonfirmasi extends AppCompatActivity {
         billing = extras.getString("billing");
         accessToken = extras.getString("accessToken");
         userID = extras.getString("userID");
-        status =  extras.getString("status");
+        status = extras.getString("status");
         usageUnit = extras.getString("usageUnit");
         //
 
         // SETTEXT DISINI NA
         txtJenis.setText(jenis);
-        txtReffID.setText(billingReferenceID);
+        txtReffID.setText(billingReferenceID.trim());
         txtCustomerID.setText(customerID);
         txtCustomerName.setText(customerName);
         txtCustomerMSISDN.setText(customerMSISDN);
@@ -109,9 +119,11 @@ public class TransKonfirmasi extends AppCompatActivity {
         txtBilling.setText(billing);
         txtStatus.setText(status);
 
-        if(usageUnit.equalsIgnoreCase("TOPUP")){
+        if (usageUnit.equalsIgnoreCase("TOPUP")) {
             usageUnit = "TOPUP";
             lbIdCustomer.setVisibility(View.GONE);
+            layoutNama.setVisibility(View.GONE);
+            layoutCust.setVisibility(View.GONE);
             lbNama.setVisibility(View.GONE);
             titik2nama.setVisibility(View.GONE);
             titik2idcust.setVisibility(View.GONE);
@@ -119,7 +131,9 @@ public class TransKonfirmasi extends AppCompatActivity {
             txtCustomerName.setVisibility(View.GONE);
             btnSave.setText("OK");
             lblContent.setText("Transaksi Sukses\nTerimakasih Telah Berbelanja di Eklanku");
-        }else{
+        } else {
+            layoutNama.setVisibility(View.VISIBLE);
+            layoutCust.setVisibility(View.VISIBLE);
             lbIdCustomer.setVisibility(View.VISIBLE);
             lbNama.setVisibility(View.VISIBLE);
             titik2nama.setVisibility(View.VISIBLE);
@@ -131,15 +145,21 @@ public class TransKonfirmasi extends AppCompatActivity {
                     "\nSilahkan klik tombol Proses untuk melanjutkan");
         }
 
+        if (status.equals("SUCCESS")) {
+            imgStatus.setImageResource(R.drawable.ic_doku_success);
+        } else {
+            imgStatus.setImageResource(R.drawable.ic_doku_failed);
+        }
+
 
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(usageUnit.equalsIgnoreCase("TOPUP")){
+                if (usageUnit.equalsIgnoreCase("TOPUP")) {
                     finish();
-                }else{
-                    konfirm_transaksi();
+                } else {
+                    confirmTransaksi();
                 }
 
             }
@@ -147,7 +167,7 @@ public class TransKonfirmasi extends AppCompatActivity {
     }
 
 
-    private void konfirm_transaksi() {
+    private void confirmTransaksi() {
         loadingDialog = ProgressDialog.show(TransKonfirmasi.this, "Harap Tunggu", "Konfirmasi Pembayaran...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
@@ -159,9 +179,6 @@ public class TransKonfirmasi extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String error = response.body().getRespMessage();
-
-                    Log.d("OPPO-1", "onResponse: " + status);
-
                     if (status.equals("SUCCESS")) {
                         Intent inThankYou = new Intent(getBaseContext(), TransThankyou.class);
                         startActivity(inThankYou);

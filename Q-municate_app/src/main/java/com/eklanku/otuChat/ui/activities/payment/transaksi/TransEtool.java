@@ -457,6 +457,11 @@ public class TransEtool extends AppCompatActivity {
                 txtnomor.setText(txtNo.getText().toString());
                 txtvoucher.setText(code);
 
+                TextView tvProduct = dialog.findViewById(R.id.txt_product);
+                TextView tvTranske = dialog.findViewById(R.id.txt_transke);
+                tvProduct.setText(code_name.get(position));
+                tvTranske.setText(txtTrasaksi_ke.getText().toString());
+
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -473,6 +478,9 @@ public class TransEtool extends AppCompatActivity {
                 });
 
                 dialog.show();
+                Window window = dialog.getWindow();
+                assert window != null;
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 return;
             }
         });
@@ -603,7 +611,7 @@ public class TransEtool extends AppCompatActivity {
         });
     }
 
-    ArrayList<String> code_product;
+    ArrayList<String> code_product, code_name;
 
     public void initProduct(String provider) {
         Log.d("OPPO-1", "initProduct: " + provider);
@@ -613,11 +621,13 @@ public class TransEtool extends AppCompatActivity {
         c = new ArrayList<>();
         d = new ArrayList<>();
         code_product = new ArrayList<>();
+        code_name=new ArrayList<>();
         a.clear();
         b.clear();
         c.clear();
         d.clear();
         code_product.clear();
+        code_name.clear();
         String product_type = "";
         for (int i = 0; i < listCode.size(); i++) {
             // Log.d("OPPO-1", "initProduct: "+listProviderProduct.get(i)+", "+provider);
@@ -627,6 +637,7 @@ public class TransEtool extends AppCompatActivity {
                 c.add(listEP.get(i));
                 d.add(listProviderProduct.get(i));
                 code_product.add(listCode.get(i));
+                code_name.add(listName.get(i));
             }
         }
         SpinnerAdapterNew adapterNew = new SpinnerAdapterNew(getApplicationContext(), a, b, c, d, product_type);

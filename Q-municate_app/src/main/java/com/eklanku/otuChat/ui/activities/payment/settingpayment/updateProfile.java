@@ -3,15 +3,18 @@ package com.eklanku.otuChat.ui.activities.payment.settingpayment;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
@@ -20,6 +23,11 @@ import com.eklanku.otuChat.ui.activities.main.Utils;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.utils.image.ImageLoaderUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.quickblox.q_municate_core.models.AppSession;
+import com.quickblox.q_municate_core.models.UserCustomData;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -52,6 +60,7 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
 
     Bundle extras;
     int statusdate = 0;
+    ImageView img;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +82,7 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
         txtCarrier = findViewById(R.id.txt_profile_carrier);
         txtanggaldaftar = findViewById(R.id.txt_tanggal_daftar);
 
+        img = findViewById(R.id.profile_image);
         //===========data bank member
         txbank = findViewById(R.id.txt_bank);
         txnorek = findViewById(R.id.txt_nomor_rekening);
@@ -171,6 +181,36 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
 
             }
         });
+
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(updateProfile.this, "Silahkan ke menu Setting Tab Chat untuk update foto profile", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        checkVisibilityUserIcon();
+    }
+
+    private void loadLogoActionBar(String logoUrl) {
+        ImageLoader.getInstance().loadImage(logoUrl, ImageLoaderUtils.UIL_USER_AVATAR_DISPLAY_OPTIONS,
+                new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedBitmap) {
+                        img.setImageBitmap(loadedBitmap);
+                    }
+                });
+    }
+
+    private void checkVisibilityUserIcon() {
+        UserCustomData userCustomData = com.quickblox.q_municate_core.utils.Utils.customDataToObject(AppSession.getSession().getUser().getCustomData());
+        if (!TextUtils.isEmpty(userCustomData.getAvatarUrl())) {
+            loadLogoActionBar(userCustomData.getAvatarUrl());
+        } else {
+           /* setActionBarIcon(MediaUtils.getRoundIconDrawable(this,
+                    BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_user)));*/
+            img.setImageResource(R.drawable.placeholder_user);
+        }
     }
 
     @Override

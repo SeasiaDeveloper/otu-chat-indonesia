@@ -450,6 +450,11 @@ public class TransSMS extends AppCompatActivity {
                 txtnomor.setText(txtNo.getText().toString());
                 txtvoucher.setText(code);
 
+                TextView tvProduct = dialog.findViewById(R.id.txt_product);
+                TextView tvTranske = dialog.findViewById(R.id.txt_transke);
+                tvProduct.setText(code_name.get(position));
+                tvTranske.setText(txtTransaksi_ke.getText().toString());
+
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -466,6 +471,9 @@ public class TransSMS extends AppCompatActivity {
                 });
 
                 dialog.show();
+                Window window = dialog.getWindow();
+                assert window != null;
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 return;
 
             }
@@ -520,7 +528,7 @@ public class TransSMS extends AppCompatActivity {
     String tempOprPulsa = "";
     boolean statOprPulsa = false;
     boolean otherOpr = true;
-    ArrayList<String> code_product;
+    ArrayList<String> code_product, code_name;
     public void cekPrefix(CharSequence s) {
 
         ArrayList<String> a = new ArrayList<>();
@@ -528,6 +536,7 @@ public class TransSMS extends AppCompatActivity {
         ArrayList<String> c = new ArrayList<>();
         ArrayList<String> d = new ArrayList<>();
         code_product = new ArrayList<>();
+        code_name=new ArrayList<>();
         SpinnerAdapterNew adapter = null;
         listSMS.setAdapter(null);
 
@@ -567,6 +576,7 @@ public class TransSMS extends AppCompatActivity {
                         c.clear();
                         d.clear();
                         code_product.clear();
+                        code_name.clear();
                         statOprPulsa = false;
                         tempOprPulsa = "";
                         btnBayar.setEnabled(true);
@@ -584,6 +594,7 @@ public class TransSMS extends AppCompatActivity {
                         c.add(listEP.get(j));
                         d.add(listProviderProduct.get(j));
                         code_product.add(listCode.get(j));
+                        code_name.add(listName.get(j));
                     }
                 }
 

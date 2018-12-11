@@ -3,23 +3,34 @@ package com.eklanku.otuChat.ui.activities.payment.settingpayment;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.eklanku.otuChat.ui.activities.main.MainActivity;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.utils.MediaUtils;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.Utils;
 import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.utils.image.ImageLoaderUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.quickblox.q_municate_core.models.AppSession;
+import com.quickblox.q_municate_core.models.UserCustomData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +56,7 @@ public class Profile extends AppCompatActivity {
 
     String strUserID, strAccessToken;
     PreferenceManager preferenceManager;
+    ImageView img;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +78,7 @@ public class Profile extends AppCompatActivity {
         txtCarrier = findViewById(R.id.txt_profile_carrier);
         txtanggaldaftar = findViewById(R.id.txt_tanggal_daftar);
 
+        img = findViewById(R.id.profile_image);
 
         //===========data bank member
         txbank = findViewById(R.id.txt_bank);
@@ -98,6 +111,30 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+        checkVisibilityUserIcon();
+
+    }
+
+    private void loadLogoActionBar(String logoUrl) {
+        ImageLoader.getInstance().loadImage(logoUrl, ImageLoaderUtils.UIL_USER_AVATAR_DISPLAY_OPTIONS,
+                new SimpleImageLoadingListener() {
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedBitmap) {
+                        img.setImageBitmap(loadedBitmap);
+                    }
+                });
+    }
+
+    private void checkVisibilityUserIcon() {
+        UserCustomData userCustomData = com.quickblox.q_municate_core.utils.Utils.customDataToObject(AppSession.getSession().getUser().getCustomData());
+        Log.d("AYIK", "" + userCustomData.getAvatarUrl());
+        if (!TextUtils.isEmpty(userCustomData.getAvatarUrl())) {
+            loadLogoActionBar(userCustomData.getAvatarUrl());
+        } else {
+           /* setActionBarIcon(MediaUtils.getRoundIconDrawable(this,
+                    BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_user)));*/
+            img.setImageResource(R.drawable.placeholder_user);
+        }
     }
 
     @Override

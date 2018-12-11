@@ -368,6 +368,12 @@ public class TransPaketData extends AppCompatActivity {
                 btnNo = (Button) dialog.findViewById(R.id.btn_no);
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
                 txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+
+                TextView tvProduct = dialog.findViewById(R.id.txt_product);
+                TextView tvTranske = dialog.findViewById(R.id.txt_transke);
+                tvProduct.setText(code_name.get(position));
+                tvTranske.setText(txtTransaksi_ke.getText().toString());
+
                 txtnomor.setText(txtNo.getText().toString().trim());
                 txtvoucher.setText(code);
                 btnYes.setText("YA, Lanjutkan");
@@ -387,6 +393,9 @@ public class TransPaketData extends AppCompatActivity {
                 });
 
                 dialog.show();
+                Window window = dialog.getWindow();
+                assert window != null;
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 return;
             }
         });
@@ -433,7 +442,8 @@ public class TransPaketData extends AppCompatActivity {
         });
     }
 
-    ArrayList<String> code_product;
+    ArrayList<String> code_product, code_name;
+
     public void cekPrefixPaket(CharSequence s) {
         ArrayList<String> a = new ArrayList<>();
         ArrayList<String> b = new ArrayList<>();
@@ -441,6 +451,7 @@ public class TransPaketData extends AppCompatActivity {
         ArrayList<String> d = new ArrayList<>();
         SpinnerAdapterNew adapter = null;
         code_product = new ArrayList<>();
+        code_name = new ArrayList<>();
         listPaketdata.setAdapter(null);
         try {
             String nomorHp = "";
@@ -491,6 +502,7 @@ public class TransPaketData extends AppCompatActivity {
                         c.clear();
                         d.clear();
                         code_product.clear();
+                        code_name.clear();
                         statPaket = false;
                         tempPaket = "";
                         layOprPaket.setVisibility(View.GONE);
@@ -509,6 +521,7 @@ public class TransPaketData extends AppCompatActivity {
                         c.add(listEP.get(j));
                         d.add(listProviderProduct.get(j));
                         code_product.add(listCode.get(j));
+                        code_name.add(listName.get(j));
                     }
                 }
 
@@ -538,7 +551,7 @@ public class TransPaketData extends AppCompatActivity {
                     otherOpr = false;
                 }
 
-            } else /*if (s.length() < 4) */{
+            } else /*if (s.length() < 4) */ {
                 listPaketdata.setAdapter(null);
                 a.clear();
                 b.clear();

@@ -313,6 +313,11 @@ public class TransVouchergame_product extends AppCompatActivity {
                 txtnomor.setText(noPel.getText().toString());
                 txtvoucher.setText(code);
 
+                TextView tvProduct = dialog.findViewById(R.id.txt_product);
+                TextView tvTranske = dialog.findViewById(R.id.txt_transke);
+                tvProduct.setText(_listnama.get(position));
+                tvTranske.setText(transKe.getText().toString());
+
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -329,6 +334,9 @@ public class TransVouchergame_product extends AppCompatActivity {
                 });
 
                 dialog.show();
+                Window window = dialog.getWindow();
+                assert window != null;
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 return;
             }
         });
