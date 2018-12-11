@@ -37,6 +37,7 @@ import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.RiwayatActivity;
 import com.eklanku.otuChat.ui.activities.payment.doku.CCPaymentActivity;
 
+import com.eklanku.otuChat.ui.activities.payment.doku.DokuWalletPaymentActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
@@ -246,7 +247,8 @@ public class PaymentFragment extends Fragment {
         btnDoku.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(getActivity(), DokuWalletPaymentActivity.class);
+                startActivity(i);
             }
         });
 

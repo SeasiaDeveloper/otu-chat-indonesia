@@ -88,7 +88,6 @@ public class Profile extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-//        getProfile();
         exProfile();
 
 
@@ -104,7 +103,8 @@ public class Profile extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        getProfileonResume();
+        exProfileOnResume();
+        Log.d("OPPO-1", "onResume: running");
     }
 
     public void getProfile() {
@@ -180,6 +180,64 @@ public class Profile extends AppCompatActivity {
     }
 
     public void exProfile() {
+        Log.d("OPPO-1", "getProfile: running exProfil");
+        Call<DataDetailProfile> callProfil = mApiInterfacePayment.getProfile(strUserID, strApIUse, strAccessToken);
+        callProfil.enqueue(new Callback<DataDetailProfile>() {
+            @Override
+            public void onResponse(Call<DataDetailProfile> call, Response<DataDetailProfile> response) {
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String userID = response.body().getUserID();
+                    final List<DataDetailProfile> result = response.body().getData();
+                    Log.d("OPPO-1", "onResponse: " + status);
+                    if (status.equalsIgnoreCase("SUCCESS")) {
+
+                        //==========data member==============
+                        txtId.setText(userID);
+                        txtName.setText(result.get(0).getO_nama_member());
+                        txtKtp.setText(result.get(0).getNo_ktp());
+                        txtanggallahir.setText(result.get(0).getO_tgl_lahir());
+                        txtAddress.setText(result.get(0).getO_alamat());
+                        txtCity.setText(result.get(0).getO_kota());
+                        txnomorhpmember.setText(result.get(0).getO_hp());
+                        txtEmail.setText(result.get(0).getO_mail());
+                        txtCarrier.setText(result.get(0).getO_jabatanmember());
+                        txtanggaldaftar.setText(result.get(0).getO_tgl_daftar());
+
+                        //===============data bank==============
+                        txbank.setText(result.get(0).getO_bank());
+                        txnorek.setText(result.get(0).getO_norec());
+                        txpemilikrek.setText(result.get(0).getO_pemilikrekening());
+
+                        //==========data sponsor
+                        txtidUpline.setText(result.get(0).getO_id_sponsor());
+                        txtSponsorName.setText(result.get(0).getO_nama_sponsor());
+                        txtSponsorHp.setText(result.get(0).getO_hp_sponsor());
+                        txtjabatanupline.setText(result.get(0).getO_jabatan_sponsor());
+
+
+                    } else {
+                        utilsAlert.globalDialog(Profile.this, titleAlert, response.body().getErrNumber());
+                        //Toast.makeText(getBaseContext(), "FAILED GET TOKEN ["+result+"]", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    utilsAlert.globalDialog(Profile.this, titleAlert, getResources().getString(R.string.error_api));
+                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<DataDetailProfile> call, Throwable t) {
+                //utilsAlert.globalDialog(Profile.this, titleAlert, getResources().getString(R.string.error_api));
+                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                Log.d("API_TRANSBELI", t.getMessage().toString());
+            }
+        });
+
+    }
+
+    public void exProfileOnResume() {
         loadingDialog = ProgressDialog.show(Profile.this, "Harap Tunggu", "Load data profil...");
         loadingDialog.setCanceledOnTouchOutside(true);
         Log.d("OPPO-1", "getProfile: running exProfil");

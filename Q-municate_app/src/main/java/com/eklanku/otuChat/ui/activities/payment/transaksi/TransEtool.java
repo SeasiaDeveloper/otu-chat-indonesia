@@ -82,9 +82,6 @@ public class TransEtool extends AppCompatActivity {
     String strOpsel;
     String code;
 
-    /*AlertDialog.Builder dialog;
-    LayoutInflater inflater;
-    View dialogView;*/
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
 
@@ -136,8 +133,6 @@ public class TransEtool extends AppCompatActivity {
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
-
-        // loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
 
 
         btnBayar.setOnClickListener(new View.OnClickListener() {
@@ -214,18 +209,11 @@ public class TransEtool extends AppCompatActivity {
         String id_pel = txtNo.getText().toString().trim();
 
         if (id_pel.isEmpty()) {
-//            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
             layoutNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-  /*      if (id_pel.length() < 8) {
-//            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 8 digit nomor");
-            requestFocus(txtNo);
-            return false;
-        }*/
 
         layoutNo.setErrorEnabled(false);
         return true;
@@ -336,17 +324,6 @@ public class TransEtool extends AppCompatActivity {
 
                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
                         listNamaPaket.setAdapter(adapter);
-                        /*spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                code = products.get(position).getCode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });*/
 
                     } else {
                         utilsAlert.globalDialog(TransEtool.this, titleAlert, respMessage);

@@ -85,9 +85,6 @@ public class TransSMS extends AppCompatActivity {
     String strOpsel;
     String code;
 
-    /*AlertDialog.Builder dialog;
-    LayoutInflater inflater;
-    View dialogView;*/
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
 
@@ -140,9 +137,6 @@ public class TransSMS extends AppCompatActivity {
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
-
-        // loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
-
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,20 +212,11 @@ public class TransSMS extends AppCompatActivity {
         txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
-//            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
             txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
- /*       if (id_pel.length() < 8) {
-//            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            txtNo.setError("Masukkan minimal 8 digit nomor");
-            requestFocus(txtNo);
-            return false;
-        }*/
-
-        //layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -267,7 +252,6 @@ public class TransSMS extends AppCompatActivity {
                             list.add(x);
                         }
 
-                        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, list);
                         SpinnerGameAdapter spinnerGameAdapter = new SpinnerGameAdapter(getApplicationContext(), products, "PAKET SMS");
                         spnKartu.setAdapter(spinnerGameAdapter);
                         spnKartu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -285,11 +269,9 @@ public class TransSMS extends AppCompatActivity {
 
                     } else {
                         utilsAlert.globalDialog(TransSMS.this, titleAlert, respMessage);
-                        //Toast.makeText(TransSMS.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransSMS.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -339,25 +321,12 @@ public class TransSMS extends AppCompatActivity {
 
                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
                         listSMS.setAdapter(adapter);
-                        /*spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                code = products.get(position).getCode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });*/
 
                     } else {
                         utilsAlert.globalDialog(TransSMS.this, titleAlert, respMessage);
-                        //Toast.makeText(TransSMS.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransSMS.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -415,11 +384,9 @@ public class TransSMS extends AppCompatActivity {
                         finish();
                     } else {
                         utilsAlert.globalDialog(TransSMS.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransSMS.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -427,7 +394,6 @@ public class TransSMS extends AppCompatActivity {
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransSMS.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });

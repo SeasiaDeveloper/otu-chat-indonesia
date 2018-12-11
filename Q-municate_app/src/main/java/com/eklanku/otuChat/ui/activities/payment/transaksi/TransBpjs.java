@@ -149,20 +149,10 @@ public class TransBpjs extends AppCompatActivity {
         txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
-//            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
             txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
-
-/*        if (id_pel.length() < 8) {
-//            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            txtNo.setError("Masukkan minimal 8 digit nomor");
-            requestFocus(txtNo);
-            return false;
-        }*/
-
-        //layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -227,11 +217,9 @@ public class TransBpjs extends AppCompatActivity {
                         startActivity(inKonfirmasi);
                     } else {
                         utilsAlert.globalDialog(TransBpjs.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransBpjs.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -239,17 +227,12 @@ public class TransBpjs extends AppCompatActivity {
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransBpjs.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
-        //loadingDialog = ProgressDialog.show(TransBpjs.this, "Harap Tunggu", "Mengambil Data...");
-        //loadingDialog.setCanceledOnTouchOutside(true);
-
-        Log.d("OPPO-1", "accessToken: "+accessToken);
         Call<LoadDataResponse> dataCall = mApiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
@@ -287,67 +270,19 @@ public class TransBpjs extends AppCompatActivity {
                         });
                     } else {
                         utilsAlert.globalDialog(TransBpjs.this, titleAlert, error);
-//                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransBpjs.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-               // loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransBpjs.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    /*=========================================payment lama========================================================*/
-/*
-    private void cek_transaksi() {
-        loadingDialog = ProgressDialog.show(TransBpjs.this, "Harap Tunggu", "Cek Transaksi...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-
-        Log.d("OPPO-1", "cek_transaksi - TransBpjs: "+PreferenceUtil.getNumberPhone(this)));
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), load_id, "", txtNo.getText().toString(), "bpjsbyr");
-//        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", load_id, "", txtNo.getText().toString(), "bpjsbyr");
-        transBeliCall.enqueue(new Callback<TransBeliResponse>() {
-            @Override
-            public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus().toString();
-                    String error  = response.body().getError();
-
-                    if ( status.equals("OK") ) {
-                        List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi       = new Intent(getBaseContext(), TransKonfirmasi.class);
-                        inKonfirmasi.putExtra("transaksi", trans.get(0).getTransaksi());
-                        inKonfirmasi.putExtra("harga", trans.get(0).getHarga());
-                        inKonfirmasi.putExtra("id_pel", trans.get(0).getIdPel());
-                        inKonfirmasi.putExtra("jenis", trans.get(0).getJenis());
-                        inKonfirmasi.putExtra("pin", trans.get(0).getPin());
-                        inKonfirmasi.putExtra("cmd_save", trans.get(0).getCmdSave());
-                        startActivity(inKonfirmasi);
-                    } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TransBeliResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_TRANSBELI", t.getMessage().toString());
-            }
-        });
-    }*/
-    /*========================================================end payment lama=============================================*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

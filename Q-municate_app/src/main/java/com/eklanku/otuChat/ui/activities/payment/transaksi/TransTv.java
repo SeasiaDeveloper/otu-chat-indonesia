@@ -93,9 +93,6 @@ public class TransTv extends AppCompatActivity {
     String StrTV;
     LinearLayout layoutNoKonfirmasi, layoutTransaksiKe;
 
-    /*AlertDialog.Builder dialog;
-    LayoutInflater inflater;
-    View dialogView;*/
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
 
@@ -123,9 +120,6 @@ public class TransTv extends AppCompatActivity {
         arvNohp = findViewById(R.id.aRvNoHp);
         layJenisPembayaran = findViewById(R.id.layJenisPembayaran);
 
-        //id_member     = prefs.getString("auth_id", "");
-
-
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -150,21 +144,6 @@ public class TransTv extends AppCompatActivity {
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
-
-        /*spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(),nama_jenis);
-        spnJenis.setAdapter(spinnerPpobAdapter);
-        spnJenis.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                load_id = kode_jenis[position];
-                load_data2();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/
         layoutNoKonfirmasi = findViewById(R.id.layout_no_konfirmasi);
         layoutTransaksiKe = findViewById(R.id.layout_transaksi_ke);
         radioGroup = (RadioGroup) findViewById(R.id.radio_group_tv);
@@ -187,13 +166,6 @@ public class TransTv extends AppCompatActivity {
                     btnBayar.setVisibility(View.GONE);
                     arvNoPel.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
-                    /*loadProvider(strUserID, strAccessToken, strAplUse, "VOUCHER TV");
-                    layoutNominal.setVisibility(View.VISIBLE);
-                    StrTV = "VOUCHER TV";
-                    btnBayar.setText("BELI");
-                    txtno_hp.setVisibility(View.VISIBLE);
-                    layoutTransaksiKe.setVisibility(View.VISIBLE);
-                    layoutNoKonfirmasi.setVisibility(View.VISIBLE);*/
                 } else {
                     loadProviderPPOB(strUserID, strAccessToken, "OTU", "TV KABEL");
                     layoutNominal.setVisibility(View.GONE);
@@ -253,49 +225,6 @@ public class TransTv extends AppCompatActivity {
                     dialog.show();
                     return;
 
-                /*AlertDialog dialog = new AlertDialog.Builder(TransTv.this)
-                            .setTitle("Transaksi")
-                            .setMessage("Apakah Anda Yakin Ingin Melanjutkan Transaksi dg Detail \nNo: "+txtNo.getText().toString()+"\nVoucher: "+selected_nominal)
-                            .setPositiveButton("Lanjut", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    cek_transaksi_tv_voucher();
-                                }
-                            })
-                            .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .create();
-                    dialog.show();
-                    return;*/
-
-                    /*dialog = new AlertDialog.Builder(TransTv.this);
-                    inflater = getLayoutInflater();
-                    dialogView = inflater.inflate(R.layout.activity_alert_dialog, null);
-                    dialog.setView(dialogView);
-                    dialog.setCancelable(true);
-                    dialog.setIcon(R.mipmap.ic_launcher);
-                    dialog.setTitle("Peringatan Transaksi!!!");*/
-
-                    /*dialog.setPositiveButton("YA, LANJUTKAN", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            cek_transaksi();
-                        }
-                    });
-
-                    dialog.setNegativeButton("BATALKAN", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });*/
-
-                    // ((Button)dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.button_border);
-
                 } else {
                     cek_transaksi();
                 }
@@ -314,13 +243,6 @@ public class TransTv extends AppCompatActivity {
         txtno_hp.setVisibility(View.VISIBLE);
         layoutTransaksiKe.setVisibility(View.GONE);
         layoutNoKonfirmasi.setVisibility(View.VISIBLE);
-        /*loadProvider(strUserID, strAccessToken, strAplUse, "VOUCHER TV");
-        layoutNominal.setVisibility(View.VISIBLE);
-        StrTV = "VOUCHER TV";
-        btnBayar.setText("BELI");
-        txtno_hp.setVisibility(View.VISIBLE);
-        layoutTransaksiKe.setVisibility(View.VISIBLE);
-        layoutNoKonfirmasi.setVisibility(View.VISIBLE);*/
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
@@ -366,11 +288,9 @@ public class TransTv extends AppCompatActivity {
 
                     } else {
                         utilsAlert.globalDialog(TransTv.this, titleAlert, respMessage);
-                        //Toast.makeText(TransTv.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -417,7 +337,6 @@ public class TransTv extends AppCompatActivity {
                             listPrice.add(price);
                         }
 
-                        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, list);
                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
                         spnLayanan.setAdapter(adapter);
                         spnLayanan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -435,11 +354,9 @@ public class TransTv extends AppCompatActivity {
 
                     } else {
                         utilsAlert.globalDialog(TransTv.this, titleAlert, respMessage);
-                        //Toast.makeText(TransTv.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -491,11 +408,9 @@ public class TransTv extends AppCompatActivity {
                         });
                     } else {
                         utilsAlert.globalDialog(TransTv.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -503,7 +418,6 @@ public class TransTv extends AppCompatActivity {
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -512,18 +426,10 @@ public class TransTv extends AppCompatActivity {
         String id_pel = txtNo.getText().toString().trim();
 
         if (id_pel.isEmpty()) {
-            //Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
             layoutNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
-
-    /*    if (id_pel.length() < 8) {
-            //Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 8 digit nomor");
-            requestFocus(txtNo);
-            return false;
-        }*/
 
         layoutNo.setErrorEnabled(false);
         return true;
@@ -613,11 +519,9 @@ public class TransTv extends AppCompatActivity {
                         startActivity(inKonfirmasi);
                     } else {
                         utilsAlert.globalDialog(TransTv.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -625,7 +529,6 @@ public class TransTv extends AppCompatActivity {
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -682,11 +585,9 @@ public class TransTv extends AppCompatActivity {
                         startActivity(inKonfirmasi);
                     } else {
                         utilsAlert.globalDialog(TransTv.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -694,131 +595,11 @@ public class TransTv extends AppCompatActivity {
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransTv.this, titleAlert, getResources().getString(R.string.error_api));
-               // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
     }
 
-    /*===================================payment lama=============================================*/
-    /*
-    private void cek_transaksi() {
-        loadingDialog = ProgressDialog.show(TransTv.this, "Harap Tunggu", "Cek Transaksi...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-
-        Log.d("OPPO-1", "cek_transaksi - transtv: "+PreferenceUtil.getNumberPhone(this)));
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), load_id, selected_nominal, txtNo.getText().toString(), "tvbyr");
-//        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", load_id, selected_nominal, txtNo.getText().toString(), "tvbyr");
-        transBeliCall.enqueue(new Callback<TransBeliResponse>() {
-            @Override
-            public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String error  = response.body().getError();
-
-                    if ( status.equals("OK") ) {
-                        List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi       = new Intent(getBaseContext(), TransKonfirmasi.class);
-                        inKonfirmasi.putExtra("transaksi", trans.get(0).getTransaksi());
-                        inKonfirmasi.putExtra("harga", trans.get(0).getHarga());
-                        inKonfirmasi.putExtra("id_pel", trans.get(0).getIdPel());
-                        inKonfirmasi.putExtra("jenis", trans.get(0).getJenis());
-                        inKonfirmasi.putExtra("pin", trans.get(0).getPin());
-                        inKonfirmasi.putExtra("cmd_save", trans.get(0).getCmdSave());
-                        startActivity(inKonfirmasi);
-                    } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TransBeliResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_TRANSBELI", t.getMessage().toString());
-            }
-        });
-    }
-
-    public void load_data2(){
-        loadingDialog = ProgressDialog.show(TransTv.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-
-        Log.d("OPPO-1", "cek_transaksi - transtv: "+PreferenceUtil.getNumberPhone(this)));
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, PreferenceUtil.getNumberPhone(this)));
-//        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id, "085334059170");
-
-
-        dataCall.enqueue(new Callback<LoadDataResponse>() {
-            @Override
-            public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
-                nominal = new String[0];
-                denom = new String[0];
-                point = new String[0];
-                spinnerPaymentAdapter = new SpinnerPaymentAdapter(getApplicationContext(), denom, nominal, point);
-                spnLayanan.setAdapter(spinnerPaymentAdapter);
-                if (response.isSuccessful()) {
-                    String status   = response.body().getStatus();
-                    String error    = response.body().getError();
-
-                    if ( status.equals("OK") ) {
-                        final List<DataNominal> result = response.body().getResult();
-                        nominal                        = new String[result.size()];
-                        point                          = new String[result.size()];
-                        denom                          = new String[result.size()];
-                        selected_nominal               = result.get(0).getProductKode();
-
-                        // Locale localeID = new Locale("in", "ID");
-                        // NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
-
-                        DecimalFormat decimal = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-                        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-                        dfs.setCurrencySymbol("");
-                        dfs.setMonetaryDecimalSeparator(',');
-                        dfs.setGroupingSeparator('.');
-                        decimal.setDecimalFormatSymbols(dfs);
-
-                        for ( int i=0; i<result.size(); i++ ) {
-                            nominal[i] = result.get(i).getProductName();
-                            point[i] = "point : "+decimal.format(result.get(i).getEpoint());
-                        }
-
-                        spinnerPaymentAdapter = new SpinnerPaymentAdapter(getApplicationContext(),nominal, denom , point);
-                        spnLayanan.setAdapter(spinnerPaymentAdapter);
-
-//                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, nominal);
-//                        spnLayanan.setAdapter(adapter);
-                        spnLayanan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                selected_nominal = result.get(position).getProductKode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-
-            }
-        });
-    }
-    /*==========================================end payment lama=============================================*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

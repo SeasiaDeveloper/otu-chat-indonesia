@@ -69,14 +69,10 @@ public class TransPulsa extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     ImageView imgopr;
     TextView tvOpr;
-    /*String opr = "";
-    boolean cek_opr = false;*/
 
     ApiInterfacePayment apiInterfacePayment;
     PreferenceManager preferenceManager;
-    String strUserID, strAccessToken, strAplUse = "OTU"/*, strProductType = "PULSA"*/;
-    /*String[] opSel = {"Telkomsel", "XL", "Indosat", "Three", "Smart", "Ceria", "Axis"};
-    String strOpsel;*/
+    String strUserID, strAccessToken, strAplUse = "OTU";
     String code;
 
     Context context;
@@ -86,14 +82,6 @@ public class TransPulsa extends AppCompatActivity {
 
     Utils utilsAlert;
     String titleAlert = "Pulsa";
-
-    /*String[] prefix_indosat = {"0814", "0815", "0816", "0855", "0856", "0857", "0858"};
-    String[] prefix_telkomsel = {"0811", "0812", "0813", "0821", "0822", "0823", "0851", "0852", "0853"};
-    String[] prefix_tri = {"0896", "0897", "0898", "0899", "0895"};
-    String[] prefix_xl = {"0817", "0818", "0819", "0877", "0879", "0878", "0859"};//, "0831", "0838"
-    String[] prefix_bolt = {"0999", "0998"};
-    String[] prefix_smartfren = {"0881", "0882", "0883", "0884", "0885", "0885", "0887", "0888", "0889"};
-    String[] prefix_axis = {"0838", "0831", "0832", "0833"};*/
 
     ImageView imgOpr;
     TextView txOpr;
@@ -105,7 +93,6 @@ public class TransPulsa extends AppCompatActivity {
     LinearLayout layoutView;
     ProgressBar progressBar;
     TextView tvEmpty;
-    //boolean availableNominal = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,8 +123,6 @@ public class TransPulsa extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        //EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setEnabled(false);
         btnBayar.setText(getString(R.string.beli));
 
@@ -157,7 +142,6 @@ public class TransPulsa extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
 
         btnBayar.setOnClickListener(view -> {
             if (!validateIdPel()) {
@@ -232,20 +216,11 @@ public class TransPulsa extends AppCompatActivity {
         txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
-            //Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
             txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-        /*if (id_pel.length() < 8) {
-            //Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            txtNo.setError("Masukkan minimal 8 digit nomor");
-            requestFocus(txtNo);
-            return false;
-        }*/
-
-        //txtNo.setError(null);
         return true;
     }
 
@@ -255,140 +230,6 @@ public class TransPulsa extends AppCompatActivity {
         }
     }
 
-    /*private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
-        loadingDialog = ProgressDialog.show(TransPulsa.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Call<LoadDataResponseProvider> userCall = apiInterfacePayment.getLoadProvider(userID, accessToken, aplUse, productType);
-        userCall.enqueue(new Callback<LoadDataResponseProvider>() {
-            @Override
-            public void onResponse(Call<LoadDataResponseProvider> call, Response<LoadDataResponseProvider> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String userID = response.body().getUserID();
-                    String accessToken = response.body().getAccessToken();
-                    String respMessage = response.body().getRespMessage();
-                    String respTime = response.body().getRespTime();
-                    String productTypes = response.body().getProductTypes();
-
-                    if (status.equals("SUCCESS")) {
-
-                        List<String> list = new ArrayList<String>();
-                        list.clear();
-                        final List<DataProvider> products = response.body().getProviders();
-
-                        for (int i = 0; i < products.size(); i++) {
-                            String x = products.get(i).getName_provaider();
-                            Log.d("OPPO-1", "onResponse: " + x);
-                            list.add(x);
-                        }
-
-                        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, list);
-                        SpinnerGameAdapter spinner = new SpinnerGameAdapter(getApplicationContext(), products, "PULSA");
-                        spnKartu.setAdapter(spinner);
-                        spnKartu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                                strOpsel = parent.getItemAtPosition(position).toString();
-                                strOpsel = products.get(position).getName_provaider();
-                                loadProduct(strUserID, strAccessToken, strAplUse, strOpsel);
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-
-                    } else {
-                        utilsAlert.globalDialog(TransPulsa.this, titleAlert, respMessage);
-                        //Toast.makeText(TransPulsa.this, "" + respMessage, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    utilsAlert.globalDialog(TransPulsa.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
-                loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransPulsa.this, titleAlert, getResources().getString(R.string.error_api));
-            }
-        });
-    }*/
-
-    /* private void loadProduct(String userID, String accessToken, String aplUse, String provider) {
-         loadingDialog = ProgressDialog.show(TransPulsa.this, "Harap Tunggu", "Mengambil Data...");
-         loadingDialog.setCanceledOnTouchOutside(true);
-         Call<LoadDataResponseProduct> userCall = apiInterfacePayment.getLoadProduct(userID, accessToken, aplUse, provider);
-         userCall.enqueue(new Callback<LoadDataResponseProduct>() {
-             @Override
-             public void onResponse(Call<LoadDataResponseProduct> call, Response<LoadDataResponseProduct> response) {
-                 loadingDialog.dismiss();
-                 if (response.isSuccessful()) {
-                     String status = response.body().getStatus();
-                     String userID = response.body().getUserID();
-                     String accessToken = response.body().getAccessToken();
-                     String respMessage = response.body().getRespMessage();
-                     String respTime = response.body().getRespTime();
-                     String provider = response.body().getProvider();
-
-                     if (status.equals("SUCCESS")) {
-
-                         List<String> listPrice = new ArrayList<String>();
-                         List<String> listNama = new ArrayList<String>();
-                         List<String> listEp = new ArrayList<String>();
-                         id_paket = new ArrayList<>();
-                         listPrice.clear();
-                         listNama.clear();
-                         listEp.clear();
-                         final List<DataProduct> products = response.body().getProducts();
-                         for (int i = 0; i < products.size(); i++) {
-                             String name = products.get(i).getName();
-                             String price = products.get(i).getPrice();
-                             String ep = products.get(i).getEp();
-                             id_paket.add(products.get(i).getCode());
-                             listNama.add(name);
-                             listEp.add(ep);
-                             listPrice.add(price);
-                         }
-
-                         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, list);
-                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
-                         listPulsa.setAdapter(adapter);
-
-                         *//*spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                code = products.get(position).getCode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });*//*
-
-                    } else {
-                        utilsAlert.globalDialog(TransPulsa.this, titleAlert, respMessage);
-                        // Toast.makeText(TransPulsa.this, "" + respMessage, Toast.LENGTH_SHORT).show();
-                    }
-                } else
-
-                {
-                    utilsAlert.globalDialog(TransPulsa.this, titleAlert, getResources().getString(R.string.error_api));
-                    // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponseProduct> call, Throwable t) {
-                loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransPulsa.this, titleAlert, getResources().getString(R.string.error_api));
-            }
-        });
-    }*/
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransPulsa.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
@@ -434,18 +275,15 @@ public class TransPulsa extends AppCompatActivity {
                         finish();
                     } else {
                         utilsAlert.globalDialog(TransPulsa.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransPulsa.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 utilsAlert.globalDialog(TransPulsa.this, titleAlert, getResources().getString(R.string.error_api));
                 Log.d("API_TRANSBELI", t.getMessage());
             }
@@ -481,113 +319,6 @@ public class TransPulsa extends AppCompatActivity {
     String tempOprPulsa = "";
     boolean statOprPulsa = false;
     boolean otherOpr = true;
-
-    /*public void cekPrefix(CharSequence s) {
-        try {
-            if (s.length() >= 6) {
-                String nomorHP1 = s.toString().substring(0, 2);
-                String nomorHp = "";
-                String valNomorHp = "", valNomorHP2 = "";
-                if (nomorHP1.startsWith("+6")) {
-                    valNomorHp = nomorHP1.replace("+6", "0");
-                    nomorHp = valNomorHp + s.toString().substring(3, 6);
-                } else if (nomorHP1.startsWith("62")) {
-                    valNomorHp = nomorHP1.replace("62", "0");
-                    nomorHp = valNomorHp + s.toString().substring(2, 5);
-                } else {
-                    nomorHp = s.toString().substring(0, 4);
-                }
-
-                Log.d("OPPO-1", "cekPrefix: " + nomorHp);
-
-                if (Arrays.asList(prefix_indosat).contains(nomorHp)) {
-                    oprPulsa = "Indosat";
-                    txOpr.setText(oprPulsa);
-                    imgOpr.setImageResource(R.mipmap.indosat);
-                    statOprPulsa = true;
-                    otherOpr = false;
-                } else if (Arrays.asList(prefix_telkomsel).contains(nomorHp)) {
-                    oprPulsa = "Telkomsel";
-                    txOpr.setText(oprPulsa);
-                    imgOpr.setImageResource(R.mipmap.telkomsel);
-                    statOprPulsa = true;
-                    otherOpr = false;
-                } else if (Arrays.asList(prefix_xl).contains(nomorHp)) {
-                    oprPulsa = "XL";
-                    txOpr.setText(oprPulsa);
-                    imgOpr.setImageResource(R.mipmap.xl);
-                    statOprPulsa = true;
-                    otherOpr = false;
-                } else if (Arrays.asList(prefix_tri).contains(nomorHp)) {
-                    oprPulsa = "Three";
-                    txOpr.setText(oprPulsa);
-                    imgOpr.setImageResource(R.mipmap.three);
-                    statOprPulsa = true;
-                    otherOpr = false;
-                } else if (Arrays.asList(prefix_smartfren).contains(nomorHp)) {
-                    oprPulsa = "Smart";
-                    txOpr.setText(oprPulsa);
-                    imgOpr.setImageResource(R.mipmap.smart);
-                    statOprPulsa = true;
-                    otherOpr = false;
-                } else if (Arrays.asList(prefix_axis).contains(nomorHp)) {
-                    oprPulsa = "Axis";
-                    txOpr.setText(oprPulsa);
-                    imgOpr.setImageResource(R.mipmap.axis);
-                    statOprPulsa = true;
-                    otherOpr = false;
-                } else {
-                    layOpr.setVisibility(View.VISIBLE);
-                    txLayOpr.setVisibility(View.VISIBLE);
-                    statOprPulsa = false;
-                    tempOprPulsa = "";
-                    btnBayar.setEnabled(true);
-                    oprPulsa = "";
-                }
-
-                Log.d("OPPO-1", "opr baru: " + oprPulsa + " tempOprPulsa: " + tempOprPulsa);
-                Log.d("OPPO-1", "statOprPulsa: " + statOprPulsa);
-                Log.d("OPPO-1", "other opr: " + otherOpr);
-
-                if (!oprPulsa.equalsIgnoreCase(tempOprPulsa) && statOprPulsa) {
-                    loadProduct(strUserID, strAccessToken, strAplUse, oprPulsa);
-                    tempOprPulsa = oprPulsa;
-                    statOprPulsa = false;
-                    btnBayar.setEnabled(true);
-                    layOpr.setVisibility(View.GONE);
-                    txLayOpr.setVisibility(View.GONE);
-                    otherOpr = true;
-                }
-
-                if (otherOpr && oprPulsa.equalsIgnoreCase("")) {
-                    Log.d("OPPO-1", "cekPrefix: ");
-                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
-                    otherOpr = false;
-                }
-
-            } else if (s.length() < 4) {
-                listPulsa.setAdapter(adapter);
-                statOprPulsa = false;
-                otherOpr = true;
-                tempOprPulsa = "";
-                txOpr.setText("");
-                imgOpr.setImageResource(0);
-                layOpr.setVisibility(View.GONE);
-                txLayOpr.setVisibility(View.GONE);
-                btnBayar.setEnabled(false);
-            } else if (s.length() >= 8 && s.length() <= 13) {
-                listPulsa.setAdapter(adapter);
-                layOpr.setVisibility(View.GONE);
-                txLayOpr.setVisibility(View.GONE);
-                btnBayar.setEnabled(false);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }*/
-
 
     private void initializeResources() {
         listPulsa = findViewById(R.id.listPulsa);
@@ -799,12 +530,7 @@ public class TransPulsa extends AppCompatActivity {
                 layOpr.setVisibility(View.GONE);
                 txLayOpr.setVisibility(View.GONE);
                 btnBayar.setEnabled(false);
-            } /*else if (s.length() >= 8 && s.length() <= 13) {
-                listPulsa.setAdapter(adapter);
-                layOpr.setVisibility(View.GONE);
-                txLayOpr.setVisibility(View.GONE);
-                btnBayar.setEnabled(false);
-            }*/
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

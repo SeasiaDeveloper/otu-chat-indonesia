@@ -114,7 +114,6 @@ public class TransWi extends AppCompatActivity {
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
-        //loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
         loadProduct(strUserID, strAccessToken, strAplUse, strProductType);
 
         btnBayar.setOnClickListener(new View.OnClickListener() {
@@ -187,20 +186,11 @@ public class TransWi extends AppCompatActivity {
         String id_pel = txtNo.getText().toString().trim();
         txtNo.setError(null);
         if (id_pel.isEmpty()) {
-//            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
             txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
- /*       if (id_pel.length() < 8) {
-//            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            txtNo.setError("Masukkan minimal 8 digit nomor");
-            requestFocus(txtNo);
-            return false;
-        }*/
-
-        //layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -253,11 +243,9 @@ public class TransWi extends AppCompatActivity {
 
                     } else {
                         utilsAlert.globalDialog(TransWi.this, titleAlert, respMessage);
-                        //Toast.makeText(TransWi.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -307,25 +295,12 @@ public class TransWi extends AppCompatActivity {
 
                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
                         listWifiID.setAdapter(adapter);
-                        /*spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                code = products.get(position).getCode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });*/
 
                     } else {
                         utilsAlert.globalDialog(TransWi.this, titleAlert, respMessage);
-                        //Toast.makeText(TransWi.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -383,18 +358,15 @@ public class TransWi extends AppCompatActivity {
                         finish();
                     } else {
                         utilsAlert.globalDialog(TransWi.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }

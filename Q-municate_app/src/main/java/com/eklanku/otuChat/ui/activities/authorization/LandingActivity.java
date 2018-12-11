@@ -258,7 +258,9 @@ public class LandingActivity extends BaseAuthActivity {
                 new AccountKitConfiguration.AccountKitConfigurationBuilder(
                         com.facebook.accountkit.ui.LoginType.PHONE,
                         AccountKitActivity.ResponseType.TOKEN); // or .ResponseType.TOKEN
-        uiManager = new SkinManager(com.facebook.accountkit.ui.LoginType.PHONE, SkinManager.Skin.TRANSLUCENT,
+
+        //di param UI Manager di hilangkan parameter com.facebook.accountkit.ui.LoginType.PHONE
+       uiManager = new SkinManager(SkinManager.Skin.TRANSLUCENT,
                 (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? getResources().getColor(R.color.colorTextOtu,null):getResources().getColor(R.color.colorTextOtu)),
                 R.drawable.ic_background,
                 SkinManager.Tint.WHITE,

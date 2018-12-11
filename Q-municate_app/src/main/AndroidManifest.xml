@@ -436,14 +436,6 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.payment.transaksi.TransVoucherGame"
-            android:label="Voucher Game"
-            android:theme="@style/AppThemePaymentItems">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
-        </activity>
-        <activity
             android:name=".ui.activities.payment.transaksi.TransEtool"
             android:label="E-TOOL"
             android:theme="@style/AppThemePaymentItems">
@@ -625,7 +617,6 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity android:name=".ui.activities.payment.topup.TopupBilling" />
-        <activity android:name=".ui.activities.payment.topup.TopupDetail" />
         <!-- <activity android:name=".ui.activities.payment.settingpayment.Register" /> -->
         <activity
             android:name=".ui.activities.settings.SettingTabPaymentActivity"
@@ -640,8 +631,10 @@
 
         <!-- DOKU -->
         <activity android:name=".ui.activities.payment.doku.CCPaymentActivity" />
+        <activity android:name=".ui.activities.payment.doku.DokuWalletPaymentActivity" />
         <activity android:name=".ui.activities.payment.doku.HomeGatewayDoku"
             android:theme="@style/activityDialog"/>
+
 
         <!-- new config -->
         <!--

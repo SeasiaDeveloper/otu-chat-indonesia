@@ -75,8 +75,6 @@ public class TransDeposit extends AppCompatActivity {
         utilsAlert = new Utils(TransDeposit.this);
 
         txtNo = (EditText) findViewById(R.id.txtTransDepositTujuan);
-        //=============sementara saja, karena layout inputan di hp ku ilang
-        txtNo.setText("EKL0035808");
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransDepositTujuan);
         txtJml = (EditText) findViewById(R.id.txtTransDepositJml);
         layoutJml = (TextInputLayout) findViewById(R.id.txtLayoutTransDepositJml);

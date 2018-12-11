@@ -154,27 +154,14 @@ public class TransMultiFinance extends AppCompatActivity {
                             idFinance.add(result.get(i).getCode());
                         }
 
-                        //adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
                         spinnerPpobAdapter = new SpinnerPpobAdapter(getBaseContext(), nama_operator);
                         listFinance.setAdapter(spinnerPpobAdapter);
-                        /*spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                selected_operator = result.get(position).getCode();
-                            }
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });*/
                     } else {
                         utilsAlert.globalDialog(TransMultiFinance.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransMultiFinance.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -182,7 +169,6 @@ public class TransMultiFinance extends AppCompatActivity {
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransMultiFinance.this, titleAlert, getResources().getString(R.string.error_api));
-               // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -191,20 +177,11 @@ public class TransMultiFinance extends AppCompatActivity {
         String id_pel = txtNo.getText().toString().trim();
         txtNo.setError(null);
         if (id_pel.isEmpty()) {
-//            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
             txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-   /*     if (id_pel.length() < 8) {
-//            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            txtNo.setError("Masukkan minimal 8 digit nomor");
-            requestFocus(txtNo);
-            return false;
-        }*/
-
-       // layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -232,25 +209,7 @@ public class TransMultiFinance extends AppCompatActivity {
         }
     }
 
-   /* private boolean validateIdpel() {
-        String id_pel = txtNo.getText().toString().trim();
 
-        if ( id_pel.isEmpty() ) {
-            layoutNo.setError("Kolom nomor ID tidak boleh kosong");
-            requestFocus(txtNo);
-            return false;
-        }
-
-        if ( id_pel.length() < 8 ) {
-            layoutNo.setError("Masukkan minimal 8 digit nomor ID");
-            requestFocus(txtNo);
-            return false;
-        }
-
-        layoutNo.setErrorEnabled(false);
-        return true;
-    }
-*/
     private void requestFocus(View view) {
         if ( view.requestFocus() ) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -307,11 +266,9 @@ public class TransMultiFinance extends AppCompatActivity {
                         startActivity(inKonfirmasi);
                     } else {
                         utilsAlert.globalDialog(TransMultiFinance.this, titleAlert, error);
-                       // Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransMultiFinance.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -319,7 +276,6 @@ public class TransMultiFinance extends AppCompatActivity {
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransMultiFinance.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });

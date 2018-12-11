@@ -150,31 +150,6 @@ public class TransPln extends AppCompatActivity {
         progressBar = findViewById(R.id.progress);
         tvEmpty = findViewById(R.id.tv_empty);
 
-
-       /* //loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
-        spinnerProviderAdapter = new SpinnerPpobAdapter(getApplicationContext(), arrayProvider);
-        spinnerProvider.setAdapter(spinnerProviderAdapter);
-        spinnerProvider.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    laySpnNominal.setVisibility(View.VISIBLE);
-                    btnBayar.setText("Beli Token Listrik");
-                    //load_id = parent.getItemAtPosition(position).toString();
-                    load_data2();
-                } else {
-                    laySpnNominal.setVisibility(View.GONE);
-                    btnBayar.setText("Cek Tagihan Listrik");
-                    load_id = "PLNPOST";
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/
-
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
 
@@ -196,7 +171,6 @@ public class TransPln extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton rb = (RadioButton) group.findViewById(checkedId);
-                //Toast.makeText(TransPln.this, rb.getText(), Toast.LENGTH_SHORT).show();
                 if (rb.getText().toString().equalsIgnoreCase("Token Listrik")) {
                     loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
                     layoutNominal.setVisibility(View.VISIBLE);
@@ -238,8 +212,6 @@ public class TransPln extends AppCompatActivity {
     }
 
     private void load() {
-        // loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
-        //loadProduct(strUserID, strAccessToken, strAplUse, strProductType);
         getProductPLNToken();
         layoutNominal.setVisibility(View.VISIBLE);
         rbPln = "Token Listrik";
@@ -256,7 +228,6 @@ public class TransPln extends AppCompatActivity {
         Log.d("OPPO-1", "loadProvider: " + userID);
         loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        //Toast.makeText(this, "load provider", Toast.LENGTH_SHORT).show();
         Call<LoadDataResponseProvider> userCall = apiInterfacePayment.getLoadProvider(userID, accessToken, aplUse, productType);
         userCall.enqueue(new Callback<LoadDataResponseProvider>() {
             @Override
@@ -297,11 +268,9 @@ public class TransPln extends AppCompatActivity {
 
                     } else {
                         utilsAlert.globalDialog(TransPln.this, titleAlert, respMessage);
-                        // Toast.makeText(TransPln.this, "" + respMessage, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -352,17 +321,6 @@ public class TransPln extends AppCompatActivity {
                         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, list);
                         SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
                         listPLN.setAdapter(adapter);
-                        /*spnNominal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                code = products.get(position).getCode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });*/
 
                     } else {
                         utilsAlert.globalDialog(TransPln.this, titleAlert, respMessage);
@@ -383,8 +341,6 @@ public class TransPln extends AppCompatActivity {
     }
 
     private void loadProviderPPOB(String userID, String accessToken, String aplUse, String productGroup) {
-//        loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
-//        loadingDialog.setCanceledOnTouchOutside(true);
 
         Call<LoadDataResponse> dataCall = apiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
@@ -469,21 +425,10 @@ public class TransPln extends AppCompatActivity {
         txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
-//            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
             txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
-
-
-     /*   if (id_pel.length() < 8) {
-//            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            txtNo.setError("Masukkan minimal 8 digit nomor");
-            requestFocus(txtNo);
-            return false;
-        }*/
-
-        // layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -546,11 +491,9 @@ public class TransPln extends AppCompatActivity {
                         startActivity(inKonfirmasi);
                     } else {
                         utilsAlert.globalDialog(TransPln.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-                    // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -558,7 +501,6 @@ public class TransPln extends AppCompatActivity {
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-                // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -617,11 +559,9 @@ public class TransPln extends AppCompatActivity {
                         startActivity(inKonfirmasi);
                     } else {
                         utilsAlert.globalDialog(TransPln.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -629,7 +569,6 @@ public class TransPln extends AppCompatActivity {
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });

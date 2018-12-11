@@ -47,7 +47,6 @@ public class TransKartuKredit extends AppCompatActivity {
 
     private static String[] nama_operator;
 
-    //private static String[] kode_operator;
     private static String load_type    = "kartukredit_nominal";
 
     SharedPreferences prefs;
@@ -104,23 +103,6 @@ public class TransKartuKredit extends AppCompatActivity {
         HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
-
-//        load_data();
-/*
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, nama_operator);
-        spnOperator.setAdapter(adapter);
-        spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                load_id = kode_operator[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-*/
 
         loadProvider(strUserID, strAccessToken, "OTU", "KARTU KREDIT");
         btnBayar.setOnClickListener(new View.OnClickListener() {
@@ -195,18 +177,11 @@ public class TransKartuKredit extends AppCompatActivity {
         String id_pel = txtNo.getText().toString().trim();
 
         if (id_pel.isEmpty()) {
-//            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
             layoutNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-  /*      if (id_pel.length() < 8) {
-//            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            layoutNo.setError("Masukkan minimal 8 digit nomor");
-            requestFocus(txtNo);
-            return false;
-        }*/
 
         layoutNo.setErrorEnabled(false);
         return true;
@@ -310,109 +285,6 @@ public class TransKartuKredit extends AppCompatActivity {
         });
     }
 
-    /*private void load_data() {
-        loadingDialog = ProgressDialog.show(TransKartuKredit.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Log.d("OPPO-1", "cek_transaksi - Transkartukredit: "+PreferenceUtil.getNumberPhone(this));
-        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id,PreferenceUtil.getNumberPhone(this));
-//        Call<LoadDataResponse> dataCall = mApiInterface.postLoadData(load_type, load_id,"085334059170");
-        dataCall.enqueue(new Callback<LoadDataResponse>() {
-            @Override
-            public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
-                nama_operator=new String[0];
-                //adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, nama_operator);
-                spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(),nama_operator);
-                spnOperator.setAdapter(spinnerPpobAdapter);
-                if (response.isSuccessful()) {
-                    String status   = response.body().getStatus();
-                    String error    = response.body().getError();
-
-                    if ( status.equals("OK") ) {
-                        final List<DataNominal> result = response.body().getResult();
-                        nama_operator                        = new String[result.size()];
-                        selected_operator               = result.get(0).getProductKode();
-
-                        for ( int i=0; i<result.size(); i++ ) {
-                            nama_operator[i] = result.get(i).getProductName();//+" | "+ format.format(result.get(i).getHargaJual())+" ("+ decimal.format(result.get(i).getEpoint())+")";
-                        }
-
-//                        adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, nama_operator);
-                        spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(),nama_operator);
-                        spnOperator.setAdapter(spinnerPpobAdapter);
-                        spnOperator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                selected_operator = result.get(position).getProductKode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_LOADDATA", t.getMessage().toString());
-            }
-        });
-    }*/
-
-    /*===================================================payment lama=========================================================*/
-    /*
-    private void cek_transaksi() {
-        loadingDialog = ProgressDialog.show(TransKartuKredit.this, "Harap Tunggu", "Cek Transaksi...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        String nominal="";
-
-        Log.d("OPPO-1", "cek_transaksi - transkartukredit: "+PreferenceUtil.getNumberPhone(this)));
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), selected_operator, nominal, txtNo.getText().toString(), "kartubyr");
-//        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", selected_operator, nominal, txtNo.getText().toString(), "kartubyr");
-        transBeliCall.enqueue(new Callback<TransBeliResponse>() {
-            @Override
-            public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus().toString();
-                    String error  = response.body().getError();
-
-                    if ( status.equals("OK") ) {
-                        List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi       = new Intent(getBaseContext(), TransKonfirmasi.class);
-                        inKonfirmasi.putExtra("transaksi", trans.get(0).getTransaksi());
-                        inKonfirmasi.putExtra("harga", trans.get(0).getHarga());
-                        inKonfirmasi.putExtra("id_pel", trans.get(0).getIdPel());
-                        inKonfirmasi.putExtra("jenis", trans.get(0).getJenis());
-                        inKonfirmasi.putExtra("pin", trans.get(0).getPin());
-                        inKonfirmasi.putExtra("cmd_save", trans.get(0).getCmdSave());
-                        startActivity(inKonfirmasi);
-                    } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TransBeliResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_TRANSBELI", t.getMessage().toString());
-            }
-        });
-    }*/
-    /*======================================================end payment lama==================================================*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

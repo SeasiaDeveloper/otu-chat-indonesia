@@ -105,14 +105,6 @@ public class TransPaketData extends AppCompatActivity {
     Utils utilsAlert;
     String titleAlert = "Paket Data";
 
-    String[] prefix_indosat = {"0814", "0815", "0816", "0855", "0856", "0857", "0858"};
-    String[] prefix_telkomsel = {"0811", "0812", "0813", "0821", "0822", "0823", "0851", "0852", "0853"};
-    String[] prefix_tri = {"0896", "0897", "0898", "0899", "0895"};
-    String[] prefix_xl = {"0817", "0818", "0819", "0877", "0879", "0878", "0859"};//, "0831", "0838"
-    String[] prefix_bolt = {"0999", "0998"};
-    String[] prefix_smartfren = {"0881", "0882", "0883", "0884", "0885", "0885", "0887", "0888", "0889"};
-    String[] prefix_axis = {"0838", "0831", "0832", "0833"};
-
     ImageView imgOpr;
     TextView txOpr;
 
@@ -247,20 +239,12 @@ public class TransPaketData extends AppCompatActivity {
         txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
-//            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
             txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-       /* if (id_pel.length() < 8) {
-//            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            txtNo.setError("Masukkan minimal 8 digit nomor");
-            requestFocus(txtNo);
-            return false;
-        }*/
 
-        // layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -269,140 +253,6 @@ public class TransPaketData extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-
-//    private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
-//        loadingDialog = ProgressDialog.show(TransPaketData.this, "Harap Tunggu", "Mengambil Data...");
-//        loadingDialog.setCanceledOnTouchOutside(true);
-//        Call<LoadDataResponseProvider> userCall = apiInterfacePayment.getLoadProvider(userID, accessToken, aplUse, productType);
-//        userCall.enqueue(new Callback<LoadDataResponseProvider>() {
-//            @Override
-//            public void onResponse(Call<LoadDataResponseProvider> call, Response<LoadDataResponseProvider> response) {
-//                loadingDialog.dismiss();
-//                if (response.isSuccessful()) {
-//                    String status = response.body().getStatus();
-//                    String userID = response.body().getUserID();
-//                    String accessToken = response.body().getAccessToken();
-//                    String respMessage = response.body().getRespMessage();
-//                    String respTime = response.body().getRespTime();
-//                    String productTypes = response.body().getProductTypes();
-//
-//                    if (status.equals("SUCCESS")) {
-//
-//                        List<String> list = new ArrayList<String>();
-//                        list.clear();
-//                        final List<DataProvider> products = response.body().getProviders();
-//                        for (int i = 0; i < products.size(); i++) {
-//                            String x = products.get(i).getName_provaider();
-//                            Log.d("OPPO-1", "onResponse: " + x);
-//                            list.add(x);
-//                        }
-//
-//                        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, list);
-//                        SpinnerGameAdapter spinnerGameAdapter = new SpinnerGameAdapter(getApplicationContext(), products, "PAKET DATA");
-//                        spnJenis.setAdapter(spinnerGameAdapter);
-//                        spnJenis.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                            @Override
-//                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                                strOpsel = products.get(position).getName_provaider();
-//                                loadProduct(strUserID, strAccessToken, strAplUse, strOpsel);
-//                            }
-//
-//                            @Override
-//                            public void onNothingSelected(AdapterView<?> parent) {
-//
-//                            }
-//                        });
-//
-//                    } else {
-//                        utilsAlert.globalDialog(TransPaketData.this, titleAlert, respMessage);
-//                        //Toast.makeText(TransPaketData.this, "" + respMessage, Toast.LENGTH_SHORT).show();
-//                    }
-//                } else {
-//                    utilsAlert.globalDialog(TransPaketData.this, titleAlert, getResources().getString(R.string.error_api));
-//                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
-//                loadingDialog.dismiss();
-//                utilsAlert.globalDialog(TransPaketData.this, titleAlert, getResources().getString(R.string.error_api));
-//            }
-//        });
-//    }
-//
-//    private void loadProduct(String userID, String accessToken, String aplUse, String provider) {
-//        loadingDialog = ProgressDialog.show(TransPaketData.this, "Harap Tunggu", "Mengambil Data...");
-//        loadingDialog.setCanceledOnTouchOutside(true);
-//        Call<LoadDataResponseProduct> userCall = apiInterfacePayment.getLoadProduct(userID, accessToken, aplUse, provider);
-//        userCall.enqueue(new Callback<LoadDataResponseProduct>() {
-//            @Override
-//            public void onResponse(Call<LoadDataResponseProduct> call, Response<LoadDataResponseProduct> response) {
-//                loadingDialog.dismiss();
-//                if (response.isSuccessful()) {
-//                    String status = response.body().getStatus();
-//                    String userID = response.body().getUserID();
-//                    String accessToken = response.body().getAccessToken();
-//                    String respMessage = response.body().getRespMessage();
-//                    String respTime = response.body().getRespTime();
-//                    String provider = response.body().getProvider();
-//
-//                    if (status.equals("SUCCESS")) {
-//
-//                        List<String> listPrice = new ArrayList<String>();
-//                        List<String> listNama = new ArrayList<String>();
-//                        List<String> listEp = new ArrayList<String>();
-//                        id_paket = new ArrayList<>();
-//                        listPrice.clear();
-//                        listNama.clear();
-//                        listEp.clear();
-//                        final List<DataProduct> products = response.body().getProducts();
-//                        for (int i = 0; i < products.size(); i++) {
-//                            String name = products.get(i).getName();
-//                            String price = products.get(i).getPrice();
-//                            String ep = products.get(i).getEp();
-//                            id_paket.add(products.get(i).getCode());
-//                            listNama.add(name);
-//                            listEp.add(ep);
-//                            listPrice.add(price);
-//                        }
-//
-//                        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, list);
-//                        SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
-//                        listPaketdata.setAdapter(adapter);
-//                        /*spnNama.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                            @Override
-//                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                                code = products.get(position).getCode();
-//                                //Toast.makeText(TransPaketData.this, "" + code, Toast.LENGTH_SHORT).show();
-//                            }
-//
-//                            @Override
-//                            public void onNothingSelected(AdapterView<?> parent) {
-//
-//                            }
-//                        });*/
-//
-//                    } else {
-//                        utilsAlert.globalDialog(TransPaketData.this, titleAlert, respMessage);
-//                        //Toast.makeText(TransPaketData.this, "" + respMessage, Toast.LENGTH_SHORT).show();
-//                    }
-//                } else {
-//                    utilsAlert.globalDialog(TransPaketData.this, titleAlert, getResources().getString(R.string.error_api));
-//                    // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<LoadDataResponseProduct> call, Throwable t) {
-//                loadingDialog.dismiss();
-//                utilsAlert.globalDialog(TransPaketData.this, titleAlert, getResources().getString(R.string.error_api));
-//            }
-//        });
-//    }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -432,116 +282,7 @@ public class TransPaketData extends AppCompatActivity {
     String oprPaket = "";
     String tempPaket = "";
     boolean statPaket = false;
-
     boolean otherOpr = true;
-
-    //    public void cekPrefix(CharSequence s) {
-//        try {
-//            if (s.length() >= 6) {
-//                String nomorHP1 = s.toString().substring(0, 2);
-//                String nomorHp = "";
-//                String valNomorHp = "", valNomorHP2 = "";
-//                if (nomorHP1.startsWith("+6")) {
-//                    valNomorHp = nomorHP1.replace("+6", "0");
-//                    nomorHp = valNomorHp + s.toString().substring(3, 6);
-//                } else if (nomorHP1.startsWith("62")) {
-//                    valNomorHp = nomorHP1.replace("62", "0");
-//                    nomorHp = valNomorHp + s.toString().substring(2, 5);
-//                } else {
-//                    nomorHp = s.toString().substring(0, 4);
-//                }
-//                if (Arrays.asList(prefix_xl).contains(nomorHp)) {
-//                    oprPaket = "XL DATA";
-//                    imgOpr.setImageResource(R.mipmap.xl);
-//                    txOpr.setText("XL DATA");
-//                    statPaket = true;
-//                    otherOpr = false;
-//                } else if (Arrays.asList(prefix_axis).contains(nomorHp)) {
-//                    oprPaket = "AXIS DATA";
-//                    imgOpr.setImageResource(R.mipmap.axis);
-//                    txOpr.setText("AXIS DATA");
-//                    statPaket = true;
-//                    otherOpr = false;
-//                } else if (Arrays.asList(prefix_smartfren).contains(nomorHp)) {
-//                    oprPaket = "SMARTFREN DATA";
-//                    imgOpr.setImageResource(R.mipmap.smart);
-//                    txOpr.setText("SMARTFREN DATA");
-//                    statPaket = true;
-//                    otherOpr = false;
-//                } else if (Arrays.asList(prefix_tri).contains(nomorHp)) {
-//                    oprPaket = "TRI DATA";
-//                    imgOpr.setImageResource(R.mipmap.three);
-//                    txOpr.setText("TRI DATA");
-//                    statPaket = true;
-//                    otherOpr = false;
-//                } else if (Arrays.asList(prefix_indosat).contains(nomorHp)) {
-//                    oprPaket = "ISAT DATA";
-//                    imgOpr.setImageResource(R.mipmap.indosat);
-//                    txOpr.setText("ISAT DATA");
-//                    statPaket = true;
-//                    otherOpr = false;
-//                } else if (Arrays.asList(prefix_bolt).contains(nomorHp)) {
-//                    oprPaket = "BOLT";
-//                    imgOpr.setImageResource(R.mipmap.bolt);
-//                    txOpr.setText("BOLT");
-//                    statPaket = true;
-//                    otherOpr = false;
-//                } else if (Arrays.asList(prefix_telkomsel).contains(nomorHp)) {
-//                    oprPaket = "TSEL DATA";
-//                    imgOpr.setImageResource(R.mipmap.telkomsel);
-//                    txOpr.setText("TSEL DATA");
-//                    statPaket = true;
-//                    otherOpr = false;
-//                } else {
-//                    statPaket = false;
-//                    tempPaket = "";
-//                    layOprPaket.setVisibility(View.VISIBLE);
-//                    laytxOprPaket.setVisibility(View.VISIBLE);
-//                    btnBayar.setEnabled(true);
-//                    oprPaket = "";
-//                }
-//
-//                if (!oprPaket.equalsIgnoreCase(tempPaket) && statPaket) {
-//                   // loadProduct(strUserID, strAccessToken, strAplUse, oprPaket);
-//                    statPaket = false;
-//                    tempPaket = oprPaket;
-//                    layOprPaket.setVisibility(View.GONE);
-//                    laytxOprPaket.setVisibility(View.GONE);
-//                    btnBayar.setEnabled(true);
-//                    otherOpr = true;
-//                }
-//
-//                if (otherOpr && oprPaket.equalsIgnoreCase("")) {
-//                    Log.d("OPPO-1", "cekPrefix: ");
-//                   // loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
-//                    otherOpr = false;
-//                }
-//
-//            } else if (s.length() < 4) {
-//                spnNama.setAdapter(adapter);
-//                tempPaket = "";
-//                btnBayar.setEnabled(false);
-//                statPaket = false;
-//                otherOpr = true;
-//                imgOpr.setImageResource(0);
-//                txOpr.setText("");
-//                layOprPaket.setVisibility(View.GONE);
-//                laytxOprPaket.setVisibility(View.GONE);
-//            } else if (s.length() >= 8 && s.length() <= 13) {
-//                btnBayar.setEnabled(false);
-//                layOprPaket.setVisibility(View.GONE);
-//                laytxOprPaket.setVisibility(View.GONE);
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-
-
-
-
 
     //============================================================NEW API=======================================================
     private void cek_transaksi() {
@@ -590,11 +331,9 @@ public class TransPaketData extends AppCompatActivity {
                         finish();
                     } else {
                         utilsAlert.globalDialog(TransPaketData.this, titleAlert, error);
-                        // Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransPaketData.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -602,7 +341,6 @@ public class TransPaketData extends AppCompatActivity {
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransPaketData.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
@@ -814,12 +552,7 @@ public class TransPaketData extends AppCompatActivity {
                 layOprPaket.setVisibility(View.GONE);
                 laytxOprPaket.setVisibility(View.GONE);
                 btnBayar.setEnabled(false);
-            } /*else if (s.length() >= 8 && s.length() <= 13) {
-                listPaketdata.setAdapter(adapter);
-                layOprPaket.setVisibility(View.GONE);
-                laytxOprPaket.setVisibility(View.GONE);
-                btnBayar.setEnabled(false);
-            }*/
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

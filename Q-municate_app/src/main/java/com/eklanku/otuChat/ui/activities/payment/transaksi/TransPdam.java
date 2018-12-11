@@ -85,40 +85,6 @@ public class TransPdam extends AppCompatActivity {
             "PDAM KOTA PALEMBANG",
             "PDAM KAB BULELENG"}*/;
 
-    private static String[] kode_wilayah/* = {"PDAM_BONDO",
-            "PDAM_PON",
-            "PDAM_JMBR",
-            "PDAM_MJKRT",
-            "PDAM_BDG",
-            "PDAM_LPG",
-            "PDAM_KOBGR",
-            "PDAM_SIDO",
-            "PDAM_SBY",
-            "PDAM_BNKLN",
-            "PDAM_MLG",
-            "PDAM_STUBN",
-            "PDAM_PURRJ",
-            "PDAM_GRBG",
-            "PDAM_AETRA",
-            "PDAM_PLYJA",
-            "PDAM_SURKT",
-            "PDAM_DENPASAR",
-            "PDAM_WAGROGOT",
-            "PDAM_BALANGAN",
-            "PDAM_WAJAMBI",
-            "PDAM_WABJN",
-            "PDAM_WABATANG",
-            "PDAM_WAPASU",
-            "PDAM_WAKOPASU",
-            "PDAM_WASAMPANG",
-            "PDAM_WAKUBURAYA",
-            "PDAM_WATAPIN",
-            "PDAM_WAIBANJAR",
-            "PDAM_WAGIRIMM",
-            "PDAM_WAMANADO",
-            "PDAM_WAPLMBNG",
-            "PDAM_BULLNG"}*/;
-
     SharedPreferences prefs;
     Spinner spnWilayah;
     EditText txtNo, txtno_hp;
@@ -184,19 +150,6 @@ public class TransPdam extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-       /* spinnerPpobAdapter = new SpinnerPpobAdapter(getApplicationContext(), nama_wilayah);
-        spnWilayah.setAdapter(spinnerPpobAdapter);
-        spnWilayah.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                load_id = kode_wilayah[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/
 
         loadProvider(strUserID, strAccessToken, "OTU", "PDAM");
 
@@ -220,26 +173,15 @@ public class TransPdam extends AppCompatActivity {
         String id_pel = txtNo.getText().toString().trim();
         txtNo.setError(null);
         if (id_pel.isEmpty()) {
-//            Toast.makeText(this, "Kolom nomor tidak boleh kosong", Toast.LENGTH_SHORT).show();
             txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-  /*      if (id_pel.length() < 6) {
-//            Toast.makeText(this, "Masukkan minimal 8 digit nomor", Toast.LENGTH_SHORT).show();
-            txtNo.setError("Masukkan minimal 6 digit nomor");
-            requestFocus(txtNo);
-            return false;
-        }*/
-
-        //layoutNo.setErrorEnabled(false);
         return true;
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
-        //loadingDialog = ProgressDialog.show(TransPdam.this, "Harap Tunggu", "Mengambil Data...");
-        //loadingDialog.setCanceledOnTouchOutside(true);
 
         Call<LoadDataResponse> dataCall = mApiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
@@ -252,8 +194,6 @@ public class TransPdam extends AppCompatActivity {
                 cartList.clear();
                 cartList = new ArrayList<>();
 
-               /* adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_wilayah);
-                spnWilayah.setAdapter(adapter);*/
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String error = response.body().getError();
@@ -276,23 +216,10 @@ public class TransPdam extends AppCompatActivity {
 
                         }
 
-                        //adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_wilayah);
-                        //listwilayah.setAdapter(adapter);
 
                         mAdapter = new CustomAdapter(cartList, TransPdam.this);
                         listwilayah.setAdapter(mAdapter);
 
-                        /*spnWilayah.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                load_id = result.get(position).getCode();
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });*/
                     } else {
                         utilsAlert.globalDialog(TransPdam.this, titleAlert, error);
                         //Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
@@ -305,9 +232,7 @@ public class TransPdam extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                //loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransPdam.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -395,11 +320,9 @@ public class TransPdam extends AppCompatActivity {
                         startActivity(inKonfirmasi);
                     } else {
                         utilsAlert.globalDialog(TransPdam.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransPdam.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -407,57 +330,12 @@ public class TransPdam extends AppCompatActivity {
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransPdam.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });
     }
 
-    /*========================================payment lama=====================================================*/
-    /*
 
-    private void cek_transaksi() {
-        loadingDialog = ProgressDialog.show(TransPdam.this, "Harap Tunggu", "Cek Transaksi...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-
-        Log.d("OPPO-1", "cek_transaksi - transpdam: "+PreferenceUtil.getNumberPhone(this)));
-        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli(PreferenceUtil.getNumberPhone(this)), load_id, "", txtNo.getText().toString(), "pdambyr");
-//        Call<TransBeliResponse> transBeliCall = mApiInterface.postTransBeli("085334059170", load_id, "", txtNo.getText().toString(), "pdambyr");
-        transBeliCall.enqueue(new Callback<TransBeliResponse>() {
-            @Override
-            public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus().toString();
-                    String error  = response.body().getError();
-
-                    if ( status.equals("OK") ) {
-                        List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi       = new Intent(getBaseContext(), TransKonfirmasi.class);
-                        inKonfirmasi.putExtra("transaksi", trans.get(0).getTransaksi());
-                        inKonfirmasi.putExtra("harga", trans.get(0).getHarga());
-                        inKonfirmasi.putExtra("id_pel", trans.get(0).getIdPel());
-                        inKonfirmasi.putExtra("jenis", trans.get(0).getJenis());
-                        inKonfirmasi.putExtra("pin", trans.get(0).getPin());
-                        inKonfirmasi.putExtra("cmd_save", trans.get(0).getCmdSave());
-                        startActivity(inKonfirmasi);
-                    } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TransBeliResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_TRANSBELI", t.getMessage().toString());
-            }
-        });
-    }*/
-    /*===========================================end payment lama======================================================*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -485,20 +363,6 @@ public class TransPdam extends AppCompatActivity {
 
     private void initializeResources() {
         listwilayah = (ListView) findViewById(R.id.listWilayah);
-
-        /*listwilayah.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                *//*if (!validateIdpel()) {
-                    return;
-                }
-                load_id =  id_wilayah.get(position);
-                cek_transaksi();*//*
-                load_id = id_wilayah.get(position);
-                Toast.makeText(TransPdam.this, "" + load_id, Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
     }
 
     public void addTextListener() {
@@ -629,7 +493,6 @@ public class TransPdam extends AppCompatActivity {
                     }
                     load_id = viewHolder.txtId.getText().toString();
                     cek_transaksi();
-                    //Toast.makeText(mContext, "" + load_id, Toast.LENGTH_SHORT).show();
                 }
             });
 

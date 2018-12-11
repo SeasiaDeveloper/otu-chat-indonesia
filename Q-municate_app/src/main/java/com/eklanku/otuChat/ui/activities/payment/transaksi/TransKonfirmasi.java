@@ -183,42 +183,6 @@ public class TransKonfirmasi extends AppCompatActivity {
         });
     }
 
-    /*======================================================konfirm transakasi lama================================================*/
-    /*
-    private void konfirm_transaksi() {
-        loadingDialog = ProgressDialog.show(TransKonfirmasi.this, "Harap Tunggu", "Konfirmasi Pembayaran...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-
-        Call<TransBeliResponse> transKonfirmCall = mApiInterface.postTransConfirm(PreferenceUtil.getNumberPhone(this)), jenis, id_pel, pin, cmd_save);
-        transKonfirmCall.enqueue(new Callback<TransBeliResponse>() {
-            @Override
-            public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String error = response.body().getError();
-
-                    if (status.equals("OK")) {
-                        Intent inThankYou = new Intent(getBaseContext(), TransThankyou.class);
-                        startActivity(inThankYou);
-                        finish();
-                    } else {
-                        Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TransBeliResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_TRANSCONFIRM", t.getMessage().toString());
-            }
-        });
-    }
-    /*=======================================================*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
