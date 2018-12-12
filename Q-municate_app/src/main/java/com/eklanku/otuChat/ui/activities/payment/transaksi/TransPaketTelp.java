@@ -112,9 +112,6 @@ public class TransPaketTelp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans_paket_telp);
-
-
-
         ButterKnife.bind(this);
 
         utilsAlert = new Utils(TransPaketTelp.this);
@@ -413,7 +410,7 @@ public class TransPaketTelp extends AppCompatActivity {
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         List<DataDetailPrefix> data = response.body().getData();
                         for (int i = 0; i < data.size(); i++) {
-                            listProvider.add(data.get(i).getProvider());
+                            listProvider.add(data.get(i).getProvider().replace("DATA", "TELPON"));
                             listPrefix.add(data.get(i).getPrefix());
                         }
                         getProductData();
@@ -462,7 +459,7 @@ public class TransPaketTelp extends AppCompatActivity {
                 }
 
                 for (int i = 0; i < listPrefix.size(); i++) {
-                    Log.d("OPPO-1", "provider: " + listProvider.get(i));
+
                     if (nomorHp.equals(listPrefix.get(i))) {
                         oprPaket = listProvider.get(i);
                         txOpr.setText(oprPaket);
@@ -470,17 +467,19 @@ public class TransPaketTelp extends AppCompatActivity {
                         otherOpr = false;
                         String setImgOpr = "";
 
-                        if (oprPaket.equalsIgnoreCase("XL DATA")) {
+                        Log.d("OPPO-1", "provider: " + oprPaket + " -> " + listProvider.get(i));
+
+                        if (oprPaket.equalsIgnoreCase("XL TELPON")) {
                             setImgOpr = "xl";
-                        } else if (oprPaket.equalsIgnoreCase("TSEL DATA")) {
+                        } else if (oprPaket.equalsIgnoreCase("TSEL TELPON")) {
                             setImgOpr = "telkomsel";
-                        } else if (oprPaket.equalsIgnoreCase("AXIS DATA")) {
+                        } else if (oprPaket.equalsIgnoreCase("AXIS TELPON")) {
                             setImgOpr = "axis";
-                        } else if (oprPaket.equalsIgnoreCase("SMARTFREN DATA")) {
+                        } else if (oprPaket.equalsIgnoreCase("SMARTFREN TELPON")) {
                             setImgOpr = "smart";
-                        } else if (oprPaket.equalsIgnoreCase("TRI DATA")) {
+                        } else if (oprPaket.equalsIgnoreCase("TRI TELPON")) {
                             setImgOpr = "three";
-                        } else if (oprPaket.equalsIgnoreCase("ISAT DATA")) {
+                        } else if (oprPaket.equalsIgnoreCase("ISAT TELPON")) {
                             setImgOpr = "indosat";
                         } else if (oprPaket.equalsIgnoreCase("BOLT")) {
                             setImgOpr = "bolt";
@@ -601,6 +600,7 @@ public class TransPaketTelp extends AppCompatActivity {
                         for (int i = 0; i < data.size(); i++) {
                             listCode.add(data.get(i).getCode());
                             listName.add(data.get(i).getName());
+                            Log.d("OPPO-1", "onResponse: " + data.get(i).getProvider() + ", " + data.get(i).getName());
                             listPrice.add(data.get(i).getPrice());
                             listEP.add(data.get(i).getEp());
                             listIsActive.add(data.get(i).getIsActive());
@@ -608,7 +608,7 @@ public class TransPaketTelp extends AppCompatActivity {
                             listProviderProduct.add(data.get(i).getProvider());
                         }
 
-                        Log.d("OPPO-1", "onResponse: " + listCode);
+
                     } else {
                         utilsAlert.globalDialog(TransPaketTelp.this, titleAlert, respMessage);
                     }

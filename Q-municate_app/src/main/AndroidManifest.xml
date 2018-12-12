@@ -702,7 +702,14 @@
             android:label="Riwayat"
             android:theme="@style/AppThemePaymentItems" />
         <activity android:name=".ui.activities.TesActivity" />
-        <activity android:name=".ui.activities.payment.transaksi.TransPaketTelp"></activity>
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransPaketTelp"
+            android:label="Paket Telp"
+            android:theme="@style/AppThemePaymentItems">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

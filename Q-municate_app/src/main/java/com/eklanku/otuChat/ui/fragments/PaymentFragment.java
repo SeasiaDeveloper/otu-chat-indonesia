@@ -79,6 +79,7 @@ public class PaymentFragment extends Fragment {
     public TextView //lblUsername,
             lblSaldo, lblSaldoMain, txtEklmain;
     TextView btnDeposit, tvBonus;
+    ImageButton btnPaketTelp;
     ImageButton btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
             btnTv, btnPaket, btnSMS, btnEtool, btnWi, btnhotel, btnpesawat, btnkeretapai, btnesaldo;
@@ -333,7 +334,7 @@ public class PaymentFragment extends Fragment {
         btnTv = view.findViewById(R.id.btnTv);
         btnTelkom = view.findViewById(R.id.btnTelkom);
         btnPaket = view.findViewById(R.id.btnPaket);
-        ImageButton btnPaketTelp = view.findViewById(R.id.btn_telp);
+        btnPaketTelp = view.findViewById(R.id.btn_telp);
         //btnPengaturan = view.findViewById(R.id.btnPengaturan);
 
         btnWi = view.findViewById(R.id.btn_wifi_id);
@@ -369,6 +370,7 @@ public class PaymentFragment extends Fragment {
         //btnCallme.setOnClickListener(new buttonListener());
 
         btnEtool.setOnClickListener(new buttonListener());
+        btnPaketTelp.setOnClickListener(new buttonListener());
         btnSMS.setOnClickListener(new buttonListener());
         btnWi.setOnClickListener(new buttonListener());
         btnPajak.setOnClickListener(new buttonListener());
