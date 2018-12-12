@@ -147,18 +147,18 @@
     <string name="dialog_attach_btn_location">Location</string>
     <string name="dialog_attach_btn_contact">Contact</string>
 
-<!--<<<<<<< HEAD-->
+    <!--<<<<<<< HEAD-->
     <string name="dialog_attach_contact_name_one">\u0020and 1 other contact</string>
     <string name="dialog_attach_contact_name_more">\u0020and %1d other contacts</string>
     <string name="dialog_attach_contact_add_button">\add</string>
-<!--=======-->
+    <!--=======-->
     <string name="open_web_qr">Open WEB QR</string>
     <string name="web_qr_title">OtuChat Web</string>
     <string name="web_qr_invitation">Visit otuchat.com on your computer</string>
     <string name="dlg_logout_all_devices">Log out from all devices</string>
     <string name="dlg_logout_device_confirmation">Log out from this device?</string>
     <string name="dlg_logout_all_devices_confirmation">Are you sure you want to log out from all devices?</string>
-<!--&gt;>>>>>> origin/feature/logging_destroy_session-->
+    <!--&gt;>>>>>> origin/feature/logging_destroy_session-->
 
     <string-array name="dialog_attach_types_array">
         <item>Take Photo</item>

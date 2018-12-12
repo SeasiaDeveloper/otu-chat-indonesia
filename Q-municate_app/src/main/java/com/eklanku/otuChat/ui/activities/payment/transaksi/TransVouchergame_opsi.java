@@ -48,6 +48,7 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
     LinearLayout layoutView;
     ProgressBar progressBar;
     TextView tvEmpty;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,15 +160,15 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
     ArrayList<String> listType;
     ArrayList<String> listProviderProduct;
 
-    public void getProduct_Game(){
+    public void getProduct_Game() {
         showProgress(true);
-        Log.d("OPPO-1", "getProduct_Game: "+strUserID+", "+strAccessToken);
+        Log.d("OPPO-1", "getProduct_Game: " + strUserID + ", " + strAccessToken);
         Call<DataAllProduct> product_game = apiInterfacePayment.getproduct_game(strUserID, strAccessToken, "OTU");
         product_game.enqueue(new Callback<DataAllProduct>() {
             @Override
             public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
                 showProgress(false);
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     listCode = new ArrayList<>();
                     listPrice = new ArrayList<>();
                     listName = new ArrayList<>();
@@ -183,9 +184,9 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
                     listType.clear();
                     listProviderProduct.clear();
                     String status = response.body().getStatus();
-                    String respMessage= response.body().getRespMessage();
-                    Log.d("OPPO-1", "status: "+status);
-                    if(status.equalsIgnoreCase("SUCCESS")){
+                    String respMessage = response.body().getRespMessage();
+                    Log.d("OPPO-1", "status: " + status);
+                    if (status.equalsIgnoreCase("SUCCESS")) {
                         List<DataProduct> data = response.body().getData();
                         for (int i = 0; i < data.size(); i++) {
                             listCode.add(data.get(i).getCode());
@@ -196,8 +197,8 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
                             listType.add(data.get(i).getType());
                             listProviderProduct.add(data.get(i).getProvider());
                         }
-                        Log.d("OPPO-1", "onResponse: "+listCode);
-                    }else {
+                        Log.d("OPPO-1", "onResponse: " + listCode);
+                    } else {
                         utilsAlert.globalDialog(TransVouchergame_opsi.this, titleAlert, respMessage);
                     }
                 } else {
@@ -208,12 +209,12 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
             @Override
             public void onFailure(Call<DataAllProduct> call, Throwable t) {
                 showProgress(false);
-                Log.d("OPPO-1", "onFailure: "+t.getMessage());
+                Log.d("OPPO-1", "onFailure: " + t.getMessage());
             }
         });
     }
 
-    public void detailProduct(String provider){
+    public void detailProduct(String provider) {
         ArrayList<String> a, b, c, d, e;
         a = new ArrayList<>();
         b = new ArrayList<>();
@@ -225,11 +226,11 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         c.clear();
         d.clear();
         e.clear();
-        for(int i = 0; i < listCode.size(); i++){
-            Log.d("OPPO-1", "detailProduct: "+listCode);
-            Log.d("OPPO-1", "detailProduct>>: "+listProviderProduct.get(i)+" > "+provider);
+        for (int i = 0; i < listCode.size(); i++) {
+            Log.d("OPPO-1", "detailProduct: " + listCode);
+            Log.d("OPPO-1", "detailProduct>>: " + listProviderProduct.get(i) + " > " + provider);
             if (listProviderProduct.get(i).equalsIgnoreCase(provider)) {
-                Log.d("OPPO-1", "detailProduct>>: "+listProviderProduct.get(i)+" > "+provider);
+                Log.d("OPPO-1", "detailProduct>>: " + listProviderProduct.get(i) + " > " + provider);
                 a.add(listName.get(i));
                 b.add(listPrice.get(i));
                 c.add(listEP.get(i));
