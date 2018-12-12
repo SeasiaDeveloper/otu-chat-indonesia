@@ -23,6 +23,8 @@ import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.R;;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -42,14 +44,15 @@ public class TransKonfirmasi extends AppCompatActivity {
             jenis, id_pel, pin, cmd_save;
 
     String productCode, billingReferenceID, customerID, customerName, customerMSISDN, tanggal, payment, adminBank, billing, status;
-    String usageUnit;
+    String usageUnit, respMessage;
     String userID, accessToken;
 
     ApiInterfacePayment mApiInterfacePayment;
-    TextView txtJenis, txtReffID, txtCustomerID, txtCustomerName, txtCustomerMSISDN, txtTanggal, txtPayment, txtAdminBank, txtBilling, txtStatus;
+    TextView txtJenis, txtReffID, txtCustomerID, txtCustomerName, txtCustomerMSISDN, txtTanggal, txtPayment, txtAdminBank, txtBilling, txtStatus, txrespMessage;
 
     TextView lbIdCustomer, lbNama, titik2idcust, titik2nama;
     ImageView imgStatus;
+    View vIDcust, vName, vPhone;
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
 
@@ -84,6 +87,13 @@ public class TransKonfirmasi extends AppCompatActivity {
         txtAdminBank = findViewById(R.id.txt_admin_bank);
         txtBilling = findViewById(R.id.txt_billing);
         txtStatus = findViewById(R.id.txt_status);
+        txrespMessage = findViewById(R.id.txt_notice);
+
+
+
+        vIDcust = findViewById(R.id.vIdcustomer);
+        vName = findViewById(R.id.vName);
+        vPhone = findViewById(R.id.vphone);
 
         jenis = extras.getString("productCode");
         id_pel = extras.getString("id_pel");
@@ -105,7 +115,7 @@ public class TransKonfirmasi extends AppCompatActivity {
         userID = extras.getString("userID");
         status = extras.getString("status");
         usageUnit = extras.getString("usageUnit");
-        //
+        respMessage = extras.getString("respMessage");
 
         // SETTEXT DISINI NA
         txtJenis.setText(jenis);
@@ -114,13 +124,17 @@ public class TransKonfirmasi extends AppCompatActivity {
         txtCustomerName.setText(customerName);
         txtCustomerMSISDN.setText(customerMSISDN);
         txtTanggal.setText(tanggal);
-        txtPayment.setText(payment);
-        txtAdminBank.setText(adminBank);
-        txtBilling.setText(billing);
+        txtPayment.setText(formatRP(Double.parseDouble(payment)));
+        txtAdminBank.setText(formatRP(Double.parseDouble(adminBank)));
+        txtBilling.setText(formatRP(Double.parseDouble(billing)));
         txtStatus.setText(status);
+        txrespMessage.setText(respMessage);
 
         if (usageUnit.equalsIgnoreCase("TOPUP")) {
             usageUnit = "TOPUP";
+            vIDcust.setVisibility(View.GONE);
+            vName.setVisibility(View.GONE);
+
             lbIdCustomer.setVisibility(View.GONE);
             layoutNama.setVisibility(View.GONE);
             layoutCust.setVisibility(View.GONE);
@@ -130,8 +144,11 @@ public class TransKonfirmasi extends AppCompatActivity {
             txtCustomerID.setVisibility(View.GONE);
             txtCustomerName.setVisibility(View.GONE);
             btnSave.setText("OK");
-            lblContent.setText("Transaksi Sukses\nTerimakasih Telah Berbelanja di Eklanku");
+            lblContent.setText("Terimakasih Telah Berbelanja di Eklanku - Otu Chat");
+
         } else {
+            vIDcust.setVisibility(View.VISIBLE);
+            vName.setVisibility(View.VISIBLE);
             layoutNama.setVisibility(View.VISIBLE);
             layoutCust.setVisibility(View.VISIBLE);
             lbIdCustomer.setVisibility(View.VISIBLE);
@@ -220,5 +237,19 @@ public class TransKonfirmasi extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public String formatRP(double nominal){
+        String valNom = "";
+        DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+        DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
+
+        formatRp.setCurrencySymbol("Rp. ");
+        formatRp.setMonetaryDecimalSeparator('.');
+        formatRp.setGroupingSeparator('.');
+
+        kursIndonesia.setDecimalFormatSymbols(formatRp);
+        valNom = kursIndonesia.format(nominal);
+        return valNom;
     }
 }

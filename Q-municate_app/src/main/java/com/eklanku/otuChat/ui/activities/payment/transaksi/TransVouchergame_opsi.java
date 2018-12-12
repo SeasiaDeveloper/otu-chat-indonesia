@@ -37,7 +37,7 @@ import retrofit2.Response;
 
 public class TransVouchergame_opsi extends AppCompatActivity implements View.OnClickListener {
 
-    ImageButton ibMegasus, ibGarena, ibGemscool, ibMobilelegend, ibGoogleplay, ibLyto, ibMol, ibCherry;
+    ImageButton ibMegasus, ibGarena, ibGemscool, ibMobilelegend, ibGoogleplay, ibLyto, ibMol, ibCherry, ibPubg;
     String strUserID, strAccessToken;
 
     ApiInterfacePayment apiInterfacePayment;
@@ -63,6 +63,7 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         ibLyto = findViewById(R.id.btnVGLyto);
         ibMol = findViewById(R.id.btnVGMol);
         ibCherry = findViewById(R.id.btnVGCherry);
+        ibPubg = findViewById(R.id.btnVGPUBG);
 
         layoutView = findViewById(R.id.linear_layout);
         progressBar = findViewById(R.id.progress);
@@ -86,6 +87,8 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         ibLyto.setOnClickListener(this);
         ibMol.setOnClickListener(this);
         ibCherry.setOnClickListener(this);
+        ibPubg.setOnClickListener(this);
+
 
         getProduct_Game();
     }
@@ -95,35 +98,47 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
 
         String jnsGame = "";
+        String img = "";
         switch (v.getId()) {
             case R.id.btnVGMegasus:
                 jnsGame = "MEGAXUS";
-
+                img = "megasus";
                 break;
             case R.id.btnVGGarena:
                 jnsGame = "GARENA";
+                img = "garena";
                 break;
             case R.id.btnVGGamescool:
                 jnsGame = "GEMSCOOL";
+                img = "gemscool";
                 break;
             case R.id.btnVGMobilelegend:
                 jnsGame = "MOBILE LEGENDS";
+                img = "mobilelegend";
                 break;
             case R.id.btnVGGoogleplay:
                 jnsGame = "GOOGLE PLAY ID";
+                img = "googleplay";
                 break;
             case R.id.btnVGLyto:
                 jnsGame = "LYTO";
+                img = "lyto";
                 break;
             case R.id.btnVGMol:
                 jnsGame = "MOL";
+                img = "molpoint";
                 break;
             case R.id.btnVGCherry:
                 jnsGame = "CHERRY";
+                img = "cherry";
+                break;
+            case R.id.btnVGPUBG:
+                jnsGame = "PUBG";
+                img = "pubg";
                 break;
         }
 
-        detailProduct(jnsGame);
+        detailProduct(jnsGame, img);
     }
 
 
@@ -196,7 +211,7 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
                             listType.add(data.get(i).getType());
                             listProviderProduct.add(data.get(i).getProvider());
                         }
-                        Log.d("OPPO-1", "onResponse: "+listCode);
+                        Log.d("OPPO-1", "onResponse: "+listProviderProduct);
                     }else {
                         utilsAlert.globalDialog(TransVouchergame_opsi.this, titleAlert, respMessage);
                     }
@@ -213,7 +228,7 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         });
     }
 
-    public void detailProduct(String provider){
+    public void detailProduct(String provider, String imgOpr){
         ArrayList<String> a, b, c, d, e;
         a = new ArrayList<>();
         b = new ArrayList<>();
@@ -226,8 +241,6 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         d.clear();
         e.clear();
         for(int i = 0; i < listCode.size(); i++){
-            Log.d("OPPO-1", "detailProduct: "+listCode);
-            Log.d("OPPO-1", "detailProduct>>: "+listProviderProduct.get(i)+" > "+provider);
             if (listProviderProduct.get(i).equalsIgnoreCase(provider)) {
                 Log.d("OPPO-1", "detailProduct>>: "+listProviderProduct.get(i)+" > "+provider);
                 a.add(listName.get(i));
@@ -244,6 +257,7 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         product.putExtra("listProvider", d);
         product.putExtra("listCode", e);
         product.putExtra("jnsGame", provider);
+        product.putExtra("imgOpr", imgOpr);
         startActivity(product);
 
     }

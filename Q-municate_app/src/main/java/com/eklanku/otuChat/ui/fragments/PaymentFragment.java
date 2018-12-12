@@ -47,6 +47,7 @@ import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.payment.topup.AlertSyarat;
 import com.eklanku.otuChat.ui.activities.payment.topup.TopupOrder;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransESaldo_opsi;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransEtool;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketData;
@@ -79,7 +80,7 @@ public class PaymentFragment extends Fragment {
     TextView btnDeposit, tvBonus;
     ImageButton btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
-            btnTv, btnPaket, btnSMS, btnEtool, btnWi, btnhotel, btnpesawat, btnkeretapai;
+            btnTv, btnPaket, btnSMS, btnEtool, btnWi, btnhotel, btnpesawat, btnkeretapai, btnesaldo;
     ImageButton btnRiwayat, btnTransfer /*btnPengaturan*/;
     ImageButton btnCallme;
     /* Button btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
@@ -341,6 +342,8 @@ public class PaymentFragment extends Fragment {
         btnpesawat = view.findViewById(R.id.btnPesawat);
         btnkeretapai = view.findViewById(R.id.btnKAI);
 
+        btnesaldo = view.findViewById(R.id.btn_e_saldo);
+
         //btnDeposit.setOnClickListener(new buttonListener());
         btnMultiFinance.setOnClickListener(new buttonListener());
         btnKartuKredit.setOnClickListener(new buttonListener());
@@ -367,6 +370,8 @@ public class PaymentFragment extends Fragment {
         btnSMS.setOnClickListener(new buttonListener());
         btnWi.setOnClickListener(new buttonListener());
         btnPajak.setOnClickListener(new buttonListener());
+        btnesaldo.setOnClickListener(new buttonListener());
+
 
     }
 
@@ -479,11 +484,11 @@ public class PaymentFragment extends Fragment {
 //                    startActivity(new Intent(context, TransPajak.class));
                     Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
-               /* case R.id.btnRiwayat:
+                case R.id.btn_e_saldo:
                     if (menuDialog()) {
-                        startActivity(new Intent(context, RiwayatActivity.class));
+                        startActivity(new Intent(context, TransESaldo_opsi.class));
                     }
-                    break;*/
+                    break;
                /* case R.id.btnTransfer:
                     if (menuDialog()) {
                         startActivity(new Intent(context, TransDeposit.class));

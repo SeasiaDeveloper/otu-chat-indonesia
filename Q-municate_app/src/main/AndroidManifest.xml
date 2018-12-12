@@ -556,6 +556,22 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
+            android:name=".ui.activities.payment.transaksi.TransESaldo_opsi"
+            android:label="E-Saldo"
+            android:theme="@style/AppThemePaymentItems">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransESaldo_product"
+            android:label="E-Saldo"
+            android:theme="@style/AppThemePaymentItems">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
+        </activity>
+        <activity
             android:name=".ui.activities.payment.laporan.HistoryBalanceActivity"
             android:configChanges="orientation|screenSize">
             <meta-data
