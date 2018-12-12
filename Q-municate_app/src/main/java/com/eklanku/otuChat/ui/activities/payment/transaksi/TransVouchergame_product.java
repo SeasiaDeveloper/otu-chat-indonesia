@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -80,10 +81,13 @@ public class TransVouchergame_product extends AppCompatActivity {
     ArrayList<String> _listProvide;
     ArrayList<String> _listCode;
     String _namaProvider;
+    String _img;
 
     LinearLayout layoutView;
     ProgressBar progressBar;
     TextView tvEmpty;
+
+    ImageView imgOPR;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +103,7 @@ public class TransVouchergame_product extends AppCompatActivity {
         transKe = findViewById(R.id.txtTransKe);
         transKe.setText("1");
         layoutNo = findViewById(R.id.txtLayoutTransPulsaNo);
+        imgOPR =findViewById(R.id.imgOpr);
 
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
@@ -132,13 +137,16 @@ public class TransVouchergame_product extends AppCompatActivity {
         _listProvide =  extras.getStringArrayList("listProvider");
         _listCode =  extras.getStringArrayList("listCode");
         _namaProvider = extras.getString("jnsGame");
-        Log.d("OPPO-1", "onCreate>>>>>>>>>>>>>>>>: " + _listnama);
+        _img = extras.getString("imgOpr");
 
         addList();
     }
 
     public void addList(){
         SpinnerAdapterNew adapter = new SpinnerAdapterNew(getApplicationContext(), _listnama, _listprice, _listep, _listProvide, _namaProvider);
+        int id = TransVouchergame_product.this.getResources().getIdentifier("drawable/ic_voucher_game_" + _img.toLowerCase(), null, TransVouchergame_product.this.getPackageName());
+        imgOPR.setImageResource(id);
+
         lvProductGame.setAdapter(adapter);
     }
 

@@ -233,6 +233,14 @@ public interface ApiInterfacePayment {
     );
 
     @FormUrlEncoded
+    @POST("Prabayar/product_telepon")
+    Call<DataAllProduct> geetProduct_paketTelp(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
     @POST("Prabayar/product_sms")
     Call<DataAllProduct> getProduct_sms(
             @Field("userID") String userID,
@@ -482,7 +490,14 @@ public interface ApiInterfacePayment {
             @Field("aplUse") String aplUse
     );
 
-
+    //get product e saldo
+    @FormUrlEncoded
+    @POST("Prabayar/product_esaldo")
+    Call<DataAllProduct> getProductESaldo(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
 
 
 }

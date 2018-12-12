@@ -60,10 +60,9 @@
                 <ImageView
                     android:id="@+id/imgOpr"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="43dp"
                     android:layout_weight="2"
-                    android:src="@drawable/ic_otu_voucher_game" />
-
+                    android:src="@drawable/ic_otu_e_saldo" />
 
             </LinearLayout>
 
@@ -117,7 +116,7 @@
             android:visibility="gone" />
 
         <ListView
-            android:id="@+id/listProductGame"
+            android:id="@+id/listEsaldo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
