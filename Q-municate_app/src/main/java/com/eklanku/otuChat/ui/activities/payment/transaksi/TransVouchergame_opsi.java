@@ -37,7 +37,7 @@ import retrofit2.Response;
 
 public class TransVouchergame_opsi extends AppCompatActivity implements View.OnClickListener {
 
-    ImageButton ibMegasus, ibGarena, ibGemscool, ibMobilelegend, ibGoogleplay, ibLyto, ibMol, ibCherry, ibPubg;
+    ImageButton ibMegasus, ibGarena, ibGemscool, ibMobilelegend, ibGoogleplay, ibLyto, ibMol, ibCherry, ibPubg, ibAeria, ibWavegame;
     String strUserID, strAccessToken;
 
     ApiInterfacePayment apiInterfacePayment;
@@ -65,6 +65,8 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         ibMol = findViewById(R.id.btnVGMol);
         ibCherry = findViewById(R.id.btnVGCherry);
         ibPubg = findViewById(R.id.btnVGPUBG);
+        ibAeria = findViewById(R.id.btnAeria);
+        ibWavegame = findViewById(R.id.btnWavegame);
 
         layoutView = findViewById(R.id.linear_layout);
         progressBar = findViewById(R.id.progress);
@@ -89,6 +91,8 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         ibMol.setOnClickListener(this);
         ibCherry.setOnClickListener(this);
         ibPubg.setOnClickListener(this);
+        ibAeria.setOnClickListener(this);
+        ibWavegame.setOnClickListener(this);
 
 
         getProduct_Game();
@@ -136,6 +140,14 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
             case R.id.btnVGPUBG:
                 jnsGame = "PUBG";
                 img = "pubg";
+                break;
+            case R.id.btnAeria:
+                jnsGame = "AERIA";
+                img = "aeria";
+                break;
+            case R.id.btnWavegame:
+                jnsGame = "WAVEGAME";
+                img = "wavegame";
                 break;
         }
 

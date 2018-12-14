@@ -157,7 +157,7 @@ public class TransKonfirmasi extends AppCompatActivity {
             titik2idcust.setVisibility(View.VISIBLE);
             txtCustomerID.setVisibility(View.VISIBLE);
             txtCustomerName.setVisibility(View.VISIBLE);
-            btnSave.setText("Confirmation");
+            btnSave.setText("Proses Pembayaran");
             lblContent.setText("Anda yakin akan melanjutkan transaksi? " +
                     "\nSilahkan klik tombol Proses untuk melanjutkan");
         }

@@ -40,12 +40,9 @@ import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKonfirmasi;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapter;
@@ -224,7 +221,7 @@ public class TransPln extends AppCompatActivity {
         txtpilihpembayaran.setVisibility(View.VISIBLE);
     }
 
-    private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
+    /*private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
         Log.d("OPPO-1", "loadProvider: " + userID);
         loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
         loadingDialog.setCanceledOnTouchOutside(true);
@@ -278,6 +275,62 @@ public class TransPln extends AppCompatActivity {
             public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
+            }
+        });
+    }*/
+
+    private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
+        loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
+        loadingDialog.setCanceledOnTouchOutside(true);
+        Call<LoadDataResponse> dataCall = apiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
+        dataCall.enqueue(new Callback<LoadDataResponse>() {
+            @Override
+            public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
+                loadingDialog.dismiss();
+
+                if (response.isSuccessful()) {
+                    String status = response.body().getStatus();
+                    String error = response.body().getRespMessage();
+                    Log.d("OPPO-1", "onResponse: "+status+"/"+error);
+                    Log.d("OPPO-1", "onResponse: "+userID+"/"+accessToken+"/"+aplUse);
+                    if (status.equals("SUCCESS")) {
+                        final List<DataListPPOB> products = response.body().getProductList();
+
+                        List<String> list = new ArrayList<String>();
+                        list.clear();
+
+                        for (int i = 0; i < products.size(); i++) {
+                            String x = products.get(i).getName();
+                            list.add(x);
+                        }
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, list);
+                        spinnerProvider.setAdapter(adapter);
+                        spinnerProvider.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                strOpsel = parent.getItemAtPosition(position).toString();
+                                loadProduct(strUserID, strAccessToken, strAplUse, strOpsel);
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                    } else {
+                        utilsAlert.globalDialog(TransPln.this, titleAlert, error);
+                    }
+                } else {
+                    utilsAlert.globalDialog(TransPln.this, titleAlert,"1. "+ getResources().getString(R.string.error_api));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoadDataResponse> call, Throwable t) {
+                loadingDialog.dismiss();
+                utilsAlert.globalDialog(TransPln.this, titleAlert, "2. "+getResources().getString(R.string.error_api));
+                Log.d("OPPO-1", "onFailure: "+t.getMessage());
             }
         });
     }
@@ -359,7 +412,7 @@ public class TransPln extends AppCompatActivity {
                         nama_operator = new String[result.size()];
                         selected_operator = result.get(0).getCode();
 
-                        Toast.makeText(TransPln.this, "SUCCESS " + nama_operator + " " + selected_operator, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(TransPln.this, "SUCCESS " + nama_operator + " " + selected_operator, Toast.LENGTH_SHORT).show();
 
                         for (int i = 0; i < result.size(); i++) {
                             nama_operator[i] = result.get(i).getName();

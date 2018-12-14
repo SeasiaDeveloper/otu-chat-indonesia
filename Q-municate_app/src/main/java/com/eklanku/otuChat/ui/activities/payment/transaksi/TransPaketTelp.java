@@ -94,7 +94,7 @@ public class TransPaketTelp extends AppCompatActivity {
     Button btnYes, btnNo;
 
     Utils utilsAlert;
-    String titleAlert = "Paket Data";
+    String titleAlert = "Paket Telp";
 
     ImageView imgOpr;
     TextView txOpr;
@@ -297,7 +297,7 @@ public class TransPaketTelp extends AppCompatActivity {
                         inKonfirmasi.putExtra("status", status);//
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
                         inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//
-                        inKonfirmasi.putExtra("productCode", "PAKET DATA");//
+                        inKonfirmasi.putExtra("productCode", "PAKET TELP");//
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
                         inKonfirmasi.putExtra("customerID", response.body().getMSISDN());//
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
@@ -396,7 +396,7 @@ public class TransPaketTelp extends AppCompatActivity {
 
     public void loadPrefix() {
         showProgress(true);
-        Call<DataPrefix> prefix_data = apiInterfacePayment.getPrefixData(strUserID, strAccessToken, strAplUse);
+        Call<DataPrefix> prefix_data = apiInterfacePayment.getPrefixTelp(strUserID, strAccessToken, strAplUse);
         prefix_data.enqueue(new Callback<DataPrefix>() {
             @Override
             public void onResponse(Call<DataPrefix> call, Response<DataPrefix> response) {
@@ -410,7 +410,7 @@ public class TransPaketTelp extends AppCompatActivity {
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         List<DataDetailPrefix> data = response.body().getData();
                         for (int i = 0; i < data.size(); i++) {
-                            listProvider.add(data.get(i).getProvider().replace("DATA", "TELPON"));
+                            listProvider.add(data.get(i).getProvider());//disini untuk replace nya
                             listPrefix.add(data.get(i).getPrefix());
                         }
                         getProductData();

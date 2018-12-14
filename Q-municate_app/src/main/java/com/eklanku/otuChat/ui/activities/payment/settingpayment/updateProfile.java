@@ -3,26 +3,37 @@ package com.eklanku.otuChat.ui.activities.payment.settingpayment;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.main.Utils;
+import com.eklanku.otuChat.ui.activities.payment.models.DataKota;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.adapters.payment.ListAdapterKota;
 import com.eklanku.otuChat.utils.image.ImageLoaderUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -31,9 +42,11 @@ import com.quickblox.q_municate_core.models.UserCustomData;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,6 +59,7 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
             txtjabatanupline, txtanggallahir, txnomorhpmember, txtanggaldaftar, txbank, txnorek, txpemilikrek, ed_pin;
 
     String idmember, name, ktp, tgllahir, alamat, kota, nohp_member, email, karirmember, tgldaftar, bank, norec, pemilikrec, idupline, namaupline, hpsponsor, karirsponsor;
+    AutoCompleteTextView x;
 
     Dialog loadingDialog;
 
@@ -81,6 +95,7 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
         txtEmail = findViewById(R.id.txt_profile_email);
         txtCarrier = findViewById(R.id.txt_profile_carrier);
         txtanggaldaftar = findViewById(R.id.txt_tanggal_daftar);
+        x = findViewById(R.id.autoCompleteTextView);
 
         img = findViewById(R.id.profile_image);
         //===========data bank member
@@ -190,6 +205,8 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
         });
 
         checkVisibilityUserIcon();
+        getKota();
+
     }
 
     private void loadLogoActionBar(String logoUrl) {
@@ -274,4 +291,44 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+
+    //api get kota
+    ArrayList<String> listKota;
+    public void getKota(){
+        Call<DataKota> datakota = mApiInterfacePayment.getKota(strUserID,strAccessToken,strApIUse);
+        datakota.enqueue(new Callback<DataKota>() {
+            @Override
+            public void onResponse(Call<DataKota> call, Response<DataKota> response) {
+                if(response.isSuccessful()){
+                    listKota = new ArrayList<>();
+                    listKota.clear();
+                    String status = response.body().getStatus();
+                    String respMessage = response.body().getRespMessage();
+                    if(status.equalsIgnoreCase("SUCCESS")){
+                        ArrayList<DataKota> kota = response.body().getData();
+                        for(int i = 0; i<kota.size(); i++){
+                            listKota.add(kota.get(i).getKota());
+                        }
+                        ListAdapterKota adapter = new ListAdapterKota(updateProfile.this, kota);
+                        //Getting the instance of AutoCompleteTextView
+                        x = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
+                        x.setThreshold(1);//will start working from first character
+                        x.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
+                        x.setTextColor(Color.RED);
+                    }else{
+                        utilsAlert.globalDialog(updateProfile.this, titleAlert, respMessage);
+                    }
+                }else{
+                    utilsAlert.globalDialog(updateProfile.this, titleAlert, getResources().getString(R.string.error_api));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataKota> call, Throwable t) {
+                utilsAlert.globalDialog(updateProfile.this, titleAlert, getResources().getString(R.string.error_api));
+            }
+        });
+    }
+
+
 }

@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClientPayment {
 
-    public static final String BASE_URL = "http://dev.eklanku.com/devapi/api/";
+    public static final String BASE_URL = "http://api.eklanku.com/developapi/";
 
     private static Retrofit retrofit = null;
 

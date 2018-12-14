@@ -98,6 +98,7 @@ public class TransTelkom extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
+
         preferenceManager = new PreferenceManager(this);
 
         //get userid and token from preference
@@ -128,8 +129,9 @@ public class TransTelkom extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
-                    String error = response.body().getError();
-
+                    String error = response.body().getRespMessage();
+                    Log.d("OPPO-1", "onResponse: "+status+"/"+error);
+                    Log.d("OPPO-1", "onResponse: "+userID+"/"+accessToken+"/"+aplUse);
                     if (status.equals("SUCCESS")) {
                         final List<DataListPPOB> products = response.body().getProductList();
 
@@ -147,7 +149,6 @@ public class TransTelkom extends AppCompatActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 load_id = products.get(position).getCode();
-                                //Toast.makeText(TransTelkom.this, ""+ load_id, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -159,14 +160,15 @@ public class TransTelkom extends AppCompatActivity {
                         utilsAlert.globalDialog(TransTelkom.this, titleAlert, error);
                     }
                 } else {
-                    utilsAlert.globalDialog(TransTelkom.this, titleAlert, getResources().getString(R.string.error_api));
+                    utilsAlert.globalDialog(TransTelkom.this, titleAlert,"1. "+ getResources().getString(R.string.error_api));
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransTelkom.this, titleAlert, getResources().getString(R.string.error_api));
+                utilsAlert.globalDialog(TransTelkom.this, titleAlert, "2. "+getResources().getString(R.string.error_api));
+                Log.d("OPPO-1", "onFailure: "+t.getMessage());
             }
         });
     }
@@ -216,7 +218,7 @@ public class TransTelkom extends AppCompatActivity {
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransTelkom.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
-
+        Log.d("OPPO-1", "cek_transaksi: "+load_id);
         Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, load_id, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
@@ -263,12 +265,12 @@ public class TransTelkom extends AppCompatActivity {
                         startActivity(inKonfirmasi);
                     } else {
                         utilsAlert.globalDialog(TransTelkom.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransTelkom.this, titleAlert, getResources().getString(R.string.error_api));
-                   // Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
+
+                Log.d("OPPO-1", "onResponse: "+response.toString());
             }
 
             @Override

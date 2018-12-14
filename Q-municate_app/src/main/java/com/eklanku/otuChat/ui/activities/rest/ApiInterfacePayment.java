@@ -6,6 +6,7 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataCekMemberTransfer;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.DataHistoryOTU;
+import com.eklanku.otuChat.ui.activities.payment.models.DataKota;
 import com.eklanku.otuChat.ui.activities.payment.models.DataPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProviderByType;
@@ -44,28 +45,6 @@ public interface ApiInterfacePayment {
             @Field("aplUse") String aplUse,
             @Field("provider") String provider
     );
-
-
-    @FormUrlEncoded
-    @POST("ppob/payment")
-    Call<TransBeliResponse> postTransConfirm(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("billingReferenceID") String billingReferenceID,
-            @Field("aplUse") String apIUse
-    );
-
-    @FormUrlEncoded
-    @POST("ppob/inquiry")
-    Call<TransBeliResponse> postPpobInquiry(
-            @Field("userID") String userID,
-            @Field("accessToken") String accessToken,
-            @Field("productCode") String productGroup,
-            @Field("customerID") String customerID,
-            @Field("customerMSISDN") String customerMSISDN,
-            @Field("aplUse") String aplUse
-    );
-
 
     //deposit
     @FormUrlEncoded
@@ -211,6 +190,14 @@ public interface ApiInterfacePayment {
     @FormUrlEncoded
     @POST("Prabayar/prefix_data")
     Call<DataPrefix> getPrefixData(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Prabayar/prefix_telpon")
+    Call<DataPrefix> getPrefixTelp(
             @Field("userID") String userID,
             @Field("accessToken") String accessToken,
             @Field("aplUse") String aplUse
@@ -494,6 +481,45 @@ public interface ApiInterfacePayment {
     @FormUrlEncoded
     @POST("Prabayar/product_esaldo")
     Call<DataAllProduct> getProductESaldo(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    //inquiry
+    @FormUrlEncoded
+    @POST("Pascabayar/inquiry")
+    Call<TransBeliResponse> postPpobInquiry(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("productCode") String productGroup,
+            @Field("customerID") String customerID,
+            @Field("customerMSISDN") String customerMSISDN,
+            @Field("aplUse") String aplUse
+    );
+
+
+    @FormUrlEncoded
+    @POST("Pascabayar/payment")
+    Call<TransBeliResponse> postTransConfirm(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("billingReferenceID") String billingReferenceID,
+            @Field("aplUse") String apIUse
+    );
+
+    //get product wifi id
+    @FormUrlEncoded
+    @POST("Prabayar/product_wifi_id")
+    Call<DataAllProduct> getProduct_wifiid(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Member/kota_provinsi")
+    Call<DataKota> getKota(
             @Field("userID") String userID,
             @Field("accessToken") String accessToken,
             @Field("aplUse") String aplUse

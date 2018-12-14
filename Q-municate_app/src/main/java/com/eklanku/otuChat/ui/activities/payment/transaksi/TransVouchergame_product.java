@@ -103,7 +103,7 @@ public class TransVouchergame_product extends AppCompatActivity {
         transKe = findViewById(R.id.txtTransKe);
         transKe.setText("1");
         layoutNo = findViewById(R.id.txtLayoutTransPulsaNo);
-        imgOPR =findViewById(R.id.imgOpr);
+        imgOPR = findViewById(R.id.imgOpr);
 
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
@@ -123,7 +123,7 @@ public class TransVouchergame_product extends AppCompatActivity {
         _listprice = new ArrayList<>();
         _listep = new ArrayList<>();
         _listProvide = new ArrayList<>();
-        _listCode= new ArrayList<>();
+        _listCode = new ArrayList<>();
 
         _listnama.clear();
         _listprice.clear();
@@ -133,19 +133,25 @@ public class TransVouchergame_product extends AppCompatActivity {
 
         _listnama = extras.getStringArrayList("listName");
         _listprice = extras.getStringArrayList("listPrice");
-        _listep =  extras.getStringArrayList("listEP");
-        _listProvide =  extras.getStringArrayList("listProvider");
-        _listCode =  extras.getStringArrayList("listCode");
+        _listep = extras.getStringArrayList("listEP");
+        _listProvide = extras.getStringArrayList("listProvider");
+        _listCode = extras.getStringArrayList("listCode");
         _namaProvider = extras.getString("jnsGame");
         _img = extras.getString("imgOpr");
 
         addList();
     }
 
-    public void addList(){
+    public void addList() {
         SpinnerAdapterNew adapter = new SpinnerAdapterNew(getApplicationContext(), _listnama, _listprice, _listep, _listProvide, _namaProvider);
         int id = TransVouchergame_product.this.getResources().getIdentifier("drawable/ic_voucher_game_" + _img.toLowerCase(), null, TransVouchergame_product.this.getPackageName());
-        imgOPR.setImageResource(id);
+        Log.d("OPPO-1", "addList>>>>>>>>>>>>>>: " + id);
+        if (id == 0) {
+            int id2 = TransVouchergame_product.this.getResources().getIdentifier("drawable/ic_" + _img.toLowerCase(), null, TransVouchergame_product.this.getPackageName());
+            imgOPR.setImageResource(id2);
+        } else {
+            imgOPR.setImageResource(id);
+        }
 
         lvProductGame.setAdapter(adapter);
     }

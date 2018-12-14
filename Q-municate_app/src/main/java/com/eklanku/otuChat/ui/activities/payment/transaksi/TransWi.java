@@ -29,9 +29,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
+import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
+import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
@@ -39,6 +42,7 @@ import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
 import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapterNew;
 import com.eklanku.otuChat.utils.Utils;
 
 import java.util.ArrayList;
@@ -114,8 +118,6 @@ public class TransWi extends AppCompatActivity {
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
-        loadProduct(strUserID, strAccessToken, strAplUse, strProductType);
-
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,9 +158,10 @@ public class TransWi extends AppCompatActivity {
                 dialog.show();
                 return;
 
-                }
+            }
         });
         initializeResources();
+        getProductWI();
     }
 
     private class txtWatcher implements TextWatcher {
@@ -200,122 +203,105 @@ public class TransWi extends AppCompatActivity {
         }
     }
 
-    private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
-        loadingDialog = ProgressDialog.show(TransWi.this, "Harap Tunggu", "Mengambil Data...");
+    ArrayList<String> listCode;
+    ArrayList<String> listPrice;
+    ArrayList<String> listName;
+    ArrayList<String> listEP;
+    ArrayList<String> listisActive;
+    ArrayList<String> listType;
+    ArrayList<String> listProviderProduct;
+
+    public void getProductWI() {
+        loadingDialog = ProgressDialog.show(TransWi.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Call<LoadDataResponseProvider> userCall = apiInterfacePayment.getLoadProvider(userID, accessToken, aplUse, productType);
-        userCall.enqueue(new Callback<LoadDataResponseProvider>() {
+        Call<DataAllProduct> dataPulsa = apiInterfacePayment.getProduct_wifiid(strUserID, strAccessToken, strAplUse);
+        dataPulsa.enqueue(new Callback<DataAllProduct>() {
             @Override
-            public void onResponse(Call<LoadDataResponseProvider> call, Response<LoadDataResponseProvider> response) {
+            public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
+                //showProgress(false);
                 loadingDialog.dismiss();
                 if (response.isSuccessful()) {
+                    listCode = new ArrayList<>();
+                    listPrice = new ArrayList<>();
+                    listName = new ArrayList<>();
+                    listEP = new ArrayList<>();
+                    listisActive = new ArrayList<>();
+                    listType = new ArrayList<>();
+                    listProviderProduct = new ArrayList<>();
+                    listCode.clear();
+                    listPrice.clear();
+                    listName.clear();
+                    listEP.clear();
+                    listisActive.clear();
+                    listType.clear();
+                    listProviderProduct.clear();
                     String status = response.body().getStatus();
-                    String userID = response.body().getUserID();
-                    String accessToken = response.body().getAccessToken();
                     String respMessage = response.body().getRespMessage();
-                    String respTime = response.body().getRespTime();
-                    String productTypes = response.body().getProductTypes();
-
-                    if (status.equals("SUCCESS")) {
-
-                        List<String> list = new ArrayList<String>();
-                        list.clear();
-                        final List<DataProvider> products = response.body().getProviders();
-                        for (int i = 0; i < products.size(); i++) {
-                            String x = products.get(i).getName_provaider();
-                            list.add(x);
+                    if (status.equalsIgnoreCase("SUCCESS")) {
+                        List<DataProduct> data = response.body().getData();
+                        for (int i = 0; i < data.size(); i++) {
+                            listCode.add(data.get(i).getCode());
+                            listPrice.add(data.get(i).getPrice());
+                            listName.add(data.get(i).getName());
+                            listEP.add(data.get(i).getEp());
+                            listisActive.add(data.get(i).getIsActive());
+                            listType.add(data.get(i).getType());
+                            listProviderProduct.add(data.get(i).getProvider());
                         }
-
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, list);
-                        spnKartu.setAdapter(adapter);
-                        spnKartu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                strOpsel = parent.getItemAtPosition(position).toString();
-                                loadProduct(strUserID, strAccessToken, strAplUse, strOpsel);
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-
+                        initProduct();
+                        Log.d("OPPO-1", "onResponse: " + listCode);
                     } else {
                         utilsAlert.globalDialog(TransWi.this, titleAlert, respMessage);
                     }
                 } else {
-                    utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
+                    utilsAlert.globalDialog(TransWi.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
                 }
             }
 
             @Override
-            public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
+            public void onFailure(Call<DataAllProduct> call, Throwable t) {
+                //showProgress(false);
                 loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
+                utilsAlert.globalDialog(TransWi.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
+
             }
         });
     }
 
-    private void loadProduct(String userID, String accessToken, String aplUse, String provider) {
-        loadingDialog = ProgressDialog.show(TransWi.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Call<LoadDataResponseProduct> userCall = apiInterfacePayment.getLoadProduct(userID, accessToken, aplUse, provider);
-        userCall.enqueue(new Callback<LoadDataResponseProduct>() {
-            @Override
-            public void onResponse(Call<LoadDataResponseProduct> call, Response<LoadDataResponseProduct> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String userID = response.body().getUserID();
-                    String accessToken = response.body().getAccessToken();
-                    String respMessage = response.body().getRespMessage();
-                    String respTime = response.body().getRespTime();
-                    String provider = response.body().getProvider();
+    ArrayList<String> code_product, code_name;
 
-                    if (status.equals("SUCCESS")) {
+    public void initProduct() {
+        ArrayList<String> a, b, c, d;
+        a = new ArrayList<>();
+        b = new ArrayList<>();
+        c = new ArrayList<>();
+        d = new ArrayList<>();
+        code_product = new ArrayList<>();
+        code_name = new ArrayList<>();
+        a.clear();
+        b.clear();
+        c.clear();
+        d.clear();
+        code_product.clear();
+        code_name.clear();
+        String product_type = "";
+        for (int i = 0; i < listCode.size(); i++) {
+            a.add(listName.get(i));
+            b.add(listPrice.get(i));
+            c.add(listEP.get(i));
+            d.add(listProviderProduct.get(i));
+            code_product.add(listCode.get(i));
+            code_name.add(listName.get(i));
 
-                        List<String> listPrice = new ArrayList<String>();
-                        List<String> listNama = new ArrayList<String>();
-                        List<String> listEp = new ArrayList<String>();
-                        idWifiID = new ArrayList<>();
-                        listPrice.clear();
-                        listNama.clear();
-                        listEp.clear();
-                        final List<DataProduct> products = response.body().getProducts();
-                        for (int i = 0; i < products.size(); i++) {
-                            String name = products.get(i).getName();
-                            String price = products.get(i).getPrice();
-                            String ep = products.get(i).getEp();
-                            idWifiID.add(products.get(i).getCode());
-                            listNama.add(name);
-                            listEp.add(ep);
-                            listPrice.add(price);
-                        }
-
-                        SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
-                        listWifiID.setAdapter(adapter);
-
-                    } else {
-                        utilsAlert.globalDialog(TransWi.this, titleAlert, respMessage);
-                    }
-                } else {
-                    utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponseProduct> call, Throwable t) {
-                loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransWi.this, titleAlert, getResources().getString(R.string.error_api));
-            }
-        });
+        }
+        SpinnerAdapterNew adapterNew = new SpinnerAdapterNew(getApplicationContext(), a, b, c, d, product_type);
+        listWifiID.setAdapter(adapterNew);
     }
 
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransWi.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Log.d("OPPO-1", "cek_transaksi: "+code);
+        Log.d("OPPO-1", "cek_transaksi: " + code);
         Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtTransaksi_ke.getText().toString(), "", "", code);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
@@ -407,7 +393,7 @@ public class TransWi extends AppCompatActivity {
                 if (!validateIdpel()) {
                     return;
                 }
-                code = idWifiID.get(position);
+                code = listCode.get(position);
                 final Dialog dialog = new Dialog(TransWi.this);
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -419,6 +405,12 @@ public class TransWi extends AppCompatActivity {
                 btnNo = (Button) dialog.findViewById(R.id.btn_no);
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
                 txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
+
+                TextView tvProduct = dialog.findViewById(R.id.txt_product);
+                TextView tvTranske = dialog.findViewById(R.id.txt_transke);
+                tvProduct.setText(code_name.get(position));
+                tvTranske.setText(txtTransaksi_ke.getText().toString());
+
                 txtnomor.setText(txtNo.getText().toString());
                 txtvoucher.setText(code);
 
@@ -444,5 +436,8 @@ public class TransWi extends AppCompatActivity {
         });
 
     }
+
+
+
 
 }
