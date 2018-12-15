@@ -1,10 +1,13 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -16,10 +19,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -35,6 +40,8 @@ import com.eklanku.otuChat.utils.Utils;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
+import java.lang.reflect.Field;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -71,6 +78,9 @@ public class TransBpjs extends AppCompatActivity {
 
     Utils utilsAlert;
     String titleAlert = "BPJS";
+
+    EditText etPickADate;
+    private int mYear, mMonth, mDay;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,6 +128,21 @@ public class TransBpjs extends AppCompatActivity {
                 cek_transaksi();
             }
         });
+
+        Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        etPickADate = (EditText) findViewById(R.id.et_datePicker);
+        etPickADate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createDialogWithoutDateField().show();
+            }
+        });
+
+
     }
 
     private class txtWatcher implements TextWatcher {
@@ -309,4 +334,31 @@ public class TransBpjs extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+    private DatePickerDialog createDialogWithoutDateField() {
+        DatePickerDialog dpd = new DatePickerDialog(this, null, 2014, 1, 24);
+        try {
+            java.lang.reflect.Field[] datePickerDialogFields = dpd.getClass().getDeclaredFields();
+            for (java.lang.reflect.Field datePickerDialogField : datePickerDialogFields) {
+                if (datePickerDialogField.getName().equals("mDatePicker")) {
+                    datePickerDialogField.setAccessible(true);
+                    DatePicker datePicker = (DatePicker) datePickerDialogField.get(dpd);
+                    java.lang.reflect.Field[] datePickerFields = datePickerDialogField.getType().getDeclaredFields();
+                    for (java.lang.reflect.Field datePickerField : datePickerFields) {
+                        Log.i("test", datePickerField.getName());
+                        if ("mDaySpinner".equals(datePickerField.getName())) {
+                            datePickerField.setAccessible(true);
+                            Object dayPicker = datePickerField.get(datePicker);
+                            ((View) dayPicker).setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex) {
+        }
+        return dpd;
+    }
+
 }
