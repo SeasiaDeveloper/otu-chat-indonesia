@@ -204,6 +204,7 @@ public class TransBpjs extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", response.body().getSellPrice());
                         inKonfirmasi.putExtra("adminBank", response.body().getAdminBank());
                         inKonfirmasi.putExtra("profit", response.body().getProfit());
+                        inKonfirmasi.putExtra("ep", response.body().getEp());
 
                         inKonfirmasi.putExtra("transaksi", "-");
                         inKonfirmasi.putExtra("harga", "-");
@@ -215,6 +216,7 @@ public class TransBpjs extends AppCompatActivity {
                         Log.d("OPPO-1", "getBillingReferenceID() "+response.body().getBillingReferenceID());
 
                         startActivity(inKonfirmasi);
+                        finish();
                     } else {
                         utilsAlert.globalDialog(TransBpjs.this, titleAlert, error);
                     }

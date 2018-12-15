@@ -88,7 +88,7 @@ public class TransPaketTelp extends AppCompatActivity {
     ApiInterfacePayment apiInterfacePayment;
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strOpsel, strAplUse = "OTU", strProductType = "KUOTA";
-    String code;
+    String code, ep;
 
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
@@ -317,6 +317,7 @@ public class TransPaketTelp extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", "");
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("profit", "");
+                        inKonfirmasi.putExtra("ep", ep);
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
@@ -354,6 +355,7 @@ public class TransPaketTelp extends AppCompatActivity {
                 dialog.setTitle("Peringatan Transaksi!!!");
 
                 code = code_product.get(position);
+                ep = endpoint.get(position);
                 btnYes = (Button) dialog.findViewById(R.id.btn_yes);
                 btnNo = (Button) dialog.findViewById(R.id.btn_no);
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
@@ -432,7 +434,7 @@ public class TransPaketTelp extends AppCompatActivity {
         });
     }
 
-    ArrayList<String> code_product, code_name;
+    ArrayList<String> code_product, code_name, endpoint;
 
     public void cekPrefixPaket(CharSequence s) {
         ArrayList<String> a = new ArrayList<>();
@@ -442,6 +444,7 @@ public class TransPaketTelp extends AppCompatActivity {
         SpinnerAdapterNew adapter = null;
         code_product = new ArrayList<>();
         code_name = new ArrayList<>();
+        endpoint = new ArrayList<>();
         listPaketdata.setAdapter(null);
         try {
             String nomorHp = "";
@@ -495,6 +498,7 @@ public class TransPaketTelp extends AppCompatActivity {
                         d.clear();
                         code_product.clear();
                         code_name.clear();
+                        endpoint.clear();
                         statPaket = false;
                         tempPaket = "";
                         layOprPaket.setVisibility(View.GONE);
@@ -514,6 +518,7 @@ public class TransPaketTelp extends AppCompatActivity {
                         d.add(listProviderProduct.get(j));
                         code_product.add(listCode.get(j));
                         code_name.add(listName.get(j));
+                        endpoint.add(listEP.get(j));
                     }
                 }
 
@@ -549,6 +554,9 @@ public class TransPaketTelp extends AppCompatActivity {
                 b.clear();
                 c.clear();
                 d.clear();
+                code_product.clear();
+                code_name.clear();
+                endpoint.clear();
                 statPaket = false;
                 otherOpr = true;
                 tempPaket = "";

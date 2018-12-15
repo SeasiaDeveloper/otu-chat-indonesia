@@ -83,7 +83,7 @@ public class TransSMS extends AppCompatActivity {
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strAplUse = "OTU", strProductType = "SMS";
     String strOpsel;
-    String code;
+    String code, ep;
 
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
@@ -380,6 +380,7 @@ public class TransSMS extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", "");
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("profit", "");
+                        inKonfirmasi.putExtra("ep", ep);
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
@@ -436,6 +437,7 @@ public class TransSMS extends AppCompatActivity {
                 }
 
                 code = code_product.get(position);
+                ep = endpoint.get(position);
                 final Dialog dialog = new Dialog(TransSMS.this);
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -528,7 +530,7 @@ public class TransSMS extends AppCompatActivity {
     String tempOprPulsa = "";
     boolean statOprPulsa = false;
     boolean otherOpr = true;
-    ArrayList<String> code_product, code_name;
+    ArrayList<String> code_product, code_name, endpoint;
     public void cekPrefix(CharSequence s) {
 
         ArrayList<String> a = new ArrayList<>();
@@ -537,6 +539,7 @@ public class TransSMS extends AppCompatActivity {
         ArrayList<String> d = new ArrayList<>();
         code_product = new ArrayList<>();
         code_name=new ArrayList<>();
+        endpoint = new ArrayList<>();
         SpinnerAdapterNew adapter = null;
         listSMS.setAdapter(null);
 
@@ -577,6 +580,7 @@ public class TransSMS extends AppCompatActivity {
                         d.clear();
                         code_product.clear();
                         code_name.clear();
+                        endpoint.clear();
                         statOprPulsa = false;
                         tempOprPulsa = "";
                         btnBayar.setEnabled(true);
@@ -595,6 +599,7 @@ public class TransSMS extends AppCompatActivity {
                         d.add(listProviderProduct.get(j));
                         code_product.add(listCode.get(j));
                         code_name.add(listName.get(j));
+                        endpoint.add(listEP.get(j));
                     }
                 }
 
@@ -627,6 +632,9 @@ public class TransSMS extends AppCompatActivity {
                 b.clear();
                 c.clear();
                 d.clear();
+                code_product.clear();
+                code_name.clear();
+                endpoint.clear();
                 listSMS.setAdapter(adapter);
                 statOprPulsa = false;
                 otherOpr = true;

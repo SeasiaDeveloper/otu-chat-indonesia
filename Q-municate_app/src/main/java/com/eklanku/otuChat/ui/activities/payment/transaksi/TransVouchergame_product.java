@@ -64,7 +64,7 @@ public class TransVouchergame_product extends AppCompatActivity {
     Bundle extras;
     Utils utilsAlert;
     String titleAlert = "Voucher Game";
-    String code;
+    String code, ep;
 
     EditText noPel, transKe;
     Button btnBayar;
@@ -279,6 +279,7 @@ public class TransVouchergame_product extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", "");
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("profit", "");
+                        inKonfirmasi.putExtra("ep", ep);
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
@@ -320,6 +321,7 @@ public class TransVouchergame_product extends AppCompatActivity {
                 dialog.setTitle("Peringatan Transaksi!!!");
 
                 code = _listCode.get(position);
+                ep = _listep.get(position);
                 btnYes = (Button) dialog.findViewById(R.id.btn_yes);
                 btnNo = (Button) dialog.findViewById(R.id.btn_no);
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);

@@ -80,7 +80,7 @@ public class TransEtool extends AppCompatActivity {
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strAplUse = "OTU", strProductType = "ETOOL";
     String strOpsel;
-    String code;
+    String code, ep;
 
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
@@ -385,6 +385,7 @@ public class TransEtool extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", "");
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("profit", "");
+                        inKonfirmasi.putExtra("ep", ep);
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
@@ -438,6 +439,7 @@ public class TransEtool extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 code = code_product.get(position);
+                ep = endpoint.get(position);
                 Log.d("OPPO-1", "onItemClick: " + code);
                 if (!validateIdpel()) {
                     return;
@@ -611,7 +613,7 @@ public class TransEtool extends AppCompatActivity {
         });
     }
 
-    ArrayList<String> code_product, code_name;
+    ArrayList<String> code_product, code_name, endpoint;
 
     public void initProduct(String provider) {
         Log.d("OPPO-1", "initProduct: " + provider);
@@ -622,12 +624,14 @@ public class TransEtool extends AppCompatActivity {
         d = new ArrayList<>();
         code_product = new ArrayList<>();
         code_name=new ArrayList<>();
+        endpoint = new ArrayList<>();
         a.clear();
         b.clear();
         c.clear();
         d.clear();
         code_product.clear();
         code_name.clear();
+        endpoint.clear();
         String product_type = "";
         for (int i = 0; i < listCode.size(); i++) {
             // Log.d("OPPO-1", "initProduct: "+listProviderProduct.get(i)+", "+provider);
@@ -638,6 +642,7 @@ public class TransEtool extends AppCompatActivity {
                 d.add(listProviderProduct.get(i));
                 code_product.add(listCode.get(i));
                 code_name.add(listName.get(i));
+                endpoint.add(listEP.get(i));
             }
         }
         SpinnerAdapterNew adapterNew = new SpinnerAdapterNew(getApplicationContext(), a, b, c, d, product_type);

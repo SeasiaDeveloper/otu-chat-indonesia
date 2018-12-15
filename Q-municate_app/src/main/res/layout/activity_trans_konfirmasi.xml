@@ -30,7 +30,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txt_jenis">
+        android:layout_below="@+id/txt_jenis"
+        android:layout_marginTop="7dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,8 +78,8 @@
                 android:background="@color/grey_400" />
 
             <LinearLayout
-                android:layout_width="match_parent"
                 android:id="@+id/layout_cust"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -225,7 +226,8 @@
                     android:layout_weight="2.5" />
             </LinearLayout>
 
-            <View android:layout_width="match_parent"
+            <View
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
@@ -259,7 +261,8 @@
                     android:layout_weight="2.5" />
             </LinearLayout>
 
-            <View android:layout_width="match_parent"
+            <View
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
@@ -293,7 +296,8 @@
                     android:layout_weight="2.5" />
             </LinearLayout>
 
-            <View android:layout_width="match_parent"
+            <View
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
@@ -330,7 +334,8 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <View android:layout_width="match_parent"
+            <View
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
@@ -367,12 +372,51 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <View android:layout_width="match_parent"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grey_400" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Point"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/density_4"
+                    android:layout_marginLeft="@dimen/density_4"
+                    android:layout_marginEnd="@dimen/density_4"
+                    android:layout_marginRight="@dimen/density_4"
+                    android:text=":"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_point"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="@color/grey_400"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -409,9 +453,9 @@
             <ImageView
                 android:id="@+id/img_status"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/density_64"
+                android:layout_height="35dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/density_64"
+                android:layout_marginTop="@dimen/density_16"
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/ic_doku_success" />
 

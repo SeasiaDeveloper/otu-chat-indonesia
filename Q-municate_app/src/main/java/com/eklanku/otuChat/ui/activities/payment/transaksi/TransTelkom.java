@@ -255,6 +255,7 @@ public class TransTelkom extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", response.body().getSellPrice());
                         inKonfirmasi.putExtra("adminBank", response.body().getAdminBank());
                         inKonfirmasi.putExtra("profit", response.body().getProfit());
+                        inKonfirmasi.putExtra("ep", response.body().getEp());
 
                         inKonfirmasi.putExtra("transaksi", "-");
                         inKonfirmasi.putExtra("harga", "-");
@@ -263,6 +264,7 @@ public class TransTelkom extends AppCompatActivity {
                         inKonfirmasi.putExtra("pin", "-");
                         inKonfirmasi.putExtra("cmd_save", "-");
                         startActivity(inKonfirmasi);
+                        finish();
                     } else {
                         utilsAlert.globalDialog(TransTelkom.this, titleAlert, error);
                     }

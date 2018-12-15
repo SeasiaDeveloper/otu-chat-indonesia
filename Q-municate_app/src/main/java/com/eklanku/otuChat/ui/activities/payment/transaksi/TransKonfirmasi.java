@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
+import com.eklanku.otuChat.ui.activities.payment.transfer.TransConfirm;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.R;;
@@ -44,11 +47,11 @@ public class TransKonfirmasi extends AppCompatActivity {
             jenis, id_pel, pin, cmd_save;
 
     String productCode, billingReferenceID, customerID, customerName, customerMSISDN, tanggal, payment, adminBank, billing, status;
-    String usageUnit, respMessage;
+    String usageUnit, respMessage, point;
     String userID, accessToken;
 
     ApiInterfacePayment mApiInterfacePayment;
-    TextView txtJenis, txtReffID, txtCustomerID, txtCustomerName, txtCustomerMSISDN, txtTanggal, txtPayment, txtAdminBank, txtBilling, txtStatus, txrespMessage;
+    TextView txtJenis, txtReffID, txtCustomerID, txtCustomerName, txtCustomerMSISDN, txtTanggal, txtPayment, txtAdminBank, txtBilling, txtStatus, txrespMessage, txpoint;
 
     TextView lbIdCustomer, lbNama, titik2idcust, titik2nama;
     ImageView imgStatus;
@@ -88,6 +91,7 @@ public class TransKonfirmasi extends AppCompatActivity {
         txtBilling = findViewById(R.id.txt_billing);
         txtStatus = findViewById(R.id.txt_status);
         txrespMessage = findViewById(R.id.txt_notice);
+        txpoint = findViewById(R.id.txt_point);
 
 
 
@@ -116,6 +120,7 @@ public class TransKonfirmasi extends AppCompatActivity {
         status = extras.getString("status");
         usageUnit = extras.getString("usageUnit");
         respMessage = extras.getString("respMessage");
+        point = extras.getString("ep");
 
         // SETTEXT DISINI NA
         txtJenis.setText(jenis);
@@ -129,6 +134,7 @@ public class TransKonfirmasi extends AppCompatActivity {
         txtBilling.setText(formatRP(Double.parseDouble(billing)));
         txtStatus.setText(status);
         txrespMessage.setText(respMessage);
+        txpoint.setText(point);
 
         if (usageUnit.equalsIgnoreCase("TOPUP")) {
             usageUnit = "TOPUP";
@@ -176,7 +182,7 @@ public class TransKonfirmasi extends AppCompatActivity {
                 if (usageUnit.equalsIgnoreCase("TOPUP")) {
                     finish();
                 } else {
-                    confirmTransaksi();
+                    dialogWarning();
                 }
 
             }
@@ -251,5 +257,38 @@ public class TransKonfirmasi extends AppCompatActivity {
         kursIndonesia.setDecimalFormatSymbols(formatRp);
         valNom = kursIndonesia.format(nominal);
         return valNom;
+    }
+
+
+    public void dialogWarning() {
+        final Dialog dialog = new Dialog(TransKonfirmasi.this);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_alert_dialog_konfirmasi);
+        dialog.setCancelable(false);
+        dialog.setTitle("Peringatan Transaksi!!!");
+
+
+        Button btnYes = dialog.findViewById(R.id.btn_yes);
+        Button btnNo = dialog.findViewById(R.id.btn_no);
+        TextView tvNama = dialog.findViewById(R.id.txt_namapemiliktagihan);
+        TextView tvtagihan = dialog.findViewById(R.id.txt_tagihan);
+
+        tvNama.setText(customerName);
+        tvtagihan.setText(formatRP(Double.parseDouble(billing)));
+
+        btnYes.setText(getString(R.string.lanjutkan));
+        btnYes.setOnClickListener(view -> {
+            confirmTransaksi();
+            dialog.dismiss();
+        });
+
+        btnNo.setOnClickListener(view -> dialog.dismiss());
+
+        dialog.show();
+        Window window = dialog.getWindow();
+        assert window != null;
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        return;
     }
 }

@@ -97,7 +97,7 @@ public class TransPaketData extends AppCompatActivity {
     ApiInterfacePayment apiInterfacePayment;
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strOpsel, strAplUse = "OTU", strProductType = "KUOTA";
-    String code;
+    String code, ep;
 
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
@@ -327,6 +327,7 @@ public class TransPaketData extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", "");
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("profit", "");
+                        inKonfirmasi.putExtra("ep", ep);
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
@@ -364,6 +365,7 @@ public class TransPaketData extends AppCompatActivity {
                 dialog.setTitle("Peringatan Transaksi!!!");
 
                 code = code_product.get(position);
+                ep = point_ep.get(position);
                 btnYes = (Button) dialog.findViewById(R.id.btn_yes);
                 btnNo = (Button) dialog.findViewById(R.id.btn_no);
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
@@ -442,7 +444,7 @@ public class TransPaketData extends AppCompatActivity {
         });
     }
 
-    ArrayList<String> code_product, code_name;
+    ArrayList<String> code_product, code_name, point_ep;
 
     public void cekPrefixPaket(CharSequence s) {
         ArrayList<String> a = new ArrayList<>();
@@ -452,6 +454,7 @@ public class TransPaketData extends AppCompatActivity {
         SpinnerAdapterNew adapter = null;
         code_product = new ArrayList<>();
         code_name = new ArrayList<>();
+        point_ep = new ArrayList<>();
         listPaketdata.setAdapter(null);
         try {
             String nomorHp = "";
@@ -501,6 +504,7 @@ public class TransPaketData extends AppCompatActivity {
                         b.clear();
                         c.clear();
                         d.clear();
+                        point_ep.clear();
                         code_product.clear();
                         code_name.clear();
                         statPaket = false;
@@ -522,6 +526,7 @@ public class TransPaketData extends AppCompatActivity {
                         d.add(listProviderProduct.get(j));
                         code_product.add(listCode.get(j));
                         code_name.add(listName.get(j));
+                        point_ep.add(listEP.get(j));
                     }
                 }
 

@@ -111,6 +111,17 @@ public class TransBeliResponse {
     @SerializedName("profit")
     private String profit;
 
+    public String getEp() {
+        return ep;
+    }
+
+    public void setEp(String ep) {
+        this.ep = ep;
+    }
+
+    @SerializedName("ep")
+    private String ep;
+
     public String getUserID() {
         return userID;
     }

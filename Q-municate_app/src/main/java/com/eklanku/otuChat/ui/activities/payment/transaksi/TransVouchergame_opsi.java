@@ -37,7 +37,7 @@ import retrofit2.Response;
 
 public class TransVouchergame_opsi extends AppCompatActivity implements View.OnClickListener {
 
-    ImageButton ibMegasus, ibGarena, ibGemscool, ibMobilelegend, ibGoogleplay, ibLyto, ibMol, ibCherry, ibPubg, ibAeria, ibWavegame;
+    ImageButton ibMegasus, ibGarena, ibGemscool, ibMobilelegend, ibGoogleplay, ibLyto, ibMol, ibCherry, ibPubg, ibAeria, ibWavegame, ibUni, ibSteam, ibTravian, ibFb, ibMcoin;
     String strUserID, strAccessToken;
 
     ApiInterfacePayment apiInterfacePayment;
@@ -67,6 +67,11 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         ibPubg = findViewById(R.id.btnVGPUBG);
         ibAeria = findViewById(R.id.btnAeria);
         ibWavegame = findViewById(R.id.btnWavegame);
+        ibUni = findViewById(R.id.btnUni);
+        ibSteam = findViewById(R.id.btnSteam);
+        ibTravian = findViewById(R.id.btnTravian);
+        ibFb = findViewById(R.id.btnFb);
+        ibMcoin = findViewById(R.id.btnMCoin);
 
         layoutView = findViewById(R.id.linear_layout);
         progressBar = findViewById(R.id.progress);
@@ -93,7 +98,11 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         ibPubg.setOnClickListener(this);
         ibAeria.setOnClickListener(this);
         ibWavegame.setOnClickListener(this);
-
+        ibUni.setOnClickListener(this);
+        ibSteam.setOnClickListener(this);
+        ibTravian.setOnClickListener(this);
+        ibFb.setOnClickListener(this);
+        ibMcoin.setOnClickListener(this);
 
         getProduct_Game();
     }
@@ -149,7 +158,27 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
                 jnsGame = "WAVEGAME";
                 img = "wavegame";
                 break;
+            case R.id.btnUni:
+                jnsGame = "UNIPIN";
+                img = "unipin";
+                break;
+            case R.id.btnSteam:
+                jnsGame = "STEAM";
+                img = "steam";
+                break;
+            case R.id.btnTravian:
+                jnsGame ="TRAVIAN";
+                img = "travian";
+                break;
+            case R.id.btnFb:
+                jnsGame = "FB KREDIT";
+                img = "fb_credit";
+                break;
+            case R.id.btnMCoin:
+                jnsGame = "MCOIN";
+                img = "mcoin";
         }
+
 
         detailProduct(jnsGame, img);
     }

@@ -72,7 +72,7 @@ public class TransPulsa extends AppCompatActivity {
     ApiInterfacePayment apiInterfacePayment;
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strAplUse = "OTU";
-    String code;
+    String code, point;
 
     Context context;
 
@@ -270,6 +270,7 @@ public class TransPulsa extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", "");
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("profit", "");
+                        inKonfirmasi.putExtra("ep", point);
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
@@ -328,6 +329,7 @@ public class TransPulsa extends AppCompatActivity {
             }
 
             code = code_product.get(position);
+            point = point_ep.get(position);
             String name = code_name.get(position);
             dialogWarning(code, name);
         });
@@ -423,6 +425,7 @@ public class TransPulsa extends AppCompatActivity {
 
     ArrayList<String> code_product;
     ArrayList<String> code_name;
+    ArrayList<String> point_ep;
 
     public void cekPrefixNumber(CharSequence s) {
         SpinnerAdapterNew adapter = null;
@@ -433,6 +436,7 @@ public class TransPulsa extends AppCompatActivity {
         d = new ArrayList<>();
         code_product = new ArrayList<>();
         code_name= new ArrayList<>();
+        point_ep = new ArrayList<>();
         listPulsa.setAdapter(null);
 
         try {
@@ -472,6 +476,7 @@ public class TransPulsa extends AppCompatActivity {
                         b.clear();
                         c.clear();
                         d.clear();
+                        point_ep.clear();
                         code_product.clear();
                         code_name.clear();
                         layOpr.setVisibility(View.GONE);
@@ -494,6 +499,7 @@ public class TransPulsa extends AppCompatActivity {
                         d.add(listProviderProduct.get(j));
                         code_product.add(listCode.get(j));
                         code_name.add(listName.get(j));
+                        point_ep.add(listEP.get(j));
                     }
                 }
 

@@ -47,13 +47,16 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+
     <Button
         android:id="@+id/btnThankYouBack"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/ic_action_back" />
+        android:layout_marginTop="@dimen/density_8"
+        android:background="@drawable/custom_round_green_dark"
+        android:text="OK"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
 
 </RelativeLayout>

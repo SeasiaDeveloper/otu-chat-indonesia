@@ -88,7 +88,7 @@ public class TransPln extends AppCompatActivity {
     String[] point;
     private PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strOpsel, strAplUse = "OTU", strProductType = "PLN TOKEN", selected_operator;
-    String code;
+    String code, ep;
     LinearLayout layoutNominal;
     private RadioGroup radioGroup;
     String rbPln;
@@ -221,63 +221,6 @@ public class TransPln extends AppCompatActivity {
         txtpilihpembayaran.setVisibility(View.VISIBLE);
     }
 
-    /*private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
-        Log.d("OPPO-1", "loadProvider: " + userID);
-        loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Call<LoadDataResponseProvider> userCall = apiInterfacePayment.getLoadProvider(userID, accessToken, aplUse, productType);
-        userCall.enqueue(new Callback<LoadDataResponseProvider>() {
-            @Override
-            public void onResponse(Call<LoadDataResponseProvider> call, Response<LoadDataResponseProvider> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String userID = response.body().getUserID();
-                    String accessToken = response.body().getAccessToken();
-                    String respMessage = response.body().getRespMessage();
-                    String respTime = response.body().getRespTime();
-                    String productTypes = response.body().getProductTypes();
-
-                    if (status.equals("SUCCESS")) {
-                        List<String> list = new ArrayList<String>();
-                        list.clear();
-                        final List<DataProvider> products = response.body().getProviders();
-                        for (int i = 0; i < products.size(); i++) {
-                            String x = products.get(i).getName_provaider();
-                            Log.d("OPPO-1", "onResponse: " + x);
-                            list.add(x);
-                        }
-
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, list);
-                        spinnerProvider.setAdapter(adapter);
-                        spinnerProvider.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                strOpsel = parent.getItemAtPosition(position).toString();
-                                loadProduct(strUserID, strAccessToken, strAplUse, strOpsel);
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-
-                    } else {
-                        utilsAlert.globalDialog(TransPln.this, titleAlert, respMessage);
-                    }
-                } else {
-                    utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
-                loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransPln.this, titleAlert, getResources().getString(R.string.error_api));
-            }
-        });
-    }*/
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
         loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Mengambil Data...");
@@ -534,6 +477,7 @@ public class TransPln extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", response.body().getSellPrice());
                         inKonfirmasi.putExtra("adminBank", response.body().getAdminBank());
                         inKonfirmasi.putExtra("profit", response.body().getProfit());
+                        inKonfirmasi.putExtra("ep", response.body().getEp());
 
                         inKonfirmasi.putExtra("transaksi", "-");
                         inKonfirmasi.putExtra("harga", "-");
@@ -602,6 +546,7 @@ public class TransPln extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", "");
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("profit", "");
+                        inKonfirmasi.putExtra("ep", ep);
 
                         inKonfirmasi.putExtra("transaksi", "-");
                         inKonfirmasi.putExtra("harga", "-");
@@ -671,7 +616,7 @@ public class TransPln extends AppCompatActivity {
                     dialog.setContentView(R.layout.activity_alert_dialog);
                     dialog.setCancelable(false);
                     dialog.setTitle("Peringatan Transaksi!!!");
-
+                    ep = listEP.get(position);
                     code = listCode.get(position);
 
                     btnYes = (Button) dialog.findViewById(R.id.btn_yes);

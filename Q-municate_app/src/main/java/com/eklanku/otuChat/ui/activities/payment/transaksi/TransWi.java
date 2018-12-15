@@ -340,6 +340,7 @@ public class TransWi extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", "");
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("profit", "");
+                        inKonfirmasi.putExtra("ep", response.body().getEp());
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
