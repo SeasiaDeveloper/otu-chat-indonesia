@@ -1,6 +1,5 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -11,6 +10,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -39,11 +39,18 @@ import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.Utils;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.utils.PreferenceUtil;
+import com.twinkle94.monthyearpicker.picker.YearMonthPickerDialog;
 
-import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -82,6 +89,11 @@ public class TransBpjs extends AppCompatActivity {
     EditText etPickADate;
     private int mYear, mMonth, mDay;
 
+    String monthYearStr;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy");
+    SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +105,7 @@ public class TransBpjs extends AppCompatActivity {
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnBpjs = (Spinner) findViewById(R.id.spnTransBpjs);
         txtNo = (EditText) findViewById(R.id.txtTransBpjsNo);
-        layoutNo  = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
+        layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransBpjsBayar);
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
@@ -103,10 +115,10 @@ public class TransBpjs extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
-        if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){
-            String no = PreferenceUtil.getNumberPhone(this).replace("+62","0");
+        if (PreferenceUtil.getNumberPhone(this).startsWith("+62")) {
+            String no = PreferenceUtil.getNumberPhone(this).replace("+62", "0");
             txtno_hp.setText(no);
-        }else{
+        } else {
             txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
         }
 
@@ -138,10 +150,19 @@ public class TransBpjs extends AppCompatActivity {
         etPickADate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createDialogWithoutDateField().show();
+
+                monthYear();
             }
         });
 
+        List<String> monthsList = new ArrayList<String>();
+        String[] months = new DateFormatSymbols().getMonths();
+        for (int i = 0; i < months.length; i++) {
+            String month = months[i];
+            //System.out.println("month = " + month);
+            monthsList .add(months[i]);
+            Log.d("AYIK", "month->"+ month);
+        }
 
     }
 
@@ -187,11 +208,9 @@ public class TransBpjs extends AppCompatActivity {
         }
     }
 
-
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransBpjs.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
-
 
         Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, selected_operator, txtNo.getText().toString(), txtno_hp.getText().toString(), "OTU");
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
@@ -238,7 +257,7 @@ public class TransBpjs extends AppCompatActivity {
                         inKonfirmasi.putExtra("pin", "-");
                         inKonfirmasi.putExtra("cmd_save", "-");
 
-                        Log.d("OPPO-1", "getBillingReferenceID() "+response.body().getBillingReferenceID());
+                        Log.d("OPPO-1", "getBillingReferenceID() " + response.body().getBillingReferenceID());
 
                         startActivity(inKonfirmasi);
                         finish();
@@ -335,30 +354,57 @@ public class TransBpjs extends AppCompatActivity {
         }
     }
 
+    private void monthYear() {
+        MonthYearPickerDialog pickerDialog = new MonthYearPickerDialog();
+        pickerDialog.setListener(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int i2) {
+                monthYearStr = year + "-" + (month + 1) + "-" + i2;
 
-    private DatePickerDialog createDialogWithoutDateField() {
-        DatePickerDialog dpd = new DatePickerDialog(this, null, 2014, 1, 24);
-        try {
-            java.lang.reflect.Field[] datePickerDialogFields = dpd.getClass().getDeclaredFields();
-            for (java.lang.reflect.Field datePickerDialogField : datePickerDialogFields) {
-                if (datePickerDialogField.getName().equals("mDatePicker")) {
-                    datePickerDialogField.setAccessible(true);
-                    DatePicker datePicker = (DatePicker) datePickerDialogField.get(dpd);
-                    java.lang.reflect.Field[] datePickerFields = datePickerDialogField.getType().getDeclaredFields();
-                    for (java.lang.reflect.Field datePickerField : datePickerFields) {
-                        Log.i("test", datePickerField.getName());
-                        if ("mDaySpinner".equals(datePickerField.getName())) {
-                            datePickerField.setAccessible(true);
-                            Object dayPicker = datePickerField.get(datePicker);
-                            ((View) dayPicker).setVisibility(View.GONE);
-                        }
-                    }
+                long interval = Math.abs(interval(monthYearStr));
+                if (interval <= 400) {
+                    etPickADate.setText((formatMonthYear(monthYearStr)));
+                } else {
+                    Toast.makeText(TransBpjs.this, "Melebihi batas waktu yang ditentukan (Maksimal 1 Tahun)", Toast.LENGTH_SHORT).show();
                 }
+
             }
-        }
-        catch (Exception ex) {
-        }
-        return dpd;
+        });
+        pickerDialog.show(getSupportFragmentManager(), "MonthYearPickerDialog");
     }
 
+    String formatMonthYear(String str) {
+        Date date = null;
+        try {
+            date = input.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return sdf.format(date);
+    }
+
+    private long interval(String event) {
+
+        long x = 0;
+        String eventDate = event;
+        DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date1 = date.parse(eventDate);
+            Date currentDate = new Date();
+            currentDate = date.parse(date.format(currentDate));
+            long difference = date1.getTime() - currentDate.getTime();
+            long diff = TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
+            x = diff;
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return x;
+
+    }
+
+
 }
+

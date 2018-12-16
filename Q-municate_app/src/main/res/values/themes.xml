@@ -27,6 +27,8 @@
 
         <item name="searchViewStyle">@style/SearchViewStyle</item>
 
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+
     </style>
 
     <style name="AppTheme" parent="Base.AppTheme">

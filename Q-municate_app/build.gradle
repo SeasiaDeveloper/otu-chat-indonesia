@@ -214,6 +214,8 @@ dependencies {
     //user agent simple and fast parser
     implementation group: 'eu.bitwalker', name: 'UserAgentUtils', version: '1.21'
 //>>>>>>> origin/feature/logging_destroy_session
+
+    implementation 'com.github.twinkle942910:monthyearpicker:0.0.1'
 }
 
 def changeApkFileName(variant) {

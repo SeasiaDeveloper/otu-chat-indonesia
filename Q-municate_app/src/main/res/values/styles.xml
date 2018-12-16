@@ -474,4 +474,20 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">#1fd76e</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_width">@dimen/density_200</item>
+        <item name="android:width">@dimen/density_100</item>
+        <item name="android:background">@drawable/custom_round_new</item>
+    </style>
+
 </resources>

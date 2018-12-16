@@ -59,7 +59,6 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
             txtjabatanupline, txtanggallahir, txnomorhpmember, txtanggaldaftar, txbank, txnorek, txpemilikrek, ed_pin;
 
     String idmember, name, ktp, tgllahir, alamat, kota, nohp_member, email, karirmember, tgldaftar, bank, norec, pemilikrec, idupline, namaupline, hpsponsor, karirsponsor;
-    AutoCompleteTextView x;
 
     Dialog loadingDialog;
 
@@ -73,8 +72,13 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
     String titleAlert = "Profile";
 
     Bundle extras;
-    int statusdate = 0;
     ImageView img;
+
+    //AUTOCOMPLETE
+    AutoCompleteTextView textCity;
+    ArrayList<String> cityList;
+    String[] cityArr;
+    ArrayAdapter<String> cityAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,11 +95,12 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
         txtanggallahir = findViewById(R.id.txt_tgl_lahir);
         txtAddress = findViewById(R.id.txt_profile_address);
         txtCity = findViewById(R.id.txt_profile_city);
+
         txnomorhpmember = findViewById(R.id.txt_nomor_hp);
         txtEmail = findViewById(R.id.txt_profile_email);
         txtCarrier = findViewById(R.id.txt_profile_carrier);
         txtanggaldaftar = findViewById(R.id.txt_tanggal_daftar);
-        x = findViewById(R.id.autoCompleteTextView);
+        //x = findViewById(R.id.autoCompleteTextView);
 
         img = findViewById(R.id.profile_image);
         //===========data bank member
@@ -152,16 +157,8 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
             }
         });
 
-       /* txtanggaldaftar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                statusdate = 2;
-                getDate(v);
-            }
-        });*/
-
         txtAddress.setText(alamat);
-        txtCity.setText(kota);
+
         txnomorhpmember.setText(nohp_member);
         txtEmail.setText(email);
         txtCarrier.setText(karirmember);
@@ -192,6 +189,7 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Toast.makeText(updateProfile.this, "" + textCity.getText().toString(), Toast.LENGTH_SHORT).show();
                 updateProfil();
 
             }
@@ -203,6 +201,11 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
                 Toast.makeText(updateProfile.this, "Silahkan ke menu Setting Tab Chat untuk update foto profile", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+        textCity = findViewById(R.id.autoCompleteTextView);
+        textCity.setText(kota);
+        cityList = new ArrayList<>();
 
         checkVisibilityUserIcon();
         getKota();
@@ -251,7 +254,7 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
         String secCode = ed_pin.getText().toString() + "x@2016ekl";
         strSecurityCode = Utils.md5(secCode);
 
-        Call<DataProfile> callProfil = mApiInterfacePayment.updateProfil(strUserID, strApIUse, strAccessToken, txtEmail.getText().toString(), txtCity.getText().toString(),
+        Call<DataProfile> callProfil = mApiInterfacePayment.updateProfil(strUserID, strApIUse, strAccessToken, txtEmail.getText().toString(), textCity.getText().toString(),
                 txtAddress.getText().toString(), txtKtp.getText().toString(), txtanggallahir.getText().toString(), strSecurityCode);
         callProfil.enqueue(new Callback<DataProfile>() {
             @Override
@@ -293,32 +296,46 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
     }
 
     //api get kota
-    ArrayList<String> listKota;
-    public void getKota(){
-        Call<DataKota> datakota = mApiInterfacePayment.getKota(strUserID,strAccessToken,strApIUse);
+    /* ArrayList<String> listKota;*/
+
+    public void getKota() {
+
+        Call<DataKota> datakota = mApiInterfacePayment.getKota(strUserID, strAccessToken, strApIUse);
         datakota.enqueue(new Callback<DataKota>() {
             @Override
             public void onResponse(Call<DataKota> call, Response<DataKota> response) {
-                if(response.isSuccessful()){
-                    listKota = new ArrayList<>();
-                    listKota.clear();
+                if (response.isSuccessful()) {
+                    /*listKota = new ArrayList<>();
+                    listKota.clear();*/
+                    cityList.clear();
+
                     String status = response.body().getStatus();
                     String respMessage = response.body().getRespMessage();
-                    if(status.equalsIgnoreCase("SUCCESS")){
+                    if (status.equalsIgnoreCase("SUCCESS")) {
                         ArrayList<DataKota> kota = response.body().getData();
-                        for(int i = 0; i<kota.size(); i++){
-                            listKota.add(kota.get(i).getKota());
+                        for (int i = 0; i < kota.size(); i++) {
+                            cityList.add(kota.get(i).getKota());
+                            Log.d("AYIK", "->" + i + ":" + kota.get(i).getKota());
                         }
-                        ListAdapterKota adapter = new ListAdapterKota(updateProfile.this, kota);
+
+                        Log.d("AYIK", "->" + cityList.size());
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                                (updateProfile.this, android.R.layout.simple_list_item_1, cityList);
+                        textCity.setThreshold(1); //will start working from first character
+                        textCity.setAdapter(adapter);
+
+                        /*ListAdapterKota adapter = new ListAdapterKota(updateProfile.this, cityList);
                         //Getting the instance of AutoCompleteTextView
                         x = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
                         x.setThreshold(1);//will start working from first character
                         x.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
-                        x.setTextColor(Color.RED);
-                    }else{
+                        x.setTextColor(Color.RED);*/
+
+                    } else {
                         utilsAlert.globalDialog(updateProfile.this, titleAlert, respMessage);
                     }
-                }else{
+                } else {
                     utilsAlert.globalDialog(updateProfile.this, titleAlert, getResources().getString(R.string.error_api));
                 }
             }
