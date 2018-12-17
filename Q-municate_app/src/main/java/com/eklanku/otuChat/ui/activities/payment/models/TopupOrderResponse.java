@@ -11,8 +11,6 @@ public class TopupOrderResponse {
     @SerializedName("errNumber")
     private String error;
 
-    /*@SerializedName("data")
-    private List<PaketTopup> paketTopups;*/
 
     public String getStatus() {
         return status;
@@ -29,14 +27,6 @@ public class TopupOrderResponse {
     public void setError(String error) {
         this.error = error;
     }
-
-    /*public List<PaketTopup> getPaketTopups() {
-        return paketTopups;
-    }
-
-    public void setPaketTopups(List<PaketTopup> paketTopups) {
-        this.paketTopups = paketTopups;
-    }*/
 
     @SerializedName("userID")
     private String userID;

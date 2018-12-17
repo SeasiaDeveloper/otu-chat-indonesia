@@ -32,15 +32,11 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
-import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
-import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKonfirmasi;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapter;
-import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapterNew;
+import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapterNew;
 import com.eklanku.otuChat.utils.Utils;
 
 import java.util.ArrayList;
@@ -139,6 +135,8 @@ public class TransVouchergame_product extends AppCompatActivity {
         _namaProvider = extras.getString("jnsGame");
         _img = extras.getString("imgOpr");
 
+        setTitle(_namaProvider);
+
         addList();
     }
 
@@ -177,64 +175,6 @@ public class TransVouchergame_product extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable s) {
             validateIdpel();
-        }
-    }
-
-
-    public void loadProduct(String userID, String accessToken, String aplUse, String voucherGame) {
-        try {
-            loadingDialog = ProgressDialog.show(TransVouchergame_product.this, "Harap Tunggu", "Mengambil Data...");
-            loadingDialog.setCanceledOnTouchOutside(true);
-
-            Call<LoadDataResponseProduct> gameVoucher = apiInterfacePayment.getLoadProduct(userID, accessToken, aplUse, voucherGame);
-            gameVoucher.enqueue(new Callback<LoadDataResponseProduct>() {
-                @Override
-                public void onResponse(Call<LoadDataResponseProduct> call, Response<LoadDataResponseProduct> response) {
-                    loadingDialog.dismiss();
-                    if (response.isSuccessful()) {
-                        String status = response.body().getStatus();
-                        String respMessage = response.body().getRespMessage();
-                        if (status.equalsIgnoreCase("SUCCESS")) {
-
-                            List<String> listPrice = new ArrayList<String>();
-                            List<String> listNama = new ArrayList<String>();
-                            List<String> listEp = new ArrayList<String>();
-                            id_paket = new ArrayList<>();
-                            listPrice.clear();
-                            listNama.clear();
-                            listEp.clear();
-                            final List<DataProduct> products = response.body().getProducts();
-                            for (int i = 0; i < products.size(); i++) {
-                                String name = products.get(i).getName();
-                                String price = products.get(i).getPrice();
-                                String ep = products.get(i).getEp();
-                                id_paket.add(products.get(i).getCode());
-                                listNama.add(name);
-                                listEp.add(ep);
-                                listPrice.add(price);
-                            }
-
-                            SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
-                            lvProductGame.setAdapter(adapter);
-                            /*lvProductGame.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    code = products.get(position).getCode();
-                                }
-                            });*/
-
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<LoadDataResponseProduct> call, Throwable t) {
-
-                }
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

@@ -1,4 +1,4 @@
-package com.eklanku.otuChat.ui.adapters.payment2;
+package com.eklanku.otuChat.ui.adapters.payment;
 
 import android.content.Context;
 import android.util.Log;

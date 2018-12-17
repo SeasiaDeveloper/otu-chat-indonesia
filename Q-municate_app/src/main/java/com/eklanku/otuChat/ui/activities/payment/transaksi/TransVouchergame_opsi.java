@@ -218,7 +218,6 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
 
     public void getProduct_Game() {
         showProgress(true);
-        Log.d("OPPO-1", "getProduct_Game: " + strUserID + ", " + strAccessToken);
         Call<DataAllProduct> product_game = apiInterfacePayment.getproduct_game(strUserID, strAccessToken, "OTU");
         product_game.enqueue(new Callback<DataAllProduct>() {
             @Override
@@ -285,9 +284,6 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         d.clear();
         e.clear();
         for (int i = 0; i < listCode.size(); i++) {
-            Log.d("OPPO-1", "detailProduct: " + listCode);
-           /* Log.d("OPPO-1", "detailProduct>>: " + listProviderProduct.get(i) + " > " + provider);
-            for (int i = 0; i < listCode.size(); i++) {*/
             if (listProviderProduct.get(i).equalsIgnoreCase(provider)) {
                 Log.d("OPPO-1", "detailProduct>>: " + listProviderProduct.get(i) + " > " + provider);
                 a.add(listName.get(i));
@@ -306,10 +302,7 @@ public class TransVouchergame_opsi extends AppCompatActivity implements View.OnC
         product.putExtra("jnsGame", provider);
         product.putExtra("imgOpr", imgOpr);
         startActivity(product);
-
     }
-//    }
-    //}
 
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)

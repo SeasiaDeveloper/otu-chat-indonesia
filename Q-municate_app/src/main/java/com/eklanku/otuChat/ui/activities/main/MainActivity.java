@@ -48,7 +48,7 @@ import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
 import com.eklanku.otuChat.ui.views.banner.GlideImageLoader;
-import com.eklanku.otuChat.ui.views.banner2.BannerDataManager;
+import com.eklanku.otuChat.ui.views.banner.BannerDataManager;
 import com.eklanku.otuChat.utils.helpers.ServiceManager;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;

@@ -1,10 +1,12 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -30,7 +32,7 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapterNew;
+import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapterNew;
 import com.eklanku.otuChat.utils.Utils;
 
 import java.util.ArrayList;
@@ -88,7 +90,7 @@ public class TransESaldo_product extends AppCompatActivity {
         transKe = findViewById(R.id.txtTransKe);
         transKe.setText("1");
         layoutNo = findViewById(R.id.txtLayoutTransPulsaNo);
-        imgOPR =findViewById(R.id.imgOpr);
+        imgOPR = findViewById(R.id.imgOpr);
 
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
@@ -104,7 +106,7 @@ public class TransESaldo_product extends AppCompatActivity {
         _listprice = new ArrayList<>();
         _listep = new ArrayList<>();
         _listProvide = new ArrayList<>();
-        _listCode= new ArrayList<>();
+        _listCode = new ArrayList<>();
 
         _listnama.clear();
         _listprice.clear();
@@ -114,18 +116,19 @@ public class TransESaldo_product extends AppCompatActivity {
 
         _listnama = extras.getStringArrayList("listName");
         _listprice = extras.getStringArrayList("listPrice");
-        _listep =  extras.getStringArrayList("listEP");
-        _listProvide =  extras.getStringArrayList("listProvider");
-        _listCode =  extras.getStringArrayList("listCode");
+        _listep = extras.getStringArrayList("listEP");
+        _listProvide = extras.getStringArrayList("listProvider");
+        _listCode = extras.getStringArrayList("listCode");
         _namaProvider = extras.getString("jnsEsaldo");
         _img = extras.getString("imgOpr");
 
+        setTitle(_namaProvider);
         addList();
     }
 
     private void initializeResources() {
         Log.d("OPPO-1", "initializeResources: ");
-        lvProductESaldo= (ListView) findViewById(R.id.listEsaldo);
+        lvProductESaldo = (ListView) findViewById(R.id.listEsaldo);
         lvProductESaldo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -219,6 +222,7 @@ public class TransESaldo_product extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransESaldo_product.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
@@ -284,7 +288,7 @@ public class TransESaldo_product extends AppCompatActivity {
     }
 
 
-    public void addList(){
+    public void addList() {
         SpinnerAdapterNew adapter = new SpinnerAdapterNew(getApplicationContext(), _listnama, _listprice, _listep, _listProvide, _namaProvider);
         int id = TransESaldo_product.this.getResources().getIdentifier("drawable/ic_e_saldo_" + _img.toLowerCase(), null, TransESaldo_product.this.getPackageName());
         imgOPR.setImageResource(id);

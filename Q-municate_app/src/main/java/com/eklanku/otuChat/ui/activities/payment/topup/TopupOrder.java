@@ -24,7 +24,7 @@ import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupPayResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment2.SpinnerBankAdapter;
+import com.eklanku.otuChat.ui.adapters.payment.SpinnerBankAdapter;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupDetailM;
 import com.eklanku.otuChat.ui.activities.payment.models.TopupOrderResponse;
@@ -261,59 +261,6 @@ public class TopupOrder extends AppCompatActivity {
             }
         });
     }
-
-    /*====================================payment lama==================================================*/
-/*
-    private void loadData() {
-        loadingDialog = ProgressDialog.show(TopupOrder.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Call<TopupOrderResponse> dataCall = mApiInterface.getPaketTopup();
-        dataCall.enqueue(new Callback<TopupOrderResponse>() {
-            @Override
-            public void onResponse(Call<TopupOrderResponse> call, Response<TopupOrderResponse> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status   = response.body().getStatus();
-                    String error    = response.body().getError();
-
-                    if ( status.equals("OK") ) {
-                        final List<PaketTopup> result = response.body().getPaketTopups();
-                        id_paket = new ArrayList<>();
-                        nama_paket = new ArrayList<>();
-                        nominal = new ArrayList<>();
-
-                        for ( int i=0; i<result.size(); i++ ) {
-                            id_paket.add(result.get(i).getId());
-                            Double total = Double.valueOf(result.get(i).getHargaPaket());
-                            Locale localeID = new Locale("in", "ID");
-                            NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
-                            String rupiah = format.format(total);
-                            String r = result.get(i).getNamaPaket().replace(" rb","k");
-                            nama_paket.add("Paket " + r);
-                            nominal.add(rupiah);
-                        }
-
-                        listViewAdapter = new ListViewAdapter(getApplicationContext(),nama_paket,nominal);
-                        listView.setAdapter(listViewAdapter);
-//                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, nama_paket);
-//                        listView.setAdapter(adapter);
-                    } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TopupOrderResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_LOADDATA", t.getMessage().toString());
-            }
-        });
-    }
-    /*===========================================end payment lama=====================================================*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

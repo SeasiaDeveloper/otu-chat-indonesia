@@ -399,16 +399,14 @@ public class WebServiceHandler {
 
     private void loaddata_bonus(){
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-
-        Log.d("OPPO-1", "loaddata_balance: "+mainFragment.strUserID);
-        Log.d("OPPO-1", "loaddata_balance: "+mainFragment.strAccessToken);
         mainFragment.showProgressDialog();
         Call<DataHistoryOTU> dataCall = mApiInterfacePayment.getHistoryTrx(mainFragment.strUserID, strApIUse, mainFragment.strAccessToken, "5");
         dataCall.enqueue(new Callback<DataHistoryOTU>() {
             @Override
             public void onResponse(Call<DataHistoryOTU> call, Response<DataHistoryOTU> response) {
                 mainFragment.hideProgressDialog();
-                if (response.isSuccessful()) {
+
+                if (!response.equals(null) && response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
 

@@ -46,7 +46,7 @@ import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPaymentAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
-import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapterNew;
+import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapterNew;
 import com.eklanku.otuChat.ui.views.ARTextView;
 import com.eklanku.otuChat.utils.Utils;
 

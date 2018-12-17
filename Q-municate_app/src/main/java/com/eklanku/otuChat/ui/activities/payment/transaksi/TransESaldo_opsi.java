@@ -1,6 +1,10 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
@@ -42,6 +48,10 @@ public class TransESaldo_opsi extends AppCompatActivity implements View.OnClickL
 
     String titleAlert = "E-Saldo";
 
+    ProgressBar progressBar;
+
+    LinearLayout layoutView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +62,8 @@ public class TransESaldo_opsi extends AppCompatActivity implements View.OnClickL
         btnGojek = findViewById(R.id.btnSaldoGojek);
         btnGrab = findViewById(R.id.btnSaldoGrab);
         btnOvo = findViewById(R.id.btnsaldoOVO);
+        progressBar = findViewById(R.id.progress);
+        layoutView = findViewById(R.id.linear_layout);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,7 +79,7 @@ public class TransESaldo_opsi extends AppCompatActivity implements View.OnClickL
         btnGrab.setOnClickListener(this);
         btnOvo.setOnClickListener(this);
 
-        //get all product
+        //get all product from new API
         getProductPulsa();
 
     }
@@ -82,11 +94,12 @@ public class TransESaldo_opsi extends AppCompatActivity implements View.OnClickL
     ArrayList<String> listProviderProduct;
 
     public void getProductPulsa() {
+        showProgress(true);
         Call<DataAllProduct> dataESaldo = apiInterfacePayment.getProductESaldo(strUserID, strAccessToken, strAplUse);
         dataESaldo.enqueue(new Callback<DataAllProduct>() {
             @Override
             public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
-//                showProgress(false);
+                showProgress(false);
                 if (response.isSuccessful()) {
                     listCode = new ArrayList<>();
                     listPrice = new ArrayList<>();
@@ -116,7 +129,6 @@ public class TransESaldo_opsi extends AppCompatActivity implements View.OnClickL
                             listProviderProduct.add(data.get(i).getProvider());
                         }
 
-                        Log.d("OPPO-1", "onResponse: " + listCode);
                     } else {
                         utilsAlert.globalDialog(TransESaldo_opsi.this, titleAlert, respMessage);
                     }
@@ -127,7 +139,7 @@ public class TransESaldo_opsi extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onFailure(Call<DataAllProduct> call, Throwable t) {
-//                showProgress(false);
+                showProgress(false);
                 utilsAlert.globalDialog(TransESaldo_opsi.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
 
             }
@@ -147,10 +159,7 @@ public class TransESaldo_opsi extends AppCompatActivity implements View.OnClickL
         d.clear();
         e.clear();
         for(int i = 0; i < listCode.size(); i++){
-            Log.d("OPPO-1", "detailProduct: "+listCode);
-            Log.d("OPPO-1", "detailProduct>>: "+listProviderProduct.get(i)+" > "+provider);
             if (listProviderProduct.get(i).equalsIgnoreCase(provider)) {
-                Log.d("OPPO-1", "detailProduct>>: "+listProviderProduct.get(i)+" > "+provider);
                 a.add(listName.get(i));
                 b.add(listPrice.get(i));
                 c.add(listEP.get(i));
@@ -215,5 +224,36 @@ public class TransESaldo_opsi extends AppCompatActivity implements View.OnClickL
                 break;
         }
         detailProduct(jns_ESaldo, imgOpr);
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
+        }
     }
 }

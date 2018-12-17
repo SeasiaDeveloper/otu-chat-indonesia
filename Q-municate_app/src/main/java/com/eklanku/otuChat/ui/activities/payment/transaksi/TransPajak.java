@@ -45,39 +45,7 @@ import retrofit2.Response;
 
 public class TransPajak extends AppCompatActivity {
 
-    private static String[] nama_wilayah/* = {"PDAM BONDOWOSO",
-            "PDAM PONTIANAK",
-            "PDAM KAB JEMBER",
-            "PDAM KAB MOJOKERTO",
-            "PDAM KOTA BANDUNG",
-            "PDAM KOTA BANDAR LAMPUNG",
-            "PDAM KOTA BOGOR",
-            "PDAM KAB SIDOARJO",
-            "PDAM SURABAYA",
-            "PDAM KAB BANGKALAN",
-            "PDAM KAB MALANG",
-            "PDAM KAB SITUBONDO",
-            "PDAM KOTA PURWOREJO",
-            "PDAM KAB GROBOGAN",
-            "PDAM AETRA JAKARTA",
-            "PDAM PALYJA JAKARTA",
-            "PDAM KOTA SURAKARTA",
-            "PDAM DENPASAR",
-            "PDAM KOTA TANAH GROGOT",
-            "PDAM KAB. BALANGAN",
-            "PDAM KOTA JAMBI",
-            "PDAM KAB. BOJONEGORO",
-            "PDAM KAB. BATANG",
-            "PDAM KAB. PASURUAN",
-            "PDAM KOTA PASURUAN",
-            "PDAM KAB. SAMPANG",
-            "PDAM KAB. KUBU RAYA",
-            "PDAM KAB. TAPIN",
-            "PDAM KOTA BANJARBARU",
-            "PDAM KOTA MATARAM",
-            "PDAM KOTA MANADO",
-            "PDAM KOTA PALEMBANG",
-            "PDAM KAB BULELENG"}*/;
+    private static String[] nama_wilayah;
 
     SharedPreferences prefs;
     Spinner spnWilayah;

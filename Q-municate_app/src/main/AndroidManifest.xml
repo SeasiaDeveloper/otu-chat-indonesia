@@ -563,7 +563,6 @@
         </activity>
         <activity
             android:name=".ui.activities.payment.transaksi.TransESaldo_product"
-            android:label="E-Saldo"
             android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

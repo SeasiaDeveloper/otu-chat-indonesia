@@ -267,11 +267,9 @@ public class TransKartuKredit extends AppCompatActivity {
                         startActivity(inKonfirmasi);
                     } else {
                         utilsAlert.globalDialog(TransKartuKredit.this, titleAlert, error);
-                        //Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     utilsAlert.globalDialog(TransKartuKredit.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -279,7 +277,6 @@ public class TransKartuKredit extends AppCompatActivity {
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
                 utilsAlert.globalDialog(TransKartuKredit.this, titleAlert, getResources().getString(R.string.error_api));
-                //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
         });

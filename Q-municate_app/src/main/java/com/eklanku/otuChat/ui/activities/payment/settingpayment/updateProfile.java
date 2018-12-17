@@ -227,8 +227,6 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
         if (!TextUtils.isEmpty(userCustomData.getAvatarUrl())) {
             loadLogoActionBar(userCustomData.getAvatarUrl());
         } else {
-           /* setActionBarIcon(MediaUtils.getRoundIconDrawable(this,
-                    BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_user)));*/
             img.setImageResource(R.drawable.placeholder_user);
         }
     }

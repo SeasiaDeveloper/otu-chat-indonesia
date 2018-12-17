@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -24,11 +26,10 @@ public class ApiClientPayment {
             OkHttpClient okHttpClient = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
                 @Override
                 public okhttp3.Response intercept(Chain chain) throws IOException {
-                    Request originalRequest = chain.request();
-
-                    Request.Builder builder = originalRequest.newBuilder()
-                            .header("X-API-KEY", "222");
-                    Request newRequest = builder.build();
+                        Request originalRequest = chain.request();
+                        Request.Builder builder = originalRequest.newBuilder()
+                                .header("X-API-KEY", "222");
+                        Request newRequest = builder.build();
                     return chain.proceed(newRequest);
                 }
             })
@@ -46,5 +47,9 @@ public class ApiClientPayment {
                     .build();
         }
         return retrofit;
+    }
+
+    public interface OnConnectionTimeoutListener {
+        void onConnectionTimeout();
     }
 }

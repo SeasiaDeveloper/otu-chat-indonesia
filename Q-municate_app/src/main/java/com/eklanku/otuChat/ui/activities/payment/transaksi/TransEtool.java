@@ -45,11 +45,10 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponseProvider;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKonfirmasi;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapter;
-import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapterNew;
+import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
+import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapterNew;
 import com.eklanku.otuChat.utils.Utils;
 
 import java.util.ArrayList;

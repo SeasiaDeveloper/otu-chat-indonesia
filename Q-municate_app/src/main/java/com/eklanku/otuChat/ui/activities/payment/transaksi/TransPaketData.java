@@ -43,10 +43,9 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
-import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKonfirmasi;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.ui.adapters.payment2.SpinnerAdapterNew;
+import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapterNew;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPaymentAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.ui.views.ARTextView;
@@ -530,12 +529,10 @@ public class TransPaketData extends AppCompatActivity {
                     }
                 }
 
-                if (a.size() >= 1 /*&& nomorHp.equals(oprPulsa)*/) {
+                if (a.size() >= 1) {
                     tvEmpty.setVisibility(View.GONE);
-//                    listPulsa.setVisibility(View.VISIBLE);
                 } else {
                     tvEmpty.setVisibility(View.VISIBLE);
-//                    listPulsa.setVisibility(View.GONE);
                 }
 
                 adapter = new SpinnerAdapterNew(getApplicationContext(), a, b, c, d, oprPaket);

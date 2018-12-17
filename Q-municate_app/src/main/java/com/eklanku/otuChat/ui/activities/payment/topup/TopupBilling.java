@@ -12,7 +12,8 @@ import android.widget.TextView;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
-import com.eklanku.otuChat.R;;
+import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.utils.Utils;;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,6 +42,9 @@ public class TopupBilling extends AppCompatActivity {
 
     String bank, nominal, msg;
     SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+
+    Utils utilsAlert;
+    String titleAlert = "Topup";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,21 +76,8 @@ public class TopupBilling extends AppCompatActivity {
         txtBank.setText(bank);
         txtTime.setText(sdf.format(new Date()));
         edMessage.setText(msg);
-
-/*
-        Double total = 0.0d;
-        try {
-            if (nominal != null && !nominal.trim().isEmpty())
-                total = Double.valueOf(nominal);
-        } catch (Exception e) {
-            total = 0.0d;
-        }
-        Locale localeID = new Locale("in", "ID");
-        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);
-        String rupiah = format.format(total);
-*/
-
-        txtKeterangan.setText("Langkah menuju sukses melakukan deposit:\n1. transfer sesuai nominal Rp " + nominal + ".\n2. Pastikan no. rek. sesuai dgn a.n. PT. Eklanku Sehati Cemerlang.\n3. Silahkan klik tombol Konfirmasi, setelah transfer dilakukan.");
+        utilsAlert = new Utils(TopupBilling.this);
+        txtKeterangan.setText("Langkah menuju sukses melakukan deposit:\n1. transfer sesuai nominal Rp " + nominal + ".\n2. Pastikan no. rek. sesuai dgn a.n. PT. Eklanku Indonesia Cemerlang.\n3. Silahkan klik tombol Konfirmasi, setelah transfer dilakukan.");
     }
 
 
@@ -96,89 +87,10 @@ public class TopupBilling extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //depositOrder();
-                finish();
+                utilsAlert.globalDialog(TopupBilling.this, titleAlert, "Terimakasih Telah Melakukan Pengisian Saldo");
+                //finish();
             }
         });
     }
-
-
-    /*=================================dipindah di topup order====================================*/
-    /*
-    private void depositOrder() {
-        loadingDialog = ProgressDialog.show(TopupBilling.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-
-        Call<TopupPayResponse> dataCall = mApiInterfacePayment.postDepositOrder(strUserID, strAccessToken, strApIUse, bank, nominal);
-        dataCall.enqueue(new Callback<TopupPayResponse>() {
-            @Override
-            public void onResponse(Call<TopupPayResponse> call, Response<TopupPayResponse> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String error = response.body().getRespMessage();
-
-                    if (status.equals("SUCCESS")) {
-                        edMessage.setText(error);
-
-                    } else {
-                        Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TopupPayResponse> call, Throwable t) {
-                loadingDialog.dismiss();
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                Log.d("API_LOADDATA", t.getMessage().toString());
-            }
-        });
-    }
-*/
-
-    /*=======================================payment lama==================================================*/
-/*
-    private class BayarButtonListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            loadingDialog = ProgressDialog.show(TopupBilling.this, "Harap Tunggu", "Memproses Pengisian Topup");
-            loadingDialog.setCanceledOnTouchOutside(true);
-            Call<TopupPayResponse> dataCall = mApiInterface.postTopupPay("transfer", id_paket, PreferenceUtil.getNumberPhone(this)));
-//            Call<TopupPayResponse> dataCall = mApiInterface.postTopupPay("transfer", id_paket, "085334059170");
-            dataCall.enqueue(new Callback<TopupPayResponse>() {
-                @Override
-                public void onResponse(Call<TopupPayResponse> call, Response<TopupPayResponse> response) {
-                    loadingDialog.dismiss();
-                    if (response.isSuccessful()) {
-                        String status = response.body().getStatus();
-                        String error = response.body().getError();
-                        String message = response.body().getMessage();
-
-                        if (status.equals("OK")) {
-                            Intent intent = new Intent(getBaseContext(), TopupDetail.class);
-                            intent.putExtra("id", message);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(getBaseContext(), "Terjadi kesalahan:\n" + error, Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<TopupPayResponse> call, Throwable t) {
-                    loadingDialog.dismiss();
-                    Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                    Log.d("API_LOADDATA", t.getMessage().toString());
-                }
-            });
-
-        }
-    }
-/*============================================end payment lama================================================================*/
 
 }
