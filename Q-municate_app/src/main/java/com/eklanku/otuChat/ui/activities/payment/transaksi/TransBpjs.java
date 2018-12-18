@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
+import com.eklanku.otuChat.ui.activities.payment.models.DataPeriodeBPJS;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -164,6 +165,7 @@ public class TransBpjs extends AppCompatActivity {
             Log.d("AYIK", "month->"+ month);
         }
 
+        getPeriodeBpjs();
     }
 
     private class txtWatcher implements TextWatcher {
@@ -404,6 +406,28 @@ public class TransBpjs extends AppCompatActivity {
         return x;
 
     }
+
+
+    public void getPeriodeBpjs(){
+        Call<DataPeriodeBPJS> periode = mApiInterfacePayment.getperiodebpjs(strUserID, strAccessToken, strAplUse);
+        periode.enqueue(new Callback<DataPeriodeBPJS>() {
+            @Override
+            public void onResponse(Call<DataPeriodeBPJS> call, Response<DataPeriodeBPJS> response) {
+                if(response.isSuccessful()){
+                    String status = response.body().getStatus();
+                    if(status.equalsIgnoreCase("SUCCESS")){
+                        Log.d("OPPO-1", "oSuccess");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataPeriodeBPJS> call, Throwable t) {
+                Log.d("OPPO-1", "onFailure: "+t.getMessage());
+            }
+        });
+    }
+
 
 
 }

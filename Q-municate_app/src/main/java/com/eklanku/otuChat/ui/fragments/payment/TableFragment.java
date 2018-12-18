@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.eklanku.otuChat.ui.activities.payment.tableview.holder.CellViewHolder;
 import com.eklanku.otuChat.ui.adapters.payment.MyTableAdapter;
 import com.evrencoskun.tableview.TableView;
 
@@ -193,4 +194,10 @@ public class TableFragment extends Fragment {
             mProgressDialog.dismiss();
         mProgressDialog = null;
     }
+
+
+    public void getData(){
+        
+    }
+
 }

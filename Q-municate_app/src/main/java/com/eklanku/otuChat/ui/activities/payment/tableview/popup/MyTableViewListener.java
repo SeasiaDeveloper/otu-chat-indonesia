@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.eklanku.otuChat.ui.activities.payment.tableview.holder.CellViewHolder;
 import com.evrencoskun.tableview.ITableView;
 import com.evrencoskun.tableview.listener.ITableViewListener;
 import com.eklanku.otuChat.ui.activities.payment.tableview.holder.ColumnHeaderViewHolder;
@@ -18,8 +19,17 @@ public class MyTableViewListener implements ITableViewListener {
 
     @Override
     public void onCellClicked(@NonNull RecyclerView.ViewHolder p_jCellView, int p_nXPosition, int p_nYPosition) {
-        //Log.d("OPPO-1", "onCellClicked: "+p_jCellView.);
 
+        if (p_jCellView != null && p_jCellView instanceof CellViewHolder) {
+
+            Log.d("OPPO-1", "onCellClicked: "+((CellViewHolder) p_jCellView).cell_textview.getText());
+            // Create Long Press Popup
+            CellColomnLongPressPopup popup = new CellColomnLongPressPopup(
+                    (CellViewHolder) p_jCellView, mTableView);
+            // Show
+            popup.show();
+
+        }
 
     }
 

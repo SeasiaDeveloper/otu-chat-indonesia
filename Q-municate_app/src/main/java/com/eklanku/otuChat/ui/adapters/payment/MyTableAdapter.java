@@ -1,10 +1,14 @@
 package com.eklanku.otuChat.ui.adapters.payment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import com.eklanku.otuChat.R;;
 import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
@@ -16,9 +20,12 @@ import com.eklanku.otuChat.ui.activities.payment.tableview.model.CellModel;
 import com.eklanku.otuChat.ui.activities.payment.tableview.model.ColumnHeaderModel;
 import com.eklanku.otuChat.ui.activities.payment.tableview.model.RowHeaderModel;
 
+import java.util.EventListener;
 
-public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowHeaderModel,
-        CellModel> {
+import io.fabric.sdk.android.services.events.EventsHandler;
+
+
+public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowHeaderModel, CellModel> {
 
     public MyTableAdapter(Context p_jContext) {
         super(p_jContext);

@@ -45,4 +45,6 @@ public class RowHeaderViewHolder extends AbstractViewHolder {
         row_header_textview.setTextColor(ContextCompat.getColor(row_header_textview.getContext(),
                 nForegroundColorId));
     }
+
+
 }

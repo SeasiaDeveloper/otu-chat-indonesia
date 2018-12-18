@@ -7,6 +7,7 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.DataHistoryOTU;
 import com.eklanku.otuChat.ui.activities.payment.models.DataKota;
+import com.eklanku.otuChat.ui.activities.payment.models.DataPeriodeBPJS;
 import com.eklanku.otuChat.ui.activities.payment.models.DataPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProviderByType;
@@ -520,6 +521,15 @@ public interface ApiInterfacePayment {
     @FormUrlEncoded
     @POST("Member/kota_provinsi")
     Call<DataKota> getKota(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse
+    );
+
+    //get periode bpjs
+    @FormUrlEncoded
+    @POST("Pascabayar/bulan_bpjs")
+    Call<DataPeriodeBPJS> getperiodebpjs(
             @Field("userID") String userID,
             @Field("accessToken") String accessToken,
             @Field("aplUse") String aplUse
