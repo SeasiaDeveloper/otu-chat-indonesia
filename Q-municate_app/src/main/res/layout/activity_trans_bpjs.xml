@@ -64,15 +64,52 @@
          android:background="@drawable/custom_bottom_border_grey"
          android:orientation="horizontal">-->
 
-    <EditText
-        android:id="@+id/et_datePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Bulan"
-        android:inputType="text" />
+    <!--<EditText-->
+        <!--android:id="@+id/et_datePicker"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="Bulan"-->
+        <!--android:inputType="text" />-->
 
 
     <!--  </RelativeLayout>-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spnPeriodeBPJS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@drawable/custom_bottom_border_grey"
+            android:gravity="center"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_drop"
+            android:tint="@color/default_text_icon_otu_color" />
+
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvketPeriode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red_900"
+        android:text="okkk"
+        android:textSize="@dimen/text_11"
+        android:layout_marginTop="@dimen/density_4"/>
 
     <com.eklanku.otuChat.ui.views.ARTextView
         android:id="@+id/textView29"

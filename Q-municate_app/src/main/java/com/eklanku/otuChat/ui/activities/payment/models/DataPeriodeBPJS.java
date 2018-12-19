@@ -2,6 +2,8 @@ package com.eklanku.otuChat.ui.activities.payment.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class DataPeriodeBPJS {
 
     @SerializedName("errNumber")
@@ -10,14 +12,25 @@ public class DataPeriodeBPJS {
     @SerializedName("userID")
     String userID;
 
+    public List<DataDetailPeriodeBPJS> getPeriode() {
+        return periode;
+    }
+
+    public void setPeriode(List<DataDetailPeriodeBPJS> periode) {
+        this.periode = periode;
+    }
+
     @SerializedName("periode")
-    String periode;
+    List<DataDetailPeriodeBPJS> periode;
 
     @SerializedName("respTime")
     String respTime;
 
     @SerializedName("status")
     String status;
+
+    @SerializedName("respMessage")
+    String respMessage;
 
     public String getErrNumber() {
         return errNumber;
@@ -33,14 +46,6 @@ public class DataPeriodeBPJS {
 
     public void setUserID(String userID) {
         this.userID = userID;
-    }
-
-    public String getPeriode() {
-        return periode;
-    }
-
-    public void setPeriode(String periode) {
-        this.periode = periode;
     }
 
     public String getRespTime() {
@@ -67,6 +72,6 @@ public class DataPeriodeBPJS {
         this.respMessage = respMessage;
     }
 
-    @SerializedName("respMessage")
-    String respMessage;
+
+
 }

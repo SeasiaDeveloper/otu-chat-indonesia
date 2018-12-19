@@ -77,10 +77,6 @@ public interface ApiInterfacePayment {
     );
 
 
-
-
-
-
     @FormUrlEncoded
     @POST("resetpass/getToken")
     Call<ResetPassResponse> getTokenResetpass(
@@ -499,6 +495,19 @@ public interface ApiInterfacePayment {
             @Field("aplUse") String aplUse
     );
 
+    //inquiry
+    @FormUrlEncoded
+    @POST("Pascabayar/inquiry")
+    Call<TransBeliResponse> postPpobInquiryBPJS(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("productCode") String productGroup,
+            @Field("customerID") String customerID,
+            @Field("customerMSISDN") String customerMSISDN,
+            @Field("aplUse") String aplUse,
+            @Field("periode") String periode
+    );
+
 
     @FormUrlEncoded
     @POST("Pascabayar/payment")
@@ -533,6 +542,16 @@ public interface ApiInterfacePayment {
             @Field("userID") String userID,
             @Field("accessToken") String accessToken,
             @Field("aplUse") String aplUse
+    );
+
+    @FormUrlEncoded
+    @POST("Donasi/manual_transfer")
+    Call<TopupPayResponse> donasi_manual(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("bank") String bank,
+            @Field("nominal") String nominal
     );
 
 

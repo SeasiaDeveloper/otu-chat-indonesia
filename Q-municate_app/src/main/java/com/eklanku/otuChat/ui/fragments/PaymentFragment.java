@@ -38,6 +38,7 @@ import com.eklanku.otuChat.ui.activities.payment.RiwayatActivity;
 import com.eklanku.otuChat.ui.activities.payment.doku.CCPaymentActivity;
 
 import com.eklanku.otuChat.ui.activities.payment.doku.DokuWalletPaymentActivity;
+import com.eklanku.otuChat.ui.activities.payment.donasi.DonasiOpsi;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDeposit;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
@@ -82,7 +83,7 @@ public class PaymentFragment extends Fragment {
     ImageButton btnPaketTelp;
     ImageButton btnTelkom, btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
             btnTagihan, btnBpjs, btnMultiFinance, btnKartuKredit, btnAsuransi, btnPGN,
-            btnTv, btnPaket, btnSMS, btnEtool, btnWi, btnhotel, btnpesawat, btnkeretapai, btnesaldo;
+            btnTv, btnPaket, btnSMS, btnEtool, btnWi, btnhotel, btnpesawat, btnkeretapai, btnesaldo, btndonasi;
     ImageButton btnRiwayat, btnTransfer /*btnPengaturan*/;
     ImageButton btnCallme;
     /* Button btnListrik, btnPulsa, btnVoucher, btnPdam, btnPajak,
@@ -346,6 +347,7 @@ public class PaymentFragment extends Fragment {
         btnkeretapai = view.findViewById(R.id.btnKAI);
 
         btnesaldo = view.findViewById(R.id.btn_e_saldo);
+        btndonasi = view.findViewById(R.id.btn_donasi);
 
         //btnDeposit.setOnClickListener(new buttonListener());
         btnMultiFinance.setOnClickListener(new buttonListener());
@@ -375,6 +377,7 @@ public class PaymentFragment extends Fragment {
         btnWi.setOnClickListener(new buttonListener());
         btnPajak.setOnClickListener(new buttonListener());
         btnesaldo.setOnClickListener(new buttonListener());
+        btndonasi.setOnClickListener(new buttonListener());
 
 
     }
@@ -497,11 +500,11 @@ public class PaymentFragment extends Fragment {
                         startActivity(new Intent(context, TransESaldo_opsi.class));
                     }
                     break;
-               /* case R.id.btnTransfer:
+                case R.id.btn_donasi:
                     if (menuDialog()) {
-                        startActivity(new Intent(context, TransDeposit.class));
+                        startActivity(new Intent(context, DonasiOpsi.class));
                     }
-                    break;*/
+                    break;
                /* case R.id.btnPengaturan:
                     if (menuDialog()) {
                         startActivity(new Intent(context, SettingTabPaymentActivity.class));

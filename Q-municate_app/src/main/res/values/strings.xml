@@ -558,4 +558,5 @@
     <string name="beli">BELI</string>
     <string name="url_volley">http://dev.eklanku.com/devapi/api/</string>
 
+    <string name="aksi_table">Cetak</string>
 </resources>

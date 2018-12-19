@@ -140,12 +140,12 @@ public class TableFragment extends Fragment {
             list.add(new ColumnHeaderModel("Status"));
             list.add(new ColumnHeaderModel("Ket"));
         }else if(getTableName().contains("trx")){
-            //invoice	tgl	vstatus	harga	tujuan	keterangan	vsn	mbr_name	tgl_sukses
             list.add(new ColumnHeaderModel("Tgl"));
             list.add(new ColumnHeaderModel("tujuan"));
             list.add(new ColumnHeaderModel("harga"));
             list.add(new ColumnHeaderModel("status"));
             list.add(new ColumnHeaderModel("ket"));
+            list.add(new ColumnHeaderModel("Aksi"));
         }else if(getTableName().contains("deposit")){
             list.add(new ColumnHeaderModel("Tgl"));
             list.add(new ColumnHeaderModel("Bank"));

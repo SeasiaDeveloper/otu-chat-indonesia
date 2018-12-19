@@ -649,6 +649,24 @@
             android:name=".ui.activities.payment.doku.HomeGatewayDoku"
             android:theme="@style/activityDialog" />
 
+        <!--Donasi-->
+        <activity
+            android:name=".ui.activities.payment.donasi.DonasiOpsi"
+            android:label="Donasi Yayasan Cinta Anak"
+            android:theme="@style/AppThemePaymentItems">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.activities.payment.donasi.DonasiManualTransfer"
+            android:theme="@style/AppThemePaymentItems">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
+        </activity>
+
         <!-- new config -->
         <!--
          <meta-data android:name=".com.connectycube.pushnotifications.TYPE" android:value="FCM" />

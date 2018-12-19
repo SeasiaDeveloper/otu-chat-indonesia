@@ -27,15 +27,18 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.models.DataDetailPeriodeBPJS;
 import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
 import com.eklanku.otuChat.ui.activities.payment.models.DataPeriodeBPJS;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
+import com.eklanku.otuChat.ui.adapters.payment.ListViewPeriodeBpjsAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.Utils;
 import com.eklanku.otuChat.R;;
@@ -95,6 +98,9 @@ public class TransBpjs extends AppCompatActivity {
     SimpleDateFormat sdf = new SimpleDateFormat("MMM yyyy");
     SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
 
+    Spinner spnPeriodeBPJS;
+    TextView txketperiode;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,9 +114,11 @@ public class TransBpjs extends AppCompatActivity {
         txtNo = (EditText) findViewById(R.id.txtTransBpjsNo);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransBpjsBayar);
+        spnPeriodeBPJS = findViewById(R.id.spnPeriodeBPJS);
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
+        txketperiode = findViewById(R.id.tvketPeriode);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -142,7 +150,7 @@ public class TransBpjs extends AppCompatActivity {
             }
         });
 
-        Calendar c = Calendar.getInstance();
+        /*Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -163,7 +171,7 @@ public class TransBpjs extends AppCompatActivity {
             //System.out.println("month = " + month);
             monthsList .add(months[i]);
             Log.d("AYIK", "month->"+ month);
-        }
+        }*/
 
         getPeriodeBpjs();
     }
@@ -211,10 +219,11 @@ public class TransBpjs extends AppCompatActivity {
     }
 
     private void cek_transaksi() {
+        Log.d("OPPO-1", "cek_transaksi: "+idper);
         loadingDialog = ProgressDialog.show(TransBpjs.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, selected_operator, txtNo.getText().toString(), txtno_hp.getText().toString(), "OTU");
+        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiryBPJS(strUserID, strAccessToken, selected_operator, txtNo.getText().toString(), txtno_hp.getText().toString(), "OTU", idper);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -407,16 +416,52 @@ public class TransBpjs extends AppCompatActivity {
 
     }
 
+    ArrayList<String> idperiode;
+    ArrayList<String> blnperiode;
+    String keteranganperiode;
+    String idper, bln, ket;
 
     public void getPeriodeBpjs(){
         Call<DataPeriodeBPJS> periode = mApiInterfacePayment.getperiodebpjs(strUserID, strAccessToken, strAplUse);
         periode.enqueue(new Callback<DataPeriodeBPJS>() {
             @Override
             public void onResponse(Call<DataPeriodeBPJS> call, Response<DataPeriodeBPJS> response) {
+                idperiode = new ArrayList<>();
+                blnperiode = new ArrayList<>();
+                idperiode.clear();
+                blnperiode.clear();
+                ListViewPeriodeBpjsAdapter adapter = new ListViewPeriodeBpjsAdapter(getBaseContext(), blnperiode, keteranganperiode);
+                spnPeriodeBPJS.setAdapter(adapter);
                 if(response.isSuccessful()){
                     String status = response.body().getStatus();
+                    keteranganperiode = response.body().getRespMessage();
+                    txketperiode.setText("* "+keteranganperiode);
                     if(status.equalsIgnoreCase("SUCCESS")){
                         Log.d("OPPO-1", "oSuccess");
+                        List<DataDetailPeriodeBPJS> periode = response.body().getPeriode();
+                        for(int i = 0; i < periode.size(); i++){
+                            idperiode.add(periode.get(i).getId());
+                            blnperiode.add(periode.get(i).getPeriode());
+                        }
+
+                        Log.d("OPPO-1", "onResponse: "+idperiode);
+                        Log.d("OPPO-1", "onResponse: "+blnperiode);
+
+                        adapter = new ListViewPeriodeBpjsAdapter(getBaseContext(), blnperiode, keteranganperiode);
+                        spnPeriodeBPJS.setAdapter(adapter);
+                        spnPeriodeBPJS.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                idper = periode.get(position).getId();
+                                bln = periode.get(position).getPeriode();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
                     }
                 }
             }
