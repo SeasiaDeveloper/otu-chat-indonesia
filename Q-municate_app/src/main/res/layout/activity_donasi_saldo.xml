@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,6 +23,51 @@
             android:layout_marginBottom="@dimen/density_8"
             android:background="@color/grey_400" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvKetSaldo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/density_8"
+                android:text="Saldo : "
+                android:textColor="@color/colorTextOtuDark"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvjmlsaldo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/colorTextOtuDark"
+                android:text="0"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/density_8"
+                android:textStyle="bold"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="@dimen/density_8"
+            android:layout_marginRight="@dimen/density_8"
+            android:background="@color/dark_gray" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/grey_400" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/grey_300" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,12 +84,12 @@
             android:layout_marginLeft="@dimen/density_8"
             android:layout_marginRight="@dimen/density_8"
             android:background="@null"
+            android:editable="false"
             android:inputType="phone"
             android:paddingTop="@dimen/density_8"
             android:paddingBottom="@dimen/density_8"
-            android:textSize="@dimen/text_14"
             android:text="CHILD LOVE FOUNDATION"
-            android:editable="false"/>
+            android:textSize="@dimen/text_14" />
 
         <View
             android:layout_width="match_parent"
@@ -66,7 +109,6 @@
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:background="@color/grey_300" />
-
 
 
         <TextView
@@ -114,113 +156,6 @@
             android:layout_height="1dp"
             android:layout_marginBottom="5dp"
             android:background="@color/grey_400" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/density_8"
-            android:layout_marginTop="@dimen/density_8"
-            android:layout_marginRight="@dimen/density_8"
-            android:text="Pilih Data Bank"
-            android:textColor="@color/dark_gray"
-            android:textSize="16sp" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/density_8"
-            android:layout_marginRight="@dimen/density_8"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/spinner_data_bank"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:gravity="center"
-                android:spinnerMode="dropdown" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_drop"
-                android:tint="@color/green" />
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/grey_400" />
-
-
-        <CheckBox
-            android:id="@+id/cksetuju"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/density_8"
-            android:layout_marginRight="@dimen/density_8"
-            android:text="Setuju Syarat dan Ketentuan" />
-
-        <ScrollView
-            android:id="@+id/scrollview_syarat"
-            android:layout_marginTop="@dimen/density_8"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/btnLanjut"
-            android:layout_below="@id/imageView2">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.codesgood.views.JustifiedTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/density_4"
-                    android:text="@string/syarat_ketentuan_donasi"
-                    android:textSize="@dimen/text_14"
-                    android:layout_marginLeft="@dimen/density_8"
-                    android:layout_marginRight="@dimen/density_8"
-                    android:textStyle="bold" />
-
-                <com.ms.square.android.expandabletextview.ExpandableTextView xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/expand_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    expandableTextView:animDuration="200"
-                    expandableTextView:maxCollapsedLines="4">
-
-                    <com.codesgood.views.JustifiedTextView
-                        android:id="@id/expandable_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginLeft="@dimen/density_8"
-                        android:layout_marginRight="@dimen/density_8"
-                        android:textColor="#666666"
-                        android:textSize="16sp" />
-
-                    <ImageButton
-                        android:id="@id/expand_collapse"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|bottom"
-                        android:background="@android:color/transparent"
-                        android:padding="16dp" />
-                </com.ms.square.android.expandabletextview.ExpandableTextView>
-
-            </LinearLayout>
-
-        </ScrollView>
 
     </LinearLayout>
 

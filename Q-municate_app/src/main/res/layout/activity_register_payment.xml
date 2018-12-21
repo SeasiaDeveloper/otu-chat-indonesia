@@ -29,8 +29,7 @@
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/density_4">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/txt_password"
@@ -44,15 +43,28 @@
             android:paddingBottom="@dimen/density_16"
             android:paddingLeft="@dimen/density_8"
             android:paddingStart="@dimen/density_8"
-            android:paddingTop="@dimen/density_16" />
+            android:paddingTop="@dimen/density_16"
+            />
 
     </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/lbketerangan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/txtLayoutLoginPassword"
+        android:layout_alignRight="@+id/txtLayoutLoginPassword"
+        android:layout_alignLeft="@+id/txtLayoutLoginPassword"
+        android:layout_alignStart="@+id/txtLayoutLoginPassword"
+        android:layout_below="@+id/txtLayoutLoginPassword"
+        android:textSize="10sp"
+        android:text="*A Password must be at least 8 characters maximum 16 characters"
+        android:textColor="@color/red_600" />
 
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/density_4">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/txt_email"
@@ -69,10 +81,22 @@
 
     </android.support.design.widget.TextInputLayout>
 
+    <TextView
+        android:id="@+id/lbketeranganemail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/txtLayoutLoginPassword"
+        android:layout_alignRight="@+id/txtLayoutLoginPassword"
+        android:layout_alignLeft="@+id/txtLayoutLoginPassword"
+        android:layout_alignStart="@+id/txtLayoutLoginPassword"
+        android:layout_below="@+id/txtLayoutLoginPassword"
+        android:textSize="10sp"
+        android:text="*ex: rr@gmail.com"
+        android:textColor="@color/red_600" />
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/density_4">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/txt_pin"
@@ -89,6 +113,21 @@
             android:paddingTop="@dimen/density_16" />
 
     </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/lbketeranganpin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtLayoutLoginPassword"
+        android:layout_alignEnd="@+id/txtLayoutLoginPassword"
+        android:layout_alignRight="@+id/txtLayoutLoginPassword"
+        android:layout_alignLeft="@+id/txtLayoutLoginPassword"
+        android:layout_alignStart="@+id/txtLayoutLoginPassword"
+        android:gravity="center"
+        android:textSize="@dimen/density_10"
+        android:layout_toLeftOf="@+id/lblLoginRegister"
+        android:text="*A PIN must be at least 6 characters maximum 10 characters"
+        android:textColor="@color/red_400" />
 
 
     <android.support.design.widget.TextInputLayout

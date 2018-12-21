@@ -53,7 +53,7 @@ public class TopupPayResponse {
     @SerializedName("respTime")
     private String respTime;
 
-    @SerializedName("respMessage")
+    @SerializedName("res_response_msg")
     private String respMessage;
 
     public String getUserID() {

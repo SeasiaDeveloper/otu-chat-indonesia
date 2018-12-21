@@ -31,19 +31,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvket1">
+        android:layout_below="@+id/tvket1"
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" Terimakasih telah melakukan donasi"
             android:layout_gravity="center"
-            android:textSize="18dp"/>
+            android:textSize="18dp"
+            android:visibility="gone"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_smile_green"/>
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_donasi_yayasan"
+            android:layout_gravity="center"/>
 
     </LinearLayout>
 

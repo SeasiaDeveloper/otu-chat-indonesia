@@ -791,7 +791,8 @@
                     android:layout_marginLeft="@dimen/density_4"
                     android:layout_marginTop="@dimen/density_8"
                     android:layout_marginEnd="@dimen/density_4"
-                    android:layout_marginRight="@dimen/density_4">
+                    android:layout_marginRight="@dimen/density_4"
+                    android:layout_marginBottom="@dimen/density_16">
 
                     <LinearLayout
                         android:id="@+id/layout_ppob"
@@ -1083,7 +1084,8 @@
                                 android:layout_margin="5dp"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:visibility="gone">
 
                                 <ImageButton
                                     android:id="@+id/btnMultiFinance"
@@ -1133,7 +1135,8 @@
                     android:layout_marginTop="@dimen/density_8"
                     android:layout_marginEnd="@dimen/density_4"
                     android:layout_marginRight="@dimen/density_4"
-                    android:layout_marginBottom="@dimen/density_16">
+                    android:layout_marginBottom="@dimen/density_16"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:id="@+id/layout_coming_soon"

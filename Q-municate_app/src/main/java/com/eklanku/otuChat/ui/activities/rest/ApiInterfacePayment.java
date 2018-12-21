@@ -545,7 +545,7 @@ public interface ApiInterfacePayment {
     );
 
     @FormUrlEncoded
-    @POST("Donasi/manual_transfer")
+    @POST("Donasi/request")
     Call<TopupPayResponse> donasi_manual(
             @Field("userID") String userID,
             @Field("accessToken") String accessToken,

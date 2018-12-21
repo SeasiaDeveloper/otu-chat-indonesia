@@ -650,6 +650,15 @@
             android:theme="@style/activityDialog" />
 
         <!--Donasi-->
+        <activity android:name=".ui.activities.payment.donasi.CCDonasiActivity" />
+        <activity android:name=".ui.activities.payment.donasi.KonfimasiDonasi" />
+        <activity android:name=".ui.activities.payment.donasi.DonasiTransferSaldo"
+            android:label="Donasi Yayasan Cinta Anak"
+            android:theme="@style/AppThemePaymentItems" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
+        </activity>
         <activity
             android:name=".ui.activities.payment.donasi.DonasiOpsi"
             android:label="Donasi Yayasan Cinta Anak"

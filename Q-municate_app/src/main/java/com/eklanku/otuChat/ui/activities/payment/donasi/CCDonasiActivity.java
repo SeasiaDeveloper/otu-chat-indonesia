@@ -1,4 +1,4 @@
-package com.eklanku.otuChat.ui.activities.payment.doku;
+package com.eklanku.otuChat.ui.activities.payment.donasi;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -54,7 +54,7 @@ import java.util.Map;
 import java.util.Random;
 //import retrofit2.Response;
 
-public class CCPaymentActivity extends AppCompatActivity {
+public class CCDonasiActivity extends AppCompatActivity {
 
     //EditText et_ccn, et_cvv, et_noc, et_ed, et_email, et_mp;
     //Button btnPayment;
@@ -126,7 +126,7 @@ public class CCPaymentActivity extends AppCompatActivity {
         DirectSDK directSDK = new DirectSDK();
         PaymentItems paymentItems = new PaymentItems();
         paymentItems.setDataAmount(amount + ".00");
-        paymentItems.setDataBasket("[{\"name\":\"deposit\",\"amount\":\"" + amount + ".00\",\"quantity\":\"1\",\"subtotal\":\"" + amount + ".00\"}]");
+        paymentItems.setDataBasket("[{\"name\":\"donasi\",\"amount\":\"" + amount + ".00\",\"quantity\":\"1\",\"subtotal\":\"" + amount + ".00\"}]");
         paymentItems.setDataCurrency("360");
         paymentItems.setDataWords(words);
         Log.d("OPPO-1", "word->2 " + words);
@@ -190,7 +190,7 @@ public class CCPaymentActivity extends AppCompatActivity {
             public void onError(final String text) {
                 String tokenId = "", pairingCode = "", responseMessage = "", responseCode = "", deviceId = "", amount = "",
                         tokenCode = "", transactionId = "", dataEmail = "", name = "", paymentChannel = "", dataMobilePhone = "";
-                Log.d("OPPO-1", "onError->" + text);
+               // Log.d("OPPO-1", "onError->" + text);
                 layoutStatus.setVisibility(View.VISIBLE);
                 btnOk.setVisibility(View.VISIBLE);
                 imgStatus.setImageResource(R.drawable.ic_doku_failed);
@@ -236,30 +236,30 @@ public class CCPaymentActivity extends AppCompatActivity {
         StringRequest request = null;
         String url = getResources().getString(R.string.url_volley);
         try {
-            request = new StringRequest(Request.Method.POST, url + "Deposit/request",
+            request = new StringRequest(Request.Method.POST, url + "Donasi/request",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             try {
                                 JSONObject dataObj = new JSONObject(response);
-                                Log.d("OPPO-1", "response->" + dataObj.toString());
+                               Log.d("OPPO-1", "response->" + dataObj.toString());
                                 if (dataObj.getString("errNumber").equalsIgnoreCase("0")) {
                                     if (dataObj.getString("res_response_code").equalsIgnoreCase("0000")) {
                                         layoutStatus.setVisibility(View.VISIBLE);
                                         btnOk.setVisibility(View.VISIBLE);
                                         imgStatus.setImageResource(R.drawable.ic_doku_success);
-                                        tvStatus.setText(dataObj.getString("res_response_msg"));
+                                        tvStatus.setText(dataObj.getString("respMessage"));
                                     }else{
                                         layoutStatus.setVisibility(View.VISIBLE);
                                         btnOk.setVisibility(View.VISIBLE);
                                         imgStatus.setImageResource(R.drawable.ic_doku_failed);
-                                        tvStatus.setText(dataObj.getString("res_response_msg"));
+                                        tvStatus.setText(dataObj.getString("respMessage"));
                                     }
                                 } else {
                                     layoutStatus.setVisibility(View.VISIBLE);
                                     btnOk.setVisibility(View.VISIBLE);
                                     imgStatus.setImageResource(R.drawable.ic_doku_failed);
-                                    tvStatus.setText(dataObj.getString("respMessage"));
+                                    tvStatus.setText(dataObj.getString("res_response_msg"));
                                 }
 
 
@@ -268,7 +268,7 @@ public class CCPaymentActivity extends AppCompatActivity {
                                 btnOk.setVisibility(View.VISIBLE);
                                 imgStatus.setImageResource(R.drawable.ic_doku_failed);
                                 tvStatus.setText("Kesalahan parse, silahkan coba lagi");
-                                Toast.makeText(CCPaymentActivity.this, "Kesalahan parse, silahkan coba lagi", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CCDonasiActivity.this, "Kesalahan parse, silahkan coba lagi", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -280,13 +280,13 @@ public class CCPaymentActivity extends AppCompatActivity {
                         msgError = new String(error.networkResponse.data);
                         String message = Utils.responseMessage(statusCode, msgError);
                         Log.d("OPPO-1", "onErrorResponse: " + msgError + "/" + message);
-                        Toast.makeText(CCPaymentActivity.this, "" + statusCode + ", " + message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CCDonasiActivity.this, "" + statusCode + ", " + message, Toast.LENGTH_SHORT).show();
                         layoutStatus.setVisibility(View.VISIBLE);
                         btnOk.setVisibility(View.VISIBLE);
                         imgStatus.setImageResource(R.drawable.ic_doku_failed);
                         tvStatus.setText("" + statusCode + ", " + message);
                     } else {
-                        Toast.makeText(CCPaymentActivity.this, "Tidak ada koneksi", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CCDonasiActivity.this, "Tidak ada koneksi", Toast.LENGTH_SHORT).show();
                         layoutStatus.setVisibility(View.VISIBLE);
                         btnOk.setVisibility(View.VISIBLE);
                         imgStatus.setImageResource(R.drawable.ic_doku_failed);
@@ -302,7 +302,7 @@ public class CCPaymentActivity extends AppCompatActivity {
                     params.put("userID", userID);
                     params.put("accessToken", accessToken);
                     params.put("aplUse", aplUse);
-                    params.put("bank", bank);
+                    params.put("bank", "KARTU KREDIT");
                     params.put("nominal", nominal);
                     params.put("doku-token", dokuToken);
                     params.put("deviceid", dokuDeviceId);
@@ -339,12 +339,15 @@ public class CCPaymentActivity extends AppCompatActivity {
     private void dialogNominal() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog_cc);
+        dialog.setContentView(R.layout.custom_dialog_cc_donasi);
         dialog.setCancelable(false);
 
         final EditText edNom = dialog.findViewById(R.id.ed_nominal);
         final Button btnOk = dialog.findViewById(R.id.btn_ok);
         final Button btnCancel = dialog.findViewById(R.id.btn_cancel);
+        final EditText edTujuan = dialog.findViewById(R.id.ed_tujuan_donasi);
+
+        edTujuan.setEnabled(false);
 
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -372,7 +375,7 @@ public class CCPaymentActivity extends AppCompatActivity {
     private void dialogSuccess(String tokenId, String pairingCode, String responseMessage, String responseCode, String deviceId,
                                String amount, String tokenCode, String transactionId, String dataEmail, String name,
                                String paymentChannel, String dataMobilePhone) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CCPaymentActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CCDonasiActivity.this);
         builder.setIcon(R.drawable.ic_doku_success);
         builder.setMessage(responseMessage)
                 .setNeutralButton("OK", new DialogInterface.OnClickListener() {
@@ -386,7 +389,7 @@ public class CCPaymentActivity extends AppCompatActivity {
     private void dialogFailed(String tokenId, String pairingCode, String responseMessage, String responseCode, String deviceId,
                               String amount, String tokenCode, String transactionId, String dataEmail, String name,
                               String paymentChannel, String dataMobilePhone) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(CCPaymentActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CCDonasiActivity.this);
         builder.setIcon(R.drawable.ic_doku_failed);
         builder.setMessage(responseMessage)
                 .setNeutralButton("OK", new DialogInterface.OnClickListener() {

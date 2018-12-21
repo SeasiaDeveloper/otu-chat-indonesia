@@ -18,8 +18,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14dp"
-        android:text="Apakah anda yakin ingin melajutkan donasi senilai "
+        android:text="Apakah anda yakin ingin melajutkan donasi dengan detail: "
         android:textColor="@color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/density_8">
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Tujuan Donasi"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:text=":"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:id="@+id/txt_tujuan_donasi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="CHILD LOVE FOUNDATION"
+            android:textSize="@dimen/text_12"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,6 +91,8 @@
             android:textColor="@color/black"
             android:textStyle="bold" />
     </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"

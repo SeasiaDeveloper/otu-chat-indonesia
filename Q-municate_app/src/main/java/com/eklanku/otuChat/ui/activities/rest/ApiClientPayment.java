@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClientPayment {
 
-    public static final String BASE_URL = "http://api.eklanku.com/developapi/";
+    public static final String BASE_URL = "http://payment.eklanku.com/";
 
     private static Retrofit retrofit = null;
 
@@ -49,7 +49,4 @@ public class ApiClientPayment {
         return retrofit;
     }
 
-    public interface OnConnectionTimeoutListener {
-        void onConnectionTimeout();
-    }
 }

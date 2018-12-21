@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_margin="@dimen/density_8"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tujuan Donasi:"
+        android:textSize="@dimen/text_16"
+        android:layout_marginBottom="@dimen/density_8"/>
+
+    <EditText
+        android:id="@+id/ed_tujuan_donasi"
+        android:layout_width="match_parent"
+        android:padding="@dimen/density_8"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_spinner"
+        android:text="CHILD LOVE FOUNDATION"
+        android:layout_marginBottom="@dimen/density_8"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nominal Donasi:"
+        android:textSize="@dimen/text_16"
+        android:layout_marginBottom="@dimen/density_8"/>
+
+    <EditText
+        android:id="@+id/ed_nominal"
+        android:layout_width="match_parent"
+        android:padding="@dimen/density_8"
+        android:layout_height="wrap_content"
+        android:hint="Nominal"
+        android:background="@drawable/custom_spinner"
+        android:inputType="numberDecimal" />
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/density_8"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="0dp"
+            android:text="OK"
+            android:id="@+id/btn_ok"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/density_4"
+            android:layout_marginRight="@dimen/density_4"
+            android:background="@drawable/custom_round_new"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_marginStart="@dimen/density_4"
+            android:layout_marginLeft="@dimen/density_4"
+            android:text="BATAL"
+            android:id="@+id/btn_cancel"
+            android:textColor="@color/white"
+            android:layout_weight="1"
+            android:background="@drawable/custom_round_new"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+</LinearLayout>

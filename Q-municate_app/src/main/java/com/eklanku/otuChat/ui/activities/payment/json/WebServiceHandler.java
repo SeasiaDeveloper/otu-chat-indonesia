@@ -198,18 +198,12 @@ public class WebServiceHandler {
                                 vMutasi_Status = vstatus;
                             }
 
-
-                            ImageView view = new ImageView(mainFragment.getContext());
-                            view.setImageResource(R.drawable.ic_account);
-
-
                             List<CellModel> cellList = new ArrayList<>();
                             cellList.add(new CellModel("0", valDate));
                             cellList.add(new CellModel("1", tujuan));
                             cellList.add(new CellModel("2", format.format(result.get(i).getHarga())));
                             cellList.add(new CellModel("3", vMutasi_Status));
                             cellList.add(new CellModel("4", keterangan));
-                            cellList.add(new CellModel("5", "Print"));
                             list.add(cellList);
                         }
 

@@ -72,7 +72,8 @@
                 android:paddingEnd="@dimen/density_8"
                 android:paddingRight="@dimen/density_8"
                 android:text="First Payment Tokenization"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_second"
@@ -89,7 +90,8 @@
                 android:paddingEnd="@dimen/density_8"
                 android:paddingRight="@dimen/density_8"
                 android:text="Second Payment Tokenization"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_doku"
@@ -106,7 +108,8 @@
                 android:paddingEnd="@dimen/density_8"
                 android:paddingRight="@dimen/density_8"
                 android:text="Doku"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_mandiri"
@@ -123,7 +126,8 @@
                 android:paddingEnd="@dimen/density_8"
                 android:paddingRight="@dimen/density_8"
                 android:text="Mandiri Click Pay"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_va"
@@ -140,7 +144,8 @@
                 android:paddingEnd="@dimen/density_8"
                 android:paddingRight="@dimen/density_8"
                 android:text="Virtual Account"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btn_vam"
@@ -157,13 +162,14 @@
                 android:paddingEnd="@dimen/density_8"
                 android:paddingRight="@dimen/density_8"
                 android:text="Virtual Account Minimarket"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:visibility="gone"/>
 
             <ImageButton
                 android:id="@+id/btn_cancel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/density_24"
+                android:layout_marginTop="@dimen/density_16"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_cancel_dark"
                 android:text="CLOSE"
@@ -173,7 +179,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="CLOSE" />
+                android:text="CLOSE"
+                android:textSize="@dimen/density_12"/>
 
         </LinearLayout>
     </ScrollView>

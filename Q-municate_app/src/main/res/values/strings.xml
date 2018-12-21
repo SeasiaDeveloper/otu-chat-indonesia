@@ -516,8 +516,9 @@
     <string name="dlg_auth_error_message">Something went wrong. Please try again.</string>
 
     <string name="syarat_ketentuan">Dengan melakukan TopUp Saldo maka anda menyetujui syarat dan ketentuan yang berlaku.\n</string>
-    <string name="syarat_ketentuan_detail">TopUp Saldo adalah Mengirimkan dana dari rekening anda sesuai dengan nominal yang sudah anda tentukan ke akun OTU Chat Anda yang nantinya bisa di gunakan nutuk bertransaksi.\n\nSyarat &amp; Ketentuan TopUp Saldo setelah melakukan TopUp dari Aplikasi OTU Chat.\n\n1. TopUp saldo hanya bisa di lakukan oleh member pengguna dari layanan Otu Chat.\n\n2. Saldo hanya bisa di gunakan untuk bertransaksi di Otu Chat.\n\n3. Saldo tidak bisa di uangkan.\n\nTerimakasih.
-    </string>
+    <string name="syarat_ketentuan_detail">TopUp Saldo adalah Mengirimkan dana dari rekening anda sesuai dengan nominal yang sudah anda tentukan ke akun OTU Chat Anda yang nantinya bisa di gunakan nutuk bertransaksi.\n\nSyarat &amp; Ketentuan TopUp Saldo setelah melakukan TopUp dari Aplikasi OTU Chat.\n\n1. TopUp saldo hanya bisa di lakukan oleh member pengguna dari layanan Otu Chat.\n\n2. Saldo hanya bisa di gunakan untuk bertransaksi di Otu Chat.\n\n3. Saldo tidak bisa di uangkan.\n\nTerimakasih.</string>
+    <string name="syarat_ketentuan_donasi">  Sebelum memberikan donasi melalui CHILD LOVE FOUNDATION, pastikan Anda membaca terlebih dahulu Syarat dan Ketentuan berikut ini:\n</string>
+    <string name="syarat_ketentuan_donasi_detail">1. Pengguna wajib mencermati segala informasi pada Situs Lembaga Donasi yang direferensikan dari situs OTU Chat sebelum memberikan donasi.\n\n2. OTU Chat <b>tidak bertanggung jawab</b> atas pelaksanaan kegiatan yang dijanjikan oleh Lembaga Donasi.\n\n3. Pengguna dapat memanfaatkan kontak organisasi yang tertera pada email bukti transaksi Donasi untuk mengetahui detail kegiatan dan pertanggung jawaban dari Lembaga Donasi secara langsung.\n\n4. Dana Pengguna akan diteruskan kepada Pihak Lembaga Donasi dengan ketentuan berikut:\n\n Donasi akan diteruskan secara Anonim,\n\n Donasi akan diteruskan dengan melampirkan detail yang telah diisi dalam form. Isi form tersebut mencakup\n\n  – Nama;\n  – Nama NPWP (bila ada);\n  – Nomor NPWP (bila ada);\n  – Nomor telepon; dan\n  – Alamat email.\n\n5. Pengguna wajib tidak melakukan pencucian uang dan/atau menggunakan uang yang berasal dari sumber yang tidak sah secara hukum dalam mendonasikan uangnya. OTU Chat berhak untuk melaporkan transaksi yang dicurigai sebagai tindak pidana pencucian uang kepada pihak yang berwajib.\n\n6. Syarat dan Ketentuan ini merupakan bagian yang tidak terpisahkan dan satu kesatuan dengan <b><u>Syarat dan Ketentuan</u></b> dan sewaktu-waktu dapat berubah tanpa pemberitahuan sebelumnya.</string>
     <string name="payment_confirmation">Konfirmasi Pembayaran</string>
     <string name="payment_send_evindence">Kirim Bukti Pembayaran</string>
 
@@ -556,7 +557,7 @@
     <string name="text">Pengembangan perangkat lunak Android adalah proses di mana aplikasi baru diciptakan untuk sistem operasi Android. Aplikasi tersebut biasanya dikembangkan dalam bahasa pemrograman Java dengan menggunakan Software Development Kit Android, tetapi perkakas lainnya juga tersedia.</string>
     <string name="lanjutkan">YA, Lanjutkan</string>
     <string name="beli">BELI</string>
-    <string name="url_volley">http://dev.eklanku.com/devapi/api/</string>
+    <string name="url_volley">http://payment.eklanku.com/</string>
 
     <string name="aksi_table">Cetak</string>
 </resources>

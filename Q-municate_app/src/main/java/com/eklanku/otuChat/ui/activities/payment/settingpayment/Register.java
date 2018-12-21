@@ -123,7 +123,7 @@ public class Register extends AppCompatActivity {
         }
 
         if (!TextUtils.isEmpty(pin) && !isPinValid(pin)) {
-            txPin.setError(getString(R.string.error_invalid_password));
+            txPin.setError("min 6 char");
             focusView = txPin;
             cancel = true;
         }
