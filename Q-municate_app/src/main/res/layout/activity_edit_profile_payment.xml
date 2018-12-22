@@ -10,6 +10,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:scrollbars="none">
 
         <LinearLayout
@@ -242,14 +244,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2.5"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <AutoCompleteTextView
                     android:id="@+id/autoCompleteTextView"
                     android:layout_width="0dp"
-                    android:hint="Kota"
+                    android:layout_height="wrap_content"
                     android:layout_weight="2.5"
-                    android:layout_height="wrap_content" />
+                    android:hint="Kota" />
             </LinearLayout>
 
             <View
@@ -439,7 +441,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2.5"
-                    android:textColor="@color/grey"/>
+                    android:textColor="@color/grey" />
             </LinearLayout>
 
             <View
@@ -475,7 +477,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2.5"
-                    android:textColor="@color/grey"/>
+                    android:textColor="@color/grey" />
             </LinearLayout>
 
             <View
@@ -511,7 +513,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2.5"
-                    android:textColor="@color/grey"/>
+                    android:textColor="@color/grey" />
             </LinearLayout>
 
             <View
@@ -684,17 +686,17 @@
                     android:id="@+id/txtPinUpdateProfil"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/density_8"
                     android:background="@drawable/custom_bg_text"
-                    android:drawableLeft="@drawable/ic_key"
                     android:drawableStart="@drawable/ic_key"
+                    android:drawableLeft="@drawable/ic_key"
                     android:ems="10"
                     android:hint="Masukkan PIN"
                     android:inputType="textPassword"
-                    android:paddingBottom="@dimen/density_16"
-                    android:paddingLeft="@dimen/density_8"
                     android:paddingStart="@dimen/density_8"
+                    android:paddingLeft="@dimen/density_8"
                     android:paddingTop="@dimen/density_16"
-                    android:layout_marginTop="@dimen/density_8"/>
+                    android:paddingBottom="@dimen/density_16" />
 
             </android.support.design.widget.TextInputLayout>
 

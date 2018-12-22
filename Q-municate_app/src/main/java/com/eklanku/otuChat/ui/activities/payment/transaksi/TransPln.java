@@ -508,7 +508,7 @@ public class TransPln extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransPln.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtTransaksi_ke.getText().toString(), txtno_hp.getText().toString(), "", code);
+        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtno_hp.getText().toString(), "", code);
 
 
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {

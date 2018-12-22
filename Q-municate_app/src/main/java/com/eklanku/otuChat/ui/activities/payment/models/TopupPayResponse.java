@@ -104,4 +104,15 @@ public class TopupPayResponse {
         this.respMessage = respMessage;
     }
 
+    public String getResponMessage2() {
+        return responMessage2;
+    }
+
+    public void setResponMessage2(String responMessage2) {
+        this.responMessage2 = responMessage2;
+    }
+
+    @SerializedName("respMessage")
+    String responMessage2;
+
 }

@@ -127,7 +127,7 @@
             android:layout_marginLeft="@dimen/density_8"
             android:layout_marginRight="@dimen/density_8"
             android:background="@null"
-            android:inputType="phone"
+            android:inputType="number"
             android:paddingTop="@dimen/density_8"
             android:paddingBottom="@dimen/density_8"
             android:textSize="@dimen/text_14" />

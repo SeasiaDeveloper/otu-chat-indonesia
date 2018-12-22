@@ -24,7 +24,7 @@
         <ScrollView
             android:id="@+id/scrollview_syarat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_above="@+id/btnLanjut"
             android:layout_below="@id/imageView2"
             android:layout_marginTop="@dimen/density_8">
@@ -34,223 +34,206 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.codesgood.views.JustifiedTextView
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/density_8"
-                    android:layout_marginRight="@dimen/density_8"
-                    android:layout_marginBottom="@dimen/density_4"
                     android:text="@string/syarat_ketentuan_donasi"
-                    android:textSize="@dimen/text_14"
                     android:textStyle="bold" />
 
-                <com.ms.square.android.expandabletextview.ExpandableTextView xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/expand_text_view"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    expandableTextView:animDuration="300"
-                    expandableTextView:maxCollapsedLines="12">
+                    android:text="@string/syarat_ketentuan_donasi_detail"
+                    android:layout_marginBottom="@dimen/density_8"/>
 
-                    <com.codesgood.views.JustifiedTextView
-                        android:id="@id/expandable_text"
+                <TextView
+                    android:id="@+id/tv6syaratketentuan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/syarat_ketentuan_donasi_detail2"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cvbutton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/density_8"
-                        android:layout_marginRight="@dimen/density_8"
-                        android:layout_marginBottom="4dp"
-                        android:textColor="#666666"
-                        android:textSize="16sp" />
+                        android:layout_alignParentBottom="true"
+                        app:cardCornerRadius="@dimen/density_8">
 
-                    <ImageButton
-                        android:id="@id/expand_collapse"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|bottom"
-                        android:background="@android:color/transparent"
-                        android:padding="16dp" />
-                </com.ms.square.android.expandabletextview.ExpandableTextView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/density_8"
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/cksetuju"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Setuju Syarat dan Ketentuan" />
+
+                            <TextView
+                                android:id="@+id/tvket"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:text="Pilih salah satu metode donasi di bawah ini:"
+                                android:textColor="@color/default_text_icon_otu_color"
+                                android:textSize="14dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:visibility="gone">
+
+                                    <ImageButton
+                                        android:id="@+id/btnDonasimanual"
+                                        android:layout_width="62dp"
+                                        android:layout_height="62dp"
+                                        android:layout_centerHorizontal="true"
+                                        android:background="@drawable/bg_otu_payment"
+                                        android:padding="6dp"
+                                        android:scaleType="centerInside"
+                                        android:src="@drawable/ic_donasi_transfer" />
+
+                                    <android.support.v7.widget.AppCompatImageView
+                                        android:id="@+id/ivSaldoGojek"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_alignParentTop="true"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:elevation="2dp"
+                                        android:visibility="gone"
+                                        app:srcCompat="@drawable/ic_e_saldo_gojek" />
+
+                                    <TextView
+                                        android:id="@+id/textView18"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/btnDonasimanual"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_marginTop="6dp"
+                                        android:text="Transfer"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textColor="@color/color_payment_list_icon_text"
+                                        android:textSize="10dp"
+                                        android:textStyle="bold" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <ImageButton
+                                        android:id="@+id/btnDonasisaldoekl"
+                                        android:layout_width="62dp"
+                                        android:layout_height="62dp"
+                                        android:layout_centerHorizontal="true"
+                                        android:background="@drawable/bg_otu_payment"
+                                        android:padding="6dp"
+                                        android:scaleType="centerInside"
+                                        android:src="@drawable/ic_donasi_saldo" />
+
+                                    <android.support.v7.widget.AppCompatImageView
+                                        android:id="@+id/ivSaldoGrab"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_alignParentTop="true"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:elevation="2dp"
+                                        android:visibility="gone"
+                                        app:srcCompat="@drawable/ic_e_saldo_grab" />
+
+                                    <TextView
+                                        android:id="@+id/tvSaldoGrab"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/btnDonasisaldoekl"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_marginTop="6dp"
+                                        android:text="Saldo Eklanku"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textColor="@color/color_payment_list_icon_text"
+                                        android:textSize="10dp"
+                                        android:textStyle="bold" />
+                                </RelativeLayout>
+
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center">
+
+                                    <ImageButton
+                                        android:id="@+id/btnDonasidoku"
+                                        android:layout_width="62dp"
+                                        android:layout_height="62dp"
+                                        android:layout_centerHorizontal="true"
+                                        android:background="@drawable/bg_otu_payment"
+                                        android:padding="6dp"
+                                        android:scaleType="centerInside"
+                                        android:src="@drawable/ic_credit_card" />
+
+                                    <android.support.v7.widget.AppCompatImageView
+                                        android:id="@+id/ivsaldoOVO"
+                                        android:layout_width="40dp"
+                                        android:layout_height="40dp"
+                                        android:layout_alignParentTop="true"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:elevation="2dp"
+                                        android:visibility="gone"
+                                        app:srcCompat="@drawable/ic_credit_card" />
+
+                                    <TextView
+                                        android:id="@+id/tvsaldoOVO"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/btnDonasidoku"
+                                        android:layout_centerHorizontal="true"
+                                        android:layout_marginTop="6dp"
+                                        android:text="Kartu Kredit"
+                                        android:textAlignment="center"
+                                        android:textAllCaps="true"
+                                        android:textColor="@color/color_payment_list_icon_text"
+                                        android:textSize="10dp"
+                                        android:textStyle="bold" />
+                                </RelativeLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
 
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/cvbutton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:cardCornerRadius="@dimen/density_8">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/density_8"
-                android:orientation="vertical">
-
-                <CheckBox
-                    android:id="@+id/cksetuju"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Setuju Syarat dan Ketentuan" />
-
-                <TextView
-                    android:id="@+id/tvket"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Pilih salah satu metode donasi di bawah ini:"
-                    android:textColor="@color/default_text_icon_otu_color"
-                    android:textSize="14dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:visibility="gone">
-
-                        <ImageButton
-                            android:id="@+id/btnDonasimanual"
-                            android:layout_width="62dp"
-                            android:layout_height="62dp"
-                            android:layout_centerHorizontal="true"
-                            android:background="@drawable/bg_otu_payment"
-                            android:padding="6dp"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/ic_donasi_transfer" />
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/ivSaldoGojek"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:elevation="2dp"
-                            android:visibility="gone"
-                            app:srcCompat="@drawable/ic_e_saldo_gojek" />
-
-                        <TextView
-                            android:id="@+id/textView18"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/btnDonasimanual"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="6dp"
-                            android:text="Transfer"
-                            android:textAlignment="center"
-                            android:textAllCaps="true"
-                            android:textColor="@color/color_payment_list_icon_text"
-                            android:textSize="10dp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <ImageButton
-                            android:id="@+id/btnDonasisaldoekl"
-                            android:layout_width="62dp"
-                            android:layout_height="62dp"
-                            android:layout_centerHorizontal="true"
-                            android:background="@drawable/bg_otu_payment"
-                            android:padding="6dp"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/ic_donasi_saldo" />
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/ivSaldoGrab"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:elevation="2dp"
-                            android:visibility="gone"
-                            app:srcCompat="@drawable/ic_e_saldo_grab" />
-
-                        <TextView
-                            android:id="@+id/tvSaldoGrab"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/btnDonasisaldoekl"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="6dp"
-                            android:text="Saldo Eklanku"
-                            android:textAlignment="center"
-                            android:textAllCaps="true"
-                            android:textColor="@color/color_payment_list_icon_text"
-                            android:textSize="10dp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <ImageButton
-                            android:id="@+id/btnDonasidoku"
-                            android:layout_width="62dp"
-                            android:layout_height="62dp"
-                            android:layout_centerHorizontal="true"
-                            android:background="@drawable/bg_otu_payment"
-                            android:padding="6dp"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/ic_credit_card" />
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/ivsaldoOVO"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:elevation="2dp"
-                            android:visibility="gone"
-                            app:srcCompat="@drawable/ic_credit_card" />
-
-                        <TextView
-                            android:id="@+id/tvsaldoOVO"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/btnDonasidoku"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="6dp"
-                            android:text="Kartu Kredit"
-                            android:textAlignment="center"
-                            android:textAllCaps="true"
-                            android:textColor="@color/color_payment_list_icon_text"
-                            android:textSize="10dp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-    </RelativeLayout>
 
 </LinearLayout>

@@ -76,6 +76,7 @@ public class CCPaymentActivity extends AppCompatActivity {
     ApiClientPayment apiClientPayment;
 
     String words = "";
+    EditText edNom;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -349,8 +350,16 @@ public class CCPaymentActivity extends AppCompatActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
-                retrieveToken(edNom.getText().toString());
+                if (edNom.getText().toString().equalsIgnoreCase("")) {
+                    edNom.setError("Kolom nominal tidak boleh kosong");
+                    requestFocus(edNom);
+                } else if (edNom.getText().toString().equalsIgnoreCase("0")) {
+                    edNom.setError("Nilai nominal tidak boleh 0");
+                    requestFocus(edNom);
+                } else {
+                    retrieveToken(edNom.getText().toString());
+                    dialog.dismiss();
+                }
             }
         });
 
@@ -486,5 +495,30 @@ public class CCPaymentActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    private boolean validateIdPel() {
+        String nominal = edNom.getText().toString().trim();
+        edNom.setError(null);
+
+        if (nominal.isEmpty()) {
+            edNom.setError("Kolom nomor tidak boleh kosong");
+            requestFocus(edNom);
+            return false;
+        }
+
+        if(nominal=="0"){
+            edNom.setError("Nilai donasi tidak boleh 0");
+            requestFocus(edNom);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
     }
 }

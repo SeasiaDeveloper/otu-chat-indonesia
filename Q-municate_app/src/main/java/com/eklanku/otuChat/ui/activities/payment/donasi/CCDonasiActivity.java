@@ -76,6 +76,7 @@ public class CCDonasiActivity extends AppCompatActivity {
     ApiClientPayment apiClientPayment;
 
     String words = "";
+    EditText edNom;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -190,7 +191,7 @@ public class CCDonasiActivity extends AppCompatActivity {
             public void onError(final String text) {
                 String tokenId = "", pairingCode = "", responseMessage = "", responseCode = "", deviceId = "", amount = "",
                         tokenCode = "", transactionId = "", dataEmail = "", name = "", paymentChannel = "", dataMobilePhone = "";
-               // Log.d("OPPO-1", "onError->" + text);
+                // Log.d("OPPO-1", "onError->" + text);
                 layoutStatus.setVisibility(View.VISIBLE);
                 btnOk.setVisibility(View.VISIBLE);
                 imgStatus.setImageResource(R.drawable.ic_doku_failed);
@@ -242,24 +243,24 @@ public class CCDonasiActivity extends AppCompatActivity {
                         public void onResponse(String response) {
                             try {
                                 JSONObject dataObj = new JSONObject(response);
-                               Log.d("OPPO-1", "response->" + dataObj.toString());
+                                Log.d("OPPO-1", "response->" + dataObj.toString());
                                 if (dataObj.getString("errNumber").equalsIgnoreCase("0")) {
                                     if (dataObj.getString("res_response_code").equalsIgnoreCase("0000")) {
                                         layoutStatus.setVisibility(View.VISIBLE);
                                         btnOk.setVisibility(View.VISIBLE);
                                         imgStatus.setImageResource(R.drawable.ic_doku_success);
-                                        tvStatus.setText(dataObj.getString("respMessage"));
-                                    }else{
+                                        tvStatus.setText(dataObj.getString("res_response_msg"));
+                                    } else {
                                         layoutStatus.setVisibility(View.VISIBLE);
                                         btnOk.setVisibility(View.VISIBLE);
                                         imgStatus.setImageResource(R.drawable.ic_doku_failed);
-                                        tvStatus.setText(dataObj.getString("respMessage"));
+                                        tvStatus.setText(dataObj.getString("res_response_msg"));
                                     }
                                 } else {
                                     layoutStatus.setVisibility(View.VISIBLE);
                                     btnOk.setVisibility(View.VISIBLE);
                                     imgStatus.setImageResource(R.drawable.ic_doku_failed);
-                                    tvStatus.setText(dataObj.getString("res_response_msg"));
+                                    tvStatus.setText(dataObj.getString("respMessage"));
                                 }
 
 
@@ -342,18 +343,27 @@ public class CCDonasiActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.custom_dialog_cc_donasi);
         dialog.setCancelable(false);
 
-        final EditText edNom = dialog.findViewById(R.id.ed_nominal);
+        EditText edNom = dialog.findViewById(R.id.ed_nominal);
         final Button btnOk = dialog.findViewById(R.id.btn_ok);
         final Button btnCancel = dialog.findViewById(R.id.btn_cancel);
         final EditText edTujuan = dialog.findViewById(R.id.ed_tujuan_donasi);
 
         edTujuan.setEnabled(false);
 
+
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
-                retrieveToken(edNom.getText().toString());
+                if (edNom.getText().toString().equalsIgnoreCase("")) {
+                    edNom.setError("Kolom nominal tidak boleh kosong");
+                    requestFocus(edNom);
+                } else if (edNom.getText().toString().equalsIgnoreCase("0")) {
+                    edNom.setError("Nilai nominal tidak boleh 0");
+                    requestFocus(edNom);
+                } else {
+                    retrieveToken(edNom.getText().toString());
+                    dialog.dismiss();
+                }
             }
         });
 
@@ -370,6 +380,12 @@ public class CCDonasiActivity extends AppCompatActivity {
         assert window != null;
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
     }
 
     private void dialogSuccess(String tokenId, String pairingCode, String responseMessage, String responseCode, String deviceId,

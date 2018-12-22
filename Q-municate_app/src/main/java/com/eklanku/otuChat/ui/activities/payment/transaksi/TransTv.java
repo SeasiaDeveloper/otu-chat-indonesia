@@ -541,7 +541,7 @@ public class TransTv extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransTv.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtTransaksi_ke.getText().toString(), txtNo.getText().toString(), "", selected_nominal);
+        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtno_hp.getText().toString(), "", selected_nominal);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {

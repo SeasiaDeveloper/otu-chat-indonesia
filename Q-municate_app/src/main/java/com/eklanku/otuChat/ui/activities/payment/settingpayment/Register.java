@@ -186,6 +186,9 @@ public class Register extends AppCompatActivity {
 
 
     public void Register() {
+        progressDialog.setMessage("Proses Register...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         Log.d("OPPO-1", "strSecurityCode: " + PreferenceUtil.getNumberPhone(this));
         Call<DataProfile> callProfil = mApiInterfacePayment.postRegisterUpline(PreferenceUtil.getNumberPhone(this), txtReferal.getText().toString(), strApIUse,
                 txtNama.getText().toString(), txEmail.getText().toString(), txPass.getText().toString(), txPin.getText().toString());
@@ -205,10 +208,12 @@ public class Register extends AppCompatActivity {
                         startActivity(new Intent(Register.this, MainActivity.class));
                         finish();
                     } else {
+                        progressDialog.dismiss();
                         utilsAlert.globalDialog(Register.this, titleAlert, msg);
 
                     }
                 } else {
+                    progressDialog.dismiss();
                     utilsAlert.globalDialog(Register.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
                 }
             }

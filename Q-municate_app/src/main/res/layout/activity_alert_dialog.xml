@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="14dp"
-        android:text="Apakah anda yakin ingin melajutkan transaksi dengan detail"
+        android:text="Apakah anda yakin ingin melanjutkan transaksi dengan detail berikut"
         android:textColor="@color/black" />
 
     <LinearLayout
@@ -127,7 +127,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:layout_marginTop="@dimen/density_8"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <com.eklanku.otuChat.ui.views.ARTextView
             android:layout_width="0dp"

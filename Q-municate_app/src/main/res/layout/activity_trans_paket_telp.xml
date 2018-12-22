@@ -156,7 +156,8 @@
                 android:layout_marginTop="@dimen/density_8"
                 android:text="Transaksi Ke-"
                 android:textColor="@color/grey_600"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/txt_transaksi_ke"
@@ -168,7 +169,8 @@
                 android:inputType="number"
                 android:paddingTop="@dimen/density_8"
                 android:paddingBottom="@dimen/density_8"
-                android:textColor="@color/grey_600" />
+                android:textColor="@color/grey_600"
+                android:visibility="gone"/>
 
 
             <LinearLayout

@@ -80,6 +80,8 @@ public class ResetPassword extends AppCompatActivity {
     }
 
     public void sendresetPass() {
+        loadingDialog = ProgressDialog.show(ResetPassword.this, "Harap Tunggu", "Reset Password...");
+        loadingDialog.setCanceledOnTouchOutside(true);
         String pass = txtNewPass.getText().toString().trim();
         String encrypt = Utils.md5(txtPin.getText().toString()+"x@2016ekl");
         Log.d("OPPO-1", "sendresetPass: "+PreferenceUtil.getNumberPhone(this));
@@ -91,6 +93,7 @@ public class ResetPassword extends AppCompatActivity {
         callResetPass.enqueue(new Callback<ResetPassResponse>() {
             @Override
             public void onResponse(Call<ResetPassResponse> call, Response<ResetPassResponse> response) {
+                loadingDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
@@ -108,6 +111,7 @@ public class ResetPassword extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResetPassResponse> call, Throwable t) {
+                loadingDialog.dismiss();
                 utilsAlert.globalDialog(ResetPassword.this, titleAlert, "2. "+getResources().getString(R.string.error_api));
                 Log.d("OPPO-1", t.getMessage().toString());
                 t.printStackTrace();

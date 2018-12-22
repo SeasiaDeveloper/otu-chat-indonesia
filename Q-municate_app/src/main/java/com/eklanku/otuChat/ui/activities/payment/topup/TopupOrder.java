@@ -233,7 +233,7 @@ public class TopupOrder extends AppCompatActivity {
                 loadingDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
-                    String error = response.body().getRespMessage();
+                    String error = response.body().getResponMessage2();
 
                     if (status.equals("SUCCESS")) {
                         Intent intent = new Intent(getBaseContext(), TopupBilling.class);

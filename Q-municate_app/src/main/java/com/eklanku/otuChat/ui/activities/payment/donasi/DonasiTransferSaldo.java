@@ -131,8 +131,8 @@ public class DonasiTransferSaldo extends AppCompatActivity {
                 loadingDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
-                    String respMessage = response.body().getRespMessage();
-
+                    String respMessage = response.body().getResponMessage2();
+                    Log.d("OPPO-1", "onResponse: "+respMessage);
                     if (status.equals("SUCCESS")) {
                         Intent intent = new Intent(getBaseContext(), KonfimasiDonasi.class);
                         intent.putExtra("nominal", edNominal.getText().toString());

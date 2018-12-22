@@ -234,12 +234,24 @@ public interface ApiInterfacePayment {
 
     @FormUrlEncoded
     @POST("Prabayar/order")
-    Call<TransBeliResponse> postTopup(
+    Call<TransBeliResponse> postTopupOld(
             @Field("userID") String userID,
             @Field("accessToken") String accessToken,
             @Field("aplUse") String aplUse,
             @Field("MSISDN") String MSISDN,
             @Field("sequence") String sequence,
+            @Field("buyerPhone") String buyerPhone,
+            @Field("refIDCustomer") String refIDCustomer,
+            @Field("productCode") String productCode
+    );
+
+    @FormUrlEncoded
+    @POST("Prabayar/order")
+    Call<TransBeliResponse> postTopup(//menghilangkan sequence
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("aplUse") String aplUse,
+            @Field("MSISDN") String MSISDN,
             @Field("buyerPhone") String buyerPhone,
             @Field("refIDCustomer") String refIDCustomer,
             @Field("productCode") String productCode

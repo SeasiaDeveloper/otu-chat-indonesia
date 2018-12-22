@@ -171,7 +171,7 @@ public class ResetPIN extends AppCompatActivity {
                     String status = response.body().getStatus();
                     String respMessage = response.body().getRespMessage();
                     if(status.equalsIgnoreCase("SUCCESS")){
-
+                        Toast.makeText(getBaseContext(), "Status request OTP: "+status+"\nsilahkan tunggu notifikasi untuk kode OTP", Toast.LENGTH_SHORT).show();
                     }else{
                         utilsAlert.globalDialog(ResetPIN.this, titleAlert, respMessage);
                     }

@@ -199,7 +199,8 @@
                     android:id="@+id/layout_transaksi_ke"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <com.eklanku.otuChat.ui.views.ARTextView
                         android:id="@+id/tv_trans_ke"

@@ -296,7 +296,7 @@ public class TransWi extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransWi.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
         Log.d("OPPO-1", "cek_transaksi: " + code);
-        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(), txtTransaksi_ke.getText().toString(), "", "", code);
+        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, txtNo.getText().toString(),"", "", code);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {

@@ -227,7 +227,7 @@ public class TransESaldo_product extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransESaldo_product.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, noPel.getText().toString(), transKe.getText().toString(), "", "", code);
+        Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, noPel.getText().toString(), "", "", code);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
