@@ -2,171 +2,184 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/density_16"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/density_16">
 
-
-    <android.support.design.widget.TextInputLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/density_4">
-
-        <EditText
-            android:id="@+id/txt_nama"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_bg_text"
-            android:ems="10"
-            android:hint="Nama"
-            android:inputType="text"
-            android:paddingBottom="@dimen/density_16"
-            android:paddingLeft="@dimen/density_8"
-            android:paddingStart="@dimen/density_8"
-            android:paddingTop="@dimen/density_16"  />
-
-    </android.support.design.widget.TextInputLayout>
-
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/txt_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_bg_text"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="text"
-            android:maxLength="16"
-            android:paddingBottom="@dimen/density_16"
-            android:paddingLeft="@dimen/density_8"
-            android:paddingStart="@dimen/density_8"
-            android:paddingTop="@dimen/density_16"
-            />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:id="@+id/lbketerangan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/txtLayoutLoginPassword"
-        android:layout_alignRight="@+id/txtLayoutLoginPassword"
-        android:layout_alignLeft="@+id/txtLayoutLoginPassword"
-        android:layout_alignStart="@+id/txtLayoutLoginPassword"
-        android:layout_below="@+id/txtLayoutLoginPassword"
-        android:textSize="10sp"
-        android:text="*A Password must be at least 8 characters maximum 16 characters"
-        android:textColor="@color/red_600" />
-
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/txt_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_bg_text"
-            android:ems="10"
-            android:hint="Email"
-            android:inputType="text"
-            android:paddingBottom="@dimen/density_16"
-            android:paddingLeft="@dimen/density_8"
-            android:paddingStart="@dimen/density_8"
-            android:paddingTop="@dimen/density_16" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:id="@+id/lbketeranganemail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/txtLayoutLoginPassword"
-        android:layout_alignRight="@+id/txtLayoutLoginPassword"
-        android:layout_alignLeft="@+id/txtLayoutLoginPassword"
-        android:layout_alignStart="@+id/txtLayoutLoginPassword"
-        android:layout_below="@+id/txtLayoutLoginPassword"
-        android:textSize="10sp"
-        android:text="*ex: rr@gmail.com"
-        android:textColor="@color/red_600" />
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/txt_pin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_bg_text"
-            android:ems="10"
-            android:hint="Pin"
-            android:inputType="number"
-            android:paddingBottom="@dimen/density_16"
-            android:maxLength="10"
-            android:paddingLeft="@dimen/density_8"
-            android:paddingStart="@dimen/density_8"
-            android:paddingTop="@dimen/density_16" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:id="@+id/lbketeranganpin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtLayoutLoginPassword"
-        android:layout_alignEnd="@+id/txtLayoutLoginPassword"
-        android:layout_alignRight="@+id/txtLayoutLoginPassword"
-        android:layout_alignLeft="@+id/txtLayoutLoginPassword"
-        android:layout_alignStart="@+id/txtLayoutLoginPassword"
-        android:gravity="center"
-        android:textSize="@dimen/density_10"
-        android:layout_toLeftOf="@+id/lblLoginRegister"
-        android:text="*A PIN must be at least 6 characters maximum 10 characters"
-        android:textColor="@color/red_400" />
-
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/txt_referal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_bg_text"
-            android:ems="10"
-            android:hint="Kode Refferal"
-            android:inputType="text"
-            android:paddingBottom="@dimen/density_16"
-            android:paddingLeft="@dimen/density_8"
-            android:paddingStart="@dimen/density_8"
-            android:paddingTop="@dimen/density_16" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:text="@string/ekl_default"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btn_next"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/density_16"
-        android:background="@drawable/custom_round_green_dark"
-        android:drawableEnd="@drawable/ic_next_white"
-        android:drawableLeft="@drawable/ic_check"
-        android:drawableRight="@drawable/ic_next_white"
-        android:drawableStart="@drawable/ic_check"
-        android:text="Next"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+        android:layout_centerHorizontal="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/density_4">
+
+                <EditText
+                    android:id="@+id/txt_nama"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_bg_text"
+                    android:ems="10"
+                    android:hint="Nama"
+                    android:inputType="text"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txt_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_bg_text"
+                    android:ems="10"
+                    android:hint="Password"
+                    android:inputType="text"
+                    android:maxLength="16"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/lbketerangan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtLayoutLoginPassword"
+                android:layout_alignStart="@+id/txtLayoutLoginPassword"
+                android:layout_alignLeft="@+id/txtLayoutLoginPassword"
+                android:layout_alignEnd="@+id/txtLayoutLoginPassword"
+                android:layout_alignRight="@+id/txtLayoutLoginPassword"
+                android:text="*A Password must be at least 8 characters maximum 16 characters"
+                android:textColor="@color/red_600"
+                android:textSize="10sp" />
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txt_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_bg_text"
+                    android:ems="10"
+                    android:hint="Email"
+                    android:inputType="text"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/lbketeranganemail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtLayoutLoginPassword"
+                android:layout_alignStart="@+id/txtLayoutLoginPassword"
+                android:layout_alignLeft="@+id/txtLayoutLoginPassword"
+                android:layout_alignEnd="@+id/txtLayoutLoginPassword"
+                android:layout_alignRight="@+id/txtLayoutLoginPassword"
+                android:text="*ex: rr@gmail.com"
+                android:textColor="@color/red_600"
+                android:textSize="10sp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txt_pin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_bg_text"
+                    android:ems="10"
+                    android:hint="Pin"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/lbketeranganpin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtLayoutLoginPassword"
+                android:layout_alignStart="@+id/txtLayoutLoginPassword"
+                android:layout_alignLeft="@+id/txtLayoutLoginPassword"
+                android:layout_alignEnd="@+id/txtLayoutLoginPassword"
+                android:layout_alignRight="@+id/txtLayoutLoginPassword"
+                android:layout_toLeftOf="@+id/lblLoginRegister"
+                android:gravity="center"
+                android:text="*A PIN must be at least 6 characters maximum 10 characters"
+                android:textColor="@color/red_400"
+                android:textSize="@dimen/density_10" />
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txt_referal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_bg_text"
+                    android:ems="10"
+                    android:hint="Kode Refferal"
+                    android:inputType="text"
+                    android:paddingStart="@dimen/density_8"
+                    android:paddingLeft="@dimen/density_8"
+                    android:paddingTop="@dimen/density_16"
+                    android:paddingBottom="@dimen/density_16" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ekl_default" />
+
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/density_16"
+                android:background="@drawable/custom_round_green_dark"
+                android:drawableStart="@drawable/ic_check"
+                android:drawableLeft="@drawable/ic_check"
+                android:drawableEnd="@drawable/ic_next_white"
+                android:drawableRight="@drawable/ic_next_white"
+                android:text="Next"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
