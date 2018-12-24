@@ -286,7 +286,8 @@
                     android:id="@+id/txt_nomor_hp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2.5" />
+                    android:layout_weight="2.5"
+                    android:textColor="@color/grey"/>
             </LinearLayout>
 
             <View

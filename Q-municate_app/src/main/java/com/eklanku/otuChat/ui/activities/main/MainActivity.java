@@ -43,6 +43,7 @@ import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.updateProfile;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
@@ -163,6 +164,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     private Observer mBannerDataObserver;
 
+    com.eklanku.otuChat.utils.Utils utilsAlert;
+
     public static void start(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -271,6 +274,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         }
 
 
+        utilsAlert = new com.eklanku.otuChat.utils.Utils(MainActivity.this);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //lblSaldo = (TextView) findViewById(R.id.tvSaldo);
@@ -616,6 +620,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         Toast.makeText(MainActivity.this, "SUCCESS LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
+//                        utilsAlert.globalDialog(MainActivity.this, "Logout", msg);
                         PreferenceUtil.setLoginStatus(MainActivity.this, false);
                         tvSaldo.setText("0.00");
                         //paymentFragment.lblSaldoMain.setText("0.00");
@@ -1277,12 +1282,16 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
                         break;
                     case R.id.nav_logout:
-                        warningLogoutpay();
+                        if (menuDialog()) {
+                            warningLogoutpay();
+                        }
                         break;
 
                     case R.id.action_hapusakun:
-                        Intent nonAktif = new Intent(MainActivity.this, DeleteAccount.class);
-                        startActivity(nonAktif);
+                        if (menuDialog()) {
+                            Intent nonAktif = new Intent(MainActivity.this, DeleteAccount.class);
+                            startActivity(nonAktif);
+                        }
                         break;
                 }
 

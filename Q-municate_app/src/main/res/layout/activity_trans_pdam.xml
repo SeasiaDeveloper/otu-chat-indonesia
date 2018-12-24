@@ -36,7 +36,8 @@
                 android:background="@drawable/custom_bottom_border_grey"
                 android:ems="10"
                 android:inputType="text"
-                android:paddingBottom="@dimen/density_8" />
+                android:paddingBottom="@dimen/density_8"
+                android:hint="Masukkan nomor sambung"/>
         </android.support.design.widget.TextInputLayout>
 
         <ImageView
@@ -131,6 +132,14 @@
         android:textStyle="bold"
         android:visibility="gone" />
 
+    <EditText
+        android:id="@+id/autoComplete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/density_8"
+        android:ems="8"
+        android:hint="Ketik nama wilayah" />
+
     <com.eklanku.otuChat.ui.views.ARTextView
         android:id="@+id/tvPilihWilayah"
         android:layout_width="wrap_content"
@@ -141,14 +150,6 @@
         android:text="Pilih Wilayah"
         android:textColor="@color/white"
         android:textSize="16sp" />
-
-    <EditText
-        android:id="@+id/autoComplete"
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/density_8"
-        android:layout_height="wrap_content"
-        android:ems="8"
-        android:hint="Ketik nama wilayah" />
 
     <ListView
         android:id="@+id/listWilayah"

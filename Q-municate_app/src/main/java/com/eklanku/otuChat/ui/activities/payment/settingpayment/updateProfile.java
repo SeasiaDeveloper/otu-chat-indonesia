@@ -185,6 +185,7 @@ public class updateProfile extends AppCompatActivity implements DatePickerDialog
         txbank.setEnabled(false);
         txnorek.setEnabled(false);
         txpemilikrek.setEnabled(false);
+        txnomorhpmember.setEnabled(false);
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override

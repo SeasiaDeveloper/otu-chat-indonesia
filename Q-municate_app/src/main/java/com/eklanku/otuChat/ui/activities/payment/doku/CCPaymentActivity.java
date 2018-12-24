@@ -3,6 +3,7 @@ package com.eklanku.otuChat.ui.activities.payment.doku;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -356,7 +357,10 @@ public class CCPaymentActivity extends AppCompatActivity {
                 } else if (edNom.getText().toString().equalsIgnoreCase("0")) {
                     edNom.setError("Nilai nominal tidak boleh 0");
                     requestFocus(edNom);
-                } else {
+                } else if(Integer.parseInt(edNom.getText().toString())<10000){
+                    edNom.setError("Minimal saldo Rp. 10.000");
+                    requestFocus(edNom);
+                }else {
                     retrieveToken(edNom.getText().toString());
                     dialog.dismiss();
                 }

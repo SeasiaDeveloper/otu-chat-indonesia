@@ -99,8 +99,11 @@ public class ResetPassword extends AppCompatActivity {
                     String msg = response.body().getRespMessage();
                     Log.d("OPPO-1", "resetPass: " + status);
                     if (status.equalsIgnoreCase("SUCCESS")) {
-                        Toast.makeText(getBaseContext(), "SUCCESS RESET PASS [" + msg + "]", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getBaseContext(), "SUCCESS RESET PASS [" + msg + "]", Toast.LENGTH_SHORT).show();
                         logOutPayment();
+                        utilsAlert.globalDialog(ResetPassword.this, titleAlert, "SUKSES RESET PASSWORD");
+                    }else{
+                        utilsAlert.globalDialog(ResetPassword.this, titleAlert, msg);
                     }
 
                 } else {
@@ -253,7 +256,7 @@ public class ResetPassword extends AppCompatActivity {
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         Toast.makeText(getBaseContext(), "SUCCESS LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
                         PreferenceUtil.setLoginStatus(getApplicationContext(), false);
-                        finish();
+                        //finish();
                     }
                     /*else {
                         Toast.makeText(getBaseContext(), "FAILED LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
