@@ -322,13 +322,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
         mScrollView.setScrollViewCallbacks(this);
         mParallaxImageHeight = getResources().getDimensionPixelSize(R.dimen.density_200);
 
-        Activity activity = this;
-
-        if (PreferenceUtil.isLoginStatus(this)) {
+       /* if (PreferenceUtil.isLoginStatus(this)) {
             if (!activity.isFinishing()) {
                 loadSaldoBonus(strUserID, strAccessToken);
             }
-        }
+        }*/
 
         initBanner();
 
@@ -548,10 +546,22 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
     @Override
     protected void onResume() {
+
         app.fetchFirebaseRemoteConfigValues();
         actualizeCurrentTitle();
         super.onResume();
         addActions();
+
+        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
+        strUserID = user.get(preferenceManager.KEY_USERID);
+        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
+
+        Activity activity = this;
+        if (PreferenceUtil.isLoginStatus(this)) {
+            if (!activity.isFinishing()) {
+                loadSaldoBonus(strUserID, strAccessToken);
+            }
+        }
 
         openPushDialogIfPossible();
     }
@@ -1429,6 +1439,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                             bonus_member = products.get(i).getBonus_member();
                         }
 
+                        txtEkl.setText(id_member);
+
                         Double total = 0.0d;
                         try {
                             if (sisa_uang != null && !sisa_uang.trim().isEmpty())
@@ -1477,4 +1489,6 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             }
         });
     }
+
+
 }
