@@ -67,6 +67,7 @@ import com.eklanku.otuChat.ui.activities.payment.transfer.TransDeposit;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.utils.PreferenceUtil;
+import com.eklanku.otuChat.utils.Utils;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -95,6 +96,7 @@ public class PaymentFragment extends Fragment {
     private String strUserID, strAccessToken, strApIUse = "OTU";
     HashMap<String, String> user;
     DrawerLayout drawer;
+    Utils utilsAlert;
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -111,6 +113,7 @@ public class PaymentFragment extends Fragment {
         setHasOptionsMenu(true);
         preferenceManager = new PreferenceManager(getActivity());
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
+        utilsAlert = new Utils(getActivity());
 
         user = preferenceManager.getUserDetailsPayment();
         strUserID = user.get(preferenceManager.KEY_USERID);
@@ -752,6 +755,7 @@ public class PaymentFragment extends Fragment {
 
                     } else {
                         Toast.makeText(getActivity(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(getActivity(), "Logout", error);
                     }
                 } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
@@ -887,7 +891,8 @@ public class PaymentFragment extends Fragment {
                         lblSaldoMain.setText(rupiah);
 
                     } else {
-                        Toast.makeText(getActivity(), "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "ANDA TELAH LOGOUT SILAHKAN LOGIN KEMBALI", Toast.LENGTH_SHORT).show();
+                        utilsAlert.globalDialog(getActivity(), "Peringatan", error);
                     }
                 } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();

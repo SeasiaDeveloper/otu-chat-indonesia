@@ -140,8 +140,8 @@ public class TransPln extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
-        txtTransaksi_ke.setText("1");
+        /*txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
+        txtTransaksi_ke.setText("1");*/
 
         layoutView = findViewById(R.id.linear_layout);
         progressBar = findViewById(R.id.progress);
@@ -170,6 +170,7 @@ public class TransPln extends AppCompatActivity {
                 RadioButton rb = (RadioButton) group.findViewById(checkedId);
                 if (rb.getText().toString().equalsIgnoreCase("Token Listrik")) {
                     loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+//                    getProductPLNToken(); ========================>next ini yang akan di jalankan
                     layoutNominal.setVisibility(View.VISIBLE);
                     rbPln = "Token Listrik";
                     btnBayar.setText("BELI");
@@ -629,7 +630,7 @@ public class TransPln extends AppCompatActivity {
                     TextView tvProduct = dialog.findViewById(R.id.txt_product);
                     TextView tvTranske = dialog.findViewById(R.id.txt_transke);
                     tvProduct.setText(listName.get(position));
-                    tvTranske.setText(txtTransaksi_ke.getText().toString());
+                    //tvTranske.setText(txtTransaksi_ke.getText().toString());
 
                     btnYes.setOnClickListener(new View.OnClickListener() {
                         @Override

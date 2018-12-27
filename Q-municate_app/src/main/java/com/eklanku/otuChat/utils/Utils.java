@@ -55,17 +55,25 @@ public class Utils {
 
         txjdlError.setText(title);
         txpesanError.setText(message);
+        if(message.equalsIgnoreCase("KODE KEAMANAN SALAH")){
+            txpesanError.setText("ANDA TELAH LOGOUT SILAHKAN LOGIN KEMBALI");
+        }else{
+            txpesanError.setText(message);
+        }
 
         btn_ok.setOnClickListener(v -> {
             dialog.dismiss();
-            if (message.equalsIgnoreCase("SERVER BUSY, PLEASE TRY AGAIN LATER")) {
+            if (message.equalsIgnoreCase("SERVER BUSY, PLEASE TRY AGAIN LATER") || message.equalsIgnoreCase("KODE KEAMANAN SALAH")) {
                 activity.startActivity(new Intent(activity, PaymentLogin.class));
                 PreferenceUtil.setLoginStatus(activity, false);
             }else{
 
             }
 
-            activity.finish();
+            if(!message.equalsIgnoreCase("KODE KEAMANAN SALAH")){
+                activity.finish();
+            }
+
         });
         if(isActivityFinishedOrDestroyed(activity)){
             return;
