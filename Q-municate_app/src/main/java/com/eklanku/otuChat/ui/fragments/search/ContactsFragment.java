@@ -220,7 +220,7 @@ public class ContactsFragment extends BaseFragment implements MenuItemCompat.OnA
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                //MainActivity.mainActivity.recreate();
+                //ViewDataActivity.mainActivity.recreate();
                 startActivity(new Intent(getActivity(), MainActivity.class));
                 getActivity().getSupportFragmentManager().popBackStack();
                 return true;

@@ -561,4 +561,12 @@
     <string name="url_volley">http://payment.eklanku.com/</string>
 
     <string name="aksi_table">Cetak</string>
+
+    <!--HISTORY-->
+    <string name="activity_title_history">History</string>
+    <string name="msg_no_history">No history found!</string>
+    <string name="lbl_new_history_title">New History</string>
+    <string name="lbl_edit_history_title">Edit History</string>
+    <string name="hint_enter_history">Enter your data!</string>
+
 </resources>

@@ -630,7 +630,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
 
                     if (status.equalsIgnoreCase("SUCCESS")) {
                         Toast.makeText(MainActivity.this, "SUCCESS LOGOUT PAY [" + msg + "]", Toast.LENGTH_SHORT).show();
-//                        utilsAlert.globalDialog(MainActivity.this, "Logout", msg);
+//                        utilsAlert.globalDialog(ViewDataActivity.this, "Logout", msg);
                         PreferenceUtil.setLoginStatus(MainActivity.this, false);
                         tvSaldo.setText("0.00");
                         //paymentFragment.lblSaldoMain.setText("0.00");
@@ -936,7 +936,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                     String msg = response.body().getRespMessage();
                     String errNumber = response.body().getErrNumber();
                     if (errNumber.equalsIgnoreCase("0")) {
-                        PreferenceUtil.setMemberStatus(MainActivity.this, true);
+                        PreferenceUtil.setMemberStatus(ViewDataActivity.this, true);
                     } else if (errNumber.equalsIgnoreCase("5")) {
                         lauchRegister();
                     } else {
@@ -1236,7 +1236,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 break;
             case R.id.action_start_settings:
                 //SettingsActivity.startForResult(DialogsListFragment.class);
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                startActivity(new Intent(ViewDataActivity.this, SettingsActivity.class));
                 break;
             case R.id.action_start_about:
                 AboutActivity.start(this);
@@ -1251,7 +1251,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 return super.onOptionsItemSelected(item);
         }
 
-        //Toast.makeText(MainActivity.this, "Handle from navigation right", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ViewDataActivity.this, "Handle from navigation right", Toast.LENGTH_SHORT).show();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -1305,7 +1305,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         break;
                 }
 
-                //Toast.makeText(MainActivity.this, "Handle from navigation right", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ViewDataActivity.this, "Handle from navigation right", Toast.LENGTH_SHORT).show();
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.END);
                 return true;
@@ -1396,10 +1396,10 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         }
 
                     } else {
-                        // Toast.makeText(MainActivity.this, "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(ViewDataActivity.this, "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    //Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ViewDataActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1408,7 +1408,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 if (call.isCanceled()) {
                     return;
                 }
-                // Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(ViewDataActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }*/
@@ -1473,10 +1473,10 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         }
 
                     } else {
-                        // Toast.makeText(MainActivity.this, "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(ViewDataActivity.this, "Load balance deposit gagal:\n" + error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    //Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ViewDataActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1485,7 +1485,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                 if (call.isCanceled()) {
                     return;
                 }
-                // Toast.makeText(MainActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(ViewDataActivity.this, getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
         });
     }

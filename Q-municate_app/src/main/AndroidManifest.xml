@@ -653,9 +653,10 @@
         <activity android:name=".ui.activities.payment.donasi.CCDonasiActivity" />
         <activity android:name=".ui.activities.payment.donasi.KonfimasiDonasi" />
         <activity android:name=".ui.activities.payment.donasi.WebViewSyaratKetentuan" />
-        <activity android:name=".ui.activities.payment.donasi.DonasiTransferSaldo"
+        <activity
+            android:name=".ui.activities.payment.donasi.DonasiTransferSaldo"
             android:label="Donasi Yayasan Cinta Anak"
-            android:theme="@style/AppThemePaymentItems" >
+            android:theme="@style/AppThemePaymentItems">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
@@ -724,6 +725,7 @@
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
 
         <activity android:name=".ui.activities.payment.TestActivity" />
+        <activity android:name=".ui.activities.payment.sqlite.view.ViewDataActivity" />
         <activity
             android:name=".ui.activities.payment.RiwayatActivity"
             android:label="Riwayat"

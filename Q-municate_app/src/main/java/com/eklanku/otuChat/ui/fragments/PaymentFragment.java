@@ -22,6 +22,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.ResetPassResponse;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
+import com.eklanku.otuChat.ui.activities.payment.sqlite.view.ViewDataActivity;
 import com.eklanku.otuChat.ui.activities.payment.topup.AlertSyarat;
 import com.eklanku.otuChat.ui.activities.payment.topup.TopupOrder;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
@@ -120,6 +122,7 @@ public class PaymentFragment extends Fragment {
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
 
+
     }
 
     @Override
@@ -128,6 +131,15 @@ public class PaymentFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         context = getActivity();
+
+        //HISTORY SEMENTARA
+        LinearLayout x = getActivity().findViewById(R.id.laytx1);
+        x.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ViewDataActivity.class));
+            }
+        });
 
         setActivityBannerVisibility(View.VISIBLE);
 
@@ -676,11 +688,11 @@ public class PaymentFragment extends Fragment {
           final TextView tvRaw = (TextView) dialog.findViewById(R.id.raw);
           final TextView tvDecode = (TextView) dialog.findViewById(R.id.decode);
 
-          tvStatus.setText("" + MainActivity.mainActivity.isReferrerDetected);
-          tvFirst.setText(MainActivity.mainActivity.firstLaunch);
-          tvDate.setText(MainActivity.mainActivity.referrerDate);
-          tvRaw.setText(MainActivity.mainActivity.referrerDataRaw);
-          tvDecode.setText(MainActivity.mainActivity.referrerDataDecoded);
+          tvStatus.setText("" + ViewDataActivity.mainActivity.isReferrerDetected);
+          tvFirst.setText(ViewDataActivity.mainActivity.firstLaunch);
+          tvDate.setText(ViewDataActivity.mainActivity.referrerDate);
+          tvRaw.setText(ViewDataActivity.mainActivity.referrerDataRaw);
+          tvDecode.setText(ViewDataActivity.mainActivity.referrerDataDecoded);
 
           Button dialogButtonX = (Button) dialog.findViewById(R.id.btn_ok);
           dialogButtonX.setOnClickListener(new View.OnClickListener() {

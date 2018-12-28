@@ -41,6 +41,8 @@ import com.eklanku.otuChat.ui.activities.payment.models.DataDetailPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models.DataPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
+import com.eklanku.otuChat.ui.activities.payment.sqlite.database.DatabaseHelper;
+import com.eklanku.otuChat.ui.activities.payment.sqlite.database.model.History;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapterNew;
@@ -100,6 +102,7 @@ public class TransPulsa extends AppCompatActivity {
         ButterKnife.bind(this);
 
         utilsAlert = new Utils(TransPulsa.this);
+
 
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnKartu = findViewById(R.id.spnTransPulsaKartu);
@@ -187,6 +190,7 @@ public class TransPulsa extends AppCompatActivity {
         //getProductPulsa();
 
     }
+
 
     private class txtWatcher implements TextWatcher {
         private View view;

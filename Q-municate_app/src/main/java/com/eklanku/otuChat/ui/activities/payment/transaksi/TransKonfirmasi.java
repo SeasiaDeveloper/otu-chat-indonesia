@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
+import com.eklanku.otuChat.ui.activities.payment.sqlite.database.DatabaseHelper;
+import com.eklanku.otuChat.ui.activities.payment.sqlite.database.model.History;
 import com.eklanku.otuChat.ui.activities.payment.transfer.TransConfirm;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
@@ -29,7 +31,9 @@ import com.eklanku.otuChat.R;;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -61,11 +65,18 @@ public class TransKonfirmasi extends AppCompatActivity {
 
     LinearLayout layoutNama, layoutCust;
 
+    //HISTORY
+    private DatabaseHelper db;
+    private List<History> historyList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans_konfirmasi);
         ButterKnife.bind(this);
+
+        //HISTORY
+        db = new DatabaseHelper(this);
 
         extras = getIntent().getExtras();
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
@@ -187,6 +198,26 @@ public class TransKonfirmasi extends AppCompatActivity {
 
             }
         });
+    }
+
+    //HISTORY
+    private void createHistory(String number, String nominal, String trans) {
+        // inserting number in db and getting
+        // newly inserted number id
+        long id = db.insertHistory(number, nominal, trans);
+
+        // get the newly inserted number from db
+        History n = db.getHistory(id);
+
+        if (n != null) {
+            // adding new number to array list at 0 position
+            historyList.add(0, n);
+
+            // refreshing the list
+            //mAdapter.notifyDataSetChanged();
+
+            //toggleEmptyNotesHistory();
+        }
     }
 
 

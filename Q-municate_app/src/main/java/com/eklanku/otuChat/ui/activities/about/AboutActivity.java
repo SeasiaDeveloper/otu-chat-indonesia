@@ -89,7 +89,7 @@ public class AboutActivity extends BaseLoggableActivity {
                 .append("<br/>")
                 .append(referrerDataRaw);
 
-        //if (MainActivity.mainActivity.referrerDataDecoded != null) {
+        //if (ViewDataActivity.mainActivity.referrerDataDecoded != null) {
         sb.append("<br/><br/>")
                 .append("<b>Decoded referrer:</b>")
                 .append("<br/>")
