@@ -104,9 +104,12 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String oppUsername = opponentUser.getFullName();
+        int oppUsername = opponentUser.getId();
+        //get fullname ===> String oppUsername = opponentUser.getFullName();
 
-        if (oppUsername.equals("Otu Payment"))
+
+        Log.d("OPPO-1-", "onCreate: "+oppUsername);
+        if (oppUsername==32350)
             inputViewPanel.setVisibility(View.GONE);
 
     }
