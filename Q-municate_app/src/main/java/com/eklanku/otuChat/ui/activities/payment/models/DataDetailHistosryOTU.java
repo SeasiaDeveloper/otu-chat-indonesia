@@ -19,7 +19,7 @@ public class DataDetailHistosryOTU {
     private String vstatus;
 
     @SerializedName("harga")
-    private Double harga;
+    private String harga;
 
     @SerializedName("tujuan")
     private String tujuan;
@@ -35,6 +35,28 @@ public class DataDetailHistosryOTU {
 
     @SerializedName("tgl_sukses")
     private String tgl_sukses;
+
+    @SerializedName("product_kode")
+    private String product_kode;
+
+    public String getProduct_kode() {
+        return product_kode;
+    }
+
+    public void setProduct_kode(String product_kode) {
+        this.product_kode = product_kode;
+    }
+
+    public String getType_product() {
+        return type_product;
+    }
+
+    public void setType_product(String type_product) {
+        this.type_product = type_product;
+    }
+
+    @SerializedName("type_product")
+    private String type_product;
 
     public String getId_member() {
         return id_member;
@@ -68,11 +90,11 @@ public class DataDetailHistosryOTU {
         this.vstatus = vstatus;
     }
 
-    public Double getHarga() {
+    public String getHarga() {
         return harga;
     }
 
-    public void setHarga(Double harga) {
+    public void setHarga(String harga) {
         this.harga = harga;
     }
 

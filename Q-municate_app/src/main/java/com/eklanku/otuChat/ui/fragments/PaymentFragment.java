@@ -132,14 +132,14 @@ public class PaymentFragment extends Fragment {
 
         context = getActivity();
 
-        //HISTORY SEMENTARA
-        LinearLayout x = getActivity().findViewById(R.id.laytx1);
-        x.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ViewDataActivity.class));
-            }
-        });
+        //HISTORY SEMENTARA================sementara di tutup karena error
+//        LinearLayout x = getActivity().findViewById(R.id.laytx1);
+//        x.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(getActivity(), ViewDataActivity.class));
+//            }
+//        });
 
         setActivityBannerVisibility(View.VISIBLE);
 
