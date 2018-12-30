@@ -1,64 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/density_16">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/tvKode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/density_4"
-            android:text="XL 5000"
-            android:textSize="@dimen/text_16"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvNominal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rp. 10000"
-            android:layout_alignParentRight="true"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tvTanggal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="26-12-2018 02:12:54"
-            android:layout_marginBottom="@dimen/density_4"/>
-
-        <TextView
-            android:id="@+id/tvstatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SUKSES"
-            android:layout_alignParentRight="true"/>
-    </RelativeLayout>
-
-
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/density_8">
 
     <TextView
-        android:id="@+id/tvJnsTransaksi"
+        android:id="@+id/dot"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PULSA"
-        android:layout_marginBottom="@dimen/density_4"/>
+        android:layout_height="@dimen/density_30"
+        android:layout_marginTop="@dimen/density_8"
+        android:layout_marginEnd="@dimen/density_8"
+        android:layout_marginRight="@dimen/density_8"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="0dp"
+        android:textColor="@color/colorTextOtu" />
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="@dimen/density_8"
-        android:background="@color/grey_400" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTanggal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/density_4"
+                android:layout_weight="1"
+                android:background="@color/white_green"
+                android:gravity="center"
+                android:padding="@dimen/density_8"
+                android:text="26-12-2018 02:12:54" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/density_8"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvKode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/density_4"
+                    android:text="XL 5000"
+                    android:textSize="@dimen/text_16"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/density_8"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvInvoice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/density_4"
+                    android:layout_weight="3"
+                    android:text="INVOICE" />
+
+                <TextView
+                    android:id="@+id/tvstatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="SUKSES"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvJnsTransaksi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/density_4"
+                    android:layout_weight="2"
+                    android:text="PULSA"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvNominal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="Rp. 100000"
+                    android:textStyle="bold" />
 
 
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/density_8"
+            android:background="@color/grey_400" />
+
+    </LinearLayout>
 </LinearLayout>

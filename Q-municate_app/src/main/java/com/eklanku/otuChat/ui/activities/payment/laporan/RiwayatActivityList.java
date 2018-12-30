@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.ui.activities.payment.laporannew.NewHistoryTrxActivity;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
@@ -27,6 +29,8 @@ public class RiwayatActivityList extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_riwayat);
 
+        Toast.makeText(this, "HISTORI", Toast.LENGTH_SHORT).show();
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -42,7 +46,6 @@ public class RiwayatActivityList extends AppCompatActivity implements View.OnCli
         mLinRiwayatPenarikan.setOnClickListener(this);
         mLinRiwayatBonus.setOnClickListener(this);
 
-        Log.d("OPPO-1", "oke");
 
     }
 
@@ -59,6 +62,7 @@ public class RiwayatActivityList extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.linRiwayatTransaksi:
                 if (menuDialog()) {
+                    Toast.makeText(this, "TRX", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(RiwayatActivityList.this, HistoryTrxActivity.class));
                 }
                 break;
@@ -71,6 +75,7 @@ public class RiwayatActivityList extends AppCompatActivity implements View.OnCli
                 if (menuDialog()) {
                     startActivity(new Intent(RiwayatActivityList.this, HistoryPenarikanActivity.class));
                 }
+
                 break;
             case R.id.linRiwayatBonus:
                 if (menuDialog()) {

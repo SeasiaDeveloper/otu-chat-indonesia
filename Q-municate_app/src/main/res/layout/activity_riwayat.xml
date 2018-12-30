@@ -4,22 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context="com.eklanku.otuChat.ui.activities.payment.RiwayatActivity">
 
     <Button
         android:id="@+id/linRiwayatSaldo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableStart="@drawable/ic_saldo"
         android:drawableLeft="@drawable/ic_saldo"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_saldo"
         android:gravity="left|center_vertical"
         android:padding="@dimen/density_24"
         android:text="Riwayat Saldo"
         android:textAllCaps="false"
-        android:background="@null"
         android:textColor="@color/grey_600" />
 
     <View
@@ -32,14 +32,14 @@
         android:layout_width="match_parent"
 
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableStart="@drawable/ic_transaksi"
         android:drawableLeft="@drawable/ic_transaksi"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_transaksi"
         android:gravity="left|center_vertical"
         android:padding="@dimen/density_24"
         android:text="Riwayat Transaksi"
         android:textAllCaps="false"
-        android:background="@null"
         android:textColor="@color/grey_600" />
 
     <View
@@ -51,15 +51,15 @@
         android:id="@+id/linRiwayatDeposit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableStart="@drawable/ic_deposit"
         android:drawableLeft="@drawable/ic_deposit"
         android:drawablePadding="10dp"
-        android:padding="@dimen/density_24"
-        android:drawableStart="@drawable/ic_deposit"
         android:gravity="left|center_vertical"
+        android:padding="@dimen/density_24"
         android:paddingLeft="20dp"
         android:text="Riwayat Deposit"
         android:textAllCaps="false"
-        android:background="@null"
         android:textColor="@color/grey_600" />
 
     <View
@@ -71,14 +71,14 @@
         android:id="@+id/linRiwayatPenarikan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableStart="@drawable/ic_penarikan"
         android:drawableLeft="@drawable/ic_penarikan"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_penarikan"
         android:gravity="left|center_vertical"
         android:padding="@dimen/density_24"
         android:text="Riwayat Penarikan"
         android:textAllCaps="false"
-        android:background="@null"
         android:textColor="@color/grey_600" />
 
     <View
@@ -90,14 +90,14 @@
         android:id="@+id/linRiwayatBonus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@null"
+        android:drawableStart="@drawable/ic_bonus"
         android:drawableLeft="@drawable/ic_bonus"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_bonus"
         android:gravity="left|center_vertical"
         android:padding="@dimen/density_24"
         android:text="Riwayat Bonus"
         android:textAllCaps="false"
-        android:background="@null"
         android:textColor="@color/grey_600" />
 
     <View

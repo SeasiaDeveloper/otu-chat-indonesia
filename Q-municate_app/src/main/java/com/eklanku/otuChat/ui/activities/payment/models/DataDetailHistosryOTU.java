@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class DataDetailHistosryOTU {
 
-    //1: transaction report
-
     @SerializedName("id_member")
     private String id_member;
 

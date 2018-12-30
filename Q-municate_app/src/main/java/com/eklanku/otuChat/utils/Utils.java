@@ -63,11 +63,9 @@ public class Utils {
 
         btn_ok.setOnClickListener(v -> {
             dialog.dismiss();
-            if (message.equalsIgnoreCase("SERVER BUSY, PLEASE TRY AGAIN LATER") || message.equalsIgnoreCase("KODE KEAMANAN SALAH")) {
+            if (message.equalsIgnoreCase("SERVER BUSY, PLEASE TRY AGAIN LATER") || message.equalsIgnoreCase("KODE KEAMANAN SALAH") || message.equalsIgnoreCase("INVALID SECURITY CODE")) {
                 activity.startActivity(new Intent(activity, PaymentLogin.class));
                 PreferenceUtil.setLoginStatus(activity, false);
-            }else{
-
             }
 
             if(!message.equalsIgnoreCase("KODE KEAMANAN SALAH")){

@@ -583,7 +583,7 @@ public class PaymentFragment extends Fragment {
                 break;
             case R.id.mntrx:
                 if (menuDialog()) {
-                    startActivity(new Intent(context, HistoryTrxActivity.class));
+                    startActivity(new Intent(context, NewHistoryTrxActivity.class));
                 }
                 break;
             case R.id.mndeposit:
