@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewHistoryTrxActivity extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity {
     Bundle extras;
     TextView _titleHistory;
 
@@ -68,7 +69,7 @@ public class NewHistoryTrxActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress);
         tvEmpty = findViewById(R.id.tv_empty);
 
-        preferenceManager = new PreferenceManager(NewHistoryTrxActivity.this);
+        preferenceManager = new PreferenceManager(HistoryActivity.this);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
 
         user = preferenceManager.getUserDetailsPayment();
@@ -123,15 +124,10 @@ public class NewHistoryTrxActivity extends AppCompatActivity {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
                     String trxKode, trxTanggal, trxStatus, trxNominal, trxJenis, trxInvoice;
-
-                    //Toast.makeText(NewHistoryTrxActivity.this, "SUKSES", Toast.LENGTH_SHORT).show();
-
+                    String trxMbrId, trxTujuan, trxKet, trxVsn, trxMbrName, trxTglSukses;
                     if (status.equals("SUCCESS")) {
                         final List<DataDetailHistosryOTU> result = response.body().getListData();
                         int ROW_SIZE = result.size();
-
-                       /* Locale localeID = new Locale("in", "ID");
-                        NumberFormat format = NumberFormat.getCurrencyInstance(localeID);*/
 
                         for (int i = 0; i < ROW_SIZE; i++) {
                             trxKode = result.get(i).getProduct_kode();
@@ -141,17 +137,24 @@ public class NewHistoryTrxActivity extends AppCompatActivity {
                             trxJenis = result.get(i).getType_product();
                             trxInvoice = result.get(i).getInvoice();
 
-                            Log.d("AYIK", "history trx->" + trxKode + " " + trxJenis + " " + trxNominal);
+                            trxMbrId = result.get(i).getId_member();
+                            trxTujuan = result.get(i).getTujuan();
+                            trxKet = result.get(i).getKeterangan();
+                            trxVsn = result.get(i).getVsn();
+                            trxMbrName = result.get(i).getMbr_name();
+                            trxTglSukses = result.get(i).getTgl_sukses();
 
-                            ItemHistoryTrx trx = new ItemHistoryTrx(trxKode, trxTanggal, trxStatus, trxNominal, trxJenis, trxInvoice);
+                            if (TextUtils.isEmpty(trxKet)) {
+                                trxKet = "-";
+                            }
+
+                            if (TextUtils.isEmpty(trxVsn)) {
+                                trxVsn = "-";
+                            }
+
+                            ItemHistoryTrx trx = new ItemHistoryTrx(trxKode, trxTanggal, trxStatus, trxNominal, trxJenis, trxInvoice,
+                                    trxMbrId, trxTujuan, trxKet, trxVsn, trxMbrName, trxTglSukses);
                             trxListTransaksi.add(trx);
-
-                            //ganti status active jadi success
-                            /*if (stat.get(i).equals("Active")) {
-                                valStatus.add("Sukses");
-                            } else {
-                                valStatus.add(stat.get(i));
-                            }*/
 
                         }
 
@@ -163,16 +166,16 @@ public class NewHistoryTrxActivity extends AppCompatActivity {
                             //recyclerView.setVisibility(View.VISIBLE);
                         }
 
-                        adapterTransaksi = new HistoryTrxAdapter(NewHistoryTrxActivity.this, trxListTransaksi);
+                        adapterTransaksi = new HistoryTrxAdapter(HistoryActivity.this, trxListTransaksi);
                         recyclerView.setAdapter(adapterTransaksi);
                         adapterTransaksi.notifyDataSetChanged();
 
                     } else {
-                        Toast.makeText(NewHistoryTrxActivity.this, "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HistoryActivity.this, "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
 
                     }
                 } else {
-                    Toast.makeText(NewHistoryTrxActivity.this, NewHistoryTrxActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, HistoryActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -180,7 +183,7 @@ public class NewHistoryTrxActivity extends AppCompatActivity {
             public void onFailure(Call<DataHistoryOTU> call, Throwable t) {
 
                 showProgress(false);
-                Toast.makeText(NewHistoryTrxActivity.this, NewHistoryTrxActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                Toast.makeText(HistoryActivity.this, HistoryActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }
         });
@@ -201,7 +204,7 @@ public class NewHistoryTrxActivity extends AppCompatActivity {
                     String msg = response.body().getRespMessage();
                     String tanggal, jmldeposit, bank, statusdeposit;
 
-                    //Toast.makeText(NewHistoryTrxActivity.this, "SUKSES", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(HistoryActivity.this, "SUKSES", Toast.LENGTH_SHORT).show();
 
                     if (status.equals("SUCCESS")) {
                         final List<DataDetailHistosryOTU> result = response.body().getListData();
@@ -228,23 +231,23 @@ public class NewHistoryTrxActivity extends AppCompatActivity {
                             //recyclerView.setVisibility(View.VISIBLE);
                         }
 
-                        adapterDeposit = new HistoryDepositAdapter(NewHistoryTrxActivity.this, trxListDeposit);
+                        adapterDeposit = new HistoryDepositAdapter(HistoryActivity.this, trxListDeposit);
                         recyclerView.setAdapter(adapterDeposit);
                         adapterDeposit.notifyDataSetChanged();
 
                     } else {
-                        Toast.makeText(NewHistoryTrxActivity.this, "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HistoryActivity.this, "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
 
                     }
                 } else {
-                    Toast.makeText(NewHistoryTrxActivity.this, NewHistoryTrxActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, HistoryActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<DataHistoryOTU> call, Throwable t) {
                 showProgress(false);
-                Toast.makeText(NewHistoryTrxActivity.this, NewHistoryTrxActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                Toast.makeText(HistoryActivity.this, HistoryActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }
         });
@@ -273,7 +276,7 @@ public class NewHistoryTrxActivity extends AppCompatActivity {
                         for (int i = 0; i < ROW_SIZE; i++) {
                             mutasi_id = result.get(i).getMutasi_id();
                             tanggal_mutasi = result.get(i).getTgl_mutasi();
-                            mutasi_status = result.get(i).getMutasi_status().toString();
+                            mutasi_status = result.get(i).getMutasi_status();
                             sisa_saldo = result.get(i).getSisa_saldo().toString();
 
                             ItemHistorySaldo trx = new ItemHistorySaldo(mutasi_id, tanggal_mutasi, mutasi_status, sisa_saldo);
@@ -288,23 +291,23 @@ public class NewHistoryTrxActivity extends AppCompatActivity {
                             //recyclerView.setVisibility(View.VISIBLE);
                         }
 
-                        adapterSaldo = new HistorySaldoAdapter(NewHistoryTrxActivity.this, trxListSaldo);
+                        adapterSaldo = new HistorySaldoAdapter(HistoryActivity.this, trxListSaldo);
                         recyclerView.setAdapter(adapterSaldo);
                         adapterSaldo.notifyDataSetChanged();
 
                     } else {
-                        Toast.makeText(NewHistoryTrxActivity.this, "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HistoryActivity.this, "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
 
                     }
                 } else {
-                    Toast.makeText(NewHistoryTrxActivity.this, NewHistoryTrxActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, HistoryActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<DataHistoryOTU> call, Throwable t) {
                 showProgress(false);
-                Toast.makeText(NewHistoryTrxActivity.this, NewHistoryTrxActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                Toast.makeText(HistoryActivity.this, HistoryActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }
         });
@@ -347,23 +350,23 @@ public class NewHistoryTrxActivity extends AppCompatActivity {
                             //recyclerView.setVisibility(View.VISIBLE);
                         }
 
-                        adapterPenarikan = new HistoryPenarikanAdapter(NewHistoryTrxActivity.this, trxListPenarikan);
+                        adapterPenarikan = new HistoryPenarikanAdapter(HistoryActivity.this, trxListPenarikan);
                         recyclerView.setAdapter(adapterPenarikan);
                         adapterPenarikan.notifyDataSetChanged();
 
                     } else {
-                        Toast.makeText(NewHistoryTrxActivity.this, "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HistoryActivity.this, "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
 
                     }
                 } else {
-                    Toast.makeText(NewHistoryTrxActivity.this, NewHistoryTrxActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, HistoryActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<DataHistoryOTU> call, Throwable t) {
                 showProgress(false);
-                Toast.makeText(NewHistoryTrxActivity.this, NewHistoryTrxActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                Toast.makeText(HistoryActivity.this, HistoryActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }
         });
@@ -406,23 +409,23 @@ public class NewHistoryTrxActivity extends AppCompatActivity {
                             //recyclerView.setVisibility(View.VISIBLE);
                         }
 
-                        adapterBonus = new HistoryBonusAdapter(NewHistoryTrxActivity.this, trxListBonus);
+                        adapterBonus = new HistoryBonusAdapter(HistoryActivity.this, trxListBonus);
                         recyclerView.setAdapter(adapterBonus);
                         adapterBonus.notifyDataSetChanged();
 
                     } else {
-                        Toast.makeText(NewHistoryTrxActivity.this, "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HistoryActivity.this, "Terjadi kesalahan:\n" + msg, Toast.LENGTH_SHORT).show();
 
                     }
                 } else {
-                    Toast.makeText(NewHistoryTrxActivity.this, NewHistoryTrxActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HistoryActivity.this, HistoryActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<DataHistoryOTU> call, Throwable t) {
                 showProgress(false);
-                Toast.makeText(NewHistoryTrxActivity.this, NewHistoryTrxActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
+                Toast.makeText(HistoryActivity.this, HistoryActivity.this.getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }
         });

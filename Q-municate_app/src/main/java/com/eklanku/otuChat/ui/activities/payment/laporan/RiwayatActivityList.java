@@ -4,14 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
-import com.eklanku.otuChat.ui.activities.payment.laporannew.NewHistoryTrxActivity;
+import com.eklanku.otuChat.ui.activities.payment.laporannew.HistoryActivity;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
@@ -63,7 +62,7 @@ public class RiwayatActivityList extends AppCompatActivity implements View.OnCli
             case R.id.linRiwayatTransaksi:
                 if (menuDialog()) {
                     Toast.makeText(this, "TRX", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(RiwayatActivityList.this, HistoryTrxActivity.class));
+                    startActivity(new Intent(RiwayatActivityList.this, HistoryActivity.class));
                 }
                 break;
             case R.id.linRiwayatDeposit:

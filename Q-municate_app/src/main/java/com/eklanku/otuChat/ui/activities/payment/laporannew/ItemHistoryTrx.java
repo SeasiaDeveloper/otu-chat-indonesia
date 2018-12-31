@@ -3,8 +3,10 @@ package com.eklanku.otuChat.ui.activities.payment.laporannew;
 public class ItemHistoryTrx {
 
     private String trxKode, trxTanggal, trxStatus, trxNominal, trxJenis, trxInvoice;
+    private  String trxMbrId, trxTujuan, trxKet, trxVsn, trxMbrName, trxTglSukses;
 
-    public ItemHistoryTrx(String trxKode, String trxTanggal, String trxStatus, String trxNominal, String trxJenis, String trxInvoice) {
+    public ItemHistoryTrx(String trxKode, String trxTanggal, String trxStatus, String trxNominal, String trxJenis, String trxInvoice,
+                          String trxMbrId, String trxTujuan, String trxKet, String trxVsn, String trxMbrName, String trxTglSukses) {
 
         this.trxKode = trxKode;
         this.trxTanggal = trxTanggal;
@@ -12,6 +14,62 @@ public class ItemHistoryTrx {
         this.trxNominal = trxNominal;
         this.trxJenis = trxJenis;
         this.trxInvoice = trxInvoice;
+
+        this.trxMbrId = trxMbrId;
+        this.trxTujuan = trxTujuan;
+        this.trxKet = trxKet;
+        this.trxVsn = trxVsn;
+        this.trxMbrName = trxMbrName;
+        this.trxTglSukses = trxTglSukses;
+
+    }
+
+    public String getTrxMbrId() {
+        return trxMbrId;
+    }
+
+    public void setTrxMbrId(String trxMbrId) {
+        this.trxMbrId = trxMbrId;
+    }
+
+    public String getTrxTujuan() {
+        return trxTujuan;
+    }
+
+    public void setTrxTujuan(String trxTujuan) {
+        this.trxTujuan = trxTujuan;
+    }
+
+    public String getTrxKet() {
+        return trxKet;
+    }
+
+    public void setTrxKet(String trxKet) {
+        this.trxKet = trxKet;
+    }
+
+    public String getTrxVsn() {
+        return trxVsn;
+    }
+
+    public void setTrxVsn(String trxVsn) {
+        this.trxVsn = trxVsn;
+    }
+
+    public String getTrxMbrName() {
+        return trxMbrName;
+    }
+
+    public void setTrxMbrName(String trxMbrName) {
+        this.trxMbrName = trxMbrName;
+    }
+
+    public String getTrxTglSukses() {
+        return trxTglSukses;
+    }
+
+    public void setTrxTglSukses(String trxTglSukses) {
+        this.trxTglSukses = trxTglSukses;
     }
 
     public String getTrxInvoice() {

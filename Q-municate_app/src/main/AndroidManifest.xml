@@ -583,7 +583,7 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.payment.laporannew.NewHistoryTrxActivity"
+            android:name=".ui.activities.payment.laporannew.HistoryActivity"
             android:configChanges="orientation|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

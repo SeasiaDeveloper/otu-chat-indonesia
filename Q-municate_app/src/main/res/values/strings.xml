@@ -21,6 +21,8 @@
     <string name="action_bar_chat_details">Chat details</string>
     <string name="action_bar_add_chat_attach">Add attach</string>
 
+    <string name="dot">&#8226;</string>
+
 
     <!-- Landing -->
     <string name="landing_connect_with_facebook">Connect with Facebook</string>

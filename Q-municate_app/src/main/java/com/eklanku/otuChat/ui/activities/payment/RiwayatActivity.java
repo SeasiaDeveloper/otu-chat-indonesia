@@ -10,10 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.eklanku.otuChat.R;
-import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBalanceActivity;
-import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBonusActivity;
-import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryPenarikanActivity;
-import com.eklanku.otuChat.ui.activities.payment.laporannew.NewHistoryTrxActivity;
+import com.eklanku.otuChat.ui.activities.payment.laporannew.HistoryActivity;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
@@ -61,7 +58,7 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.linRiwayatSaldo:
                 if (menuDialog()) {
                     //startActivity(new Intent(RiwayatActivity.this, HistoryBalanceActivity.class));
-                    Intent intent = new Intent(RiwayatActivity.this, NewHistoryTrxActivity.class);
+                    Intent intent = new Intent(RiwayatActivity.this, HistoryActivity.class);
                     intent.putExtra("jenisHistory", "saldo");
                     startActivity(intent);
                 }
@@ -69,8 +66,8 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.linRiwayatTransaksi:
                 //Toast.makeText(this, "TRX", Toast.LENGTH_SHORT).show();
                 if (menuDialog()) {
-                    /*startActivity(new Intent(RiwayatActivity.this, HistoryTrxActivity.class));*/
-                    Intent intent = new Intent(RiwayatActivity.this, NewHistoryTrxActivity.class);
+                    /*startActivity(new Intent(RiwayatActivity.this, HistoryActivity.class));*/
+                    Intent intent = new Intent(RiwayatActivity.this, HistoryActivity.class);
                     intent.putExtra("jenisHistory", "transaksi");
                     startActivity(intent);
                 }
@@ -78,7 +75,7 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.linRiwayatDeposit:
                 if (menuDialog()) {
                     //startActivity(new Intent(RiwayatActivity.this, HistoryDespositActivity.class));
-                    Intent intent = new Intent(RiwayatActivity.this, NewHistoryTrxActivity.class);
+                    Intent intent = new Intent(RiwayatActivity.this, HistoryActivity.class);
                     intent.putExtra("jenisHistory", "deposit");
                     startActivity(intent);
                 }
@@ -86,7 +83,7 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.linRiwayatPenarikan:
                 if (menuDialog()) {
                    // startActivity(new Intent(RiwayatActivity.this, HistoryPenarikanActivity.class));
-                    Intent intent = new Intent(RiwayatActivity.this, NewHistoryTrxActivity.class);
+                    Intent intent = new Intent(RiwayatActivity.this, HistoryActivity.class);
                     intent.putExtra("jenisHistory", "penarikan");
                     startActivity(intent);
                 }
@@ -94,7 +91,7 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.linRiwayatBonus:
                 if (menuDialog()) {
                     //startActivity(new Intent(RiwayatActivity.this, HistoryBonusActivity.class));
-                    Intent intent = new Intent(RiwayatActivity.this, NewHistoryTrxActivity.class);
+                    Intent intent = new Intent(RiwayatActivity.this, HistoryActivity.class);
                     intent.putExtra("jenisHistory", "bonus");
                     startActivity(intent);
                 }
