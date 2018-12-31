@@ -69,7 +69,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         if(itemProduct.getTrxStatus().equalsIgnoreCase("Gagal")){
             holder.tvStatus.setTextColor(Color.RED);
         }else{
-            holder.tvStatus.setTextColor(Color.GREEN);
+            holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
 
         holder.tvDot.setText(Html.fromHtml("&#8226;"));

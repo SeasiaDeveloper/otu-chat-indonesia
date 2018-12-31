@@ -8,14 +8,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBalanceActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryBonusActivity;
-import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryDespositActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryPenarikanActivity;
-import com.eklanku.otuChat.ui.activities.payment.laporan.HistoryTrxActivity;
 import com.eklanku.otuChat.ui.activities.payment.laporannew.NewHistoryTrxActivity;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.utils.PreferenceUtil;
@@ -63,29 +60,43 @@ public class RiwayatActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.linRiwayatSaldo:
                 if (menuDialog()) {
-                    startActivity(new Intent(RiwayatActivity.this, HistoryBalanceActivity.class));
+                    //startActivity(new Intent(RiwayatActivity.this, HistoryBalanceActivity.class));
+                    Intent intent = new Intent(RiwayatActivity.this, NewHistoryTrxActivity.class);
+                    intent.putExtra("jenisHistory", "saldo");
+                    startActivity(intent);
                 }
                 break;
             case R.id.linRiwayatTransaksi:
                 //Toast.makeText(this, "TRX", Toast.LENGTH_SHORT).show();
                 if (menuDialog()) {
                     /*startActivity(new Intent(RiwayatActivity.this, HistoryTrxActivity.class));*/
-                    startActivity(new Intent(RiwayatActivity.this, NewHistoryTrxActivity.class));
+                    Intent intent = new Intent(RiwayatActivity.this, NewHistoryTrxActivity.class);
+                    intent.putExtra("jenisHistory", "transaksi");
+                    startActivity(intent);
                 }
                 break;
             case R.id.linRiwayatDeposit:
                 if (menuDialog()) {
-                    startActivity(new Intent(RiwayatActivity.this, HistoryDespositActivity.class));
+                    //startActivity(new Intent(RiwayatActivity.this, HistoryDespositActivity.class));
+                    Intent intent = new Intent(RiwayatActivity.this, NewHistoryTrxActivity.class);
+                    intent.putExtra("jenisHistory", "deposit");
+                    startActivity(intent);
                 }
                 break;
             case R.id.linRiwayatPenarikan:
                 if (menuDialog()) {
-                    startActivity(new Intent(RiwayatActivity.this, HistoryPenarikanActivity.class));
+                   // startActivity(new Intent(RiwayatActivity.this, HistoryPenarikanActivity.class));
+                    Intent intent = new Intent(RiwayatActivity.this, NewHistoryTrxActivity.class);
+                    intent.putExtra("jenisHistory", "penarikan");
+                    startActivity(intent);
                 }
                 break;
             case R.id.linRiwayatBonus:
                 if (menuDialog()) {
-                    startActivity(new Intent(RiwayatActivity.this, HistoryBonusActivity.class));
+                    //startActivity(new Intent(RiwayatActivity.this, HistoryBonusActivity.class));
+                    Intent intent = new Intent(RiwayatActivity.this, NewHistoryTrxActivity.class);
+                    intent.putExtra("jenisHistory", "bonus");
+                    startActivity(intent);
                 }
                 break;
         }

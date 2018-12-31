@@ -139,7 +139,7 @@ public class DataDetailHistosryOTU {
 
     //    2: deposit report
     @SerializedName("jumlah_deposit")
-    private Double jumlah_deposit;
+    private String jumlah_deposit;
 
     @SerializedName("status_deposit")
     private String status_deposit;
@@ -153,11 +153,11 @@ public class DataDetailHistosryOTU {
     @SerializedName("tgl_deposit")
     private String tgl_deposit;
 
-    public Double getJumlah_deposit() {
+    public String getJumlah_deposit() {
         return jumlah_deposit;
     }
 
-    public void setJumlah_deposit(Double jumlah_deposit) {
+    public void setJumlah_deposit(String jumlah_deposit) {
         this.jumlah_deposit = jumlah_deposit;
     }
 
@@ -268,7 +268,7 @@ public class DataDetailHistosryOTU {
     private String status_penarikan;
 
     @SerializedName("jml_penarikan")
-    private Double jml_penarikan;
+    private String jml_penarikan;
 
     @SerializedName("atas_nama")
     private String atas_nama;
@@ -292,11 +292,11 @@ public class DataDetailHistosryOTU {
         this.status_penarikan = status_penarikan;
     }
 
-    public Double getJml_penarikan() {
+    public String getJml_penarikan() {
         return jml_penarikan;
     }
 
-    public void setJml_penarikan(Double jml_penarikan) {
+    public void setJml_penarikan(String jml_penarikan) {
         this.jml_penarikan = jml_penarikan;
     }
 
@@ -326,16 +326,16 @@ public class DataDetailHistosryOTU {
     @SerializedName("status_bonus")
     private String status_bonus;
 
-    public Double getJml_bonus() {
+    public String getJml_bonus() {
         return jml_bonus;
     }
 
-    public void setJml_bonus(Double jml_bonus) {
+    public void setJml_bonus(String jml_bonus) {
         this.jml_bonus = jml_bonus;
     }
 
     @SerializedName("jml_bonus")
-    private Double jml_bonus;
+    private String jml_bonus;
 
     public String getTgl_perolehan() {
         return tgl_perolehan;
