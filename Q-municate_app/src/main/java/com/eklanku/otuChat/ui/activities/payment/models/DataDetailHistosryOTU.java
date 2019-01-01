@@ -153,6 +153,28 @@ public class DataDetailHistosryOTU {
     @SerializedName("tgl_deposit")
     private String tgl_deposit;
 
+    public String getNama_pemilik() {
+        return nama_pemilik;
+    }
+
+    public void setNama_pemilik(String nama_pemilik) {
+        this.nama_pemilik = nama_pemilik;
+    }
+
+    @SerializedName("nama_pemilik")
+    private String nama_pemilik;
+
+    public String getTotal_transfer() {
+        return total_transfer;
+    }
+
+    public void setTotal_transfer(String total_transfer) {
+        this.total_transfer = total_transfer;
+    }
+
+    @SerializedName("total_transfer")
+    private String total_transfer;
+
     public String getJumlah_deposit() {
         return jumlah_deposit;
     }

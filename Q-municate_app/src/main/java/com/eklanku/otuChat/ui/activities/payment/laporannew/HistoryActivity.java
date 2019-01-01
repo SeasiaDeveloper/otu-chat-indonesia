@@ -202,7 +202,7 @@ public class HistoryActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
-                    String tanggal, jmldeposit, bank, statusdeposit;
+                    String tanggal, deposit, kodeunix, total_transfer, bank, nomor_rekening, atas_nama, status_deposit;
 
                     //Toast.makeText(HistoryActivity.this, "SUKSES", Toast.LENGTH_SHORT).show();
 
@@ -214,12 +214,17 @@ public class HistoryActivity extends AppCompatActivity {
                         NumberFormat format = NumberFormat.getCurrencyInstance(localeID);*/
 
                         for (int i = 0; i < ROW_SIZE; i++) {
-                            jmldeposit = result.get(i).getJumlah_deposit();
-                            statusdeposit = result.get(i).getStatus_deposit();
-                            bank = result.get(i).getBank();
                             tanggal = result.get(i).getTgl_deposit();
+                            deposit = result.get(i).getJumlah_deposit();
+                            kodeunix = result.get(i).getCodeunix();
+                            total_transfer = result.get(i).getTotal_transfer();
+                            bank = result.get(i).getBank();
+                            nomor_rekening = result.get(i).getNomer_rekening();
+                            atas_nama = result.get(i).getNama_pemilik();
+                            status_deposit = result.get(i).getStatus_deposit();
 
-                            ItemHistoryDeposit trx = new ItemHistoryDeposit(tanggal, jmldeposit, statusdeposit, bank);
+                            ItemHistoryDeposit trx = new ItemHistoryDeposit(tanggal, status_deposit, kodeunix,
+                                    total_transfer, bank, deposit, nomor_rekening, atas_nama);
                             trxListDeposit.add(trx);
                         }
 
@@ -265,7 +270,7 @@ public class HistoryActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
-                    String tanggal_mutasi, mutasi_id, mutasi_status, sisa_saldo;
+                    String tanggal_mutasi, mutasi_id, mutasi_status, sisa_saldo, uang_masuk, uang_keluar, keterangan;
 
                     if (status.equals("SUCCESS")) {
                         final List<DataDetailHistosryOTU> result = response.body().getListData();
@@ -278,8 +283,14 @@ public class HistoryActivity extends AppCompatActivity {
                             tanggal_mutasi = result.get(i).getTgl_mutasi();
                             mutasi_status = result.get(i).getMutasi_status();
                             sisa_saldo = result.get(i).getSisa_saldo().toString();
+                            uang_masuk = result.get(i).getUang_masuk().toString();
+                            uang_keluar = result.get(i).getUang_keluar().toString();
+                            keterangan = result.get(i).getKeterangan();
 
-                            ItemHistorySaldo trx = new ItemHistorySaldo(mutasi_id, tanggal_mutasi, mutasi_status, sisa_saldo);
+
+
+                            ItemHistorySaldo trx = new ItemHistorySaldo(mutasi_id, tanggal_mutasi, mutasi_status,
+                                    sisa_saldo, uang_masuk, uang_keluar, keterangan);
                             trxListSaldo.add(trx);
                         }
 
@@ -325,20 +336,21 @@ public class HistoryActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
-                    String tanggal_penarikan, jumlah_penarikan, status_penarikan;
+                    String tgl_penarikan, status_penarikan, jml_penarikan, bank, atas_nama, nomer_rekening;
 
                     if (status.equals("SUCCESS")) {
                         final List<DataDetailHistosryOTU> result = response.body().getListData();
                         int ROW_SIZE = result.size();
 
-                        Log.d("OPPO-1", "onResponse: " + ROW_SIZE);
-
                         for (int i = 0; i < ROW_SIZE; i++) {
-                            tanggal_penarikan = result.get(i).getTgl_penarikan();
-                            jumlah_penarikan = result.get(i).getJml_penarikan();
+                            tgl_penarikan = result.get(i).getTgl_penarikan();
                             status_penarikan = result.get(i).getStatus_penarikan();
+                            jml_penarikan = result.get(i).getJml_penarikan();
+                            bank = result.get(i).getBank();
+                            atas_nama = result.get(i).getAtas_nama();
+                            nomer_rekening = result.get(i).getNomer_rekening();
 
-                            ItemHistoryPenarikan trx = new ItemHistoryPenarikan(tanggal_penarikan, status_penarikan, jumlah_penarikan);
+                            ItemHistoryPenarikan trx = new ItemHistoryPenarikan(tgl_penarikan, status_penarikan, jml_penarikan, bank, atas_nama, nomer_rekening);
                             trxListPenarikan.add(trx);
                         }
 
@@ -384,20 +396,20 @@ public class HistoryActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
-                    String tanggal_perolehan, jenis_cb, jml_cb, status_perolehan;
+                    String tgl_perolehan, keterangan, jenis_bonus, status_bonus, jml_bonus;
 
                     if (status.equals("SUCCESS")) {
                         final List<DataDetailHistosryOTU> result = response.body().getListData();
                         int ROW_SIZE = result.size();
 
-                        Log.d("OPPO-1", "onResponse: " + ROW_SIZE);
-
                         for (int i = 0; i < ROW_SIZE; i++) {
-                            tanggal_perolehan = result.get(i).getTgl_perolehan();
-                            jenis_cb = result.get(i).getJenis_bonus();
-                            jml_cb = result.get(i).getJml_bonus();
-                            status_perolehan = result.get(i).getStatus_bonus();
-                            ItemHistoryBonus trx = new ItemHistoryBonus(tanggal_perolehan, jenis_cb, status_perolehan, jml_cb);
+                            tgl_perolehan = result.get(i).getTgl_perolehan();
+                            keterangan = result.get(i).getKeterangan();
+                            jenis_bonus = result.get(i).getJenis_bonus();
+                            jml_bonus = result.get(i).getJml_bonus();
+                            status_bonus = result.get(i).getStatus_bonus();
+                            Log.d("OPPO-1", "onResponse: "+status_bonus);
+                            ItemHistoryBonus trx = new ItemHistoryBonus(tgl_perolehan, keterangan, jenis_bonus, status_bonus, jml_bonus);
                             trxListBonus.add(trx);
                         }
 

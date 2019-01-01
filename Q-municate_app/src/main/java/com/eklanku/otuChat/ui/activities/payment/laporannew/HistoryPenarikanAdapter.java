@@ -4,12 +4,17 @@ package com.eklanku.otuChat.ui.activities.payment.laporannew;
  * Created by AHMAD AYIK RIFAI on 10/3/2017.
  */
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,7 +76,8 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
         holder.viewTrx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "DETAIL", Toast.LENGTH_SHORT).show();
+                showDetail(itemProduct.getTgl_penarikan(), itemProduct.getJml_penarikan(), itemProduct.getBank(),
+                        itemProduct.getAtas_nama(), itemProduct.getNomer_rekening(), itemProduct.getStatus_penarikan());
             }
         });
 
@@ -80,6 +86,44 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
     @Override
     public int getItemCount() {
         return cartList.size();
+    }
+
+    public void showDetail(String _tanggal, String _jumlah_penarikan, String _bank, String _atas_nama,
+                           String _nomor_rekening, String _status){
+        final Dialog builder = new Dialog(context);
+        builder.setContentView(R.layout.history_detail_penarikan);
+        builder.setTitle("Jumlah");
+        builder.setCancelable(false);
+
+        final TextView title = builder.findViewById(R.id.tv_product_type);
+        final EditText tanggal = builder.findViewById(R.id.et_tgl);
+        final EditText jumlah_penarikan = builder.findViewById(R.id.et_jumlah_penarikan);
+        final EditText bank = builder.findViewById(R.id.et_bank);
+        final EditText atas_nama = builder.findViewById(R.id.et_atas_nama);
+        final EditText nomor_rekening = builder.findViewById(R.id.et_nomor_rekening);
+        final EditText status = builder.findViewById(R.id.et_status_penarikan);
+
+        title.setText("DETAIL HISTORY PENARIKAN");
+        tanggal.setText(_tanggal);
+        jumlah_penarikan.setText(_jumlah_penarikan);
+        bank.setText(_bank);
+        atas_nama.setText(_atas_nama);
+        nomor_rekening.setText(_nomor_rekening);
+        status.setText(_status);
+
+        Button btnClose = builder.findViewById(R.id.btn_close);
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                builder.dismiss();
+            }
+        });
+
+        builder.show();
+        Window window = builder.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
     }
 
 

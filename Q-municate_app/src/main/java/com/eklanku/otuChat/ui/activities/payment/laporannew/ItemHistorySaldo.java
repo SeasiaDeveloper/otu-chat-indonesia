@@ -1,19 +1,12 @@
 package com.eklanku.otuChat.ui.activities.payment.laporannew;
 
-import android.util.Log;
-
 public class ItemHistorySaldo {
 
     private String mutasi_id;
     private String tgl_mutasi;
     private String mutasi_status;
-
-    public ItemHistorySaldo(String mutasi_id, String tgl_mutasi, String mutasi_status, String sisa_saldo) {
-        this.mutasi_id = mutasi_id;
-        this.tgl_mutasi = tgl_mutasi;
-        this.mutasi_status = mutasi_status;
-        this.sisa_saldo = sisa_saldo;
-    }
+    private String sisa_saldo;
+    private String uang_masuk;
 
     public String getMutasi_id() {
         return mutasi_id;
@@ -47,5 +40,44 @@ public class ItemHistorySaldo {
         this.sisa_saldo = sisa_saldo;
     }
 
-    private String sisa_saldo;
+    public String getUang_masuk() {
+        return uang_masuk;
+    }
+
+    public void setUang_masuk(String uang_masuk) {
+        this.uang_masuk = uang_masuk;
+    }
+
+    public String getUang_keluar() {
+        return uang_keluar;
+    }
+
+    public void setUang_keluar(String uang_keluar) {
+        this.uang_keluar = uang_keluar;
+    }
+
+    public String getKeterangan() {
+        return keterangan;
+    }
+
+    public void setKeterangan(String keterangan) {
+        this.keterangan = keterangan;
+    }
+
+    private String uang_keluar;
+    private String keterangan;
+
+    public ItemHistorySaldo(String mutasi_id, String tgl_mutasi, String mutasi_status,
+                            String sisa_saldo, String uang_masuk, String uang_keluar, String keterangan) {
+        this.mutasi_id = mutasi_id;
+        this.tgl_mutasi = tgl_mutasi;
+        this.mutasi_status = mutasi_status;
+        this.sisa_saldo = sisa_saldo;
+        this.uang_masuk = uang_masuk;
+        this.uang_keluar = uang_keluar;
+        this.keterangan = keterangan;
+    }
+
+
+
 }
