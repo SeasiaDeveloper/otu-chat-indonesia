@@ -39,9 +39,11 @@
                     android:layout_marginBottom="@dimen/density_4"
                     android:layout_weight="1"
                     android:background="@color/green_50"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:padding="@dimen/density_8"
-                    android:text="26-12-2018 02:12:54" />
+                    android:text="26-12-2018 02:12:54"
+                    android:textColor="@color/colorTextOtuDark"
+                    android:textStyle="bold"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -85,8 +87,7 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="SUKSES"
-                        android:textStyle="bold" />
-
+                        android:textColor="@color/colorTextOtu"/>
                 </LinearLayout>
             </LinearLayout>
 

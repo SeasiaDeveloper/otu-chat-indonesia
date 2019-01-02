@@ -287,8 +287,6 @@ public class HistoryActivity extends AppCompatActivity {
                             uang_keluar = result.get(i).getUang_keluar().toString();
                             keterangan = result.get(i).getKeterangan();
 
-
-
                             ItemHistorySaldo trx = new ItemHistorySaldo(mutasi_id, tanggal_mutasi, mutasi_status,
                                     sisa_saldo, uang_masuk, uang_keluar, keterangan);
                             trxListSaldo.add(trx);

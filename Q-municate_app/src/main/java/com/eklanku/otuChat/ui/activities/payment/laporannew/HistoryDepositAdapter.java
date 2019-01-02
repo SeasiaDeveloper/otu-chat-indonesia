@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAdapter.MyViewHolder> {
     private Context context;
@@ -60,19 +62,16 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
         final ItemHistoryDeposit itemProduct = cartList.get(position);
 
         holder.tvtanggal.setText(itemProduct.getTgl_deposit());
-        holder.tvjumlah.setText(itemProduct.getTotal_transfer());
+        holder.tvjumlah.setText(formatRupiah(Double.parseDouble(itemProduct.getTotal_transfer())));
         holder.tvbank.setText(itemProduct.getBank());
-
+        holder.tvstatus.setText(itemProduct.getStatus_deposit());
 
         if (itemProduct.getStatus_deposit().equalsIgnoreCase("Gagal")) {
             holder.tvstatus.setTextColor(Color.RED);
+        } else if (itemProduct.getStatus_deposit().equalsIgnoreCase("Waiting")) {
+            holder.tvstatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
         } else {
             holder.tvstatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
-        }
-
-
-        if (itemProduct.getStatus_deposit().equalsIgnoreCase("Active")) {
-            holder.tvstatus.setText("Sukses");
         }
 
         holder.viewTrx.setOnClickListener(new View.OnClickListener() {
@@ -98,20 +97,29 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
         builder.setCancelable(false);
 
         final TextView title = builder.findViewById(R.id.tv_product_type);
-        final EditText tanggal = builder.findViewById(R.id.et_tgl);
-        final EditText deposit = builder.findViewById(R.id.et_jumlah_deposit);
-        final EditText kode_unix = builder.findViewById(R.id.et_kode_unix);
-        final EditText total_transfer = builder.findViewById(R.id.et_total_transfer);
-        final EditText bank = builder.findViewById(R.id.et_bank);
-        final EditText nomor_rekening = builder.findViewById(R.id.et_nomor_rekening);
-        final EditText atas_nama = builder.findViewById(R.id.et_atas_nama);
-        final EditText status = builder.findViewById(R.id.et_status);
+        final TextView tanggal = builder.findViewById(R.id.et_tgl);
+        final TextView deposit = builder.findViewById(R.id.et_jumlah_deposit);
+        final TextView kode_unix = builder.findViewById(R.id.et_kode_unix);
+        final TextView total_transfer = builder.findViewById(R.id.et_total_transfer);
+        final TextView bank = builder.findViewById(R.id.et_bank);
+        final TextView nomor_rekening = builder.findViewById(R.id.et_nomor_rekening);
+        final TextView atas_nama = builder.findViewById(R.id.et_atas_nama);
+        final TextView status = builder.findViewById(R.id.et_status);
+        final TextView tutup = builder.findViewById(R.id.tv_close);
 
-        title.setText("DETAIL HISTORY DEPOSIT");
+        if (_status.equalsIgnoreCase("Gagal")) {
+            status.setTextColor(Color.RED);
+        } else if (_status.equalsIgnoreCase("Waiting")) {
+            status.setTextColor(context.getResources().getColor(R.color.yellow_800));
+        } else {
+            status.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
+        }
+
+        title.setText("Detail Deposit");
         tanggal.setText(_tanggal);
-        deposit.setText(_deposit);
+        deposit.setText(formatRupiah(Double.parseDouble(_deposit)));
         kode_unix.setText(_kode_unix);
-        total_transfer.setText(_total_transfer);
+        total_transfer.setText(formatRupiah(Double.parseDouble(_total_transfer)));
         bank.setText(_bank);
         nomor_rekening.setText(_nomor_rekening);
         atas_nama.setText(_atas_nama);
@@ -119,7 +127,7 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
 
         Button btnClose = builder.findViewById(R.id.btn_close);
 
-        btnClose.setOnClickListener(new View.OnClickListener() {
+        tutup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 builder.dismiss();
@@ -131,5 +139,12 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
+    }
 
 }

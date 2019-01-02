@@ -12,12 +12,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class HistoryBonusAdapter extends RecyclerView.Adapter<HistoryBonusAdapter.MyViewHolder> {
 
@@ -43,9 +46,11 @@ public class HistoryBonusAdapter extends RecyclerView.Adapter<HistoryBonusAdapte
         myViewHolder.tvTanggal.setText(itemProduct.getTgl_perolehan());
         myViewHolder.tvJnsBonus.setText(itemProduct.getJenis_bonus());
         myViewHolder.tvStatus.setText(itemProduct.getStatus_bonus());
-        myViewHolder.tvJumlahBonus.setText(itemProduct.getJml_bonus());
+        myViewHolder.tvJumlahBonus.setText(formatRupiah(Double.parseDouble(itemProduct.getJml_bonus())));
         if (itemProduct.getStatus_bonus().equalsIgnoreCase("Gagal")) {
             myViewHolder.tvStatus.setTextColor(Color.RED);
+        } else if (itemProduct.getStatus_bonus().equalsIgnoreCase("Waiting")) {
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
         } else {
             myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
@@ -84,22 +89,30 @@ public class HistoryBonusAdapter extends RecyclerView.Adapter<HistoryBonusAdapte
         builder.setCancelable(false);
 
         final TextView title = builder.findViewById(R.id.tv_product_type);
-        final EditText tanggal = builder.findViewById(R.id.et_tgl);
-        final EditText jenis_bonus = builder.findViewById(R.id.et_jenis_bonus);
-        final EditText jumlah_bonus = builder.findViewById(R.id.et_jumlah_bonus);
-        final EditText keterangan = builder.findViewById(R.id.et_keterangan);
-        final EditText status = builder.findViewById(R.id.et_status);
+        final TextView tanggal = builder.findViewById(R.id.et_tgl);
+        final TextView jenis_bonus = builder.findViewById(R.id.et_jenis_bonus);
+        final TextView jumlah_bonus = builder.findViewById(R.id.et_jumlah_bonus);
+        final TextView keterangan = builder.findViewById(R.id.et_keterangan);
+        final TextView status = builder.findViewById(R.id.et_status);
+        final TextView tutup = builder.findViewById(R.id.tv_close);
 
-        title.setText("DETAIL HISTORY BONUS");
+        if (_status.equalsIgnoreCase("Gagal")) {
+            status.setTextColor(Color.RED);
+        } else if (_status.equalsIgnoreCase("Waiting")) {
+            status.setTextColor(context.getResources().getColor(R.color.yellow_800));
+        } else {
+            status.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
+        }
+        title.setText("Detail Bonus");
         tanggal.setText(_tanggal);
         jenis_bonus.setText(_jenis_bonus);
-        jumlah_bonus.setText(_jumlah_bonus);
+        jumlah_bonus.setText(formatRupiah(Double.parseDouble(_jumlah_bonus)));
         keterangan.setText(_keterangan);
         status.setText(_status);
 
-        Button btnClose = builder.findViewById(R.id.btn_close);
+        ImageView btnClose = builder.findViewById(R.id.btn_close);
 
-        btnClose.setOnClickListener(new View.OnClickListener() {
+        tutup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 builder.dismiss();
@@ -109,5 +122,13 @@ public class HistoryBonusAdapter extends RecyclerView.Adapter<HistoryBonusAdapte
         builder.show();
         Window window = builder.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+    }
+
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
     }
 }

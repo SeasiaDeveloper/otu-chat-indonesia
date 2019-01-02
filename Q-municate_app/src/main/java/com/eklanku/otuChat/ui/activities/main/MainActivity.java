@@ -38,6 +38,7 @@ import com.eklanku.otuChat.ui.activities.base.BaseLoggableActivity;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailSaldoBonus;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProfile;
 import com.eklanku.otuChat.ui.activities.payment.models.DataSaldoBonus;
+import com.eklanku.otuChat.ui.activities.payment.news.WebViewNews;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.DeleteAccount;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
@@ -1268,7 +1269,9 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         UserSessionsActivity.start(MainActivity.this);
                         break;
                     case R.id.action_notification:
-                        Toast.makeText(MainActivity.this, "Coming soon...", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "Coming soon...", Toast.LENGTH_SHORT).show();
+                        Intent news = new Intent(MainActivity.this, WebViewNews.class);
+                        startActivity(news);
                         break;
                     case R.id.action_profile:
                         if (menuDialog()) {

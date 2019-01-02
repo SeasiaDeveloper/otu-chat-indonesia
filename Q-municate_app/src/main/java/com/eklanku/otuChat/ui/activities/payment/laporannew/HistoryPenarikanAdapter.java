@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarikanAdapter.MyViewHolder> {
     private Context context;
@@ -59,17 +61,15 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
         final ItemHistoryPenarikan itemProduct = cartList.get(position);
 
         holder.tvtanggal.setText(itemProduct.getTgl_penarikan());
-        holder.tvjumlah.setText(itemProduct.getJml_penarikan());
-
+        holder.tvjumlah.setText(formatRupiah(Double.parseDouble(itemProduct.getJml_penarikan())));
+        holder.tvstatus.setText(itemProduct.getStatus_penarikan());
 
         if(itemProduct.getStatus_penarikan().equalsIgnoreCase("Gagal")){
             holder.tvstatus.setTextColor(Color.RED);
-        }else{
+        }else if (itemProduct.getStatus_penarikan().equalsIgnoreCase("Waiting")) {
+            holder.tvstatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
+        } else {
             holder.tvstatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
-        }
-
-        if(itemProduct.getStatus_penarikan().equalsIgnoreCase("Active")){
-            holder.tvstatus.setText("Sukses");
         }
 
 
@@ -96,16 +96,26 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
         builder.setCancelable(false);
 
         final TextView title = builder.findViewById(R.id.tv_product_type);
-        final EditText tanggal = builder.findViewById(R.id.et_tgl);
-        final EditText jumlah_penarikan = builder.findViewById(R.id.et_jumlah_penarikan);
-        final EditText bank = builder.findViewById(R.id.et_bank);
-        final EditText atas_nama = builder.findViewById(R.id.et_atas_nama);
-        final EditText nomor_rekening = builder.findViewById(R.id.et_nomor_rekening);
-        final EditText status = builder.findViewById(R.id.et_status_penarikan);
+        final TextView tanggal = builder.findViewById(R.id.et_tgl);
+        final TextView jumlah_penarikan = builder.findViewById(R.id.et_jumlah_penarikan);
+        final TextView bank = builder.findViewById(R.id.et_bank);
+        final TextView atas_nama = builder.findViewById(R.id.et_atas_nama);
+        final TextView nomor_rekening = builder.findViewById(R.id.et_nomor_rekening);
+        final TextView status = builder.findViewById(R.id.et_status_penarikan);
+        final TextView tutup = builder.findViewById(R.id.tv_close);
 
-        title.setText("DETAIL HISTORY PENARIKAN");
+
+        if(_status.equalsIgnoreCase("Gagal")){
+            status.setTextColor(Color.RED);
+        }else if (_status.equalsIgnoreCase("Waiting")) {
+            status.setTextColor(context.getResources().getColor(R.color.yellow_800));
+        } else {
+            status.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
+        }
+
+        title.setText("Detail Penarikan");
         tanggal.setText(_tanggal);
-        jumlah_penarikan.setText(_jumlah_penarikan);
+        jumlah_penarikan.setText(formatRupiah(Double.parseDouble(_jumlah_penarikan)));
         bank.setText(_bank);
         atas_nama.setText(_atas_nama);
         nomor_rekening.setText(_nomor_rekening);
@@ -113,7 +123,7 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
 
         Button btnClose = builder.findViewById(R.id.btn_close);
 
-        btnClose.setOnClickListener(new View.OnClickListener() {
+        tutup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 builder.dismiss();
@@ -125,6 +135,12 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
     }
-
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
+    }
 
 }

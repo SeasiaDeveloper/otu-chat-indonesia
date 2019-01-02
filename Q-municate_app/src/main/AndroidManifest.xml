@@ -653,6 +653,7 @@
         <activity android:name=".ui.activities.payment.donasi.CCDonasiActivity" />
         <activity android:name=".ui.activities.payment.donasi.KonfimasiDonasi" />
         <activity android:name=".ui.activities.payment.donasi.WebViewSyaratKetentuan" />
+        <activity android:name=".ui.activities.payment.news.WebViewNews" />
         <activity
             android:name=".ui.activities.payment.donasi.DonasiTransferSaldo"
             android:label="Donasi Yayasan Cinta Anak"

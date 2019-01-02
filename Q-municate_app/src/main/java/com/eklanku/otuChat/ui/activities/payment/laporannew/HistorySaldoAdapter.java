@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapter.MyViewHolder> {
 
@@ -43,17 +45,19 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
 
         myViewHolder.tvTanggal.setText(itemProduct.getTgl_mutasi());
         myViewHolder.tvInvoice.setText(itemProduct.getMutasi_id());
-        myViewHolder.tvSisaSaldo.setText(itemProduct.getSisa_saldo());
+        myViewHolder.tvStatus.setText(itemProduct.getMutasi_status());
 
-        if(itemProduct.getMutasi_status().equalsIgnoreCase("Gagal")){
+        myViewHolder.tvSisaSaldo.setText(formatRupiah(Double.parseDouble(itemProduct.getSisa_saldo())));
+
+        if (itemProduct.getMutasi_status().equalsIgnoreCase("Gagal")) {
             myViewHolder.tvStatus.setTextColor(Color.RED);
-        }else{
+        } else {
             myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
 
-        if(itemProduct.getMutasi_status().equalsIgnoreCase("Active")){
+        /*if (itemProduct.getMutasi_status().equalsIgnoreCase("Active")) {
             myViewHolder.tvStatus.setText("Sukses");
-        }
+        }*/
 
         myViewHolder.viewTrx.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,9 +73,10 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
         return cartList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView tvTanggal, tvInvoice, tvStatus, tvSisaSaldo;
         private View viewTrx;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             viewTrx = itemView;
@@ -83,33 +88,40 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
     }
 
     public void showDetail(String _mutasi_id, String _tanggal, String _sisa_saldo, String _kredit, String _debet, String _keterangan,
-                           String _status){
+                           String _status) {
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.history_detail_saldo);
         builder.setTitle("Jumlah");
         builder.setCancelable(false);
 
         final TextView title = builder.findViewById(R.id.tv_product_type);
-        final EditText mutasi_id = builder.findViewById(R.id.et_mutasi_id);
-        final EditText tanggal = builder.findViewById(R.id.et_tgl);
-        final EditText sisa_saldo = builder.findViewById(R.id.et_sisa_saldo);
-        final EditText kredit = builder.findViewById(R.id.et_uang_masuk);
-        final EditText debet = builder.findViewById(R.id.et_uang_keluar);
-        final EditText keterangan = builder.findViewById(R.id.et_keterangan);
-        final EditText status = builder.findViewById(R.id.et_status);
+        final TextView mutasi_id = builder.findViewById(R.id.et_mutasi_id);
+        final TextView tanggal = builder.findViewById(R.id.et_tgl);
+        final TextView sisa_saldo = builder.findViewById(R.id.et_sisa_saldo);
+        final TextView kredit = builder.findViewById(R.id.et_uang_masuk);
+        final TextView debet = builder.findViewById(R.id.et_uang_keluar);
+        final TextView keterangan = builder.findViewById(R.id.et_keterangan);
+        final TextView status = builder.findViewById(R.id.et_status);
+        final TextView tutup = builder.findViewById(R.id.tv_close);
 
-        title.setText("DETAIL HISTORY SALDO");
+        if (_status.equalsIgnoreCase("Gagal")) {
+            status.setTextColor(Color.RED);
+        } else {
+            status.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
+        }
+
+        title.setText("Detail Saldo");
         mutasi_id.setText(_mutasi_id);
         tanggal.setText(_tanggal);
-        sisa_saldo.setText(_sisa_saldo);
-        kredit.setText(_kredit);
-        debet.setText(_debet);
+        sisa_saldo.setText(formatRupiah(Double.parseDouble(_sisa_saldo)));
+        kredit.setText(formatRupiah(Double.parseDouble(_kredit)));
+        debet.setText(formatRupiah(Double.parseDouble(_debet)));
         keterangan.setText(_keterangan);
         status.setText(_status);
 
         Button btnClose = builder.findViewById(R.id.btn_close);
 
-        btnClose.setOnClickListener(new View.OnClickListener() {
+        tutup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 builder.dismiss();
@@ -119,5 +131,13 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
         builder.show();
         Window window = builder.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+    }
+
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
     }
 }

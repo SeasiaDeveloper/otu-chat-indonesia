@@ -55,7 +55,7 @@ public class Utils {
 
         txjdlError.setText(title);
         txpesanError.setText(message);
-        if(message.equalsIgnoreCase("KODE KEAMANAN SALAH")){
+        if(message.equalsIgnoreCase("KODE KEAMANAN SALAH") || message.equalsIgnoreCase("INVALID SECURITY CODE")){
             txpesanError.setText("ANDA TELAH LOGOUT SILAHKAN LOGIN KEMBALI");
         }else{
             txpesanError.setText(message);
@@ -68,7 +68,7 @@ public class Utils {
                 PreferenceUtil.setLoginStatus(activity, false);
             }
 
-            if(!message.equalsIgnoreCase("KODE KEAMANAN SALAH")){
+            if(!message.equalsIgnoreCase("KODE KEAMANAN SALAH") || !message.equalsIgnoreCase("INVALID SECURITY CODE")){
                 activity.finish();
             }
 
