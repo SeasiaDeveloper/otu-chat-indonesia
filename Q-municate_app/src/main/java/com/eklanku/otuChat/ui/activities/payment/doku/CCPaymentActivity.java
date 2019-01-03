@@ -446,7 +446,7 @@ public class CCPaymentActivity extends AppCompatActivity {
 
     public String transactionID() {
         String vTransactionID;
-        vTransactionID = "dep_ccn_" + sdf.format(new Date()) + "" /*+ "_" + getRandomString()*/;
+        vTransactionID = "DEP_CCN_" + sdf.format(new Date()) + "" /*+ "_" + getRandomString()*/;
         //Log.d("OPPO-1", "vTransactionID: " + vTransactionID);
         return vTransactionID;
     }

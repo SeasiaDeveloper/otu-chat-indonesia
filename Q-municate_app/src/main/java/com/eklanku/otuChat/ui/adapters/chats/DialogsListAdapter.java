@@ -1,11 +1,24 @@
 package com.eklanku.otuChat.ui.adapters.chats;
 
+import android.app.Dialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.connectycube.storage.model.ConnectycubeFile;
+import com.eklanku.otuChat.ui.activities.chats.BaseDialogActivity;
+import com.eklanku.otuChat.ui.activities.others.PreviewImageActivity;
 import com.eklanku.otuChat.ui.adapters.base.BaseListAdapter;
+import com.eklanku.otuChat.ui.views.TouchImageView;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
 import com.eklanku.otuChat.utils.DateUtils;
 import com.connectycube.chat.model.ConnectycubeChatDialog;
@@ -13,6 +26,7 @@ import com.connectycube.chat.model.ConnectycubeDialogType;
 
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
+import com.eklanku.otuChat.utils.ToastUtils;
 import com.quickblox.q_municate_core.models.DialogWrapper;
 import com.quickblox.q_municate_core.utils.ConstsCore;
 import com.quickblox.q_municate_user_service.model.QMUser;
@@ -66,6 +80,18 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
                     R.id.unread_messages_textview);
 
             convertView.setTag(viewHolder);
+
+            viewHolder.avatarImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    QMUser opponentUser = dialogWrapper.getOpponentUser();
+                    //PreviewImageActivity.start(baseActivity, opponentUser.getAvatar());
+                    viewImage(opponentUser.getAvatar(), opponentUser.getFullName(), opponentUser.getId().toString());
+
+                }
+            });
+
+
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
@@ -115,6 +141,8 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
         String sdt = df.format(new Date(dialogWrapper.getLastMessageDate()));
 
         viewHolder.lastMessageTime.setText(DateUtils.toTodayYesterdayShortMonthDate(dialogWrapper.getLastMessageDate()));
+
+
 
         return convertView;
     }
@@ -167,5 +195,35 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
         public TextView lastMessageTextView;
         public TextView unreadMessagesTextView;
         public TextView lastMessageTime;
+    }
+
+    public void viewImage(String imageUrl, String nama, String id){
+        final Dialog builder = new Dialog(context);
+        builder.setContentView(R.layout.activity_preview_image_friends);
+        builder.setCancelable(true);
+
+        TouchImageView img = builder.findViewById(R.id.image_touchimageview);
+
+        if (!TextUtils.isEmpty(imageUrl)) {
+            Glide.with(baseActivity)
+                    .load(imageUrl)
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            ToastUtils.shortToast(R.string.preview_image_error);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into(img);
+        }
+
+        builder.show();
+        Window window = builder.getWindow();
+        window.setLayout(800, 800);
     }
 }

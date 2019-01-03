@@ -54,7 +54,7 @@ public class DonasiOpsi extends AppCompatActivity{
                     btndonasiSaldo.setEnabled(true);
                     btndonasiDoku.setEnabled(true);
                     btndonasiSaldo.setImageResource(R.drawable.ic_donasi_saldo);
-                    btndonasiDoku.setImageResource(R.drawable.ic_credit_card);
+                    btndonasiDoku.setImageResource(R.drawable.ic_donasi_cc);
                 } else {
                     btndonasiSaldo.setEnabled(false);
                     btndonasiDoku.setEnabled(false);

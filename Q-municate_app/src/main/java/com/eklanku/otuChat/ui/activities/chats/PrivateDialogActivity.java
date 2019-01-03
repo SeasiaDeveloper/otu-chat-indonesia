@@ -100,6 +100,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     @Bind(R.id.include_view_input_message_layout)
     View inputViewPanel;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,8 +110,9 @@ public class PrivateDialogActivity extends BaseDialogActivity {
 
 
         Log.d("OPPO-1-", "onCreate: "+oppUsername);
-        if (oppUsername==148490 || oppUsername==148478 || oppUsername==148492)
+        if (oppUsername==148490 || oppUsername==148478 || oppUsername==148492 || oppUsername==32350){
             inputViewPanel.setVisibility(View.GONE);
+        }
 
     }
 

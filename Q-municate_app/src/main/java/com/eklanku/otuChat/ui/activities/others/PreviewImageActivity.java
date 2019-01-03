@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -28,6 +29,7 @@ public class PreviewImageActivity extends BaseLoggableActivity {
     TouchImageView imageTouchImageView;
 
     public static void start(Context context, String url) {
+        Log.d("OPPO-1", "start: "+url);
         Intent intent = new Intent(context, PreviewImageActivity.class);
         intent.putExtra(EXTRA_IMAGE_URL, url);
         context.startActivity(intent);

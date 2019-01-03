@@ -194,7 +194,7 @@
                                         android:background="@drawable/bg_otu_payment"
                                         android:padding="6dp"
                                         android:scaleType="centerInside"
-                                        android:src="@drawable/ic_credit_card" />
+                                        android:src="@drawable/ic_donasi_cc" />
 
                                     <android.support.v7.widget.AppCompatImageView
                                         android:id="@+id/ivsaldoOVO"
