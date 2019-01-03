@@ -4,9 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -68,6 +70,17 @@ import butterknife.OnClick;
 import rx.Observer;
 import rx.Subscriber;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.MODIFY_AUDIO_SETTINGS;
+import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.RECEIVE_SMS;
+import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 public class LandingActivity extends BaseAuthActivity {
 
     @Bind(R.id.app_version_textview)
@@ -81,6 +94,7 @@ public class LandingActivity extends BaseAuthActivity {
     private Button login; //logout;
     private String TAG = "AYIK";
     //================================================
+    private static final int REQUEST_READ_PHONE_STATE = 0;
 
     private int loginTryCount = 0;
     public ServiceManager serviceManager;
@@ -104,6 +118,8 @@ public class LandingActivity extends BaseAuthActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        populate();
 
         initVersionName();
 
@@ -416,6 +432,80 @@ public class LandingActivity extends BaseAuthActivity {
         public void execute(Bundle bundle) throws Exception {
             ConnectycubeUser user = (ConnectycubeUser) bundle.getSerializable(QBServiceConsts.EXTRA_USER);
             login(user.getLogin());
+        }
+    }
+
+    private void populate() {
+        if (!mayRequest()) {
+            return;
+        }
+    }
+
+    private boolean mayRequest() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (
+                checkSelfPermission(READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(CAMERA) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(MODIFY_AUDIO_SETTINGS) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED /*&&
+                        checkSelfPermission(VIBRATE) == PackageManager.PERMISSION_GRANTED*/
+                ) {
+
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(READ_PHONE_STATE)) {
+            requestPermissions(new String[]{
+
+                    READ_PHONE_STATE, ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE,
+                    CAMERA, RECEIVE_SMS, READ_CONTACTS, MODIFY_AUDIO_SETTINGS, RECORD_AUDIO/*, VIBRATE*/
+            }, REQUEST_READ_PHONE_STATE);
+        } else {
+            requestPermissions(new String[]{
+
+                    READ_PHONE_STATE,
+                    ACCESS_COARSE_LOCATION,
+                    ACCESS_FINE_LOCATION,
+                    WRITE_EXTERNAL_STORAGE,
+                    READ_EXTERNAL_STORAGE,
+                    CAMERA, RECEIVE_SMS, READ_CONTACTS, MODIFY_AUDIO_SETTINGS, RECORD_AUDIO/*, VIBRATE*/
+
+            }, REQUEST_READ_PHONE_STATE);
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_READ_PHONE_STATE) {
+            if (grantResults.length == 10 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[2] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[3] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[4] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[5] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[6] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[7] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[8] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[9] == PackageManager.PERMISSION_GRANTED /*&&
+                    grantResults[10] == PackageManager.PERMISSION_GRANTED*/
+                    )
+
+
+            {
+
+            } else {
+                finish();
+
+            }
         }
     }
 }
