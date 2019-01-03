@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -94,6 +95,7 @@ public class TransPulsa extends AppCompatActivity {
     LinearLayout layoutView;
     ProgressBar progressBar;
     TextView tvEmpty;
+    String nominalx, tujuanx;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,11 +105,28 @@ public class TransPulsa extends AppCompatActivity {
 
         utilsAlert = new Utils(TransPulsa.this);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+
+        }
 
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnKartu = findViewById(R.id.spnTransPulsaKartu);
         spnNominal = findViewById(R.id.spnTransPulsaNominal);
+
         txtNo = findViewById(R.id.txtTransPulsaNo);
+        txtNo.setText(tujuanx);
         etTransaksiKe = findViewById(R.id.txt_transaksi_ke);
         btnBayar = findViewById(R.id.btnTransPulsaBayar);
         layoutNo = findViewById(R.id.txtLayoutTransPulsaNo);
@@ -139,8 +158,6 @@ public class TransPulsa extends AppCompatActivity {
         strUserID = user.get(PreferenceManager.KEY_USERID);
         strAccessToken = user.get(PreferenceManager.KEY_ACCESS_TOKEN);
 
-        txtNo.addTextChangedListener(new txtWatcher(txtNo));
-
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -149,7 +166,6 @@ public class TransPulsa extends AppCompatActivity {
             if (!validateIdPel()) {
                 return;
             }
-
 
             final Dialog dialog = new Dialog(TransPulsa.this);
 
@@ -187,10 +203,11 @@ public class TransPulsa extends AppCompatActivity {
 
         initializeResources();
         getPrefixPulsa();
-        //getProductPulsa();
+
+        txtNo.addTextChangedListener(new txtWatcher(txtNo));
+
 
     }
-
 
     private class txtWatcher implements TextWatcher {
         private View view;
@@ -201,16 +218,19 @@ public class TransPulsa extends AppCompatActivity {
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
         }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             cekPrefixNumber(s);
+
         }
 
         @Override
         public void afterTextChanged(Editable s) {
             validateIdPel();
+            //cekPrefixNumber(s);
         }
     }
 
@@ -432,6 +452,7 @@ public class TransPulsa extends AppCompatActivity {
     ArrayList<String> point_ep;
 
     public void cekPrefixNumber(CharSequence s) {
+        //Toast.makeText(context, "cek prefix " + s, Toast.LENGTH_SHORT).show();
         SpinnerAdapterNew adapter = null;
         ArrayList<String> a, b, c, d;
         a = new ArrayList<>();
@@ -439,7 +460,7 @@ public class TransPulsa extends AppCompatActivity {
         c = new ArrayList<>();
         d = new ArrayList<>();
         code_product = new ArrayList<>();
-        code_name= new ArrayList<>();
+        code_name = new ArrayList<>();
         point_ep = new ArrayList<>();
         listPulsa.setAdapter(null);
 
@@ -605,7 +626,9 @@ public class TransPulsa extends AppCompatActivity {
                             listProviderProduct.add(data.get(i).getProvider());
                         }
 
-                        Log.d("OPPO-1", "onResponse: " + listCode);
+                        if (!TextUtils.isEmpty(tujuanx)) {
+                            cekPrefixNumber(tujuanx);
+                        }
                     } else {
                         utilsAlert.globalDialog(TransPulsa.this, titleAlert, respMessage);
                     }

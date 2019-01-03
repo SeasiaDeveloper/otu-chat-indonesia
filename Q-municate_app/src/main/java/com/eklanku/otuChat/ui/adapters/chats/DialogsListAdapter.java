@@ -84,10 +84,14 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
             viewHolder.avatarImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    QMUser opponentUser = dialogWrapper.getOpponentUser();
-                    //PreviewImageActivity.start(baseActivity, opponentUser.getAvatar());
-                    viewImage(opponentUser.getAvatar(), opponentUser.getFullName(), opponentUser.getId().toString());
-
+                    QMUser opponentUser;
+                    if (dialogWrapper.getOpponentUser() != null) {
+                        opponentUser = dialogWrapper.getOpponentUser();
+                        //Toast.makeText(baseActivity, "ADA", Toast.LENGTH_SHORT).show();
+                        viewImage(opponentUser.getAvatar(), opponentUser.getFullName(), opponentUser.getId().toString());
+                    } else {
+                        Toast.makeText(baseActivity, "Tidak bisa menampilkan profile", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 
@@ -143,7 +147,6 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
         viewHolder.lastMessageTime.setText(DateUtils.toTodayYesterdayShortMonthDate(dialogWrapper.getLastMessageDate()));
 
 
-
         return convertView;
     }
 
@@ -197,7 +200,7 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
         public TextView lastMessageTime;
     }
 
-    public void viewImage(String imageUrl, String nama, String id){
+    public void viewImage(String imageUrl, String nama, String id) {
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.activity_preview_image_friends);
         builder.setCancelable(true);
@@ -223,7 +226,7 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
         }
 
         builder.show();
-        Window window = builder.getWindow();
-        window.setLayout(800, 800);
+        /*Window window = builder.getWindow();
+        window.setLayout(800, 800);*/
     }
 }

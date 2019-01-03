@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -24,6 +25,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketData;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketTelp;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPdam;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransSMS;
 
 
 import java.text.NumberFormat;
@@ -142,6 +148,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         //Button btnPrint = builder.findViewById(R.id.btn_print);
 
         ImageView btnBuy = builder.findViewById(R.id.btn_buy);
+        ImageView btnClose = builder.findViewById(R.id.btn_close);
         ImageView btnPrint = builder.findViewById(R.id.btn_print);
 
         ImageView btnCopyInv = builder.findViewById(R.id.btn_copy_inv);
@@ -174,11 +181,49 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             }
         });
 
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                builder.dismiss();
+            }
+        });
+
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
+                Intent i = null;
+
+                if (trxJenis.equalsIgnoreCase("PULSA")) {
+                    i = new Intent(context, TransPulsa.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                } else if (trxJenis.equalsIgnoreCase("TELPONS")) {
+                    i = new Intent(context, TransPaketTelp.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                } else if (trxJenis.equalsIgnoreCase("KUOTA")) {
+                    i = new Intent(context, TransPaketData.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                } else if (trxJenis.equalsIgnoreCase("SMS")) {
+                    i = new Intent(context, TransSMS.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                } else if (trxJenis.equalsIgnoreCase("PPOB PDAM")) {
+                    i = new Intent(context, TransPdam.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                }else{
+                    Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
+                }
+
+
 
             }
         });

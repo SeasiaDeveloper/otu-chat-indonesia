@@ -79,6 +79,7 @@ public class TransPdam extends AppCompatActivity {
 
     private ArrayList<ItemPdam> cartList;
     private CustomAdapter mAdapter;
+    String nominalx, tujuanx;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,10 +88,27 @@ public class TransPdam extends AppCompatActivity {
 
         utilsAlert = new Utils(TransPdam.this);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+
+        }
+
         ButterKnife.bind(this);
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnWilayah = (Spinner) findViewById(R.id.spnTransPdamWilayah);
         txtNo = (EditText) findViewById(R.id.txtTransPdamNo);
+        txtNo.setText(tujuanx);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransPdamBayar);
         listwilayah = findViewById(R.id.listWilayah);

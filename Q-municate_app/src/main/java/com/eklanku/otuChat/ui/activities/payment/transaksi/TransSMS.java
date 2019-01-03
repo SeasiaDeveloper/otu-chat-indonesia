@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -95,7 +96,7 @@ public class TransSMS extends AppCompatActivity {
 
     TextView tvEmpty;
 
-
+    String nominalx, tujuanx;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,10 +105,25 @@ public class TransSMS extends AppCompatActivity {
 
         utilsAlert = new Utils(TransSMS.this);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+        }
+
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnKartu = (Spinner) findViewById(R.id.spnTransSMS);
         spnNominal = (Spinner) findViewById(R.id.spnTransSMSNominal);
         txtNo = (EditText) findViewById(R.id.txtTransSMSNo);
+        txtNo.setText(tujuanx);
         txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
         btnBayar = (Button) findViewById(R.id.btnTransSMSBayar);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
@@ -692,6 +708,9 @@ public class TransSMS extends AppCompatActivity {
                             listIsActive.add(data.get(i).getIsActive());
                             listType.add(data.get(i).getType());
                             listProviderProduct.add(data.get(i).getProvider());
+                        }
+                        if (!TextUtils.isEmpty(tujuanx)) {
+                            cekPrefix(tujuanx);
                         }
                     } else {
                         utilsAlert.globalDialog(TransSMS.this, titleAlert, respMessage);

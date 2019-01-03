@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -115,7 +116,7 @@ public class TransPaketData extends AppCompatActivity {
 
     LinearLayout layoutPulsa;
     ProgressBar progressBar;
-
+    String nominalx, tujuanx;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,14 +126,33 @@ public class TransPaketData extends AppCompatActivity {
 
         utilsAlert = new Utils(TransPaketData.this);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+
+        }
+
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnJenis = (Spinner) findViewById(R.id.spnTransPaketJenis);
         spnNama = (Spinner) findViewById(R.id.spnTransPaketNama);
         txtNo = (EditText) findViewById(R.id.txtTransPaketNo);
+        txtNo.setText(tujuanx);
         txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransPaketBayar);
         btnBayar.setText("BELI");
+
+
 
         imgOpr = findViewById(R.id.imgOpr);
         txOpr = findViewById(R.id.txOpr);
@@ -617,7 +637,9 @@ public class TransPaketData extends AppCompatActivity {
                             listProviderProduct.add(data.get(i).getProvider());
                         }
 
-                        Log.d("OPPO-1", "onResponse: " + listCode);
+                        if (!TextUtils.isEmpty(tujuanx)) {
+                            cekPrefixPaket(tujuanx);
+                        }
                     } else {
                         utilsAlert.globalDialog(TransPaketData.this, titleAlert, respMessage);
                     }

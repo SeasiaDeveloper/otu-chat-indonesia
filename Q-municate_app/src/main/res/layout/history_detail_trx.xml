@@ -259,6 +259,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/density_8"
             android:text="Tutup"
+            android:paddingLeft="@dimen/density_8"
+            android:paddingStart="@dimen/density_8"
             android:textColor="@color/red_700" />
 
         <LinearLayout

@@ -100,17 +100,17 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     @Bind(R.id.include_view_input_message_layout)
     View inputViewPanel;
 
+    int oppUsername;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int oppUsername = opponentUser.getId();
+        oppUsername = opponentUser.getId();
         //get fullname ===> String oppUsername = opponentUser.getFullName();
 
-
-        Log.d("OPPO-1-", "onCreate: "+oppUsername);
-        if (oppUsername==148490 || oppUsername==148478 || oppUsername==148492 || oppUsername==32350){
+        Log.d("AYIK", "name->" + oppUsername);
+        if (oppUsername == 148490 || oppUsername == 148478 || oppUsername == 148492 || oppUsername == 32350 || oppUsername == 44402) {
             inputViewPanel.setVisibility(View.GONE);
         }
 
@@ -290,7 +290,17 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+
         inflater.inflate(R.menu.private_dialog_menu, menu);
+
+        MenuItem audio = menu.findItem(R.id.action_audio_call);
+        MenuItem video = menu.findItem(R.id.switch_camera_toggle);
+
+        if (oppUsername == 148490 || oppUsername == 148478 || oppUsername == 148492 || oppUsername == 32350 || oppUsername == 44402) {
+            audio.setVisible(false);
+            video.setVisible(false);
+        }
+
         return true;
     }
 
@@ -590,15 +600,20 @@ public class PrivateDialogActivity extends BaseDialogActivity {
     }
 
     private void setOnlineStatus(QMUser user) {
-        if (user != null) {
-            if (friendListHelper != null) {
-                String offlineStatus = getString(R.string.last_seen, DateUtils.toTodayYesterdayShortDateWithoutYear2(user.getLastRequestAt() != null ?
-                                user.getLastRequestAt().getTime() : 0),
-                        DateUtils.formatDateSimpleTime(user.getLastRequestAt() != null ? user.getLastRequestAt().getTime() : 0));
-                setActionBarSubtitle(
-                        OnlineStatusUtils.getOnlineStatus(this, friendListHelper.isUserOnline(user.getId()), offlineStatus));
+        if (oppUsername == 148490 || oppUsername == 148478 || oppUsername == 148492 || oppUsername == 32350 || oppUsername == 44402) {
+            // do nothing
+        } else {
+            if (user != null) {
+                if (friendListHelper != null) {
+                    String offlineStatus = getString(R.string.last_seen, DateUtils.toTodayYesterdayShortDateWithoutYear2(user.getLastRequestAt() != null ?
+                                    user.getLastRequestAt().getTime() : 0),
+                            DateUtils.formatDateSimpleTime(user.getLastRequestAt() != null ? user.getLastRequestAt().getTime() : 0));
+                    setActionBarSubtitle(
+                            OnlineStatusUtils.getOnlineStatus(this, friendListHelper.isUserOnline(user.getId()), offlineStatus));
+                }
             }
         }
+
     }
 
     public void sendMessage(View view) {
