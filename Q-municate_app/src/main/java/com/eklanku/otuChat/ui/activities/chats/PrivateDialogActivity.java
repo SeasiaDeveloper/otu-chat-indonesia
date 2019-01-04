@@ -110,7 +110,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         //get fullname ===> String oppUsername = opponentUser.getFullName();
 
         Log.d("AYIK", "name->" + oppUsername);
-        if (oppUsername == 148490 || oppUsername == 148478 || oppUsername == 148492 || oppUsername == 32350 || oppUsername == 44402) {
+        if (oppUsername == 148490 || oppUsername == 148478 || oppUsername == 148492 || oppUsername == 44402) {
             inputViewPanel.setVisibility(View.GONE);
         }
 

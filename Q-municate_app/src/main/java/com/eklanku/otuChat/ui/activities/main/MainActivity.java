@@ -497,6 +497,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             ConnectycubeChatDialog chatDialog = DataManager.getInstance().getConnectycubeChatDialogDataManager()
                     .getByDialogId(sharedHelper.getPushDialogId());
             QMUser user = QMUserService.getInstance().getUserCache().get((long) sharedHelper.getPushUserId());
+            Log.d("OPPO-1", "openPushDialogIfPossible: "+user);
             if (chatDialog != null) {
                 startDialogActivity(chatDialog, user);
             }

@@ -1,12 +1,15 @@
 package com.eklanku.otuChat.ui.adapters.chats;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,9 +17,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.connectycube.chat.ConnectycubeChatService;
 import com.connectycube.storage.model.ConnectycubeFile;
+import com.connectycube.users.model.ConnectycubeUser;
+import com.connectycube.videochat.RTCTypes;
+import com.eklanku.otuChat.ui.activities.call.CallActivity;
 import com.eklanku.otuChat.ui.activities.chats.BaseDialogActivity;
+import com.eklanku.otuChat.ui.activities.chats.NewMessageActivity;
+import com.eklanku.otuChat.ui.activities.chats.PrivateDialogActivity;
 import com.eklanku.otuChat.ui.activities.others.PreviewImageActivity;
+import com.eklanku.otuChat.ui.activities.profile.UserProfileActivity;
 import com.eklanku.otuChat.ui.adapters.base.BaseListAdapter;
 import com.eklanku.otuChat.ui.views.TouchImageView;
 import com.eklanku.otuChat.ui.views.roundedimageview.RoundedImageView;
@@ -27,13 +37,23 @@ import com.connectycube.chat.model.ConnectycubeDialogType;
 import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.activities.base.BaseActivity;
 import com.eklanku.otuChat.utils.ToastUtils;
+import com.quickblox.q_municate_core.models.AppSession;
 import com.quickblox.q_municate_core.models.DialogWrapper;
+import com.quickblox.q_municate_core.qb.commands.chat.QBCreatePrivateChatCommand;
+import com.quickblox.q_municate_core.service.QBServiceConsts;
 import com.quickblox.q_municate_core.utils.ConstsCore;
+import com.quickblox.q_municate_core.utils.UserFriendUtils;
+import com.quickblox.q_municate_core.utils.helpers.CoreSharedHelper;
+import com.quickblox.q_municate_db.managers.DataManager;
+import com.quickblox.q_municate_db.models.DialogOccupant;
+import com.quickblox.q_municate_db.utils.DialogTransformUtils;
+import com.quickblox.q_municate_user_service.QMUserService;
 import com.quickblox.q_municate_user_service.model.QMUser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -48,6 +68,7 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
 
     ViewHolder viewHolder;
     BaseActivity baseActivity;
+    private DataManager dataManager;
 
     public DialogsListAdapter(BaseActivity baseActivity, List<DialogWrapper> objectsList) {
         super(baseActivity, objectsList);
@@ -88,7 +109,7 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
                     if (dialogWrapper.getOpponentUser() != null) {
                         opponentUser = dialogWrapper.getOpponentUser();
                         //Toast.makeText(baseActivity, "ADA", Toast.LENGTH_SHORT).show();
-                        viewImage(opponentUser.getAvatar(), opponentUser.getFullName(), opponentUser.getId().toString());
+                        viewImage(opponentUser.getAvatar(), opponentUser.getFullName(), opponentUser.getId().toString(), opponentUser);
                     } else {
                         Toast.makeText(baseActivity, "Tidak bisa menampilkan profile", Toast.LENGTH_SHORT).show();
                     }
@@ -189,7 +210,6 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
                 break;
             }
         }
-
     }
 
     private static class ViewHolder {
@@ -200,12 +220,16 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
         public TextView lastMessageTime;
     }
 
-    public void viewImage(String imageUrl, String nama, String id) {
+    public void viewImage(String imageUrl, String nama, String id, QMUser user) {
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.activity_preview_image_friends);
         builder.setCancelable(true);
 
         TouchImageView img = builder.findViewById(R.id.image_touchimageview);
+        ImageButton btn_chat = builder.findViewById(R.id.ib_chat);
+        ImageButton btn_call = builder.findViewById(R.id.ib_call);
+        ImageButton btn_vcall = builder.findViewById(R.id.ib_vcall);
+        ImageButton btn_info = builder.findViewById(R.id.ib_info);
 
         if (!TextUtils.isEmpty(imageUrl)) {
             Glide.with(baseActivity)
@@ -223,10 +247,67 @@ public class DialogsListAdapter extends BaseListAdapter<DialogWrapper> {
                         }
                     })
                     .into(img);
+        }else{
+            img.setImageResource(R.drawable.placeholder_user);
         }
 
+        btn_chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage(user);
+            }
+        });
+
+        btn_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callToUser(RTCTypes.ConferenceType.CONFERENCE_TYPE_AUDIO, user);
+            }
+        });
+
+        btn_vcall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callToUser(RTCTypes.ConferenceType.CONFERENCE_TYPE_VIDEO, user);
+            }
+        });
+
+        btn_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserProfileActivity.start(context, Integer.parseInt(id));
+            }
+        });
+
         builder.show();
-        /*Window window = builder.getWindow();
-        window.setLayout(800, 800);*/
+    }
+
+    public void sendMessage(QMUser user){
+        dataManager = DataManager.getInstance();
+        user = QMUserService.getInstance().getUserCache().get((long)user.getId());
+        DialogOccupant dialogOccupant = dataManager.getDialogOccupantDataManager().getDialogOccupantForPrivateChat(user.getId());
+        if (dialogOccupant != null && dialogOccupant.getDialog() != null) {
+            ConnectycubeChatDialog chatDialog = DialogTransformUtils.createQBDialogFromLocalDialog(dataManager, dialogOccupant.getDialog());
+            PrivateDialogActivity.startWithClearTop(context, user, chatDialog);
+        } else {
+            QBCreatePrivateChatCommand.start(context, user);
+        }
+    }
+    private void callToUser(RTCTypes.ConferenceType conferenceType, QMUser user) {
+        if (!isChatInitializedAndUserLoggedIn()) {
+            ToastUtils.longToast(R.string.call_chat_service_is_initializing);
+            return;
+        }
+        List<ConnectycubeUser> connectycubeUserList = new ArrayList<>(1);
+        connectycubeUserList.add(UserFriendUtils.createConnectycubeUser(user));
+        CallActivity.start((Activity) context, connectycubeUserList, conferenceType, null);
+    }
+
+    protected boolean isAppInitialized() {
+        return AppSession.getSession().isSessionExist();
+    }
+
+    public boolean isChatInitializedAndUserLoggedIn() {
+        return isAppInitialized() && ConnectycubeChatService.getInstance().isLoggedIn();
     }
 }
