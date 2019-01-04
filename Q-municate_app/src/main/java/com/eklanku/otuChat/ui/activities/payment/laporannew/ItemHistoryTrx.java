@@ -3,10 +3,25 @@ package com.eklanku.otuChat.ui.activities.payment.laporannew;
 public class ItemHistoryTrx {
 
     private String trxKode, trxTanggal, trxStatus, trxNominal, trxJenis, trxInvoice;
-    private  String trxMbrId, trxTujuan, trxKet, trxVsn, trxMbrName, trxTglSukses;
+    private  String trxMbrId;
+    private String trxTujuan;
+    private String trxKet;
+    private String trxVsn;
+    private String trxMbrName;
+    private String trxTglSukses;
+
+    public String getTrxProvide_name() {
+        return trxProvide_name;
+    }
+
+    public void setTrxProvide_name(String trxProvide_name) {
+        this.trxProvide_name = trxProvide_name;
+    }
+
+    private String trxProvide_name;
 
     public ItemHistoryTrx(String trxKode, String trxTanggal, String trxStatus, String trxNominal, String trxJenis, String trxInvoice,
-                          String trxMbrId, String trxTujuan, String trxKet, String trxVsn, String trxMbrName, String trxTglSukses) {
+                          String trxMbrId, String trxTujuan, String trxKet, String trxVsn, String trxMbrName, String trxTglSukses, String trxProvide_name) {
 
         this.trxKode = trxKode;
         this.trxTanggal = trxTanggal;
@@ -21,6 +36,7 @@ public class ItemHistoryTrx {
         this.trxVsn = trxVsn;
         this.trxMbrName = trxMbrName;
         this.trxTglSukses = trxTglSukses;
+        this.trxProvide_name = trxProvide_name;
 
     }
 

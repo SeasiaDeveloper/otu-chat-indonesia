@@ -253,7 +253,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        baseActivity.showSnackbar(R.string.dialog_loading_dialogs, Snackbar.LENGTH_INDEFINITE);
+        //baseActivity.showSnackbar(R.string.dialog_loading_dialogs, Snackbar.LENGTH_INDEFINITE);
     }
 
     @Override
@@ -356,7 +356,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         checkUpdateDialogs();
 
         if (State.finished == updateDialogsProcess) {
-            baseActivity.hideSnackBar(R.string.dialog_loading_dialogs);
+            //baseActivity.hideSnackBar(R.string.dialog_loading_dialogs);
         }
     }
 
@@ -539,13 +539,12 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         checkEmptyList(dialogsListAdapter.getCount());
 
         if (!baseActivity.isDialogLoading()) {
-            baseActivity.hideSnackBar(R.string.dialog_loading_dialogs);
+           // baseActivity.hideSnackBar(R.string.dialog_loading_dialogs);
         }
 
 //        startForResult load dialogs from REST when finished loading from cache
         if (dialogsListLoader.isLoadCacheFinished()) {
             if (baseActivity.isChatInitializedAndUserLoggedIn()) {
-                Log.v(TAG, " onLoadFinished --- !QBLoginChatCompositeCommand.isRunning()");
                 QBLoadDialogsCommand.start(getContext(), true);
             }
         }
@@ -560,9 +559,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
 
         if (dialogsListLoader.isLoadRestFinished()) {
             updateDialogsProcess = State.finished;
-            Log.d(TAG, "onLoadFinished isLoadRestFinished updateDialogsProcess= " + updateDialogsProcess);
         }
-        Log.d(TAG, "onLoadFinished dialogsListAdapter.getCount() " + dialogsListAdapter.getCount());
     }
 
     private boolean needUpdateDialogsAdapter(List<DialogWrapper> dialogsList) {

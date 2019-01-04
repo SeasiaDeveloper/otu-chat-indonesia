@@ -667,7 +667,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
     protected void loginChat() {
         isDialogLoading = true;
-        showSnackbar(R.string.dialog_loading_dialogs, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
+       //showSnackbar(R.string.dialog_loading_dialogs, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
         if (ConnectycubeSessionManager.getInstance().getSessionParameters() != null
                 && ConnectycubeProvider.FIREBASE_PHONE.equals(ConnectycubeSessionManager.getInstance().getSessionParameters().getSocialProvider())
                 && !ConnectycubeSessionManager.getInstance().isValidActiveSession()) {
@@ -698,7 +698,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ActionBa
 
     private void performRetryLoginAttepmt(){
         if(!QBLoginChatCompositeCommand.isRunning() && currentLoginRetryAttempts <= 5){
-            showSnackbar(R.string.dialog_loading_dialogs, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
+            //showSnackbar(R.string.dialog_loading_dialogs, Snackbar.LENGTH_INDEFINITE, Priority.MAX);
             currentLoginRetryAttempts++;
             QBLoginChatCompositeCommand.start(this);
         }

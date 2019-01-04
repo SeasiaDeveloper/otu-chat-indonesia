@@ -25,11 +25,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransEtool;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketData;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketTelp;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPdam;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPln;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransSMS;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransVouchergame_product;
 
 
 import java.text.NumberFormat;
@@ -97,7 +100,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             @Override
             public void onClick(View v) {
                 showDetail(itemProduct.getTrxTanggal(), itemProduct.getTrxStatus(), itemProduct.getTrxNominal(), itemProduct.getTrxJenis(),
-                        itemProduct.getTrxInvoice(), itemProduct.getTrxTujuan(), itemProduct.getTrxKet(), itemProduct.getTrxVsn());
+                        itemProduct.getTrxInvoice(), itemProduct.getTrxTujuan(), itemProduct.getTrxKet(), itemProduct.getTrxVsn(), itemProduct.getTrxProvide_name());
             }
         });
 
@@ -109,7 +112,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
     }
 
     public void showDetail(String trxTanggal, String trxStatus, String trxNominal, String trxJenis,
-                           String trxInvoice, String trxTujuan, String trxKet, String trxVsn) {
+                           String trxInvoice, String trxTujuan, String trxKet, String trxVsn, String trxProvideName) {
 
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.history_detail_trx);
@@ -199,17 +202,33 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                     i.putExtra("nominal", trxNominal);
                     i.putExtra("tujuan", trxTujuan);
                     context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("TELPONS")) {
-                    i = new Intent(context, TransPaketTelp.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
                 } else if (trxJenis.equalsIgnoreCase("KUOTA")) {
                     i = new Intent(context, TransPaketData.class);
                     i.putExtra("nominal", trxNominal);
                     i.putExtra("tujuan", trxTujuan);
                     context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("SMS")) {
+                } else if (trxJenis.equalsIgnoreCase("PLNTOKEN")) {
+                    i = new Intent(context, TransPln.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                } else if (trxJenis.equalsIgnoreCase("ETOOL MANDIRI")) {
+                    i = new Intent(context, TransEtool.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                } else if (trxJenis.equalsIgnoreCase("GAME")) {
+                    i = new Intent(context, TransVouchergame_product.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    i.putExtra("jenis", trxProvideName);
+                    context.startActivity(i);
+                } else if (trxJenis.equalsIgnoreCase("TELPONS")) {
+                    i = new Intent(context, TransPaketTelp.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                }  else if (trxJenis.equalsIgnoreCase("SMS")) {
                     i = new Intent(context, TransSMS.class);
                     i.putExtra("nominal", trxNominal);
                     i.putExtra("tujuan", trxTujuan);

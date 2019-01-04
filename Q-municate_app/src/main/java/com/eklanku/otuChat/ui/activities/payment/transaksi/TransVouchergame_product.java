@@ -32,6 +32,8 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
+import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -85,14 +87,44 @@ public class TransVouchergame_product extends AppCompatActivity {
 
     ImageView imgOPR;
 
+    String nominalx, tujuanx, jenis;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_platform_game_product);
 
         utilsAlert = new Utils(TransVouchergame_product.this);
-        extras = getIntent().getExtras();
+        _listnama = new ArrayList<>();
+        _listprice = new ArrayList<>();
+        _listep = new ArrayList<>();
+        _listProvide = new ArrayList<>();
+        _listCode = new ArrayList<>();
 
+        _listnama.clear();
+        _listprice.clear();
+        _listep.clear();
+        _listProvide.clear();
+        _listCode.clear();
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+                jenis = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+                jenis = extras.getString("jenis");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+            jenis = (String) savedInstanceState.getSerializable("jenis");
+
+        }
         lvProductGame = findViewById(R.id.listProductGame);
         btnBayar = findViewById(R.id.btnTransVoucherBayar);
         noPel = findViewById(R.id.txtTransVoucherNo);
@@ -112,32 +144,27 @@ public class TransVouchergame_product extends AppCompatActivity {
         progressBar = findViewById(R.id.progress);
         tvEmpty = findViewById(R.id.tv_empty);
 
-        initializeResources();
         noPel.addTextChangedListener(new txtWatcher(noPel));
 
-        _listnama = new ArrayList<>();
-        _listprice = new ArrayList<>();
-        _listep = new ArrayList<>();
-        _listProvide = new ArrayList<>();
-        _listCode = new ArrayList<>();
+        if (jenis != null) {
+            getProduct_Game(jenis);
+            _img = jenis;
+            noPel.setText(tujuanx);
 
-        _listnama.clear();
-        _listprice.clear();
-        _listep.clear();
-        _listProvide.clear();
-        _listCode.clear();
+        } else {
+            extras = getIntent().getExtras();
+            _listnama = extras.getStringArrayList("listName");
+            _listprice = extras.getStringArrayList("listPrice");
+            _listep = extras.getStringArrayList("listEP");
+            _listProvide = extras.getStringArrayList("listProvider");
+            _listCode = extras.getStringArrayList("listCode");
+            _namaProvider = extras.getString("jnsGame");
+            _img = extras.getString("imgOpr");
+            setTitle(_namaProvider);
+            addList();
+        }
 
-        _listnama = extras.getStringArrayList("listName");
-        _listprice = extras.getStringArrayList("listPrice");
-        _listep = extras.getStringArrayList("listEP");
-        _listProvide = extras.getStringArrayList("listProvider");
-        _listCode = extras.getStringArrayList("listCode");
-        _namaProvider = extras.getString("jnsGame");
-        _img = extras.getString("imgOpr");
-
-        setTitle(_namaProvider);
-
-        addList();
+        initializeResources();
     }
 
     public void addList() {
@@ -370,4 +397,81 @@ public class TransVouchergame_product extends AppCompatActivity {
 
         }
     }
+
+    ArrayList<String> listCode;
+    ArrayList<String> listPrice;
+    ArrayList<String> listName;
+    ArrayList<String> listEP;
+    ArrayList<String> listisActive;
+    ArrayList<String> listType;
+    ArrayList<String> listProviderProduct;
+
+    public void getProduct_Game(String jenis) {
+        showProgress(true);
+        Call<DataAllProduct> product_game = apiInterfacePayment.getproduct_game(strUserID, strAccessToken, "OTU");
+        product_game.enqueue(new Callback<DataAllProduct>() {
+            @Override
+            public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
+                showProgress(false);
+                if (response.isSuccessful()) {
+                    listCode = new ArrayList<>();
+                    listPrice = new ArrayList<>();
+                    listName = new ArrayList<>();
+                    listEP = new ArrayList<>();
+                    listisActive = new ArrayList<>();
+                    listType = new ArrayList<>();
+                    listProviderProduct = new ArrayList<>();
+                    listCode.clear();
+                    listPrice.clear();
+                    listName.clear();
+                    listEP.clear();
+                    listisActive.clear();
+                    listType.clear();
+                    listProviderProduct.clear();
+                    String status = response.body().getStatus();
+                    String respMessage = response.body().getRespMessage();
+                    Log.d("OPPO-1", "status: " + status);
+                    if (status.equalsIgnoreCase("SUCCESS")) {
+                        List<DataProduct> data = response.body().getData();
+                        for (int i = 0; i < data.size(); i++) {
+                            listCode.add(data.get(i).getCode());
+                            listPrice.add(data.get(i).getPrice());
+                            listName.add(data.get(i).getName());
+                            listEP.add(data.get(i).getEp());
+                            listisActive.add(data.get(i).getIsActive());
+                            listType.add(data.get(i).getType());
+                            listProviderProduct.add(data.get(i).getProvider());
+                        }
+                        detailProduct(jenis, _img);
+                    } else {
+                        utilsAlert.globalDialog(TransVouchergame_product.this, titleAlert, respMessage);
+                    }
+                } else {
+                    utilsAlert.globalDialog(TransVouchergame_product.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataAllProduct> call, Throwable t) {
+                showProgress(false);
+            }
+        });
+    }
+
+
+    public void detailProduct(String provider, String imgOpr) {
+        for (int i = 0; i < listCode.size(); i++) {
+            if (listProviderProduct.get(i).equalsIgnoreCase(provider)) {
+                Log.d("OPPO-1", "detailProduct>>: " + listProviderProduct.get(i) + " > " + provider);
+                _listnama.add(listName.get(i));
+                _listprice.add(listPrice.get(i));
+                _listep.add(listEP.get(i));
+                _listProvide.add(listProviderProduct.get(i));
+                _listCode.add(listCode.get(i));
+                addList();
+            }
+        }
+
+    }
+
 }

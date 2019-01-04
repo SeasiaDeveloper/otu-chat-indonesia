@@ -37,6 +37,17 @@ public class DataDetailHistosryOTU {
     @SerializedName("product_kode")
     private String product_kode;
 
+    public String getProvider_name() {
+        return provider_name;
+    }
+
+    public void setProvider_name(String provider_name) {
+        this.provider_name = provider_name;
+    }
+
+    @SerializedName("provider_name")
+    private String provider_name;
+
     public String getProduct_kode() {
         return product_kode;
     }

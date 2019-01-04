@@ -93,6 +93,7 @@ public class TransEtool extends AppCompatActivity {
     LinearLayout layoutView;
     ProgressBar progressBar;
     TextView tvEmpty;
+    String nominalx, tujuanx;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,10 +103,27 @@ public class TransEtool extends AppCompatActivity {
 
         utilsAlert = new Utils(TransEtool.this);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+
+        }
+
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnKartu = (Spinner) findViewById(R.id.spnTransEtool);
         spnNominal = (Spinner) findViewById(R.id.spnTransEtoolNominal);
         txtNo = (EditText) findViewById(R.id.txtTransEtoolNo);
+        txtNo.setText(tujuanx);
         btnBayar = (Button) findViewById(R.id.btnTransEtoolBayar);
         txtTrasaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
