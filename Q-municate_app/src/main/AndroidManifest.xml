@@ -681,6 +681,8 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
 
+        <activity android:name=".ui.activities.payment.laporannew.PrintTransaksi"/>
+
         <!-- new config -->
         <!--
          <meta-data android:name=".com.connectycube.pushnotifications.TYPE" android:value="FCM" />

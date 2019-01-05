@@ -237,7 +237,8 @@
                 android:background="@android:color/transparent"
                 android:src="@mipmap/ic_riwayat_print"
                 android:textColor="@color/white"
-                android:layout_marginRight="@dimen/density_16"/>
+                android:layout_marginRight="@dimen/density_16"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/btnshare"
@@ -246,7 +247,8 @@
                 android:background="@android:color/transparent"
                 android:src="@mipmap/ic_riwayat_share"
                 android:textColor="@color/white"
-                android:layout_marginRight="@dimen/density_16"/>
+                android:layout_marginRight="@dimen/density_16"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/btndownload"
@@ -254,7 +256,8 @@
                 android:layout_height="25dp"
                 android:background="@android:color/transparent"
                 android:src="@mipmap/ic_riwayat_download"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:visibility="gone"/>
         </LinearLayout>
     </LinearLayout>
 

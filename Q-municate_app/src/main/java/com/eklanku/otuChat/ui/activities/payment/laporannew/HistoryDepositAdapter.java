@@ -4,8 +4,10 @@ package com.eklanku.otuChat.ui.activities.payment.laporannew;
  * Created by AHMAD AYIK RIFAI on 10/3/2017.
  */
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +31,8 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
     private Context context;
     private List<ItemHistoryDeposit> cartList;
     private String TAG = HistoryDepositAdapter.class.getSimpleName();
+
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView tvjumlah, tvstatus, tvunix, tvbank, tvtanggal, tvDot, tvInvoice;
@@ -134,6 +139,14 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
             }
         });
 
+        ImageView btnPrint = builder.findViewById(R.id.btnprint);
+        btnPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PrintTransaksi.start((Activity) context);
+
+            }
+        });
         builder.show();
         Window window = builder.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);

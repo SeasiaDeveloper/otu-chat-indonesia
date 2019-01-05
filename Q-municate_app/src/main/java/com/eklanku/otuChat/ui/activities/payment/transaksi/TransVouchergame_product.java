@@ -148,7 +148,41 @@ public class TransVouchergame_product extends AppCompatActivity {
 
         if (jenis != null) {
             getProduct_Game(jenis);
-            _img = jenis;
+            if(jenis.equalsIgnoreCase("MEGAXUS")){
+                _img = "megasus";
+            }else if(jenis.equalsIgnoreCase("GARENA")){
+                _img = "garena";
+            }else if(jenis.equalsIgnoreCase("GEMSCOOL")){
+                _img = "gemscool";
+            }else if(jenis.equalsIgnoreCase("MOBILE LEGENDS")){
+                _img = "mobilelegend";
+            }else if(jenis.equalsIgnoreCase("GOOGLE PLAY ID")){
+                _img = "googleplay";
+            }else if(jenis.equalsIgnoreCase("LYTO")){
+                _img = "lyto";
+            }else if(jenis.equalsIgnoreCase("MOL")){
+                _img = "molpoint";
+            }else if(jenis.equalsIgnoreCase("CHERRY")){
+                _img = "cherry";
+            }else if(jenis.equalsIgnoreCase("PUBG")){
+                _img = "pubg";
+            }else if(jenis.equalsIgnoreCase("AERIA")){
+                _img = "aeria";
+            }else if(jenis.equalsIgnoreCase("WAVEGAME")){
+                _img = "wavegame";
+            }else if(jenis.equalsIgnoreCase("UNIPIN")){
+                _img = "unipin";
+            }else if(jenis.equalsIgnoreCase("STEAM")){
+                _img = "steam";
+            }else if(jenis.equalsIgnoreCase("STEAM")){
+                _img = "steam";
+            }else if(jenis.equalsIgnoreCase("TRAVIAN")){
+                _img = "travian";
+            }else if(jenis.equalsIgnoreCase("FB KREDIT")){
+                _img = "fb_credit";
+            }else if(jenis.equalsIgnoreCase("MCOIN")){
+                _img = "mcoin";
+            }
             noPel.setText(tujuanx);
 
         } else {
