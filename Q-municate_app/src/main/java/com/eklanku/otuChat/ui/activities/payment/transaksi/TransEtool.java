@@ -224,15 +224,12 @@ public class TransEtool extends AppCompatActivity {
 
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
-
+        txtNo.setError(null);
         if (id_pel.isEmpty()) {
-            layoutNo.setError("Kolom nomor tidak boleh kosong");
+            txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
-
-
-        layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -640,7 +637,7 @@ public class TransEtool extends AppCompatActivity {
         c = new ArrayList<>();
         d = new ArrayList<>();
         code_product = new ArrayList<>();
-        code_name=new ArrayList<>();
+        code_name = new ArrayList<>();
         endpoint = new ArrayList<>();
         a.clear();
         b.clear();

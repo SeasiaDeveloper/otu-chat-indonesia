@@ -82,7 +82,7 @@ public class TransBpjs extends AppCompatActivity {
 
     SpinnerPpobAdapter spinnerPpobAdapter;
     String selected_operator;
-
+    String nominalx, tujuanx;
 
     private static String[] nama_operator;
 
@@ -108,9 +108,26 @@ public class TransBpjs extends AppCompatActivity {
 
         utilsAlert = new Utils(TransBpjs.this);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+
+        }
+
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnBpjs = (Spinner) findViewById(R.id.spnTransBpjs);
         txtNo = (EditText) findViewById(R.id.txtTransBpjsNo);
+        txtNo.setText(tujuanx);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransBpjsBayar);
         spnPeriodeBPJS = findViewById(R.id.spnPeriodeBPJS);

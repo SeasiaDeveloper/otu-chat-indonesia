@@ -180,7 +180,20 @@ public class TransPln extends AppCompatActivity {
         radioGroup.clearCheck();
 
         RadioButton rbToken = findViewById(R.id.radio_pln_token);
-        rbToken.setChecked(true);
+        RadioButton rbTagihan = findViewById(R.id.radio_pln);
+
+        //Toast.makeText(this, "" + nominalx, Toast.LENGTH_SHORT).show();
+        if (nominalx != null) {
+            if (nominalx.equalsIgnoreCase("token")) {
+                rbToken.setChecked(true);
+            } else if (nominalx.equalsIgnoreCase("ppob")) {
+                rbTagihan.setChecked(true);
+            } else {
+                rbToken.setChecked(true);
+            }
+        } else {
+            rbToken.setChecked(true);
+        }
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -253,8 +266,8 @@ public class TransPln extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String error = response.body().getRespMessage();
-                    Log.d("OPPO-1", "onResponse: "+status+"/"+error);
-                    Log.d("OPPO-1", "onResponse: "+userID+"/"+accessToken+"/"+aplUse);
+                    Log.d("OPPO-1", "onResponse: " + status + "/" + error);
+                    Log.d("OPPO-1", "onResponse: " + userID + "/" + accessToken + "/" + aplUse);
                     if (status.equals("SUCCESS")) {
                         final List<DataListPPOB> products = response.body().getProductList();
 
@@ -284,15 +297,15 @@ public class TransPln extends AppCompatActivity {
                         utilsAlert.globalDialog(TransPln.this, titleAlert, error);
                     }
                 } else {
-                    utilsAlert.globalDialog(TransPln.this, titleAlert,"1. "+ getResources().getString(R.string.error_api));
+                    utilsAlert.globalDialog(TransPln.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
                 }
             }
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransPln.this, titleAlert, "2. "+getResources().getString(R.string.error_api));
-                Log.d("OPPO-1", "onFailure: "+t.getMessage());
+                utilsAlert.globalDialog(TransPln.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
+                Log.d("OPPO-1", "onFailure: " + t.getMessage());
             }
         });
     }
@@ -374,7 +387,7 @@ public class TransPln extends AppCompatActivity {
                         nama_operator = new String[result.size()];
                         selected_operator = result.get(0).getCode();
 
-                       // Toast.makeText(TransPln.this, "SUCCESS " + nama_operator + " " + selected_operator, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(TransPln.this, "SUCCESS " + nama_operator + " " + selected_operator, Toast.LENGTH_SHORT).show();
 
                         for (int i = 0; i < result.size(); i++) {
                             nama_operator[i] = result.get(i).getName();

@@ -9,10 +9,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -60,6 +63,9 @@ public class HistoryActivity extends AppCompatActivity {
     ProgressBar progressBar;
     TextView tvEmpty;
 
+    EditText etCari;
+    String jenisHistory;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +74,8 @@ public class HistoryActivity extends AppCompatActivity {
         layoutView = findViewById(R.id.layout);
         progressBar = findViewById(R.id.progress);
         tvEmpty = findViewById(R.id.tv_empty);
+
+        etCari = findViewById(R.id.et_cari);
 
         preferenceManager = new PreferenceManager(HistoryActivity.this);
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
@@ -89,25 +97,31 @@ public class HistoryActivity extends AppCompatActivity {
         trxListPenarikan = new ArrayList<>();
         trxListBonus = new ArrayList<>();
 
-        String jenisHistory = extras.getString("jenisHistory");
+        jenisHistory = extras.getString("jenisHistory");
 
         if (jenisHistory.equalsIgnoreCase("transaksi")) {
             _titleHistory.setText("HISTORY TRANSAKSI");
+            etCari.setVisibility(View.VISIBLE);
             getListHistory();
         } else if (jenisHistory.equalsIgnoreCase("saldo")) {
             _titleHistory.setText("HISTORY SALDO");
+            etCari.setVisibility(View.GONE);
             getListHistorySaldo();
         } else if (jenisHistory.equalsIgnoreCase("deposit")) {
             _titleHistory.setText("HISTORY DEPOSIT");
+            etCari.setVisibility(View.GONE);
             getListHistoryDeposit();
         } else if (jenisHistory.equalsIgnoreCase("penarikan")) {
             _titleHistory.setText("HISTORY PENARIKAN");
+            etCari.setVisibility(View.GONE);
             getListHistoryPenarikan();
         } else if (jenisHistory.equalsIgnoreCase("bonus")) {
             _titleHistory.setText("HISTORY BONUS");
+            etCari.setVisibility(View.GONE);
             getListHistoryBonus();
         }
 
+        addTextListener();
 
     }
 
@@ -408,7 +422,7 @@ public class HistoryActivity extends AppCompatActivity {
                             jenis_bonus = result.get(i).getJenis_bonus();
                             jml_bonus = result.get(i).getJml_bonus();
                             status_bonus = result.get(i).getStatus_bonus();
-                            Log.d("OPPO-1", "onResponse: "+status_bonus);
+                            Log.d("OPPO-1", "onResponse: " + status_bonus);
                             ItemHistoryBonus trx = new ItemHistoryBonus(tgl_perolehan, keterangan, jenis_bonus, status_bonus, jml_bonus);
                             trxListBonus.add(trx);
                         }
@@ -441,6 +455,38 @@ public class HistoryActivity extends AppCompatActivity {
                 Log.d("API_LOADDATA", t.getMessage().toString());
             }
         });
+    }
+
+    public void addTextListener() {
+
+        etCari.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence query, int start, int before, int count) {
+
+                query = query.toString().toLowerCase();
+
+                final ArrayList<ItemHistoryTrx> filteredList = new ArrayList<>();
+
+                for (ItemHistoryTrx model : trxListTransaksi) {
+                    final String text1 = model.getTrxJenis().toLowerCase();
+
+                    if (text1.contains(query)) {
+                        filteredList.add(model);
+                    }
+                }
+
+                adapterTransaksi = new HistoryTrxAdapter(HistoryActivity.this, filteredList);
+                recyclerView.setAdapter(adapterTransaksi);
+                adapterTransaksi.notifyDataSetChanged();
+            }
+        });
+
     }
 
     @Override

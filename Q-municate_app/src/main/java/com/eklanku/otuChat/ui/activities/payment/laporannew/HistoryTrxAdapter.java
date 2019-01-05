@@ -25,14 +25,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransBpjs;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransEtool;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransMultiFinance;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketData;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketTelp;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPdam;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPln;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransSMS;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransTelkom;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransTv;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransVouchergame_product;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransWi;
 
 
 import java.text.NumberFormat;
@@ -207,12 +212,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                     i.putExtra("nominal", trxNominal);
                     i.putExtra("tujuan", trxTujuan);
                     context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("PLNTOKEN")) {
-                    i = new Intent(context, TransPln.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("ETOOL MANDIRI")) {
+                } else if (trxJenis.equalsIgnoreCase("ETOOL MANDIRI") || trxJenis.equalsIgnoreCase("ETOOL BNI")) {
                     i = new Intent(context, TransEtool.class);
                     i.putExtra("nominal", trxNominal);
                     i.putExtra("tujuan", trxTujuan);
@@ -228,7 +228,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                     i.putExtra("nominal", trxNominal);
                     i.putExtra("tujuan", trxTujuan);
                     context.startActivity(i);
-                }  else if (trxJenis.equalsIgnoreCase("SMS")) {
+                } else if (trxJenis.equalsIgnoreCase("SMS")) {
                     i = new Intent(context, TransSMS.class);
                     i.putExtra("nominal", trxNominal);
                     i.putExtra("tujuan", trxTujuan);
@@ -238,10 +238,45 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                     i.putExtra("nominal", trxNominal);
                     i.putExtra("tujuan", trxTujuan);
                     context.startActivity(i);
-                }else{
+                    //============================================================
+                } else if (trxJenis.equalsIgnoreCase("PPOB TELKOM")) {
+                    i = new Intent(context, TransTelkom.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                /*} else if (trxJenis.equalsIgnoreCase("MULTY FINANCE")) {
+                    i = new Intent(context, TransMultiFinance.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);*/
+                } else if (trxJenis.equalsIgnoreCase("PPOB PLN")) {
+                    i = new Intent(context, TransPln.class);
+                    i.putExtra("nominal", "ppob");
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                } else if (trxJenis.equalsIgnoreCase("PLNTOKEN")) {
+                    i = new Intent(context, TransPln.class);
+                    i.putExtra("nominal", "token");
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                } else if (trxJenis.equalsIgnoreCase("BPJSKES")) {
+                    i = new Intent(context, TransBpjs.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                } else if (trxJenis.equalsIgnoreCase("PPOB TV KABEL")) {
+                    i = new Intent(context, TransTv.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                } else if (trxJenis.equalsIgnoreCase("WIFI ID")) {
+                    i = new Intent(context, TransWi.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);
+                } else {
                     Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
                 }
-
 
 
             }

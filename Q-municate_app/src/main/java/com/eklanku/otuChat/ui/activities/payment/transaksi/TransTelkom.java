@@ -68,6 +68,7 @@ public class TransTelkom extends AppCompatActivity {
 
     Utils utilsAlert;
     String titleAlert = "Telkom";
+    String nominalx, tujuanx;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,9 +78,26 @@ public class TransTelkom extends AppCompatActivity {
 
         utilsAlert = new Utils(TransTelkom.this);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+
+        }
+
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnJenis = (Spinner) findViewById(R.id.spnTransTelkomJenis);
         txtNo = (EditText) findViewById(R.id.txtTransTelkomNo);
+        txtNo.setText(tujuanx);
         layoutNo  = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransTelkomBayar);
         EditText txtNoHP = findViewById(R.id.txt_no_hp);

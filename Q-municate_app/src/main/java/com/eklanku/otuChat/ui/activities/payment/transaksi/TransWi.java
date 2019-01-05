@@ -76,6 +76,7 @@ public class TransWi extends AppCompatActivity {
     ListView listWifiID;
     ArrayList<String> idWifiID;
 
+    String nominalx, tujuanx;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,10 +85,28 @@ public class TransWi extends AppCompatActivity {
         ButterKnife.bind(this);
 
         utilsAlert = new Utils(TransWi.this);
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+
+        }
+
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnKartu = (Spinner) findViewById(R.id.spnTransWifiid);
         spnNominal = (Spinner) findViewById(R.id.spnTransWifiidNominal);
         txtNo = (EditText) findViewById(R.id.txtTransWifiidNo);
+        txtNo.setText(tujuanx);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         txtTransaksi_ke = (EditText) findViewById(R.id.txt_transaksi_ke);
         btnBayar = (Button) findViewById(R.id.btnTransWifiBayar);

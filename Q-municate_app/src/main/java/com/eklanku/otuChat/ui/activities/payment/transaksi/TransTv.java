@@ -97,6 +97,7 @@ public class TransTv extends AppCompatActivity {
     Button btnYes, btnNo;
 
     Utils utilsAlert;
+    String nominalx, tujuanx;
     String titleAlert = "Vouchet TV";
 
     @Override
@@ -107,11 +108,28 @@ public class TransTv extends AppCompatActivity {
 
         utilsAlert = new Utils(TransTv.this);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+
+        }
+
         layoutNominal = (LinearLayout) findViewById(R.id.layout_nominal);
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnJenis = (Spinner) findViewById(R.id.spnTransTvJenis);
         spnLayanan = (Spinner) findViewById(R.id.spnTransTvLayanan);
         txtNo = (EditText) findViewById(R.id.txtTransTvNo);
+        txtNo.setText(tujuanx);
         layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar = (Button) findViewById(R.id.btnTransTvBayar);
         tvJenisPembayaran = findViewById(R.id.textView30);
