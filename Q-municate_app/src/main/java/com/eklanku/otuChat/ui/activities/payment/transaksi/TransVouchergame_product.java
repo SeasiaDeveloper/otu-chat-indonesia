@@ -183,6 +183,8 @@ public class TransVouchergame_product extends AppCompatActivity {
             }else if(jenis.equalsIgnoreCase("MCOIN")){
                 _img = "mcoin";
             }
+
+            setTitle(jenis);
             noPel.setText(tujuanx);
 
         } else {

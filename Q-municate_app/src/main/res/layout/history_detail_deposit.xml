@@ -297,7 +297,7 @@
                 android:src="@mipmap/ic_riwayat_print"
                 android:textColor="@color/white"
                 android:layout_marginRight="@dimen/density_16"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/btnshare"

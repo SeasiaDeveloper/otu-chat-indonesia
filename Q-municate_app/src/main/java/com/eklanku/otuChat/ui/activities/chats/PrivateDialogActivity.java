@@ -176,7 +176,6 @@ public class PrivateDialogActivity extends BaseDialogActivity {
                     String fileId = "";
                     String fileType = "";
                     ConnectycubeAttachment connectycubeAttachment = null;
-                    Log.d("RINA", "initChatAdapter: " + position);
                     for (ConnectycubeAttachment attachment : combinationMessagesList.get(position).getAttachments()) {
                         fileId = attachment.getId();
                         fileType = attachment.getType();
@@ -296,7 +295,7 @@ public class PrivateDialogActivity extends BaseDialogActivity {
         MenuItem audio = menu.findItem(R.id.action_audio_call);
         MenuItem video = menu.findItem(R.id.switch_camera_toggle);
 
-        if (oppUsername == 148490 || oppUsername == 148478 || oppUsername == 148492 || oppUsername == 32350 || oppUsername == 44402) {
+        if (oppUsername == 148490 || oppUsername == 148478 || oppUsername == 148492 || oppUsername == 44402) {
             audio.setVisible(false);
             video.setVisible(false);
         }

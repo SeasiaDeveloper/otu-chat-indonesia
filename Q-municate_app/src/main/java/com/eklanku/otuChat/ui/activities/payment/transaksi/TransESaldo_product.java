@@ -1,9 +1,13 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -22,12 +26,16 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
+import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -76,6 +84,11 @@ public class TransESaldo_product extends AppCompatActivity {
     String _img;
     ImageView imgOPR;
 
+    String nominalx, tujuanx, jenis;
+    LinearLayout layoutView;
+    ProgressBar progressBar;
+    TextView tvEmpty;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,15 +105,9 @@ public class TransESaldo_product extends AppCompatActivity {
         layoutNo = findViewById(R.id.txtLayoutTransPulsaNo);
         imgOPR = findViewById(R.id.imgOpr);
 
-        apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-        preferenceManager = new PreferenceManager(this);
-
-        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
-        strUserID = user.get(preferenceManager.KEY_USERID);
-        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
-
-        initializeResources();
-        noPel.addTextChangedListener(new txtWatcher(noPel));
+        layoutView = findViewById(R.id.linear_layout);
+        progressBar = findViewById(R.id.progress);
+        tvEmpty = findViewById(R.id.tv_empty);
 
         _listnama = new ArrayList<>();
         _listprice = new ArrayList<>();
@@ -114,16 +121,56 @@ public class TransESaldo_product extends AppCompatActivity {
         _listProvide.clear();
         _listCode.clear();
 
-        _listnama = extras.getStringArrayList("listName");
-        _listprice = extras.getStringArrayList("listPrice");
-        _listep = extras.getStringArrayList("listEP");
-        _listProvide = extras.getStringArrayList("listProvider");
-        _listCode = extras.getStringArrayList("listCode");
-        _namaProvider = extras.getString("jnsEsaldo");
-        _img = extras.getString("imgOpr");
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+                jenis = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+                jenis = extras.getString("jenis");
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+            jenis = (String) savedInstanceState.getSerializable("jenis");
 
-        setTitle(_namaProvider);
-        addList();
+        }
+
+        apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
+        preferenceManager = new PreferenceManager(this);
+
+        HashMap<String, String> user = preferenceManager.getUserDetailsPayment();
+        strUserID = user.get(preferenceManager.KEY_USERID);
+        strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
+
+        initializeResources();
+        noPel.addTextChangedListener(new txtWatcher(noPel));
+
+        if (jenis != null) {
+            getProductPulsa(jenis);
+            if (jenis.equalsIgnoreCase("GO-JEK")) {
+                _img = "gojek";
+            } else if (jenis.equalsIgnoreCase("GRAB")) {
+                _img = "grab";
+            } else if (jenis.equalsIgnoreCase("OVO CASH")) {
+                _img = "ovo";
+            }
+            noPel.setText(tujuanx);
+            setTitle(jenis);
+        } else {
+            _listnama = extras.getStringArrayList("listName");
+            _listprice = extras.getStringArrayList("listPrice");
+            _listep = extras.getStringArrayList("listEP");
+            _listProvide = extras.getStringArrayList("listProvider");
+            _listCode = extras.getStringArrayList("listCode");
+            _namaProvider = extras.getString("jnsEsaldo");
+            _img = extras.getString("imgOpr");
+            setTitle(_namaProvider);
+            addList();
+        }
     }
 
     private void initializeResources() {
@@ -316,6 +363,113 @@ public class TransESaldo_product extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable s) {
             validateIdpel();
+        }
+    }
+
+    ArrayList<String> listCode;
+    ArrayList<String> listPrice;
+    ArrayList<String> listName;
+    ArrayList<String> listEP;
+    ArrayList<String> listisActive;
+    ArrayList<String> listType;
+    ArrayList<String> listProviderProduct;
+
+    public void getProductPulsa(String jenis) {
+        showProgress(true);
+        Call<DataAllProduct> dataESaldo = apiInterfacePayment.getProductESaldo(strUserID, strAccessToken, strAplUse);
+        dataESaldo.enqueue(new Callback<DataAllProduct>() {
+            @Override
+            public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
+                showProgress(false);
+                if (response.isSuccessful()) {
+                    listCode = new ArrayList<>();
+                    listPrice = new ArrayList<>();
+                    listName = new ArrayList<>();
+                    listEP = new ArrayList<>();
+                    listisActive = new ArrayList<>();
+                    listType = new ArrayList<>();
+                    listProviderProduct = new ArrayList<>();
+                    listCode.clear();
+                    listPrice.clear();
+                    listName.clear();
+                    listEP.clear();
+                    listisActive.clear();
+                    listType.clear();
+                    listProviderProduct.clear();
+                    String status = response.body().getStatus();
+                    String respMessage = response.body().getRespMessage();
+                    if (status.equalsIgnoreCase("SUCCESS")) {
+                        List<DataProduct> data = response.body().getData();
+                        for (int i = 0; i < data.size(); i++) {
+                            listCode.add(data.get(i).getCode());
+                            listPrice.add(data.get(i).getPrice());
+                            listName.add(data.get(i).getName());
+                            listEP.add(data.get(i).getEp());
+                            listisActive.add(data.get(i).getIsActive());
+                            listType.add(data.get(i).getType());
+                            listProviderProduct.add(data.get(i).getProvider());
+                        }
+
+                        detailProduct(jenis, _img);
+                    } else {
+                        utilsAlert.globalDialog(TransESaldo_product.this, titleAlert, respMessage);
+                    }
+                } else {
+                    utilsAlert.globalDialog(TransESaldo_product.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataAllProduct> call, Throwable t) {
+                showProgress(false);
+                utilsAlert.globalDialog(TransESaldo_product.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
+
+            }
+        });
+    }
+
+    public void detailProduct(String provider, String imgOpr) {
+
+        for (int i = 0; i < listCode.size(); i++) {
+            if (listProviderProduct.get(i).equalsIgnoreCase(provider)) {
+                _listnama.add(listName.get(i));
+                _listprice.add(listPrice.get(i));
+                _listep.add(listEP.get(i));
+                _listProvide.add(listProviderProduct.get(i));
+                _listCode.add(listCode.get(i));
+                addList();
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
         }
     }
 }

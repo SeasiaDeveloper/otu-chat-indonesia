@@ -4,12 +4,14 @@ package com.eklanku.otuChat.ui.activities.payment.laporannew;
  * Created by AHMAD AYIK RIFAI on 10/3/2017.
  */
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransBpjs;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransESaldo_product;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransEtool;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransMultiFinance;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketData;
@@ -50,7 +53,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
     private String TAG = HistoryTrxAdapter.class.getSimpleName();
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvKode, tvTanggal, tvStatus, tvNominal, tvJenis, tvDot, tvInvoice;
+        private TextView tvKode, tvTanggal, tvStatus, tvNominal, tvJenis, tvDot, tvInvoice, tvTujuan;
         private View viewTrx;
 
         public MyViewHolder(View view) {
@@ -63,6 +66,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             tvJenis = view.findViewById(R.id.tvJnsTransaksi);
             //tvDot = view.findViewById(R.id.dot);
             tvInvoice = view.findViewById(R.id.tvInvoice);
+            tvTujuan = view.findViewById(R.id.tvtujuan);
 
         }
     }
@@ -90,6 +94,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         holder.tvNominal.setText(formatRupiah(Double.parseDouble(itemProduct.getTrxNominal())));
         holder.tvJenis.setText(itemProduct.getTrxJenis());
         holder.tvInvoice.setText(itemProduct.getTrxInvoice());
+        holder.tvTujuan.setText(itemProduct.getTrxTujuan());
 
         if (itemProduct.getTrxStatus().equalsIgnoreCase("Gagal")) {
             holder.tvStatus.setTextColor(Color.RED);
@@ -199,93 +204,14 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent i = null;
-
-                if (trxJenis.equalsIgnoreCase("PULSA")) {
-                    i = new Intent(context, TransPulsa.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("KUOTA")) {
-                    i = new Intent(context, TransPaketData.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("ETOOL MANDIRI") || trxJenis.equalsIgnoreCase("ETOOL BNI")) {
-                    i = new Intent(context, TransEtool.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("GAME")) {
-                    i = new Intent(context, TransVouchergame_product.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    i.putExtra("jenis", trxProvideName);
-                    context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("TELPONS")) {
-                    i = new Intent(context, TransPaketTelp.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("SMS")) {
-                    i = new Intent(context, TransSMS.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("PPOB PDAM")) {
-                    i = new Intent(context, TransPdam.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                    //============================================================
-                } else if (trxJenis.equalsIgnoreCase("PPOB TELKOM")) {
-                    i = new Intent(context, TransTelkom.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                /*} else if (trxJenis.equalsIgnoreCase("MULTY FINANCE")) {
-                    i = new Intent(context, TransMultiFinance.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);*/
-                } else if (trxJenis.equalsIgnoreCase("PPOB PLN")) {
-                    i = new Intent(context, TransPln.class);
-                    i.putExtra("nominal", "ppob");
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("PLNTOKEN")) {
-                    i = new Intent(context, TransPln.class);
-                    i.putExtra("nominal", "token");
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("BPJSKES")) {
-                    i = new Intent(context, TransBpjs.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("PPOB TV KABEL")) {
-                    i = new Intent(context, TransTv.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                } else if (trxJenis.equalsIgnoreCase("WIFI ID")) {
-                    i = new Intent(context, TransWi.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);
-                } else {
-                    Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
-                }
-
-
+                buy(trxJenis, trxNominal, trxTujuan, trxProvideName);
             }
         });
 
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
+                printTransaksi();
             }
         });
 
@@ -300,6 +226,97 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
         parseRp = formatRupiah.format(nominal);
         return parseRp;
+    }
+
+    public void printTransaksi(){
+        PrintTransaksi.start((Activity) context);
+    }
+
+    public void buy(String trxJenis, String trxNominal, String trxTujuan, String trxProvideName){
+        Intent i = null;
+
+        if (trxJenis.equalsIgnoreCase("PULSA")) {
+            i = new Intent(context, TransPulsa.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("KUOTA")) {
+            i = new Intent(context, TransPaketData.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("ETOOL MANDIRI") || trxJenis.equalsIgnoreCase("ETOOL BNI")) {
+            i = new Intent(context, TransEtool.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("GAME")) {
+            i = new Intent(context, TransVouchergame_product.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            i.putExtra("jenis", trxProvideName);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("TELPONS")) {
+            i = new Intent(context, TransPaketTelp.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("SMS")) {
+            i = new Intent(context, TransSMS.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("PPOB PDAM")) {
+            i = new Intent(context, TransPdam.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+            //============================================================
+        } else if (trxJenis.equalsIgnoreCase("PPOB TELKOM")) {
+            i = new Intent(context, TransTelkom.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+                /*} else if (trxJenis.equalsIgnoreCase("MULTY FINANCE")) {
+                    i = new Intent(context, TransMultiFinance.class);
+                    i.putExtra("nominal", trxNominal);
+                    i.putExtra("tujuan", trxTujuan);
+                    context.startActivity(i);*/
+        } else if (trxJenis.equalsIgnoreCase("PPOB PLN")) {
+            i = new Intent(context, TransPln.class);
+            i.putExtra("nominal", "ppob");
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("PLNTOKEN")) {
+            i = new Intent(context, TransPln.class);
+            i.putExtra("nominal", "token");
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("BPJSKES")) {
+            i = new Intent(context, TransBpjs.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("PPOB TV KABEL")) {
+            i = new Intent(context, TransTv.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("WIFI ID")) {
+            i = new Intent(context, TransWi.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("OJEK ONLINE")) {
+            i = new Intent(context, TransESaldo_product.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            i.putExtra("jenis", trxProvideName);
+            context.startActivity(i);
+        }
+        else {
+            Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

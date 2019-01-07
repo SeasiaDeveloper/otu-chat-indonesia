@@ -474,7 +474,7 @@ public class HistoryActivity extends AppCompatActivity {
                 final ArrayList<ItemHistoryTrx> filteredList = new ArrayList<>();
 
                 for (ItemHistoryTrx model : trxListTransaksi) {
-                    final String text1 = model.getTrxJenis().toLowerCase();
+                    final String text1 = model.getTrxTujuan().toLowerCase();
 
                     if (text1.contains(query)) {
                         filteredList.add(model);

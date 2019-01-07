@@ -358,6 +358,7 @@ public class TransEtool extends AppCompatActivity {
     }
 
     private void cek_transaksi() {
+
         Log.d("OPPO-1", "cek_transaksi: " + code);
         loadingDialog = ProgressDialog.show(TransEtool.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);

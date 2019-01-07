@@ -571,6 +571,6 @@
     <string name="lbl_new_history_title">New History</string>
     <string name="lbl_edit_history_title">Edit History</string>
     <string name="hint_enter_history">Enter your data!</string>
-    <string name="cari_disini">Search history by product</string>
+    <string name="cari_disini">Cari berdasarkan tujuan</string>
 
 </resources>
