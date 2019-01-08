@@ -68,12 +68,14 @@ public class Utils {
             if (message.equalsIgnoreCase("SERVER BUSY, PLEASE TRY AGAIN LATER") || message.equalsIgnoreCase("KODE KEAMANAN SALAH") || message.equalsIgnoreCase("INVALID SECURITY CODE")) {
                 activity.startActivity(new Intent(activity, PaymentLogin.class));
                 PreferenceUtil.setLoginStatus(activity, false);
+                if(message.equalsIgnoreCase("KODE KEAMANAN SALAH") || message.equalsIgnoreCase("INVALID SECURITY CODE")){
+                    Log.d("OPPO-1", "globalDialog .. : "+message);
+                    // DO NOTHING
+                }else{
+                    activity.finish();
+                }
             }
 
-            if(message.equalsIgnoreCase("KODE KEAMANAN SALAH") || message.equalsIgnoreCase("INVALID SECURITY CODE")){
-                Log.d("OPPO-1", "globalDialog .. : "+message);
-                activity.finish();
-            }
 
         });
         if(isActivityFinishedOrDestroyed(activity)){
