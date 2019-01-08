@@ -91,7 +91,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
 
         holder.tvKode.setText(itemProduct.getTrxKode());
         holder.tvTanggal.setText(itemProduct.getTrxTanggal());
-        holder.tvStatus.setText(itemProduct.getTrxStatus());
+        //holder.tvStatus.setText(itemProduct.getTrxStatus());
         holder.tvNominal.setText(formatRupiah(Double.parseDouble(itemProduct.getTrxNominal())));
         holder.tvJenis.setText(itemProduct.getTrxJenis());
         holder.tvInvoice.setText(itemProduct.getTrxInvoice());
@@ -103,6 +103,12 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             holder.tvStatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
         } else {
             holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
+        }
+
+        if(itemProduct.getTrxStatus().equalsIgnoreCase("Active")){
+            holder.tvStatus.setText("Sukses");
+        }else{
+            holder.tvStatus.setText(itemProduct.getTrxStatus());
         }
 
         //holder.tvDot.setText(Html.fromHtml("&#8226;"));
@@ -140,6 +146,12 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         final TextView etKet = builder.findViewById(R.id.et_keterangan);
         final TextView tutup = builder.findViewById(R.id.tv_close);
 
+        if(trxStatus.equalsIgnoreCase("Active")){
+            etStatus.setText("Sukses");
+        }else{
+            etStatus.setText(trxStatus);
+        }
+
         if (trxStatus.equalsIgnoreCase("Gagal")) {
             etStatus.setTextColor(Color.RED);
         } else if (trxStatus.equalsIgnoreCase("Waiting")) {
@@ -149,7 +161,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         }
 
         etTgl.setText(trxTanggal);
-        etStatus.setText(trxStatus);
+        //etStatus.setText(trxStatus);
         etNominal.setText(formatRupiah(Double.parseDouble(trxNominal)));
         tvProductType.setText("Detail Transaksi " + trxJenis);
         etInvoice.setText(trxInvoice);
