@@ -211,7 +211,8 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                printTransaksi();
+               // printTransaksi();
+                Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -241,10 +242,17 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             i.putExtra("tujuan", trxTujuan);
             context.startActivity(i);
         } else if (trxJenis.equalsIgnoreCase("KUOTA")) {
-            i = new Intent(context, TransPaketData.class);
-            i.putExtra("nominal", trxNominal);
-            i.putExtra("tujuan", trxTujuan);
-            context.startActivity(i);
+            if(trxProvideName.contains("SMS")){
+                i = new Intent(context, TransSMS.class);
+                i.putExtra("nominal", trxNominal);
+                i.putExtra("tujuan", trxTujuan);
+                context.startActivity(i);
+            }else{
+                i = new Intent(context, TransPaketData.class);
+                i.putExtra("nominal", trxNominal);
+                i.putExtra("tujuan", trxTujuan);
+                context.startActivity(i);
+            }
         } else if (trxJenis.equalsIgnoreCase("ETOOL MANDIRI") || trxJenis.equalsIgnoreCase("ETOOL BNI")) {
             i = new Intent(context, TransEtool.class);
             i.putExtra("nominal", trxNominal);
@@ -277,11 +285,6 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             i.putExtra("nominal", trxNominal);
             i.putExtra("tujuan", trxTujuan);
             context.startActivity(i);
-                /*} else if (trxJenis.equalsIgnoreCase("MULTY FINANCE")) {
-                    i = new Intent(context, TransMultiFinance.class);
-                    i.putExtra("nominal", trxNominal);
-                    i.putExtra("tujuan", trxTujuan);
-                    context.startActivity(i);*/
         } else if (trxJenis.equalsIgnoreCase("PPOB PLN")) {
             i = new Intent(context, TransPln.class);
             i.putExtra("nominal", "ppob");

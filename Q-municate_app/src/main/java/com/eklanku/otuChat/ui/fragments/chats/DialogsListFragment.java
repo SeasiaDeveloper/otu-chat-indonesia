@@ -356,7 +356,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         checkUpdateDialogs();
 
         if (State.finished == updateDialogsProcess) {
-            //baseActivity.hideSnackBar(R.string.dialog_loading_dialogs);
+            baseActivity.hideSnackBar(R.string.dialog_loading_dialogs);
         }
     }
 
@@ -539,7 +539,7 @@ public class DialogsListFragment extends BaseLoaderFragment<List<DialogWrapper>>
         checkEmptyList(dialogsListAdapter.getCount());
 
         if (!baseActivity.isDialogLoading()) {
-           // baseActivity.hideSnackBar(R.string.dialog_loading_dialogs);
+            baseActivity.hideSnackBar(R.string.dialog_loading_dialogs);
         }
 
 //        startForResult load dialogs from REST when finished loading from cache

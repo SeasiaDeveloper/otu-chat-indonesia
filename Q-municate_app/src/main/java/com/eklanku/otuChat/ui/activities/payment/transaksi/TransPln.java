@@ -200,8 +200,8 @@ public class TransPln extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton rb = (RadioButton) group.findViewById(checkedId);
                 if (rb.getText().toString().equalsIgnoreCase("Token Listrik")) {
-                    loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
-//                    getProductPLNToken(); ========================>next ini yang akan di jalankan
+                    //loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
+                    getProductPLNToken();
                     layoutNominal.setVisibility(View.VISIBLE);
                     rbPln = "Token Listrik";
                     btnBayar.setText("BELI");
