@@ -70,7 +70,7 @@ public class Utils {
                 PreferenceUtil.setLoginStatus(activity, false);
             }
 
-            if(!message.equalsIgnoreCase("KODE KEAMANAN SALAH") || !message.equalsIgnoreCase("INVALID SECURITY CODE")){
+            if(message.equalsIgnoreCase("KODE KEAMANAN SALAH") || message.equalsIgnoreCase("INVALID SECURITY CODE")){
                 Log.d("OPPO-1", "globalDialog .. : "+message);
                 activity.finish();
             }
