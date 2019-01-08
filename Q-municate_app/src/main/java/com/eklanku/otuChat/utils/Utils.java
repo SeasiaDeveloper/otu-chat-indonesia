@@ -29,20 +29,20 @@ public class Utils {
         this.context = context;
     }
 
-    public static boolean isActivityFinishedOrDestroyed(Activity activity){
-        if(activity != null){
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+    public static boolean isActivityFinishedOrDestroyed(Activity activity) {
+        if (activity != null) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 return activity.isDestroyed() || activity.isFinishing();
-            } else{
+            } else {
                 return activity.isFinishing();
             }
-        }else{
+        } else {
             return true;
         }
     }
 
     public void globalDialog(Activity activity, String title, String message) {
-        if(activity==null){
+        if (activity == null) {
             return;
         }
         final Dialog dialog = new Dialog(activity);
@@ -56,10 +56,10 @@ public class Utils {
 
         txjdlError.setText(title);
         txpesanError.setText(message);
-        Log.d("OPPO-1", "globalDialog: "+message);
-        if(message.equalsIgnoreCase("KODE KEAMANAN SALAH") || message.equalsIgnoreCase("INVALID SECURITY CODE")){
+        Log.d("OPPO-1", "globalDialog: " + message);
+        if (message.equalsIgnoreCase("KODE KEAMANAN SALAH") || message.equalsIgnoreCase("INVALID SECURITY CODE")) {
             txpesanError.setText("ANDA TELAH LOGOUT SILAHKAN LOGIN KEMBALI");
-        }else{
+        } else {
             txpesanError.setText(message);
         }
 
@@ -68,17 +68,19 @@ public class Utils {
             if (message.equalsIgnoreCase("SERVER BUSY, PLEASE TRY AGAIN LATER") || message.equalsIgnoreCase("KODE KEAMANAN SALAH") || message.equalsIgnoreCase("INVALID SECURITY CODE")) {
                 activity.startActivity(new Intent(activity, PaymentLogin.class));
                 PreferenceUtil.setLoginStatus(activity, false);
-                if(message.equalsIgnoreCase("KODE KEAMANAN SALAH") || message.equalsIgnoreCase("INVALID SECURITY CODE")){
-                    Log.d("OPPO-1", "globalDialog .. : "+message);
-                    // DO NOTHING
-                }else{
-                    activity.finish();
-                }
+            }
+
+            if (message.equalsIgnoreCase("KODE KEAMANAN SALAH")) {
+                // DO NOTHING
+            } else if (message.equalsIgnoreCase("INVALID SECURITY CODE")) {
+                // DO NOTHING
+            } else {
+                activity.finish();
             }
 
 
         });
-        if(isActivityFinishedOrDestroyed(activity)){
+        if (isActivityFinishedOrDestroyed(activity)) {
             return;
         }
         dialog.show();

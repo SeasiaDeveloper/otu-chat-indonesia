@@ -36,7 +36,7 @@
                 android:paddingLeft="@dimen/density_8"
                 android:paddingEnd="@dimen/density_8"
                 android:paddingRight="@dimen/density_8"
-                android:text="Manual"
+                android:text="Transfer Bank"
                 android:textAllCaps="false" />
 
             <Button
