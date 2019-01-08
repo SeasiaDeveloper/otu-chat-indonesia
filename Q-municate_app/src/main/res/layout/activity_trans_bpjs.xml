@@ -107,7 +107,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/red_900"
-        android:text="okkk"
         android:textSize="@dimen/text_11"
         android:layout_marginTop="@dimen/density_4"/>
 

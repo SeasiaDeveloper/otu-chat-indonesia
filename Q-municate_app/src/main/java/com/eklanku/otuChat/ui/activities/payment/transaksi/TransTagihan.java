@@ -69,6 +69,7 @@ public class TransTagihan extends AppCompatActivity {
 
     Utils utilsAlert;
     String titleAlert = "Pasca Bayar";
+    String nominalx, tujuanx;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +79,22 @@ public class TransTagihan extends AppCompatActivity {
 
         utilsAlert = new Utils(TransTagihan.this);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+
+        }
+
         prefs       = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnOperator = (Spinner) findViewById(R.id.spnTransTagihanOperator);
         txtNo       = (EditText) findViewById(R.id.txtTransTagihanNo);
@@ -86,6 +103,7 @@ public class TransTagihan extends AppCompatActivity {
         // id_member   = prefs.getString("auth_id", "");
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
+        txtNo.setText(tujuanx);
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);

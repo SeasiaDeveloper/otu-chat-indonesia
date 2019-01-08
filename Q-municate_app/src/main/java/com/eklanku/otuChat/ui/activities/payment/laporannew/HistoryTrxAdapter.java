@@ -37,6 +37,7 @@ import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPdam;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPln;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransSMS;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransTagihan;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransTelkom;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransTv;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransVouchergame_product;
@@ -211,7 +212,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // printTransaksi();
+                // printTransaksi();
                 Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
             }
         });
@@ -229,11 +230,11 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         return parseRp;
     }
 
-    public void printTransaksi(){
+    public void printTransaksi() {
         PrintTransaksi.start((Activity) context);
     }
 
-    public void buy(String trxJenis, String trxNominal, String trxTujuan, String trxProvideName){
+    public void buy(String trxJenis, String trxNominal, String trxTujuan, String trxProvideName) {
         Intent i = null;
 
         if (trxJenis.equalsIgnoreCase("PULSA")) {
@@ -242,12 +243,12 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             i.putExtra("tujuan", trxTujuan);
             context.startActivity(i);
         } else if (trxJenis.equalsIgnoreCase("KUOTA")) {
-            if(trxProvideName.contains("SMS")){
+            if (trxProvideName.contains("SMS")) {
                 i = new Intent(context, TransSMS.class);
                 i.putExtra("nominal", trxNominal);
                 i.putExtra("tujuan", trxTujuan);
                 context.startActivity(i);
-            }else{
+            } else {
                 i = new Intent(context, TransPaketData.class);
                 i.putExtra("nominal", trxNominal);
                 i.putExtra("tujuan", trxTujuan);
@@ -316,8 +317,12 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             i.putExtra("tujuan", trxTujuan);
             i.putExtra("jenis", trxProvideName);
             context.startActivity(i);
-        }
-        else {
+        } else if (trxJenis.equalsIgnoreCase("PPOB TELCO PASCA")) {
+            i = new Intent(context, TransTagihan.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else {
             Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
         }
     }
