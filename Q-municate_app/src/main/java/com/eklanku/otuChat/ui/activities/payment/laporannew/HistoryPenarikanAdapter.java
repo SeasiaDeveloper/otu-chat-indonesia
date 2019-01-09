@@ -62,9 +62,9 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
 
         holder.tvtanggal.setText(itemProduct.getTgl_penarikan());
         holder.tvjumlah.setText(formatRupiah(Double.parseDouble(itemProduct.getJml_penarikan())));
-        holder.tvstatus.setText(itemProduct.getStatus_penarikan());
 
-        if(itemProduct.getStatus_penarikan().equalsIgnoreCase("Gagal")){
+
+        if(itemProduct.getStatus_penarikan().equalsIgnoreCase("Reject")){
             holder.tvstatus.setTextColor(Color.RED);
         }else if (itemProduct.getStatus_penarikan().equalsIgnoreCase("Waiting")) {
             holder.tvstatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
@@ -73,6 +73,11 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
         }
 
 
+        if(itemProduct.getStatus_penarikan().equalsIgnoreCase("Active")){
+            holder.tvstatus.setText("Sukses");
+        }else{
+            holder.tvstatus.setText(itemProduct.getStatus_penarikan());
+        }
         holder.viewTrx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,12 +110,19 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
         final TextView tutup = builder.findViewById(R.id.tv_close);
 
 
-        if(_status.equalsIgnoreCase("Gagal")){
+        if(_status.equalsIgnoreCase("Reject")){
             status.setTextColor(Color.RED);
         }else if (_status.equalsIgnoreCase("Waiting")) {
             status.setTextColor(context.getResources().getColor(R.color.yellow_800));
         } else {
             status.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
+        }
+
+
+        if(_status.equalsIgnoreCase("Active")){
+            status.setText("Sukses");
+        }else{
+            status.setText(_status);
         }
 
         title.setText("Detail Penarikan");
@@ -119,7 +131,6 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
         bank.setText(_bank);
         atas_nama.setText(_atas_nama);
         nomor_rekening.setText(_nomor_rekening);
-        status.setText(_status);
 
         Button btnClose = builder.findViewById(R.id.btn_close);
 

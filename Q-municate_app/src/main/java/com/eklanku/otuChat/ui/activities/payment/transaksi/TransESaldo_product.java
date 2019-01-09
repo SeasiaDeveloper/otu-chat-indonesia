@@ -43,9 +43,11 @@ import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapterNew;
 import com.eklanku.otuChat.utils.Utils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -197,12 +199,23 @@ public class TransESaldo_product extends AppCompatActivity {
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
                 txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
                 txtnomor.setText(noPel.getText().toString());
-                txtvoucher.setText(code);
+                txtvoucher.setText(formatRupiah(Double.parseDouble(_listprice.get(position))));
 
                 TextView tvProduct = dialog.findViewById(R.id.txt_product);
                 TextView tvTranske = dialog.findViewById(R.id.txt_transke);
                 tvProduct.setText(_listnama.get(position));
                 tvTranske.setText(transKe.getText().toString());
+
+                TextView tvKeterangan = dialog.findViewById(R.id.txt_keterangan);
+                TextView total = dialog.findViewById(R.id.txt_total);
+                ImageView imgKonfirmasi = dialog.findViewById(R.id.img_konfirmasi);
+                TextView biaya = dialog.findViewById(R.id.txt_biaya);
+
+                tvKeterangan.setText(_listnama.get(position));
+                total.setText(formatRupiah(Double.parseDouble(_listprice.get(position))));
+                biaya.setText("Rp0");
+                int idimg = TransESaldo_product.this.getResources().getIdentifier("drawable/ic_e_saldo_" + _img.toLowerCase(), null, TransESaldo_product.this.getPackageName());
+                imgKonfirmasi.setImageResource(idimg);
 
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -226,6 +239,14 @@ public class TransESaldo_product extends AppCompatActivity {
                 return;
             }
         });
+    }
+
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
     }
 
     private boolean validateIdpel() {

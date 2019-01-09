@@ -47,10 +47,8 @@ public class HistoryBonusAdapter extends RecyclerView.Adapter<HistoryBonusAdapte
         myViewHolder.tvJnsBonus.setText(itemProduct.getJenis_bonus());
         myViewHolder.tvStatus.setText(itemProduct.getStatus_bonus());
         myViewHolder.tvJumlahBonus.setText(formatRupiah(Double.parseDouble(itemProduct.getJml_bonus())));
-        if (itemProduct.getStatus_bonus().equalsIgnoreCase("Gagal")) {
+        if (itemProduct.getStatus_bonus().equalsIgnoreCase("Reject")) {
             myViewHolder.tvStatus.setTextColor(Color.RED);
-        } else if (itemProduct.getStatus_bonus().equalsIgnoreCase("Waiting")) {
-            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
         } else {
             myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
@@ -96,10 +94,8 @@ public class HistoryBonusAdapter extends RecyclerView.Adapter<HistoryBonusAdapte
         final TextView status = builder.findViewById(R.id.et_status);
         final TextView tutup = builder.findViewById(R.id.tv_close);
 
-        if (_status.equalsIgnoreCase("Gagal")) {
+        if (_status.equalsIgnoreCase("Reject")) {
             status.setTextColor(Color.RED);
-        } else if (_status.equalsIgnoreCase("Waiting")) {
-            status.setTextColor(context.getResources().getColor(R.color.yellow_800));
         } else {
             status.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }

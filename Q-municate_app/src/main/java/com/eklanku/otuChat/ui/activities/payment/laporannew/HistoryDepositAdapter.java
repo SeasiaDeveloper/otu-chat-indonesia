@@ -33,7 +33,6 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
     private String TAG = HistoryDepositAdapter.class.getSimpleName();
 
 
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView tvjumlah, tvstatus, tvunix, tvbank, tvtanggal, tvDot, tvInvoice;
         private View viewTrx;
@@ -69,14 +68,20 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
         holder.tvtanggal.setText(itemProduct.getTgl_deposit());
         holder.tvjumlah.setText(formatRupiah(Double.parseDouble(itemProduct.getTotal_transfer())));
         holder.tvbank.setText(itemProduct.getBank());
-        holder.tvstatus.setText(itemProduct.getStatus_deposit());
 
-        if (itemProduct.getStatus_deposit().equalsIgnoreCase("Gagal")) {
+
+        if (itemProduct.getStatus_deposit().equalsIgnoreCase("Gagal") || itemProduct.getStatus_deposit().equalsIgnoreCase("Reject")) {
             holder.tvstatus.setTextColor(Color.RED);
-        } else if (itemProduct.getStatus_deposit().equalsIgnoreCase("Waiting")) {
+        } else if (itemProduct.getStatus_deposit().equalsIgnoreCase("Waiting") || itemProduct.getStatus_deposit().equalsIgnoreCase("Onproses")) {
             holder.tvstatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
         } else {
             holder.tvstatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
+        }
+
+        if (itemProduct.getStatus_deposit().equalsIgnoreCase("Active")) {
+            holder.tvstatus.setText("Sukses");
+        } else {
+            holder.tvstatus.setText(itemProduct.getStatus_deposit());
         }
 
         holder.viewTrx.setOnClickListener(new View.OnClickListener() {
@@ -112,13 +117,14 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
         final TextView status = builder.findViewById(R.id.et_status);
         final TextView tutup = builder.findViewById(R.id.tv_close);
 
-        if (_status.equalsIgnoreCase("Gagal")) {
+        if (_status.equalsIgnoreCase("Gagal") || _status.equalsIgnoreCase("Reject")) {
             status.setTextColor(Color.RED);
-        } else if (_status.equalsIgnoreCase("Waiting")) {
+        } else if (_status.equalsIgnoreCase("Waiting") || _status.equalsIgnoreCase("Onproses")) {
             status.setTextColor(context.getResources().getColor(R.color.yellow_800));
         } else {
             status.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
+
 
         title.setText("Detail Deposit");
         tanggal.setText(_tanggal);
@@ -128,8 +134,12 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
         bank.setText(_bank);
         nomor_rekening.setText(_nomor_rekening);
         atas_nama.setText(_atas_nama);
-        status.setText(_status);
 
+        if (_status.equalsIgnoreCase("Active")) {
+            status.setText("Sukses");
+        } else {
+            status.setText(_status);
+        }
         Button btnClose = builder.findViewById(R.id.btn_close);
 
         tutup.setOnClickListener(new View.OnClickListener() {

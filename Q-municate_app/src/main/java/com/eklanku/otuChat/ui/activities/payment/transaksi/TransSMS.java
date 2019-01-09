@@ -53,9 +53,11 @@ import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapterNew;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerGameAdapter;
 import com.eklanku.otuChat.utils.Utils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -97,6 +99,7 @@ public class TransSMS extends AppCompatActivity {
     TextView tvEmpty;
 
     String nominalx, tujuanx;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,51 +155,10 @@ public class TransSMS extends AppCompatActivity {
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
-        btnBayar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!validateIdpel()) {
-                    return;
-                }
-
-                final Dialog dialog = new Dialog(TransSMS.this);
-
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.activity_alert_dialog);
-                dialog.setCancelable(false);
-                dialog.setTitle("Peringatan Transaksi!!!");
-
-                btnYes = (Button) dialog.findViewById(R.id.btn_yes);
-                btnNo = (Button) dialog.findViewById(R.id.btn_no);
-                txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
-                txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
-                txtnomor.setText(txtNo.getText().toString().trim());
-                txtvoucher.setText(code);
-
-                btnYes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cek_transaksi();
-                        dialog.dismiss();
-                    }
-                });
-
-                btnNo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
-                return;
-
-            }
-        });
 
         initializeResources();
         loadPrefix();
-       // getProductSMS();
+        // getProductSMS();
     }
 
     private class txtWatcher implements TextWatcher {
@@ -465,13 +427,29 @@ public class TransSMS extends AppCompatActivity {
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
                 txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
                 txtnomor.setText(txtNo.getText().toString());
-                txtvoucher.setText(code);
+                txtvoucher.setText(formatRupiah(Double.parseDouble(b.get(position))));
 
                 TextView tvProduct = dialog.findViewById(R.id.txt_product);
                 TextView tvTranske = dialog.findViewById(R.id.txt_transke);
                 tvProduct.setText(code_name.get(position));
                 tvTranske.setText(txtTransaksi_ke.getText().toString());
 
+                TextView tvKeterangan = dialog.findViewById(R.id.txt_keterangan);
+                TextView total = dialog.findViewById(R.id.txt_total);
+                ImageView imgKonfirmasi = dialog.findViewById(R.id.img_konfirmasi);
+                TextView biaya = dialog.findViewById(R.id.txt_biaya);
+
+                tvKeterangan.setText(code_name.get(position));
+                total.setText(formatRupiah(Double.parseDouble(b.get(position))));
+                biaya.setText("Rp0");
+                String setImgOpr = "";
+                if (oprSMS.equalsIgnoreCase("ISAT SMS")) {
+                    setImgOpr = "indosat";
+                } else if (oprSMS.equalsIgnoreCase("TSEL SMS")) {
+                    setImgOpr = "telkomsel";
+                }
+                int idimg = TransSMS.this.getResources().getIdentifier("mipmap/" + setImgOpr.toLowerCase(), null, TransSMS.this.getPackageName());
+                imgKonfirmasi.setImageResource(idimg);
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -496,6 +474,15 @@ public class TransSMS extends AppCompatActivity {
             }
         });
     }
+
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
+    }
+
 
     //=========================================================NEW API=================================================================
 
@@ -541,19 +528,22 @@ public class TransSMS extends AppCompatActivity {
         });
     }
 
+
     String oprSMS = "";
     String tempOprPulsa = "";
     boolean statOprPulsa = false;
     boolean otherOpr = true;
     ArrayList<String> code_product, code_name, endpoint;
+    ArrayList<String> a, b, c, d;
+
     public void cekPrefix(CharSequence s) {
 
-        ArrayList<String> a = new ArrayList<>();
-        ArrayList<String> b = new ArrayList<>();
-        ArrayList<String> c = new ArrayList<>();
-        ArrayList<String> d = new ArrayList<>();
+        a = new ArrayList<>();
+        b = new ArrayList<>();
+        c = new ArrayList<>();
+        d = new ArrayList<>();
         code_product = new ArrayList<>();
-        code_name=new ArrayList<>();
+        code_name = new ArrayList<>();
         endpoint = new ArrayList<>();
         SpinnerAdapterNew adapter = null;
         listSMS.setAdapter(null);
@@ -641,7 +631,7 @@ public class TransSMS extends AppCompatActivity {
                     otherOpr = false;
                 }
 
-            } else /*if (s.length() < 4) */{
+            } else /*if (s.length() < 4) */ {
                 listSMS.setAdapter(null);
                 a.clear();
                 b.clear();

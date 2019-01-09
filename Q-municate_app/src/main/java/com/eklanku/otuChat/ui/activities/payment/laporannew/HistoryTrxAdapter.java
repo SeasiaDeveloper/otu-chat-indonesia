@@ -101,13 +101,15 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             holder.tvStatus.setTextColor(Color.RED);
         } else if (itemProduct.getTrxStatus().equalsIgnoreCase("Waiting")) {
             holder.tvStatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
+        } else if (itemProduct.getTrxStatus().equalsIgnoreCase("Refund")) {
+            holder.tvStatus.setTextColor(context.getResources().getColor(R.color.grey_800));
         } else {
             holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
 
-        if(itemProduct.getTrxStatus().equalsIgnoreCase("Active")){
+        if (itemProduct.getTrxStatus().equalsIgnoreCase("Active")) {
             holder.tvStatus.setText("Sukses");
-        }else{
+        } else {
             holder.tvStatus.setText(itemProduct.getTrxStatus());
         }
 
@@ -146,9 +148,9 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         final TextView etKet = builder.findViewById(R.id.et_keterangan);
         final TextView tutup = builder.findViewById(R.id.tv_close);
 
-        if(trxStatus.equalsIgnoreCase("Active")){
+        if (trxStatus.equalsIgnoreCase("Active")) {
             etStatus.setText("Sukses");
-        }else{
+        } else {
             etStatus.setText(trxStatus);
         }
 
@@ -156,7 +158,9 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             etStatus.setTextColor(Color.RED);
         } else if (trxStatus.equalsIgnoreCase("Waiting")) {
             etStatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
-        } else {
+        } else if (trxStatus.equalsIgnoreCase("Refund")) {
+            etStatus.setTextColor(context.getResources().getColor(R.color.grey_800));
+        }else {
             etStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
 

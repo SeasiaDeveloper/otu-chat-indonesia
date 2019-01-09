@@ -4,63 +4,165 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/density_8">
+    android:padding="@dimen/density_16">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/density_14"
+        android:text="Konfirmasi Pembayaran"
+        android:textColor="@color/colorTextOtuDark"
+        android:textSize="@dimen/text_14"
+        android:textStyle="bold"/>
+
+    <View android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="@dimen/density_10"
+        android:background="@color/grey_900" />
 
     <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Transaksi sudah benar?"
-        android:textColor="@color/black"
-        android:textStyle="bold" />
+        android:layout_marginBottom="@dimen/density_8"
+        android:text="Nomor Handphone"
+        android:textColor="@color/grey_600" />
 
-    <com.eklanku.otuChat.ui.views.ARTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
-        android:text="Apakah anda yakin ingin melanjutkan transaksi dengan detail berikut"
-        android:textColor="@color/black" />
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <com.eklanku.otuChat.ui.views.ARTextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:text="Nomor"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
+            android:orientation="vertical">
+
+            <com.eklanku.otuChat.ui.views.ARTextView
+                android:id="@+id/txt_nomor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="-"
+                android:textSize="@dimen/text_14"
+                android:layout_marginBottom="@dimen/density_4"/>
+
+            <com.eklanku.otuChat.ui.views.ARTextView
+                android:id="@+id/txt_keterangan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="-"
+                android:textSize="@dimen/text_10"/>
+        </LinearLayout>
+
+            <ImageView
+                android:id="@+id/img_konfirmasi"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <View android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="@dimen/density_10"
+        android:background="@color/grey_900" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:text="Detail"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_14"
+        android:layout_marginBottom="@dimen/text_8"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <com.eklanku.otuChat.ui.views.ARTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/density_4"
-            android:layout_marginLeft="@dimen/density_4"
-            android:layout_marginEnd="@dimen/density_4"
-            android:layout_marginRight="@dimen/density_4"
-            android:text=":"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
+            android:layout_weight="1.5"
+            android:text="Voucher"
+            android:textColor="@color/grey_600" />
 
         <com.eklanku.otuChat.ui.views.ARTextView
-            android:id="@+id/txt_nomor"
-            android:layout_width="0dp"
+            android:id="@+id/txt_voucher"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
             android:textColor="@color/black"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:text="-"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Biaya Transaksi"
+            android:textColor="@color/grey_600" />
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:id="@+id/txt_biaya"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5"
+            android:textColor="@color/black"
+            android:layout_alignParentRight="true"
+            android:text="-"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+
+    <View android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="@dimen/density_16"
+        android:background="@color/grey_900" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="Total"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_14"
+            android:layout_marginBottom="@dimen/text_8"/>
+
+        <TextView
+            android:id="@+id/txt_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5"
+            android:textColor="@color/colorTextOtuDark"
+            android:layout_alignParentRight="true"
+            android:text="-"
+            android:textStyle="bold"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="top"
         android:layout_marginTop="@dimen/density_8"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <com.eklanku.otuChat.ui.views.ARTextView
             android:layout_width="0dp"
@@ -96,30 +198,6 @@
         android:gravity="center_vertical"
         android:layout_marginTop="@dimen/density_8"
         android:orientation="horizontal">
-
-        <com.eklanku.otuChat.ui.views.ARTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:text="Kode"
-            android:textColor="@color/black" />
-
-        <com.eklanku.otuChat.ui.views.ARTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/density_4"
-            android:layout_marginLeft="@dimen/density_4"
-            android:layout_marginEnd="@dimen/density_4"
-            android:layout_marginRight="@dimen/density_4"
-            android:text=":"
-            android:textColor="@color/black" />
-
-        <com.eklanku.otuChat.ui.views.ARTextView
-            android:id="@+id/txt_voucher"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.5"
-            android:textColor="@color/black" />
     </LinearLayout>
 
     <LinearLayout
@@ -159,13 +237,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_16"
         android:gravity="right">
 
         <Button
             android:id="@+id/btn_no"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginRight="8dp"
             android:background="@drawable/background_round_corner_gray"
             android:paddingStart="@dimen/density_8"
@@ -180,7 +257,7 @@
         <Button
             android:id="@+id/btn_yes"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:background="@drawable/background_round_corner_green"
             android:paddingStart="@dimen/density_8"
             android:paddingLeft="@dimen/density_8"

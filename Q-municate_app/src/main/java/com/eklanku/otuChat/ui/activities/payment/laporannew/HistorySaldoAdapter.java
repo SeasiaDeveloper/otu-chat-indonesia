@@ -45,7 +45,7 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
 
         myViewHolder.tvTanggal.setText(itemProduct.getTgl_mutasi());
         myViewHolder.tvInvoice.setText(itemProduct.getMutasi_id());
-        myViewHolder.tvStatus.setText(itemProduct.getMutasi_status());
+       // myViewHolder.tvStatus.setText(itemProduct.getMutasi_status());
 
         myViewHolder.tvSisaSaldo.setText(formatRupiah(Double.parseDouble(itemProduct.getSisa_saldo())));
 
@@ -55,9 +55,11 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
             myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
 
-        /*if (itemProduct.getMutasi_status().equalsIgnoreCase("Active")) {
+        if (itemProduct.getMutasi_status().equalsIgnoreCase("Active")) {
             myViewHolder.tvStatus.setText("Sukses");
-        }*/
+        } else {
+            myViewHolder.tvStatus.setText(itemProduct.getMutasi_status());
+        }
 
         myViewHolder.viewTrx.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +112,7 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
             status.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
 
+
         title.setText("Detail Saldo");
         mutasi_id.setText(_mutasi_id);
         tanggal.setText(_tanggal);
@@ -117,7 +120,12 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
         kredit.setText(formatRupiah(Double.parseDouble(_kredit)));
         debet.setText(formatRupiah(Double.parseDouble(_debet)));
         keterangan.setText(_keterangan);
-        status.setText(_status);
+
+        if(_status.equalsIgnoreCase("Active")){
+            status.setText("Sukses");
+        }else{
+            status.setText(_status);
+        }
 
         Button btnClose = builder.findViewById(R.id.btn_close);
 

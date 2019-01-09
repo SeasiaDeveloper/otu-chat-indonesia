@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -52,9 +53,11 @@ import com.eklanku.otuChat.ui.adapters.payment.SpinnerPpobAdapter;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 import com.eklanku.otuChat.utils.Utils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -656,12 +659,20 @@ public class TransPln extends AppCompatActivity {
                     txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
                     txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
                     txtnomor.setText(txtNo.getText().toString());
-                    txtvoucher.setText(code);
+                    txtvoucher.setText(formatRupiah(Double.parseDouble(listPrice.get(position))));
 
                     TextView tvProduct = dialog.findViewById(R.id.txt_product);
                     TextView tvTranske = dialog.findViewById(R.id.txt_transke);
                     tvProduct.setText(listName.get(position));
-                    //tvTranske.setText(txtTransaksi_ke.getText().toString());
+
+                    TextView tvKeterangan = dialog.findViewById(R.id.txt_keterangan);
+                    TextView total = dialog.findViewById(R.id.txt_total);
+                    ImageView imgKonfirmasi = dialog.findViewById(R.id.img_konfirmasi);
+                    TextView biaya = dialog.findViewById(R.id.txt_biaya);
+
+                    tvKeterangan.setText(listName.get(position));
+                    total.setText(formatRupiah(Double.parseDouble(listPrice.get(position))));
+                    biaya.setText("Rp0");
 
                     btnYes.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -690,6 +701,13 @@ public class TransPln extends AppCompatActivity {
         });
     }
 
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
+    }
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) return;

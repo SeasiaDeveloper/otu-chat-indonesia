@@ -54,9 +54,11 @@ import com.eklanku.otuChat.utils.Utils;
 
 import org.json.JSONArray;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -97,7 +99,7 @@ public class TransPaketData extends AppCompatActivity {
     ApiInterfacePayment apiInterfacePayment;
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strOpsel, strAplUse = "OTU", strProductType = "KUOTA";
-    String code, ep;
+    String code, ep, price;
 
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
@@ -180,47 +182,6 @@ public class TransPaketData extends AppCompatActivity {
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
         //loadProvider(strUserID, strAccessToken, strAplUse, strProductType);
 
-        btnBayar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!validateIdpel()) {
-                    return;
-                }
-
-                final Dialog dialog = new Dialog(TransPaketData.this);
-
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.activity_alert_dialog);
-                dialog.setCancelable(false);
-                dialog.setTitle("Peringatan Transaksi!!!");
-
-                btnYes = (Button) dialog.findViewById(R.id.btn_yes);
-                btnNo = (Button) dialog.findViewById(R.id.btn_no);
-                txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
-                txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
-                txtnomor.setText(txtNo.getText().toString().trim());
-                txtvoucher.setText(code);
-
-                btnYes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cek_transaksi();
-                        dialog.dismiss();
-                    }
-                });
-
-                btnNo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
-                return;
-            }
-
-        });
 
         initializeResources();
         loadPrefix();
@@ -396,7 +357,35 @@ public class TransPaketData extends AppCompatActivity {
                 tvTranske.setText(txtTransaksi_ke.getText().toString());
 
                 txtnomor.setText(txtNo.getText().toString().trim());
-                txtvoucher.setText(code);
+                txtvoucher.setText(formatRupiah(Double.parseDouble(b.get(position))));
+
+                TextView tvKeterangan = dialog.findViewById(R.id.txt_keterangan);
+                TextView total = dialog.findViewById(R.id.txt_total);
+                ImageView imgKonfirmasi = dialog.findViewById(R.id.img_konfirmasi);
+                TextView biaya = dialog.findViewById(R.id.txt_biaya);
+
+                tvKeterangan.setText(code_name.get(position));
+                total.setText(formatRupiah(Double.parseDouble(b.get(position))));
+                biaya.setText("Rp0");
+
+                String setImgOpr = "";
+                if (oprPaket.equalsIgnoreCase("XL DATA")) {
+                    setImgOpr = "xl";
+                } else if (oprPaket.equalsIgnoreCase("TSEL DATA")) {
+                    setImgOpr = "telkomsel";
+                } else if (oprPaket.equalsIgnoreCase("AXIS DATA")) {
+                    setImgOpr = "axis";
+                } else if (oprPaket.equalsIgnoreCase("SMARTFREN DATA")) {
+                    setImgOpr = "smart";
+                } else if (oprPaket.equalsIgnoreCase("TRI DATA")) {
+                    setImgOpr = "three";
+                } else if (oprPaket.equalsIgnoreCase("ISAT DATA")) {
+                    setImgOpr = "indosat";
+                } else if (oprPaket.equalsIgnoreCase("BOLT")) {
+                    setImgOpr = "bolt";
+                }
+                int idimg = TransPaketData.this.getResources().getIdentifier("mipmap/" + setImgOpr, null, TransPaketData.this.getPackageName());
+                imgKonfirmasi.setImageResource(idimg);
                 btnYes.setText("YA, Lanjutkan");
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -420,6 +409,14 @@ public class TransPaketData extends AppCompatActivity {
                 return;
             }
         });
+    }
+
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
     }
 
     ArrayList<String> listProvider;
@@ -464,12 +461,12 @@ public class TransPaketData extends AppCompatActivity {
     }
 
     ArrayList<String> code_product, code_name, point_ep;
-
+    ArrayList<String> a, b, c, d;
     public void cekPrefixPaket(CharSequence s) {
-        ArrayList<String> a = new ArrayList<>();
-        ArrayList<String> b = new ArrayList<>();
-        ArrayList<String> c = new ArrayList<>();
-        ArrayList<String> d = new ArrayList<>();
+        a = new ArrayList<>();
+        b = new ArrayList<>();
+        c = new ArrayList<>();
+        d = new ArrayList<>();
         SpinnerAdapterNew adapter = null;
         code_product = new ArrayList<>();
         code_name = new ArrayList<>();

@@ -50,9 +50,11 @@ import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapterNew;
 import com.eklanku.otuChat.ui.views.ARTextView;
 import com.eklanku.otuChat.utils.Utils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -75,11 +77,12 @@ public class TransPulsa extends AppCompatActivity {
     ApiInterfacePayment apiInterfacePayment;
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strAplUse = "OTU";
-    String code, point;
+    String code, point, price;
 
     Context context;
 
-    TextView tvNomor, tvVoucher, tvProduct, tvTranske;
+    TextView tvNomor, tvVoucher, tvProduct, tvTranske, tvKeterangan, tvBiaya, tvTotal;
+    ImageView imgKonfirmasi;
     Button btnYes, btnNo;
 
     Utils utilsAlert;
@@ -160,46 +163,6 @@ public class TransPulsa extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        btnBayar.setOnClickListener(view -> {
-            if (!validateIdPel()) {
-                return;
-            }
-
-            final Dialog dialog = new Dialog(TransPulsa.this);
-
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.activity_alert_dialog);
-            dialog.setCancelable(false);
-            dialog.setTitle("Peringatan Transaksi!!!");
-
-            btnYes = dialog.findViewById(R.id.btn_yes);
-            btnNo = dialog.findViewById(R.id.btn_no);
-            tvNomor = dialog.findViewById(R.id.txt_nomor);
-            tvVoucher = dialog.findViewById(R.id.txt_voucher);
-            tvNomor.setText(txtNo.getText().toString().trim());
-            tvVoucher.setText(code);
-            btnYes.setText(getString(R.string.lanjutkan));
-            btnYes.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    cekTransaksi();
-                    dialog.dismiss();
-                }
-            });
-
-            btnNo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-
-            dialog.show();
-            return;
-
-        });
 
         initializeResources();
         getPrefixPulsa();
@@ -354,13 +317,14 @@ public class TransPulsa extends AppCompatActivity {
 
             code = code_product.get(position);
             point = point_ep.get(position);
+            price = b.get(position);
             String name = code_name.get(position);
-            dialogWarning(code, name);
+            dialogWarning(code, name, name, price);
         });
 
     }
 
-    public void dialogWarning(String kodepaket, String name) {
+    public void dialogWarning(String kodepaket, String name, String keterangan, String total) {
         final Dialog dialog = new Dialog(TransPulsa.this);
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -376,11 +340,22 @@ public class TransPulsa extends AppCompatActivity {
 
         tvProduct = dialog.findViewById(R.id.txt_product);
         tvTranske = dialog.findViewById(R.id.txt_transke);
+        tvKeterangan = dialog.findViewById(R.id.txt_keterangan);
+        tvBiaya = dialog.findViewById(R.id.txt_biaya);
+        tvTotal = dialog.findViewById(R.id.txt_total);
+        imgKonfirmasi = dialog.findViewById(R.id.img_konfirmasi);
         tvProduct.setText(name);
         tvTranske.setText(etTransaksiKe.getText().toString());
-
         tvNomor.setText(txtNo.getText().toString().trim());
         tvVoucher.setText(kodepaket);
+        tvNomor.setText(txtNo.getText().toString().trim());
+        tvVoucher.setText(formatRupiah(Double.parseDouble(price)));
+        tvKeterangan.setText(name);
+        tvBiaya.setText("Rp0");
+        tvTotal.setText(formatRupiah(Double.parseDouble(price)));
+
+        int id = TransPulsa.this.getResources().getIdentifier("mipmap/" + oprPulsa.toLowerCase(), null, TransPulsa.this.getPackageName());
+        imgKonfirmasi.setImageResource(id);
 
         btnYes.setText(getString(R.string.lanjutkan));
         btnYes.setOnClickListener(view -> {
@@ -402,6 +377,13 @@ public class TransPulsa extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
+    }
 
     /*====================================================new service api=====================================*/
     ArrayList<String> listProvider;
@@ -450,11 +432,11 @@ public class TransPulsa extends AppCompatActivity {
     ArrayList<String> code_product;
     ArrayList<String> code_name;
     ArrayList<String> point_ep;
+    ArrayList<String> a, b, c, d;
 
     public void cekPrefixNumber(CharSequence s) {
         //Toast.makeText(context, "cek prefix " + s, Toast.LENGTH_SHORT).show();
         SpinnerAdapterNew adapter = null;
-        ArrayList<String> a, b, c, d;
         a = new ArrayList<>();
         b = new ArrayList<>();
         c = new ArrayList<>();
@@ -467,7 +449,6 @@ public class TransPulsa extends AppCompatActivity {
         try {
             String nomorHp;
             if (s.length() >= 6) {
-
                 a.clear();
                 b.clear();
                 c.clear();
@@ -590,6 +571,7 @@ public class TransPulsa extends AppCompatActivity {
     ArrayList<String> listisActive;
     ArrayList<String> listType;
     ArrayList<String> listProviderProduct;
+
 
     public void getProductPulsa() {
         Call<DataAllProduct> dataPulsa = apiInterfacePayment.getProduct_pulsa(strUserID, strAccessToken, strAplUse);

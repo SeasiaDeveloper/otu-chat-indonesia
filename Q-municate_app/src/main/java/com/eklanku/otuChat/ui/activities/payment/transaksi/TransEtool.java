@@ -51,9 +51,11 @@ import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapter;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapterNew;
 import com.eklanku.otuChat.utils.Utils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -472,12 +474,21 @@ public class TransEtool extends AppCompatActivity {
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
                 txtvoucher = (TextView) dialog.findViewById(R.id.txt_voucher);
                 txtnomor.setText(txtNo.getText().toString());
-                txtvoucher.setText(code);
+                txtvoucher.setText(formatRupiah(Double.parseDouble(listPrice.get(position))));
 
                 TextView tvProduct = dialog.findViewById(R.id.txt_product);
                 TextView tvTranske = dialog.findViewById(R.id.txt_transke);
                 tvProduct.setText(code_name.get(position));
                 tvTranske.setText(txtTrasaksi_ke.getText().toString());
+
+                TextView tvKeterangan = dialog.findViewById(R.id.txt_keterangan);
+                TextView total = dialog.findViewById(R.id.txt_total);
+                ImageView imgKonfirmasi = dialog.findViewById(R.id.img_konfirmasi);
+                TextView biaya = dialog.findViewById(R.id.txt_biaya);
+
+                tvKeterangan.setText(code_name.get(position));
+                total.setText(formatRupiah(Double.parseDouble(listPrice.get(position))));
+                biaya.setText("Rp0");
 
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -504,6 +515,13 @@ public class TransEtool extends AppCompatActivity {
 
     }
 
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
+    }
     //======================================================NEW API================================================
     ArrayList<String> listCode;
     ArrayList<String> listPrice;
@@ -515,16 +533,7 @@ public class TransEtool extends AppCompatActivity {
 
     public void getproduct_etool() {
         showProgress(true);
-        ArrayList<String> a, b, c, d;
-        a = new ArrayList<>();
-        b = new ArrayList<>();
-        c = new ArrayList<>();
-        d = new ArrayList<>();
 
-        a.clear();
-        b.clear();
-        c.clear();
-        d.clear();
         Call<DataAllProduct> getproduct_etoll = apiInterfacePayment.getproduct_etoll(strUserID, strAccessToken, strAplUse);
         getproduct_etoll.enqueue(new Callback<DataAllProduct>() {
             @Override
