@@ -175,6 +175,13 @@
             android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activities.payment.settingpayment.SettingPrinterActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.main.MainActivity" />
+        </activity>
+        <activity
             android:name=".ui.activities.chats.CreateGroupDialogActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />

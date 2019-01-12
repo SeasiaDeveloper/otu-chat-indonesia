@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="stt"
+        android:title="Setting Mobile Printer">
+        <EditTextPreference
+            android:icon="@drawable/ic_print"
+            android:key="nm_printer"
+            android:summary="Mobile printer yang digunakan"
+            android:title="Nama Mobile Printer">
+        </EditTextPreference>
+        <EditTextPreference
+            android:icon="@drawable/ic_print"
+            android:key="mac_printer"
+            android:summary="Mac Address Mobile Printer"
+            android:title="Mac Address">
+        </EditTextPreference>
+        <PreferenceScreen
+            android:icon="@drawable/ic_print"
+            android:key="test_print"
+            android:summary="Coba mobile printer"
+            android:title="Test Print">
+
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Data Device">
+        <PreferenceScreen
+            android:icon="@drawable/ic_developer"
+            android:key="imei"
+            android:title="IMEI">
+        </PreferenceScreen>
+        <PreferenceScreen
+            android:icon="@drawable/ic_developer"
+            android:key="namahp"
+            android:title="Nama Device">
+        </PreferenceScreen>
+    </PreferenceCategory>
+</PreferenceScreen>
