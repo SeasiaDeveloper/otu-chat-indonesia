@@ -57,7 +57,7 @@ public class TransKonfirmasi extends AppCompatActivity {
     ApiInterfacePayment mApiInterfacePayment;
     TextView txtJenis, txtReffID, txtCustomerID, txtCustomerName, txtCustomerMSISDN, txtTanggal, txtPayment, txtAdminBank, txtBilling, txtStatus, txrespMessage, txpoint;
 
-    TextView lbIdCustomer, lbNama, titik2idcust, titik2nama;
+    TextView lbIdCustomer, lbNama;
     ImageView imgStatus;
     View vIDcust, vName, vPhone;
 
@@ -82,9 +82,7 @@ public class TransKonfirmasi extends AppCompatActivity {
         prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         lblContent = (TextView) findViewById(R.id.lblKonfirmasiContent);
         lbIdCustomer = (TextView) findViewById(R.id.idcustomer);
-        titik2idcust = (TextView) findViewById(R.id.titik2idcust);
         lbNama = (TextView) findViewById(R.id.lbNama);
-        titik2nama = (TextView) findViewById(R.id.titik2nama);
         btnSave = (Button) findViewById(R.id.btnKonfirmasiSave);
 
         imgStatus = findViewById(R.id.img_status);
@@ -156,8 +154,6 @@ public class TransKonfirmasi extends AppCompatActivity {
             layoutNama.setVisibility(View.GONE);
             layoutCust.setVisibility(View.GONE);
             lbNama.setVisibility(View.GONE);
-            titik2nama.setVisibility(View.GONE);
-            titik2idcust.setVisibility(View.GONE);
             txtCustomerID.setVisibility(View.GONE);
             txtCustomerName.setVisibility(View.GONE);
             btnSave.setText("OK");
@@ -170,8 +166,6 @@ public class TransKonfirmasi extends AppCompatActivity {
             layoutCust.setVisibility(View.VISIBLE);
             lbIdCustomer.setVisibility(View.VISIBLE);
             lbNama.setVisibility(View.VISIBLE);
-            titik2nama.setVisibility(View.VISIBLE);
-            titik2idcust.setVisibility(View.VISIBLE);
             txtCustomerID.setVisibility(View.VISIBLE);
             txtCustomerName.setVisibility(View.VISIBLE);
             btnSave.setText("Proses Pembayaran");

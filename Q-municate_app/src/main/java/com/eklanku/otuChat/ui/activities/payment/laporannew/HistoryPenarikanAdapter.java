@@ -60,7 +60,7 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final ItemHistoryPenarikan itemProduct = cartList.get(position);
 
-        holder.tvtanggal.setText(itemProduct.getTgl_penarikan());
+        holder.tvtanggal.setText(formatTgl(itemProduct.getTgl_penarikan()));
         holder.tvjumlah.setText(formatRupiah(Double.parseDouble(itemProduct.getJml_penarikan())));
 
 
@@ -81,7 +81,7 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
         holder.viewTrx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDetail(itemProduct.getTgl_penarikan(), itemProduct.getJml_penarikan(), itemProduct.getBank(),
+                showDetail(formatTgl(itemProduct.getTgl_penarikan()), itemProduct.getJml_penarikan(), itemProduct.getBank(),
                         itemProduct.getAtas_nama(), itemProduct.getNomer_rekening(), itemProduct.getStatus_penarikan());
             }
         });
@@ -154,4 +154,21 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
         return parseRp;
     }
 
+    public String formatTgl(String tgl){
+        String format = "";
+        if(!tgl.equals("") || !tgl.equals("null")){
+            String parsTgl[] = tgl.split(" ");
+            String parsTgl2[] = parsTgl[0].split("-");
+
+            String tanggal = parsTgl2[2];
+            String bulan = parsTgl2[1];
+            String tahun = parsTgl2[0];
+
+            format = tanggal+"-"+bulan+"-"+tahun+" "+parsTgl[1];
+        }else{
+            format = "";
+        }
+
+        return format;
+    }
 }

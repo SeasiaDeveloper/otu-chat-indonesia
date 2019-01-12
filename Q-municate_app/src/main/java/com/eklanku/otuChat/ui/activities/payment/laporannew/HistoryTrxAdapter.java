@@ -90,8 +90,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         final ItemHistoryTrx itemProduct = cartList.get(position);
 
         holder.tvKode.setText(itemProduct.getTrxKode());
-        holder.tvTanggal.setText(itemProduct.getTrxTanggal());
-        //holder.tvStatus.setText(itemProduct.getTrxStatus());
+        holder.tvTanggal.setText(formatTgl(itemProduct.getTrxTanggal()));
         holder.tvNominal.setText(formatRupiah(Double.parseDouble(itemProduct.getTrxNominal())));
         holder.tvJenis.setText(itemProduct.getTrxJenis());
         holder.tvInvoice.setText(itemProduct.getTrxInvoice());
@@ -118,8 +117,9 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         holder.viewTrx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDetail(itemProduct.getTrxTanggal(), itemProduct.getTrxStatus(), itemProduct.getTrxNominal(), itemProduct.getTrxJenis(),
-                        itemProduct.getTrxInvoice(), itemProduct.getTrxTujuan(), itemProduct.getTrxKet(), itemProduct.getTrxVsn(), itemProduct.getTrxProvide_name());
+                showDetail(formatTgl(itemProduct.getTrxTanggal()), itemProduct.getTrxStatus(), itemProduct.getTrxNominal(), itemProduct.getTrxJenis(),
+                        itemProduct.getTrxInvoice(), itemProduct.getTrxTujuan(), itemProduct.getTrxKet(), itemProduct.getTrxVsn(),
+                        itemProduct.getTrxProvide_name(), itemProduct.getTrxKode(), itemProduct.getTrxProductName());
             }
         });
 
@@ -131,7 +131,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
     }
 
     public void showDetail(String trxTanggal, String trxStatus, String trxNominal, String trxJenis,
-                           String trxInvoice, String trxTujuan, String trxKet, String trxVsn, String trxProvideName) {
+                           String trxInvoice, String trxTujuan, String trxKet, String trxVsn, String trxProvideName, String trxkode, String trxProductName) {
 
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.history_detail_trx);
@@ -228,8 +228,12 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // printTransaksi();
-                Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
+                if(trxStatus.equalsIgnoreCase("Active")){
+                    String ket = "Slip Pembelian "+trxJenis.substring(0,1).toUpperCase() + trxJenis.substring(1).toLowerCase()+" "+trxProvideName;
+                    printTransaksi(trxTanggal, ket, trxProductName, trxTujuan, trxVsn, trxNominal);
+                }else{
+                    Toast.makeText(context, "Selain transaksi sukses tidak bisa di print", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -246,8 +250,10 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         return parseRp;
     }
 
-    public void printTransaksi() {
-        PrintTransaksi.start((Activity) context);
+    public void printTransaksi(String tanggal, String keterangan, String jenisvoucher,
+                               String nomortujuan, String nomorseri, String harga) {
+        String sn = nomorseri.replace("SN","").replace(":", "").replace(" ","");
+        PrintTransaksi.start((Activity) context, tanggal, keterangan, jenisvoucher, nomortujuan, sn, harga);
     }
 
     public void buy(String trxJenis, String trxNominal, String trxTujuan, String trxProvideName) {
@@ -341,6 +347,24 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         } else {
             Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public String formatTgl(String tgl){
+        String format = "";
+        if(!tgl.equals("") || !tgl.equals("null")){
+            String parsTgl[] = tgl.split(" ");
+            String parsTgl2[] = parsTgl[0].split("-");
+
+            String tanggal = parsTgl2[2];
+            String bulan = parsTgl2[1];
+            String tahun = parsTgl2[0];
+
+            format = tanggal+"-"+bulan+"-"+tahun+" "+parsTgl[1];
+        }else{
+            format = "";
+        }
+
+        return format;
     }
 
 }

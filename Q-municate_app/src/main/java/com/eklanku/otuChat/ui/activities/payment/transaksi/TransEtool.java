@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPrabayar;
 import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailProviderByType;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
@@ -81,7 +82,7 @@ public class TransEtool extends AppCompatActivity {
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strAplUse = "OTU", strProductType = "ETOOL";
     String strOpsel;
-    String code, ep;
+    String code, ep, name, nameetoll;
 
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
@@ -90,7 +91,7 @@ public class TransEtool extends AppCompatActivity {
     String titleAlert = "E Tool";
 
     ListView listNamaPaket;
-    ArrayList<String> idNamaPaket;
+    ArrayList<String> idNamaPaket, nameEtool;
 
     LinearLayout layoutView;
     ProgressBar progressBar;
@@ -241,126 +242,7 @@ public class TransEtool extends AppCompatActivity {
         }
     }
 
-    private void loadProvider(String userID, String accessToken, String aplUse, String productType) {
-        loadingDialog = ProgressDialog.show(TransEtool.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Call<LoadDataResponseProvider> userCall = apiInterfacePayment.getLoadProvider(userID, accessToken, aplUse, productType);
-        userCall.enqueue(new Callback<LoadDataResponseProvider>() {
-            @Override
-            public void onResponse(Call<LoadDataResponseProvider> call, Response<LoadDataResponseProvider> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String userID = response.body().getUserID();
-                    String accessToken = response.body().getAccessToken();
-                    String respMessage = response.body().getRespMessage();
-                    String respTime = response.body().getRespTime();
-                    String productTypes = response.body().getProductTypes();
-
-                    if (status.equals("SUCCESS")) {
-
-                        List<String> list = new ArrayList<String>();
-                        list.clear();
-                        final List<DataProvider> products = response.body().getProviders();
-                        for (int i = 0; i < products.size(); i++) {
-                            String x = products.get(i).getName_provaider();
-                            list.add(x);
-                        }
-
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, list);
-                        spnKartu.setAdapter(adapter);
-                        spnKartu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                strOpsel = parent.getItemAtPosition(position).toString();
-                                Log.d("OPPO-1", "onItemSelected: " + strOpsel);
-                                loadProduct(strUserID, strAccessToken, strAplUse, strOpsel);
-                                //getproduct_etool(strOpsel);
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-
-                            }
-                        });
-
-                    } else {
-                        utilsAlert.globalDialog(TransEtool.this, titleAlert, respMessage);
-                        // Toast.makeText(TransEtool.this, "" + respMessage, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    utilsAlert.globalDialog(TransEtool.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponseProvider> call, Throwable t) {
-                loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransEtool.this, titleAlert, getResources().getString(R.string.error_api));
-            }
-        });
-    }
-
-    private void loadProduct(String userID, String accessToken, String aplUse, String provider) {
-        loadingDialog = ProgressDialog.show(TransEtool.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-        Call<LoadDataResponseProduct> userCall = apiInterfacePayment.getLoadProduct(userID, accessToken, aplUse, provider);
-        userCall.enqueue(new Callback<LoadDataResponseProduct>() {
-            @Override
-            public void onResponse(Call<LoadDataResponseProduct> call, Response<LoadDataResponseProduct> response) {
-                loadingDialog.dismiss();
-                if (response.isSuccessful()) {
-                    String status = response.body().getStatus();
-                    String userID = response.body().getUserID();
-                    String accessToken = response.body().getAccessToken();
-                    String respMessage = response.body().getRespMessage();
-                    String respTime = response.body().getRespTime();
-                    String provider = response.body().getProvider();
-
-                    if (status.equals("SUCCESS")) {
-
-                        List<String> listPrice = new ArrayList<String>();
-                        List<String> listNama = new ArrayList<String>();
-                        List<String> listEp = new ArrayList<String>();
-                        idNamaPaket = new ArrayList<>();
-                        listPrice.clear();
-                        listNama.clear();
-                        listEp.clear();
-                        final List<DataProduct> products = response.body().getProducts();
-                        for (int i = 0; i < products.size(); i++) {
-                            String name = products.get(i).getName();
-                            String price = products.get(i).getPrice();
-                            String ep = products.get(i).getEp();
-                            idNamaPaket.add(products.get(i).getCode());
-                            listNama.add(name);
-                            listEp.add(ep);
-                            listPrice.add(price);
-                        }
-
-                        SpinnerAdapter adapter = new SpinnerAdapter(getApplicationContext(), products);
-                        listNamaPaket.setAdapter(adapter);
-
-                    } else {
-                        utilsAlert.globalDialog(TransEtool.this, titleAlert, respMessage);
-                        //Toast.makeText(TransEtool.this, "" + respMessage, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    utilsAlert.globalDialog(TransEtool.this, titleAlert, getResources().getString(R.string.error_api));
-                    //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoadDataResponseProduct> call, Throwable t) {
-                loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransEtool.this, titleAlert, getResources().getString(R.string.error_api));
-            }
-        });
-    }
-
     private void cek_transaksi() {
-
         Log.d("OPPO-1", "cek_transaksi: " + code);
         loadingDialog = ProgressDialog.show(TransEtool.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
@@ -375,17 +257,22 @@ public class TransEtool extends AppCompatActivity {
 
                     Log.d("OPPO-1", "onResponse: " + status);
                     if (status.equals("SUCCESS")) {
-                        List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasi.class);
-                        inKonfirmasi.putExtra("userID", response.body().getUserID());//
+                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPrabayar.class);
+                        inKonfirmasi.putExtra("productCode", "ETOOL");//
+                        inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
+                        inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
+                        inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//
+                        inKonfirmasi.putExtra("billing", response.body().getNominal());//
+                        inKonfirmasi.putExtra("adminBank", "0");
+                        inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
+                        inKonfirmasi.putExtra("ep", ep);
+                        inKonfirmasi.putExtra("jenisvoucher", name);
+                        inKonfirmasi.putExtra("oprPulsa", nameetoll);
+
+                        /*inKonfirmasi.putExtra("userID", response.body().getUserID());//
                         inKonfirmasi.putExtra("accessToken", strAccessToken);//
                         inKonfirmasi.putExtra("status", status);//
-                        inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
-                        inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//
-                        inKonfirmasi.putExtra("productCode", "E TOOL");//
-                        inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
                         inKonfirmasi.putExtra("customerID", response.body().getMSISDN());//
-                        inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
                         inKonfirmasi.putExtra("customerName", "");
                         inKonfirmasi.putExtra("period", "");
                         inKonfirmasi.putExtra("policeNumber", "");
@@ -398,11 +285,8 @@ public class TransEtool extends AppCompatActivity {
                         inKonfirmasi.putExtra("minPayment", "");
                         inKonfirmasi.putExtra("minPayment", "");
                         inKonfirmasi.putExtra("additionalMessage", response.body().getAdditionalMessage());
-                        inKonfirmasi.putExtra("billing", response.body().getNominal());//
                         inKonfirmasi.putExtra("sellPrice", "");
-                        inKonfirmasi.putExtra("adminBank", "0");
-                        inKonfirmasi.putExtra("profit", "");
-                        inKonfirmasi.putExtra("ep", ep);
+                        inKonfirmasi.putExtra("profit", "");*/
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
@@ -457,7 +341,8 @@ public class TransEtool extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 code = code_product.get(position);
                 ep = endpoint.get(position);
-                Log.d("OPPO-1", "onItemClick: " + code);
+                name = code_name.get(position);
+                nameetoll = list.get(position);
                 if (!validateIdpel()) {
                     return;
                 }

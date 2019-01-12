@@ -55,13 +55,22 @@
                         android:layout_weight="1"
                         android:text="Reff ID" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/density_4"
+                        android:layout_marginLeft="@dimen/density_4"
+                        android:layout_marginRight="@dimen/density_4"
+                        android:layout_marginStart="@dimen/density_4"
+                        android:text=":" />
+
 
                     <TextView
                         android:id="@+id/txt_billing_reff_id"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.5"
-                        android:gravity="right" />
+                        android:layout_weight="2.5" />
                 </LinearLayout>
 
                 <View
@@ -85,6 +94,16 @@
                         android:layout_weight="1"
                         android:text="ID Customer"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/density_4"
+                        android:layout_marginLeft="@dimen/density_4"
+                        android:layout_marginRight="@dimen/density_4"
+                        android:layout_marginStart="@dimen/density_4"
+                        android:text=":" />
 
 
                     <TextView
@@ -118,6 +137,16 @@
                         android:text="Name"
                         android:textStyle="bold" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/density_4"
+                        android:layout_marginLeft="@dimen/density_4"
+                        android:layout_marginRight="@dimen/density_4"
+                        android:layout_marginStart="@dimen/density_4"
+                        android:text=":" />
+
 
                     <TextView
                         android:id="@+id/txt_customer_name"
@@ -148,6 +177,16 @@
                         android:text="Phone" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/density_4"
+                        android:layout_marginLeft="@dimen/density_4"
+                        android:layout_marginRight="@dimen/density_4"
+                        android:layout_marginStart="@dimen/density_4"
+                        android:text=":" />
+
+                    <TextView
                         android:id="@+id/txt_customer_msisdn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -173,6 +212,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Date" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/density_4"
+                        android:layout_marginLeft="@dimen/density_4"
+                        android:layout_marginRight="@dimen/density_4"
+                        android:layout_marginStart="@dimen/density_4"
+                        android:text=":" />
 
                     <TextView
                         android:id="@+id/txt_tanggal"
@@ -201,6 +250,16 @@
                         android:text="Payment" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/density_4"
+                        android:layout_marginLeft="@dimen/density_4"
+                        android:layout_marginRight="@dimen/density_4"
+                        android:layout_marginStart="@dimen/density_4"
+                        android:text=":" />
+
+                    <TextView
                         android:id="@+id/txt_payment"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -225,6 +284,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Admin Bank" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/density_4"
+                        android:layout_marginLeft="@dimen/density_4"
+                        android:layout_marginRight="@dimen/density_4"
+                        android:layout_marginStart="@dimen/density_4"
+                        android:text=":" />
 
 
                     <TextView
@@ -253,6 +322,16 @@
                         android:layout_weight="1"
                         android:text="Billing"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/density_4"
+                        android:layout_marginLeft="@dimen/density_4"
+                        android:layout_marginRight="@dimen/density_4"
+                        android:layout_marginStart="@dimen/density_4"
+                        android:text=":" />
 
 
                     <TextView
@@ -284,6 +363,16 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/density_4"
+                        android:layout_marginLeft="@dimen/density_4"
+                        android:layout_marginRight="@dimen/density_4"
+                        android:layout_marginStart="@dimen/density_4"
+                        android:text=":" />
+
+                    <TextView
                         android:id="@+id/txt_notice"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -310,6 +399,16 @@
                         android:layout_weight="1"
                         android:text="Point"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/density_4"
+                        android:layout_marginLeft="@dimen/density_4"
+                        android:layout_marginRight="@dimen/density_4"
+                        android:layout_marginStart="@dimen/density_4"
+                        android:text=":" />
 
                     <TextView
                         android:id="@+id/txt_point"

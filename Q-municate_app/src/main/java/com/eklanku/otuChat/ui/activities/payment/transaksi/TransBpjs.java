@@ -225,6 +225,12 @@ public class TransBpjs extends AppCompatActivity {
             requestFocus(txtNo);
             return false;
         }
+
+        if(id_pel.length()>16){
+            txtNo.setError("Panjang maksimal nomor pelanggan adalah 16 digit");
+            requestFocus(txtNo);
+            return false;
+        }
         return true;
     }
 
@@ -235,7 +241,7 @@ public class TransBpjs extends AppCompatActivity {
     }
 
     private void cek_transaksi() {
-        Log.d("OPPO-1", "cek_transaksi: "+idper);
+        Log.d("OPPO-1", "cek_transaksi: "+selected_operator);
         loadingDialog = ProgressDialog.show(TransBpjs.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 

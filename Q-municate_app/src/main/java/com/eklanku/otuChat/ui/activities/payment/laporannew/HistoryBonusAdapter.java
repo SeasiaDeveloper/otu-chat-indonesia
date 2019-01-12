@@ -43,7 +43,7 @@ public class HistoryBonusAdapter extends RecyclerView.Adapter<HistoryBonusAdapte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         final ItemHistoryBonus itemProduct = cartList.get(i);
-        myViewHolder.tvTanggal.setText(itemProduct.getTgl_perolehan());
+        myViewHolder.tvTanggal.setText(formatTgl(itemProduct.getTgl_perolehan()));
         myViewHolder.tvJnsBonus.setText(itemProduct.getJenis_bonus());
         myViewHolder.tvStatus.setText(itemProduct.getStatus_bonus());
         myViewHolder.tvJumlahBonus.setText(formatRupiah(Double.parseDouble(itemProduct.getJml_bonus())));
@@ -55,7 +55,7 @@ public class HistoryBonusAdapter extends RecyclerView.Adapter<HistoryBonusAdapte
         myViewHolder.viewTrx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDetail(itemProduct.getTgl_perolehan(), itemProduct.getJenis_bonus(), itemProduct.getJml_bonus(),
+                showDetail(formatTgl(itemProduct.getTgl_perolehan()), itemProduct.getJenis_bonus(), itemProduct.getJml_bonus(),
                         itemProduct.getKeterangan(), itemProduct.getStatus_bonus());
             }
         });
@@ -126,5 +126,23 @@ public class HistoryBonusAdapter extends RecyclerView.Adapter<HistoryBonusAdapte
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
         parseRp = formatRupiah.format(nominal);
         return parseRp;
+    }
+
+    public String formatTgl(String tgl){
+        String format = "";
+        if(!tgl.equals("") || !tgl.equals("null")){
+            String parsTgl[] = tgl.split(" ");
+            String parsTgl2[] = parsTgl[0].split("-");
+
+            String tanggal = parsTgl2[2];
+            String bulan = parsTgl2[1];
+            String tahun = parsTgl2[0];
+
+            format = tanggal+"-"+bulan+"-"+tahun+" "+parsTgl[1];
+        }else{
+            format = "";
+        }
+
+        return format;
     }
 }

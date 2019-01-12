@@ -43,7 +43,7 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         final ItemHistorySaldo itemProduct = cartList.get(i);
 
-        myViewHolder.tvTanggal.setText(itemProduct.getTgl_mutasi());
+        myViewHolder.tvTanggal.setText(formatTgl(itemProduct.getTgl_mutasi()));
         myViewHolder.tvInvoice.setText(itemProduct.getMutasi_id());
        // myViewHolder.tvStatus.setText(itemProduct.getMutasi_status());
 
@@ -115,7 +115,7 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
 
         title.setText("Detail Saldo");
         mutasi_id.setText(_mutasi_id);
-        tanggal.setText(_tanggal);
+        tanggal.setText(formatTgl(_tanggal));
         sisa_saldo.setText(formatRupiah(Double.parseDouble(_sisa_saldo)));
         kredit.setText(formatRupiah(Double.parseDouble(_kredit)));
         debet.setText(formatRupiah(Double.parseDouble(_debet)));
@@ -147,5 +147,23 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
         parseRp = formatRupiah.format(nominal);
         return parseRp;
+    }
+
+    public String formatTgl(String tgl){
+        String format = "";
+        if(!tgl.equals("") || !tgl.equals("null")){
+            String parsTgl[] = tgl.split(" ");
+            String parsTgl2[] = parsTgl[0].split("-");
+
+            String tanggal = parsTgl2[2];
+            String bulan = parsTgl2[1];
+            String tahun = parsTgl2[0];
+
+            format = tanggal+"-"+bulan+"-"+tahun+" "+parsTgl[1];
+        }else{
+            format = "";
+        }
+
+        return format;
     }
 }

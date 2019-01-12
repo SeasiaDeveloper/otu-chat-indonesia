@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPrabayar;
 import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models.DataPrefix;
@@ -85,7 +86,7 @@ public class TransSMS extends AppCompatActivity {
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strAplUse = "OTU", strProductType = "SMS";
     String strOpsel;
-    String code, ep;
+    String code, ep, nameOpr;
 
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
@@ -330,17 +331,22 @@ public class TransSMS extends AppCompatActivity {
 
                     Log.d("OPPO-1", "onResponse: " + status);
                     if (status.equals("SUCCESS")) {
-                        List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasi.class);
-                        inKonfirmasi.putExtra("userID", response.body().getUserID());//
+                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPrabayar.class);
+                        inKonfirmasi.putExtra("productCode", "KUOTA SMS");//
+                        inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
+                        inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
+                        inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//
+                        inKonfirmasi.putExtra("billing", response.body().getNominal());//
+                        inKonfirmasi.putExtra("adminBank", "0");
+                        inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
+                        inKonfirmasi.putExtra("ep", ep);
+                        inKonfirmasi.putExtra("jenisvoucher", nameOpr);
+                        inKonfirmasi.putExtra("oprPulsa", oprSMS);
+
+                        /*inKonfirmasi.putExtra("userID", response.body().getUserID());//
                         inKonfirmasi.putExtra("accessToken", strAccessToken);//
                         inKonfirmasi.putExtra("status", status);//
-                        inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
-                        inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//
-                        inKonfirmasi.putExtra("productCode", "PAKET SMS");//
-                        inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
                         inKonfirmasi.putExtra("customerID", response.body().getMSISDN());//
-                        inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
                         inKonfirmasi.putExtra("customerName", "");
                         inKonfirmasi.putExtra("period", "");
                         inKonfirmasi.putExtra("policeNumber", "");
@@ -353,11 +359,8 @@ public class TransSMS extends AppCompatActivity {
                         inKonfirmasi.putExtra("minPayment", "");
                         inKonfirmasi.putExtra("minPayment", "");
                         inKonfirmasi.putExtra("additionalMessage", response.body().getAdditionalMessage());
-                        inKonfirmasi.putExtra("billing", response.body().getNominal());//
                         inKonfirmasi.putExtra("sellPrice", "");
-                        inKonfirmasi.putExtra("adminBank", "0");
-                        inKonfirmasi.putExtra("profit", "");
-                        inKonfirmasi.putExtra("ep", ep);
+                        inKonfirmasi.putExtra("profit", "");*/
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
@@ -415,6 +418,7 @@ public class TransSMS extends AppCompatActivity {
 
                 code = code_product.get(position);
                 ep = endpoint.get(position);
+                nameOpr = code_name.get(position);
                 final Dialog dialog = new Dialog(TransSMS.this);
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

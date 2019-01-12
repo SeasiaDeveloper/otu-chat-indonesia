@@ -411,6 +411,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
+        <activity android:name=".ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPrabayar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
+        </activity>
         <activity
             android:name=".ui.activities.payment.transaksi.TransPulsa"
             android:label="Pulsa"

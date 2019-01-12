@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPrabayar;
 import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailPrefix;
 import com.eklanku.otuChat.ui.activities.payment.models.DataPrefix;
@@ -99,7 +100,7 @@ public class TransPaketData extends AppCompatActivity {
     ApiInterfacePayment apiInterfacePayment;
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strOpsel, strAplUse = "OTU", strProductType = "KUOTA";
-    String code, ep, price;
+    String code, ep, price, name;
 
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
@@ -279,18 +280,22 @@ public class TransPaketData extends AppCompatActivity {
                     String error = response.body().getRespMessage();
 
                     if (status.equals("SUCCESS")) {
-                        List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasi.class);
+                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPrabayar.class);
+                        inKonfirmasi.putExtra("productCode", "KUOTA PAKET DATA");//
+                        inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
+                        inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
+                        inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//
+                        inKonfirmasi.putExtra("billing", response.body().getNominal());//
+                        inKonfirmasi.putExtra("adminBank", "0");
+                        inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
+                        inKonfirmasi.putExtra("ep", point);
+                        inKonfirmasi.putExtra("jenisvoucher", name);
+                        inKonfirmasi.putExtra("oprPulsa", oprPaket);
 
-                        inKonfirmasi.putExtra("userID", response.body().getUserID());//
+                        /*inKonfirmasi.putExtra("userID", response.body().getUserID());//
                         inKonfirmasi.putExtra("accessToken", strAccessToken);//
                         inKonfirmasi.putExtra("status", status);//
-                        inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
-                        inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//
-                        inKonfirmasi.putExtra("productCode", "PAKET DATA");//
-                        inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
                         inKonfirmasi.putExtra("customerID", response.body().getMSISDN());//
-                        inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
                         inKonfirmasi.putExtra("customerName", "");
                         inKonfirmasi.putExtra("period", "");
                         inKonfirmasi.putExtra("policeNumber", "");
@@ -303,11 +308,8 @@ public class TransPaketData extends AppCompatActivity {
                         inKonfirmasi.putExtra("minPayment", "");
                         inKonfirmasi.putExtra("minPayment", "");
                         inKonfirmasi.putExtra("additionalMessage", response.body().getAdditionalMessage());
-                        inKonfirmasi.putExtra("billing", response.body().getNominal());//
                         inKonfirmasi.putExtra("sellPrice", "");
-                        inKonfirmasi.putExtra("adminBank", "0");
-                        inKonfirmasi.putExtra("profit", "");
-                        inKonfirmasi.putExtra("ep", ep);
+                        inKonfirmasi.putExtra("profit", "");*/
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
@@ -346,6 +348,7 @@ public class TransPaketData extends AppCompatActivity {
 
                 code = code_product.get(position);
                 ep = point_ep.get(position);
+                name = code_name.get(position);
                 btnYes = (Button) dialog.findViewById(R.id.btn_yes);
                 btnNo = (Button) dialog.findViewById(R.id.btn_no);
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);

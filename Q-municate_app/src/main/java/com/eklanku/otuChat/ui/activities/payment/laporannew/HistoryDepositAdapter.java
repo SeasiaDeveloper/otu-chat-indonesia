@@ -65,7 +65,7 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final ItemHistoryDeposit itemProduct = cartList.get(position);
 
-        holder.tvtanggal.setText(itemProduct.getTgl_deposit());
+        holder.tvtanggal.setText(formatTgl(itemProduct.getTgl_deposit()));
         holder.tvjumlah.setText(formatRupiah(Double.parseDouble(itemProduct.getTotal_transfer())));
         holder.tvbank.setText(itemProduct.getBank());
 
@@ -87,7 +87,7 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
         holder.viewTrx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDetail(itemProduct.getTgl_deposit(), itemProduct.getJumlah_deposit(), itemProduct.getCodeunix(), itemProduct.getTotal_transfer(),
+                showDetail(formatTgl(itemProduct.getTgl_deposit()), itemProduct.getJumlah_deposit(), itemProduct.getCodeunix(), itemProduct.getTotal_transfer(),
                         itemProduct.getBank(), itemProduct.getNomor_rekening(), itemProduct.getPemilik(), itemProduct.getStatus_deposit());
             }
         });
@@ -153,7 +153,6 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PrintTransaksi.start((Activity) context);
 
             }
         });
@@ -168,6 +167,24 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
         parseRp = formatRupiah.format(nominal);
         return parseRp;
+    }
+
+    public String formatTgl(String tgl){
+        String format = "";
+        if(!tgl.equals("") || !tgl.equals("null")){
+            String parsTgl[] = tgl.split(" ");
+            String parsTgl2[] = parsTgl[0].split("-");
+
+            String tanggal = parsTgl2[2];
+            String bulan = parsTgl2[1];
+            String tahun = parsTgl2[0];
+
+            format = tanggal+"-"+bulan+"-"+tahun+" "+parsTgl[1];
+        }else{
+            format = "";
+        }
+
+        return format;
     }
 
 }
