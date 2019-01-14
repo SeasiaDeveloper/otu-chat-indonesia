@@ -44,6 +44,7 @@ import com.eklanku.otuChat.ui.activities.payment.settingpayment.Profile;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.Register;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPIN;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
+import com.eklanku.otuChat.ui.activities.payment.settingpayment.SettingPrinterActivity;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.updateProfile;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
@@ -1273,6 +1274,11 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         //Toast.makeText(MainActivity.this, "Coming soon...", Toast.LENGTH_SHORT).show();
                         Intent news = new Intent(MainActivity.this, WebViewNews.class);
                         startActivity(news);
+                        break;
+                    case R.id.action_setting_printer:
+                        //Toast.makeText(MainActivity.this, "Coming soon...", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(MainActivity.this, SettingPrinterActivity.class);
+                        startActivity(i);
                         break;
                     case R.id.action_profile:
                         if (menuDialog()) {
