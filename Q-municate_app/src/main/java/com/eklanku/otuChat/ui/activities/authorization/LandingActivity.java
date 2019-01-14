@@ -72,6 +72,8 @@ import rx.Subscriber;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.BLUETOOTH;
+import static android.Manifest.permission.BLUETOOTH_ADMIN;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.MODIFY_AUDIO_SETTINGS;
 import static android.Manifest.permission.READ_CONTACTS;
@@ -132,8 +134,7 @@ public class LandingActivity extends BaseAuthActivity {
         //logout = findViewById(R.id.logout);
         login = findViewById(R.id.login);
 
-        if (app.isNeedToUpdate())
-        {
+        if (app.isNeedToUpdate()) {
             updateApp();
         }
 
@@ -186,28 +187,24 @@ public class LandingActivity extends BaseAuthActivity {
 //        }
 //    }
 
-    private void addActions()
-    {
+    private void addActions() {
         addAction(QBServiceConsts.SIGNUP_SUCCESS_ACTION, signUpSuccessAction);
         updateBroadcastActionList();
     }
 
-    private void removeActions()
-    {
+    private void removeActions() {
         removeAction(QBServiceConsts.SIGNUP_SUCCESS_ACTION);
         updateBroadcastActionList();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         addActions();
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         removeActions();
     }
@@ -276,8 +273,8 @@ public class LandingActivity extends BaseAuthActivity {
                         AccountKitActivity.ResponseType.TOKEN); // or .ResponseType.TOKEN
 
         //di param UI Manager di hilangkan parameter com.facebook.accountkit.ui.LoginType.PHONE
-       uiManager = new SkinManager(SkinManager.Skin.TRANSLUCENT,
-                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? getResources().getColor(R.color.colorTextOtu,null):getResources().getColor(R.color.colorTextOtu)),
+        uiManager = new SkinManager(SkinManager.Skin.TRANSLUCENT,
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? getResources().getColor(R.color.colorTextOtu, null) : getResources().getColor(R.color.colorTextOtu)),
                 R.drawable.ic_background,
                 SkinManager.Tint.WHITE,
                 0.55
@@ -293,31 +290,23 @@ public class LandingActivity extends BaseAuthActivity {
                                  final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == APP_REQUEST_CODE) { // confirm that this response matches your request
-            if (data != null)
-            {
+            if (data != null) {
                 AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
                 String toastMessage = "";
-                if (loginResult.getError() != null)
-                {
+                if (loginResult.getError() != null) {
                     toastMessage = loginResult.getError().getErrorType().getMessage();
                     errorDialog(loginResult.getError().toString());
                     //Log.d(TAG, "Error " + loginResult.getError().toString());
-                }
-                else if (loginResult.wasCancelled())
-                {
+                } else if (loginResult.wasCancelled()) {
                     toastMessage = "Login Cancelled";
-                }
-                else
-                {
+                } else {
                     // Success! Start your next activity...
                     getCurrentAccount();
                 }
                 // Surface the result to your user in an appropriate way.
-                if(!toastMessage.isEmpty())
+                if (!toastMessage.isEmpty())
                     Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
-            }
-            else
-            {
+            } else {
                 Toast.makeText(this, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
                 //Log.d(TAG, "Error data is empty");
             }
@@ -357,10 +346,10 @@ public class LandingActivity extends BaseAuthActivity {
 
     // QBAuth with phone number
 
-    protected void authenticateWithNumber(String strPhoneNumber){
+    protected void authenticateWithNumber(String strPhoneNumber) {
         showProgress();
 
-        Log.d(TAG, "authenticateWithNumber: "+strPhoneNumber);
+        Log.d(TAG, "authenticateWithNumber: " + strPhoneNumber);
         loginType = LoginType.FIREBASE_PHONE;
         login(strPhoneNumber);
     }
@@ -382,12 +371,9 @@ public class LandingActivity extends BaseAuthActivity {
             @Override
             public void onError(Throwable e) {
                 Log.d("LOGIN ERROR", "onError" + e.getMessage());
-                if (loginTryCount <= 2)
-                {
+                if (loginTryCount <= 2) {
                     signUpWithNumber(userPhone);
-                }
-                else
-                {
+                } else {
                     hideProgress();
 
                     OneButtonDialogFragment.show(getSupportFragmentManager(), R.string.dlg_auth_error_message, false, new MaterialDialog.ButtonCallback() {
@@ -405,7 +391,7 @@ public class LandingActivity extends BaseAuthActivity {
 
             @Override
             public void onNext(ConnectycubeUser connectycubeUser) {
-                 performLoginSuccessAction();
+                performLoginSuccessAction();
             }
         });
     }
@@ -455,6 +441,8 @@ public class LandingActivity extends BaseAuthActivity {
                         checkSelfPermission(RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED &&
                         checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED &&
                         checkSelfPermission(MODIFY_AUDIO_SETTINGS) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(BLUETOOTH) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED &&
                         checkSelfPermission(RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED /*&&
                         checkSelfPermission(VIBRATE) == PackageManager.PERMISSION_GRANTED*/
                 ) {
@@ -465,7 +453,7 @@ public class LandingActivity extends BaseAuthActivity {
             requestPermissions(new String[]{
 
                     READ_PHONE_STATE, ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE,
-                    CAMERA, RECEIVE_SMS, READ_CONTACTS, MODIFY_AUDIO_SETTINGS, RECORD_AUDIO/*, VIBRATE*/
+                    CAMERA, RECEIVE_SMS, READ_CONTACTS, MODIFY_AUDIO_SETTINGS, BLUETOOTH, BLUETOOTH_ADMIN, RECORD_AUDIO/*, VIBRATE*/
             }, REQUEST_READ_PHONE_STATE);
         } else {
             requestPermissions(new String[]{
@@ -475,7 +463,7 @@ public class LandingActivity extends BaseAuthActivity {
                     ACCESS_FINE_LOCATION,
                     WRITE_EXTERNAL_STORAGE,
                     READ_EXTERNAL_STORAGE,
-                    CAMERA, RECEIVE_SMS, READ_CONTACTS, MODIFY_AUDIO_SETTINGS, RECORD_AUDIO/*, VIBRATE*/
+                    CAMERA, RECEIVE_SMS, READ_CONTACTS, MODIFY_AUDIO_SETTINGS, BLUETOOTH, BLUETOOTH_ADMIN, RECORD_AUDIO/*, VIBRATE*/
 
             }, REQUEST_READ_PHONE_STATE);
         }
@@ -485,7 +473,7 @@ public class LandingActivity extends BaseAuthActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_READ_PHONE_STATE) {
-            if (grantResults.length == 10 &&
+            if (grantResults.length == 12 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[1] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[2] == PackageManager.PERMISSION_GRANTED &&
@@ -495,7 +483,9 @@ public class LandingActivity extends BaseAuthActivity {
                     grantResults[6] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[7] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[8] == PackageManager.PERMISSION_GRANTED &&
-                    grantResults[9] == PackageManager.PERMISSION_GRANTED /*&&
+                    grantResults[9] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[10] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[11] == PackageManager.PERMISSION_GRANTED/*&&
                     grantResults[10] == PackageManager.PERMISSION_GRANTED*/
                     )
 

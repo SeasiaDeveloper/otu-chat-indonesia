@@ -109,6 +109,8 @@ import java.util.TimeZone;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.BLUETOOTH;
+import static android.Manifest.permission.BLUETOOTH_ADMIN;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.MODIFY_AUDIO_SETTINGS;
 import static android.Manifest.permission.READ_CONTACTS;
@@ -498,7 +500,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             ConnectycubeChatDialog chatDialog = DataManager.getInstance().getConnectycubeChatDialogDataManager()
                     .getByDialogId(sharedHelper.getPushDialogId());
             QMUser user = QMUserService.getInstance().getUserCache().get((long) sharedHelper.getPushUserId());
-            Log.d("OPPO-1", "openPushDialogIfPossible: "+user);
+            Log.d("OPPO-1", "openPushDialogIfPossible: " + user);
             if (chatDialog != null) {
                 startDialogActivity(chatDialog, user);
             }
@@ -860,6 +862,8 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                         checkSelfPermission(RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED &&
                         checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED &&
                         checkSelfPermission(MODIFY_AUDIO_SETTINGS) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(BLUETOOTH) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED &&
                         checkSelfPermission(RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED /*&&
                         checkSelfPermission(VIBRATE) == PackageManager.PERMISSION_GRANTED*/
                 ) {
@@ -870,7 +874,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
             requestPermissions(new String[]{
 
                     READ_PHONE_STATE, ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE,
-                    CAMERA, RECEIVE_SMS, READ_CONTACTS, MODIFY_AUDIO_SETTINGS, RECORD_AUDIO/*, VIBRATE*/
+                    CAMERA, RECEIVE_SMS, READ_CONTACTS, MODIFY_AUDIO_SETTINGS, BLUETOOTH, BLUETOOTH_ADMIN, RECORD_AUDIO/*, VIBRATE*/
             }, REQUEST_READ_PHONE_STATE);
         } else {
             requestPermissions(new String[]{
@@ -880,7 +884,7 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                     ACCESS_FINE_LOCATION,
                     WRITE_EXTERNAL_STORAGE,
                     READ_EXTERNAL_STORAGE,
-                    CAMERA, RECEIVE_SMS, READ_CONTACTS, MODIFY_AUDIO_SETTINGS, RECORD_AUDIO/*, VIBRATE*/
+                    CAMERA, RECEIVE_SMS, READ_CONTACTS, MODIFY_AUDIO_SETTINGS, BLUETOOTH, BLUETOOTH_ADMIN, RECORD_AUDIO/*, VIBRATE*/
 
             }, REQUEST_READ_PHONE_STATE);
         }
@@ -900,7 +904,9 @@ public class MainActivity extends BaseLoggableActivity implements ObservableScro
                     grantResults[6] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[7] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[8] == PackageManager.PERMISSION_GRANTED &&
-                    grantResults[9] == PackageManager.PERMISSION_GRANTED /*&&
+                    grantResults[9] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[10] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[11] == PackageManager.PERMISSION_GRANTED/*&&
                     grantResults[10] == PackageManager.PERMISSION_GRANTED*/
                     )
 
