@@ -42,6 +42,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <ImageView
+            android:id="@+id/img_finance"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="35dp"
@@ -132,7 +133,7 @@
         android:text="Cek Tagihan"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <com.eklanku.otuChat.ui.views.ARTextView
         android:id="@+id/tvPilihFinance"
@@ -143,12 +144,14 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         android:background="@drawable/rounded_shape_payment"
-        android:padding="@dimen/density_8"/>
+        android:padding="@dimen/density_8"
+        android:visibility="gone"/>
 
     <ListView
         android:id="@+id/listFinance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        android:visibility="gone"/>
 
 </LinearLayout>

@@ -6,11 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPascabayar;
 import com.eklanku.otuChat.ui.activities.payment.models.DataDetailPeriodeBPJS;
 import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
 import com.eklanku.otuChat.ui.activities.payment.models.DataPeriodeBPJS;
@@ -45,11 +43,9 @@ import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.utils.PreferenceUtil;
 
 import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -255,13 +251,13 @@ public class TransBpjs extends AppCompatActivity {
                     String error = response.body().getRespMessage();
 
                     if (status.equals("SUCCESS")) {
-                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasi.class);
+                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPascabayar.class);
                         inKonfirmasi.putExtra("userID", response.body().getUserID());
                         inKonfirmasi.putExtra("accessToken", strAccessToken);
                         inKonfirmasi.putExtra("status", status);
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
                         inKonfirmasi.putExtra("respTime", response.body().getRespTime());
-                        inKonfirmasi.putExtra("productCode", response.body().getProductCode());
+                        inKonfirmasi.putExtra("productCode", "Nomor Peserta BPJS Kesehatan");
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());

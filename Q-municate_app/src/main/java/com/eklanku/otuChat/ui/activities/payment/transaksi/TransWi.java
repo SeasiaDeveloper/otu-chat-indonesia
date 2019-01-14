@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPascabayar;
 import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
@@ -327,7 +328,7 @@ public class TransWi extends AppCompatActivity {
                     Log.d("OPPO-1", "onResponse: " + status);
                     if (status.equals("SUCCESS")) {
                         List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasi.class);
+                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPascabayar.class);
                         inKonfirmasi.putExtra("userID", response.body().getUserID());//
                         inKonfirmasi.putExtra("accessToken", strAccessToken);//
                         inKonfirmasi.putExtra("status", status);//

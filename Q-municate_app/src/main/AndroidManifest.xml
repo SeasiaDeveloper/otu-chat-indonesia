@@ -4,6 +4,8 @@
     package="com.eklanku.otuChat"
     android:installLocation="preferExternal">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -406,7 +408,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
-        <activity android:name=".ui.activities.payment.transaksi.TransKonfirmasi">
+        <activity android:name=".ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPascabayar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
@@ -514,6 +516,14 @@
         </activity>
         <activity
             android:name=".ui.activities.payment.transaksi.TransMultiFinance"
+            android:theme="@style/AppThemePaymentItems">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransMultifinance_opsi"
             android:label="Finance"
             android:theme="@style/AppThemePaymentItems">
             <meta-data

@@ -1,4 +1,4 @@
-package com.eklanku.otuChat.ui.activities.payment.transaksi;
+package com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
 import com.eklanku.otuChat.ui.activities.payment.sqlite.database.DatabaseHelper;
 import com.eklanku.otuChat.ui.activities.payment.sqlite.database.model.History;
-import com.eklanku.otuChat.ui.activities.payment.transfer.TransConfirm;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransThankyou;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
 import com.eklanku.otuChat.R;;
@@ -40,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TransKonfirmasi extends AppCompatActivity {
+public class TransKonfirmasiPascabayar extends AppCompatActivity {
     Bundle extras;
     SharedPreferences prefs;
     TextView lblContent;
@@ -51,11 +51,12 @@ public class TransKonfirmasi extends AppCompatActivity {
             jenis, id_pel, pin, cmd_save;
 
     String productCode, billingReferenceID, customerID, customerName, customerMSISDN, tanggal, payment, adminBank, billing, status;
-    String usageUnit, respMessage, point;
+    String usageUnit, respMessage, point, periode;
     String userID, accessToken;
 
     ApiInterfacePayment mApiInterfacePayment;
-    TextView txtJenis, txtReffID, txtCustomerID, txtCustomerName, txtCustomerMSISDN, txtTanggal, txtPayment, txtAdminBank, txtBilling, txtStatus, txrespMessage, txpoint;
+    TextView txtJenis, txtReffID, txtCustomerID, txtCustomerName, txtCustomerMSISDN, txtTanggal, txtPayment, txtAdminBank,
+            txtBilling, txtStatus, txrespMessage, txpoint, txperiode;
 
     TextView lbIdCustomer, lbNama;
     ImageView imgStatus;
@@ -101,12 +102,12 @@ public class TransKonfirmasi extends AppCompatActivity {
         txtStatus = findViewById(R.id.txt_status);
         txrespMessage = findViewById(R.id.txt_notice);
         txpoint = findViewById(R.id.txt_point);
-
-
+        txperiode = findViewById(R.id.txt_periode);
 
         vIDcust = findViewById(R.id.vIdcustomer);
         vName = findViewById(R.id.vName);
         vPhone = findViewById(R.id.vphone);
+
 
         jenis = extras.getString("productCode");
         id_pel = extras.getString("id_pel");
@@ -130,6 +131,9 @@ public class TransKonfirmasi extends AppCompatActivity {
         usageUnit = extras.getString("usageUnit");
         respMessage = extras.getString("respMessage");
         point = extras.getString("ep");
+        periode = extras.getString("period");
+
+        Log.d("OPPO-1", "onCreate>>>>>>>>>: "+productCode);
 
         // SETTEXT DISINI NA
         txtJenis.setText(jenis);
@@ -142,36 +146,16 @@ public class TransKonfirmasi extends AppCompatActivity {
         txtAdminBank.setText(formatRP(Double.parseDouble(adminBank)));
         txtBilling.setText(formatRP(Double.parseDouble(billing)));
         txtStatus.setText(status);
-        txrespMessage.setText(respMessage);
-        txpoint.setText(point);
-
-        if (usageUnit.equalsIgnoreCase("TOPUP")) {
-            usageUnit = "TOPUP";
-            vIDcust.setVisibility(View.GONE);
-            vName.setVisibility(View.GONE);
-
-            lbIdCustomer.setVisibility(View.GONE);
-            layoutNama.setVisibility(View.GONE);
-            layoutCust.setVisibility(View.GONE);
-            lbNama.setVisibility(View.GONE);
-            txtCustomerID.setVisibility(View.GONE);
-            txtCustomerName.setVisibility(View.GONE);
-            btnSave.setText("OK");
-            lblContent.setText("Terimakasih Telah Berbelanja di Eklanku - Otu Chat");
-
+        if (respMessage.equalsIgnoreCase("PROSES BERHASIL")) {
+            txrespMessage.setText("PENGECEKAN BERHASIL");
         } else {
-            vIDcust.setVisibility(View.VISIBLE);
-            vName.setVisibility(View.VISIBLE);
-            layoutNama.setVisibility(View.VISIBLE);
-            layoutCust.setVisibility(View.VISIBLE);
-            lbIdCustomer.setVisibility(View.VISIBLE);
-            lbNama.setVisibility(View.VISIBLE);
-            txtCustomerID.setVisibility(View.VISIBLE);
-            txtCustomerName.setVisibility(View.VISIBLE);
-            btnSave.setText("Proses Pembayaran");
-            lblContent.setText("Anda yakin akan melanjutkan transaksi? " +
-                    "\nSilahkan klik tombol Proses untuk melanjutkan");
+            txrespMessage.setText(respMessage);
         }
+        txpoint.setText(point);
+        txperiode.setText(periode);
+
+        lblContent.setText("Anda yakin akan melanjutkan transaksi? " +
+                "\nSilahkan klik tombol Proses untuk melanjutkan");
 
         if (status.equals("SUCCESS")) {
             imgStatus.setImageResource(R.drawable.ic_doku_success);
@@ -204,19 +188,13 @@ public class TransKonfirmasi extends AppCompatActivity {
         History n = db.getHistory(id);
 
         if (n != null) {
-            // adding new number to array list at 0 position
             historyList.add(0, n);
-
-            // refreshing the list
-            //mAdapter.notifyDataSetChanged();
-
-            //toggleEmptyNotesHistory();
         }
     }
 
 
     private void confirmTransaksi() {
-        loadingDialog = ProgressDialog.show(TransKonfirmasi.this, "Harap Tunggu", "Konfirmasi Pembayaran...");
+        loadingDialog = ProgressDialog.show(TransKonfirmasiPascabayar.this, "Harap Tunggu", "Konfirmasi Pembayaran...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
         Call<TransBeliResponse> transKonfirmCall = mApiInterfacePayment.postTransConfirm(userID, accessToken, billingReferenceID, "OTU");
@@ -270,7 +248,7 @@ public class TransKonfirmasi extends AppCompatActivity {
         }
     }
 
-    public String formatRP(double nominal){
+    public String formatRP(double nominal) {
         String valNom = "";
         DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
         DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
@@ -286,21 +264,25 @@ public class TransKonfirmasi extends AppCompatActivity {
 
 
     public void dialogWarning() {
-        final Dialog dialog = new Dialog(TransKonfirmasi.this);
+        final Dialog dialog = new Dialog(TransKonfirmasiPascabayar.this);
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.activity_alert_dialog_konfirmasi);
         dialog.setCancelable(false);
         dialog.setTitle("Peringatan Transaksi!!!");
-
-
         Button btnYes = dialog.findViewById(R.id.btn_yes);
         Button btnNo = dialog.findViewById(R.id.btn_no);
-        TextView tvNama = dialog.findViewById(R.id.txt_namapemiliktagihan);
-        TextView tvtagihan = dialog.findViewById(R.id.txt_tagihan);
+        TextView tvKetJdl = dialog.findViewById(R.id.ket_jdl);
+        TextView tvnomor = dialog.findViewById(R.id.txt_nomor);
+        TextView tvjmltagihan = dialog.findViewById(R.id.txt_tagihan);
+        TextView tvbiaya = dialog.findViewById(R.id.txt_biaya);
+        TextView tvtotal = dialog.findViewById(R.id.txt_total);
 
-        tvNama.setText(customerName);
-        tvtagihan.setText(formatRP(Double.parseDouble(billing)));
+        tvKetJdl.setText(productCode);
+        tvnomor.setText(customerID);
+        tvjmltagihan.setText(formatRP(Double.parseDouble(payment)));
+        tvbiaya.setText(formatRP(Double.parseDouble(adminBank)));
+        tvtotal.setText(formatRP(Double.parseDouble(billing)));
 
         btnYes.setText(getString(R.string.lanjutkan));
         btnYes.setOnClickListener(view -> {

@@ -1085,7 +1085,7 @@
                                 android:layout_weight="1"
                                 android:gravity="center"
                                 android:orientation="vertical"
-                                android:visibility="gone">
+                                android:visibility="visible">
 
                                 <ImageButton
                                     android:id="@+id/btnMultiFinance"
@@ -1136,7 +1136,7 @@
                     android:layout_marginEnd="@dimen/density_4"
                     android:layout_marginRight="@dimen/density_4"
                     android:layout_marginBottom="@dimen/density_16"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:id="@+id/layout_coming_soon"

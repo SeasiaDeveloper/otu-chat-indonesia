@@ -34,9 +34,9 @@ public class ApiClientPayment {
                     return chain.proceed(newRequest);
                 }
             })
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(30, TimeUnit.SECONDS)
+                    .connectTimeout(40, TimeUnit.SECONDS)
+                    .readTimeout(40, TimeUnit.SECONDS)
+                    .writeTimeout(40, TimeUnit.SECONDS)
                     .build();
 
             Gson gson = new GsonBuilder().setLenient().create();

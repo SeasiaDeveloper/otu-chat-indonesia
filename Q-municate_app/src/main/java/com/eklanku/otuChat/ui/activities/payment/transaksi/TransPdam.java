@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPascabayar;
 import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
@@ -270,18 +271,18 @@ public class TransPdam extends AppCompatActivity {
 
                     if (status.equals("SUCCESS")) {
 
-                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasi.class);
+                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPascabayar.class);
                         inKonfirmasi.putExtra("userID", response.body().getUserID());
                         inKonfirmasi.putExtra("accessToken", strAccessToken);
                         inKonfirmasi.putExtra("status", status);
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
                         inKonfirmasi.putExtra("respTime", response.body().getRespTime());
-                        inKonfirmasi.putExtra("productCode", response.body().getProductCode());
+                        inKonfirmasi.putExtra("productCode", "Nomor Pelanggan PDAM");
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());
                         inKonfirmasi.putExtra("customerName", response.body().getCustomerName());
-                        inKonfirmasi.putExtra("period", response.body().getPeriod());
+                        inKonfirmasi.putExtra("period", response.body().getPeriod()+" bulan");
                         inKonfirmasi.putExtra("policeNumber", response.body().getPoliceNumber());
                         inKonfirmasi.putExtra("lastPaidPeriod", response.body().getLastPaidPeriod());
                         inKonfirmasi.putExtra("tenor", response.body().getTenor());

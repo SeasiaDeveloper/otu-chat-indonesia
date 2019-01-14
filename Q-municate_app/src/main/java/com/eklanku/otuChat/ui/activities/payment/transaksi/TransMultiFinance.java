@@ -21,13 +21,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPascabayar;
 import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
-import com.eklanku.otuChat.ui.activities.payment.models.DataNominal;
 import com.eklanku.otuChat.ui.activities.payment.models.LoadDataResponse;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
@@ -54,7 +55,7 @@ public class TransMultiFinance extends AppCompatActivity {
 
     SharedPreferences prefs;
     Spinner spnOperator;
-    EditText txtNo, txtno_hp;
+    EditText txtNo, txtno_hp, txtNoHP;
     TextInputLayout layoutNo;
     Button btnBayar;
     String load_id = "FIN", selected_operator;
@@ -74,11 +75,19 @@ public class TransMultiFinance extends AppCompatActivity {
     ListView listFinance;
     ArrayList<String> idFinance;
 
+    Bundle extras;
+    String jenis, img;
+
+    ImageView imgFinance;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trans_multifinance);
         ButterKnife.bind(this);
+        extras = getIntent().getExtras();
+
+
 
         utilsAlert = new Utils(TransMultiFinance.this);
 
@@ -87,7 +96,8 @@ public class TransMultiFinance extends AppCompatActivity {
         txtNo       = (EditText) findViewById(R.id.txtTransFinanceNo);
         layoutNo    = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar    = (Button) findViewById(R.id.btnTransFinanceBayar);
-        EditText txtNoHP = findViewById(R.id.txt_no_hp);
+        txtNoHP = findViewById(R.id.txt_no_hp);
+        imgFinance = findViewById(R.id.img_finance);
         btnBayar.setText("CEK TAGIHAN");
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
         listFinance = findViewById(R.id.listFinance);
@@ -100,6 +110,16 @@ public class TransMultiFinance extends AppCompatActivity {
             txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
         }
 
+
+        jenis = extras.getString("jenis");
+        img = extras.getString("img");
+        setTitle(jenis);
+
+        int idimg = TransMultiFinance.this.getResources().getIdentifier("drawable/ic_finance_" + img.toLowerCase(), null, TransMultiFinance.this.getPackageName());
+        imgFinance.setImageResource(idimg);
+
+
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -111,9 +131,6 @@ public class TransMultiFinance extends AppCompatActivity {
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
-        //load_data();
-        loadProvider(strUserID, strAccessToken, "OTU", "FINANCE");
-
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,8 +140,6 @@ public class TransMultiFinance extends AppCompatActivity {
                 cek_transaksi();
             }
         });
-
-        initializeResources();
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
@@ -219,8 +234,7 @@ public class TransMultiFinance extends AppCompatActivity {
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransMultiFinance.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
-
-        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, selected_operator, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
+        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, jenis, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -230,13 +244,13 @@ public class TransMultiFinance extends AppCompatActivity {
                     String error  = response.body().getRespMessage();
 
                     if ( status.equals("SUCCESS") ) {
-                        Intent inKonfirmasi       = new Intent(getBaseContext(), TransKonfirmasi.class);
+                        Intent inKonfirmasi       = new Intent(getBaseContext(), TransKonfirmasiPascabayar.class);
                         inKonfirmasi.putExtra("userID", response.body().getUserID());
                         inKonfirmasi.putExtra("accessToken", strAccessToken);
                         inKonfirmasi.putExtra("status", status);
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
                         inKonfirmasi.putExtra("respTime", response.body().getRespTime());
-                        inKonfirmasi.putExtra("productCode", response.body().getProductCode());
+                        inKonfirmasi.putExtra("productCode", "Nomor Pelanggan Multifinance");
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());
@@ -317,6 +331,7 @@ public class TransMultiFinance extends AppCompatActivity {
                     return;
                 }
                 selected_operator =  idFinance.get(position);
+
                 cek_transaksi();
             }
         });

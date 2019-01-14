@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/density_8">
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/density_8"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Pilih Tagihan Multifinance"
+            android:textColor="@color/default_text_icon_otu_color"
+            android:textSize="14dp" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/density_8">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/density_8"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageButton
+                            android:id="@+id/btnMAF"
+                            android:layout_width="62dp"
+                            android:layout_height="62dp"
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/bg_otu_payment"
+                            android:padding="6dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_finance_maf" />
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/ivMAF"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:elevation="2dp"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/ic_e_saldo_gojek" />
+
+                        <TextView
+                            android:id="@+id/textView18"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/btnMAF"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="6dp"
+                            android:text="Mega Auto Finance (MAF)"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textColor="@color/color_payment_list_icon_text"
+                            android:textSize="10dp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageButton
+                            android:id="@+id/btnMCF"
+                            android:layout_width="62dp"
+                            android:layout_height="62dp"
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/bg_otu_payment"
+                            android:padding="6dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_finance_mcf" />
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/ivMCF"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:elevation="2dp"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/ic_e_saldo_grab" />
+
+                        <TextView
+                            android:id="@+id/tvSaldoGrab"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/btnMCF"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="6dp"
+                            android:text="Mega Central Finance (MCF)"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textColor="@color/color_payment_list_icon_text"
+                            android:textSize="10dp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <ImageButton
+                            android:id="@+id/btnBAF"
+                            android:layout_width="62dp"
+                            android:layout_height="62dp"
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/bg_otu_payment"
+                            android:padding="6dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_finance_baf" />
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/ivBAF"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:elevation="2dp"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/ic_e_saldo_ovo" />
+
+                        <TextView
+                            android:id="@+id/tvsaldoOVO"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/btnBAF"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="6dp"
+                            android:text="Busan auto finance (BAF)"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textColor="@color/color_payment_list_icon_text"
+                            android:textSize="10dp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/density_8"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:id="@+id/btnFIF"
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/bg_otu_payment"
+                                android:padding="6dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_finance_fif" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivFIF"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:elevation="2dp"
+                                android:visibility="gone"
+                                app:srcCompat="@drawable/ic_e_saldo_gojek" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnFIF"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="6dp"
+                                android:text="Federal international Finance (FIF)"
+                                android:textAlignment="center"
+                                android:textAllCaps="true"
+                                android:textColor="@color/color_payment_list_icon_text"
+                                android:textSize="10dp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:id="@+id/btnColombia"
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/bg_otu_payment"
+                                android:padding="6dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_finance_columbia" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivColombia"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:elevation="2dp"
+                                android:visibility="gone"
+                                app:srcCompat="@drawable/ic_finance_columbia" />
+
+                            <TextView
+                                android:id="@+id/tvColombia"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnColombia"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="6dp"
+                                android:text="Columbia"
+                                android:textAlignment="center"
+                                android:textAllCaps="true"
+                                android:textColor="@color/color_payment_list_icon_text"
+                                android:textSize="10dp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <ImageButton
+                                android:id="@+id/btnWOM"
+                                android:layout_width="62dp"
+                                android:layout_height="62dp"
+                                android:layout_centerHorizontal="true"
+                                android:background="@drawable/bg_otu_payment"
+                                android:padding="6dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_finance_wom" />
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:id="@+id/ivWOM"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:elevation="2dp"
+                                android:visibility="gone"
+                                app:srcCompat="@drawable/ic_e_saldo_ovo" />
+
+                            <TextView
+                                android:id="@+id/tvWOM"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/btnWOM"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="6dp"
+                                android:text="Wahana ottomitra multiartha (WOM)"
+                                android:textAlignment="center"
+                                android:textAllCaps="true"
+                                android:textColor="@color/color_payment_list_icon_text"
+                                android:textSize="10dp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+</LinearLayout>

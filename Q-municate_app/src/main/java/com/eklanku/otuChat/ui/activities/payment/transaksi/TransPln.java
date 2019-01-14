@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
+import com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPascabayar;
 import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataListPPOB;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
@@ -486,18 +487,18 @@ public class TransPln extends AppCompatActivity {
                     Log.d("OPPO-1", "onResponse: " + error);
 
                     if (status.equals("SUCCESS")) {
-                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasi.class);
+                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPascabayar.class);
                         inKonfirmasi.putExtra("userID", response.body().getUserID());
                         inKonfirmasi.putExtra("accessToken", strAccessToken);
                         inKonfirmasi.putExtra("status", status);
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
                         inKonfirmasi.putExtra("respTime", response.body().getRespTime());
-                        inKonfirmasi.putExtra("productCode", response.body().getProductCode());
+                        inKonfirmasi.putExtra("productCode", "Nomor Pelanggan PLN Pascabayar");
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());
                         inKonfirmasi.putExtra("customerName", response.body().getCustomerName());
-                        inKonfirmasi.putExtra("period", response.body().getPeriod());
+                        inKonfirmasi.putExtra("period", response.body().getPeriod()+" bulan");
                         inKonfirmasi.putExtra("policeNumber", response.body().getPoliceNumber());
                         inKonfirmasi.putExtra("lastPaidPeriod", response.body().getLastPaidPeriod());
                         inKonfirmasi.putExtra("tenor", response.body().getTenor());
@@ -555,7 +556,7 @@ public class TransPln extends AppCompatActivity {
                     String error = response.body().getRespMessage();
 
                     if (status.equals("SUCCESS")) {
-                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasi.class);
+                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPascabayar.class);
                         inKonfirmasi.putExtra("userID", response.body().getUserID());//
                         inKonfirmasi.putExtra("accessToken", strAccessToken);//
                         inKonfirmasi.putExtra("status", status);//
