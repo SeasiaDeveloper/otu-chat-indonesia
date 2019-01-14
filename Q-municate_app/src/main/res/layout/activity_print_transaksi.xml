@@ -10,7 +10,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cv_topup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/laytx1"
         android:layout_marginStart="@dimen/density_4"
         android:layout_marginLeft="@dimen/density_4"
@@ -260,7 +260,7 @@
             android:paddingBottom="@dimen/density_8">
 
             <Button
-                android:id="@+id/btnTransDeposit"
+                android:id="@+id/btn_print"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_round_corner_green"

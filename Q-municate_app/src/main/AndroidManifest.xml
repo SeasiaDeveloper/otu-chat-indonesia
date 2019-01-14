@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -176,6 +178,13 @@
             android:name=".ui.activities.chats.NewGroupDialogActivity"
             android:noHistory="true"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activities.payment.settingpayment.SettingPrinterActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.main.MainActivity" />
+        </activity>
         <activity
             android:name=".ui.activities.chats.CreateGroupDialogActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

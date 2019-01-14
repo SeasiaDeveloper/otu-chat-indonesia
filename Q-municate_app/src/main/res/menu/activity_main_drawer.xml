@@ -53,6 +53,10 @@
     <item android:title="LAIN-LAIN">
         <menu>
             <item
+                android:id="@+id/action_setting_printer"
+                android:icon="@drawable/ic_print"
+                android:title="Setting Printer" />
+            <item
                 android:id="@+id/action_web_qr_code"
                 android:icon="@drawable/ic_nav_otuweb"
                 android:title="OTU Web" />
