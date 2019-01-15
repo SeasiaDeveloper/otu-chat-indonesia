@@ -94,7 +94,10 @@ public class PrintTransaksi extends AppCompatActivity {
 
     private void preparePrint(String tanggal, String keterangan, String jenis, String tujuan, String noseri, String harga) {
 
+
         /*String dataForPrint = "\n" +
+        Toast.makeText(this, "Printing", Toast.LENGTH_SHORT).show();
+        String dataForPrint = "\n" +
                 "\n\n" +
                 "" + tanggal.trim() + "\n" +
                 "-------------------------------\n" +
