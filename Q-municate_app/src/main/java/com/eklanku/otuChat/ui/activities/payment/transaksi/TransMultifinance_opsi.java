@@ -38,39 +38,47 @@ public class TransMultifinance_opsi extends AppCompatActivity implements View.On
     public void onClick(View v) {
         String jenis = "";
         String img = "";
+        String title = "";
         switch (v.getId()) {
             case R.id.btnMAF:
                 jenis = "FINMAF";
                 img = "maf";
+                title = "Mega Auto Finance";
                 break;
             case R.id.btnMCF:
                 jenis = "FINMACF";
                 img = "mcf";
+                title = "Mega Central Finance";
                 break;
             case R.id.btnBAF:
                 jenis = "FINBAF";
                 img = "baf";
+                title = "Busan Auto Finance";
                 break;
             case R.id.btnFIF:
                 jenis = "FINFIF";
                 img = "fif";
+                title = "Federal International Finance";
                 break;
             case R.id.btnColombia:
                 jenis = "FINCOLUMBIA";
                 img = "columbia";
+                title = "Columbia";
                 break;
             case R.id.btnWOM:
                 jenis = "FINWOM";
                 img = "wom";
+                title = "Wahan Ottomitra Multiartha";
                 break;
         }
-        cekTransaksiFinance(jenis, img);
+        cekTransaksiFinance(jenis, img, title);
     }
 
-    public void cekTransaksiFinance(String jenis, String img) {
+    public void cekTransaksiFinance(String jenis, String img, String title) {
         Intent i = new Intent(TransMultifinance_opsi.this, TransMultiFinance.class);
         i.putExtra("jenis", jenis);
         i.putExtra("img", img);
+        i.putExtra("title", title);
         startActivity(i);
     }
 }

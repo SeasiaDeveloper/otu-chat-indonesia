@@ -119,7 +119,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             public void onClick(View v) {
                 showDetail(formatTgl(itemProduct.getTrxTanggal()), itemProduct.getTrxStatus(), itemProduct.getTrxNominal(), itemProduct.getTrxJenis(),
                         itemProduct.getTrxInvoice(), itemProduct.getTrxTujuan(), itemProduct.getTrxKet(), itemProduct.getTrxVsn(),
-                        itemProduct.getTrxProvide_name(), itemProduct.getTrxKode(), itemProduct.getTrxProductName());
+                        itemProduct.getTrxProvide_name(), itemProduct.getTrxKode(), itemProduct.getTrxProductName(), itemProduct.getTrxid());
             }
         });
 
@@ -131,7 +131,8 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
     }
 
     public void showDetail(String trxTanggal, String trxStatus, String trxNominal, String trxJenis,
-                           String trxInvoice, String trxTujuan, String trxKet, String trxVsn, String trxProvideName, String trxkode, String trxProductName) {
+                           String trxInvoice, String trxTujuan, String trxKet, String trxVsn,
+                           String trxProvideName, String trxkode, String trxProductName, String trxid) {
 
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.history_detail_trx);
@@ -180,6 +181,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         ImageView btnBuy = builder.findViewById(R.id.btn_buy);
         ImageView btnClose = builder.findViewById(R.id.btn_close);
         ImageView btnPrint = builder.findViewById(R.id.btn_print);
+        ImageView btndownload = builder.findViewById(R.id.btndownload);
 
         ImageView btnCopyInv = builder.findViewById(R.id.btn_copy_inv);
         ImageView btnCopyTjn = builder.findViewById(R.id.btn_copy_tjn);
@@ -228,12 +230,19 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(trxStatus.equalsIgnoreCase("Active")){
+                //if(trxStatus.equalsIgnoreCase("Active")){
                     String ket = "Slip Pembelian "+trxJenis.substring(0,1).toUpperCase() + trxJenis.substring(1).toLowerCase()+" "+trxProvideName;
                     printTransaksi(trxTanggal, ket, trxProductName, trxTujuan, trxVsn, trxNominal);
-                }else{
-                    Toast.makeText(context, "Selain transaksi sukses tidak bisa di print", Toast.LENGTH_SHORT).show();
-                }
+//                }else{
+//                    Toast.makeText(context, "Selain transaksi sukses tidak bisa di print", Toast.LENGTH_SHORT).show();
+//                }
+            }
+        });
+
+        btndownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                download(trxid);
             }
         });
 
@@ -365,6 +374,10 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         }
 
         return format;
+    }
+
+    public void download(String trxid){
+       context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://demo.eklanku.com/invoice/GenerateInvoice/gen_pdf_download?trxID="+trxid)));
     }
 
 }

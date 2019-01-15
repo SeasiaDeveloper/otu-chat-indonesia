@@ -138,7 +138,7 @@ public class HistoryActivity extends AppCompatActivity {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
                     String trxKode, trxTanggal, trxStatus, trxNominal, trxJenis, trxInvoice;
-                    String trxMbrId, trxTujuan, trxKet, trxVsn, trxMbrName, trxTglSukses, trxProviderName, trxProductNsme;
+                    String trxMbrId, trxTujuan, trxKet, trxVsn, trxMbrName, trxTglSukses, trxProviderName, trxProductNsme, trxid;
                     if (status.equals("SUCCESS")) {
                         final List<DataDetailHistosryOTU> result = response.body().getListData();
                         int ROW_SIZE = result.size();
@@ -169,8 +169,10 @@ public class HistoryActivity extends AppCompatActivity {
                                 trxVsn = "-";
                             }
 
+                            trxid = result.get(i).getTransaksi_id();
+
                             ItemHistoryTrx trx = new ItemHistoryTrx(trxKode, trxTanggal, trxStatus, trxNominal, trxJenis, trxInvoice,
-                                    trxMbrId, trxTujuan, trxKet, trxVsn, trxMbrName, trxTglSukses, trxProviderName, trxProductNsme);
+                                    trxMbrId, trxTujuan, trxKet, trxVsn, trxMbrName, trxTglSukses, trxProviderName, trxProductNsme, trxid);
                             trxListTransaksi.add(trx);
 
                         }

@@ -120,18 +120,18 @@ public class PrintTransaksi extends AppCompatActivity {
                 "" + tanggal.trim() + "\n" +
                 "-------------------------------\n" +
                 "" + keterangan + "\n" +
-                "Jenis Voucher : " + jenis + "\n" +
-                "No Tujuan     : " + tujuan + "\n" +
-                "No Seri       : " + noseri + "\n" +
-                "Harga         : " + formatRupiah(Double.parseDouble(harga)) + "\n" +
+                "Voucher : " + jenis + "\n" +
+                "Nomor   : " + tujuan + "\n" +
+                "No Seri : " + noseri + "\n" +
+                "Harga   : " + formatRupiah(Double.parseDouble(harga)) + "\n" +
                 "-------------------------------\n" +
-                Utils.center("Terima Kasih dan", 32) + "\n" +
-                Utils.center("Selamat Berbelanja Kembali", 32) + "\n" +
+                Utils.center("Terima Kasih dan", 32) + "" +
+                Utils.center("Selamat Berbelanja Kembali", 32) + "" +
                 "-------------------------------\n" +
-                Utils.center("Layanan Konsumen OTU Chat", 32) + "\n" +
-                Utils.center("081-13-888-286", 32) + "\n" +
-                Utils.center("081-13-888-286", 32) + "\n" +
-                Utils.center("customer.care@otu.co.id", 32) + "\n" +
+                Utils.center("Layanan Konsumen OTU Chat", 32) + "" +
+                Utils.center("081-13-888-286", 32) + "" +
+                Utils.center("081-13-888-286", 32) + "" +
+                Utils.center("customer.care@otu.co.id", 32) + "" +
                 "\n\n";
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);

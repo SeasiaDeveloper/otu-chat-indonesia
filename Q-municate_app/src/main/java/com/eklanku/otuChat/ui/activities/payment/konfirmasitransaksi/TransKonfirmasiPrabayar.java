@@ -75,14 +75,22 @@ public class TransKonfirmasiPrabayar extends AppCompatActivity {
         btnprint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ket = "Slip Pembelian "
-                        + extras.getString("productCode").substring(0, 1).toUpperCase()
-                        + extras.getString("productCode").substring(1).toLowerCase() + " "
-                        + oprpulsa.substring(0, 1).toUpperCase()
-                        + oprpulsa.substring(1).toLowerCase();
-                PrintTransaksi.start(TransKonfirmasiPrabayar.this, formatTgl(extras.getString("respTime")), ket, jenisvoucher,
-                        extras.getString("customerMSISDN"), "-", formatRupiah(Double.parseDouble(extras.getString("billing"))));
+                String ket = "";
+                if(!oprpulsa.equalsIgnoreCase("")){
+                    ket = "Slip Pembelian "
+                            + extras.getString("productCode").substring(0, 1).toUpperCase()
+                            + extras.getString("productCode").substring(1).toLowerCase() + " "
+                            + oprpulsa.substring(0, 1).toUpperCase()
+                            + oprpulsa.substring(1).toLowerCase();
+                }else{
+                    ket = "Slip Pembelian "
+                            + extras.getString("productCode").substring(0, 1).toUpperCase()
+                            + extras.getString("productCode").substring(1).toLowerCase() + " "
+                            + oprpulsa;
+                }
 
+                PrintTransaksi.start(TransKonfirmasiPrabayar.this, formatTgl(extras.getString("respTime")), ket, jenisvoucher,
+                        extras.getString("customerMSISDN"), "-", extras.getString("billing"));
             }
         });
 
@@ -129,7 +137,7 @@ public class TransKonfirmasiPrabayar extends AppCompatActivity {
             i.putExtra("nominal", trxNominal);
             i.putExtra("tujuan", trxTujuan);
             TransKonfirmasiPrabayar.this.startActivity(i);
-        }else if (trxJenis.equalsIgnoreCase("ESALDO")) {
+        } else if (trxJenis.equalsIgnoreCase("ESALDO")) {
             i = new Intent(TransKonfirmasiPrabayar.this, TransESaldo_product.class);
             i.putExtra("nominal", trxNominal);
             i.putExtra("tujuan", trxTujuan);

@@ -197,10 +197,9 @@ public class TransEtool extends AppCompatActivity {
             }
         });
 
-
-        initializeResources();
-        //=====NEW API====
         getproduct_etool();
+        initializeResources();
+
 
     }
 
@@ -267,7 +266,7 @@ public class TransEtool extends AppCompatActivity {
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
                         inKonfirmasi.putExtra("ep", ep);
                         inKonfirmasi.putExtra("jenisvoucher", name);
-                        inKonfirmasi.putExtra("oprPulsa", nameetoll);
+                        inKonfirmasi.putExtra("oprPulsa", "");
 
                         /*inKonfirmasi.putExtra("userID", response.body().getUserID());//
                         inKonfirmasi.putExtra("accessToken", strAccessToken);//
@@ -342,7 +341,7 @@ public class TransEtool extends AppCompatActivity {
                 code = code_product.get(position);
                 ep = endpoint.get(position);
                 name = code_name.get(position);
-                nameetoll = list.get(position);
+                nameetoll = d.get(position);
                 if (!validateIdpel()) {
                     return;
                 }
@@ -493,6 +492,7 @@ public class TransEtool extends AppCompatActivity {
                             list.add(x);
                         }
 
+                        Log.d("OPPO-1", "onResponse: "+list);
                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, list);
                         spnKartu.setAdapter(adapter);
                         spnKartu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -523,10 +523,11 @@ public class TransEtool extends AppCompatActivity {
     }
 
     ArrayList<String> code_product, code_name, endpoint;
+    ArrayList<String> a, b, c, d;
 
     public void initProduct(String provider) {
         Log.d("OPPO-1", "initProduct: " + provider);
-        ArrayList<String> a, b, c, d;
+
         a = new ArrayList<>();
         b = new ArrayList<>();
         c = new ArrayList<>();

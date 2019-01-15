@@ -11,6 +11,16 @@ public class ItemHistoryTrx {
     private String trxTglSukses;
     private String trxProvide_name;
 
+    public String getTrxid() {
+        return trxid;
+    }
+
+    public void setTrxid(String trxid) {
+        this.trxid = trxid;
+    }
+
+    private String trxid;
+
     public String getTrxProductName() {
         return trxProductName;
     }
@@ -33,7 +43,8 @@ public class ItemHistoryTrx {
 
 
     public ItemHistoryTrx(String trxKode, String trxTanggal, String trxStatus, String trxNominal, String trxJenis, String trxInvoice,
-                          String trxMbrId, String trxTujuan, String trxKet, String trxVsn, String trxMbrName, String trxTglSukses, String trxProvide_name, String trxProductName) {
+                          String trxMbrId, String trxTujuan, String trxKet, String trxVsn, String trxMbrName, String trxTglSukses,
+                          String trxProvide_name, String trxProductName, String trxid) {
 
         this.trxKode = trxKode;
         this.trxTanggal = trxTanggal;
@@ -49,6 +60,7 @@ public class ItemHistoryTrx {
         this.trxTglSukses = trxTglSukses;
         this.trxProvide_name = trxProvide_name;
         this.trxProductName = trxProductName;
+        this.trxid = trxid;
 
     }
 

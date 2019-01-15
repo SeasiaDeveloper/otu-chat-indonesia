@@ -76,7 +76,7 @@ public class TransMultiFinance extends AppCompatActivity {
     ArrayList<String> idFinance;
 
     Bundle extras;
-    String jenis, img;
+    String jenis, img, title;
 
     ImageView imgFinance;
 
@@ -113,7 +113,8 @@ public class TransMultiFinance extends AppCompatActivity {
 
         jenis = extras.getString("jenis");
         img = extras.getString("img");
-        setTitle(jenis);
+        title = extras.getString("title");
+        setTitle(title);
 
         int idimg = TransMultiFinance.this.getResources().getIdentifier("drawable/ic_finance_" + img.toLowerCase(), null, TransMultiFinance.this.getPackageName());
         imgFinance.setImageResource(idimg);

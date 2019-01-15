@@ -37,6 +37,180 @@ public class DataDetailHistosryOTU {
     @SerializedName("product_kode")
     private String product_kode;
 
+    @SerializedName("transaksi_id")
+    private String transaksi_id;
+
+    @SerializedName("product_name")
+    private String product_name;
+
+    @SerializedName("provider_name")
+    private String provider_name;
+
+    @SerializedName("type_product")
+    private String type_product;
+
+    @SerializedName("header1")
+    private String header1;
+
+    @SerializedName("waktu")
+    private String waktu;
+
+    @SerializedName("ref2")
+    private String ref2;
+
+    @SerializedName("idpelanggan1")
+    private String idpelanggan1;
+
+    @SerializedName("customername")
+    private String customername;
+
+    @SerializedName("noref1")
+    private String noref1;
+
+    @SerializedName("customerphonenumber")
+    private String customerphonenumber;
+
+    @SerializedName("billercode")
+    private String billercode;
+
+    @SerializedName("billquantity")
+    private String billquantity;
+
+    @SerializedName("nominal")
+    private String nominal;
+
+    @SerializedName("biayaadmin")
+    private String biayaadmin;
+
+    @SerializedName("total_tagihan")
+    private String total_tagihan;
+
+    @SerializedName("terbilang")
+    private String terbilang;
+
+    @SerializedName("footer1")
+    private String footer1;
+
+    public String getHeader1() {
+        return header1;
+    }
+
+    public void setHeader1(String header1) {
+        this.header1 = header1;
+    }
+
+    public String getWaktu() {
+        return waktu;
+    }
+
+    public void setWaktu(String waktu) {
+        this.waktu = waktu;
+    }
+
+    public String getRef2() {
+        return ref2;
+    }
+
+    public void setRef2(String ref2) {
+        this.ref2 = ref2;
+    }
+
+    public String getIdpelanggan1() {
+        return idpelanggan1;
+    }
+
+    public void setIdpelanggan1(String idpelanggan1) {
+        this.idpelanggan1 = idpelanggan1;
+    }
+
+    public String getCustomername() {
+        return customername;
+    }
+
+    public void setCustomername(String customername) {
+        this.customername = customername;
+    }
+
+    public String getNoref1() {
+        return noref1;
+    }
+
+    public void setNoref1(String noref1) {
+        this.noref1 = noref1;
+    }
+
+    public String getCustomerphonenumber() {
+        return customerphonenumber;
+    }
+
+    public void setCustomerphonenumber(String customerphonenumber) {
+        this.customerphonenumber = customerphonenumber;
+    }
+
+    public String getBillercode() {
+        return billercode;
+    }
+
+    public void setBillercode(String billercode) {
+        this.billercode = billercode;
+    }
+
+    public String getBillquantity() {
+        return billquantity;
+    }
+
+    public void setBillquantity(String billquantity) {
+        this.billquantity = billquantity;
+    }
+
+    public String getNominal() {
+        return nominal;
+    }
+
+    public void setNominal(String nominal) {
+        this.nominal = nominal;
+    }
+
+    public String getBiayaadmin() {
+        return biayaadmin;
+    }
+
+    public void setBiayaadmin(String biayaadmin) {
+        this.biayaadmin = biayaadmin;
+    }
+
+    public String getTotal_tagihan() {
+        return total_tagihan;
+    }
+
+    public void setTotal_tagihan(String total_tagihan) {
+        this.total_tagihan = total_tagihan;
+    }
+
+    public String getTerbilang() {
+        return terbilang;
+    }
+
+    public void setTerbilang(String terbilang) {
+        this.terbilang = terbilang;
+    }
+
+    public String getFooter1() {
+        return footer1;
+    }
+
+    public void setFooter1(String footer1) {
+        this.footer1 = footer1;
+    }
+
+    public String getTransaksi_id() {
+        return transaksi_id;
+    }
+
+    public void setTransaksi_id(String transaksi_id) {
+        this.transaksi_id = transaksi_id;
+    }
+
     public String getProduct_name() {
         return product_name;
     }
@@ -45,9 +219,6 @@ public class DataDetailHistosryOTU {
         this.product_name = product_name;
     }
 
-    @SerializedName("product_name")
-    private String product_name;
-
     public String getProvider_name() {
         return provider_name;
     }
@@ -55,9 +226,6 @@ public class DataDetailHistosryOTU {
     public void setProvider_name(String provider_name) {
         this.provider_name = provider_name;
     }
-
-    @SerializedName("provider_name")
-    private String provider_name;
 
     public String getProduct_kode() {
         return product_kode;
@@ -74,9 +242,6 @@ public class DataDetailHistosryOTU {
     public void setType_product(String type_product) {
         this.type_product = type_product;
     }
-
-    @SerializedName("type_product")
-    private String type_product;
 
     public String getId_member() {
         return id_member;
