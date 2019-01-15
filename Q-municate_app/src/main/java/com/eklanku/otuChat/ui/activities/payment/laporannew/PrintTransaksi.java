@@ -28,6 +28,8 @@ import com.eklanku.otuChat.btprint.iSettings;
 import com.eklanku.otuChat.ui.activities.main.Utils;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class PrintTransaksi extends AppCompatActivity {
 
@@ -85,14 +87,14 @@ public class PrintTransaksi extends AppCompatActivity {
             public void onClick(View v) {
                 preparePrint(tv_tglprint.getText().toString(), tv_keteranganprint.getText().toString(), tv_jenisvoucher.getText().toString(),
                         tv_tujuan.getText().toString(), tv_noseri.getText().toString(),
-                        tv_harga.getText().toString().replace(",", "").replace(".", ""));
+                        tv_harga.getText().toString());
             }
         });
     }
 
     private void preparePrint(String tanggal, String keterangan, String jenis, String tujuan, String noseri, String harga) {
 
-        String dataForPrint = "\n" +
+        /*String dataForPrint = "\n" +
                 "\n\n" +
                 "" + tanggal.trim() + "\n" +
                 "-------------------------------\n" +
@@ -101,6 +103,24 @@ public class PrintTransaksi extends AppCompatActivity {
                 "No Tujuan     : " + tujuan + "\n" +
                 "No Seri       : " + noseri + "\n" +
                 "Harga         : Rp" + ConverterUtils.convertIDR(harga) + "\n" +
+                "-------------------------------\n" +
+                Utils.center("Terima Kasih dan", 32) + "\n" +
+                Utils.center("Selamat Berbelanja Kembali", 32) + "\n" +
+                "-------------------------------\n" +
+                Utils.center("Layanan Konsumen OTU Chat", 32) + "\n" +
+                Utils.center("081-13-888-286", 32) + "\n" +
+                Utils.center("081-13-888-286", 32) + "\n" +
+                Utils.center("customer.care@otu.co.id", 32) + "\n" +
+                "\n\n";*/
+
+        String dataForPrint = "\n" +
+                "" + tanggal.trim() + "\n" +
+                "-------------------------------\n" +
+                "" + keterangan + "\n" +
+                "Jenis Voucher : " + jenis + "\n" +
+                "No Tujuan     : " + tujuan + "\n" +
+                "No Seri       : " + noseri + "\n" +
+                "Harga         : " + formatRupiah(Double.parseDouble(harga)) + "\n" +
                 "-------------------------------\n" +
                 Utils.center("Terima Kasih dan", 32) + "\n" +
                 Utils.center("Selamat Berbelanja Kembali", 32) + "\n" +
@@ -120,6 +140,14 @@ public class PrintTransaksi extends AppCompatActivity {
         }
 
 
+    }
+
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
     }
 
     private void print(String dataForPrint) {
