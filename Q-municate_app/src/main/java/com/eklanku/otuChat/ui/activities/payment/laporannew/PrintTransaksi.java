@@ -13,6 +13,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,6 +27,8 @@ import com.eklanku.otuChat.btprint.iPrint;
 import com.eklanku.otuChat.btprint.iPrinters;
 import com.eklanku.otuChat.btprint.iSettings;
 import com.eklanku.otuChat.ui.activities.main.Utils;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -38,10 +41,13 @@ public class PrintTransaksi extends AppCompatActivity {
     ProgressDialog progress_dialog;
     private SharedPreferences config;
     private String strNamaPrinter, strMacAddress;
+    String jnstrx;
 
-    public static void start(Activity activity, String tanggal, String keterangan, String jenisvoucher,
+    public static void start(Activity activity, String jnstrx, String tanggal, String keterangan, String jenisvoucher,
                              String nomortujuan, String nomorseri, String harga) {
         Intent i = new Intent(activity, PrintTransaksi.class);
+
+        i.putExtra("jenistrx", jnstrx);
         i.putExtra("tanggal", tanggal);
         i.putExtra("keterangan", keterangan);
         i.putExtra("jenisvoucher", jenisvoucher);
@@ -49,6 +55,33 @@ public class PrintTransaksi extends AppCompatActivity {
         i.putExtra("nomorseri", nomorseri);
         i.putExtra("harga", harga);
         activity.startActivity(i);
+    }
+
+    public static void startBPJSKes(Activity activity, String jnstrx, String invoice, String tanggalcetak, String judul, String tanggalTransaksi, String nomorResi,
+                                    String nomorPelanggan, String namaPeserta, String jumlahPeserta, String nomorTelepon, String nomorReferensi,
+                                    String jumlahPremi, String jumlahTagihan, String biayaAdmin, String totalTagihan, String terbilang, String footer1) {
+
+        Intent i = new Intent(activity, PrintTransaksi.class);
+        Log.d("OPPO-1", "startBPJSKes: "+judul);
+        i.putExtra("jenistrx", jnstrx);
+        i.putExtra("invoice", invoice);
+        i.putExtra("tanggalcetak", tanggalcetak);
+        i.putExtra("judul", judul);
+        i.putExtra("tanggalTransaksi", tanggalTransaksi);
+        i.putExtra("nomorResi", nomorResi);
+        i.putExtra("nomorPelanggan", nomorPelanggan);
+        i.putExtra("namaPeserta", namaPeserta);
+        i.putExtra("jumlahPeserta", jumlahPeserta);
+        i.putExtra("nomorTelepon", nomorTelepon);
+        i.putExtra("nomorReferensi", nomorReferensi);
+        i.putExtra("jumlahPremi", jumlahPremi);
+        i.putExtra("jumlahTagihan", jumlahTagihan);
+        i.putExtra("biayaAdmin", biayaAdmin);
+        i.putExtra("totalTagihan", totalTagihan);
+        i.putExtra("terbilang", terbilang);
+        i.putExtra("footer1", footer1);
+        activity.startActivity(i);
+
     }
 
 
@@ -63,12 +96,13 @@ public class PrintTransaksi extends AppCompatActivity {
         tv_noseri = findViewById(R.id.tvNomorSeri);
         tv_harga = findViewById(R.id.tvHarga);
 
-        tv_tglprint.setText(getIntent().getStringExtra("tanggal"));
+        jnstrx = getIntent().getStringExtra("jenistrx");
+        /*tv_tglprint.setText(getIntent().getStringExtra("tanggal"));
         tv_keteranganprint.setText(getIntent().getStringExtra("keterangan"));
         tv_jenisvoucher.setText(getIntent().getStringExtra("jenisvoucher"));
         tv_tujuan.setText(getIntent().getStringExtra("nomortujuan"));
         tv_noseri.setText(getIntent().getStringExtra("nomorseri"));
-        tv_harga.setText(getIntent().getStringExtra("harga"));
+        tv_harga.setText(getIntent().getStringExtra("harga"));*/
 
         config = this.getSharedPreferences("config", 0);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -85,18 +119,39 @@ public class PrintTransaksi extends AppCompatActivity {
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                preparePrint(tv_tglprint.getText().toString(), tv_keteranganprint.getText().toString(), tv_jenisvoucher.getText().toString(),
-                        tv_tujuan.getText().toString(), tv_noseri.getText().toString(),
-                        tv_harga.getText().toString());
+                if (jnstrx.equals("PULSA") || jnstrx.equals("KUOTA") || jnstrx.equals("ETOOL MANDIRI") || jnstrx.equals("ETOOL BNI") ||
+                        jnstrx.equals("GAME") || jnstrx.equals("TELPONS") || jnstrx.equals("SMS") || jnstrx.equals("OJEK ONLINE")) {
+                    preparePrint(tv_tglprint.getText().toString(), tv_keteranganprint.getText().toString(), tv_jenisvoucher.getText().toString(),
+                            tv_tujuan.getText().toString(), tv_noseri.getText().toString(),
+                            tv_harga.getText().toString());
+                } else if (jnstrx.equals("BPJSKES")) {
+                    strukBPJSKes(getIntent().getStringExtra("invoice").toString(),
+                            getIntent().getStringExtra("tanggalcetak").toString(),
+                            getIntent().getStringExtra("judul").toString(),
+                            getIntent().getStringExtra("tanggalTransaksi").toString(),
+                            getIntent().getStringExtra("nomorResi").toString(),
+                            getIntent().getStringExtra("nomorPelanggan").toString(),
+                            getIntent().getStringExtra("namaPeserta").toString(),
+                            getIntent().getStringExtra("jumlahPeserta").toString(),
+                            getIntent().getStringExtra("nomorTelepon").toString(),
+                            getIntent().getStringExtra("nomorReferensi").toString(),
+                            getIntent().getStringExtra("jumlahPremi").toString(),
+                            getIntent().getStringExtra("jumlahTagihan").toString(),
+                            getIntent().getStringExtra("biayaAdmin").toString(),
+                            getIntent().getStringExtra("totalTagihan").toString(),
+                            getIntent().getStringExtra("terbilang").toString(),
+                            getIntent().getStringExtra("footer1").toString()
+                    );
+                }
+
             }
         });
     }
 
     private void preparePrint(String tanggal, String keterangan, String jenis, String tujuan, String noseri, String harga) {
 
-
-        /*String dataForPrint = "\n" +
         Toast.makeText(this, "Printing", Toast.LENGTH_SHORT).show();
+        /*String dataForPrint = "\n" +
         String dataForPrint = "\n" +
                 "\n\n" +
                 "" + tanggal.trim() + "\n" +
@@ -141,7 +196,48 @@ public class PrintTransaksi extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Bluetooth printer not set, please go to setting printer menu", Toast.LENGTH_SHORT).show();
         }
+    }
 
+    public void strukBPJSKes(String invoice, String tanggalcetak, String judul, String tanggalTransaksi, String nomorResi,
+                             String nomorPelanggan, String namaPeserta, String jumlahPeserta, String nomorTelepon, String nomorReferensi,
+                             String jumlahPremi, String jumlahTagihan, String biayaAdmin, String totalTagihan, String terbilang, String footer1) {
+        Toast.makeText(this, "Printing", Toast.LENGTH_SHORT).show();
+        String dataForPrint = "\n" +
+                "" + tanggalcetak.trim() + "\n" +
+                "-------------------------------\n" +
+                "" + judul + "\n" +
+                "Invoice         : " + invoice + "\n" +
+                "Tanggal         : " + tanggalTransaksi + "\n" +
+                "No Pelanggan    : " + nomorPelanggan + "\n" +
+                "Nama Peserta    : " + namaPeserta + "\n" +
+                "Jumlah Peserta  : " + jumlahPeserta + "\n" +
+                "Nomor Telepon   : " + nomorTelepon + "\n" +
+                "Nomor Referansi : " + nomorReferensi + "\n" +
+                "Jumlah Premi    : " + jumlahPremi + "\n" +
+                "Jumlah Tagihan  : " + jumlahTagihan + "\n" +
+                "Biaya Admin     : " + biayaAdmin + "\n" +
+                "-------------------------------\n" +
+                "Total Tagihan   : " + totalTagihan + "\n" +
+                "Terbilang       : " + terbilang + "\n\n" +
+                footer1 + "\n" +
+                "-------------------------------\n" +
+                Utils.center("Terima Kasih dan", 32) + "" +
+                Utils.center("Selamat Berbelanja Kembali", 32) + "" +
+                "-------------------------------\n" +
+                Utils.center("Layanan Konsumen OTU Chat", 32) + "" +
+                Utils.center("081-13-888-286", 32) + "" +
+                Utils.center("081-13-888-286", 32) + "" +
+                Utils.center("customer.care@otu.co.id", 32) + "" +
+                "\n\n";
+
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (sp.getString("mac_printer", "") != null) {
+            print(dataForPrint);
+        } else {
+            Toast.makeText(this, "Bluetooth printer not set, please go to setting printer menu", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -199,6 +295,7 @@ public class PrintTransaksi extends AppCompatActivity {
             _print.Start(sp.getString("nm_printer", ""));
             iObject _object = new iObject();
             _object.Text(strprint);
+            _object.FontSize(5);
             _print.Add(_object);
             _print.End();
             _print.Print();

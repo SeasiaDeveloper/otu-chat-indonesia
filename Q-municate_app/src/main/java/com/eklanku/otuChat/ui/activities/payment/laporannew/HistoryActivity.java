@@ -129,7 +129,7 @@ public class HistoryActivity extends AppCompatActivity {
         showProgress(true);
         trxListTransaksi.clear();
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-        Call<DataHistoryOTU> dataCall = mApiInterfacePayment.getHistoryTrx(strUserID, strApIUse, strAccessToken, "1");
+        Call<DataHistoryOTU> dataCall = mApiInterfacePayment.getHistoryTrx(strUserID, strApIUse, strAccessToken, "6");
         dataCall.enqueue(new Callback<DataHistoryOTU>() {
             @Override
             public void onResponse(Call<DataHistoryOTU> call, Response<DataHistoryOTU> response) {
@@ -137,42 +137,94 @@ public class HistoryActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String msg = response.body().getRespMessage();
-                    String trxKode, trxTanggal, trxStatus, trxNominal, trxJenis, trxInvoice;
-                    String trxMbrId, trxTujuan, trxKet, trxVsn, trxMbrName, trxTglSukses, trxProviderName, trxProductNsme, trxid;
+                    String id_member, invoice, tgl, vstatus, harga, tujuan, keterangan, vsn, mbr_name, tgl_sukses, product_kode, type_product,
+                            provider_name, product_name, transaksi_id, ptname, waktu, startdate, enddate, ref2, idpelanggan1, customerid,
+                            customername, subscribername, subscribersegmentation, powerconsumingcategory, swreferencenumber, billercode, noref1, noref2,
+                            customerphonenumber, lastpaidperiode, lastpaidduedate, tenor, productcategory, billquantity, billerrefnumber,
+                            carnumber, nominal, biayaadmin, odinstallmentamount, odpenaltyfee, billeradminfee, itemmerktype, minimumpayamount,
+                            miscfee, branchname, infoteks, serviceunitphone, serviceunit, tarif_daya, wording, bl_th, angsuran_ke,
+                            angsuran_pokok, jumlah_tagihan, total_tagihan, terbilang, header1, middle1, footer1, footer2, footer3, footer4;
+
                     if (status.equals("SUCCESS")) {
                         final List<DataDetailHistosryOTU> result = response.body().getListData();
                         int ROW_SIZE = result.size();
 
                         for (int i = 0; i < ROW_SIZE; i++) {
-                            trxKode = result.get(i).getProduct_kode();
-                            trxTanggal = result.get(i).getTgl();
-                            trxStatus = result.get(i).getVstatus();
-                            trxNominal = result.get(i).getHarga();
-                            trxJenis = result.get(i).getType_product();
-                            trxInvoice = result.get(i).getInvoice();
 
-                            trxMbrId = result.get(i).getId_member();
-                            trxTujuan = result.get(i).getTujuan();
-                            trxKet = result.get(i).getKeterangan();
-                            trxVsn = result.get(i).getVsn();
-                            trxMbrName = result.get(i).getMbr_name();
-                            trxTglSukses = result.get(i).getTgl_sukses();
+                            id_member = result.get(i).getId_member();
+                            invoice = result.get(i).getInvoice();
+                            tgl = result.get(i).getTgl();
+                            vstatus = result.get(i).getVstatus();
+                            harga = result.get(i).getHarga();
+                            tujuan = result.get(i).getTujuan();
+                            keterangan = result.get(i).getKeterangan();
+                            vsn = result.get(i).getVsn();
+                            mbr_name = result.get(i).getMbr_name();
+                            tgl_sukses = result.get(i).getTgl_sukses();
+                            product_kode = result.get(i).getProduct_kode();
+                            type_product = result.get(i).getType_product();
+                            provider_name = result.get(i).getProvider_name();
+                            product_name = result.get(i).getProduct_name();
+                            transaksi_id = result.get(i).getTransaksi_id();
+                            ptname = result.get(i).getPtname();
+                            waktu = result.get(i).getWaktu();
+                            startdate = result.get(i).getStartdate();
+                            enddate = result.get(i).getEnddate();
+                            ref2 = result.get(i).getRef2();
+                            idpelanggan1 = result.get(i).getIdpelanggan1();
+                            customerid = result.get(i).getCustomerid();
+                            customername = result.get(i).getCustomername();
+                            subscribername = result.get(i).getSubscribername();
+                            subscribersegmentation = result.get(i).getSubscribersegmentation();
+                            powerconsumingcategory = result.get(i).getPowerconsumingcategory();
+                            swreferencenumber = result.get(i).getSwreferencenumber();
+                            billercode = result.get(i).getBillercode();
+                            noref1 = result.get(i).getNoref1();
+                            noref2 = result.get(i).getNoref2();
+                            customerphonenumber = result.get(i).getCustomerphonenumber();
+                            lastpaidperiode = result.get(i).getLastpaidperiode();
+                            lastpaidduedate = result.get(i).getLastpaidduedate();
+                            tenor = result.get(i).getTenor();
+                            productcategory = result.get(i).getProductcategory();
+                            billquantity = result.get(i).getBillquantity();
+                            billerrefnumber = result.get(i).getBillerrefnumber();
+                            carnumber = result.get(i).getCarnumber();
+                            nominal = result.get(i).getNominal();
+                            biayaadmin = result.get(i).getBiayaadmin();
+                            odinstallmentamount = result.get(i).getOdinstallmentamount();
+                            odpenaltyfee = result.get(i).getOdpenaltyfee();
+                            billeradminfee = result.get(i).getBilleradminfee();
+                            itemmerktype = result.get(i).getItemmerktype();
+                            minimumpayamount = result.get(i).getMinimumpayamount();
+                            miscfee = result.get(i).getMiscfee();
+                            branchname = result.get(i).getBranchname();
+                            infoteks = result.get(i).getInfoteks();
+                            serviceunitphone = result.get(i).getServiceunitphone();
+                            serviceunit = result.get(i).getServiceunit();
+                            tarif_daya = result.get(i).getTarif_daya();
+                            wording = result.get(i).getWording();
+                            bl_th = result.get(i).getBl_th();
+                            angsuran_ke = result.get(i).getAngsuran_ke();
+                            angsuran_pokok = result.get(i).getAngsuran_pokok();
+                            jumlah_tagihan = result.get(i).getJumlah_tagihan();
+                            total_tagihan = result.get(i).getTotal_tagihan();
+                            terbilang = result.get(i).getTerbilang();
+                            header1 = result.get(i).getHeader1();
+                            middle1 = result.get(i).getMiddle1();
+                            footer1 = result.get(i).getFooter1();
+                            footer2 = result.get(i).getFooter2();
+                            footer3 = result.get(i).getFooter3();
+                            footer4 = result.get(i).getFooter4();
 
-                            trxProviderName = result.get(i).getProvider_name();
-                            trxProductNsme = result.get(i).getProduct_name();
 
-                            if (TextUtils.isEmpty(trxKet)) {
-                                trxKet = "-";
-                            }
 
-                            if (TextUtils.isEmpty(trxVsn)) {
-                                trxVsn = "-";
-                            }
-
-                            trxid = result.get(i).getTransaksi_id();
-
-                            ItemHistoryTrx trx = new ItemHistoryTrx(trxKode, trxTanggal, trxStatus, trxNominal, trxJenis, trxInvoice,
-                                    trxMbrId, trxTujuan, trxKet, trxVsn, trxMbrName, trxTglSukses, trxProviderName, trxProductNsme, trxid);
+                            ItemHistoryTrx trx = new ItemHistoryTrx(id_member, invoice, tgl, vstatus, harga, tujuan, keterangan, vsn, mbr_name, tgl_sukses, product_kode, type_product,
+                                    provider_name, product_name, transaksi_id, ptname, waktu, startdate, enddate, ref2, idpelanggan1, customerid,
+                                    customername, subscribername, subscribersegmentation, powerconsumingcategory, swreferencenumber, billercode, noref1, noref2,
+                                    customerphonenumber, lastpaidperiode, lastpaidduedate, tenor, productcategory, billquantity, billerrefnumber,
+                                    carnumber, nominal, biayaadmin, odinstallmentamount, odpenaltyfee, billeradminfee, itemmerktype, minimumpayamount,
+                                    miscfee, branchname, infoteks, serviceunitphone, serviceunit, tarif_daya, wording, bl_th, angsuran_ke,
+                                    angsuran_pokok, jumlah_tagihan, total_tagihan, terbilang, header1, middle1, footer1, footer2, footer3, footer4);
                             trxListTransaksi.add(trx);
 
                         }
@@ -477,7 +529,7 @@ public class HistoryActivity extends AppCompatActivity {
                 final ArrayList<ItemHistoryTrx> filteredList = new ArrayList<>();
 
                 for (ItemHistoryTrx model : trxListTransaksi) {
-                    final String text1 = model.getTrxTujuan().toLowerCase();
+                    final String text1 = model.getTujuan().toLowerCase();
 
                     if (text1.contains(query)) {
                         filteredList.add(model);

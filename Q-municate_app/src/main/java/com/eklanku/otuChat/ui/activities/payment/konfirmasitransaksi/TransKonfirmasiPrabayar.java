@@ -89,8 +89,8 @@ public class TransKonfirmasiPrabayar extends AppCompatActivity {
                             + oprpulsa;
                 }
 
-                PrintTransaksi.start(TransKonfirmasiPrabayar.this, formatTgl(extras.getString("respTime")), ket, jenisvoucher,
-                        extras.getString("customerMSISDN"), "-", extras.getString("billing"));
+                /*PrintTransaksi.start(TransKonfirmasiPrabayar.this, formatTgl(extras.getString("respTime")), ket, jenisvoucher,
+                        extras.getString("customerMSISDN"), "-", extras.getString("billing"));*/
             }
         });
 

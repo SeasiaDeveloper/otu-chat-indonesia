@@ -53,7 +53,9 @@ import com.eklanku.otuChat.ui.activities.payment.topup.TopupOrder;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransESaldo_opsi;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransEtool;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKartuKredit;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransMultifinance_opsi;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPGN;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketTelp;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketData;
@@ -469,15 +471,15 @@ public class PaymentFragment extends Fragment {
                     startActivity(new Intent(context, TransMultifinance_opsi.class));
                     break;
                 case R.id.btnKartuKredit:
-                    // startActivity(new Intent(context, TransKartuKredit.class));
-                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
+                     startActivity(new Intent(context, TransKartuKredit.class));
+                    //Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.btnAsuransi:
                     //startActivity(new Intent(context, TransAsuransi.class));
                     Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.btnPGN:
-                    //startActivity(new Intent(context, TransPGN.class));
+                    startActivity(new Intent(context, TransPGN.class));
                     Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
                /* case R.id.btnCallMe:

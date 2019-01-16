@@ -37,23 +37,29 @@ public class DataDetailHistosryOTU {
     @SerializedName("product_kode")
     private String product_kode;
 
-    @SerializedName("transaksi_id")
-    private String transaksi_id;
-
-    @SerializedName("product_name")
-    private String product_name;
+    @SerializedName("type_product")
+    private String type_product;
 
     @SerializedName("provider_name")
     private String provider_name;
 
-    @SerializedName("type_product")
-    private String type_product;
+    @SerializedName("product_name")
+    private String product_name;
 
-    @SerializedName("header1")
-    private String header1;
+    @SerializedName("transaksi_id")
+    private String transaksi_id;
+
+    @SerializedName("ptname")
+    private String ptname;
 
     @SerializedName("waktu")
     private String waktu;
+
+    @SerializedName("startdate")
+    private String startdate;
+
+    @SerializedName("enddate")
+    private String enddate;
 
     @SerializedName("ref2")
     private String ref2;
@@ -61,20 +67,56 @@ public class DataDetailHistosryOTU {
     @SerializedName("idpelanggan1")
     private String idpelanggan1;
 
+    @SerializedName("customerid")
+    private String customerid;
+
     @SerializedName("customername")
     private String customername;
 
-    @SerializedName("noref1")
-    private String noref1;
+    @SerializedName("subscribername")
+    private String subscribername;
 
-    @SerializedName("customerphonenumber")
-    private String customerphonenumber;
+    @SerializedName("subscribersegmentation")
+    private String subscribersegmentation;
+
+    @SerializedName("powerconsumingcategory")
+    private String powerconsumingcategory;
+
+    @SerializedName("swreferencenumber")
+    private String swreferencenumber;
 
     @SerializedName("billercode")
     private String billercode;
 
+    @SerializedName("noref1")
+    private String noref1;
+
+    @SerializedName("noref2")
+    private String noref2;
+
+    @SerializedName("customerphonenumber")
+    private String customerphonenumber;
+
+    @SerializedName("lastpaidperiode")
+    private String lastpaidperiode;
+
+    @SerializedName("lastpaidduedate")
+    private String lastpaidduedate;
+
+    @SerializedName("tenor")
+    private String tenor;
+
+    @SerializedName("productcategory")
+    private String productcategory;
+
     @SerializedName("billquantity")
     private String billquantity;
+
+    @SerializedName("billerrefnumber")
+    private String billerrefnumber;
+
+    @SerializedName("carnumber")
+    private String carnumber;
 
     @SerializedName("nominal")
     private String nominal;
@@ -82,166 +124,77 @@ public class DataDetailHistosryOTU {
     @SerializedName("biayaadmin")
     private String biayaadmin;
 
+    @SerializedName("odinstallmentamount")
+    private String odinstallmentamount;
+
+    @SerializedName("odpenaltyfee")
+    private String odpenaltyfee;
+
+    @SerializedName("billeradminfee")
+    private String billeradminfee;
+
+    @SerializedName("itemmerktype")
+    private String itemmerktype;
+
+    @SerializedName("minimumpayamount")
+    private String minimumpayamount;
+
+    @SerializedName("miscfee")
+    private String miscfee;
+
+    @SerializedName("branchname")
+    private String branchname;
+
+    @SerializedName("infoteks")
+    private String infoteks;
+
+    @SerializedName("serviceunitphone")
+    private String serviceunitphone;
+
+    @SerializedName("serviceunit")
+    private String serviceunit;
+
+    @SerializedName("tarif_daya")
+    private String tarif_daya;
+
+    @SerializedName("wording")
+    private String wording;
+
+    @SerializedName("bl_th")
+    private String bl_th;
+
+    @SerializedName("angsuran_ke")
+    private String angsuran_ke;
+
+    @SerializedName("angsuran_pokok")
+    private String angsuran_pokok;
+
+    @SerializedName("jumlah_tagihan")
+    private String jumlah_tagihan;
+
     @SerializedName("total_tagihan")
     private String total_tagihan;
 
     @SerializedName("terbilang")
     private String terbilang;
 
+    @SerializedName("header1")
+    private String header1;
+
+    @SerializedName("middle1")
+    private String middle1;
+
     @SerializedName("footer1")
     private String footer1;
 
-    public String getHeader1() {
-        return header1;
-    }
+    @SerializedName("footer2")
+    private String footer2;
 
-    public void setHeader1(String header1) {
-        this.header1 = header1;
-    }
+    @SerializedName("footer3")
+    private String footer3;
 
-    public String getWaktu() {
-        return waktu;
-    }
-
-    public void setWaktu(String waktu) {
-        this.waktu = waktu;
-    }
-
-    public String getRef2() {
-        return ref2;
-    }
-
-    public void setRef2(String ref2) {
-        this.ref2 = ref2;
-    }
-
-    public String getIdpelanggan1() {
-        return idpelanggan1;
-    }
-
-    public void setIdpelanggan1(String idpelanggan1) {
-        this.idpelanggan1 = idpelanggan1;
-    }
-
-    public String getCustomername() {
-        return customername;
-    }
-
-    public void setCustomername(String customername) {
-        this.customername = customername;
-    }
-
-    public String getNoref1() {
-        return noref1;
-    }
-
-    public void setNoref1(String noref1) {
-        this.noref1 = noref1;
-    }
-
-    public String getCustomerphonenumber() {
-        return customerphonenumber;
-    }
-
-    public void setCustomerphonenumber(String customerphonenumber) {
-        this.customerphonenumber = customerphonenumber;
-    }
-
-    public String getBillercode() {
-        return billercode;
-    }
-
-    public void setBillercode(String billercode) {
-        this.billercode = billercode;
-    }
-
-    public String getBillquantity() {
-        return billquantity;
-    }
-
-    public void setBillquantity(String billquantity) {
-        this.billquantity = billquantity;
-    }
-
-    public String getNominal() {
-        return nominal;
-    }
-
-    public void setNominal(String nominal) {
-        this.nominal = nominal;
-    }
-
-    public String getBiayaadmin() {
-        return biayaadmin;
-    }
-
-    public void setBiayaadmin(String biayaadmin) {
-        this.biayaadmin = biayaadmin;
-    }
-
-    public String getTotal_tagihan() {
-        return total_tagihan;
-    }
-
-    public void setTotal_tagihan(String total_tagihan) {
-        this.total_tagihan = total_tagihan;
-    }
-
-    public String getTerbilang() {
-        return terbilang;
-    }
-
-    public void setTerbilang(String terbilang) {
-        this.terbilang = terbilang;
-    }
-
-    public String getFooter1() {
-        return footer1;
-    }
-
-    public void setFooter1(String footer1) {
-        this.footer1 = footer1;
-    }
-
-    public String getTransaksi_id() {
-        return transaksi_id;
-    }
-
-    public void setTransaksi_id(String transaksi_id) {
-        this.transaksi_id = transaksi_id;
-    }
-
-    public String getProduct_name() {
-        return product_name;
-    }
-
-    public void setProduct_name(String product_name) {
-        this.product_name = product_name;
-    }
-
-    public String getProvider_name() {
-        return provider_name;
-    }
-
-    public void setProvider_name(String provider_name) {
-        this.provider_name = provider_name;
-    }
-
-    public String getProduct_kode() {
-        return product_kode;
-    }
-
-    public void setProduct_kode(String product_kode) {
-        this.product_kode = product_kode;
-    }
-
-    public String getType_product() {
-        return type_product;
-    }
-
-    public void setType_product(String type_product) {
-        this.type_product = type_product;
-    }
+    @SerializedName("footer4")
+    private String footer4;
 
     public String getId_member() {
         return id_member;
@@ -322,6 +275,442 @@ public class DataDetailHistosryOTU {
     public void setTgl_sukses(String tgl_sukses) {
         this.tgl_sukses = tgl_sukses;
     }
+
+    public String getProduct_kode() {
+        return product_kode;
+    }
+
+    public void setProduct_kode(String product_kode) {
+        this.product_kode = product_kode;
+    }
+
+    public String getType_product() {
+        return type_product;
+    }
+
+    public void setType_product(String type_product) {
+        this.type_product = type_product;
+    }
+
+    public String getProvider_name() {
+        return provider_name;
+    }
+
+    public void setProvider_name(String provider_name) {
+        this.provider_name = provider_name;
+    }
+
+    public String getProduct_name() {
+        return product_name;
+    }
+
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
+    }
+
+    public String getTransaksi_id() {
+        return transaksi_id;
+    }
+
+    public void setTransaksi_id(String transaksi_id) {
+        this.transaksi_id = transaksi_id;
+    }
+
+    public String getPtname() {
+        return ptname;
+    }
+
+    public void setPtname(String ptname) {
+        this.ptname = ptname;
+    }
+
+    public String getWaktu() {
+        return waktu;
+    }
+
+    public void setWaktu(String waktu) {
+        this.waktu = waktu;
+    }
+
+    public String getStartdate() {
+        return startdate;
+    }
+
+    public void setStartdate(String startdate) {
+        this.startdate = startdate;
+    }
+
+    public String getEnddate() {
+        return enddate;
+    }
+
+    public void setEnddate(String enddate) {
+        this.enddate = enddate;
+    }
+
+    public String getRef2() {
+        return ref2;
+    }
+
+    public void setRef2(String ref2) {
+        this.ref2 = ref2;
+    }
+
+    public String getIdpelanggan1() {
+        return idpelanggan1;
+    }
+
+    public void setIdpelanggan1(String idpelanggan1) {
+        this.idpelanggan1 = idpelanggan1;
+    }
+
+    public String getCustomerid() {
+        return customerid;
+    }
+
+    public void setCustomerid(String customerid) {
+        this.customerid = customerid;
+    }
+
+    public String getCustomername() {
+        return customername;
+    }
+
+    public void setCustomername(String customername) {
+        this.customername = customername;
+    }
+
+    public String getSubscribername() {
+        return subscribername;
+    }
+
+    public void setSubscribername(String subscribername) {
+        this.subscribername = subscribername;
+    }
+
+    public String getSubscribersegmentation() {
+        return subscribersegmentation;
+    }
+
+    public void setSubscribersegmentation(String subscribersegmentation) {
+        this.subscribersegmentation = subscribersegmentation;
+    }
+
+    public String getPowerconsumingcategory() {
+        return powerconsumingcategory;
+    }
+
+    public void setPowerconsumingcategory(String powerconsumingcategory) {
+        this.powerconsumingcategory = powerconsumingcategory;
+    }
+
+    public String getSwreferencenumber() {
+        return swreferencenumber;
+    }
+
+    public void setSwreferencenumber(String swreferencenumber) {
+        this.swreferencenumber = swreferencenumber;
+    }
+
+    public String getBillercode() {
+        return billercode;
+    }
+
+    public void setBillercode(String billercode) {
+        this.billercode = billercode;
+    }
+
+    public String getNoref1() {
+        return noref1;
+    }
+
+    public void setNoref1(String noref1) {
+        this.noref1 = noref1;
+    }
+
+    public String getNoref2() {
+        return noref2;
+    }
+
+    public void setNoref2(String noref2) {
+        this.noref2 = noref2;
+    }
+
+    public String getCustomerphonenumber() {
+        return customerphonenumber;
+    }
+
+    public void setCustomerphonenumber(String customerphonenumber) {
+        this.customerphonenumber = customerphonenumber;
+    }
+
+    public String getLastpaidperiode() {
+        return lastpaidperiode;
+    }
+
+    public void setLastpaidperiode(String lastpaidperiode) {
+        this.lastpaidperiode = lastpaidperiode;
+    }
+
+    public String getLastpaidduedate() {
+        return lastpaidduedate;
+    }
+
+    public void setLastpaidduedate(String lastpaidduedate) {
+        this.lastpaidduedate = lastpaidduedate;
+    }
+
+    public String getTenor() {
+        return tenor;
+    }
+
+    public void setTenor(String tenor) {
+        this.tenor = tenor;
+    }
+
+    public String getProductcategory() {
+        return productcategory;
+    }
+
+    public void setProductcategory(String productcategory) {
+        this.productcategory = productcategory;
+    }
+
+    public String getBillquantity() {
+        return billquantity;
+    }
+
+    public void setBillquantity(String billquantity) {
+        this.billquantity = billquantity;
+    }
+
+    public String getBillerrefnumber() {
+        return billerrefnumber;
+    }
+
+    public void setBillerrefnumber(String billerrefnumber) {
+        this.billerrefnumber = billerrefnumber;
+    }
+
+    public String getCarnumber() {
+        return carnumber;
+    }
+
+    public void setCarnumber(String carnumber) {
+        this.carnumber = carnumber;
+    }
+
+    public String getNominal() {
+        return nominal;
+    }
+
+    public void setNominal(String nominal) {
+        this.nominal = nominal;
+    }
+
+    public String getBiayaadmin() {
+        return biayaadmin;
+    }
+
+    public void setBiayaadmin(String biayaadmin) {
+        this.biayaadmin = biayaadmin;
+    }
+
+    public String getOdinstallmentamount() {
+        return odinstallmentamount;
+    }
+
+    public void setOdinstallmentamount(String odinstallmentamount) {
+        this.odinstallmentamount = odinstallmentamount;
+    }
+
+    public String getOdpenaltyfee() {
+        return odpenaltyfee;
+    }
+
+    public void setOdpenaltyfee(String odpenaltyfee) {
+        this.odpenaltyfee = odpenaltyfee;
+    }
+
+    public String getBilleradminfee() {
+        return billeradminfee;
+    }
+
+    public void setBilleradminfee(String billeradminfee) {
+        this.billeradminfee = billeradminfee;
+    }
+
+    public String getItemmerktype() {
+        return itemmerktype;
+    }
+
+    public void setItemmerktype(String itemmerktype) {
+        this.itemmerktype = itemmerktype;
+    }
+
+    public String getMinimumpayamount() {
+        return minimumpayamount;
+    }
+
+    public void setMinimumpayamount(String minimumpayamount) {
+        this.minimumpayamount = minimumpayamount;
+    }
+
+    public String getMiscfee() {
+        return miscfee;
+    }
+
+    public void setMiscfee(String miscfee) {
+        this.miscfee = miscfee;
+    }
+
+    public String getBranchname() {
+        return branchname;
+    }
+
+    public void setBranchname(String branchname) {
+        this.branchname = branchname;
+    }
+
+    public String getInfoteks() {
+        return infoteks;
+    }
+
+    public void setInfoteks(String infoteks) {
+        this.infoteks = infoteks;
+    }
+
+    public String getServiceunitphone() {
+        return serviceunitphone;
+    }
+
+    public void setServiceunitphone(String serviceunitphone) {
+        this.serviceunitphone = serviceunitphone;
+    }
+
+    public String getServiceunit() {
+        return serviceunit;
+    }
+
+    public void setServiceunit(String serviceunit) {
+        this.serviceunit = serviceunit;
+    }
+
+    public String getTarif_daya() {
+        return tarif_daya;
+    }
+
+    public void setTarif_daya(String tarif_daya) {
+        this.tarif_daya = tarif_daya;
+    }
+
+    public String getWording() {
+        return wording;
+    }
+
+    public void setWording(String wording) {
+        this.wording = wording;
+    }
+
+    public String getBl_th() {
+        return bl_th;
+    }
+
+    public void setBl_th(String bl_th) {
+        this.bl_th = bl_th;
+    }
+
+    public String getAngsuran_ke() {
+        return angsuran_ke;
+    }
+
+    public void setAngsuran_ke(String angsuran_ke) {
+        this.angsuran_ke = angsuran_ke;
+    }
+
+    public String getAngsuran_pokok() {
+        return angsuran_pokok;
+    }
+
+    public void setAngsuran_pokok(String angsuran_pokok) {
+        this.angsuran_pokok = angsuran_pokok;
+    }
+
+    public String getJumlah_tagihan() {
+        return jumlah_tagihan;
+    }
+
+    public void setJumlah_tagihan(String jumlah_tagihan) {
+        this.jumlah_tagihan = jumlah_tagihan;
+    }
+
+    public String getTotal_tagihan() {
+        return total_tagihan;
+    }
+
+    public void setTotal_tagihan(String total_tagihan) {
+        this.total_tagihan = total_tagihan;
+    }
+
+    public String getTerbilang() {
+        return terbilang;
+    }
+
+    public void setTerbilang(String terbilang) {
+        this.terbilang = terbilang;
+    }
+
+    public String getHeader1() {
+        return header1;
+    }
+
+    public void setHeader1(String header1) {
+        this.header1 = header1;
+    }
+
+    public String getMiddle1() {
+        return middle1;
+    }
+
+    public void setMiddle1(String middle1) {
+        this.middle1 = middle1;
+    }
+
+    public String getFooter1() {
+        return footer1;
+    }
+
+    public void setFooter1(String footer1) {
+        this.footer1 = footer1;
+    }
+
+    public String getFooter2() {
+        return footer2;
+    }
+
+    public void setFooter2(String footer2) {
+        this.footer2 = footer2;
+    }
+
+    public String getFooter3() {
+        return footer3;
+    }
+
+    public void setFooter3(String footer3) {
+        this.footer3 = footer3;
+    }
+
+    public String getFooter4() {
+        return footer4;
+    }
+
+    public void setFooter4(String footer4) {
+        this.footer4 = footer4;
+    }
+
+
+
+
 
 
     //    2: deposit report

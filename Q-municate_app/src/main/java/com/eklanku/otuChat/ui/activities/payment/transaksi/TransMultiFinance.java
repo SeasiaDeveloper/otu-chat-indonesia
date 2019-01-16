@@ -235,6 +235,7 @@ public class TransMultiFinance extends AppCompatActivity {
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransMultiFinance.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
+        Log.d("OPPO-1", "cek_transaksi: "+jenis);
         Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, jenis, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override

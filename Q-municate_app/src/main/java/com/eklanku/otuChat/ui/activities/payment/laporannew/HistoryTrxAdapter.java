@@ -45,8 +45,11 @@ import com.eklanku.otuChat.ui.activities.payment.transaksi.TransWi;
 
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.SimpleTimeZone;
 
 public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.MyViewHolder> {
     private Context context;
@@ -89,27 +92,27 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final ItemHistoryTrx itemProduct = cartList.get(position);
 
-        holder.tvKode.setText(itemProduct.getTrxKode());
-        holder.tvTanggal.setText(formatTgl(itemProduct.getTrxTanggal()));
-        holder.tvNominal.setText(formatRupiah(Double.parseDouble(itemProduct.getTrxNominal())));
-        holder.tvJenis.setText(itemProduct.getTrxJenis());
-        holder.tvInvoice.setText(itemProduct.getTrxInvoice());
-        holder.tvTujuan.setText(itemProduct.getTrxTujuan());
+        holder.tvKode.setText(itemProduct.getInvoice());
+        holder.tvTanggal.setText(formatTgl(itemProduct.getTgl()));
+        holder.tvNominal.setText(formatRupiah(Double.parseDouble(itemProduct.getHarga())));
+        holder.tvJenis.setText(itemProduct.getType_product());
+        holder.tvInvoice.setText(itemProduct.getInvoice());
+        holder.tvTujuan.setText(itemProduct.getTujuan());
 
-        if (itemProduct.getTrxStatus().equalsIgnoreCase("Gagal")) {
+        if (itemProduct.getVstatus().equalsIgnoreCase("Gagal")) {
             holder.tvStatus.setTextColor(Color.RED);
-        } else if (itemProduct.getTrxStatus().equalsIgnoreCase("Waiting")) {
+        } else if (itemProduct.getVstatus().equalsIgnoreCase("Waiting")) {
             holder.tvStatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
-        } else if (itemProduct.getTrxStatus().equalsIgnoreCase("Refund")) {
+        } else if (itemProduct.getVstatus().equalsIgnoreCase("Refund")) {
             holder.tvStatus.setTextColor(context.getResources().getColor(R.color.grey_800));
         } else {
             holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
 
-        if (itemProduct.getTrxStatus().equalsIgnoreCase("Active")) {
+        if (itemProduct.getVstatus().equalsIgnoreCase("Active")) {
             holder.tvStatus.setText("Sukses");
         } else {
-            holder.tvStatus.setText(itemProduct.getTrxStatus());
+            holder.tvStatus.setText(itemProduct.getVstatus());
         }
 
         //holder.tvDot.setText(Html.fromHtml("&#8226;"));
@@ -117,9 +120,23 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         holder.viewTrx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDetail(formatTgl(itemProduct.getTrxTanggal()), itemProduct.getTrxStatus(), itemProduct.getTrxNominal(), itemProduct.getTrxJenis(),
-                        itemProduct.getTrxInvoice(), itemProduct.getTrxTujuan(), itemProduct.getTrxKet(), itemProduct.getTrxVsn(),
-                        itemProduct.getTrxProvide_name(), itemProduct.getTrxKode(), itemProduct.getTrxProductName(), itemProduct.getTrxid());
+                showDetail(itemProduct.getId_member(), itemProduct.getInvoice(), itemProduct.getTgl(), itemProduct.getVstatus(), itemProduct.getHarga(),
+                        itemProduct.getTujuan(), itemProduct.getKeterangan(), itemProduct.getVsn(), itemProduct.getMbr_name(),
+                        itemProduct.getTgl_sukses(), itemProduct.getProduct_kode(), itemProduct.getType_product(),
+                        itemProduct.getProvider_name(), itemProduct.getProduct_name(), itemProduct.getTransaksi_id(),
+                        itemProduct.getPtname(), itemProduct.getWaktu(), itemProduct.getStartdate(), itemProduct.getEnddate(),
+                        itemProduct.getRef2(), itemProduct.getIdpelanggan1(), itemProduct.getCustomerid(),
+                        itemProduct.getCustomername(), itemProduct.getSubscribername(),
+                        itemProduct.getSubscribersegmentation(), itemProduct.getPowerconsumingcategory(),
+                        itemProduct.getSwreferencenumber(), itemProduct.getBillercode(), itemProduct.getNoref1(), itemProduct.getNoref2(),
+                        itemProduct.getCustomerphonenumber(), itemProduct.getLastpaidperiode(), itemProduct.getLastpaidduedate(),
+                        itemProduct.getTenor(), itemProduct.getProductcategory(), itemProduct.getBillquantity(), itemProduct.getBillerrefnumber(),
+                        itemProduct.getCarnumber(), itemProduct.getNominal(), itemProduct.getBiayaadmin(), itemProduct.getOdinstallmentamount(),
+                        itemProduct.getOdpenaltyfee(), itemProduct.getBilleradminfee(), itemProduct.getItemmerktype(), itemProduct.getMinimumpayamount(),
+                        itemProduct.getMiscfee(), itemProduct.getBranchname(), itemProduct.getInfoteks(), itemProduct.getServiceunitphone(),
+                        itemProduct.getServiceunit(), itemProduct.getTarif_daya(), itemProduct.getWording(), itemProduct.getBl_th(), itemProduct.getAngsuran_ke(),
+                        itemProduct.getAngsuran_pokok(), itemProduct.getJumlah_tagihan(), itemProduct.getTotal_tagihan(), itemProduct.getTerbilang(),
+                        itemProduct.getHeader1(), itemProduct.getMiddle1(), itemProduct.getFooter1(), itemProduct.getFooter2(), itemProduct.getFooter3(), itemProduct.getFooter4());
             }
         });
 
@@ -130,9 +147,23 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         return cartList.size();
     }
 
-    public void showDetail(String trxTanggal, String trxStatus, String trxNominal, String trxJenis,
-                           String trxInvoice, String trxTujuan, String trxKet, String trxVsn,
-                           String trxProvideName, String trxkode, String trxProductName, String trxid) {
+    public void showDetail(String id_member, String invoice, String tgl, String vstatus, String harga,
+                           String tujuan, String keterangan, String vsn, String mbr_name,
+                           String tgl_sukses, String product_kode, String type_product,
+                           String provider_name, String product_name, String transaksi_id,
+                           String ptname, String waktu, String startdate, String enddate,
+                           String ref2, String idpelanggan1, String customerid,
+                           String customername, String subscribername,
+                           String subscribersegmentation, String powerconsumingcategory,
+                           String swreferencenumber, String billercode, String noref1, String noref2,
+                           String customerphonenumber, String lastpaidperiode, String lastpaidduedate,
+                           String tenor, String productcategory, String billquantity, String billerrefnumber,
+                           String carnumber, String nominal, String biayaadmin, String odinstallmentamount,
+                           String odpenaltyfee, String billeradminfee, String itemmerktype, String minimumpayamount,
+                           String miscfee, String branchname, String infoteks, String serviceunitphone,
+                           String serviceunit, String tarif_daya, String wording, String bl_th, String angsuran_ke,
+                           String angsuran_pokok, String jumlah_tagihan, String total_tagihan, String terbilang,
+                           String header1, String middle1, String footer1, String footer2, String footer3, String footer4) {
 
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.history_detail_trx);
@@ -149,30 +180,29 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         final TextView etKet = builder.findViewById(R.id.et_keterangan);
         final TextView tutup = builder.findViewById(R.id.tv_close);
 
-        if (trxStatus.equalsIgnoreCase("Active")) {
+        if (vstatus.equalsIgnoreCase("Active")) {
             etStatus.setText("Sukses");
         } else {
-            etStatus.setText(trxStatus);
+            etStatus.setText(vstatus);
         }
 
-        if (trxStatus.equalsIgnoreCase("Gagal")) {
+        if (vstatus.equalsIgnoreCase("Gagal")) {
             etStatus.setTextColor(Color.RED);
-        } else if (trxStatus.equalsIgnoreCase("Waiting")) {
+        } else if (vstatus.equalsIgnoreCase("Waiting")) {
             etStatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
-        } else if (trxStatus.equalsIgnoreCase("Refund")) {
+        } else if (vstatus.equalsIgnoreCase("Refund")) {
             etStatus.setTextColor(context.getResources().getColor(R.color.grey_800));
         }else {
             etStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
 
-        etTgl.setText(trxTanggal);
-        //etStatus.setText(trxStatus);
-        etNominal.setText(formatRupiah(Double.parseDouble(trxNominal)));
-        tvProductType.setText("Detail Transaksi " + trxJenis);
-        etInvoice.setText(trxInvoice);
-        etTujuan.setText(trxTujuan);
-        etVsn.setText(trxVsn);
-        etKet.setText(trxKet);
+        etTgl.setText(tgl);
+        etNominal.setText(formatRupiah(Double.parseDouble(harga)));
+        tvProductType.setText("Detail Transaksi " + type_product);
+        etInvoice.setText(invoice);
+        etTujuan.setText(tujuan);
+        etVsn.setText(vsn);
+        etKet.setText(keterangan);
 
         //Button btnClose = builder.findViewById(R.id.btn_close);
         //Button btnBuy = builder.findViewById(R.id.btn_buy);
@@ -223,26 +253,33 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buy(trxJenis, trxNominal, trxTujuan, trxProvideName);
+                buy(type_product, harga, tujuan, provider_name);
             }
         });
 
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if(trxStatus.equalsIgnoreCase("Active")){
-                    String ket = "Slip Pembelian "+trxJenis.substring(0,1).toUpperCase() + trxJenis.substring(1).toLowerCase()+" "+trxProvideName;
-                    printTransaksi(trxTanggal, ket, trxProductName, trxTujuan, trxVsn, trxNominal);
-//                }else{
-//                    Toast.makeText(context, "Selain transaksi sukses tidak bisa di print", Toast.LENGTH_SHORT).show();
-//                }
+                if(type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.equals("ETOOL MANDIRI") || type_product.equals("ETOOL BNI") ||
+                        type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS") || type_product.equals("OJEK ONLINE")) {
+
+                    //if(trxStatus.equalsIgnoreCase("Active")){
+                    String ket = "Slip Pembelian "+type_product.substring(0,1).toUpperCase() + type_product.substring(1).toLowerCase()+" "+provider_name;
+                    printTransaksi(type_product, tgl, ket, product_name, tujuan, vsn, harga);
+                /*}else{
+                   Toast.makeText(context, "Selain transaksi sukses tidak bisa di print", Toast.LENGTH_SHORT).show(); }*/
+                }else if (type_product.equals("BPJSKES")) {
+                    SimpleDateFormat sdf_tglcetak = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss");
+                    printTransaksiBpjsKes(type_product ,invoice, sdf_tglcetak.format(new Date()), header1, tgl, invoice, tujuan, customername, noref1, customerphonenumber,
+                            billercode, billquantity, nominal, biayaadmin, total_tagihan, terbilang, footer1);
+                }
             }
         });
 
         btndownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                download(trxid);
+                download(transaksi_id);
             }
         });
 
@@ -259,10 +296,22 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         return parseRp;
     }
 
-    public void printTransaksi(String tanggal, String keterangan, String jenisvoucher,
+    public void printTransaksi(String jnstrx, String tanggal, String keterangan, String jenisvoucher,
                                String nomortujuan, String nomorseri, String harga) {
-        String sn = nomorseri.replace("SN","").replace(":", "").replace(" ","");
-        PrintTransaksi.start((Activity) context, tanggal, keterangan, jenisvoucher, nomortujuan, sn, harga);
+
+
+            String sn = nomorseri.replace("SN","").replace(":", "").replace(" ","");
+            PrintTransaksi.start((Activity) context, jnstrx,  tanggal, keterangan, jenisvoucher, nomortujuan, sn, harga);
+
+    }
+
+    public void printTransaksiBpjsKes(String jnstrx, String invoice, String tanggalcetak, String judul, String tanggalTransaksi, String nomorResi,
+                                      String nomorPelanggan, String namaPeserta, String jumlahPeserta, String nomorTelepon, String nomorReferensi,
+                                      String jumlahPremi, String jumlahTagihan, String biayaAdmin, String totalTagihan, String terbilang, String footer1){
+
+        PrintTransaksi.startBPJSKes((Activity) context, jnstrx, invoice, tanggalcetak, judul, tanggalTransaksi, nomorResi,
+                nomorPelanggan, namaPeserta, jumlahPeserta, nomorTelepon, nomorReferensi,
+                jumlahPremi, jumlahTagihan, biayaAdmin, totalTagihan, terbilang, footer1);
     }
 
     public void buy(String trxJenis, String trxNominal, String trxTujuan, String trxProvideName) {
