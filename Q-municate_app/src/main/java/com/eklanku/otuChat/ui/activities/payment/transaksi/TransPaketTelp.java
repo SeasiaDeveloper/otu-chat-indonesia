@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -112,6 +113,7 @@ public class TransPaketTelp extends AppCompatActivity {
     LinearLayout layoutPulsa;
     ProgressBar progressBar;
     String nominalx, tujuanx;
+    private static long mLastClickTime = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,6 +197,12 @@ public class TransPaketTelp extends AppCompatActivity {
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
                         cek_transaksi();
                         dialog.dismiss();
                     }

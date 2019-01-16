@@ -62,7 +62,7 @@ public class PrintTransaksi extends AppCompatActivity {
                                     String jumlahPremi, String jumlahTagihan, String biayaAdmin, String totalTagihan, String terbilang, String footer1) {
 
         Intent i = new Intent(activity, PrintTransaksi.class);
-        Log.d("OPPO-1", "startBPJSKes: "+judul);
+        Log.d("OPPO-1", "startBPJSKes: " + judul);
         i.putExtra("jenistrx", jnstrx);
         i.putExtra("invoice", invoice);
         i.putExtra("tanggalcetak", tanggalcetak);
@@ -150,27 +150,6 @@ public class PrintTransaksi extends AppCompatActivity {
 
     private void preparePrint(String tanggal, String keterangan, String jenis, String tujuan, String noseri, String harga) {
 
-        Toast.makeText(this, "Printing", Toast.LENGTH_SHORT).show();
-        /*String dataForPrint = "\n" +
-        String dataForPrint = "\n" +
-                "\n\n" +
-                "" + tanggal.trim() + "\n" +
-                "-------------------------------\n" +
-                "" + keterangan + "\n" +
-                "Jenis Voucher : " + jenis + "\n" +
-                "No Tujuan     : " + tujuan + "\n" +
-                "No Seri       : " + noseri + "\n" +
-                "Harga         : Rp" + ConverterUtils.convertIDR(harga) + "\n" +
-                "-------------------------------\n" +
-                Utils.center("Terima Kasih dan", 32) + "\n" +
-                Utils.center("Selamat Berbelanja Kembali", 32) + "\n" +
-                "-------------------------------\n" +
-                Utils.center("Layanan Konsumen OTU Chat", 32) + "\n" +
-                Utils.center("081-13-888-286", 32) + "\n" +
-                Utils.center("081-13-888-286", 32) + "\n" +
-                Utils.center("customer.care@otu.co.id", 32) + "\n" +
-                "\n\n";*/
-
         String dataForPrint = "\n" +
                 "" + tanggal.trim() + "\n" +
                 "-------------------------------\n" +
@@ -206,20 +185,20 @@ public class PrintTransaksi extends AppCompatActivity {
                 "" + tanggalcetak.trim() + "\n" +
                 "-------------------------------\n" +
                 "" + judul + "\n" +
-                "Invoice         : " + invoice + "\n" +
-                "Tanggal         : " + tanggalTransaksi + "\n" +
-                "No Pelanggan    : " + nomorPelanggan + "\n" +
-                "Nama Peserta    : " + namaPeserta + "\n" +
-                "Jumlah Peserta  : " + jumlahPeserta + "\n" +
-                "Nomor Telepon   : " + nomorTelepon + "\n" +
-                "Nomor Referansi : " + nomorReferensi + "\n" +
-                "Jumlah Premi    : " + jumlahPremi + "\n" +
-                "Jumlah Tagihan  : " + jumlahTagihan + "\n" +
-                "Biaya Admin     : " + biayaAdmin + "\n" +
+                "Invoice      : " + invoice + "\n" +
+                "Tanggal      : " + tanggalTransaksi + "\n" +
+                "No Pelanggan : " + nomorPelanggan + "\n" +
+                "Nama Peserta : " + namaPeserta + "\n" +
+                "Jml Peserta  : " + jumlahPeserta + "\n" +
+                "No Telepon   : " + nomorTelepon + "\n" +
+                "No Referansi : " + nomorReferensi + "\n" +
+                "Jml Premi    : " + jumlahPremi + "\n" +
+                "Jml Tagihan  : Rp" + formatRupiah(Double.valueOf(jumlahTagihan)) + "\n" +
+                "Biaya Admin  : Rp" + biayaAdmin + "\n" +
                 "-------------------------------\n" +
-                "Total Tagihan   : " + totalTagihan + "\n" +
-                "Terbilang       : " + terbilang + "\n\n" +
-                footer1 + "\n" +
+                "Total Tagihan: " + formatRupiah(Double.valueOf(totalTagihan)) + "\n" +
+                Utils.center("(" + terbilang + ")", 32) + "\n\n" +
+                Utils.center(footer1, 32) + "\n" +
                 "-------------------------------\n" +
                 Utils.center("Terima Kasih dan", 32) + "" +
                 Utils.center("Selamat Berbelanja Kembali", 32) + "" +

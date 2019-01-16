@@ -1,6 +1,7 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,7 +82,7 @@ public class TransPdam extends AppCompatActivity {
     private ArrayList<ItemPdam> cartList;
     private CustomAdapter mAdapter;
     String nominalx, tujuanx;
-
+    private static long mLastClickTime = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +144,10 @@ public class TransPdam extends AppCompatActivity {
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 if (!validateIdpel()) {
                     return;
                 }
