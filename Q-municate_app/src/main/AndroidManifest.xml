@@ -706,6 +706,8 @@
         </activity>
 
         <activity android:name=".ui.activities.payment.laporannew.PrintTransaksi"/>
+        <activity android:name=".ui.activities.payment.laporannew.PrintTransaksiBPJS"/>
+        <activity android:name=".ui.activities.payment.laporannew.PrintTransaksiFinanceMAF"/>
 
         <!-- new config -->
         <!--

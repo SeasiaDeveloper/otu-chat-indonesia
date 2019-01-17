@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -192,7 +193,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             etStatus.setTextColor(context.getResources().getColor(R.color.yellow_800));
         } else if (vstatus.equalsIgnoreCase("Refund")) {
             etStatus.setTextColor(context.getResources().getColor(R.color.grey_800));
-        }else {
+        } else {
             etStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
 
@@ -260,18 +261,26 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.equals("ETOOL MANDIRI") || type_product.equals("ETOOL BNI") ||
+                SimpleDateFormat sdf_tglcetak = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+                if (type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.contains("ETOOL") ||
                         type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS") || type_product.equals("OJEK ONLINE")) {
 
-                    //if(trxStatus.equalsIgnoreCase("Active")){
-                    String ket = "Slip Pembelian "+type_product.substring(0,1).toUpperCase() + type_product.substring(1).toLowerCase()+" "+provider_name;
-                    printTransaksi(type_product, tgl, ket, product_name, tujuan, vsn, harga);
-                /*}else{
-                   Toast.makeText(context, "Selain transaksi sukses tidak bisa di print", Toast.LENGTH_SHORT).show(); }*/
+                    String ket = "";
+                    if (type_product.contains("ETOOL") || type_product.contains("TELPON") || type_product.contains("OJEK")) {
+                        ket = "Slip Pembelian " + provider_name;
+                    } else {
+                        ket = "Slip Pembelian " + type_product.substring(0, 1).toUpperCase() + type_product.substring(1).toLowerCase() + " " + provider_name;
+                    }
+                    printTransaksi(type_product, formatTgl(tgl), ket, product_name, tujuan, vsn, harga);
+
                 }else if (type_product.equals("BPJSKES")) {
-                    SimpleDateFormat sdf_tglcetak = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss");
-                    printTransaksiBpjsKes(type_product ,invoice, sdf_tglcetak.format(new Date()), header1, tgl, invoice, tujuan, customername, noref1, customerphonenumber,
+                    Log.d("OPPO-1", "onClick2: "+type_product);
+
+                    printTransaksiBpjsKes(type_product, invoice, sdf_tglcetak.format(new Date()), header1, formatTgl(tgl), ref2, tujuan, customername, noref1, customerphonenumber,
                             billercode, billquantity, nominal, biayaadmin, total_tagihan, terbilang, footer1);
+                }else if(type_product.equals("MULTY FINANCE")){
+                    printTransaksiFinanceMAF(type_product, header1, sdf_tglcetak.format(new Date()), invoice, tgl, ref2, ptname, "", tujuan, customername,
+                            angsuran_ke, lastpaidduedate, jumlah_tagihan, total_tagihan, terbilang, footer1);
                 }
             }
         });
@@ -300,18 +309,24 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                                String nomortujuan, String nomorseri, String harga) {
 
 
-            String sn = nomorseri.replace("SN","").replace(":", "").replace(" ","");
-            PrintTransaksi.start((Activity) context, jnstrx,  tanggal, keterangan, jenisvoucher, nomortujuan, sn, harga);
+        String sn = nomorseri.replace("SN", "").replace(":", "").replace(" ", "");
+        PrintTransaksi.start((Activity) context, jnstrx, tanggal, keterangan, jenisvoucher, nomortujuan, sn, harga);
 
     }
 
     public void printTransaksiBpjsKes(String jnstrx, String invoice, String tanggalcetak, String judul, String tanggalTransaksi, String nomorResi,
                                       String nomorPelanggan, String namaPeserta, String jumlahPeserta, String nomorTelepon, String nomorReferensi,
-                                      String jumlahPremi, String jumlahTagihan, String biayaAdmin, String totalTagihan, String terbilang, String footer1){
+                                      String jumlahPremi, String jumlahTagihan, String biayaAdmin, String totalTagihan, String terbilang, String footer1) {
 
-        PrintTransaksi.startBPJSKes((Activity) context, jnstrx, invoice, tanggalcetak, judul, tanggalTransaksi, nomorResi,
+        PrintTransaksiBPJS.startBPJSKes((Activity) context, jnstrx, invoice, tanggalcetak, judul, tanggalTransaksi, nomorResi,
                 nomorPelanggan, namaPeserta, jumlahPeserta, nomorTelepon, nomorReferensi,
                 jumlahPremi, jumlahTagihan, biayaAdmin, totalTagihan, terbilang, footer1);
+    }
+
+    public void printTransaksiFinanceMAF(String jnstrx, String judul, String tglprint, String invoice, String tgltrx, String noresi, String namakredit,
+                                         String cabang, String nokontrak, String nama, String angke, String jthtempo, String tagihan, String totaltagihan, String terbilang, String footer){
+        PrintTransaksiFinanceMAF.startFinanceMAF((Activity) context, jnstrx,  judul,  tglprint,  invoice,  tgltrx,  noresi,  namakredit, cabang,
+                nokontrak,  nama,  angke,  jthtempo,  tagihan,  totaltagihan,  terbilang,  footer);
     }
 
     public void buy(String trxJenis, String trxNominal, String trxTujuan, String trxProvideName) {
@@ -407,9 +422,9 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         }
     }
 
-    public String formatTgl(String tgl){
+    public String formatTgl(String tgl) {
         String format = "";
-        if(!tgl.equals("") || !tgl.equals("null")){
+        if (!tgl.equals("") || !tgl.equals("null")) {
             String parsTgl[] = tgl.split(" ");
             String parsTgl2[] = parsTgl[0].split("-");
 
@@ -417,16 +432,16 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             String bulan = parsTgl2[1];
             String tahun = parsTgl2[0];
 
-            format = tanggal+"-"+bulan+"-"+tahun+" "+parsTgl[1];
-        }else{
+            format = tanggal + "-" + bulan + "-" + tahun + " " + parsTgl[1];
+        } else {
             format = "";
         }
 
         return format;
     }
 
-    public void download(String trxid){
-       context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://demo.eklanku.com/invoice/GenerateInvoice/gen_pdf_download?trxID="+trxid)));
+    public void download(String trxid) {
+        context.startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://demo.eklanku.com/invoice/GenerateInvoice/gen_pdf_download?trxID=" + trxid)));
     }
 
 }
