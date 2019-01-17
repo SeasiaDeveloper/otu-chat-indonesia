@@ -256,6 +256,7 @@ public class TransPGN extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", response.body().getSellPrice());
                         inKonfirmasi.putExtra("adminBank", response.body().getAdminBank());
                         inKonfirmasi.putExtra("profit", response.body().getProfit());
+                        inKonfirmasi.putExtra("ep", response.body().getEp());
 
                         inKonfirmasi.putExtra("transaksi", "-");
                         inKonfirmasi.putExtra("harga", "-");

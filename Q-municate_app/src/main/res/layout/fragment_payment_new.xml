@@ -1129,16 +1129,16 @@
                                 android:orientation="vertical">
 
                                 <ImageButton
-                                    android:id="@+id/btnKartuKredit"
+                                    android:id="@+id/btnPGN"
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
                                     android:background="@drawable/bg_payment_list_icon"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_kartu_kredit" />
+                                    android:src="@drawable/ic_otu_pgn" />
 
                                 <android.support.v7.widget.AppCompatImageView
-                                    android:id="@+id/ivKartuKredit"
+                                    android:id="@+id/ivPGN"
                                     android:layout_width="40dp"
                                     android:layout_height="40dp"
                                     android:layout_alignParentTop="true"
@@ -1147,19 +1147,19 @@
                                     android:layout_marginBottom="10dp"
                                     android:elevation="2dp"
                                     android:visibility="gone"
-                                    app:srcCompat="@drawable/ic_otu_kartu_kredit" />
+                                    app:srcCompat="@drawable/ic_pgn" />
 
                                 <TextView
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@id/btnKartuKredit"
+                                    android:layout_below="@id/btnPGN"
                                     android:layout_centerHorizontal="true"
-                                    android:text="Kartu Kredit"
+                                    android:text="PGN"
                                     android:textAlignment="center"
-                                    android:textAllCaps="true"
                                     android:textColor="@color/color_payment_list_icon_text"
                                     android:textSize="10dp" />
                             </RelativeLayout>
+
                         </LinearLayout>
                     </LinearLayout>
 
@@ -1204,6 +1204,8 @@
                             android:text="Nantikan produk terbaru kami!!"
                             android:textSize="10sp" />
 
+
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1218,16 +1220,16 @@
                                 android:orientation="vertical">
 
                                 <ImageButton
-                                    android:id="@+id/btnPGN"
+                                    android:id="@+id/btnKartuKredit"
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
                                     android:background="@drawable/bg_payment_list_icon"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_pgn" />
+                                    android:src="@drawable/ic_otu_kartu_kredit" />
 
                                 <android.support.v7.widget.AppCompatImageView
-                                    android:id="@+id/ivPGN"
+                                    android:id="@+id/ivKartuKredit"
                                     android:layout_width="40dp"
                                     android:layout_height="40dp"
                                     android:layout_alignParentTop="true"
@@ -1236,18 +1238,21 @@
                                     android:layout_marginBottom="10dp"
                                     android:elevation="2dp"
                                     android:visibility="gone"
-                                    app:srcCompat="@drawable/ic_pgn" />
+                                    app:srcCompat="@drawable/ic_otu_kartu_kredit" />
 
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@id/btnPGN"
+                                    android:layout_below="@id/btnKartuKredit"
                                     android:layout_centerHorizontal="true"
-                                    android:text="PGN"
+                                    android:text="Kartu Kredit"
                                     android:textAlignment="center"
+                                    android:textAllCaps="true"
                                     android:textColor="@color/color_payment_list_icon_text"
                                     android:textSize="10dp" />
                             </RelativeLayout>
+
+
 
                             <RelativeLayout
                                 android:layout_width="0dp"
