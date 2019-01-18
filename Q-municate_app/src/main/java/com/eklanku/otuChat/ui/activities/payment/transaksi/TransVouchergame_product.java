@@ -200,6 +200,7 @@ public class TransVouchergame_product extends AppCompatActivity {
             _namaProvider = extras.getString("jnsGame");
             _img = extras.getString("imgOpr");
             setTitle(_namaProvider);
+            jenis = _namaProvider;
             addList();
         }
 
@@ -258,7 +259,7 @@ public class TransVouchergame_product extends AppCompatActivity {
 
                     if (status.equals("SUCCESS")) {
                         Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPrabayar.class);
-                        inKonfirmasi.putExtra("productCode", "VOUCHER GAME");//
+                        inKonfirmasi.putExtra("productCode", "GAME");//
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
                         inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//
@@ -267,7 +268,7 @@ public class TransVouchergame_product extends AppCompatActivity {
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
                         inKonfirmasi.putExtra("ep", ep);
                         inKonfirmasi.putExtra("jenisvoucher", name);
-                        inKonfirmasi.putExtra("oprPulsa", _namaProvider);
+                        inKonfirmasi.putExtra("oprPulsa", jenis);
 
                         /*inKonfirmasi.putExtra("userID", response.body().getUserID());//
                         inKonfirmasi.putExtra("accessToken", strAccessToken);//

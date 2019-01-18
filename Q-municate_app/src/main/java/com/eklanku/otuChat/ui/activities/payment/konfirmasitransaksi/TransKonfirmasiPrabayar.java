@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.ui.activities.payment.laporannew.PrintTransaksi;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransESaldo_product;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransETool_product;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransEtool;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketData;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketTelp;
@@ -76,21 +78,38 @@ public class TransKonfirmasiPrabayar extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String ket = "";
-                if(!oprpulsa.equalsIgnoreCase("")){
+                if (extras.getString("productCode").equals("KUOTA")) {
+                    ket = "Slip Pembelian "
+                            + extras.getString("productCode").substring(0, 1).toUpperCase()
+                            + extras.getString("productCode").substring(1).toLowerCase() + " "
+                            + oprpulsa;
+                } else if (extras.getString("productCode").equals("TELPONS") || extras.getString("productCode").equals("GAME")
+                        || extras.getString("productCode").equals("ETOOL")) {
+                    ket = "Slip Pembelian "
+                            + oprpulsa;
+                } else if (extras.getString("productCode").equals("ESALDO")) {
+                    ket = "Slip Pembelian Saldo "
+                            + oprpulsa;
+                } else {
                     ket = "Slip Pembelian "
                             + extras.getString("productCode").substring(0, 1).toUpperCase()
                             + extras.getString("productCode").substring(1).toLowerCase() + " "
                             + oprpulsa.substring(0, 1).toUpperCase()
                             + oprpulsa.substring(1).toLowerCase();
-                }else{
-                    ket = "Slip Pembelian "
-                            + extras.getString("productCode").substring(0, 1).toUpperCase()
-                            + extras.getString("productCode").substring(1).toLowerCase() + " "
-                            + oprpulsa;
                 }
 
-                /*PrintTransaksi.start(TransKonfirmasiPrabayar.this, formatTgl(extras.getString("respTime")), ket, jenisvoucher,
-                        extras.getString("customerMSISDN"), "-", extras.getString("billing"));*/
+
+                String voucher = "";
+                if (extras.getString("productCode").equals("KUOTA") || extras.getString("productCode").equals("TELPONS")
+                        || extras.getString("productCode").equals("GAME")) {
+                    voucher = oprpulsa;
+                } else {
+                    voucher = jenisvoucher;
+                }
+
+
+                PrintTransaksi.start(TransKonfirmasiPrabayar.this, "", formatTgl(extras.getString("respTime")), ket, voucher,
+                        extras.getString("customerMSISDN"), "", extras.getString("billing"));
             }
         });
 
@@ -105,23 +124,31 @@ public class TransKonfirmasiPrabayar extends AppCompatActivity {
 
     public void buy(String trxJenis, String trxNominal, String trxTujuan, String trxProvideName) {
         Intent i = null;
-
         if (trxJenis.equalsIgnoreCase("PULSA")) {
             i = new Intent(TransKonfirmasiPrabayar.this, TransPulsa.class);
             i.putExtra("nominal", trxNominal);
             i.putExtra("tujuan", trxTujuan);
             TransKonfirmasiPrabayar.this.startActivity(i);
-        } else if (trxJenis.equalsIgnoreCase("KUOTA PAKET DATA")) {
-            i = new Intent(TransKonfirmasiPrabayar.this, TransPaketData.class);
-            i.putExtra("nominal", trxNominal);
-            i.putExtra("tujuan", trxTujuan);
-            TransKonfirmasiPrabayar.this.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("KUOTA")) {
+            if (trxProvideName.contains("SMS")) {
+                i = new Intent(TransKonfirmasiPrabayar.this, TransSMS.class);
+                i.putExtra("nominal", trxNominal);
+                i.putExtra("tujuan", trxTujuan);
+                TransKonfirmasiPrabayar.this.startActivity(i);
+            } else {
+                i = new Intent(TransKonfirmasiPrabayar.this, TransPaketData.class);
+                i.putExtra("nominal", trxNominal);
+                i.putExtra("tujuan", trxTujuan);
+                TransKonfirmasiPrabayar.this.startActivity(i);
+            }
         } else if (trxJenis.equalsIgnoreCase("ETOOL")) {
-            i = new Intent(TransKonfirmasiPrabayar.this, TransEtool.class);
+            Log.d("OPPO-1", "buy: "+trxProvideName);
+            i = new Intent(TransKonfirmasiPrabayar.this, TransETool_product.class);
             i.putExtra("nominal", trxNominal);
             i.putExtra("tujuan", trxTujuan);
+            i.putExtra("jenis", trxProvideName);
             TransKonfirmasiPrabayar.this.startActivity(i);
-        } else if (trxJenis.equalsIgnoreCase("VOUCHER GAME")) {
+        } else if (trxJenis.equalsIgnoreCase("GAME")) {
             i = new Intent(TransKonfirmasiPrabayar.this, TransVouchergame_product.class);
             i.putExtra("nominal", trxNominal);
             i.putExtra("tujuan", trxTujuan);
@@ -129,11 +156,6 @@ public class TransKonfirmasiPrabayar extends AppCompatActivity {
             TransKonfirmasiPrabayar.this.startActivity(i);
         } else if (trxJenis.equalsIgnoreCase("TELPONS")) {
             i = new Intent(TransKonfirmasiPrabayar.this, TransPaketTelp.class);
-            i.putExtra("nominal", trxNominal);
-            i.putExtra("tujuan", trxTujuan);
-            TransKonfirmasiPrabayar.this.startActivity(i);
-        } else if (trxJenis.equalsIgnoreCase("KUOTA SMS")) {
-            i = new Intent(TransKonfirmasiPrabayar.this, TransSMS.class);
             i.putExtra("nominal", trxNominal);
             i.putExtra("tujuan", trxTujuan);
             TransKonfirmasiPrabayar.this.startActivity(i);

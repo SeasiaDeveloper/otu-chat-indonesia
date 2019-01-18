@@ -507,6 +507,18 @@ public interface ApiInterfacePayment {
             @Field("aplUse") String aplUse
     );
 
+    @FormUrlEncoded
+    @POST("Pascabayar/inquiry")
+    Call<TransBeliResponse> postPpobInquiryCC(
+            @Field("userID") String userID,
+            @Field("accessToken") String accessToken,
+            @Field("productCode") String productGroup,
+            @Field("customerID") String customerID,
+            @Field("customerMSISDN") String customerMSISDN,
+            @Field("aplUse") String aplUse,
+            @Field("nominal_bayar") String nominal_bayar
+    );
+
     //inquiry
     @FormUrlEncoded
     @POST("Pascabayar/inquiry")

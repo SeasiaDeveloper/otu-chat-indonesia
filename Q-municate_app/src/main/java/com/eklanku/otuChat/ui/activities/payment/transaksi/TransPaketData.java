@@ -285,7 +285,7 @@ public class TransPaketData extends AppCompatActivity {
 
                     if (status.equals("SUCCESS")) {
                         Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPrabayar.class);
-                        inKonfirmasi.putExtra("productCode", "KUOTA PAKET DATA");//
+                        inKonfirmasi.putExtra("productCode", "KUOTA");//
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
                         inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//

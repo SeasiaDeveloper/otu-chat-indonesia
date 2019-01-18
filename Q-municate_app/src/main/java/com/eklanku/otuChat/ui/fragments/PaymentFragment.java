@@ -53,6 +53,7 @@ import com.eklanku.otuChat.ui.activities.payment.topup.TopupOrder;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransESaldo_opsi;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransEtool;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransEtool_opsi;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKartuKredit;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransMultifinance_opsi;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPGN;
@@ -480,7 +481,6 @@ public class PaymentFragment extends Fragment {
                     break;
                 case R.id.btnPGN:
                     startActivity(new Intent(context, TransPGN.class));
-                    Toast.makeText(context, getResources().getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     break;
                /* case R.id.btnCallMe:
                     startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://eklanku.com/max")));
@@ -489,7 +489,7 @@ public class PaymentFragment extends Fragment {
                     startActivity(new Intent(context, TransWi.class));
                     break;
                 case R.id.btn_etool:
-                    startActivity(new Intent(context, TransEtool.class));
+                    startActivity(new Intent(context, TransEtool_opsi.class));
                     break;
                 case R.id.btn_sms:
                     startActivity(new Intent(context, TransSMS.class));

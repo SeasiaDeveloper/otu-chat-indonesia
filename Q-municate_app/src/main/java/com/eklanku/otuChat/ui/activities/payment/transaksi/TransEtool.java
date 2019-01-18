@@ -275,7 +275,7 @@ public class TransEtool extends AppCompatActivity {
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
                         inKonfirmasi.putExtra("ep", ep);
                         inKonfirmasi.putExtra("jenisvoucher", name);
-                        inKonfirmasi.putExtra("oprPulsa", "");
+                        inKonfirmasi.putExtra("oprPulsa", nameetoll);
 
                         /*inKonfirmasi.putExtra("userID", response.body().getUserID());//
                         inKonfirmasi.putExtra("accessToken", strAccessToken);//

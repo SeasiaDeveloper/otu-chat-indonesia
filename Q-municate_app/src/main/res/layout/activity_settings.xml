@@ -134,13 +134,15 @@
                     android:drawablePadding="16dp"
                     android:drawableStart="@drawable/ic_setting_password"
                     android:gravity="center_vertical"
-                    android:text="@string/settings_change_password" />
+                    android:text="@string/settings_change_password"
+                    android:visibility="gone"/>
 
                 <include
                     layout="@layout/view_horizontal_divider_gray"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/divider_height"
-                    android:layout_below="@id/change_password_button" />
+                    android:layout_below="@id/change_password_button"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 

@@ -34,7 +34,7 @@ import java.util.Locale;
 public class PrintTransaksiFinanceMAF extends AppCompatActivity {
 
     TextView _tvtglprint, _tvKeteranganPrint, _tvInvoice, _tvTanggaltrx, _tvNoResi, _tvNamaKredit, _tvCabang, _tvNokontrak,
-            _tvNama, _tvAngke, _tvJthtempo, _tvTagihan, _tvTotalTagihan, _tvTerbilang, _tvFooter, _;
+            _tvNama, _tvAngke, _tvJthtempo, _tvTagihan, _tvTotalTagihan, _tvTerbilang, _tvFooter;
 
 
     ProgressDialog progress_dialog;
@@ -148,7 +148,7 @@ public class PrintTransaksiFinanceMAF extends AppCompatActivity {
     public void strukMAF(String judul, String tglprint, String invoice, String tgltrx, String noresi, String namakredit,
                              String cabang, String nokontrak, String nama, String angke, String jthtempo, String tagihan, String totaltagihan, String terbilang, String footer) {
         Toast.makeText(this, "Printing", Toast.LENGTH_SHORT).show();
-        String dataForPrint = 
+        String dataForPrint =
                 "" + tglprint.trim() + "\n" +
                 "-------------------------------\n" +
                 "" + judul + "\n\n" +

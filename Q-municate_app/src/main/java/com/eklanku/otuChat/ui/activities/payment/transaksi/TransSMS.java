@@ -333,7 +333,7 @@ public class TransSMS extends AppCompatActivity {
                     Log.d("OPPO-1", "onResponse: " + status);
                     if (status.equals("SUCCESS")) {
                         Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPrabayar.class);
-                        inKonfirmasi.putExtra("productCode", "KUOTA SMS");//
+                        inKonfirmasi.putExtra("productCode", "KUOTA");//
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
                         inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//

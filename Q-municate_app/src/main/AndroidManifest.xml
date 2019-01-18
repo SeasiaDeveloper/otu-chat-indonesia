@@ -460,6 +460,21 @@
                 android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
         </activity>
         <activity
+            android:name=".ui.activities.payment.transaksi.TransEtool_opsi"
+            android:label="E-TOOL"
+            android:theme="@style/AppThemePaymentItems">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activities.payment.transaksi.TransETool_product"
+            android:theme="@style/AppThemePaymentItems">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.eklanku.otuChat.ui.activities.main.MainActivity" />
+        </activity>
+        <activity
             android:name=".ui.activities.payment.transaksi.TransWi"
             android:label="Wifi ID"
             android:theme="@style/AppThemePaymentItems">

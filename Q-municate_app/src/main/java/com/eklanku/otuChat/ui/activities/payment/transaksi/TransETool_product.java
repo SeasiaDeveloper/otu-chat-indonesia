@@ -3,14 +3,12 @@ package com.eklanku.otuChat.ui.activities.payment.transaksi;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -37,7 +35,6 @@ import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPrabayar;
 import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
-import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
 import com.eklanku.otuChat.ui.activities.payment.models.TransBeliResponse;
 import com.eklanku.otuChat.ui.activities.rest.ApiClientPayment;
 import com.eklanku.otuChat.ui.activities.rest.ApiInterfacePayment;
@@ -54,9 +51,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TransESaldo_product extends AppCompatActivity {
+public class TransETool_product extends AppCompatActivity {
 
-    ListView lvProductESaldo;
+    ListView lvProductEtool;
 
     ApiInterfacePayment apiInterfacePayment;
     PreferenceManager preferenceManager;
@@ -66,8 +63,8 @@ public class TransESaldo_product extends AppCompatActivity {
 
     Bundle extras;
     Utils utilsAlert;
-    String titleAlert = "E Saldo";
-    String code, ep,  nameEsaldo;
+    String titleAlert = "E Tool";
+    String code, ep,  nameEtool;
 
     EditText noPel, transKe;
     Button btnBayar;
@@ -95,12 +92,12 @@ public class TransESaldo_product extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_platform_e_saldo_product);
+        setContentView(R.layout.activity_platform_etool_product);
 
-        utilsAlert = new Utils(TransESaldo_product.this);
+        utilsAlert = new Utils(TransETool_product.this);
         extras = getIntent().getExtras();
 
-        lvProductESaldo = findViewById(R.id.listEsaldo);
+        lvProductEtool = findViewById(R.id.listETool);
         btnBayar = findViewById(R.id.btnTransVoucherBayar);
         noPel = findViewById(R.id.txtTransVoucherNo);
         transKe = findViewById(R.id.txtTransKe);
@@ -154,12 +151,10 @@ public class TransESaldo_product extends AppCompatActivity {
 
         if (jenis != null) {
             getProductPulsa(jenis);
-            if (jenis.equalsIgnoreCase("GO-JEK")) {
-                _img = "gojek";
-            } else if (jenis.equalsIgnoreCase("GRAB")) {
-                _img = "grab";
-            } else if (jenis.equalsIgnoreCase("OVO CASH")) {
-                _img = "ovo";
+            if (jenis.equalsIgnoreCase("BNI TAP CASH")) {
+                _img = "bni";
+            } else if (jenis.equalsIgnoreCase("ETOOL MANDIRI")) {
+                _img = "mandiri";
             }
             noPel.setText(tujuanx);
             setTitle(jenis);
@@ -169,7 +164,7 @@ public class TransESaldo_product extends AppCompatActivity {
             _listep = extras.getStringArrayList("listEP");
             _listProvide = extras.getStringArrayList("listProvider");
             _listCode = extras.getStringArrayList("listCode");
-            _namaProvider = extras.getString("jnsEsaldo");
+            _namaProvider = extras.getString("jnsEtool");
             _img = extras.getString("imgOpr");
             jenis = _namaProvider;
             setTitle(_namaProvider);
@@ -179,15 +174,15 @@ public class TransESaldo_product extends AppCompatActivity {
 
     private void initializeResources() {
         Log.d("OPPO-1", "initializeResources: ");
-        lvProductESaldo = (ListView) findViewById(R.id.listEsaldo);
-        lvProductESaldo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvProductEtool = (ListView) findViewById(R.id.listETool);
+        lvProductEtool.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (!validateIdpel()) {
                     return;
                 }
 
-                final Dialog dialog = new Dialog(TransESaldo_product.this);
+                final Dialog dialog = new Dialog(TransETool_product.this);
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.activity_alert_dialog);
@@ -196,7 +191,7 @@ public class TransESaldo_product extends AppCompatActivity {
 
                 code = _listCode.get(position);
                 ep = _listep.get(position);
-                nameEsaldo = _listnama.get(position);
+                nameEtool = _listnama.get(position);
                 btnYes = (Button) dialog.findViewById(R.id.btn_yes);
                 btnNo = (Button) dialog.findViewById(R.id.btn_no);
                 txtnomor = (TextView) dialog.findViewById(R.id.txt_nomor);
@@ -217,7 +212,7 @@ public class TransESaldo_product extends AppCompatActivity {
                 tvKeterangan.setText(_listnama.get(position));
                 total.setText(formatRupiah(Double.parseDouble(_listprice.get(position))));
                 biaya.setText("Rp0");
-                int idimg = TransESaldo_product.this.getResources().getIdentifier("drawable/ic_e_saldo_" + _img.toLowerCase(), null, TransESaldo_product.this.getPackageName());
+                int idimg = TransETool_product.this.getResources().getIdentifier("drawable/ic_e_saldo_" + _img.toLowerCase(), null, TransETool_product.this.getPackageName());
                 imgKonfirmasi.setImageResource(idimg);
 
                 btnYes.setOnClickListener(new View.OnClickListener() {
@@ -295,7 +290,7 @@ public class TransESaldo_product extends AppCompatActivity {
     }
 
     private void cek_transaksi() {
-        loadingDialog = ProgressDialog.show(TransESaldo_product.this, "Harap Tunggu", "Cek Transaksi...");
+        loadingDialog = ProgressDialog.show(TransETool_product.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
         Call<TransBeliResponse> transBeliCall = apiInterfacePayment.postTopup(strUserID, strAccessToken, strAplUse, noPel.getText().toString(), "", "", code);
@@ -309,7 +304,7 @@ public class TransESaldo_product extends AppCompatActivity {
 
                     if (status.equals("SUCCESS")) {
                         Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPrabayar.class);
-                        inKonfirmasi.putExtra("productCode", "ESALDO");//
+                        inKonfirmasi.putExtra("productCode", "ETOOL");//
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
                         inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//
@@ -317,7 +312,7 @@ public class TransESaldo_product extends AppCompatActivity {
                         inKonfirmasi.putExtra("adminBank", "0");
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
                         inKonfirmasi.putExtra("ep", ep);
-                        inKonfirmasi.putExtra("jenisvoucher", nameEsaldo);
+                        inKonfirmasi.putExtra("jenisvoucher", nameEtool);
                         inKonfirmasi.putExtra("oprPulsa", jenis);
 
                         /*inKonfirmasi.putExtra("userID", response.body().getUserID());//
@@ -342,11 +337,11 @@ public class TransESaldo_product extends AppCompatActivity {
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
-                        utilsAlert.globalDialog(TransESaldo_product.this, titleAlert, error);
+                        utilsAlert.globalDialog(TransETool_product.this, titleAlert, error);
                         // Toast.makeText(getBaseContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    utilsAlert.globalDialog(TransESaldo_product.this, titleAlert, getResources().getString(R.string.error_api));
+                    utilsAlert.globalDialog(TransETool_product.this, titleAlert, getResources().getString(R.string.error_api));
                     //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -354,7 +349,7 @@ public class TransESaldo_product extends AppCompatActivity {
             @Override
             public void onFailure(Call<TransBeliResponse> call, Throwable t) {
                 loadingDialog.dismiss();
-                utilsAlert.globalDialog(TransESaldo_product.this, titleAlert, getResources().getString(R.string.error_api));
+                utilsAlert.globalDialog(TransETool_product.this, titleAlert, getResources().getString(R.string.error_api));
                 //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
                 Log.d("API_TRANSBELI", t.getMessage().toString());
             }
@@ -364,9 +359,9 @@ public class TransESaldo_product extends AppCompatActivity {
 
     public void addList() {
         SpinnerAdapterNew adapter = new SpinnerAdapterNew(getApplicationContext(), _listnama, _listprice, _listep, _listProvide, _namaProvider);
-        int id = TransESaldo_product.this.getResources().getIdentifier("drawable/ic_e_saldo_" + _img.toLowerCase(), null, TransESaldo_product.this.getPackageName());
+        int id = TransETool_product.this.getResources().getIdentifier("drawable/ic_e_toll_" + _img.toLowerCase(), null, TransETool_product.this.getPackageName());
         imgOPR.setImageResource(id);
-        lvProductESaldo.setAdapter(adapter);
+        lvProductEtool.setAdapter(adapter);
     }
 
     private class txtWatcher implements TextWatcher {
@@ -403,7 +398,7 @@ public class TransESaldo_product extends AppCompatActivity {
 
     public void getProductPulsa(String jenis) {
         showProgress(true);
-        Call<DataAllProduct> dataESaldo = apiInterfacePayment.getProductESaldo(strUserID, strAccessToken, strAplUse);
+        Call<DataAllProduct> dataESaldo = apiInterfacePayment.getproduct_etoll(strUserID, strAccessToken, strAplUse);
         dataESaldo.enqueue(new Callback<DataAllProduct>() {
             @Override
             public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
@@ -436,20 +431,20 @@ public class TransESaldo_product extends AppCompatActivity {
                             listType.add(data.get(i).getType());
                             listProviderProduct.add(data.get(i).getProvider());
                         }
-
+                        Log.d("OPPO-1", "onResponse: "+listProviderProduct);
                         detailProduct(jenis, _img);
                     } else {
-                        utilsAlert.globalDialog(TransESaldo_product.this, titleAlert, respMessage);
+                        utilsAlert.globalDialog(TransETool_product.this, titleAlert, respMessage);
                     }
                 } else {
-                    utilsAlert.globalDialog(TransESaldo_product.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
+                    utilsAlert.globalDialog(TransETool_product.this, titleAlert, "1. " + getResources().getString(R.string.error_api));
                 }
             }
 
             @Override
             public void onFailure(Call<DataAllProduct> call, Throwable t) {
                 showProgress(false);
-                utilsAlert.globalDialog(TransESaldo_product.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
+                utilsAlert.globalDialog(TransETool_product.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
 
             }
         });

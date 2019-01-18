@@ -52,7 +52,7 @@ public class TransKartuKredit extends AppCompatActivity {
 
     SharedPreferences prefs;
     Spinner spnOperator;
-    EditText txtNo, txtno_hp;
+    EditText txtNo, txtno_hp, txtnominal;
     TextInputLayout layoutNo;
     Button btnBayar;
     String load_id = "KRE", selected_operator;
@@ -83,6 +83,7 @@ public class TransKartuKredit extends AppCompatActivity {
         prefs       = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnOperator = (Spinner) findViewById(R.id.spnTransKartuOperator);
         txtNo       = (EditText) findViewById(R.id.txtTransKartuNo);
+        txtnominal    = (EditText) findViewById(R.id.txtTransNominal);
         layoutNo    = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar    = (Button) findViewById(R.id.btnTransKartuBayar);
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
@@ -222,7 +223,7 @@ public class TransKartuKredit extends AppCompatActivity {
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransKartuKredit.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, selected_operator, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
+        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiryCC(strUserID, strAccessToken, selected_operator, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse, txtnominal.getText().toString());
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -258,6 +259,7 @@ public class TransKartuKredit extends AppCompatActivity {
                         inKonfirmasi.putExtra("sellPrice", response.body().getSellPrice());
                         inKonfirmasi.putExtra("adminBank", response.body().getAdminBank());
                         inKonfirmasi.putExtra("profit", response.body().getProfit());
+                        inKonfirmasi.putExtra("ep", response.body().getEp());
 
                         inKonfirmasi.putExtra("transaksi", "-");
                         inKonfirmasi.putExtra("harga", "-");

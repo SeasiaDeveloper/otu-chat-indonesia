@@ -294,7 +294,7 @@
                 android:background="@android:color/transparent"
                 android:src="@mipmap/ic_riwayat_download"
                 android:textColor="@color/white"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
         </LinearLayout>
     </LinearLayout>
 
