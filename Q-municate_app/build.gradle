@@ -130,6 +130,8 @@ android {
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('sun.misc.BASE64Decoder.jar')
     implementation project(':Q-municate_core')
 
     implementation "com.android.support:multidex:${rootProject.multiDexVersion}"

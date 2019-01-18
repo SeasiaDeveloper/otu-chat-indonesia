@@ -47,6 +47,7 @@ import com.eklanku.otuChat.ui.activities.payment.settingpayment.ResetPassword;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.SettingPrinterActivity;
 import com.eklanku.otuChat.ui.activities.payment.settingpayment.updateProfile;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.PaymentLogin;
+import com.eklanku.otuChat.ui.activities.rest.Enc;
 import com.eklanku.otuChat.ui.activities.settings.SettingsActivity;
 import com.eklanku.otuChat.ui.fragments.CallFragment;
 import com.eklanku.otuChat.ui.fragments.PaymentFragment;
@@ -96,6 +97,8 @@ import retrofit2.Response;
 import rx.Observable;
 import rx.Subscriber;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -119,6 +122,7 @@ import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.RECEIVE_SMS;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.eklanku.otuChat.ui.activities.rest.ApiClientPayment.BASE_URL_DEV;
 
 import com.eklanku.otuChat.utils.helpers.DbHelper;
 

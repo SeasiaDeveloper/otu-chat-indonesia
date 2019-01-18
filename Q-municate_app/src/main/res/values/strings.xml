@@ -572,5 +572,6 @@
     <string name="lbl_edit_history_title">Edit History</string>
     <string name="hint_enter_history">Enter your data!</string>
     <string name="cari_disini">Cari berdasarkan tujuan</string>
+    <string name="code">otuchatindonesia</string>
 
 </resources>
