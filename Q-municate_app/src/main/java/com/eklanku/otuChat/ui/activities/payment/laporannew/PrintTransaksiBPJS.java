@@ -231,7 +231,11 @@ public class PrintTransaksiBPJS extends AppCompatActivity {
 
     public void writePrinter(String strprint) throws IOException {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        String btAddr = sp.getString("mac_printer", "");
+        String btAddr;
+        /*if (sp.getString("mac_printer", "") == null || sp.getString("mac_printer", "").equals("")) {
+            Toast.makeText(this, "Mac address printer kosong", Toast.LENGTH_SHORT).show();
+        }*/
+        btAddr = sp.getString("mac_printer", "");
         iSettings _settings = new iSettings();
         _settings.SetPaperType(iPaperType.THERMAL);
         _settings.PrinterType(iPrinters.ZEBRA_CAMEO);

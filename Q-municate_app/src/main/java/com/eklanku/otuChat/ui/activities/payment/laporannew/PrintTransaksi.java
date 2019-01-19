@@ -103,20 +103,20 @@ public class PrintTransaksi extends AppCompatActivity {
 
         String dataForPrint =
                 "" + tanggal.trim() + "\n" +
-                "-------------------------------\n" +
-                "" + keterangan + "\n" +
-                "Voucher : " + jenis + "\n" +
-                "Nomor   : " + tujuan + "\n" +
-                "SN      : " + noseri + "\n" +
-                "Harga   : " + formatRupiah(Double.parseDouble(harga)) + "\n" +
-                "-------------------------------\n" +
-                Utils.center("Terima Kasih dan", 32) + "" +
-                Utils.center("Selamat Berbelanja Kembali", 32) + "" +
-                "-------------------------------\n" +
-                Utils.center("Layanan Konsumen OTU Chat", 32) + "" +
-                Utils.center("081-13-888-286", 32) + "" +
-                Utils.center("081-13-888-286", 32) + "" +
-                Utils.center("customer.care@otu.co.id", 32) + "";
+                        "-------------------------------\n" +
+                        "" + keterangan + "\n" +
+                        "Voucher : " + jenis + "\n" +
+                        "Nomor   : " + tujuan + "\n" +
+                        "SN      : " + noseri + "\n" +
+                        "Harga   : " + formatRupiah(Double.parseDouble(harga)) + "\n" +
+                        "-------------------------------\n" +
+                        Utils.center("Terima Kasih dan", 32) + "" +
+                        Utils.center("Selamat Berbelanja Kembali", 32) + "" +
+                        "-------------------------------\n" +
+                        Utils.center("Layanan Konsumen OTU Chat", 32) + "" +
+                        Utils.center("081-13-888-286", 32) + "" +
+                        Utils.center("081-13-888-286", 32) + "" +
+                        Utils.center("customer.care@otu.co.id", 32) + "";
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -164,8 +164,12 @@ public class PrintTransaksi extends AppCompatActivity {
     }
 
     public void writePrinter(String strprint) throws IOException {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        String btAddr = sp.getString("mac_printer", "");
+        String btAddr;
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+       /* if (sp.getString("mac_printer", "") == null || sp.getString("mac_printer", "").equals("")) {
+            Toast.makeText(this, "Mac address printer kosong", Toast.LENGTH_SHORT).show();
+        }*/
+        btAddr = sp.getString("mac_printer", "");
         iSettings _settings = new iSettings();
         _settings.SetPaperType(iPaperType.THERMAL);
         _settings.PrinterType(iPrinters.ZEBRA_CAMEO);

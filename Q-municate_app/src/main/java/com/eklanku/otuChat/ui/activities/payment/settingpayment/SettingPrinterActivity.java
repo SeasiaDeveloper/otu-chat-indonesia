@@ -18,6 +18,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.support.v4.app.ActivityCompat;
+import android.widget.Toast;
 
 import com.eklanku.otuChat.R;
 import com.eklanku.otuChat.btprint.btConnection;
@@ -64,30 +65,39 @@ public class SettingPrinterActivity extends PreferenceActivity {
         tesprint.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
-                        .getDefaultAdapter();
-                if (mBluetoothAdapter == null) {
-                    showAlert("ERROR", "Driver tidak ada!");
-                } else {
-                    if (!mBluetoothAdapter.isEnabled()) {
-                        showAlert("ERROR", "Nyalakan Bluetooth terlebih dahulu");
+
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                if (sp.getString("mac_printer", "") == null || sp.getString("mac_printer", "").equals("")) {
+                    Toast.makeText(SettingPrinterActivity.this, "Mac address printer kosong", Toast.LENGTH_SHORT).show();
+                }else{
+                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+                            .getDefaultAdapter();
+                    if (mBluetoothAdapter == null) {
+                        showAlert("ERROR", "Driver tidak ada!");
                     } else {
-                        StringBuffer str = new StringBuffer();
-                        str.append("\nTest Print\n");
-                        str.append("Powered by Powered by OTU Chat Indonesia\n\n");
-                        final String message = str.toString();
-                        progress_dialog.show();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    writePrinter(message);
-                                } catch (IOException e) {
+                        if (!mBluetoothAdapter.isEnabled()) {
+                            showAlert("ERROR", "Nyalakan Bluetooth terlebih dahulu");
+                        } else {
+                            StringBuffer str = new StringBuffer();
+                            str.append("\nTest Print\n");
+                            str.append("Powered by Powered by OTU Chat Indonesia\n\n");
+                            final String message = str.toString();
+                            progress_dialog.show();
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+
+                                        writePrinter(message);
+
+                                    } catch (IOException e) {
+                                    }
                                 }
-                            }
-                        }).start();
+                            }).start();
+                        }
                     }
                 }
+
                 return false;
             }
         });
@@ -112,12 +122,41 @@ public class SettingPrinterActivity extends PreferenceActivity {
         device.setSummary(strDevice);
         listnamaprinter.setSummary(sp.getString("nm_printer", "NA"));
         ednmpritner.setSummary(sp.getString("mac_printer", "NA"));
+
+        bindPreferenceSummaryToValue(findPreference("nm_printer"));
+        bindPreferenceSummaryToValue(findPreference("mac_printer"));
     }
+
+    private static void bindPreferenceSummaryToValue(Preference preference) {
+        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
+    }
+
+    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            String stringValue = newValue.toString();
+
+            if (preference instanceof EditTextPreference) {
+                if (preference.getKey().equals("nm_printer")) {
+                    preference.setSummary(stringValue);
+                } else if (preference.getKey().equals("mac_printer")) {
+                    preference.setSummary(stringValue);
+                }
+
+            } else {
+                preference.setSummary(stringValue);
+            }
+            return true;
+        }
+    };
+
 
     @SuppressWarnings({"deprecation"})
     public void writePrinter(String strprint) throws IOException {
+        String btAddr;
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String btAddr = sp.getString("mac_printer", "");
+        btAddr = sp.getString("mac_printer", "");
         iSettings _settings = new iSettings();
         _settings.SetPaperType(iPaperType.THERMAL);
         _settings.PrinterType(iPrinters.ZEBRA_CAMEO);
