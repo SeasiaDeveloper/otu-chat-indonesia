@@ -67,6 +67,7 @@ public class TransPGN extends AppCompatActivity {
 
     Utils utilsAlert;
     String titleAlert = "PGN";
+    String nominalx, tujuanx;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +77,22 @@ public class TransPGN extends AppCompatActivity {
 
         utilsAlert = new Utils(TransPGN.this);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+
+        }
+
         prefs       = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnOperator = (Spinner) findViewById(R.id.spnTransPgnOperator);
         txtNo       = (EditText) findViewById(R.id.txtTransPgnNo);
@@ -84,7 +101,7 @@ public class TransPGN extends AppCompatActivity {
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
-
+        txtNo.setText(tujuanx);
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
         if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){
             String no = PreferenceUtil.getNumberPhone(this).replace("+62","0");

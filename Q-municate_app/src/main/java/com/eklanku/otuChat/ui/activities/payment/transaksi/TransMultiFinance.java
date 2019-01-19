@@ -52,7 +52,7 @@ public class TransMultiFinance extends AppCompatActivity {
 
     private static String[] nama_operator;
 
-    private static String load_type    = "finance_nominal";
+    private static String load_type = "finance_nominal";
 
     SharedPreferences prefs;
     Spinner spnOperator;
@@ -68,7 +68,7 @@ public class TransMultiFinance extends AppCompatActivity {
     ApiInterfacePayment mApiInterfacePayment;
     PreferenceManager preferenceManager;
 
-    String strUserID,strAccessToken,strAplUse = "OTU";
+    String strUserID, strAccessToken, strAplUse = "OTU";
 
     Utils utilsAlert;
     String titleAlert = "Multi Finance";
@@ -79,8 +79,12 @@ public class TransMultiFinance extends AppCompatActivity {
     Bundle extras;
     String jenis, img, title;
 
+    String jenisFinance;
+
     ImageView imgFinance;
     private static long mLastClickTime = 0;
+    String nominalx, tujuanx, jenisTRX;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,15 +92,31 @@ public class TransMultiFinance extends AppCompatActivity {
         ButterKnife.bind(this);
         extras = getIntent().getExtras();
 
-
-
         utilsAlert = new Utils(TransMultiFinance.this);
 
-        prefs       = getSharedPreferences("app", Context.MODE_PRIVATE);
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+                jenisTRX = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+                jenisTRX = extras.getString("jenis");
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+            jenisTRX = (String) savedInstanceState.getSerializable("jenis");
+
+        }
+
+        prefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         spnOperator = (Spinner) findViewById(R.id.spnTransFinanceOperator);
-        txtNo       = (EditText) findViewById(R.id.txtTransFinanceNo);
-        layoutNo    = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
-        btnBayar    = (Button) findViewById(R.id.btnTransFinanceBayar);
+        txtNo = (EditText) findViewById(R.id.txtTransFinanceNo);
+        layoutNo = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
+        btnBayar = (Button) findViewById(R.id.btnTransFinanceBayar);
         txtNoHP = findViewById(R.id.txt_no_hp);
         imgFinance = findViewById(R.id.img_finance);
         btnBayar.setText("CEK TAGIHAN");
@@ -104,22 +124,49 @@ public class TransMultiFinance extends AppCompatActivity {
         listFinance = findViewById(R.id.listFinance);
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
-        if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){
-            String no = PreferenceUtil.getNumberPhone(this).replace("+62","0");
+        if (PreferenceUtil.getNumberPhone(this).startsWith("+62")) {
+            String no = PreferenceUtil.getNumberPhone(this).replace("+62", "0");
             txtno_hp.setText(no);
-        }else{
+        } else {
             txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
         }
 
+        Log.d("OPPO-1", "onCreate: "+jenisTRX);
 
-        jenis = extras.getString("jenis");
-        img = extras.getString("img");
-        title = extras.getString("title");
-        setTitle(title);
+        if (jenisTRX != null) {
+            if (jenisTRX.equalsIgnoreCase("FINMAF")) {
+                img = "maf";
+                title = "Mega Auto Finance";
+            } else if (jenisTRX.equalsIgnoreCase("FINMACF")) {
+                img = "mcf";
+                title = "Mega Central Finance";
+            } else if (jenisTRX.equalsIgnoreCase("FINBAF")) {
+                img = "baf";
+                title = "Busan Auto Finance";
+            } else if (jenisTRX.equalsIgnoreCase("FINFIF")) {
+                img = "fif";
+                title = "Federal International Finance";
+            } else if (jenisTRX.equalsIgnoreCase("FINCOLUMBIA")) {
+                img = "columbia";
+                title = "Columbia";
+            } else if (jenisTRX.equalsIgnoreCase("FINWOM")) {
+                img = "wom";
+                title = "Wahan Ottomitra Multiartha";
+            }
+            jenisFinance = jenisTRX;
+            txtNo.setText(tujuanx);
+            setTitle(title);
+        } else {
+            jenis = extras.getString("jenis");
+            jenisFinance = jenis;
+            img = extras.getString("img");
+            title = extras.getString("title");
+            setTitle(title);
+        }
+
 
         int idimg = TransMultiFinance.this.getResources().getIdentifier("drawable/ic_finance_" + img.toLowerCase(), null, TransMultiFinance.this.getPackageName());
         imgFinance.setImageResource(idimg);
-
 
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -140,7 +187,7 @@ public class TransMultiFinance extends AppCompatActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if ( !validateIdpel() ) {
+                if (!validateIdpel()) {
                     return;
                 }
                 cek_transaksi();
@@ -232,7 +279,7 @@ public class TransMultiFinance extends AppCompatActivity {
 
 
     private void requestFocus(View view) {
-        if ( view.requestFocus() ) {
+        if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
@@ -240,18 +287,18 @@ public class TransMultiFinance extends AppCompatActivity {
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransMultiFinance.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Log.d("OPPO-1", "cek_transaksi: "+jenis);
-        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, jenis, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
+        Log.d("OPPO-1", "cek_transaksi: " + jenis);
+        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, jenisFinance, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
                 loadingDialog.dismiss();
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus().toString();
-                    String error  = response.body().getRespMessage();
+                    String error = response.body().getRespMessage();
 
-                    if ( status.equals("SUCCESS") ) {
-                        Intent inKonfirmasi       = new Intent(getBaseContext(), TransKonfirmasiPascabayar.class);
+                    if (status.equals("SUCCESS")) {
+                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPascabayar.class);
                         inKonfirmasi.putExtra("userID", response.body().getUserID());
                         inKonfirmasi.putExtra("accessToken", strAccessToken);
                         inKonfirmasi.putExtra("status", status);
@@ -337,7 +384,7 @@ public class TransMultiFinance extends AppCompatActivity {
                 if (!validateIdpel()) {
                     return;
                 }
-                selected_operator =  idFinance.get(position);
+                selected_operator = idFinance.get(position);
 
                 cek_transaksi();
             }

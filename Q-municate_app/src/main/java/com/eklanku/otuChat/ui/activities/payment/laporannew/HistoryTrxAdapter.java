@@ -32,7 +32,9 @@ import com.eklanku.otuChat.ui.activities.payment.transaksi.TransBpjs;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransESaldo_product;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransETool_product;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransEtool;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransKartuKredit;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransMultiFinance;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPGN;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketData;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketTelp;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPdam;
@@ -168,7 +170,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.history_detail_trx);
         builder.setTitle("Jumlah");
-        builder.setCancelable(false);
+        builder.setCancelable(true);
 
         final TextView tvProductType = builder.findViewById(R.id.tv_product_type);
         final TextView etTgl = builder.findViewById(R.id.et_tgl);
@@ -249,7 +251,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buy(type_product, harga, tujuan, provider_name);
+                buy(type_product, harga, tujuan, provider_name, product_kode);
             }
         });
 
@@ -265,7 +267,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                     if (type_product.contains("ETOOL") || type_product.contains("TELPON") || type_product.contains("GAME")) {
                         ket = "Slip Pembelian " + provider_name;
                     } else if (type_product.contains("OJEK")) {
-                        ket = "Slip Pembelian Saldo "+provider_name;
+                        ket = "Slip Pembelian Saldo " + provider_name;
                     } else {
                         ket = "Slip Pembelian " + type_product.substring(0, 1).toUpperCase() + type_product.substring(1).toLowerCase() + " " + provider_name;
                     }
@@ -349,7 +351,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                 tagihan, admin, totaltagihan, terbilang, footer);
     }
 
-    public void buy(String trxJenis, String trxNominal, String trxTujuan, String trxProvideName) {
+    public void buy(String trxJenis, String trxNominal, String trxTujuan, String trxProvideName, String trxProductCode) {
         Intent i = null;
 
         if (trxJenis.equalsIgnoreCase("PULSA")) {
@@ -396,7 +398,6 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             i.putExtra("nominal", trxNominal);
             i.putExtra("tujuan", trxTujuan);
             context.startActivity(i);
-            //============================================================
         } else if (trxJenis.equalsIgnoreCase("PPOB TELKOM")) {
             i = new Intent(context, TransTelkom.class);
             i.putExtra("nominal", trxNominal);
@@ -437,6 +438,22 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             i = new Intent(context, TransTagihan.class);
             i.putExtra("nominal", trxNominal);
             i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("KARTU KREDIT")) {
+            i = new Intent(context, TransKartuKredit.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("PGN")) {
+            i = new Intent(context, TransPGN.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            context.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("MULTY FINANCE")) {
+            i = new Intent(context, TransMultiFinance.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
+            i.putExtra("jenis", trxProductCode);
             context.startActivity(i);
         } else {
             Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();

@@ -69,6 +69,8 @@ public class TransKartuKredit extends AppCompatActivity {
     Utils utilsAlert;
     String titleAlert = "Kartu Kredit";
 
+    String nominalx, tujuanx;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +78,22 @@ public class TransKartuKredit extends AppCompatActivity {
         ButterKnife.bind(this);
 
         utilsAlert = new Utils(TransKartuKredit.this);
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                nominalx = null;
+                tujuanx = null;
+            } else {
+                nominalx = extras.getString("nominal");
+                tujuanx = extras.getString("tujuan");
+
+            }
+        } else {
+            nominalx = (String) savedInstanceState.getSerializable("nominal");
+            tujuanx = (String) savedInstanceState.getSerializable("tujuan");
+
+        }
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -89,6 +107,8 @@ public class TransKartuKredit extends AppCompatActivity {
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
+
+        txtNo.setText(tujuanx);
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
         if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){

@@ -24,8 +24,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClientPayment {
 
-    public static String BASE_URL_DEV = "cOpe/g2A8hqDgyEJwaoa1Caze/h3RgRFibqfLSQllQUV91SmPeRuDQ==";
-    public static String BASE_URL_PROD = "cOpe/g2A8hqDgyEJwaoa1Caze/h3RgRFibqfLSQllQUV91SmPeRuDQ==";
+    public static String BASE_URL_DEV = "cOpe/g2A8hqDgyEJwaoa1Caze/h3RgRFibqfLSQllQUV91SmPeRuDQ=="; //http://api.eklanku.com/developapi/
+    public static String BASE_URL_PROD = "cOpe/g2A8hqDgyEJwaoa1Caze/h3RgRFibqfLSQllQUV91SmPeRuDQ=="; //http://payment.eklanku.com/
+
+
+
     public static String XAPIKEY = "V2vxhAvT2xs=";
 
     private static Retrofit retrofit = null;
