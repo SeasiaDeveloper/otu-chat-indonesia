@@ -259,29 +259,33 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             @Override
             public void onClick(View v) {
                 SimpleDateFormat sdf_tglcetak = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+                if (vstatus.equalsIgnoreCase("Active")) {
+                    if (type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.contains("ETOOL") ||
+                            type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS") || type_product.equals("OJEK ONLINE")) {
 
-                if (type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.contains("ETOOL") ||
-                        type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS") || type_product.equals("OJEK ONLINE")) {
+                        String ket = "";
+                        if (type_product.contains("ETOOL") || type_product.contains("TELPON") || type_product.contains("GAME")) {
+                            ket = "Slip Pembelian " + provider_name;
+                        } else if (type_product.contains("OJEK")) {
+                            ket = "Slip Pembelian Saldo " + provider_name;
+                        } else {
+                            ket = "Slip Pembelian " + type_product.substring(0, 1).toUpperCase() + type_product.substring(1).toLowerCase() + " " + provider_name;
+                        }
 
-                    String ket = "";
-                    if (type_product.contains("ETOOL") || type_product.contains("TELPON") || type_product.contains("GAME")) {
-                        ket = "Slip Pembelian " + provider_name;
-                    } else if (type_product.contains("OJEK")) {
-                        ket = "Slip Pembelian Saldo " + provider_name;
+                        String voucher = "";
+                        if (type_product.equals("KUOTA") || type_product.equals("TELPONS") || type_product.equals("GAME")) {
+                            voucher = provider_name;
+                        } else {
+                            voucher = product_name;
+                        }
+                        printTransaksi(type_product, formatTgl(tgl), ket, voucher, tujuan, vsn, harga);
                     } else {
-                        ket = "Slip Pembelian " + type_product.substring(0, 1).toUpperCase() + type_product.substring(1).toLowerCase() + " " + provider_name;
+                        Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
                     }
-
-                    String voucher = "";
-                    if (type_product.equals("KUOTA") || type_product.equals("TELPONS") || type_product.equals("GAME")) {
-                        voucher = provider_name;
-                    } else {
-                        voucher = product_name;
-                    }
-                    printTransaksi(type_product, formatTgl(tgl), ket, voucher, tujuan, vsn, harga);
-                } else {
-                    Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(context, "Hanya transaksi yang berstatus SUKSES yang bisa di Print\nTerimakasih", Toast.LENGTH_SHORT).show();
                 }
+
 
                 /*else if (type_product.equals("BPJSKES")) {
                     printTransaksiBpjsKes(type_product, invoice, sdf_tglcetak.format(new Date()), header1, formatTgl(tgl), ref2, tujuan, customername, noref1, customerphonenumber,
@@ -301,7 +305,13 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         btndownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                download(transaksi_id);
+                if (type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.contains("ETOOL") ||
+                        type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS") || type_product.equals("OJEK ONLINE")) {
+                    download(transaksi_id);
+                } else {
+                    Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

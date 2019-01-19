@@ -1,6 +1,7 @@
 package com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -28,10 +29,11 @@ import java.util.Locale;
 public class TransKonfirmasiPrabayar extends AppCompatActivity {
 
     TextView tvKeterangan, tvReffId, tvNohp, tvTanggal, tvHarga, tvAdminBank, tvTotal, tvKeteranganTrans, tvPoint;
-    ImageView imgKonfirmasi, btnprint, btnbuy;
+    ImageView imgKonfirmasi, btnprint, btnbuy, btdownload;
     Button btnok;
     Bundle extras;
     String jenisvoucher, oprpulsa;
+    String idtransaksi;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class TransKonfirmasiPrabayar extends AppCompatActivity {
         jenisvoucher = extras.getString("jenisvoucher");
         oprpulsa = extras.getString("oprPulsa");
 
+        idtransaksi = extras.getString("billingReferenceID");
         int id = TransKonfirmasiPrabayar.this.getResources().getIdentifier("mipmap/" + oprpulsa.toLowerCase(), null, TransKonfirmasiPrabayar.this.getPackageName());
         imgKonfirmasi.setImageResource(id);
 
@@ -118,6 +121,14 @@ public class TransKonfirmasiPrabayar extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 buy(extras.getString("productCode"), "0", extras.getString("customerMSISDN"), oprpulsa);
+            }
+        });
+
+        btdownload = findViewById(R.id.btndownload);
+        btdownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                download(idtransaksi);
             }
         });
     }
@@ -245,5 +256,11 @@ public class TransKonfirmasiPrabayar extends AppCompatActivity {
         parseRp = formatRupiah.format(nominal);
         return parseRp;
     }
+
+
+    public void download(String trxid) {
+        startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://demo.eklanku.com/invoice/GenerateInvoice/gen_pdf_download?trxID=" + trxid)));
+    }
+
 
 }

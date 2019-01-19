@@ -284,12 +284,13 @@
 
                     <ImageView
                         android:id="@+id/btn_print"
-                        android:layout_width="25dp"
+                        android:layout_width="22dp"
                         android:layout_height="25dp"
                         android:layout_marginRight="@dimen/density_16"
                         android:background="@android:color/transparent"
                         android:src="@mipmap/ic_riwayat_print"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/btn_buy"
