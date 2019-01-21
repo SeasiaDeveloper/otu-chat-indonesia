@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -69,6 +70,8 @@ public class TransKonfirmasiPascabayar extends AppCompatActivity {
     //HISTORY
     private DatabaseHelper db;
     private List<History> historyList = new ArrayList<>();
+
+    private static long mLastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +139,7 @@ public class TransKonfirmasiPascabayar extends AppCompatActivity {
         Log.d("OPPO-1", "onCreate>>>>>>>>>: "+productCode);
 
         // SETTEXT DISINI NA
-        txtJenis.setText(jenis);
+        txtJenis.setText("Transaksi "+jenis);
         txtReffID.setText(billingReferenceID.trim());
         txtCustomerID.setText(customerID);
         txtCustomerName.setText(customerName);
@@ -278,7 +281,7 @@ public class TransKonfirmasiPascabayar extends AppCompatActivity {
         TextView tvbiaya = dialog.findViewById(R.id.txt_biaya);
         TextView tvtotal = dialog.findViewById(R.id.txt_total);
 
-        tvKetJdl.setText(productCode);
+        tvKetJdl.setText("Nomor Pelanggan "+productCode);
         tvnomor.setText(customerID);
         tvjmltagihan.setText(formatRP(Double.parseDouble(payment)));
         tvbiaya.setText(formatRP(Double.parseDouble(adminBank)));
@@ -286,6 +289,10 @@ public class TransKonfirmasiPascabayar extends AppCompatActivity {
 
         btnYes.setText(getString(R.string.lanjutkan));
         btnYes.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
             confirmTransaksi();
             dialog.dismiss();
         });

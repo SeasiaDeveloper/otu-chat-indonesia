@@ -1,10 +1,14 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -24,13 +28,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eklanku.otuChat.ui.activities.main.PreferenceManager;
 import com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPascabayar;
+import com.eklanku.otuChat.ui.activities.payment.konfirmasitransaksi.TransKonfirmasiPrabayar;
 import com.eklanku.otuChat.ui.activities.payment.models.DataAllProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataProduct;
 import com.eklanku.otuChat.ui.activities.payment.models.DataTransBeli;
@@ -41,9 +48,11 @@ import com.eklanku.otuChat.R;;
 import com.eklanku.otuChat.ui.adapters.payment.SpinnerAdapterNew;
 import com.eklanku.otuChat.utils.Utils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -67,7 +76,7 @@ public class TransWi extends AppCompatActivity {
     PreferenceManager preferenceManager;
     String strUserID, strAccessToken, strAplUse = "OTU", strProductType = "WIFI ID";
     String strOpsel;
-    String code;
+    String code, point, name;
 
     TextView txtnomor, txtvoucher;
     Button btnYes, btnNo;
@@ -80,6 +89,10 @@ public class TransWi extends AppCompatActivity {
 
     String nominalx, tujuanx;
     private static long mLastClickTime = 0;
+
+    LinearLayout layoutView;
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +136,9 @@ public class TransWi extends AppCompatActivity {
         txtTransaksi_ke.setText("1");
         txtopr = (TextView) findViewById(R.id.textopr);
         imgopr = (ImageView) findViewById(R.id.imgopr);
+
+        layoutView = findViewById(R.id.linear_pulsa);
+        progressBar = findViewById(R.id.progress_pulsa);
 
         apiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
@@ -232,14 +248,12 @@ public class TransWi extends AppCompatActivity {
     ArrayList<String> listProviderProduct;
 
     public void getProductWI() {
-        loadingDialog = ProgressDialog.show(TransWi.this, "Harap Tunggu", "Cek Transaksi...");
-        loadingDialog.setCanceledOnTouchOutside(true);
+        showProgress(true);
         Call<DataAllProduct> dataPulsa = apiInterfacePayment.getProduct_wifiid(strUserID, strAccessToken, strAplUse);
         dataPulsa.enqueue(new Callback<DataAllProduct>() {
             @Override
             public void onResponse(Call<DataAllProduct> call, Response<DataAllProduct> response) {
-                //showProgress(false);
-                loadingDialog.dismiss();
+                showProgress(false);
                 if (response.isSuccessful()) {
                     listCode = new ArrayList<>();
                     listPrice = new ArrayList<>();
@@ -280,8 +294,7 @@ public class TransWi extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<DataAllProduct> call, Throwable t) {
-                //showProgress(false);
-                loadingDialog.dismiss();
+                showProgress(false);
                 utilsAlert.globalDialog(TransWi.this, titleAlert, "2. " + getResources().getString(R.string.error_api));
 
             }
@@ -333,17 +346,22 @@ public class TransWi extends AppCompatActivity {
 
                     Log.d("OPPO-1", "onResponse: " + status);
                     if (status.equals("SUCCESS")) {
-                        List<DataTransBeli> trans = response.body().getResult();
-                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPascabayar.class);
-                        inKonfirmasi.putExtra("userID", response.body().getUserID());//
+                        Intent inKonfirmasi = new Intent(getBaseContext(), TransKonfirmasiPrabayar.class);
+                        inKonfirmasi.putExtra("productCode", "WIFI ID");//
+                        inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
+                        inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
+                        inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//
+                        inKonfirmasi.putExtra("billing", response.body().getNominal());//
+                        inKonfirmasi.putExtra("adminBank", "0");
+                        inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
+                        inKonfirmasi.putExtra("ep", point);
+                        inKonfirmasi.putExtra("jenisvoucher", name);
+                        inKonfirmasi.putExtra("oprPulsa", name);
+
+                        /*inKonfirmasi.putExtra("userID", response.body().getUserID());//
                         inKonfirmasi.putExtra("accessToken", strAccessToken);//
                         inKonfirmasi.putExtra("status", status);//
-                        inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());//
-                        inKonfirmasi.putExtra("respTime", response.body().getTransactionDate());//
-                        inKonfirmasi.putExtra("productCode", "WI FI");//
-                        inKonfirmasi.putExtra("billingReferenceID", response.body().getTransactionID());//
                         inKonfirmasi.putExtra("customerID", response.body().getMSISDN());//
-                        inKonfirmasi.putExtra("customerMSISDN", response.body().getMSISDN());//
                         inKonfirmasi.putExtra("customerName", "");
                         inKonfirmasi.putExtra("period", "");
                         inKonfirmasi.putExtra("policeNumber", "");
@@ -356,11 +374,9 @@ public class TransWi extends AppCompatActivity {
                         inKonfirmasi.putExtra("minPayment", "");
                         inKonfirmasi.putExtra("minPayment", "");
                         inKonfirmasi.putExtra("additionalMessage", response.body().getAdditionalMessage());
-                        inKonfirmasi.putExtra("billing", response.body().getNominal());//
                         inKonfirmasi.putExtra("sellPrice", "");
-                        inKonfirmasi.putExtra("adminBank", "0");
-                        inKonfirmasi.putExtra("profit", "");
-                        inKonfirmasi.putExtra("ep", response.body().getEp());
+                        inKonfirmasi.putExtra("profit", "");*/
+
                         startActivity(inKonfirmasi);
                         finish();
                     } else {
@@ -415,6 +431,8 @@ public class TransWi extends AppCompatActivity {
                     return;
                 }
                 code = listCode.get(position);
+                point = listEP.get(position);
+                name = listName.get(position);
                 final Dialog dialog = new Dialog(TransWi.this);
 
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -431,9 +449,16 @@ public class TransWi extends AppCompatActivity {
                 TextView tvTranske = dialog.findViewById(R.id.txt_transke);
                 tvProduct.setText(code_name.get(position));
                 tvTranske.setText(txtTransaksi_ke.getText().toString());
+                TextView tvKeterangan = dialog.findViewById(R.id.txt_keterangan);
+                TextView tvBiaya = dialog.findViewById(R.id.txt_biaya);
+                TextView tvTotal = dialog.findViewById(R.id.txt_total);
+                TextView imgKonfirmasi = dialog.findViewById(R.id.img_konfirmasi);
 
                 txtnomor.setText(txtNo.getText().toString());
-                txtvoucher.setText(code);
+                txtvoucher.setText(formatRupiah(Double.parseDouble(listPrice.get(position))));
+                tvKeterangan.setText(name);
+                tvBiaya.setText("Rp0");
+                tvTotal.setText(formatRupiah(Double.parseDouble(listPrice.get(position))));
 
 
                 btnYes.setOnClickListener(new View.OnClickListener() {
@@ -459,6 +484,43 @@ public class TransWi extends AppCompatActivity {
     }
 
 
+    public String formatRupiah(double nominal) {
+        String parseRp = "";
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+        parseRp = formatRupiah.format(nominal);
+        return parseRp;
+    }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
+        }
+    }
 
 }

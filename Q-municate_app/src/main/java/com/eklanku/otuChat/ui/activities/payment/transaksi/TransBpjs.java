@@ -1,11 +1,15 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -24,6 +28,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,6 +102,8 @@ public class TransBpjs extends AppCompatActivity {
 
     Spinner spnPeriodeBPJS;
     TextView txketperiode;
+    ProgressBar progressBar;
+    LinearLayout layoutView;
     private static long mLastClickTime = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -132,6 +140,8 @@ public class TransBpjs extends AppCompatActivity {
         btnBayar.setText("CEK TAGIHAN");
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
         txketperiode = findViewById(R.id.tvketPeriode);
+        progressBar = findViewById(R.id.progress_pulsa);
+        layoutView = findViewById(R.id.linear_pulsa);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -262,7 +272,7 @@ public class TransBpjs extends AppCompatActivity {
                         inKonfirmasi.putExtra("status", status);
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
                         inKonfirmasi.putExtra("respTime", response.body().getRespTime());
-                        inKonfirmasi.putExtra("productCode", "Nomor Peserta BPJS Kesehatan");
+                        inKonfirmasi.putExtra("productCode", "BPJS Kesehatan");
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());
@@ -445,10 +455,12 @@ public class TransBpjs extends AppCompatActivity {
     String idper, bln, ket;
 
     public void getPeriodeBpjs(){
+        showProgress(true);
         Call<DataPeriodeBPJS> periode = mApiInterfacePayment.getperiodebpjs(strUserID, strAccessToken, strAplUse);
         periode.enqueue(new Callback<DataPeriodeBPJS>() {
             @Override
             public void onResponse(Call<DataPeriodeBPJS> call, Response<DataPeriodeBPJS> response) {
+                showProgress(false);
                 idperiode = new ArrayList<>();
                 blnperiode = new ArrayList<>();
                 idperiode.clear();
@@ -491,12 +503,43 @@ public class TransBpjs extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<DataPeriodeBPJS> call, Throwable t) {
+                showProgress(false);
                 Log.d("OPPO-1", "onFailure: "+t.getMessage());
             }
         });
     }
 
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
+        }
+    }
 
 }
 

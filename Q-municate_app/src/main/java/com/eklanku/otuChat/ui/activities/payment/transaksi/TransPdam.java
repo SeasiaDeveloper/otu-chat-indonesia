@@ -1,6 +1,10 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +31,9 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -83,6 +89,9 @@ public class TransPdam extends AppCompatActivity {
     private CustomAdapter mAdapter;
     String nominalx, tujuanx;
     private static long mLastClickTime = 0;
+    LinearLayout layoutView;
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +126,10 @@ public class TransPdam extends AppCompatActivity {
         etWilayah = findViewById(R.id.autoComplete);
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
+
+        layoutView = findViewById(R.id.linear_pulsa);
+        progressBar = findViewById(R.id.progress_pulsa);
+
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
         cartList = new ArrayList<>();
@@ -174,12 +187,12 @@ public class TransPdam extends AppCompatActivity {
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
-
+        showProgress(true);
         Call<LoadDataResponse> dataCall = mApiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                //loadingDialog.dismiss();
+                showProgress(false);
                 nama_wilayah = new String[0];
                 id_wilayah = new ArrayList<>();
 
@@ -224,6 +237,7 @@ public class TransPdam extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
+                showProgress(false);
                 utilsAlert.globalDialog(TransPdam.this, titleAlert, getResources().getString(R.string.error_api));
             }
         });
@@ -282,12 +296,12 @@ public class TransPdam extends AppCompatActivity {
                         inKonfirmasi.putExtra("status", status);
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
                         inKonfirmasi.putExtra("respTime", response.body().getRespTime());
-                        inKonfirmasi.putExtra("productCode", "Nomor Pelanggan PDAM");
+                        inKonfirmasi.putExtra("productCode", "PDAM");
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());
                         inKonfirmasi.putExtra("customerName", response.body().getCustomerName());
-                        inKonfirmasi.putExtra("period", response.body().getPeriod()+" bulan");
+                        inKonfirmasi.putExtra("period", response.body().getPeriod() + " bulan");
                         inKonfirmasi.putExtra("policeNumber", response.body().getPoliceNumber());
                         inKonfirmasi.putExtra("lastPaidPeriod", response.body().getLastPaidPeriod());
                         inKonfirmasi.putExtra("tenor", response.body().getTenor());
@@ -494,5 +508,36 @@ public class TransPdam extends AppCompatActivity {
             return convertView;
         }
 
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
+        }
     }
 }

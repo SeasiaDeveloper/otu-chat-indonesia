@@ -1,11 +1,16 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +26,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -70,6 +77,10 @@ public class TransKartuKredit extends AppCompatActivity {
     String titleAlert = "Kartu Kredit";
 
     String nominalx, tujuanx;
+    private static long mLastClickTime = 0;
+
+    LinearLayout layoutView;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,11 +115,11 @@ public class TransKartuKredit extends AppCompatActivity {
         txtnominal    = (EditText) findViewById(R.id.txtTransNominal);
         layoutNo    = (TextInputLayout) findViewById(R.id.txtLayoutTransPulsaNo);
         btnBayar    = (Button) findViewById(R.id.btnTransKartuBayar);
+        txtNo.setText(tujuanx);
         txtNo.addTextChangedListener(new txtWatcher(txtNo));
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
 
-        txtNo.setText(tujuanx);
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
         if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){
@@ -117,6 +128,9 @@ public class TransKartuKredit extends AppCompatActivity {
         }else{
             txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
         }
+
+        layoutView = findViewById(R.id.linear_pulsa);
+        progressBar = findViewById(R.id.progress_pulsa);
 
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
         preferenceManager = new PreferenceManager(this);
@@ -130,23 +144,32 @@ public class TransKartuKredit extends AppCompatActivity {
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 if ( !validateIdpel() ) {
                     return;
                 }
-                cek_transaksi();
+
+                String nominal = txtnominal.getText().toString().trim();
+                if(nominal.equalsIgnoreCase("0")){
+                    txtnominal.setError("Kolom nominal tidak boleh berisi 0");
+                    requestFocus(txtnominal);
+                }else{
+                    cek_transaksi();
+                }
             }
         });
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
-        loadingDialog = ProgressDialog.show(TransKartuKredit.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
-
+        showProgress(true);
         Call<LoadDataResponse> dataCall = mApiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
+                showProgress(false);
                 nama_operator = new String[0];
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
                 spnOperator.setAdapter(adapter);
@@ -188,7 +211,7 @@ public class TransKartuKredit extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
+                showProgress(false);
                 utilsAlert.globalDialog(TransKartuKredit.this, titleAlert, getResources().getString(R.string.error_api));
                 //Toast.makeText(getBaseContext(), getResources().getString(R.string.error_api), Toast.LENGTH_SHORT).show();
             }
@@ -197,15 +220,13 @@ public class TransKartuKredit extends AppCompatActivity {
 
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
+        txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
-            layoutNo.setError("Kolom nomor tidak boleh kosong");
+            txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
-
-
-        layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -259,7 +280,7 @@ public class TransKartuKredit extends AppCompatActivity {
                         inKonfirmasi.putExtra("status", status);
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
                         inKonfirmasi.putExtra("respTime", response.body().getRespTime());
-                        inKonfirmasi.putExtra("productCode", "Nomor Pelanggan Kartu Kredit");
+                        inKonfirmasi.putExtra("productCode", "Kartu Kredit");
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());
@@ -327,6 +348,37 @@ public class TransKartuKredit extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
         }
     }
 }

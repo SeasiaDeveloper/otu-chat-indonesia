@@ -685,6 +685,12 @@ public class TransPln extends AppCompatActivity {
                     btnYes.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+
                             cek_transaksi_token();
                             dialog.dismiss();
                         }
@@ -703,6 +709,11 @@ public class TransPln extends AppCompatActivity {
                     window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     return;
                 } else {
+
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     cek_transaksi();
                 }
             }

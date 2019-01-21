@@ -1,10 +1,14 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -22,6 +26,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -73,6 +79,10 @@ public class TransTagihan extends AppCompatActivity {
     String titleAlert = "Pasca Bayar";
     String nominalx, tujuanx;
     private static long mLastClickTime = 0;
+
+    LinearLayout layoutView;
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +126,9 @@ public class TransTagihan extends AppCompatActivity {
             txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
         }
 
+
+        layoutView = findViewById(R.id.linear_pulsa);
+        progressBar = findViewById(R.id.progress_pulsa);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -173,14 +186,13 @@ public class TransTagihan extends AppCompatActivity {
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
-        loadingDialog = ProgressDialog.show(TransTagihan.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
+        showProgress(true);
 
         Call<LoadDataResponse> dataCall = mApiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
+                showProgress(false);
                 nama_operator = new String[0];
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.spinner_text, nama_operator);
                 spnOperator.setAdapter(adapter);
@@ -220,7 +232,7 @@ public class TransTagihan extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
+                showProgress(false);
                 utilsAlert.globalDialog(TransTagihan.this, titleAlert, getResources().getString(R.string.error_api));
             }
         });
@@ -334,6 +346,37 @@ public class TransTagihan extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
         }
     }
 }

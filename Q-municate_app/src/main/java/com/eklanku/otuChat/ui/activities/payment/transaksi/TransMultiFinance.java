@@ -120,7 +120,7 @@ public class TransMultiFinance extends AppCompatActivity {
         txtNoHP = findViewById(R.id.txt_no_hp);
         imgFinance = findViewById(R.id.img_finance);
         btnBayar.setText("CEK TAGIHAN");
-        txtNo.addTextChangedListener(new txtWatcher(txtNo));
+
         listFinance = findViewById(R.id.listFinance);
 
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
@@ -180,6 +180,7 @@ public class TransMultiFinance extends AppCompatActivity {
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
+        txtNo.addTextChangedListener(new txtWatcher(txtNo));
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -304,7 +305,7 @@ public class TransMultiFinance extends AppCompatActivity {
                         inKonfirmasi.putExtra("status", status);
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
                         inKonfirmasi.putExtra("respTime", response.body().getRespTime());
-                        inKonfirmasi.putExtra("productCode", "Nomor Pelanggan Multifinance");
+                        inKonfirmasi.putExtra("productCode", title);
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());

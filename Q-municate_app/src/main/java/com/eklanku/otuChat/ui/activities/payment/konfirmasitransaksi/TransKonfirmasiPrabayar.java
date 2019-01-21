@@ -22,6 +22,7 @@ import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPaketTelp;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransPulsa;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransSMS;
 import com.eklanku.otuChat.ui.activities.payment.transaksi.TransVouchergame_product;
+import com.eklanku.otuChat.ui.activities.payment.transaksi.TransWi;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -153,7 +154,7 @@ public class TransKonfirmasiPrabayar extends AppCompatActivity {
                 TransKonfirmasiPrabayar.this.startActivity(i);
             }
         } else if (trxJenis.equalsIgnoreCase("ETOOL")) {
-            Log.d("OPPO-1", "buy: "+trxProvideName);
+            Log.d("OPPO-1", "buy: " + trxProvideName);
             i = new Intent(TransKonfirmasiPrabayar.this, TransETool_product.class);
             i.putExtra("nominal", trxNominal);
             i.putExtra("tujuan", trxTujuan);
@@ -175,6 +176,11 @@ public class TransKonfirmasiPrabayar extends AppCompatActivity {
             i.putExtra("nominal", trxNominal);
             i.putExtra("tujuan", trxTujuan);
             i.putExtra("jenis", trxProvideName);
+            TransKonfirmasiPrabayar.this.startActivity(i);
+        } else if (trxJenis.equalsIgnoreCase("WIFI ID")) {
+            i = new Intent(TransKonfirmasiPrabayar.this, TransWi.class);
+            i.putExtra("nominal", trxNominal);
+            i.putExtra("tujuan", trxTujuan);
             TransKonfirmasiPrabayar.this.startActivity(i);
         }
 

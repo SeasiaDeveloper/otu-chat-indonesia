@@ -9,123 +9,136 @@
     android:padding="@dimen/density_8"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransTelkom">
 
-    <com.eklanku.otuChat.ui.views.ARTextView
-        android:id="@+id/textView34"
+    <ProgressBar
+        android:id="@+id/progress_pulsa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Jenis Tagihan"
-        android:textColor="@color/grey_600"
-        android:textSize="16sp" />
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/custom_bottom_border_grey"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/spnTransTelkomJenis"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:spinnerMode="dropdown" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_drop"
-            android:tint="@color/default_text_icon_otu_color" />
-
-    </RelativeLayout>
-
-    <com.eklanku.otuChat.ui.views.ARTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_8"
-        android:text="Masukkan No Pelanggan"
-        android:textColor="@color/grey_600"
-        android:textSize="16sp" />
+        android:layout_margin="@dimen/density_8" />
 
     <LinearLayout
+        android:id="@+id/linear_pulsa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/txtLayoutTransPulsaNo"
-            android:layout_width="0dp"
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:id="@+id/textView34"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="7"
-            app:hintEnabled="false">
+            android:text="Jenis Tagihan"
+            android:textColor="@color/grey_600"
+            android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/txtTransTelkomNo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/custom_bottom_border_grey"
-                android:ems="10"
-                android:inputType="number"
-                android:paddingTop="@dimen/density_8"
-                android:paddingBottom="@dimen/density_8"
-                android:textColor="@color/grey_600" />
-        </android.support.design.widget.TextInputLayout>
 
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="2"
-            android:src="@drawable/ic_otu_telkom" />
-    </LinearLayout>
-
-    <com.eklanku.otuChat.ui.views.ARTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_8"
-        android:text="No HP"
-        android:textColor="@color/grey_600"
-        android:textSize="16sp" />
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hintEnabled="false">
-
-        <EditText
-            android:id="@+id/txt_no_hp"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_bottom_border_grey"
-            android:drawableStart="@drawable/ic_phone"
-            android:drawableLeft="@drawable/ic_phone"
-            android:ems="10"
-            android:inputType="number"
-            android:paddingBottom="@dimen/density_8"
-            android:textColor="@color/grey_600" />
+            android:orientation="horizontal">
 
-    </android.support.design.widget.TextInputLayout>
+            <Spinner
+                android:id="@+id/spnTransTelkomJenis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:spinnerMode="dropdown" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="No HP ini digunakan untuk menerima sms konfirmasi" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_drop"
+                android:tint="@color/default_text_icon_otu_color" />
+
+        </RelativeLayout>
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/density_8"
+            android:text="Masukkan No Pelanggan"
+            android:textColor="@color/grey_600"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/txtLayoutTransPulsaNo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                app:hintEnabled="false">
+
+                <EditText
+                    android:id="@+id/txtTransTelkomNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_bottom_border_grey"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:paddingTop="@dimen/density_8"
+                    android:paddingBottom="@dimen/density_8"
+                    android:textColor="@color/grey_600" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_weight="2"
+                android:src="@drawable/ic_otu_telkom" />
+        </LinearLayout>
+
+        <com.eklanku.otuChat.ui.views.ARTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/density_8"
+            android:text="No HP"
+            android:textColor="@color/grey_600"
+            android:textSize="16sp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintEnabled="false">
+
+            <EditText
+                android:id="@+id/txt_no_hp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_bottom_border_grey"
+                android:drawableStart="@drawable/ic_phone"
+                android:drawableLeft="@drawable/ic_phone"
+                android:ems="10"
+                android:inputType="number"
+                android:paddingBottom="@dimen/density_8"
+                android:textColor="@color/grey_600" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="No HP ini digunakan untuk menerima sms konfirmasi" />
 
 
-    <Button
-        android:id="@+id/btnTransTelkomBayar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/density_8"
-        android:background="@drawable/background_round_corner_green"
-        android:text="Cek Tagihan"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnTransTelkomBayar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/density_8"
+            android:background="@drawable/background_round_corner_green"
+            android:text="Cek Tagihan"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>

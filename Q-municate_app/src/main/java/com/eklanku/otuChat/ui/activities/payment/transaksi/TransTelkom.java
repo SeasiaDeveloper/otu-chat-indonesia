@@ -1,10 +1,14 @@
 package com.eklanku.otuChat.ui.activities.payment.transaksi;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -22,6 +26,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -72,6 +78,10 @@ public class TransTelkom extends AppCompatActivity {
     String titleAlert = "Telkom";
     String nominalx, tujuanx;
     private static long mLastClickTime = 0;
+    LinearLayout layoutView;
+    ProgressBar progressBar;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +124,9 @@ public class TransTelkom extends AppCompatActivity {
             txtno_hp.setText(PreferenceUtil.getNumberPhone(this));
         }
 
+        layoutView = findViewById(R.id.linear_pulsa);
+        progressBar = findViewById(R.id.progress_pulsa);
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -143,13 +156,12 @@ public class TransTelkom extends AppCompatActivity {
     }
 
     private void loadProvider(String userID, String accessToken, String aplUse, String productGroup) {
-        loadingDialog = ProgressDialog.show(TransTelkom.this, "Harap Tunggu", "Mengambil Data...");
-        loadingDialog.setCanceledOnTouchOutside(true);
+        showProgress(true);
         Call<LoadDataResponse> dataCall = mApiInterfacePayment.postPpobProduct(userID, accessToken, productGroup, aplUse);
         dataCall.enqueue(new Callback<LoadDataResponse>() {
             @Override
             public void onResponse(Call<LoadDataResponse> call, Response<LoadDataResponse> response) {
-                loadingDialog.dismiss();
+                showProgress(false);
 
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
@@ -190,7 +202,7 @@ public class TransTelkom extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoadDataResponse> call, Throwable t) {
-                loadingDialog.dismiss();
+                showProgress(false);
                 utilsAlert.globalDialog(TransTelkom.this, titleAlert, "2. "+getResources().getString(R.string.error_api));
                 Log.d("OPPO-1", "onFailure: "+t.getMessage());
             }
@@ -259,7 +271,7 @@ public class TransTelkom extends AppCompatActivity {
                         inKonfirmasi.putExtra("status", status);
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
                         inKonfirmasi.putExtra("respTime", response.body().getRespTime());
-                        inKonfirmasi.putExtra("productCode", "Nomor Pelanggan Telkom");
+                        inKonfirmasi.putExtra("productCode", "Telkom");
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());
@@ -330,6 +342,37 @@ public class TransTelkom extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+            layoutView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressBar.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            layoutView.setVisibility(show ? View.GONE : View.VISIBLE);
+
         }
     }
 }

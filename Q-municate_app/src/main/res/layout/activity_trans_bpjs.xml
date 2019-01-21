@@ -9,6 +9,18 @@
     android:padding="@dimen/density_8"
     tools:context="com.eklanku.otuChat.ui.activities.payment.transaksi.TransBpjs">
 
+    <ProgressBar
+        android:id="@+id/progress_pulsa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/density_8" />
+
+    <LinearLayout
+        android:id="@+id/linear_pulsa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
     <com.eklanku.otuChat.ui.views.ARTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -191,5 +203,6 @@
         android:text="Cek Tagihan"
         android:textColor="#FFFFFF"
         android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>

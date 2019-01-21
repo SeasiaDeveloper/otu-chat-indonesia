@@ -339,7 +339,6 @@ public class TransPulsa extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setTitle("Peringatan Transaksi!!!");
 
-
         btnYes = dialog.findViewById(R.id.btn_yes);
         btnNo = dialog.findViewById(R.id.btn_no);
         tvNomor = dialog.findViewById(R.id.txt_nomor);

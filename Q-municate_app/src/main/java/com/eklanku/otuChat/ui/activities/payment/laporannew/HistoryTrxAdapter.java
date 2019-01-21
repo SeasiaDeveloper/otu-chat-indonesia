@@ -198,6 +198,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
             etStatus.setTextColor(context.getResources().getColor(R.color.colorTextOtuDark));
         }
 
+
         etTgl.setText(tgl);
         etNominal.setText(formatRupiah(Double.parseDouble(harga)));
         tvProductType.setText("Detail Transaksi " + type_product);
@@ -261,10 +262,11 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                 SimpleDateFormat sdf_tglcetak = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
                 if (vstatus.equalsIgnoreCase("Active")) {
                     if (type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.contains("ETOOL") ||
-                            type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS") || type_product.equals("OJEK ONLINE")) {
+                            type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS")
+                            || type_product.equals("OJEK ONLINE") || type_product.equals("WIFI ID")) {
 
                         String ket = "";
-                        if (type_product.contains("ETOOL") || type_product.contains("TELPON") || type_product.contains("GAME")) {
+                        if (type_product.contains("ETOOL") || type_product.contains("TELPON") || type_product.contains("GAME") || type_product.equals("WIFI ID")) {
                             ket = "Slip Pembelian " + provider_name;
                         } else if (type_product.contains("OJEK")) {
                             ket = "Slip Pembelian Saldo " + provider_name;
@@ -273,7 +275,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                         }
 
                         String voucher = "";
-                        if (type_product.equals("KUOTA") || type_product.equals("TELPONS") || type_product.equals("GAME")) {
+                        if (type_product.equals("KUOTA") || type_product.equals("TELPONS") || type_product.equals("GAME") || type_product.equals("WIFI ID")) {
                             voucher = provider_name;
                         } else {
                             voucher = product_name;
@@ -282,7 +284,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                     } else {
                         Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(context, "Hanya transaksi yang berstatus SUKSES yang bisa di Print\nTerimakasih", Toast.LENGTH_SHORT).show();
                 }
 
@@ -305,12 +307,18 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         btndownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.contains("ETOOL") ||
-                        type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS") || type_product.equals("OJEK ONLINE")) {
-                    download(transaksi_id);
-                } else {
-                    Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
+                if(vstatus.equalsIgnoreCase("Active")){
+                    if (type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.contains("ETOOL") ||
+                            type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS") ||
+                            type_product.equals("OJEK ONLINE") || type_product.equals("WIFI ID")) {
+                        download(transaksi_id);
+                    } else {
+                        Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(context, "Hanya transaksi yang berstatus SUKSES yang bisa di Download\nTerimakasih", Toast.LENGTH_SHORT).show();
                 }
+
 
             }
         });

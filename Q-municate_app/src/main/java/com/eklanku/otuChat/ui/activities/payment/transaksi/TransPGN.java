@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -69,6 +70,8 @@ public class TransPGN extends AppCompatActivity {
     String titleAlert = "PGN";
     String nominalx, tujuanx;
 
+    private static long mLastClickTime = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,8 +103,8 @@ public class TransPGN extends AppCompatActivity {
         btnBayar    = (Button) findViewById(R.id.btnTransPgnBayar);
         EditText txtNoHP = findViewById(R.id.txt_no_hp);
         btnBayar.setText("CEK TAGIHAN");
-        txtNo.addTextChangedListener(new txtWatcher(txtNo));
         txtNo.setText(tujuanx);
+        txtNo.addTextChangedListener(new txtWatcher(txtNo));
         txtno_hp = (EditText) findViewById(R.id.txt_no_hp);
         if(PreferenceUtil.getNumberPhone(this).startsWith("+62")){
             String no = PreferenceUtil.getNumberPhone(this).replace("+62","0");
@@ -121,13 +124,19 @@ public class TransPGN extends AppCompatActivity {
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
-        loadProvider(strUserID, strAccessToken, "OTU", "PGN");
+        //loadProvider(strUserID, strAccessToken, "OTU", "PGN");
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!validateIdpel()) {
                     return;
                 }
+
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
                 cek_transaksi();
             }
         });
@@ -222,14 +231,14 @@ public class TransPGN extends AppCompatActivity {
 
     private boolean validateIdpel() {
         String id_pel = txtNo.getText().toString().trim();
+        txtNo.setError(null);
 
         if (id_pel.isEmpty()) {
-            layoutNo.setError("Kolom nomor tidak boleh kosong");
+            txtNo.setError("Kolom nomor tidak boleh kosong");
             requestFocus(txtNo);
             return false;
         }
 
-        layoutNo.setErrorEnabled(false);
         return true;
     }
 
@@ -237,7 +246,7 @@ public class TransPGN extends AppCompatActivity {
         loadingDialog = ProgressDialog.show(TransPGN.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
 
-        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, selected_operator, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
+        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiry(strUserID, strAccessToken, "PGN", txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse);
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -253,7 +262,7 @@ public class TransPGN extends AppCompatActivity {
                         inKonfirmasi.putExtra("status", status);
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
                         inKonfirmasi.putExtra("respTime", response.body().getRespTime());
-                        inKonfirmasi.putExtra("productCode", "Nomor Pelanggan PGN");
+                        inKonfirmasi.putExtra("productCode", "PGN");
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());

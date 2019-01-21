@@ -129,7 +129,7 @@ public class HistoryActivity extends AppCompatActivity {
         showProgress(true);
         trxListTransaksi.clear();
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-        Call<DataHistoryOTU> dataCall = mApiInterfacePayment.getHistoryTrx(strUserID, strApIUse, strAccessToken, "6");
+        Call<DataHistoryOTU> dataCall = mApiInterfacePayment.getHistoryTrx(strUserID, strApIUse, strAccessToken, "1");
         dataCall.enqueue(new Callback<DataHistoryOTU>() {
             @Override
             public void onResponse(Call<DataHistoryOTU> call, Response<DataHistoryOTU> response) {
