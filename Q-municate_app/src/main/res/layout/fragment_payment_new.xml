@@ -178,7 +178,7 @@
                                             android:layout_width="@dimen/density_24"
                                             android:layout_height="@dimen/density_24"
                                             android:layout_marginBottom="@dimen/density_4"
-                                            android:background="@null"
+                                            android:background="@@color/white"
                                             android:scaleType="centerInside"
                                             app:srcCompat="@drawable/ic_transfer_" />
 
@@ -206,7 +206,7 @@
                                             android:layout_width="@dimen/density_24"
                                             android:layout_height="@dimen/density_24"
                                             android:layout_marginBottom="@dimen/density_4"
-                                            android:background="@null"
+                                            android:background="@@color/white"
                                             android:scaleType="centerInside"
                                             app:srcCompat="@drawable/ic_riwayat_" />
 
@@ -234,7 +234,7 @@
                                             android:layout_width="@dimen/density_24"
                                             android:layout_height="@dimen/density_24"
                                             android:layout_marginBottom="@dimen/density_4"
-                                            android:background="@null"
+                                            android:background="@@color/white"
                                             android:scaleType="centerInside"
                                             app:srcCompat="@drawable/ic_eklankumax_" />
 
@@ -411,9 +411,8 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
-                                    android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_pulsa" />
+                                    android:background="@color/white"
+                                    android:src="@drawable/ic_ultah_pulsa" />
 
                                 <ImageView
                                     android:id="@+id/ivPulsa"
@@ -425,7 +424,7 @@
                                     android:layout_marginBottom="10dp"
                                     android:elevation="2dp"
                                     android:visibility="gone"
-                                    app:srcCompat="@drawable/ic_pulsa" />
+                                    app:srcCompat="@drawable/ic_ultah_pulsa" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -451,9 +450,8 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
-                                    android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_paketdata" />
+                                    android:background="@color/white"
+                                    android:src="@drawable/ic_ultah_paket_data" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivPaket"
@@ -465,7 +463,7 @@
                                     android:layout_marginBottom="10dp"
                                     android:elevation="2dp"
                                     android:visibility="gone"
-                                    app:srcCompat="@drawable/ic_paket_data" />
+                                    app:srcCompat="@drawable/ic_ultah_paket_data" />
 
                                 <TextView
                                     android:id="@+id/textView18"
@@ -489,12 +487,12 @@
 
                                 <ImageButton
                                     android:id="@+id/btnPln"
-                                    android:layout_width="62dp"
+                                    android:layout_width="58dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_pln" />
+                                    android:src="@drawable/ic_ultah_pln" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivPln"
@@ -532,9 +530,8 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
-                                    android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_etool" />
+                                    android:background="@color/white"
+                                    android:src="@drawable/ic_ultah_e_toll" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/iv_etool"
@@ -580,9 +577,9 @@
                                     android:layout_height="62dp"
                                     android:layout_alignParentTop="true"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_voucher_game" />
+                                    android:src="@drawable/ic_ultah_voucher_game" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivVoucher"
@@ -620,9 +617,9 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_sms" />
+                                    android:src="@drawable/ic_ultah_sms" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/iv_sms"
@@ -660,9 +657,9 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_paket_telp" />
+                                    android:src="@drawable/ic_ultah_telpon" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/iv_telp"
@@ -700,9 +697,8 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
-                                    android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_e_saldo" />
+                                    android:background="@color/white"
+                                    android:src="@drawable/ic_ultah_e_saldo" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/iv_e_saldo"
@@ -714,7 +710,7 @@
                                     android:layout_marginBottom="10dp"
                                     android:elevation="2dp"
                                     android:visibility="gone"
-                                    app:srcCompat="@drawable/ic_otu_e_saldo" />
+                                    app:srcCompat="@drawable/ic_ultah_e_saldo" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -748,9 +744,9 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_donasi_yayasan" />
+                                    android:src="@drawable/ic_ultah_donasi" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/iv_donasi"
@@ -838,9 +834,9 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_bpjs" />
+                                    android:src="@drawable/ic_ultah_bpjs" />
 
 
                                 <android.support.v7.widget.AppCompatImageView
@@ -879,9 +875,9 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_pascabayar" />
+                                    android:src="@drawable/ic_ultah_pascabayar" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivPascabayar"
@@ -919,9 +915,9 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_tvcable" />
+                                    android:src="@drawable/ic_ultah_tvkabel" />
 
 
                                 <android.support.v7.widget.AppCompatImageView
@@ -961,9 +957,9 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_wifi" />
+                                    android:src="@drawable/ic_ultah_wifi" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/iv_wifi_id"
@@ -1009,9 +1005,9 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_pdam" />
+                                    android:src="@drawable/ic_ultah_pdam" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivPdam"
@@ -1050,9 +1046,9 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_telkom" />
+                                    android:src="@drawable/ic_ultah_telkom" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivTelkom"
@@ -1092,9 +1088,9 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_finance" />
+                                    android:src="@drawable/ic_ultah_finance" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivMultiFinance"
@@ -1133,9 +1129,8 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
-                                    android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_pgn" />
+                                    android:background="@color/white"
+                                    android:src="@drawable/ic_ultah_pgn" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivPGN"
@@ -1181,9 +1176,9 @@
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
-                                    android:background="@drawable/bg_payment_list_icon"
+                                    android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_otu_kartu_kredit" />
+                                    android:src="@drawable/ic_ultah_kartukredit" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/ivKartuKredit"
@@ -1543,7 +1538,7 @@
                      android:layout_height="@dimen/density_30"
                      android:layout_centerHorizontal="true"
                      android:layout_marginBottom="@dimen/density_4"
-                     android:background="@null"
+                     android:background="@@color/white"
                      android:scaleType="centerInside"
                      android:src="@drawable/ic_green_riwayat" />
 
@@ -1575,7 +1570,7 @@
                      android:layout_height="@dimen/density_30"
                      android:layout_centerHorizontal="true"
                      android:layout_marginBottom="@dimen/density_4"
-                     android:background="@null"
+                     android:background="@@color/white"
                      android:scaleType="centerInside"
                      android:src="@drawable/ic_otu_transfer" />
 
@@ -1607,7 +1602,7 @@
                     android:layout_height="@dimen/density_30"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/density_4"
-                    android:background="@null"
+                    android:background="@@color/white"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_otu_pengaturan" />
 
