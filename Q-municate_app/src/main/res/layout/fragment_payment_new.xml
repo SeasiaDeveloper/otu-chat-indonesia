@@ -412,6 +412,7 @@
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
                                     android:background="@color/white"
+                                    android:scaleType="centerInside"
                                     android:src="@drawable/ic_ultah_pulsa" />
 
                                 <ImageView
@@ -451,19 +452,10 @@
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
                                     android:background="@color/white"
-                                    android:src="@drawable/ic_ultah_paket_data" />
+                                    android:scaleType="centerInside"
+                                    android:src="@drawable/ic_ultah_paketdata" />
 
-                                <android.support.v7.widget.AppCompatImageView
-                                    android:id="@+id/ivPaket"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:elevation="2dp"
-                                    android:visibility="gone"
-                                    app:srcCompat="@drawable/ic_ultah_paket_data" />
+
 
                                 <TextView
                                     android:id="@+id/textView18"
@@ -531,6 +523,7 @@
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
                                     android:background="@color/white"
+                                    android:scaleType="centerInside"
                                     android:src="@drawable/ic_ultah_e_toll" />
 
                                 <android.support.v7.widget.AppCompatImageView
@@ -575,7 +568,6 @@
                                     android:id="@+id/btnVoucher"
                                     android:layout_width="62dp"
                                     android:layout_height="62dp"
-                                    android:layout_alignParentTop="true"
                                     android:layout_centerHorizontal="true"
                                     android:background="@color/white"
                                     android:scaleType="centerInside"
@@ -659,7 +651,7 @@
                                     android:layout_centerHorizontal="true"
                                     android:background="@color/white"
                                     android:scaleType="centerInside"
-                                    android:src="@drawable/ic_ultah_telpon" />
+                                    android:src="@drawable/ic_ultah_telp" />
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:id="@+id/iv_telp"
@@ -698,6 +690,7 @@
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
                                     android:background="@color/white"
+                                    android:scaleType="centerInside"
                                     android:src="@drawable/ic_ultah_e_saldo" />
 
                                 <android.support.v7.widget.AppCompatImageView
@@ -1130,6 +1123,7 @@
                                     android:layout_height="62dp"
                                     android:layout_centerHorizontal="true"
                                     android:background="@color/white"
+                                    android:scaleType="centerInside"
                                     android:src="@drawable/ic_ultah_pgn" />
 
                                 <android.support.v7.widget.AppCompatImageView
@@ -1197,7 +1191,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_below="@id/btnKartuKredit"
                                     android:layout_centerHorizontal="true"
-                                    android:text="Kartu Kredit"
+                                    android:text="Kartu Kredit BNI"
                                     android:textAlignment="center"
                                     android:textAllCaps="true"
                                     android:textColor="@color/color_payment_list_icon_text"

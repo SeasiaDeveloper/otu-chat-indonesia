@@ -104,7 +104,7 @@ public class HistoryDepositAdapter extends RecyclerView.Adapter<HistoryDepositAd
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.history_detail_deposit);
         builder.setTitle("Jumlah");
-        builder.setCancelable(false);
+        builder.setCancelable(true);
 
         final TextView title = builder.findViewById(R.id.tv_product_type);
         final TextView tanggal = builder.findViewById(R.id.et_tgl);
