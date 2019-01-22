@@ -74,7 +74,7 @@ public class TransKartuKredit extends AppCompatActivity {
     String strUserID,strAccessToken,strAplUse = "OTU";
 
     Utils utilsAlert;
-    String titleAlert = "Kartu Kredit";
+    String titleAlert = "Kartu Kredit BNI";
 
     String nominalx, tujuanx;
     private static long mLastClickTime = 0;
@@ -103,7 +103,6 @@ public class TransKartuKredit extends AppCompatActivity {
         } else {
             nominalx = (String) savedInstanceState.getSerializable("nominal");
             tujuanx = (String) savedInstanceState.getSerializable("tujuan");
-
         }
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -140,7 +139,7 @@ public class TransKartuKredit extends AppCompatActivity {
         strUserID = user.get(preferenceManager.KEY_USERID);
         strAccessToken = user.get(preferenceManager.KEY_ACCESS_TOKEN);
 
-        loadProvider(strUserID, strAccessToken, "OTU", "KARTU KREDIT");
+        //loadProvider(strUserID, strAccessToken, "OTU", "KARTU KREDIT");
         btnBayar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,7 +263,7 @@ public class TransKartuKredit extends AppCompatActivity {
     private void cek_transaksi() {
         loadingDialog = ProgressDialog.show(TransKartuKredit.this, "Harap Tunggu", "Cek Transaksi...");
         loadingDialog.setCanceledOnTouchOutside(true);
-        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiryCC(strUserID, strAccessToken, selected_operator, txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse, txtnominal.getText().toString());
+        Call<TransBeliResponse> transBeliCall = mApiInterfacePayment.postPpobInquiryCC(strUserID, strAccessToken, "KREBNI", txtNo.getText().toString(), txtno_hp.getText().toString(), strAplUse, txtnominal.getText().toString());
         transBeliCall.enqueue(new Callback<TransBeliResponse>() {
             @Override
             public void onResponse(Call<TransBeliResponse> call, Response<TransBeliResponse> response) {
@@ -280,7 +279,7 @@ public class TransKartuKredit extends AppCompatActivity {
                         inKonfirmasi.putExtra("status", status);
                         inKonfirmasi.putExtra("respMessage", response.body().getRespMessage());
                         inKonfirmasi.putExtra("respTime", response.body().getRespTime());
-                        inKonfirmasi.putExtra("productCode", "Kartu Kredit");
+                        inKonfirmasi.putExtra("productCode", "Kartu Kredit BNI");
                         inKonfirmasi.putExtra("billingReferenceID", response.body().getBillingReferenceID());
                         inKonfirmasi.putExtra("customerID", response.body().getCustomerID());
                         inKonfirmasi.putExtra("customerMSISDN", response.body().getCustomerMSISDN());

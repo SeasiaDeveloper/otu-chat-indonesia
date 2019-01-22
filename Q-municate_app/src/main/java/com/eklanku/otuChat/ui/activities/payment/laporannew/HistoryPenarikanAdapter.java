@@ -98,7 +98,7 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.history_detail_penarikan);
         builder.setTitle("Jumlah");
-        builder.setCancelable(false);
+        builder.setCancelable(true);
 
         final TextView title = builder.findViewById(R.id.tv_product_type);
         final TextView tanggal = builder.findViewById(R.id.et_tgl);

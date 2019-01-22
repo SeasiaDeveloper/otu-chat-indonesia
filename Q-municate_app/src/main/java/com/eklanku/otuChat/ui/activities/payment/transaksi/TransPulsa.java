@@ -266,7 +266,7 @@ public class TransPulsa extends AppCompatActivity {
                         inKonfirmasi.putExtra("profit", "");*/
 
                         startActivity(inKonfirmasi);
-                        finish();
+                     //   finish();
                     } else {
                         utilsAlert.globalDialog(TransPulsa.this, titleAlert, error);
                     }

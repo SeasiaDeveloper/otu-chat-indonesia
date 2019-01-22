@@ -82,7 +82,7 @@ public class ApiClientPayment {
 
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl(apiDev)
+                    .baseUrl(apiProd)
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();

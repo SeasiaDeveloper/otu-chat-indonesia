@@ -94,7 +94,7 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.history_detail_saldo);
         builder.setTitle("Jumlah");
-        builder.setCancelable(false);
+        builder.setCancelable(true);
 
         final TextView title = builder.findViewById(R.id.tv_product_type);
         final TextView mutasi_id = builder.findViewById(R.id.et_mutasi_id);

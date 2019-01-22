@@ -273,7 +273,8 @@
             android:layout_marginTop="@dimen/density_8"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_doku_failed"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_close"
@@ -281,7 +282,8 @@
             android:layout_height="wrap_content"
             android:text="Tutup"
             android:layout_marginTop="@dimen/density_8"
-            android:textColor="@color/red_700"/>
+            android:textColor="@color/red_700"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"
