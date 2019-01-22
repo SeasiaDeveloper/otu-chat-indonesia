@@ -24,11 +24,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClientPayment {
 
-    public static String BASE_URL_DEV = "cOpe/g2A8hqDgyEJwaoa1Caze/h3RgRFibqfLSQllQUV91SmPeRuDQ==";
-    public static String BASE_URL_PROD = "cOpe/g2A8hrXPBPth94IezwI7RxxWadxw2ZuY6De9DM=";
+    public static String BASE_URL_DEV = "8AA40907930C18B8CC916140B8706874BC15F0C2FF2C3E7A603E7C0BDDECFBB2A6EDF89F2E7E9A8A721976A04008B8D3";
+    public static String BASE_URL_PROD = "58E286852585508A48D83B932C7012D46C508559F775FEFB766E9E1AECC88D32";
 
-
-    public static String XAPIKEY = "V2vxhAvT2xs=";
+    public static String XAPIKEY = "43EBE47A09884E05D2CB871AF7A73A6E";
 
     private static Retrofit retrofit = null;
     private static Context context;
@@ -42,10 +41,11 @@ public class ApiClientPayment {
         String apiDev = "", apiProd = "";
         String apiKey = "";
         try {
-            apiKey = new Enc(context).decrypt(XAPIKEY);
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            apiDev = AESUtils.decrypt(BASE_URL_DEV);
+            apiProd = AESUtils.decrypt(BASE_URL_PROD);
+            apiKey = AESUtils.decrypt(XAPIKEY);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -67,19 +67,6 @@ public class ApiClientPayment {
                     .build();
 
             Gson gson = new GsonBuilder().setLenient().create();
-
-            try {
-                apiDev = new Enc(context).decrypt(BASE_URL_DEV);
-                apiProd = new Enc(context).decrypt(BASE_URL_PROD);
-
-            } catch (GeneralSecurityException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(apiProd)
