@@ -132,7 +132,7 @@ public class HistoryPenarikanAdapter extends RecyclerView.Adapter<HistoryPenarik
         atas_nama.setText(_atas_nama);
         nomor_rekening.setText(_nomor_rekening);
 
-        Button btnClose = builder.findViewById(R.id.btn_close);
+     //   Button btnClose = builder.findViewById(R.id.btn_close);
 
         tutup.setOnClickListener(new View.OnClickListener() {
             @Override

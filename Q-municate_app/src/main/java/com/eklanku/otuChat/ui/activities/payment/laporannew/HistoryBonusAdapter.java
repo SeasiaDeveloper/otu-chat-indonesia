@@ -106,7 +106,7 @@ public class HistoryBonusAdapter extends RecyclerView.Adapter<HistoryBonusAdapte
         keterangan.setText(_keterangan);
         status.setText(_status);
 
-        ImageView btnClose = builder.findViewById(R.id.btn_close);
+       // ImageView btnClose = builder.findViewById(R.id.btn_close);
 
         tutup.setOnClickListener(new View.OnClickListener() {
             @Override

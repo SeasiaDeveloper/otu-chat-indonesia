@@ -127,7 +127,7 @@ public class HistorySaldoAdapter extends RecyclerView.Adapter<HistorySaldoAdapte
             status.setText(_status);
         }
 
-        Button btnClose = builder.findViewById(R.id.btn_close);
+//        Button btnClose = builder.findViewById(R.id.btn_close);
 
         tutup.setOnClickListener(new View.OnClickListener() {
             @Override
