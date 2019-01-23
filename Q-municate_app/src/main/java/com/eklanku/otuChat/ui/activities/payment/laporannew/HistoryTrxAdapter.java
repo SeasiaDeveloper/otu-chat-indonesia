@@ -182,6 +182,24 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         final TextView etKet = builder.findViewById(R.id.et_keterangan);
         final TextView tutup = builder.findViewById(R.id.tv_close);
 
+        ImageView btnBuy = builder.findViewById(R.id.btn_buy);
+        ImageView btnClose = builder.findViewById(R.id.btn_close);
+        ImageView btnPrint = builder.findViewById(R.id.btn_print);
+        ImageView btndownload = builder.findViewById(R.id.btndownload);
+
+        ImageView btnCopyInv = builder.findViewById(R.id.btn_copy_inv);
+        ImageView btnCopyTjn = builder.findViewById(R.id.btn_copy_tjn);
+
+        if (type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.contains("ETOOL") ||
+                type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS")
+                || type_product.equals("OJEK ONLINE") || type_product.equals("WIFI ID")) {
+            btnPrint.setVisibility(View.VISIBLE);
+            btndownload.setVisibility(View.VISIBLE);
+        }else{
+            btnPrint.setVisibility(View.GONE);
+            btndownload.setVisibility(View.GONE);
+        }
+
         if (vstatus.equalsIgnoreCase("Active")) {
             etStatus.setText("Sukses");
         } else {
@@ -207,13 +225,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         etVsn.setText(vsn);
         etKet.setText(keterangan);
 
-        ImageView btnBuy = builder.findViewById(R.id.btn_buy);
-        ImageView btnClose = builder.findViewById(R.id.btn_close);
-        ImageView btnPrint = builder.findViewById(R.id.btn_print);
-        ImageView btndownload = builder.findViewById(R.id.btndownload);
 
-        ImageView btnCopyInv = builder.findViewById(R.id.btn_copy_inv);
-        ImageView btnCopyTjn = builder.findViewById(R.id.btn_copy_tjn);
 
         btnCopyInv.setOnClickListener(new View.OnClickListener() {
             @Override
