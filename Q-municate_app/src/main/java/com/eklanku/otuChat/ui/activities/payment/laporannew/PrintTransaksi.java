@@ -119,8 +119,8 @@ public class PrintTransaksi extends AppCompatActivity {
                         Utils.center("customer.care@otu.co.id", 32) + "";
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-
-        if (sp.getString("mac_printer", "") != null) {
+        Log.d("OPPO-1", "preparePrint: "+sp.getString("mac_printer", ""));
+        if (!sp.getString("mac_printer", "").equalsIgnoreCase("")) {
             print(dataForPrint);
         } else {
             Toast.makeText(this, "Bluetooth printer not set, please go to setting printer menu", Toast.LENGTH_SHORT).show();
