@@ -162,7 +162,7 @@
             android:layout_marginBottom="@dimen/density_4"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="0dp"
