@@ -53,6 +53,11 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            /*minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro'
+            //shrinkResources true*/
+
             debuggable false
             ext.enableCrashlytics = true
             signingConfig signingConfigs.release
@@ -69,6 +74,10 @@ android {
         }
 
         debug {
+           /* minifyEnabled true
+            useProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro'*/
             debuggable true
             versionNameSuffix ' (debug)'
         }
