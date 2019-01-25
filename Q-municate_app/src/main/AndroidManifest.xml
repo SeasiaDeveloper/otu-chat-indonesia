@@ -722,6 +722,8 @@
         <activity android:name=".ui.activities.payment.laporannew.PrintTransaksi"/>
         <activity android:name=".ui.activities.payment.laporannew.PrintTransaksiBPJS"/>
         <activity android:name=".ui.activities.payment.laporannew.PrintTransaksiFinanceMAF"/>
+        <activity android:name=".ui.activities.payment.laporannew.PrintTransaksiPLNPascabayar"/>
+        <activity android:name=".ui.activities.payment.laporannew.PrintTransaksiSelulerPasca"/>
 
         <!-- new config -->
         <!--

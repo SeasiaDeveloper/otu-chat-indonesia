@@ -129,7 +129,7 @@ public class HistoryActivity extends AppCompatActivity {
         showProgress(true);
         trxListTransaksi.clear();
         mApiInterfacePayment = ApiClientPayment.getClient().create(ApiInterfacePayment.class);
-        Call<DataHistoryOTU> dataCall = mApiInterfacePayment.getHistoryTrx(strUserID, strApIUse, strAccessToken, "1");
+        Call<DataHistoryOTU> dataCall = mApiInterfacePayment.getHistoryTrx(strUserID, strApIUse, strAccessToken, "6");
         dataCall.enqueue(new Callback<DataHistoryOTU>() {
             @Override
             public void onResponse(Call<DataHistoryOTU> call, Response<DataHistoryOTU> response) {
@@ -144,6 +144,7 @@ public class HistoryActivity extends AppCompatActivity {
                             carnumber, nominal, biayaadmin, odinstallmentamount, odpenaltyfee, billeradminfee, itemmerktype, minimumpayamount,
                             miscfee, branchname, infoteks, serviceunitphone, serviceunit, tarif_daya, wording, bl_th, angsuran_ke,
                             angsuran_pokok, jumlah_tagihan, total_tagihan, terbilang, header1, middle1, footer1, footer2, footer3, footer4;
+                    String standmeter;
 
                     if (status.equals("SUCCESS")) {
                         final List<DataDetailHistosryOTU> result = response.body().getListData();
@@ -215,8 +216,7 @@ public class HistoryActivity extends AppCompatActivity {
                             footer2 = result.get(i).getFooter2();
                             footer3 = result.get(i).getFooter3();
                             footer4 = result.get(i).getFooter4();
-
-
+                            standmeter = result.get(i).getStand_meter();
 
                             ItemHistoryTrx trx = new ItemHistoryTrx(id_member, invoice, tgl, vstatus, harga, tujuan, keterangan, vsn, mbr_name, tgl_sukses, product_kode, type_product,
                                     provider_name, product_name, transaksi_id, ptname, waktu, startdate, enddate, ref2, idpelanggan1, customerid,
@@ -224,7 +224,7 @@ public class HistoryActivity extends AppCompatActivity {
                                     customerphonenumber, lastpaidperiode, lastpaidduedate, tenor, productcategory, billquantity, billerrefnumber,
                                     carnumber, nominal, biayaadmin, odinstallmentamount, odpenaltyfee, billeradminfee, itemmerktype, minimumpayamount,
                                     miscfee, branchname, infoteks, serviceunitphone, serviceunit, tarif_daya, wording, bl_th, angsuran_ke,
-                                    angsuran_pokok, jumlah_tagihan, total_tagihan, terbilang, header1, middle1, footer1, footer2, footer3, footer4);
+                                    angsuran_pokok, jumlah_tagihan, total_tagihan, terbilang, header1, middle1, footer1, footer2, footer3, footer4, standmeter);
                             trxListTransaksi.add(trx);
 
                         }

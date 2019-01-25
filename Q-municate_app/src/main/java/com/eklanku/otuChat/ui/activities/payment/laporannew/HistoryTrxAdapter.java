@@ -138,7 +138,8 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                         itemProduct.getMiscfee(), itemProduct.getBranchname(), itemProduct.getInfoteks(), itemProduct.getServiceunitphone(),
                         itemProduct.getServiceunit(), itemProduct.getTarif_daya(), itemProduct.getWording(), itemProduct.getBl_th(), itemProduct.getAngsuran_ke(),
                         itemProduct.getAngsuran_pokok(), itemProduct.getJumlah_tagihan(), itemProduct.getTotal_tagihan(), itemProduct.getTerbilang(),
-                        itemProduct.getHeader1(), itemProduct.getMiddle1(), itemProduct.getFooter1(), itemProduct.getFooter2(), itemProduct.getFooter3(), itemProduct.getFooter4());
+                        itemProduct.getHeader1(), itemProduct.getMiddle1(), itemProduct.getFooter1(), itemProduct.getFooter2(),
+                        itemProduct.getFooter3(), itemProduct.getFooter4(), itemProduct.getStand_meter());
             }
         });
 
@@ -165,7 +166,7 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                            String miscfee, String branchname, String infoteks, String serviceunitphone,
                            String serviceunit, String tarif_daya, String wording, String bl_th, String angsuran_ke,
                            String angsuran_pokok, String jumlah_tagihan, String total_tagihan, String terbilang,
-                           String header1, String middle1, String footer1, String footer2, String footer3, String footer4) {
+                           String header1, String middle1, String footer1, String footer2, String footer3, String footer4, String stand_meter) {
 
         final Dialog builder = new Dialog(context);
         builder.setContentView(R.layout.history_detail_trx);
@@ -190,15 +191,15 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         ImageView btnCopyInv = builder.findViewById(R.id.btn_copy_inv);
         ImageView btnCopyTjn = builder.findViewById(R.id.btn_copy_tjn);
 
-        if (type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.contains("ETOOL") ||
+       /* if (type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.contains("ETOOL") ||
                 type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS")
                 || type_product.equals("OJEK ONLINE") || type_product.equals("WIFI ID")) {
             btnPrint.setVisibility(View.VISIBLE);
             btndownload.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             btnPrint.setVisibility(View.GONE);
             btndownload.setVisibility(View.GONE);
-        }
+        }*/
 
         if (vstatus.equalsIgnoreCase("Active")) {
             etStatus.setText("Sukses");
@@ -224,7 +225,6 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         etTujuan.setText(tujuan);
         etVsn.setText(vsn);
         etKet.setText(keterangan);
-
 
 
         btnCopyInv.setOnClickListener(new View.OnClickListener() {
@@ -293,33 +293,36 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                             voucher = product_name;
                         }
                         printTransaksi(type_product, formatTgl(tgl), ket, voucher, tujuan, vsn, harga);
+                    } else if (type_product.equals("BPJSKES")) {
+                        printTransaksiBpjsKes(type_product, invoice, sdf_tglcetak.format(new Date()), header1, formatTgl(tgl), ref2, tujuan, customername, noref1, customerphonenumber,
+                                billercode, billquantity, nominal, biayaadmin, total_tagihan, terbilang, footer1);
+
+                    } else if (type_product.equals("MULTY FINANCE")) {
+                        printTransaksiFinanceMAF(type_product, header1, sdf_tglcetak.format(new Date()), invoice, tgl, ref2, ptname, "", tujuan, customername,
+                                angsuran_ke, lastpaidduedate, jumlah_tagihan, total_tagihan, terbilang, footer1);
+
+                    } else if (type_product.equals("PGN")) {
+                        printTransaksiPGN(type_product, header1, sdf_tglcetak.format(new Date()), invoice, tgl, "", customerid, customername, "",
+                                "", "", "", "", "", "", "");
+                    } else if (type_product.equals("PPOB PLN")) {
+                        printTransaksiPLNPasca(type_product, sdf_tglcetak.format(new Date()), header1, invoice, tujuan, subscribername, bl_th, stand_meter,
+                                tarif_daya, nominal, swreferencenumber, middle1, biayaadmin, total_tagihan, terbilang, footer1, footer2, footer3, footer4);
+                    } else if (type_product.equals("PPOB TELCO PASCA")) {
+                        printTransaksiSelulerPasca(type_product, sdf_tglcetak.format(new Date()), header1, invoice, tgl, "", "", tujuan,
+                                "", "0", "0", harga, "-","-");
                     } else {
                         Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(context, "Hanya transaksi yang berstatus SUKSES yang bisa di Print\nTerimakasih", Toast.LENGTH_SHORT).show();
                 }
-
-
-                /*else if (type_product.equals("BPJSKES")) {
-                    printTransaksiBpjsKes(type_product, invoice, sdf_tglcetak.format(new Date()), header1, formatTgl(tgl), ref2, tujuan, customername, noref1, customerphonenumber,
-                            billercode, billquantity, nominal, biayaadmin, total_tagihan, terbilang, footer1);
-
-                }else if(type_product.equals("MULTY FINANCE")){
-                    printTransaksiFinanceMAF(type_product, header1, sdf_tglcetak.format(new Date()), invoice, tgl, ref2, ptname, "", tujuan, customername,
-                            angsuran_ke, lastpaidduedate, jumlah_tagihan, total_tagihan, terbilang, footer1);
-
-                }else if(type_product.equals("PGN")){
-                    printTransaksiPGN(type_product, header1, sdf_tglcetak.format(new Date()), invoice, tgl, "", customerid, customername, "",
-                            "", "", "", "", "", "", "");
-                }*/
             }
         });
 
         btndownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(vstatus.equalsIgnoreCase("Active")){
+                if (vstatus.equalsIgnoreCase("Active")) {
                     if (type_product.equals("PULSA") || type_product.equals("KUOTA") || type_product.contains("ETOOL") ||
                             type_product.equals("GAME") || type_product.equals("TELPONS") || type_product.equals("SMS") ||
                             type_product.equals("OJEK ONLINE") || type_product.equals("WIFI ID")) {
@@ -327,11 +330,9 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
                     } else {
                         Toast.makeText(context, "Coming soon...", Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(context, "Hanya transaksi yang berstatus SUKSES yang bisa di Download\nTerimakasih", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
 
@@ -379,6 +380,25 @@ public class HistoryTrxAdapter extends RecyclerView.Adapter<HistoryTrxAdapter.My
         PrintTransaksiPGN.startFinancePGN((Activity) context, jnstrx, judul, tglprint, invoice, tgltrx,
                 idtransaksi, idpelanggan, nama, periode, usage, ajref,
                 tagihan, admin, totaltagihan, terbilang, footer);
+    }
+
+    public void printTransaksiPLNPasca(String jnstrx, String tglprint, String ketprint, String invoice, String idpel, String namapel, String blhthn,
+                                       String standmeter, String tarifdaya, String biayapln, String noref, String middle, String adminbank, String totaltagihan,
+                                       String terbilang, String footer1, String footer2, String footer3, String footer4) {
+
+        PrintTransaksiPLNPascabayar.startPLNPasca((Activity) context, jnstrx, tglprint, ketprint, invoice, idpel, namapel, blhthn,
+                standmeter, tarifdaya, biayapln, noref, middle, adminbank, totaltagihan,
+                terbilang, footer1, footer2, footer3, footer4);
+
+    }
+
+    public void printTransaksiSelulerPasca(String jnstrx, String tglprint, String ketprint, String invoice, String tgltrx,
+                                           String noresi, String operator, String notelp, String nama, String tagihan, String admin, String totaltagihan,
+                                           String terbilang, String footer) {
+
+        PrintTransaksiSelulerPasca.startSelulerPasca((Activity) context, jnstrx, tglprint, ketprint, invoice, tgltrx,
+                noresi, operator, notelp, nama, tagihan, admin, totaltagihan, terbilang, footer);
+
     }
 
     public void buy(String trxJenis, String trxNominal, String trxTujuan, String trxProvideName, String trxProductCode) {

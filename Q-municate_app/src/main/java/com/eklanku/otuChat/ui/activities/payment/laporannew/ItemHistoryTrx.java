@@ -67,6 +67,16 @@ public class ItemHistoryTrx {
     public String footer3;
     public String footer4;
 
+    public String getStand_meter() {
+        return stand_meter;
+    }
+
+    public void setStand_meter(String stand_meter) {
+        this.stand_meter = stand_meter;
+    }
+
+    public String stand_meter;
+
     public ItemHistoryTrx(String id_member, String invoice, String tgl, String vstatus, String harga,
                           String tujuan, String keterangan, String vsn, String mbr_name,
                           String tgl_sukses, String product_kode, String type_product,
@@ -83,7 +93,8 @@ public class ItemHistoryTrx {
                           String miscfee, String branchname, String infoteks, String serviceunitphone,
                           String serviceunit, String tarif_daya, String wording, String bl_th, String angsuran_ke,
                           String angsuran_pokok, String jumlah_tagihan, String total_tagihan, String terbilang,
-                          String header1, String middle1, String footer1, String footer2, String footer3, String footer4) {
+                          String header1, String middle1, String footer1, String footer2, String footer3, String footer4,
+                          String stand_meter) {
         this.id_member = id_member;
         this.invoice = invoice;
         this.tgl = tgl;
@@ -148,6 +159,7 @@ public class ItemHistoryTrx {
         this.footer2 = footer2;
         this.footer3 = footer3;
         this.footer4 = footer4;
+        this.stand_meter = stand_meter;
     }
 
     public String getId_member() {

@@ -196,6 +196,17 @@ public class DataDetailHistosryOTU {
     @SerializedName("footer4")
     private String footer4;
 
+    @SerializedName("stand_meter")
+    private String stand_meter;
+
+    public String getStand_meter() {
+        return stand_meter;
+    }
+
+    public void setStand_meter(String stand_meter) {
+        this.stand_meter = stand_meter;
+    }
+
     public String getId_member() {
         return id_member;
     }

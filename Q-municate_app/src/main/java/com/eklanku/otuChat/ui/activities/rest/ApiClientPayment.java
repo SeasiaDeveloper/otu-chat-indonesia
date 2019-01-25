@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClientPayment {
 
-    public static String BASE_URL_DEV = "8AA40907930C18B8CC916140B8706874BC15F0C2FF2C3E7A603E7C0BDDECFBB2A6EDF89F2E7E9A8A721976A04008B8D3";
+    public static String BASE_URL_DEV = "8AA40907930C18B8CC916140B8706874BC15F0C2FF2C3E7A603E7C0BDDECFBB22BCBE4DA5A434C1A73000EC9EA24BA5F";
     public static String BASE_URL_PROD = "58E286852585508A48D83B932C7012D46C508559F775FEFB766E9E1AECC88D32";
 
     public static String XAPIKEY = "43EBE47A09884E05D2CB871AF7A73A6E";
@@ -69,7 +69,7 @@ public class ApiClientPayment {
             Gson gson = new GsonBuilder().setLenient().create();
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl(apiProd)
+                    .baseUrl(apiDev)
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
