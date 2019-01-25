@@ -153,7 +153,10 @@ public class LandingActivity extends BaseAuthActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
-                        dialog.dismiss();
+                        if (dialog != null) {
+                            dialog.dismiss();
+                            dialog = null;
+                        }
                         finish();
                     }
                 });
@@ -161,7 +164,12 @@ public class LandingActivity extends BaseAuthActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
-                        dialog.dismiss();
+
+                        if (dialog != null) {
+                            dialog.dismiss();
+                            dialog = null;
+                        }
+
                         final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
                         try {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
