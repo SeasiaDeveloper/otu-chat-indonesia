@@ -183,7 +183,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/density_2"
+                    android:layout_marginBottom="@dimen/density_6"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -203,7 +203,7 @@
                         android:text=":" />
 
                     <TextView
-                        android:id="@+id/tvNoref"
+                        android:id="@+id/tvNoRef"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2.5" />
@@ -220,7 +220,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
-                        android:text="No SOA" />
+                        android:text="Produk" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -232,16 +232,18 @@
                         android:text=":" />
 
                     <TextView
-                        android:id="@+id/tvNoSoa"
+                        android:id="@+id/tvProduk"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2.5" />
                 </LinearLayout>
 
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/density_2"
+                    android:layout_marginBottom="@dimen/density_6"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -249,7 +251,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
-                        android:text="Tgl SOA" />
+                        android:text="Nama" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -261,69 +263,15 @@
                         android:text=":" />
 
                     <TextView
-                        android:id="@+id/tvTglSoa"
+                        android:id="@+id/tvNama"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2.5" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/density_2"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
-                        android:text="Tgl Siklus" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/density_4"
-                        android:layout_marginLeft="@dimen/density_4"
-                        android:layout_marginEnd="@dimen/density_4"
-                        android:layout_marginRight="@dimen/density_4"
-                        android:text=":" />
 
-                    <TextView
-                        android:id="@+id/tvtglsiklus"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2.5" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/density_2"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
-                        android:text="Jth Tempo" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/density_4"
-                        android:layout_marginLeft="@dimen/density_4"
-                        android:layout_marginEnd="@dimen/density_4"
-                        android:layout_marginRight="@dimen/density_4"
-                        android:text=":" />
-
-                    <TextView
-                        android:id="@+id/tvJthtempo"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2.5" />
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -349,35 +297,6 @@
 
                     <TextView
                         android:id="@+id/tvTagihan"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2.5" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/density_6"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
-                        android:text="Admin" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/density_4"
-                        android:layout_marginLeft="@dimen/density_4"
-                        android:layout_marginEnd="@dimen/density_4"
-                        android:layout_marginRight="@dimen/density_4"
-                        android:text=":" />
-
-                    <TextView
-                        android:id="@+id/tvAdmin"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2.5" />
