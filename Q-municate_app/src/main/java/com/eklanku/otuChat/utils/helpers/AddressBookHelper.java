@@ -36,7 +36,7 @@ public class AddressBookHelper {
     public static final String REG_TYPE_NOT_REGISTERED = "0";
 
     private static final String TAG = AddressBookHelper.class.getSimpleName();
-    private static final int COUNTRY_CODE = 62;
+    private static final int COUNTRY_CODE = 91;
 
     private static volatile AddressBookHelper instance;
     private ServiceManager serviceManager;
