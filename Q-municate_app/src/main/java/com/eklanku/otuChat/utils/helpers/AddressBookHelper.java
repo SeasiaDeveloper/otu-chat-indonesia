@@ -86,7 +86,7 @@ public class AddressBookHelper {
             return connectycubeUsers;
         });
     }
-
+/*add detaiuls*/
     public Observable<Boolean> updateContactListAndRoster(QBFriendListHelper friendListHelper, DbHelper mDbHelper, String currentUserPhone) {
         return uploadAddressBookObservable(mDbHelper, currentUserPhone).flatMap((Func1<ConnectycubeAddressBookResponse, Observable<ArrayList<ConnectycubeUser>>>)
                 connectycubeAddressBookResponse -> getRegisteredContactsWithoutCurrent(currentUserPhone)).flatMap((Func1<ArrayList<ConnectycubeUser>, Observable<Boolean>>)
